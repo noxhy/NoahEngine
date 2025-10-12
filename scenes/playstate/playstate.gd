@@ -116,8 +116,6 @@ func _ready():
 	music_host.get_node("Vocals").play()
 	music_host.get_node("Instrumental").pitch_scale = song_speed
 	
-	music_host.get_node("Hit Sound").stream = note_skin.hit_sound
-	
 	host.ui_skin = ui_skin
 	
 	ui.set_credits(song_data.title, song_data.artist)
@@ -147,7 +145,8 @@ func _ready():
 		strum.connect("note_miss", host.note_miss)
 		strum.set_skin(note_skin)
 		
-		if SettingsManager.get_setting("downscroll"): strum.set_scroll(-1)
+		if SettingsManager.get_setting("downscroll"):
+			strum.set_scroll(-1)
 	
 	emit_signal("setup_finished")
 
@@ -170,13 +169,14 @@ func _process(delta):
 	
 	var window_title = song_data.title
 	
-	var song_position = int(music_host.get_node("Instrumental").get_playback_position())
 	GameManager.seconds_per_beat = conductor.seconds_per_beat
 	var song_end_position = int(music_host.get_node("Instrumental").stream.get_length())
 	
-	get_tree().call_group("note", "update_y")
+	# Why is this a thing I have to do
+	if get_tree() != null:
+		get_tree().call_group("note", "update_y")
 	
-	window_title += " - " + Global.float_to_time(song_position)
+	window_title += " - " + Global.float_to_time(int(song_position))
 	window_title += " / " + Global.float_to_time(song_end_position)
 	
 	Global.set_window_title(window_title)
@@ -420,13 +420,11 @@ func score_note(hit_time: float):
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	
 	if event_name == "camera_position":
-		
 		var camera_position = host.camera_positions[int(event_parameters[0])].global_position
 		camera_position += ui.offset
 		if camera_position != null: camera.position = camera_position
 	
 	elif event_name == "camera_bop":
-		
 		var camera_bop = float(event_parameters[0])
 		var ui_bop = float(event_parameters[1])
 		
@@ -434,7 +432,6 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		ui.scale += Vector2(ui_bop, ui_bop)
 	
 	elif event_name == "camera_zoom":
-		
 		var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 		var zoom_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
 		
@@ -453,13 +450,11 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		ui_bop_strength = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 	
 	elif event_name == "lerping":
-		
 		var lerping = true if event_parameters[0] == "true" else false
 		ui.lerping = lerping
 		camera.lerping = lerping
 	
 	elif event_name == "scroll_speed":
-		
 		var scroll_speed = float(event_parameters[0])
 		var tween_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
 		
@@ -636,7 +631,7 @@ func update_ui_stats():
 # Visual Util
 
 
-func show_combo(rating: String, combo: int):
+func show_combo(rating: String, _combo: int):
 	
 	var rating_instance = rating_node.instantiate()
 	
@@ -646,7 +641,7 @@ func show_combo(rating: String, combo: int):
 	var combo_numbershandler_instance = combo_numbershandler_node.instantiate()
 	
 	combo_numbershandler_instance.ui_skin = ui_skin
-	combo_numbershandler_instance.combo = combo
+	combo_numbershandler_instance.combo = _combo
 	if misses == 0: combo_numbershandler_instance.fc = true
 	
 	

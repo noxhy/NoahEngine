@@ -1,8 +1,8 @@
 [gd_scene load_steps=22 format=3 uid="uid://blj8dbuorj1h0"]
 
-[ext_resource type="Script" uid="uid://7hv1pn58e04v" path="res://scenes/playstate/songs/basic_song_vanilla.gd" id="1_xeyw4"]
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://scenes/playstate/songs/basic_song.gd" id="1_xeyw4"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/playstate/playstate.tscn" id="2_y6xle"]
-[ext_resource type="Resource" uid="uid://hf15wrofqaey" path="res://assets/songs/playable songs/fresh/fresh_erect.tres" id="3_mynbq"]
+[ext_resource type="Resource" uid="uid://yr5kldsjyg74" path="res://assets/songs/playable songs/fresh/Fresh Erect.res" id="3_mynbq"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="4_8nme4"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="5_uia00"]
 [ext_resource type="PackedScene" uid="uid://cymgv4pu0e1rh" path="res://scenes/instances/stages/stage/stage.tscn" id="6_egett"]

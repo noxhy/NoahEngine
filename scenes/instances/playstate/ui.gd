@@ -6,7 +6,7 @@ extends CanvasLayer
 @onready var enemy_icon = $"Health Bar/Icon Manager/Enemy"
 
 @export var target_scale = Vector2(1, 1)
-@export var lerp_weight = 0.1
+@export_range(1, 25) var lerp_weight: float = 5.0
 @export var lerping = true
 
 @export var target_health = 50.0
@@ -36,8 +36,7 @@ func _process(delta):
 
 
 func _physics_process(delta):
-	
-	scale = lerp( scale, target_scale, lerp_weight )
+	scale = Global.frame_independent_lerp(scale,target_scale, lerp_weight, delta)
 
 
 # Util

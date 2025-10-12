@@ -3,7 +3,7 @@ extends Node2D
 var previous_offsets: Array[float]
 var index: int = 0
 var timing: float = 0.0
-var entries_required: int = 5
+var entries_required: int = 4
 
 var max_length: int = 832
 
@@ -12,7 +12,8 @@ func _ready():
 	
 	Global.set_window_title( "Calibrating Offset" )
 	
-	for i in entries_required: previous_offsets.append(0.0)
+	for i in entries_required:
+		previous_offsets.append(0.0)
 	$Audio/Music.play()
 
 
@@ -65,8 +66,8 @@ func _input(event):
 		$"Audio/Hit Sound".play()
 		var song_position = snapped( $Audio/Music.get_playback_position(), 0.001 )
 		timing = snapped( timing, 0.001 )
-		var distance = -snapped( song_position - timing, 0.001 )
-		previous_offsets[ index % entries_required ] = -distance
+		var distance = -snapped(song_position - timing, 0.001)
+		previous_offsets[index % entries_required] = -distance
 		
 		index += 1
 		

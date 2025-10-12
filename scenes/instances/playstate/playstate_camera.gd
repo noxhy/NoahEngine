@@ -7,7 +7,7 @@ class_name PlayStateCamera
 @export_subgroup("Essentials")
 
 @export var target_zoom: Vector2 = Vector2(1, 1)
-@export var lerp_weight: float = 0.1
+@export_range(1, 25) var lerp_weight: float = 5
 
 @export var lerping = true
 
@@ -38,13 +38,10 @@ func _ready():
 
 
 func _physics_process(delta):
-	
 	if lerping:
-		
-		zoom = lerp( zoom, target_zoom, lerp_weight )
+		zoom = Global.frame_independent_lerp(zoom, target_zoom, lerp_weight, delta)
 	
-	
-	# Camera Shaking0
+	# Camera Shaking
 	
 	if shaking:
 		

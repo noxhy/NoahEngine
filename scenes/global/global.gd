@@ -162,8 +162,15 @@ func format_number(num:float) -> String:
 	return string
 
 
-# Visual Util
+# referenced via https://youtu.be/LSNQuFEDOyQ
+## A frame independent lerp. Primary purpose is for the camera
+## your decay should be around 1 - 25
+func frame_independent_lerp(a, b, decay: float, delta: float): 
+	return b + (a - b) * exp(-decay * delta)
 
+#
+## Visual Util
+#
 
 func show_volume():
 	

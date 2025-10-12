@@ -661,9 +661,9 @@ func update_waveforms():
 
 
 func load_song(song: Song, difficulty: Variant = null):
-	
 	ChartManager.song = song
-	if difficulty == null: difficulty = ChartManager.song.difficulties.keys()[0]
+	if difficulty == null:
+		difficulty = ChartManager.song.difficulties.keys()[0]
 	current_difficulty = difficulty
 	var difficulty_data: Dictionary = song.difficulties.get(difficulty)
 	chart = load(difficulty_data.chart)
@@ -682,7 +682,6 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	%"Difficulty Button".get_popup().clear()
 	for d in ChartManager.song.difficulties.keys():
-		
 		%"Difficulty Button".get_popup().add_item(d)
 	
 	%"Difficulty Button".select(ChartManager.song.difficulties.keys().find(difficulty))
@@ -692,7 +691,6 @@ func load_song(song: Song, difficulty: Variant = null):
 
 
 func load_song_path(path: String, difficulty: Variant = null):
-	
 	var old_song = ChartManager.song
 	var song = load(path)
 	if song is not Song:
@@ -709,7 +707,6 @@ func load_song_path(path: String, difficulty: Variant = null):
 
 
 func load_chart(file: Chart, ghost: bool = false):
-	
 	selected_notes = []
 	selected_note_nodes = []
 	
@@ -724,7 +721,6 @@ func load_chart(file: Chart, ghost: bool = false):
 
 
 func new_file(path: String, song: Song):
-	
 	var old_song = ChartManager.song
 	load_song(song)
 	var action: String = "Created New Song"
@@ -738,7 +734,6 @@ func new_file(path: String, song: Song):
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
 func place_note(time: float, lane: int, length: float, type: int, placed: bool = false, moved: bool = false) -> int:
-	
 	var directions = ["left", "down", "up", "right"]
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
@@ -800,7 +795,6 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 
 
 func remove_note(lane: int, time: float):
-	
 	var i: int = find_note(lane, time)
 	if i <= -1: return
 	note_list[i].queue_free()
@@ -809,7 +803,6 @@ func remove_note(lane: int, time: float):
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	
 	var L: int = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), time - 0.1)
 	var R: int = bsearch_right_range(chart.get_notes_data(), chart.get_notes_data().size(), time + 0.1)
 	
@@ -828,7 +821,6 @@ func find_note(lane: int, time: float) -> int:
 
 
 func play_audios(time: float):
-	
 	%Instrumental.stream = load(ChartManager.song.instrumental)
 	%Vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
@@ -869,7 +861,6 @@ func float_to_time(time: float) -> String:
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	
 	var tempo_data: Dictionary = chart.get_tempos_data()
 	var offset: float = -chart.offset
 	var y_offset: float = 0
@@ -902,7 +893,6 @@ func time_to_y_position(time: float) -> float:
 
 
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	
 	var tempo_data: Dictionary = chart.get_tempos_data()
 	var meter_data: Dictionary = chart.get_meters_data()
 	var i: int = 0
@@ -941,7 +931,6 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 
 ## Binary searches for both notes and events
 func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int:
-	
 	if (length == 0): return -1
 	if (value_set[length - 1][0] < left_range): return -1
 	
@@ -960,7 +949,6 @@ func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int
 
 
 func bsearch_right_range(value_set: Array, length: int, right_range: float) -> int:
-	
 	if (length == 0): return -1
 	if (value_set[0][0] > right_range): return -1
 	
@@ -978,7 +966,8 @@ func bsearch_right_range(value_set: Array, length: int, right_range: float) -> i
 	return low - 1
 
 
-func is_note_at(lane: int, time: float) -> bool: return (find_note(lane, time) != -1)
+func is_note_at(lane: int, time: float) -> bool:
+	return (find_note(lane, time) != -1)
 
 
 func add_action(state_name: String, song: Song = ChartManager.song.duplicate(true), chart_file: Chart = chart.duplicate(true)):
@@ -986,7 +975,6 @@ func add_action(state_name: String, song: Song = ChartManager.song.duplicate(tru
 
 
 func _on_play_button_toggled(toggled_on: bool) -> void:
-	
 	%Vocals.stream_paused = !toggled_on
 	%Instrumental.stream_paused = !toggled_on
 	
@@ -999,7 +987,6 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 
 
 func move_bound_left(strum_id: String):
-	
 	ChartManager.strum_data[strum_id]["strums"][0] = clamp(ChartManager.strum_data[strum_id]["strums"][0] - 1, 0, ChartManager.strum_count - 1)
 	
 	for id in ChartManager.strum_data:
@@ -1010,7 +997,6 @@ func move_bound_left(strum_id: String):
 
 
 func move_bound_right(strum_id: String):
-	
 	ChartManager.strum_data[strum_id]["strums"][1] = clamp(ChartManager.strum_data[strum_id]["strums"][1] + 1, 0, ChartManager.strum_count - 1)
 	
 	for id in ChartManager.strum_data:
@@ -1024,25 +1010,21 @@ func _on_song_slider_value_changed(value: float) -> void: song_position = value
 
 
 func _on_skip_forward_pressed() -> void:
-	
 	song_position += 10
 	_on_play_button_toggled(true)
 
 
 func _on_skip_backward_pressed() -> void:
-	
 	song_position -= 10
 	_on_play_button_toggled(true)
 
 
 func _on_skip_to_beginning_pressed() -> void:
-	
 	song_position = start_offset
 	_on_play_button_toggled(true)
 
 
 func _on_skip_to_end_pressed() -> void:
-	
 	song_position = %Instrumental.stream.get_length() - 0.1
 	_on_play_button_toggled(true)
 
@@ -1062,7 +1044,6 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 
 ## File button item pressed
 func file_button_item_pressed(id):
-	
 	var item_name: String = %"File Button".get_popup().get_item_text(id)
 	
 	# Create New Song
@@ -1145,9 +1126,7 @@ func close_popup():
 
 
 func undo():
-	
 	if undo_redo.has_undo():
-		
 		%Undo.play()
 		undo_redo.undo()
 		if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)
@@ -1155,9 +1134,7 @@ func undo():
 	%"Edit Button".get_popup().set_item_checked(0, !undo_redo.has_undo())
 
 func redo():
-	
 	if undo_redo.has_redo():
-		
 		%Redo.play()
 		undo_redo.redo()
 		if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)

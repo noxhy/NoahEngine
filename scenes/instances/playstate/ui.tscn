@@ -144,7 +144,6 @@ shadow_size = 0
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 script = ExtResource("1_pm5h1")
-lerp_weight = 0.085
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

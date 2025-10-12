@@ -61,7 +61,8 @@ func note_holding(time, lane, note_type, strumhandler):
 
 func note_miss(time, lane, length, note_type, hit_time, strumhandler):
 	
-	if !strumhandler.enemy_slot: if note_type == -1: %"Anti-Spam Sound".play()
+	if !strumhandler.enemy_slot: if note_type == -1:
+		SoundManager.anti_spam.play()
 	playstate_host.note_miss( time, lane, length, note_type, hit_time, strumhandler )
 
 
@@ -69,4 +70,5 @@ func new_event(time, event_name, event_parameters):
 	pass
 
 
-func _on_combo_break(): %"Miss Sound".play()
+func _on_combo_break():
+	SoundManager.miss.play()

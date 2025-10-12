@@ -1010,8 +1010,8 @@ horizontal_alignment = 1
 [node name="Scrolling Text" type="CanvasLayer" parent="."]
 layer = -2
 offset = Vector2(640, 360)
-rotation = -0.0645772
-scale = Vector2(1, 1)
+rotation = -0.064577155
+scale = Vector2(1.0000004, 1.0000004)
 transform = Transform2D(0.997916, -0.0645323, 0.0645323, 0.997916, 640, 360)
 
 [node name="ParallaxLayer" type="Parallax2D" parent="Scrolling Text"]
