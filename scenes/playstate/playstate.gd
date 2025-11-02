@@ -208,6 +208,9 @@ func _process(delta):
 		song_position = music_host.get_node("Instrumental").get_playback_position() + \
 				AudioServer.get_time_since_last_mix() - \
 				AudioServer.get_output_latency()
+		
+		conductor.offset = chart.offset + SettingsManager.get_setting("offset")
+		conductor.offset += chart.get_tempo_time_at(song_position)
 	
 	# Idk how exactly this works I stole this code from sqirradotdev
 	

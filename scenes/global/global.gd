@@ -18,6 +18,8 @@ var transitioning: bool = false
 
 func _ready():
 	SettingsManager.load_settings()
+	PhysicsServer2D.set_active(false)
+	PhysicsServer3D.set_active(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

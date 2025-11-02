@@ -139,14 +139,6 @@ grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
 event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
 
-[node name="Grid2" parent="Grid Layer/Parallax2D" instance=ExtResource("2_i6pv1")]
-unique_name_in_owner = true
-grid_size = Vector2(36, 36)
-columns = 10
-grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
-event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
-position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
-
 [node name="Waveform Layer" type="CanvasLayer" parent="."]
 layer = 2
 offset = Vector2(640, 64)

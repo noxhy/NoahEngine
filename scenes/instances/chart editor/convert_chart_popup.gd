@@ -84,7 +84,7 @@ func new_file(dir: String):
 				)
 		
 		_:
-			difficulties = ["easy", "normal", "hard"]
+			difficulties = ["normal"]
 	
 	for difficulty in difficulties:
 		match chart_type:
@@ -239,7 +239,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 			for i in json.get("notes", json.song.notes):
 				# Too lazy to make sure for BPM changes so
 				var seconds_per_beat = 60.0 / current_bpm
-				var seconds_per_measure = seconds_per_beat * 4
+				var seconds_per_measure = seconds_per_beat * i.get("sectionBeats", 4)
 				
 				# Checks if the tempo changes, then adds it to the tempos dictionary
 				if i.has("changeBPM"):

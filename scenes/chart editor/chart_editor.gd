@@ -188,9 +188,12 @@ func _process(delta: float) -> void:
 		current_beats_per_measure = meter[0]
 		current_steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
+		$Conductor.offset = chart.offset + chart.get_tempo_time_at(song_position + start_offset)
 		
-		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"): undo()
-		if Input.is_action_pressed("control") and Input.is_action_just_pressed("redo"): redo()
+		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"):
+			undo()
+		if Input.is_action_pressed("control") and Input.is_action_just_pressed("redo"):
+			redo()
 	
 	%"Current Time Label".text = float_to_time(song_position + start_offset)
 	if ChartManager.song != null:
@@ -491,7 +494,6 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	
 	var rect: Rect2
 	
 	## Box when you're holding control

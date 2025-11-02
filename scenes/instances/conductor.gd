@@ -21,7 +21,8 @@ signal new_step(current_step: int, measure_relative: int)
 var beats_per_measure = 4  	# The amount of beats in a measure (Default: 4)
 var steps_per_measure = 4 * beats_per_measure  	# The amount of notes in a measure (Default: 16)
 
-var seconds_per_beat = 1.0
+var seconds_per_beat: float = 1.0
+var seconds_per_step: float = 0.25
 
 var old_beat = -1
 var old_step = -1
@@ -47,6 +48,7 @@ func _process(_delta):
 	measure_relative_step = current_step % steps_per_measure
 	
 	seconds_per_beat = 60.0 / tempo
+	seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
 	
 	# This detects if the beat or step changes
 	if old_step != current_step:
@@ -68,12 +70,12 @@ func get_beat_at(time: float) -> int:
 
 func get_step_at(time: float) -> int:
 	
-	time += offset
+	time -= offset
 	@warning_ignore("integer_division")
 	return int(time / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
 
 
 func get_measure_at(time: float) -> int:
 	
-	time += offset
+	time -= offset
 	return int(time / (seconds_per_beat  * beats_per_measure))

@@ -28,18 +28,29 @@ func get_meters_data() -> Dictionary: return chart_data.get("meters")
 
 
 func get_tempo_at(time: float) -> float:
-	
 	var output: float = -1
-	for point in get_tempos_data(): if time >= point: output = get_tempos_data().get(point)
-	else: continue
+	for point in get_tempos_data():
+		if time >= point:
+				return get_tempos_data().get(point)
+		else:
+			continue
 	
 	return output
 
 
 func get_meter_at(time: float) -> Array:
-	
 	var output: Array = []
-	for point in get_meters_data(): if time >= point: output = get_meters_data().get(point)
-	else: continue
+	for point in get_meters_data(): if time >= point:
+		output = get_meters_data().get(point)
+	else:
+		continue
+	
+	return output
+
+func get_tempo_time_at(time: float) -> float:
+	var output: float = -1
+	for point in get_tempos_data():
+		if time >= point:
+			output = point
 	
 	return output
