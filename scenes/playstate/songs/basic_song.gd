@@ -31,7 +31,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		characters[1].play_animation(characters[1].idle_animation)
 		if (characters[2].current_animation == characters[2].idle_animation):
 			characters[2].can_idle = true
-		characters[2].play_animation(characters[2].current_animation, GameManager.seconds_per_beat * 2)
+		characters[2].play_animation(characters[2].idle_animation, GameManager.seconds_per_beat * 2)
 
 # Util
 

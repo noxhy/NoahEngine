@@ -74,6 +74,7 @@ var song_start_offset: float = -4.0
 var song_start_time: float = 0.0
 # So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
 var vocal_tracks: Array = []
+var vocal_streams: Array = []
 
 var position_delta: float = 0.0
 var position_lerp: float = 0.0
@@ -100,7 +101,6 @@ var ui_bop_strength = Vector2(0.025, 0.025)
 
 var pause_preload: Variant
 var self_delta: float = 0.0
-var manual_pause: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -117,11 +117,15 @@ func _ready():
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
 	vocals.stream = AudioStreamPolyphonic.new()
+	vocals.stream.polyphony = song_data.vocals.size()
+	vocals.set_bus(&"Music")
+	for v in song_data.vocals:
+		vocal_streams.append(load(v))
 	instrumental = AudioStreamPlayer.new()
 	instrumental.stream = load(song_data.instrumental)
 	instrumental.connect("finished", song_finished)
 	instrumental.pitch_scale = song_speed
-	vocals.stream.polyphony = song_data.vocals.size()
+	instrumental.set_bus(&"Music")
 	self.add_child(vocals)
 	vocals.play()
 	self.add_child(instrumental)
@@ -189,7 +193,7 @@ func _process(delta):
 		get_tree().call_group("note", "update_y")
 	
 	if Input.is_action_just_pressed("ui_cancel") or Input.is_action_just_pressed("ui_accept"):
-		manual_pause = true
+		Global.manual_pause = true
 		pause()
 	
 	elif Input.is_action_just_pressed("kill"):
@@ -264,22 +268,6 @@ func _process(delta):
 					basic_event(time, event_name, event_parameters)
 					current_event += 1
 
-# Auto Pause
-func _notification(what: int) -> void:
-	
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		
-		if !get_tree().paused:
-			
-			manual_pause = false
-			pause()
-	
-	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
-		
-		if !manual_pause:
-			get_tree().paused = false
-
-
 #
 # Util
 #
@@ -340,11 +328,11 @@ func play_song(time: float):
 # I also call it in the process function for when the song starts before 4 beats are possible.
 func play_audios(time: float):
 	var playback = vocals.get_stream_playback()
-	for v in song_data.vocals:
-		var stream: AudioStream = load(v)
-		vocal_tracks.append(playback.play_stream(stream, -chart.offset + song_start_offset + time, \
+	
+	for stream in vocal_streams:
+		vocal_tracks.append(playback.play_stream(stream, chart.offset + song_start_offset + time, \
 		0.0, song_speed))
-	instrumental.play(-chart.offset + song_start_offset + time)
+	instrumental.play(chart.offset + song_start_offset + time)
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
@@ -392,18 +380,16 @@ static func get_rating(time: float) -> String:
 
 
 func pause():
+	var pause_scene_instance = pause_preload.instantiate()
 	
-	if manual_pause:
-		
-		var pause_scene_instance = pause_preload.instantiate()
-		
-		pause_scene_instance.song_title = song_data.title
-		pause_scene_instance.credits = song_data.artist
-		if GameManager.freeplay: pause_scene_instance.deaths = GameManager.deaths
-		
-		else: pause_scene_instance.deaths = GameManager.week_deaths
-		
-		host.add_child(pause_scene_instance)
+	pause_scene_instance.song_title = song_data.title
+	pause_scene_instance.credits = song_data.artist
+	if GameManager.freeplay:
+		pause_scene_instance.deaths = GameManager.deaths
+	else:
+		pause_scene_instance.deaths = GameManager.week_deaths
+	
+	host.add_child(pause_scene_instance)
 	
 	get_tree().paused = true
 

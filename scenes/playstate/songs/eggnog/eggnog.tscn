@@ -84,17 +84,6 @@ z_index = 100
 material = SubResource("ShaderMaterial_2etw8")
 position = Vector2(136, 662.4)
 scale = Vector2(0.8, 0.8)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Parent Down Note Dad",
-&"idle": &"Parent Christmas Idle",
-&"left": &"Parent Left Note Dad",
-&"mom_down": &"Parent Down Note Mom",
-&"mom_left": &"Parent Left Note Mom",
-&"mom_right": &"Parent Right Note Mom",
-&"mom_up": &"Parent Up Note Mom",
-&"right": &"Parent Right Note Dad",
-&"up": &"Parent Up Note Dad"
-})
 
 [node name="Metronome" parent="." instance=ExtResource("15_pd6oi")]
 unique_name_in_owner = true

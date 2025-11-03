@@ -67,14 +67,11 @@ func _ready():
 func _process(delta):
 	time_difference = (time - GameManager.offset) - GameManager.song_position
 	
-	var line_length = length
-	line_length *= scroll_speed
-	line_length *= grid_size.y
-	line_length = abs(line_length)
-	if !chart_note: line_length /= note_skin.notes_scale
-	
 	if length > 0:
+		var line_length = length * scroll_speed  * grid_size.y
 		
+		if !chart_note:
+			line_length /= note_skin.notes_scale
 		$Tail.visible = true
 		var tail_animation = $"Tail/Tail End".animation
 		var texture = $"Tail/Tail End".sprite_frames.get_frame_texture(tail_animation, 0)
@@ -94,7 +91,7 @@ func _process(delta):
 			end_direction = $Tail.points[$Tail.points.size() - 1] - $Tail.points[$Tail.points.size() - 2]
 		
 		$"Tail/Tail End".position = $Tail.get_point_position($Tail.points.size() - 1)
-		# $"Tail/Tail End".rotation = end_direction.angle()
+		$"Tail/Tail End".rotation = end_direction.angle()
 	else: 
 		$Tail.visible = false
 

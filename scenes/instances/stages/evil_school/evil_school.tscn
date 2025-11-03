@@ -23,23 +23,21 @@ volumetric_fog_anisotropy = -0.9
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture1D_ii72u")
 
-[node name="weed_school" type="Node2D"]
+[node name="Stage" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_nay4l")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6cbx4")
 
-[node name="School" type="CanvasLayer" parent="."]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="School" type="AnimatedSprite2D" parent="School" groups=["autoplay"]]
+[node name="School2" type="AnimatedSprite2D" parent="." groups=["autoplay"]]
+z_index = -10
 texture_filter = 1
-position = Vector2(4, 42)
-scale = Vector2(4.5, 4.5)
+position = Vector2(-896, -1224)
+scale = Vector2(6, 6)
 sprite_frames = ExtResource("2_8obdx")
 animation = &"background 2 instance 1"
+autoplay = "background 2 instance 1"
 frame_progress = 0.375972
+centered = false
 metadata/_edit_lock_ = true

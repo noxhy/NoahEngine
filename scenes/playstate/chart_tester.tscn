@@ -1,16 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://c56g0k7u2k6wo"]
+[gd_scene load_steps=10 format=3 uid="uid://c56g0k7u2k6wo"]
 
 [ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://scenes/playstate/chart_tester.gd" id="1_ep6vc"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/playstate/playstate.tscn" id="2_ajkug"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://assets/sprites/playstate/developer/developer_ui_skin.tres" id="2_srd2m"]
-[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/instances/conductor.gd" id="3_pxsf5"]
 [ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://assets/sprites/playstate/developer/developer_note_skin.tres" id="4_laa4w"]
 [ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/instances/playstate/playstate_camera.tscn" id="4_y3wph"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/instances/playstate/ui.tscn" id="5_g7go4"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="11_6k7lv"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/Normal Text.ttf" id="12_chcqi"]
-
-[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_7580e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
 font = ExtResource("12_chcqi")
@@ -21,30 +18,15 @@ outline_color = Color(0, 0, 0, 1)
 script = ExtResource("1_ep6vc")
 metadata/_edit_vertical_guides_ = []
 
-[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "conductor", "music_host", "rating_position", "combo_position") instance=ExtResource("2_ajkug")]
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_ajkug")]
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../Camera")
-conductor = NodePath("../Conductor")
-music_host = NodePath("../Music")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_laa4w")
 ui_skin = ExtResource("2_srd2m")
 next_scene = "res://scenes/chart editor/chart_editor.tscn"
-
-[node name="Music" type="Node" parent="."]
-
-[node name="Vocals" type="AudioStreamPlayer" parent="Music"]
-stream = SubResource("AudioStreamPolyphonic_7580e")
-bus = &"Music"
-
-[node name="Instrumental" type="AudioStreamPlayer" parent="Music"]
-bus = &"Music"
-
-[node name="Conductor" type="Node" parent="."]
-script = ExtResource("3_pxsf5")
-stream_player = NodePath("../Music/Instrumental")
 
 [node name="Camera" parent="." instance=ExtResource("4_y3wph")]
 position = Vector2(640, 360)
@@ -67,12 +49,15 @@ transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
 [node name="Position 1" type="Marker2D" parent="World"]
+unique_name_in_owner = true
 gizmo_extents = 18.3
 
 [node name="Position 2" type="Marker2D" parent="World"]
+unique_name_in_owner = true
 gizmo_extents = 18.3
 
 [node name="Position 3" type="Marker2D" parent="World"]
+unique_name_in_owner = true
 gizmo_extents = 18.3
 
 [node name="Rating Marker" type="Marker2D" parent="World"]
@@ -95,5 +80,3 @@ autowrap_mode = 3
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
-[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
-[connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]

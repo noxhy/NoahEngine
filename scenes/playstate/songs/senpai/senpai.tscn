@@ -23,7 +23,6 @@ rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_gvt2o")
 ui_skin = ExtResource("5_0s4pd")
-combo_scale_multiplier = Vector2(0.65, 0.65)
 
 [node name="Camera" parent="." instance=ExtResource("6_vhuvi")]
 position = Vector2(139.7, 520.7)

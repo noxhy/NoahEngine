@@ -19,19 +19,18 @@ scale = Vector2(1.065, 1.065)
 sprite_frames = ExtResource("2_r4bqa")
 animation = &"left"
 script = ExtResource("4_kfabs")
-animation_names = Dictionary[String, String]({
-"down": "down",
-"down tail": "down tail",
-"left": "left",
-"left tail": "left tail",
-"right": "right",
-"right tail": "right tail",
-"up": "up",
-"up tail": "up tail"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down tail": &"down tail",
+&"left": &"left",
+&"left tail": &"left tail",
+&"right": &"right",
+&"right tail": &"right tail",
+&"up": &"up",
+&"up tail": &"up tail"
 })
 
 [node name="Tail" type="Line2D" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0.588235)
 use_parent_material = true
 width = 600.0
@@ -43,12 +42,12 @@ joint_mode = 2
 use_parent_material = true
 rotation = 1.5708
 sprite_frames = ExtResource("2_r4bqa")
-animation = &"left"
+animation = &"end"
 offset = Vector2(300, 2.08189e-12)
 script = ExtResource("4_kfabs")
-animation_names = Dictionary[String, String]({
-"down end": "down end",
-"left end": "left end",
-"right end": "right end",
-"up end": "up end"
+animation_names = Dictionary[StringName, StringName]({
+&"down end": &"down end",
+&"left end": &"left end",
+&"right end": &"right end",
+&"up end": &"up end"
 })

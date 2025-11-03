@@ -7,14 +7,22 @@ signal note_hit(time: float, lane: int, note_type: int, hit_time: float, manager
 signal note_holding(time: float, lane: int, note_type: int, manager: Node2D)
 signal note_miss(time: float, lane: int, length: float, note_type: int, hit_time: float, manager: Node2D)
 
-@export var strum_count = 4
 @export var note_skin = NoteSkin.new()
+## List of NodePaths of the strumlines.
 @export var strums = PackedStringArray()
+## Vocal track ID.
 @export var id: int = 0
 
+## If [code]true[/code], the strumlines will read the player's input.
 @export var can_press = true
+## If [code]true[/code], the strumlines will hit notes automatically. Typically used for botplay
+## or the enemy strumlines.
 @export var auto_play = false
+## If [code]true[/code], the strumlines will create a note splash effect when hitting or holding a
+## note. Typically used for the player strumlines.
 @export var can_splash = false
+## If [code]true[/code], the strumlines will count as a enemy strumline. Enemy strumlines do not
+## affect player stats.
 @export var enemy_slot = false
 
 # Called when the node enters the scene tree for the first time.

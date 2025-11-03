@@ -1,162 +1,108 @@
-[gd_scene load_steps=21 format=3 uid="uid://bggq8kbjfwq6b"]
+[gd_scene load_steps=12 format=3 uid="uid://bggq8kbjfwq6b"]
 
-[ext_resource type="Script" uid="uid://7hv1pn58e04v" path="res://scenes/playstate/songs/basic_song_vanilla.gd" id="1_fcfx0"]
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://scenes/playstate/songs/basic_song.gd" id="1_fcfx0"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/playstate/playstate.tscn" id="2_d5rna"]
-[ext_resource type="Resource" uid="uid://w4bp628gcfr7" path="res://assets/songs/playable songs/thorns/thorns.tres" id="3_ihc3i"]
 [ext_resource type="Resource" uid="uid://dmw77m5oxkyig" path="res://assets/sprites/playstate/pixel/pixel_note_skin.tres" id="4_8wb6g"]
 [ext_resource type="Resource" uid="uid://dsqgb7q6eq1mf" path="res://assets/sprites/playstate/pixel/pixel_ui_skin.tres" id="5_4pyv7"]
 [ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/instances/playstate/playstate_camera.tscn" id="6_uhlqh"]
 [ext_resource type="PackedScene" uid="uid://dm1wcp8xtvqv5" path="res://scenes/instances/stages/evil_school/evil_school.tscn" id="7_ndkga"]
-[ext_resource type="AudioStream" uid="uid://bmggbtser1g3u" path="res://assets/sounds/game sounds/miss sounds/miss 1.ogg" id="8_h7cs6"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/instances/conductor.gd" id="8_ijcj0"]
-[ext_resource type="AudioStream" uid="uid://cfnrxgladhi2w" path="res://assets/sounds/game sounds/miss sounds/miss 2.ogg" id="9_bptfm"]
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://scenes/instances/characters/boyfriend pixel.tscn" id="9_rpmc0"]
 [ext_resource type="PackedScene" uid="uid://dghi5ce8cupic" path="res://scenes/instances/characters/spirit.tscn" id="10_bowlb"]
-[ext_resource type="AudioStream" uid="uid://cqne25yeqb7op" path="res://assets/sounds/game sounds/miss sounds/miss 3.ogg" id="10_ffvus"]
 [ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://scenes/instances/characters/girlfriend pixel.tscn" id="11_vat3l"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/instances/playstate/ui.tscn" id="12_tmnnb"]
-
-[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_c5btx"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_jvtyf"]
-streams_count = 3
-stream_0/stream = ExtResource("8_h7cs6")
-stream_1/stream = ExtResource("9_bptfm")
-stream_2/stream = ExtResource("10_ffvus")
-
-[sub_resource type="Gradient" id="Gradient_fn4tr"]
-offsets = PackedFloat32Array(0, 0.241935)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_7fofx"]
-gradient = SubResource("Gradient_fn4tr")
-
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6i5k7"]
-particle_flag_disable_z = true
-emission_shape = 1
-emission_sphere_radius = 14.81
-direction = Vector3(0, 0, 0)
-spread = 180.0
-initial_velocity_min = 44.94
-initial_velocity_max = 44.94
-linear_accel_min = 8.99
-linear_accel_max = 8.99
-scale_min = 4.0
-scale_max = 4.0
-color_ramp = SubResource("GradientTexture1D_7fofx")
 
 [node name="Thorns" type="Node2D"]
 script = ExtResource("1_fcfx0")
 
-[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "conductor", "music_host", "rating_position", "combo_position") instance=ExtResource("2_d5rna")]
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_d5rna")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../Camera")
-conductor = NodePath("../Conductor")
-music_host = NodePath("../Music")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
-song_data = ExtResource("3_ihc3i")
 note_skin = ExtResource("4_8wb6g")
 ui_skin = ExtResource("5_4pyv7")
-combo_scale_multiplier = Vector2(0.65, 0.65)
 
 [node name="Camera" parent="." instance=ExtResource("6_uhlqh")]
-position = Vector2(640, 432)
+position = Vector2(641.5, 390.9)
 position_smoothing_speed = 3.0
-target_zoom = Vector2(1.3, 1.3)
 
 [node name="Stage" parent="." instance=ExtResource("7_ndkga")]
 unique_name_in_owner = true
 
-[node name="Music" type="Node" parent="."]
-
-[node name="Vocals" type="AudioStreamPlayer" parent="Music"]
-stream = SubResource("AudioStreamPolyphonic_c5btx")
-bus = &"Music"
-
-[node name="Instrumental" type="AudioStreamPlayer" parent="Music"]
-bus = &"Music"
-
-[node name="Hit Sound" type="AudioStreamPlayer" parent="Music"]
-bus = &"SFX"
-
-[node name="Miss Sound" type="AudioStreamPlayer" parent="Music"]
+[node name="Player" parent="." instance=ExtResource("9_rpmc0")]
 unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_jvtyf")
-bus = &"SFX"
+z_index = 1
+position = Vector2(972, 678)
+scale = Vector2(6, 6)
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"BF DOWN NOTE instance 1",
+&"idle": &"BF IDLE instance 1",
+&"left": &"BF LEFT NOTE instance 1",
+&"miss_down": &"BF DOWN MISS instance 1",
+&"miss_left": &"BF LEFT MISS instance 1",
+&"miss_right": &"BF RIGHT MISS instance 1",
+&"miss_up": &"BF UP MISS instance 1",
+&"right": &"BF RIGHT NOTE instance 1",
+&"up": &"BF UP NOTE instance 1"
+})
 
-[node name="Anti-Spam Sound" type="AudioStreamPlayer" parent="Music"]
+[node name="Enemy" parent="." instance=ExtResource("10_bowlb")]
 unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_jvtyf")
-volume_db = -8.0
-bus = &"SFX"
+z_index = 1
+position = Vector2(344, 726)
+scale = Vector2(6, 6)
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"pixel_down",
+&"idle": &"df_idle",
+&"left": &"pixel_left",
+&"right": &"pixel_right",
+&"up": &"pixel_up"
+})
+
+[node name="Metronome" parent="." instance=ExtResource("11_vat3l")]
+unique_name_in_owner = true
+z_index = -1
+position = Vector2(660, 670)
+scale = Vector2(6, 6)
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"GF IDLE"
+})
 
 [node name="Conductor" type="Node" parent="."]
 script = ExtResource("8_ijcj0")
-stream_player = NodePath("../Music/Instrumental")
+stream_player = NodePath("")
 
 [node name="World" type="CanvasLayer" parent="."]
 layer = 10
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
 [node name="Position 1" type="Marker2D" parent="World"]
-position = Vector2(102, 104)
+unique_name_in_owner = true
+position = Vector2(743.5, 422.9)
 gizmo_extents = 18.3
 
 [node name="Position 2" type="Marker2D" parent="World"]
-position = Vector2(-87, 72)
+unique_name_in_owner = true
+position = Vector2(554.5, 390.9)
 gizmo_extents = 26.5
 
 [node name="Position 3" type="Marker2D" parent="World"]
-position = Vector2(0, 72)
+unique_name_in_owner = true
+position = Vector2(641.5, 390.9)
 gizmo_extents = 78.9
 
 [node name="Rating Marker" type="Marker2D" parent="World"]
-position = Vector2(108, 28)
+position = Vector2(832, 312)
 gizmo_extents = 20.0
 
 [node name="Combo Marker" type="Marker2D" parent="World"]
-position = Vector2(192, 72)
+position = Vector2(940, 360)
 gizmo_extents = 20.0
 
-[node name="Characters" type="CanvasLayer" parent="."]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="Player" parent="Characters" instance=ExtResource("9_rpmc0")]
-unique_name_in_owner = true
-z_index = 1
-position = Vector2(216, 314)
-scale = Vector2(4, 4)
-
-[node name="Enemy" parent="Characters" instance=ExtResource("10_bowlb")]
-unique_name_in_owner = true
-z_index = 1
-position = Vector2(-208, 304)
-scale = Vector2(4, 4)
-
-[node name="GPUParticles2D" type="GPUParticles2D" parent="Characters/Enemy"]
-z_index = -1
-texture_filter = 1
-position = Vector2(0, -64)
-amount = 15
-process_material = SubResource("ParticleProcessMaterial_6i5k7")
-lifetime = 1.3
-
-[node name="Metronome" parent="Characters" instance=ExtResource("11_vat3l")]
-unique_name_in_owner = true
-z_index = -1
-position = Vector2(0, 288)
-scale = Vector2(4, 4)
-
 [node name="UI" parent="." instance=ExtResource("12_tmnnb")]
-layer = 10
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]

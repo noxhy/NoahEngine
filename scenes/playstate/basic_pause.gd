@@ -2,12 +2,12 @@ extends Node2D
 
 @onready var menu_option_node = preload("res://scenes/instances/menu_option.tscn")
 @onready var options_menu_node = preload("res://scenes/instances/options/options_menu.tscn")
+@onready var music = $Audio/Music
 
 @export var song_title: String = ""
 @export var credits: String = ""
 @export var deaths: int = 0
 @export var pages: Dictionary = {
-	
 	"default":
 	{
 		
@@ -54,10 +54,8 @@ extends Node2D
 		"chart_editor": {
 			"option_name": "Go to Chart Editor",
 			"icon": null,
-		},
-		
+		}
 	}
-	
 }
 
 var options: Dictionary = {}
@@ -65,12 +63,11 @@ var options: Dictionary = {}
 var option_nodes = []
 var selected: int = 0
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	var tween = create_tween()
-	tween.tween_property($Audio/Music, "volume_db", 0, 4)
+	music.volume_linear = 0
+	tween.tween_property(music, "volume_linear", 1, 4)
 	$AnimationPlayer.play("intro")
 	Global.set_window_title("Paused")
 	
@@ -80,7 +77,6 @@ func _ready():
 	
 	var mode_display: String = ""
 	match GameManager.play_mode:
-		
 		GameManager.PLAY_MODE.STORY_MODE: mode_display = "Story Mode"
 		GameManager.PLAY_MODE.FREEPLAY: mode_display = "Freeplay"
 		GameManager.PLAY_MODE.PRACTICE: mode_display = "Practicing"
@@ -89,7 +85,6 @@ func _ready():
 	%"Other Info".text += "\n" + mode_display
 	
 	match GameManager.play_mode:
-		
 		GameManager.PLAY_MODE.CHARTING: render_options("charting")
 		_: render_options("default")
 	
@@ -140,16 +135,14 @@ func update_selection(i: int):
 	selected = wrapi(i, 0, options.keys().size())
 	i = selected
 	var index = -selected
-	$"Audio/Menu Scroll".play()
+	SoundManager.scroll.play()
 	
 	for j in option_nodes:
-		
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(-640 + 45 + (25 * index), index * 175) 
 		tween.tween_property(j, "position", node_position, 0.5)
 		j.modulate = Color(0.5, 0.5, 0.5)
-		
 		index += 1
 	
 	option_nodes[i].modulate = Color(1, 1, 1)
@@ -157,7 +150,6 @@ func update_selection(i: int):
 
 
 func select_option(i: int):
-	
 	var option = options.keys()[i]
 	
 	if option == "resume":

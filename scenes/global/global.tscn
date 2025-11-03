@@ -18,6 +18,7 @@ font_size = 18
 [node name="Global" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_swfdr")
+debug_visible = null
 metadata/_edit_horizontal_guides_ = [-296.0]
 
 [node name="UI" type="CanvasLayer" parent="."]

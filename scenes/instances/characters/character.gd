@@ -53,7 +53,7 @@ func play_animation(animation_name: StringName = &"", time: float = -1.0):
 	else:
 		
 		sprite.frame = 0
-		print("Animation ", animation_name , " not found")
+		printerr("Animation \"", animation_name , "\" not found")
 
 
 func get_real_animation(animation_name: String = ""):
