@@ -4,7 +4,7 @@ extends Node2D
 class_name Character
 
 @export_group("Animation Offset")
-@export var idle_animation = "idle"
+@export var idle_animation = &"idle"
 @export var animation_names: Dictionary[StringName, StringName] = {}
 @export var offsets: Dictionary[StringName, Vector2] = {}
 

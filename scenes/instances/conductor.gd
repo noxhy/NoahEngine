@@ -37,6 +37,9 @@ var measure_relative_step = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	if !stream_player:
+		return
+	
 	var time = stream_player.get_playback_position()
 	time -= AudioServer.get_output_latency()
 	
@@ -51,12 +54,10 @@ func _process(_delta):
 	
 	# This detects if the beat or step changes
 	if old_step != current_step:
-		
 		old_step = current_step
 		emit_signal("new_step", current_step, measure_relative_step)
 	
 	if old_beat != current_beat:
-		
 		old_beat = current_beat
 		emit_signal("new_beat", current_beat, measure_relative_beat)
 

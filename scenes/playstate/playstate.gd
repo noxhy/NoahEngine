@@ -14,7 +14,7 @@ signal combo_break()
 signal setup_finished()
 
 @onready var rating_node = preload("res://scenes/instances/playstate/rating.tscn")
-@onready var combo_numbershandler_node = preload("res://scenes/instances/playstate/combo_numbers_manager.tscn")
+@onready var combo_numbers_manager_node = preload("res://scenes/instances/playstate/combo_numbers_manager.tscn")
 @onready var countdown_node = preload("res://scenes/playstate/countdown.tscn")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
@@ -127,7 +127,9 @@ func _ready():
 	self.add_child(instrumental)
 	
 	conductor = Conductor.new()
-	conductor.stream_player = instrumental
+	self.add_child(conductor)
+	conductor.connect("new_beat", self.new_beat)
+	conductor.connect("new_step", self.new_step)
 	
 	pause_preload = load(pause_scene)
 	Global.song_scene = LoadingScreen.scene
@@ -136,8 +138,6 @@ func _ready():
 	assert(chart, 'Failed to load chart. is (%s) correct?' % (song_data.difficulties[GameManager.difficulty].chart))
 	
 	song_speed = SettingsManager.get_setting("song_speed")
-	# This is to prevent null references
-	host.ui_skin = ui_skin
 	
 	ui.set_credits(song_data.title, song_data.artist)
 	play_song(0)
@@ -305,6 +305,7 @@ func get_tempo_at(time: float) -> float:
 
 func play_song(time: float):
 	GameManager.started_song(song_data)
+	conductor.stream_player = instrumental
 	conductor.tempo = get_tempo_at(-chart.offset + time)
 	conductor.seconds_per_beat = 60.0 / conductor.tempo
 	conductor.offset = chart.offset + SettingsManager.get_setting("offset")
@@ -419,7 +420,6 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 	
 	if event_name == "camera_position":
 		var camera_position = host.camera_positions[int(event_parameters[0])].global_position
-		camera_position += ui.offset
 		if camera_position != null: camera.position = camera_position
 	
 	elif event_name == "camera_bop":
@@ -476,7 +476,6 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 
 
 func song_finished():
-	
 	GameManager.finished_song(score)
 	
 	if GameManager.freeplay:
@@ -497,16 +496,13 @@ func new_beat(current_beat, measure_relative):
 
 
 func new_step(current_step, measure_relative):
-	
 	if current_step % bop_rate == 0:
-		
 		camera.zoom += camera_bop_strength * camera.zoom
 		if SettingsManager.get_setting("ui_bops"): ui.scale += ui_bop_strength
 
 # Strum Util
 
 func note_hit(time, lane, note_type, hit_time, strum_manager):
-	
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
@@ -639,26 +635,26 @@ func show_combo(rating: String, _combo: int):
 	rating_instance.ui_skin = ui_skin
 	rating_instance.rating = rating
 	
-	var combo_numbershandler_instance = combo_numbershandler_node.instantiate()
+	var combo_numbers_manager_instance = combo_numbers_manager_node.instantiate()
 	
-	combo_numbershandler_instance.ui_skin = ui_skin
-	combo_numbershandler_instance.combo = _combo
-	if misses == 0: combo_numbershandler_instance.fc = true
-	
+	combo_numbers_manager_instance.ui_skin = ui_skin
+	combo_numbers_manager_instance.combo = _combo
+	if misses == 0:
+		combo_numbers_manager_instance.fc = true
 	
 	if SettingsManager.get_setting("combo_ui"):
-		
 		rating_instance.position = Vector2(-32, 88)
-		combo_numbershandler_instance.position = Vector2(96, 152)
+		combo_numbers_manager_instance.position = Vector2(96, 152)
 		
 		ui.add_child(rating_instance)
-		ui.add_child(combo_numbershandler_instance)
+		ui.add_child(combo_numbers_manager_instance)
 	else:
-		
-		rating_instance.position = rating_position.global_position + ui.offset
-		combo_numbershandler_instance.position = combo_position.global_position + ui.offset
+		rating_instance.position = rating_position.global_position
+		rating_instance.z_index = 1000
 		rating_instance.scale *= combo_scale_multiplier
-		combo_numbershandler_instance.scale *= combo_scale_multiplier
+		combo_numbers_manager_instance.position = combo_position.global_position
+		combo_numbers_manager_instance.scale *= combo_scale_multiplier
+		combo_numbers_manager_instance.z_index = 1000
 		
 		self.add_child(rating_instance)
-		self.add_child(combo_numbershandler_instance)
+		self.add_child(combo_numbers_manager_instance)

@@ -22,7 +22,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
 	# Just in case anyone wants to display this information
 	# $Performance.text = "Accuracy: " + str(snappedf(accuracy * 100, 0.01)) + "%"
 	# $Performance.text += " • " + "Rank: " + rank
@@ -52,13 +51,11 @@ func set_enemy_color(color: Color): $"Health Bar".tint_under = color
 
 
 func icon_bop(time: float):
-	
 	Global.bop_tween(player_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
 	Global.bop_tween(enemy_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
 
 
 func update_health_bar(health: float):
-	
 	$"Health Bar".value = health
 	
 	var display_x = ($"Health Bar".value / $"Health Bar".max_value) * $"Health Bar".size.x
@@ -84,20 +81,17 @@ func update_health_bar(health: float):
 			break
 
 func downscroll_ui():
-	
 	$"Player Strum".position.y *= -1
 	$"Enemy Strum".position.y *= -1
 	$"Health Bar".position.y *= -1
 
 
 func streamer_ui():
-	
 	$"Health Bar".visible = false
 	$"Health Bar/Performance".visible = false
 
 
 func set_credits(song_name: String, artist_names: String):
-	
 	$"Song Credits/ColorRect/Label".text = song_name
 	$"Song Credits/ColorRect/Label".text += "\n-\n"
 	$"Song Credits/ColorRect/Label".text += artist_names

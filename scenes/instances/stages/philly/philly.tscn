@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=3 uid="uid://o04ewby7jkf1"]
 
-[ext_resource type="Script" uid="uid://df3mvgqvkhgri" path="res://scenes/instances/stages/4chan_philly/4chan_philly.gd" id="1_osrb8"]
+[ext_resource type="Script" uid="uid://df3mvgqvkhgri" path="res://scenes/instances/stages/philly/philly.gd" id="1_osrb8"]
 [ext_resource type="Shader" uid="uid://cn1tl4764rmon" path="res://assets/shaders/raindrops.gdshader" id="2_0df5w"]
 [ext_resource type="Texture2D" uid="uid://qh7u8c8w87q0" path="res://assets/sprites/stages/philly_streets/phillyForeground.png" id="2_ivyoc"]
 [ext_resource type="Shader" uid="uid://dw0lfwemfmrel" path="res://assets/shaders/rain.gdshader" id="2_xd4wj"]
@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ddqj4k888858g" path="res://assets/sprites/stages/philly_streets/phillyHighway.png" id="5_42vn4"]
 [ext_resource type="Texture2D" uid="uid://bkvyo7phmg6hy" path="res://assets/sprites/stages/philly_streets/phillyHighwayLights.png" id="6_tj78g"]
 [ext_resource type="Texture2D" uid="uid://b2v8falt6oedu" path="res://assets/sprites/stages/philly_streets/phillyHighwayLights_lightmap.png" id="7_aje2x"]
-[ext_resource type="PackedScene" uid="uid://cpci1337c6gt3" path="res://scenes/instances/stages/4chan_philly/car.tscn" id="7_e0uik"]
+[ext_resource type="PackedScene" uid="uid://cpci1337c6gt3" path="res://scenes/instances/stages/philly/car.tscn" id="7_e0uik"]
 [ext_resource type="Texture2D" uid="uid://dvv2jnryyebrj" path="res://assets/sprites/stages/philly_streets/phillySkyline.png" id="8_uppan"]
 [ext_resource type="Texture2D" uid="uid://c8mta45ho35bj" path="res://assets/sprites/stages/philly_streets/phillySmog.png" id="9_8888w"]
 [ext_resource type="Texture2D" uid="uid://bgqiys4216y2h" path="res://assets/sprites/stages/philly_streets/phillySkybox.png" id="10_2fyi0"]

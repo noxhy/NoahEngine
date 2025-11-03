@@ -11,83 +11,72 @@
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="8_njc57"]
 
 [node name="weed_school" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_5a47v")
-slow_boppers = Array[NodePath]([NodePath("Boppers/Simps")])
 
-[node name="Boppers" type="CanvasLayer" parent="." groups=["parallax"]]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.9
+[node name="Simps" parent="." groups=["slow_bop", "tween_bop"] instance=ExtResource("5_hrt6l")]
+z_index = 80
+position = Vector2(-646, 222)
+scale = Vector2(6, 6)
+autoplay = "BG girls group"
+frame = 29
+frame_progress = 1.0
+centered = false
 
-[node name="Simps" parent="Boppers" groups=["autoplay", "tween"] instance=ExtResource("5_hrt6l")]
-position = Vector2(0, 48)
-scale = Vector2(4, 4)
-metadata/_edit_lock_ = true
-
-[node name="Tree" type="CanvasLayer" parent="."]
-layer = -2
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="WeebTrees" type="Sprite2D" parent="Tree"]
-z_index = 1
+[node name="WeebStreet" type="Sprite2D" parent="."]
+z_index = 30
 texture_filter = 1
-position = Vector2(8, -160)
-scale = Vector2(4.3, 4.3)
-texture = ExtResource("5_fs3li")
-metadata/_edit_lock_ = true
+position = Vector2(-662, 6)
+scale = Vector2(6, 6)
+texture = ExtResource("2_awjbp")
+centered = false
 
-[node name="WeebTreesBack" type="Sprite2D" parent="Tree"]
-texture_filter = 1
-position = Vector2(2.067, 16)
-scale = Vector2(4.308, 4.861)
+[node name="WeebTreesBack" type="Sprite2D" parent="."]
+z_index = 40
+position = Vector2(-500, 6)
+scale = Vector2(6, 6.77)
 texture = ExtResource("6_8vprs")
-metadata/_edit_lock_ = true
+centered = false
 
-[node name="Petals" type="AnimatedSprite2D" parent="Tree" groups=["autoplay"]]
-z_index = 2
-texture_filter = 1
-position = Vector2(11, 8)
-scale = Vector2(4.894, 4.894)
+[node name="WeebTrees" type="Sprite2D" parent="."]
+z_index = 60
+position = Vector2(-626, -78)
+scale = Vector2(6, 6)
+texture = ExtResource("5_fs3li")
+centered = false
+
+[node name="Petals" type="Parallax2D" parent="."]
+z_index = 70
+scroll_scale = Vector2(0.5, 0.5)
+
+[node name="Petals" type="AnimatedSprite2D" parent="Petals"]
+position = Vector2(-626, -78)
+scale = Vector2(6, 6)
 sprite_frames = ExtResource("7_52auc")
 animation = &"PETALS ALL"
-frame_progress = 0.758623
+autoplay = "PETALS ALL"
+frame_progress = 0.08097751
+centered = false
 script = ExtResource("8_njc57")
-metadata/_edit_lock_ = true
 
-[node name="School" type="CanvasLayer" parent="."]
-layer = -3
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="WeebStreet" type="Sprite2D" parent="School"]
-texture_filter = 1
-position = Vector2(2.08189e-12, 40)
-scale = Vector2(4.5, 4.5)
-texture = ExtResource("2_awjbp")
-metadata/_edit_lock_ = true
+[node name="School" type="Parallax2D" parent="."]
+z_index = 20
+scroll_scale = Vector2(0.75, 0.75)
 
 [node name="WeebSchool" type="Sprite2D" parent="School"]
 z_index = -1
 texture_filter = 1
-position = Vector2(-3.05176e-05, 40)
-scale = Vector2(4.5, 4.5)
+position = Vector2(-668, 6)
+scale = Vector2(6, 6)
 texture = ExtResource("3_v5aas")
-metadata/_edit_lock_ = true
+centered = false
 
-[node name="Background" type="CanvasLayer" parent="." groups=["parallax"]]
-layer = -4
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.9
+[node name="Background" type="Parallax2D" parent="."]
+z_index = 10
+scroll_scale = Vector2(0.2, 0.2)
 
 [node name="WeebSky" type="Sprite2D" parent="Background"]
-texture_filter = 1
-position = Vector2(-35.5556, 84.4445)
-scale = Vector2(5, 5)
+position = Vector2(-626, -78)
+scale = Vector2(6, 6)
 texture = ExtResource("4_aghp0")
+centered = false

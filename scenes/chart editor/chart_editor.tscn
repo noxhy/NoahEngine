@@ -45,7 +45,7 @@ muted_color = Color(0.16, 0.16, 0.16, 0.502)
 box_color = Color(0.151337, 0.445313, 0.17072, 0.287)
 selected_color = Color(0.404297, 0.75, 0.442108, 0.734)
 
-[node name="Conductor" type="Node" parent="."]
+[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_dontb")
 stream_player = NodePath("../Audio/Instrumental")
 

@@ -19,8 +19,8 @@ class_name NoteSkin
 @export var hold_covers_scale = 1.0
 
 @export_subgroup("Offsets")
-@export var animation_names: Dictionary[String, String] = {}
-@export var offsets: Dictionary[String, Vector2] = {}
+@export var animation_names: Dictionary[StringName, StringName] = {}
+@export var offsets: Dictionary[StringName, Vector2] = {}
 
 @export_subgroup("Audio")
 @export var hit_sound: AudioStream

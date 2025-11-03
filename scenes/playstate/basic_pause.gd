@@ -166,15 +166,17 @@ func select_option(i: int):
 	
 	elif option == "options":
 		get_tree().paused = false
-		Global.change_scene_to("res://scenes/options/options.tscn", null)
+		self.get_parent().process_mode = PROCESS_MODE_DISABLED
+		Global.change_scene_to("res://scenes/options/options.tscn", "down")
 	
 	elif option == "restart":
 		get_tree().paused = false
+		self.get_parent().process_mode = PROCESS_MODE_DISABLED
 		get_tree().reload_current_scene()
 	
 	elif option == "exit":
-		self.get_parent().process_mode = Node.PROCESS_MODE_DISABLED
 		get_tree().paused = false
+		self.get_parent().process_mode = PROCESS_MODE_DISABLED
 		GameManager.reset_stats()
 		
 		if GameManager.freeplay:
@@ -183,7 +185,7 @@ func select_option(i: int):
 			Global.change_scene_to("res://scenes/story mode/story_mode.tscn", "down")
 	
 	elif option == "chart_editor":
-		self.get_parent().process_mode = Node.PROCESS_MODE_DISABLED
 		get_tree().paused = false
+		self.get_parent().process_mode = PROCESS_MODE_DISABLED
 		GameManager.reset_stats()
 		Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")

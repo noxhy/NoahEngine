@@ -2,10 +2,9 @@ extends AnimatedSprite2D
 class_name OffsetSprite
 
 ## Each key is the animation id and the value is the real animation name in the [code]SpriteFrames[/code]
-@export var animation_names: Dictionary[String, String] = {}
+@export var animation_names: Dictionary[StringName, StringName] = {}
 ## Each key is the animation name in the [code]SpriteFrames[/code] and the value is the offset
-@export var offsets: Dictionary[String, Vector2] = {}
-
+@export var offsets: Dictionary[StringName, Vector2] = {}
 
 func play_animation(animation_name: String = "", forced: bool = true):
 	if animation_names.has(animation_name):

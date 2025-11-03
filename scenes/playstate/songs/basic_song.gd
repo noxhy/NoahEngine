@@ -1,12 +1,12 @@
 extends Node2D
 
 @onready var characters = [%Player, %Enemy, %Metronome]
-@onready var camera_positions = [$"World/Position 1", $"World/Position 2", $"World/Position 3"]
+@onready var camera_positions = [%"Position 1", %"Position 2", %"Position 3"]
 @onready var playstate_host: PlayState = $"PlayState Host"
-@onready var ui_skin: UISkin
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	assert(playstate_host, "Playstate host not found")
 	playstate_host.ui.set_player_icons(%Player.icons)
 	playstate_host.ui.set_player_color(%Player.color)
 	
@@ -18,39 +18,24 @@ func _ready():
 	
 	await playstate_host.setup_finished
 	
+	if get_node_or_null("%Stage") != null:
+		playstate_host.conductor.connect("new_beat", %Stage._on_conductor_new_beat)
+	
 	playstate_host.conductor.connect("new_beat", self._on_conductor_new_beat)
-	playstate_host.conductor.connect("new_step", self._on_conductor_new_step)
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	%Stage.tempo = playstate_host.conductor.tempo
 
 # Conductor Util
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	
 	if measure_relative % 2 == 0:
-		
-		characters[0].play_animation("idle")
-		characters[1].play_animation("idle")
-		if (characters[2].current_animation == "idle"): characters[2].can_idle = true
-		characters[2].play_animation("idle", playstate_host.conductor.seconds_per_beat * 2)
-	
-	playstate_host.new_beat(current_beat, measure_relative)
-	
-	%Stage.bop(measure_relative % 2 == 0)
-
-
-func _on_conductor_new_step(current_step, measure_relative):
-	playstate_host.new_step(current_step, measure_relative)
-
+		characters[0].play_animation(characters[0].idle_animation)
+		characters[1].play_animation(characters[1].idle_animation)
+		if (characters[2].current_animation == characters[2].idle_animation):
+			characters[2].can_idle = true
+		characters[2].play_animation(characters[2].current_animation, GameManager.seconds_per_beat * 2)
 
 # Util
 
-
 func _on_create_note(time, lane, note_length, note_type, tempo):
-	
 	if (lane > 3):
 		playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
 	else:
@@ -58,7 +43,6 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 
 
 func note_hit(time, lane, note_type, hit_time, strumhandler):
-	
 	var animations = ["left", "down", "up", "right"]
 	
 	if !strumhandler.enemy_slot:
@@ -70,7 +54,6 @@ func note_hit(time, lane, note_type, hit_time, strumhandler):
 
 
 func note_holding(time, lane, note_type, strumhandler):
-	
 	var animations = ["left", "down", "up", "right"]
 	
 	if !strumhandler.enemy_slot:
@@ -82,14 +65,12 @@ func note_holding(time, lane, note_type, strumhandler):
 
 
 func note_miss(time, lane, length, note_type, hit_time, strumhandler):
-	
 	var animations = ["left", "down", "up", "right"]
 	
 	if !strumhandler.enemy_slot:
-		
-		if note_type == -1: SoundManager.anti_spam.play()
+		if note_type == -1:
+			SoundManager.anti_spam.play()
 		characters[0].play_animation("miss_" + animations[lane])
-	
 	else:
 		characters[1].play_animation("miss_" + animations[lane])
 	
@@ -101,6 +82,6 @@ func _on_new_event(time, event_name, event_parameters):
 
 
 func _on_combo_break():
-	
 	SoundManager.miss.play()
-	characters[2].play_animation("cry")
+	if characters.get(2):
+		characters[2].play_animation("cry")

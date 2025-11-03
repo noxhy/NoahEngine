@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://dgaywwoiwkbeu"]
+[gd_scene load_steps=11 format=3 uid="uid://dgaywwoiwkbeu"]
 
 [ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://scenes/playstate/songs/basic_song.gd" id="1_kkhjq"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/playstate/playstate.tscn" id="2_hvfki"]
@@ -6,7 +6,6 @@
 [ext_resource type="Resource" uid="uid://dsqgb7q6eq1mf" path="res://assets/sprites/playstate/pixel/pixel_ui_skin.tres" id="5_0s4pd"]
 [ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/instances/playstate/playstate_camera.tscn" id="6_vhuvi"]
 [ext_resource type="PackedScene" uid="uid://cd3leoxyqnk4m" path="res://scenes/instances/stages/weeb_school/weeb_school.tscn" id="7_mjcyn"]
-[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/instances/conductor.gd" id="8_0rus8"]
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://scenes/instances/characters/boyfriend pixel.tscn" id="9_cvimb"]
 [ext_resource type="PackedScene" uid="uid://c641vxfiu033w" path="res://scenes/instances/characters/senpai.tscn" id="10_2o85c"]
 [ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://scenes/instances/characters/girlfriend pixel.tscn" id="11_norpj"]
@@ -15,12 +14,11 @@
 [node name="Senpai" type="Node2D"]
 script = ExtResource("1_kkhjq")
 
-[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "conductor", "rating_position", "combo_position") instance=ExtResource("2_hvfki")]
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_hvfki")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../Camera")
-conductor = NodePath("../Conductor")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_gvt2o")
@@ -28,53 +26,17 @@ ui_skin = ExtResource("5_0s4pd")
 combo_scale_multiplier = Vector2(0.65, 0.65)
 
 [node name="Camera" parent="." instance=ExtResource("6_vhuvi")]
-position = Vector2(640, 432)
+position = Vector2(139.7, 520.7)
 position_smoothing_speed = 3.0
-target_zoom = Vector2(1.3, 1.3)
 
 [node name="Stage" parent="." instance=ExtResource("7_mjcyn")]
 unique_name_in_owner = true
 
-[node name="Conductor" type="Node" parent="."]
-script = ExtResource("8_0rus8")
-
-[node name="World" type="CanvasLayer" parent="."]
-layer = 10
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="Position 1" type="Marker2D" parent="World"]
-position = Vector2(102, 104)
-gizmo_extents = 18.3
-
-[node name="Position 2" type="Marker2D" parent="World"]
-position = Vector2(-87, 72)
-gizmo_extents = 26.5
-
-[node name="Position 3" type="Marker2D" parent="World"]
-position = Vector2(0, 72)
-gizmo_extents = 120.7
-
-[node name="Rating Marker" type="Marker2D" parent="World"]
-position = Vector2(108, 28)
-gizmo_extents = 20.0
-
-[node name="Combo Marker" type="Marker2D" parent="World"]
-position = Vector2(192, 72)
-gizmo_extents = 20.0
-
-[node name="Characters" type="CanvasLayer" parent="."]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="Player" parent="Characters" instance=ExtResource("9_cvimb")]
+[node name="Player" parent="." instance=ExtResource("9_cvimb")]
 unique_name_in_owner = true
-z_index = 1
-position = Vector2(216, 314)
-scale = Vector2(4, 4)
+z_index = 300
+position = Vector2(480, 880.00006)
+scale = Vector2(6, 6)
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"BF DOWN NOTE instance 1",
 &"idle": &"BF IDLE instance 1",
@@ -87,11 +49,11 @@ animation_names = Dictionary[StringName, StringName]({
 &"up": &"BF UP NOTE instance 1"
 })
 
-[node name="Enemy" parent="Characters" instance=ExtResource("10_2o85c")]
+[node name="Enemy" parent="." instance=ExtResource("10_2o85c")]
 unique_name_in_owner = true
-z_index = 1
-position = Vector2(-176, 314)
-scale = Vector2(4, 4)
+z_index = 200
+position = Vector2(-160, 904.00006)
+scale = Vector2(6, 6)
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"SENPAI DOWN NOTE instance 1",
 &"idle": &"Senpai Idle instance 1",
@@ -100,14 +62,41 @@ animation_names = Dictionary[StringName, StringName]({
 &"up": &"SENPAI UP NOTE instance 1"
 })
 
-[node name="Metronome" parent="Characters" instance=ExtResource("11_norpj")]
+[node name="Metronome" parent="." instance=ExtResource("11_norpj")]
 unique_name_in_owner = true
-z_index = -1
-position = Vector2(0, 288)
-scale = Vector2(4, 4)
+z_index = 100
+position = Vector2(144, 840)
+scale = Vector2(6, 6)
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"GF IDLE"
 })
+
+[node name="World" type="CanvasLayer" parent="."]
+layer = 10
+follow_viewport_enabled = true
+
+[node name="Position 1" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(240, 568)
+gizmo_extents = 18.3
+
+[node name="Position 2" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(18.5, 520.7)
+gizmo_extents = 26.5
+
+[node name="Position 3" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(139.7, 520.7)
+gizmo_extents = 120.7
+
+[node name="Rating Marker" type="Marker2D" parent="World"]
+position = Vector2(284, 484)
+gizmo_extents = 20.0
+
+[node name="Combo Marker" type="Marker2D" parent="World"]
+position = Vector2(368, 528)
+gizmo_extents = 20.0
 
 [node name="UI" parent="." instance=ExtResource("12_q80n4")]
 layer = 10
@@ -115,5 +104,3 @@ layer = 10
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
 [connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]
-[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
-[connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]
