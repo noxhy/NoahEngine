@@ -42,7 +42,7 @@ void fragment() {
 		}
 		//COLOR = result;
 	}
-	if ((filter_mode & 8) !=0 ) {
+	if ((filter_mode & 8) !=0) {
 		vec4 src = texture(TEXTURE, UV);
 		COLOR = color_filter(src);
 	}

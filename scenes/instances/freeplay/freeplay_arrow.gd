@@ -14,10 +14,10 @@ func _process(_delta: float) -> void:
 		
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property( $OffsetSprite, "scale", Vector2( 0.9, 0.9 ), 0.2 )
+		tween.tween_property($OffsetSprite, "scale", Vector2(0.9, 0.9), 0.2)
 	
 	if Input.is_action_just_released(input):
 		
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-		tween.tween_property( $OffsetSprite, "scale", Vector2( 1, 1 ), 0.2 )
+		tween.tween_property($OffsetSprite, "scale", Vector2(1, 1), 0.2)

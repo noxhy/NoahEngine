@@ -236,7 +236,7 @@ tracks/0/path = NodePath("Screen Flash/ColorRect:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -364,6 +364,9 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(256, 312)
 scale = Vector2(0.95, 0.95)
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"gfDance"
+})
 
 [node name="Play Label" type="Label" parent="UI"]
 anchors_preset = -1

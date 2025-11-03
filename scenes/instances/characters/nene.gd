@@ -32,7 +32,7 @@ func _process(delta):
 	var interval = (maxFrequency - minFrequency) / definition
 	
 	update_timer -= delta
-	if ( update_timer <= 0 ): update_timer = update_rate
+	if (update_timer <= 0): update_timer = update_rate
 	
 	for i in range(definition):
 		
@@ -48,11 +48,11 @@ func _process(delta):
 		
 		
 		var mag = spectrum.get_magnitude_for_frequency_range(frequencyRangeLow, frequencyRangeHigh)
-		mag = linear_to_db( mag.length() )
+		mag = linear_to_db(mag.length())
 		mag = (mag - min_db) / (max_db - min_db * 1.0)
 		
-		mag += slope * ( frequency - minFrequency ) / ( maxFrequency - minFrequency )
+		mag += slope * (frequency - minFrequency) / (maxFrequency - minFrequency)
 		mag = clamp(mag, 0.01, 1.0) * 7.0
 		
-		if ( update_timer == update_rate ):
+		if (update_timer == update_rate):
 			visualizer_nodes[i].frame = 7 - mag

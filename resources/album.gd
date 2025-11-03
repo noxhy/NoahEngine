@@ -1,4 +1,4 @@
-@icon( "res://assets/sprites/nodes/album.png" )
+@icon("res://assets/sprites/nodes/album.png")
 
 extends Resource
 class_name Album

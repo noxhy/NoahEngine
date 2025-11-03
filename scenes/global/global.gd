@@ -18,8 +18,11 @@ var transitioning: bool = false
 
 func _ready():
 	SettingsManager.load_settings()
+	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
+	# Input responsiveness
+	Input.set_use_accumulated_input(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -29,9 +32,9 @@ func _process(delta):
 	$"UI/Performance Label".visible = SettingsManager.get_setting("show_performance")
 	if SettingsManager.get_setting("show_performance"):
 		
-		var memory = snapped(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / 1024.0 / 1024.0, 0.01)
+		var memory = String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
 		var performance_string: String = "FPS: " + str(Engine.get_frames_per_second())
-		performance_string += "\nMEM: " + str(memory) + " MB"
+		performance_string += "\nMEM: " + memory
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
 		
 		$"UI/Performance Label".text = performance_string

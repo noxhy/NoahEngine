@@ -8,7 +8,7 @@ func _ready():
 	$OffsetSprite.sprite_frames = note_skin.splashes_texture
 	
 	if note_skin.animation_names != null:
-		$OffsetSprite.animation_names.merge( note_skin.animation_names, true )
+		$OffsetSprite.animation_names.merge(note_skin.animation_names, true)
 	
 	$OffsetSprite.offsets = note_skin.offsets
 	

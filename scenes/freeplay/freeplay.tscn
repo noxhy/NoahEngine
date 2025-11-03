@@ -34,7 +34,7 @@ metadata/_edit_horizontal_guides_ = [88.0]
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(640, 360)
 
-[node name="Conductor" type="Node" parent="."]
+[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("1_d85pb")
 stream_player = NodePath("../Audio/Music")
 

@@ -64,7 +64,7 @@ func generate_preview(stream: AudioStreamWAV, image_max_width: int = 500):
 	var reduced_data = PackedByteArray()
 	# We use floor(), not round(), because extra elements in the end of data
 	# before next sampling interval are discarded
-	var reduced_data_size = int(floor( data_size / float(sample_interval) ))
+	var reduced_data_size = int(floor(data_size / float(sample_interval)))
 	reduced_data.resize(reduced_data_size)
 	
 	

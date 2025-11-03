@@ -92,11 +92,8 @@ func _ready() -> void:
 	%"Window Button".get_popup().connect("id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
 
-
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
 	if start_offset < 0: start_offset = 0
 	
 	if ChartManager.song != null:
@@ -174,9 +171,7 @@ func _process(delta: float) -> void:
 					%"Chart Snap".value = chart_snap
 		
 		if chart != null:
-			
 			if Input.is_action_pressed("control") and Input.is_action_just_pressed("save"):
-				
 				ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 				ResourceSaver.save(chart, chart.resource_path)
 	
@@ -310,7 +305,6 @@ func _process(delta: float) -> void:
 									j += 1
 								
 								if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)
-	
 	
 	if Input.is_action_pressed("mouse_left"):
 		

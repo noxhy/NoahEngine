@@ -45,38 +45,38 @@ animations = [{
 
 [node name="Boyfriend" type="Node2D"]
 script = ExtResource("1_mx020")
-animation_names = Dictionary[String, String]({
-"attack": "boyfriend attack",
-"cheer": "BF HEY!!",
-"dodge": "boyfriend dodge",
-"down": "BF NOTE DOWN",
-"hit": "BF hit",
-"idle": "BF idle dance",
-"left": "BF NOTE LEFT",
-"miss_down": "BF NOTE DOWN MISS",
-"miss_left": "BF NOTE LEFT MISS",
-"miss_right": "BF NOTE RIGHT MISS",
-"miss_up": "BF NOTE UP MISS",
-"pre_attack": "bf pre attack",
-"right": "BF NOTE RIGHT",
-"scared": "BF idle shaking",
-"up": "BF NOTE UP"
+animation_names = Dictionary[StringName, StringName]({
+&"attack": &"boyfriend attack",
+&"cheer": &"BF HEY!!",
+&"dodge": &"boyfriend dodge",
+&"down": &"BF NOTE DOWN",
+&"hit": &"BF hit",
+&"idle": &"BF idle dance",
+&"left": &"BF NOTE LEFT",
+&"miss_down": &"BF NOTE DOWN MISS",
+&"miss_left": &"BF NOTE LEFT MISS",
+&"miss_right": &"BF NOTE RIGHT MISS",
+&"miss_up": &"BF NOTE UP MISS",
+&"pre_attack": &"bf pre attack",
+&"right": &"BF NOTE RIGHT",
+&"scared": &"BF idle shaking",
+&"up": &"BF NOTE UP"
 })
-offsets = Dictionary[String, Vector2]({
-"BF HEY!!": Vector2(-16, -163),
-"BF NOTE DOWN": Vector2(-26, -131),
-"BF NOTE DOWN MISS": Vector2(-27, -141),
-"BF NOTE LEFT": Vector2(-37, -155),
-"BF NOTE LEFT MISS": Vector2(-40, -168),
-"BF NOTE RIGHT": Vector2(27, -158),
-"BF NOTE RIGHT MISS": Vector2(24, -168),
-"BF NOTE UP": Vector2(0, -173),
-"BF NOTE UP MISS": Vector2(0, -170),
-"BF hit": Vector2(-12, -165),
-"BF idle dance": Vector2(-16, -160),
-"bf pre attack": Vector2(0, -133),
-"boyfriend attack": Vector2(-165, -290),
-"boyfriend dodge": Vector2(-34, -148)
+offsets = Dictionary[StringName, Vector2]({
+&"BF HEY!!": Vector2(-16, -163),
+&"BF NOTE DOWN": Vector2(-26, -131),
+&"BF NOTE DOWN MISS": Vector2(-27, -141),
+&"BF NOTE LEFT": Vector2(-37, -155),
+&"BF NOTE LEFT MISS": Vector2(-40, -168),
+&"BF NOTE RIGHT": Vector2(27, -158),
+&"BF NOTE RIGHT MISS": Vector2(24, -168),
+&"BF NOTE UP": Vector2(0, -173),
+&"BF NOTE UP MISS": Vector2(0, -170),
+&"BF hit": Vector2(-12, -165),
+&"BF idle dance": Vector2(-16, -160),
+&"bf pre attack": Vector2(0, -133),
+&"boyfriend attack": Vector2(-165, -290),
+&"boyfriend dodge": Vector2(-34, -148)
 })
 icons = SubResource("SpriteFrames_u3ypl")
 color = Color(0.286275, 0.733333, 0.85098, 1)

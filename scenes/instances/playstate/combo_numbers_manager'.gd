@@ -9,7 +9,7 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	var digits = str( combo ).length()
+	var digits = str(combo).length()
 	
 	for digit in digits:
 		

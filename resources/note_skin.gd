@@ -1,4 +1,4 @@
-@icon ( "res://assets/sprites/nodes/note skin.png" )
+@icon ("res://assets/sprites/nodes/note skin.png")
 
 extends Resource
 class_name NoteSkin

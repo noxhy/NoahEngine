@@ -1,4 +1,4 @@
-@icon( "res://assets/sprites/nodes/dialogue.png" )
+@icon("res://assets/sprites/nodes/dialogue.png")
 
 extends Resource
 class_name Dialogue

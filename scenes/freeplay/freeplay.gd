@@ -18,7 +18,6 @@ var dj: AtlasSprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	difficulty = difficulties[0] 
 	$"Difficulty Selector".difficulties = difficulties
 	album = Preload.character_data[GameManager.current_character].album
@@ -123,7 +122,6 @@ func load_page():
 
 
 func update_selection(i: int):
-	
 	var instances = get_tree().get_nodes_in_group("instances")
 	
 	Global.freeplay_song_option = wrapi(
@@ -137,6 +135,7 @@ func update_selection(i: int):
 		return
 	
 	var song_file = options[instances[i].index]
+	
 	SoundManager.scroll.play()
 	$Audio/Music.stream = load(song_file.instrumental)
 	$Audio/Music.volume_db = -60
@@ -192,6 +191,13 @@ func select_option(i: int):
 		
 		var song_file = options[get_tree().get_nodes_in_group("instances")[i].index]
 		
+		# Null Protection
+		var scene = song_file.scene
+		if scene == "" or !ResourceLoader.exists(scene):
+			SoundManager.cancel.play()
+			printerr("Could not load scene (\"%s\")" % scene)
+			return
+		
 		# Lock Check
 		if song_file.locked: return
 		
@@ -202,7 +208,7 @@ func select_option(i: int):
 		var tween = create_tween()
 		tween.set_parallel()
 		
-		tween.tween_property( $Audio/Music, "volume_db", -60, 1 )
+		tween.tween_property($Audio/Music, "volume_db", -60, 1)
 		
 		var option_nodes = get_tree().get_nodes_in_group("instances")
 		for j in option_nodes:
@@ -221,11 +227,11 @@ func select_option(i: int):
 @warning_ignore("shadowed_variable")
 # Doesn't actually play the audio, just sends you to the scene
 func play_song(song: Song, difficulty: String):
-	
 	var scene = song.scene
 	if song.difficulties[difficulty].has("scene"):
 		scene = song.difficulties[difficulty].scene
 	
+	GameManager.current_song = song
 	GameManager.play_mode = GameManager.PLAY_MODE.FREEPLAY
 	GameManager.difficulty = difficulty
 	GameManager.freeplay = true
@@ -241,7 +247,6 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 
 @warning_ignore("shadowed_variable")
 func _on_difficulty_selector_selected_difficulty(difficulty: String) -> void:
-	
 	self.difficulty = difficulty
 	load_page()
 	await Engine.get_main_loop().process_frame
@@ -250,12 +255,10 @@ func _on_difficulty_selector_selected_difficulty(difficulty: String) -> void:
 
 
 func update_grade(grade: int):
-	
 	$Above/ClearBox/Label.text = str(int(grade))
 	current_grade = grade
 
 
 func dj_animation_looped():
-	
 	if dj.animation == "intro":
 		dj.animation = "idle"

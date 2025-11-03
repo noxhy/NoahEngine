@@ -1,7 +1,6 @@
 extends CanvasLayer
 
-@onready var strums = [ $"Player Strum", $"Enemy Strum" ]
-
+@onready var strums = [$"Player Strum", $"Enemy Strum"]
 @onready var player_icon = $"Health Bar/Icon Manager/Player"
 @onready var enemy_icon = $"Health Bar/Icon Manager/Enemy"
 
@@ -25,14 +24,14 @@ func _ready():
 func _process(delta):
 	
 	# Just in case anyone wants to display this information
-	# $Performance.text = "Accuracy: " + str( snappedf( accuracy * 100, 0.01 ) ) + "%"
+	# $Performance.text = "Accuracy: " + str(snappedf(accuracy * 100, 0.01)) + "%"
 	# $Performance.text += " • " + "Rank: " + rank
 	
 	$"Health Bar/Performance".text = "Score: " + Global.format_number(score)
 	$"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
 	
 	
-	update_health_bar( lerp( $"Health Bar".value, target_health, 0.115 ) )
+	update_health_bar(lerp($"Health Bar".value, target_health, 0.115))
 
 
 func _physics_process(delta):
@@ -54,18 +53,18 @@ func set_enemy_color(color: Color): $"Health Bar".tint_under = color
 
 func icon_bop(time: float):
 	
-	Global.bop_tween( player_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD )
-	Global.bop_tween( enemy_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD )
+	Global.bop_tween(player_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
+	Global.bop_tween(enemy_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
 
 
-func update_health_bar( health: float ):
+func update_health_bar(health: float):
 	
 	$"Health Bar".value = health
 	
-	var display_x = ( $"Health Bar".value / $"Health Bar".max_value ) * $"Health Bar".size.x
+	var display_x = ($"Health Bar".value / $"Health Bar".max_value) * $"Health Bar".size.x
 	display_x = $"Health Bar".size.x - display_x
 	
-	$"Health Bar/Icon Manager".position = Vector2( display_x, 10 )
+	$"Health Bar/Icon Manager".position = Vector2(display_x, 10)
 	
 	var conditions = [
 		[ health >= 85, "winning", "losing" ],
@@ -77,10 +76,10 @@ func update_health_bar( health: float ):
 		
 		if condition[0]:
 			
-			if player_icon.sprite_frames.get_animation_names().has( condition[1] ):
+			if player_icon.sprite_frames.get_animation_names().has(condition[1]):
 				player_icon.animation = condition[1]
 			
-			if enemy_icon.sprite_frames.get_animation_names().has( condition[2] ):
+			if enemy_icon.sprite_frames.get_animation_names().has(condition[2]):
 				enemy_icon.animation = condition[2]
 			break
 
@@ -97,7 +96,7 @@ func streamer_ui():
 	$"Health Bar/Performance".visible = false
 
 
-func set_credits( song_name: String, artist_names: String ):
+func set_credits(song_name: String, artist_names: String):
 	
 	$"Song Credits/ColorRect/Label".text = song_name
 	$"Song Credits/ColorRect/Label".text += "\n-\n"

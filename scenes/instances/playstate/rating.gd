@@ -14,19 +14,19 @@ func _ready():
 	
 	if ui_skin.animation_names != null:
 		
-		$OffsetSprite.animation_names.merge( ui_skin.animation_names, true )
+		$OffsetSprite.animation_names.merge(ui_skin.animation_names, true)
 	
 	$OffsetSprite.offsets = ui_skin.offsets
-	$OffsetSprite.scale = Vector2( ui_skin.rating_scale, ui_skin.rating_scale ) 
+	$OffsetSprite.scale = Vector2(ui_skin.rating_scale, ui_skin.rating_scale) 
 	
 	if ui_skin.pixel_texture:
 		$OffsetSprite.texture_filter = TEXTURE_FILTER_NEAREST
 	
 	$OffsetSprite.play()
 	
-	$OffsetSprite.play_animation( rating )
+	$OffsetSprite.play_animation(rating)
 	
-	motion = Vector2( randf_range( -0.5, 0.5 ), -2 )
+	motion = Vector2(randf_range(-0.5, 0.5), -2)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

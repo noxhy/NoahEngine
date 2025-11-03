@@ -52,7 +52,7 @@ func _ready():
 	if not SoundManager.music.playing:
 		SoundManager.music.play()
 	
-	$Conductor.stream_player = SoundManager.music.get_path()
+	$Conductor.stream_player = SoundManager.music
 	
 	await $Conductor.ready
 	

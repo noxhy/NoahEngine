@@ -9,7 +9,7 @@ signal new_step(current_step: int, measure_relative: int)
 ## The time where the conductor will [b]start[/b].
 @export_range(-1000, 1000, 1) var offset = 0
 ## Node Path to an [code]AudioStreamPlayer[/code] that the Conductor will conduct.
-@export_node_path("AudioStreamPlayer") var stream_player
+@export var stream_player: AudioStreamPlayer
 ## Beats per minute.
 @export var tempo = 60.0
 
@@ -37,8 +37,7 @@ var measure_relative_step = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	
-	var time = get_node(stream_player).get_playback_position()
+	var time = stream_player.get_playback_position()
 	time -= AudioServer.get_output_latency()
 	
 	current_beat = get_beat_at(time)
@@ -63,19 +62,15 @@ func _process(_delta):
 
 
 func get_beat_at(time: float) -> int:
-	
 	time += offset
 	return int(time / seconds_per_beat)
 
 
 func get_step_at(time: float) -> int:
-	
 	time -= offset
-	@warning_ignore("integer_division")
 	return int(time / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
 
 
 func get_measure_at(time: float) -> int:
-	
 	time -= offset
 	return int(time / (seconds_per_beat  * beats_per_measure))

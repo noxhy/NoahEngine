@@ -14,7 +14,7 @@ func _get_visible_name() -> String:
 
 
 func _get_recognized_extensions() -> PackedStringArray:
-	return ['xml',]
+	return ['xml' ]
 
 
 func _get_save_extension() -> String:
@@ -40,7 +40,7 @@ func _get_import_options(path: String, preset_index: int):
 				'property_hint': PROPERTY_HINT_RANGE,
 				'hint_string': '0,128,1,or_greater'},
 		{'name': 'animations_looped', 'default_value': false},
-		{'name': 'store_external_spriteframes', 'default_value': false},]
+		{'name': 'store_external_spriteframes', 'default_value': false}, ]
 
 
 func _get_priority() -> float:
@@ -55,7 +55,7 @@ func _get_option_visibility(path: String, option_name: StringName, options: Dict
 	return true
 
 
-func _import(source_file: String, save_path: String, options: Dictionary, 
+func _import(source_file: String, save_path: String, options: Dictionary,
 		platform_variants: Array[String], gen_files: Array[String]) -> Error:
 	# This is done, because, the get_image function is fucking stupid sometimes.
 	# Thanks! :3
@@ -64,15 +64,32 @@ func _import(source_file: String, save_path: String, options: Dictionary,
 	if not FileAccess.file_exists(source_file):
 		return ERR_FILE_NOT_FOUND
 	
+	var filename: StringName = &'%s.%s' % [save_path, _get_save_extension()]
+
+	var resourceName = &'%s.%s' % [source_file.get_basename(), _get_save_extension()]
+	
+	if ResourceLoader.exists(resourceName):
+		return ERR_ALREADY_EXISTS
+	
+	if FileAccess.file_exists(filename):
+		print_debug('removed early return.')
+		#return ERR_ALREADY_EXISTS
+	
+	
 	var xml: XMLParser = XMLParser.new()
 	xml.open(source_file)
+	
+	
 	
 	var sprite_frames: SpriteFrames = SpriteFrames.new()
 	sprite_frames.remove_animation('default')
 	
+	
+	
 	var texture = null
 	var image: Image
 	var image_texture: ImageTexture
+	
 	
 	# This is done to prevent reuse of atlas textures.
 	# The actual difference this makes may be unnoticable but it is still done.
@@ -89,7 +106,13 @@ func _import(source_file: String, save_path: String, options: Dictionary,
 			var image_path: String = '%s/%s' % [source_file.get_base_dir(), image_name]
 			
 			if not FileAccess.file_exists(image_path):
-				return ERR_FILE_NOT_FOUND
+				#lets run it back and assume its fucking normal 
+				#srsly why would u expect this path just assume the png is the same name as the xml
+				image_path = source_file.get_basename() + '.png'
+				
+				if not FileAccess.file_exists(image_path):
+					return ERR_FILE_NOT_FOUND
+			
 			
 			texture = ResourceLoader.load(image_path, 'CompressedTexture2D', ResourceLoader.CACHE_MODE_IGNORE)
 			
@@ -154,7 +177,7 @@ func _import(source_file: String, save_path: String, options: Dictionary,
 				var offsets: Rect2i = frame.offsets
 				
 				margin = Rect2i(
-					-offsets.position.x, -offsets.position.y,
+					- offsets.position.x, -offsets.position.y,
 					offsets.size.x - source.size.x, offsets.size.y - source.size.y)
 				
 				margin.size = margin.size.clamp(margin.position.abs(), Vector2i.MAX)
@@ -179,7 +202,7 @@ func _import(source_file: String, save_path: String, options: Dictionary,
 					atlas.region = source
 
 					margin = Rect2i(
-						-offsets.position.x, -offsets.position.y,
+						- offsets.position.x, -offsets.position.y,
 						offsets.size.x - source.size.x, offsets.size.y - source.size.y)
 					
 					atlas.margin = margin
@@ -200,8 +223,8 @@ func _import(source_file: String, save_path: String, options: Dictionary,
 
 	for frame in sparrow_frames:
 		sprite_frames.add_frame(frame.animation, frame.atlas)
-
-	var filename: StringName = &'%s.%s' % [save_path, _get_save_extension()]
+		
+		
 
 	if options.get('store_external_spriteframes', false):
 		filename = &'%s.%s' % [source_file.get_basename(), _get_save_extension()]

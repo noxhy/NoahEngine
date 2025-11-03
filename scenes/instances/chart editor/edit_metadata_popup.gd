@@ -7,7 +7,7 @@ extends Window
 @export var offset: float
 @export var scroll_speed: float
 
-signal metadata_changed( artist: String, song_title: String, song_difficulty: String, offset: float, scroll_speed: float )
+signal metadata_changed(artist: String, song_title: String, song_difficulty: String, offset: float, scroll_speed: float)
 
 func _ready():
 	
@@ -21,7 +21,7 @@ func _ready():
 
 func _on_save_button_pressed():
 	
-	emit_signal( "metadata_changed", %"Artist Name".text, %"Song Title".text, %"Song Difficulty".text, %Offset.value, %"Scroll Speed".value )
+	emit_signal("metadata_changed", %"Artist Name".text, %"Song Title".text, %"Song Difficulty".text, %Offset.value, %"Scroll Speed".value)
 	self.queue_free()
 
 

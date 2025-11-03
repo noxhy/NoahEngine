@@ -161,30 +161,29 @@ func select_option(i: int):
 	var option = options.keys()[i]
 	
 	if option == "resume":
-		
 		get_tree().paused = false
 		queue_free()
 	
 	elif option == "options":
-		
 		get_tree().paused = false
 		Global.change_scene_to("res://scenes/options/options.tscn", null)
 	
 	elif option == "restart":
-		
 		get_tree().paused = false
 		get_tree().reload_current_scene()
 	
 	elif option == "exit":
-		
+		self.get_parent().process_mode = Node.PROCESS_MODE_DISABLED
 		get_tree().paused = false
 		GameManager.reset_stats()
 		
-		if GameManager.freeplay: Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", null)
-		else: Global.change_scene_to("res://scenes/story mode/story_mode.tscn", null)
+		if GameManager.freeplay:
+			Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", "down")
+		else:
+			Global.change_scene_to("res://scenes/story mode/story_mode.tscn", "down")
 	
 	elif option == "chart_editor":
-		
+		self.get_parent().process_mode = Node.PROCESS_MODE_DISABLED
 		get_tree().paused = false
 		GameManager.reset_stats()
-		Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", null)
+		Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")

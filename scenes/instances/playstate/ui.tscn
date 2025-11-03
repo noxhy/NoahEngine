@@ -150,13 +150,13 @@ libraries = {
 &"": SubResource("AnimationLibrary_eqvj4")
 }
 
-[node name="Player Strum" parent="." instance=ExtResource("2_58g8k")]
+[node name="Player Strum" parent="." groups=["strums"] instance=ExtResource("2_58g8k")]
 position = Vector2(288, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
 can_splash = true
 
-[node name="Enemy Strum" parent="." instance=ExtResource("2_58g8k")]
+[node name="Enemy Strum" parent="." groups=["strums"] instance=ExtResource("2_58g8k")]
 position = Vector2(-352, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
@@ -204,9 +204,9 @@ metadata/_edit_lock_ = true
 [node name="Health Bar" type="TextureProgressBar" parent="."]
 z_index = -2
 offset_left = -300.0
-offset_top = 256.0
+offset_top = 290.0
 offset_right = 300.0
-offset_bottom = 276.0
+offset_bottom = 310.0
 pivot_offset = Vector2(300, 10)
 step = 0.001
 value = 50.0
@@ -245,9 +245,9 @@ anchor_top = 0.433
 anchor_right = 0.219
 anchor_bottom = 0.469
 offset_left = 175.4
-offset_top = 31.34
+offset_top = 21.34
 offset_right = 424.6
-offset_bottom = 56.62
+offset_bottom = 46.62
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(280, 13)

@@ -1,35 +1,28 @@
 extends AnimatedSprite2D
 class_name OffsetSprite
 
-@export var animation_names: Dictionary[String, String] = { "default": "default", }
-@export var offsets: Dictionary[String, Vector2] = { "default": Vector2(0, 0), }
+## Each key is the animation id and the value is the real animation name in the [code]SpriteFrames[/code]
+@export var animation_names: Dictionary[String, String] = {}
+## Each key is the animation name in the [code]SpriteFrames[/code] and the value is the offset
+@export var offsets: Dictionary[String, Vector2] = {}
 
 
-func play_animation(animation_name: String = ""):
-	
+func play_animation(animation_name: String = "", forced: bool = true):
 	if animation_names.has(animation_name):
+		var real_animation_name: String = animation_names.get(animation_name)
 		
-		var real_animation_name: String = animation_names.get( animation_name )
+		if not forced and animation == real_animation_name:
+			return
 		
-		play( real_animation_name )
+		play(real_animation_name)
 		
-		if offsets.has( real_animation_name ):
-			
-			offset = offsets.get( real_animation_name )
+		if offsets.has(real_animation_name):
+			offset = offsets.get(real_animation_name)
 
-
+## Returns the animation name of the given id in SpriteFrames.
 func get_real_animation(animation_name: String = ""):
-	
-	if animation_names.has( animation_name ):
-		
-		var real_animation_name: String = animation_names.get( animation_name )
+	if animation_names.has(animation_name):
+		var real_animation_name: String = animation_names.get(animation_name)
 		return real_animation_name
 	else:
-		
 		return null
-
-
-func _on_frame_changed():
-	
-	var duration = sprite_frames.get_frame_duration( animation, frame )
-	rotation_degrees = 0 if duration == 1 else -90

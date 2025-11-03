@@ -37,5 +37,5 @@ func _input(event):
 		var time = 0.2
 		
 		tween.set_trans(Tween.TRANS_CUBIC)
-		tween.tween_property( $Background/LoadingScreen, "scale", Vector2(1.05, 1.05), time * 0.0625 ).set_ease( Tween.EASE_IN_OUT )
-		tween.tween_property( $Background/LoadingScreen, "scale", Vector2(1.0, 1.0), time ).set_delay( time * 0.0625 ).set_ease( Tween.EASE_OUT )
+		tween.tween_property($Background/LoadingScreen, "scale", Vector2(1.05, 1.05), time * 0.0625).set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property($Background/LoadingScreen, "scale", Vector2(1.0, 1.0), time).set_delay(time * 0.0625).set_ease(Tween.EASE_OUT)

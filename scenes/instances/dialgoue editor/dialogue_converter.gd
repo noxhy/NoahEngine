@@ -47,7 +47,7 @@ func _input(event):
 
 func convert_dialogue():
 	
-	var json_file = FileAccess.open( load_path, FileAccess.READ )
+	var json_file = FileAccess.open(load_path, FileAccess.READ)
 	var json_data = json_file.get_as_text()
 	
 	var json = JSON.parse_string(json_data)
@@ -60,7 +60,7 @@ func convert_dialogue():
 	
 	for dialogue_data in json.dialogue:
 		
-		print( dialogue_data )
+		print(dialogue_data)
 		
 		if dialogue_data.portrait != current_portait:
 			
@@ -75,15 +75,15 @@ func convert_dialogue():
 		if dialogue_data.speed != current_speed:
 			
 			current_speed = dialogue_data.speed
-			dialogue_resource.dialogue += "func set_speed " + str( dialogue_data.speed ) + "\n"
+			dialogue_resource.dialogue += "func set_speed " + str(dialogue_data.speed) + "\n"
 		
 		dialogue_resource.dialogue += "func set_expression " + dialogue_data.expression + "\n"
 		dialogue_resource.dialogue += dialogue_data.portrait + ": " + dialogue_data.text
 		
-		if json.dialogue.rfind( dialogue_data ) != json.dialogue.size() - 1:
+		if json.dialogue.rfind(dialogue_data) != json.dialogue.size() - 1:
 			dialogue_resource.dialogue += "\n"
 	
-	print( "done" )
+	print("done")
 	
-	ResourceSaver.save( dialogue_resource, save_path + ".res" )
+	ResourceSaver.save(dialogue_resource, save_path + ".res")
 	emit_signal("finished")

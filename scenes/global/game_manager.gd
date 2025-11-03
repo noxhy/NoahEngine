@@ -10,7 +10,6 @@ const SHIT_RATING_WINDOW = 0.16
 # future note: ok so this apparently just also gets set whenever
 # other things do so idk
 @onready var DEFAULT_TALLIES: Dictionary = {
-	
 	"sick": 0,
 	"good": 0,
 	"bad": 0,
@@ -18,16 +17,13 @@ const SHIT_RATING_WINDOW = 0.16
 	"miss": 0,
 	"max_combo": 0,
 	"total_notes": 0
-	
 }
 
 enum PLAY_MODE {
-	
 	STORY_MODE,
 	FREEPLAY,
 	CHARTING,
 	PRACTICE
-	
 }
 
 var freeplay: bool = true
@@ -35,6 +31,8 @@ var difficulty: String
 var play_mode = PLAY_MODE.FREEPLAY
 var current_song: Song
 var current_week: String
+var week_songs: Array
+var current_week_song: int = 0
 var character: PlayableCharacter
 var current_character: String = "boyfriend"
 
@@ -57,22 +55,20 @@ func _ready() -> void:
 	reset_stats()
 
 func started_song(song: Song):
-	
 	tallies = DEFAULT_TALLIES.duplicate()
 	accuracy = 0.0
 	current_song = song
 	character = Preload.character_data[current_character]
 
 func finished_song(score: int):
-	
 	week_score += score
 	week_deaths += deaths
 	total_accuracy += accuracy
 	songs_played += 1
 	deaths = 0
+	current_week_song += 1
 	
 	for tally in tallies.keys():
-		
 		if week_tallies.has(tally): week_tallies[tally] += tallies[tally]
 		else: week_tallies[tally] = tallies[tally]
 	
@@ -98,20 +94,20 @@ func finished_song(score: int):
 		highscore = false
 
 func reset_stats():
-	
 	accuracy = 0.0
 	deaths = 0
 	week_score = 0
 	week_deaths = 0
 	songs_played = 0
+	current_week_song = 0
 	
 	tallies = DEFAULT_TALLIES.duplicate()
 	week_tallies = DEFAULT_TALLIES.duplicate()
 
-func get_week_accuracy() -> float: return total_accuracy / songs_played
+func get_week_accuracy() -> float:
+	return total_accuracy / songs_played
 
 func get_rank(_grade: Variant = null) -> String:
-	
 	var _tallies = week_tallies
 	
 	if _grade == null:
@@ -136,5 +132,6 @@ func get_rank(_grade: Variant = null) -> String:
 		[_grade >= 0, "loss"],
 	]
 	
-	for condition in accuracies: if condition[0]: return condition[1]
+	for condition in accuracies: if condition[0]:
+		return condition[1]
 	return "?"

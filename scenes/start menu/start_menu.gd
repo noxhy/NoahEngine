@@ -21,7 +21,7 @@ func _ready():
 	var keycode = SettingsManager.get_keybind("ui_accept")
 	$"UI/Play Label".text = "Press " + SettingsManager.get_keycode_string(keycode) + " to Play"
 	
-	$Conductor.stream_player = SoundManager.music.get_path()
+	$Conductor.stream_player = SoundManager.music
 	
 	if not SoundManager.music.playing:
 		SoundManager.music.play()
@@ -49,10 +49,10 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	
 	# Metronome Bop Animation
 	
-	if( measure_relative % 2 == 0 ):
+	if(measure_relative % 2 == 0):
 		
 		%Metronome.can_idle = true
-		%Metronome.play_animation( "idle", $Conductor.seconds_per_beat * 2 )
+		%Metronome.play_animation("idle", $Conductor.seconds_per_beat * 2)
 	
 	var time = 0
 	
@@ -67,7 +67,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 			tween.tween_property($Background/ColorRect, "color", Color(0, 0, 0), 0.3)
 			
 			# "Press enter" text color phasing, i most definitely could've done a sine equation
-			if( current_beat % 2 == 0 ):
+			if(current_beat % 2 == 0):
 				
 				tween.tween_property($"UI/Play Label", "theme_override_colors/font_color", Color(0, 0.366667, 1, 0.8), $Conductor.seconds_per_beat * 2)
 			else:
@@ -80,11 +80,11 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	
 	time = 0.2
 	
-	tween2.tween_property( $UI/Logo, "scale", Vector2(0.95, 0.95), time * 0.0625 ).set_ease(Tween.EASE_IN_OUT)
-	tween2.tween_property( $UI/Logo, "scale", Vector2(0.9, 0.9), time ).set_delay( time * 0.0625 ).set_ease(Tween.EASE_OUT)
+	tween2.tween_property($UI/Logo, "scale", Vector2(0.95, 0.95), time * 0.0625).set_ease(Tween.EASE_IN_OUT)
+	tween2.tween_property($UI/Logo, "scale", Vector2(0.9, 0.9), time).set_delay(time * 0.0625).set_ease(Tween.EASE_OUT)
 
 
 func _on_animation_player_animation_finished(anim_name):
 	
 	if anim_name == "press_enter":
-		Global.change_scene_to( "res://scenes/main menu/main_menu.tscn" )
+		Global.change_scene_to("res://scenes/main menu/main_menu.tscn")

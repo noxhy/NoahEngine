@@ -5,6 +5,6 @@ uniform sampler2D screen_texture : hint_screen_texture;
 
 void fragment() {
 
-	COLOR = texture( screen_texture, SCREEN_UV ) + ( texture( TEXTURE, UV ) * energy );
+	COLOR = texture(screen_texture, SCREEN_UV) + (texture(TEXTURE, UV) * energy);
 
 }

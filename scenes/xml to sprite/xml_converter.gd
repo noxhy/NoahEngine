@@ -17,10 +17,10 @@ signal finished
 func do_it():
 	
 	var xml_parser = XMLParser.new()
-	xml_parser.open( load_path + ".xml" )
+	xml_parser.open(load_path + ".xml")
 	
 	var frames = anim_sprite.sprite_frames
-	var texture = load( load_path + ".png" )
+	var texture = load(load_path + ".png")
 	var cur_anim_name: String
 	
 	print(ResourceSaver.get_recognized_extensions(frames))
@@ -53,12 +53,12 @@ func do_it():
 					
 					if !xml_parser.has_attribute("rotated"):
 						
-						new_margin = Rect2(-int( xml_parser.get_named_attribute_value("frameX") ), -int( xml_parser.get_named_attribute_value("frameY") ),
-											int( xml_parser.get_named_attribute_value("frameWidth") ) - new_region.size.x, int( xml_parser.get_named_attribute_value("frameHeight") ) - new_region.size.y )
+						new_margin = Rect2(-int(xml_parser.get_named_attribute_value("frameX")), -int(xml_parser.get_named_attribute_value("frameY")),
+											int(xml_parser.get_named_attribute_value("frameWidth")) - new_region.size.x, int(xml_parser.get_named_attribute_value("frameHeight")) - new_region.size.y)
 					else:
 						
 						new_margin = Rect2(-int(xml_parser.get_named_attribute_value("frameX")), -int(xml_parser.get_named_attribute_value("frameY")),
-									int( xml_parser.get_named_attribute_value("frameWidth") ) - new_region.size.y, int( xml_parser.get_named_attribute_value("frameHeight")) - new_region.size.x )
+									int(xml_parser.get_named_attribute_value("frameWidth")) - new_region.size.y, int(xml_parser.get_named_attribute_value("frameHeight")) - new_region.size.x)
 				
 				
 				var num_frames = frames.get_frame_count(cur_anim_name)

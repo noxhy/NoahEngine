@@ -54,7 +54,7 @@ func _physics_process(delta):
 		if shake_time <= 0: end_shake()
 
 
-func shake( amount: int, time: float ):
+func shake(amount: int, time: float):
 	
 	shake_time = time
 	shake_decay_rate = time
@@ -67,8 +67,8 @@ func end_shake():
 	shaking = false
 	
 	var tween = create_tween()
-	tween.set_trans( Tween.TRANS_ELASTIC ).set_ease( Tween.EASE_IN_OUT )
-	tween.tween_property( self, "offset", default_offset, 0.1 )
+	tween.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(self, "offset", default_offset, 0.1)
 
 
 func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:

@@ -22,11 +22,11 @@ func _ready():
 func _process(delta):
 	
 	$HSlider.position.x = $Label.size.x + 20
-	$Label.text = display_name + ": " + str( $HSlider.value ) + " " + value_name
+	$Label.text = display_name + ": " + str($HSlider.value) + " " + value_name
 
 
 func _on_h_slider_value_changed(value):
 	
-	if step == 1: value = int( value )
-	SettingsManager.set_setting( setting_name, value * value_scale )
+	if step == 1: value = int(value)
+	SettingsManager.set_setting(setting_name, value * value_scale)
 	SettingsManager.save_settings()
