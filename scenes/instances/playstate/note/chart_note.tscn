@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3 uid="uid://yyfqg2jvwcmt"]
+
+[ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://scenes/instances/playstate/note/chart_note.gd" id="1_ud7f5"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://assets/sprites/playstate/developer/arrow/notes.tres" id="2_jcxlk"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="3_gsgsu"]
+
+[node name="Note" type="Node2D" groups=["note"]]
+use_parent_material = true
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_ud7f5")
+
+[node name="Note" type="AnimatedSprite2D" parent="."]
+z_index = 1
+use_parent_material = true
+scale = Vector2(1.065, 1.065)
+sprite_frames = ExtResource("2_jcxlk")
+animation = &"left"
+script = ExtResource("3_gsgsu")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"down end",
+&"down tail": &"down tail",
+&"left": &"left",
+&"left end": &"left end",
+&"left tail": &"left tail",
+&"right": &"right",
+&"right end": &"right end",
+&"right tail": &"right tail",
+&"up": &"up",
+&"up end": &"up end",
+&"up tail": &"up tail"
+})
+
+[node name="Tail" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.588)
+rotation = 1.5707964
+stretch_mode = 1
+
+[node name="End" type="TextureRect" parent="Tail"]
+texture_repeat = 2
+layout_mode = 0
+stretch_mode = 2
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+rect = Rect2(-319.99997, -319.99997, 639.99994, 639.99994)

@@ -1,7 +1,7 @@
 extends Node2D
 
 const LABEL_FONT: Font = preload("res://assets/fonts/Bold Normal Text.ttf")
-const NOTE_PRELOAD = preload("res://scenes/instances/playstate/note/note.tscn")
+const NOTE_PRELOAD = preload("res://scenes/instances/playstate/note/chart_note.tscn")
 const NOTE_SKIN = preload("res://assets/sprites/playstate/developer/developer_note_skin.tres")
 const STRUM_BUTTON_PRELOAD = preload("res://scenes/instances/chart editor/strum_button.tscn")
 
@@ -734,7 +734,6 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	note_instance.chart_note = true
 	var meter = chart.get_meter_at(time)
 	
 	note_instance.time = time
