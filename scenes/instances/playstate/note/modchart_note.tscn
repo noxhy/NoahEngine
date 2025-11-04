@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3 uid="uid://bfovtttcq6f32"]
+
+[ext_resource type="Script" uid="uid://dc0yd85m6dsa7" path="res://scenes/instances/playstate/note/modchart_note.gd" id="1_h3pbp"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://assets/sprites/playstate/developer/arrow/notes.tres" id="2_o35eu"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="3_3ud5f"]
+[ext_resource type="Texture2D" uid="uid://ds5jlynhtryxg" path="res://assets/sprites/playstate/developer/arrow/tail.png" id="4_ieyxg"]
+[ext_resource type="Script" uid="uid://br0jox4auxxsl" path="res://scenes/instances/playstate/note/tail.gd" id="5_x7q10"]
+[ext_resource type="Texture2D" uid="uid://ceji7odamm1lk" path="res://assets/sprites/playstate/developer/arrow/end.png" id="6_k3lyu"]
+
+[node name="Note" type="Node2D" groups=["note"]]
+use_parent_material = true
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_h3pbp")
+
+[node name="Note" type="AnimatedSprite2D" parent="."]
+z_index = 1
+use_parent_material = true
+scale = Vector2(1.065, 1.065)
+sprite_frames = ExtResource("2_o35eu")
+animation = &"left"
+script = ExtResource("3_3ud5f")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"down end",
+&"down tail": &"down tail",
+&"left": &"left",
+&"left end": &"left end",
+&"left tail": &"left tail",
+&"right": &"right",
+&"right end": &"right end",
+&"right tail": &"right tail",
+&"up": &"up",
+&"up end": &"up end",
+&"up tail": &"up tail"
+})
+
+[node name="Tail" type="Line2D" parent="."]
+modulate = Color(1, 1, 1, 0.588235)
+use_parent_material = true
+width = 600.0
+texture = ExtResource("4_ieyxg")
+texture_mode = 1
+joint_mode = 2
+script = ExtResource("5_x7q10")
+end_texture = ExtResource("6_k3lyu")

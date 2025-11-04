@@ -84,11 +84,6 @@ func downscroll_ui():
 	$"Health Bar".position.y *= -1
 
 
-func streamer_ui():
-	$"Health Bar".visible = false
-	$"Health Bar/Performance".visible = false
-
-
 func set_credits(song_name: String, artist_names: String):
 	$"Song Credits/ColorRect/Label".text = song_name
 	$"Song Credits/ColorRect/Label".text += "\n-\n"

@@ -18,15 +18,14 @@ notes_scale = 6.75
 splash_scale = 5.0
 sustain_width = 7
 hold_covers_scale = 6.0
-animation_names = Dictionary[String, String]({})
-offsets = Dictionary[String, Vector2]({
-"cover down": Vector2(25, -3),
-"cover down end": Vector2(25, -3),
-"cover left": Vector2(25, -3),
-"cover left end": Vector2(25, -3),
-"cover right": Vector2(25, -3),
-"cover right end": Vector2(25, -3),
-"cover up": Vector2(25, -3),
-"cover up end": Vector2(25, -3)
+offsets = Dictionary[StringName, Vector2]({
+&"cover down": Vector2(25, -3),
+&"cover down end": Vector2(25, -3),
+&"cover left": Vector2(25, -3),
+&"cover left end": Vector2(25, -3),
+&"cover right": Vector2(25, -3),
+&"cover right end": Vector2(25, -3),
+&"cover up": Vector2(25, -3),
+&"cover up end": Vector2(25, -3)
 })
 hit_sound = ExtResource("1_piid7")

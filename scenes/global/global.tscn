@@ -18,7 +18,6 @@ font_size = 18
 [node name="Global" type="Node2D"]
 process_mode = 3
 script = ExtResource("1_swfdr")
-debug_visible = null
 metadata/_edit_horizontal_guides_ = [-296.0]
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -61,7 +60,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Master Volume: -80 db"
+text = "Master Volume: 100%"
 label_settings = SubResource("LabelSettings_harfc")
 horizontal_alignment = 1
 vertical_alignment = 1

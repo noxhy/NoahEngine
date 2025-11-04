@@ -3,7 +3,6 @@ extends Node2D
 @export var debug_visible = true
 
 var loading_screen = preload("res://scenes/global/loading_screen.tscn")
-var new_scene: String = "res://test/test_scene.tscn"
 var fullscreen = false
 
 var freeplay_difficulty: int = 0
@@ -30,14 +29,11 @@ func _process(delta):
 	# Peformance Test
 	$"UI/Performance Label".visible = SettingsManager.get_setting("show_performance")
 	if SettingsManager.get_setting("show_performance"):
-		
-		var memory = String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
 		var performance_string: String = "FPS: " + str(Engine.get_frames_per_second())
-		performance_string += "\nMEM: " + memory
+		performance_string += "\nMEM: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
 		
 		$"UI/Performance Label".text = performance_string
-	
 	
 	if Input.is_action_just_pressed("fullscreen"):
 		fullscreen = !fullscreen
@@ -64,7 +60,6 @@ func _process(delta):
 		$"UI/Voume Node/Hide Timer".start(1.5)
 	
 	elif Input.is_action_just_pressed("mute"):
-		
 		AudioServer.set_bus_mute(0, !AudioServer.is_bus_mute(0))
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1)
@@ -118,11 +113,6 @@ func bop_tween(object: Object, property: NodePath, original_val: Variant, final_
 func set_window_title(title: String):
 	DisplayServer.window_set_title("Friday Night Funkin' Noah Engine 2.3 | " + title)
 
-func format_seconds_to_mm_ss(total_seconds: int) -> String:
-	var minutes = total_seconds / 60
-	var seconds = fmod(total_seconds, 60)
-	return "%02d:%02d" % [minutes, seconds]
-
 func format_number(num:float) -> String: 
 	var isNegative = num < 0.0
 	
@@ -155,17 +145,13 @@ func format_number(num:float) -> String:
 		
 	return string
 
-
 # referenced via https://youtu.be/LSNQuFEDOyQ
 ## A frame independent lerp. Primary purpose is for the camera
 ## your decay should be around 1 - 25
 func frame_independent_lerp(a, b, decay: float, delta: float): 
 	return b + (a - b) * exp(-decay * delta)
 
-#
-## Visual Util
-#
-
+#region Volume Visual
 func show_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -188,3 +174,4 @@ func hide_volume():
 
 
 func _on_hide_timer_timeout(): hide_volume()
+#endregion

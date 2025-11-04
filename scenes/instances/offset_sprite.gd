@@ -6,7 +6,7 @@ class_name OffsetSprite
 ## Each key is the animation name in the [code]SpriteFrames[/code] and the value is the offset
 @export var offsets: Dictionary[StringName, Vector2] = {}
 
-func play_animation(animation_name: String = "", forced: bool = true):
+func play_animation(animation_name: StringName, forced: bool = true):
 	if animation_names.has(animation_name):
 		var real_animation_name: String = animation_names.get(animation_name)
 		
@@ -19,9 +19,5 @@ func play_animation(animation_name: String = "", forced: bool = true):
 			offset = offsets.get(real_animation_name)
 
 ## Returns the animation name of the given id in SpriteFrames.
-func get_real_animation(animation_name: String = ""):
-	if animation_names.has(animation_name):
-		var real_animation_name: String = animation_names.get(animation_name)
-		return real_animation_name
-	else:
-		return null
+func get_real_animation(animation_name: StringName) -> Variant:
+	return animation_names.get(animation_name)

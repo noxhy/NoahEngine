@@ -2,7 +2,6 @@
 
 extends Node2D
 
-signal created_note(time: float, lane: int, length: float, note_type: int, manager: Node2D)
 signal note_hit(time: float, lane: int, note_type: int, hit_time: float, manager: Node2D)
 signal note_holding(time: float, lane: int, note_type: int, manager: Node2D)
 signal note_miss(time: float, lane: int, length: float, note_type: int, hit_time: float, manager: Node2D)
@@ -27,7 +26,6 @@ signal note_miss(time: float, lane: int, length: float, note_type: int, hit_time
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	set_skin(note_skin)
 	set_press(can_press)
 	set_auto_play(auto_play)
@@ -41,7 +39,6 @@ func _process(delta):
 
 
 func set_skin(new_skin: NoteSkin):
-	
 	for i in strums:
 		get_node(i).set_skin(new_skin)
 
@@ -50,69 +47,51 @@ func set_skin(new_skin: NoteSkin):
 
 
 func set_scroll_speed(new_scroll_speed: float):
-	
 	for i in strums:
 		get_node(i).scroll_speed = new_scroll_speed
 
 
 func set_scroll(new_scroll: float):
-	
 	for i in strums:
 		get_node(i).scroll = new_scroll
 
 
 func set_press(toggle: bool):
-	
-	can_press = toggle
-	
 	for i in strums:
-		get_node(i).can_press = can_press
+		get_node(i).can_press = toggle
 
 
 func set_auto_play(toggle: bool):
-	
-	auto_play = toggle
-	
 	for i in strums:
-		get_node(i).auto_play = auto_play
+		get_node(i).auto_play = toggle
 
 
 func set_can_splash(toggle: bool):
-	
-	can_splash = toggle
-	
 	for i in strums:
-		get_node(i).can_splash = can_splash
+		get_node(i).can_splash = toggle
 
 
 func set_enemy_slot(toggle: bool):
-	
-	enemy_slot = toggle
-	
 	for i in strums:
-		get_node(i).enemy_slot = enemy_slot
+		get_node(i).enemy_slot = toggle
 
 
-func set_ignored_note_types(note_types: Array):
-	
+func set_ignored_note_types(_note_types: Array):
 	for i in strums:
-		get_node(i).ignored_note_types = note_types
+		get_node(i).ignored_note_types = _note_types
 
 
 func get_strumline(lane: int) -> ArrowStrum: return get_node(strums[lane])
 func get_scroll_speed(lane: int) -> float: return get_strumline(lane).scroll_speed
 
 
-func note_types(note_types: Array):
-	
+func note_types(_note_types: Array):
 	for i in strums:
-		
-		get_node(i).note_types = note_types
+		get_node(i).note_types = _note_types
 
 
 func create_note(time: float, lane: int, length: float, note_type: int, tempo: float):
-	
-	var strum = strums[ lane ]
+	var strum = strums[lane]
 	get_node(strum).create_note(time, length, note_type, tempo)
 
 

@@ -9,28 +9,24 @@
 script = ExtResource("2_g6s64")
 strums_texture = ExtResource("3_7te8r")
 notes_texture = ExtResource("1_ovb1l")
-pixel_texture = false
 notes_scale = 0.2
-splash_scale = 1.0
 sustain_width = 600
-hold_covers_scale = 1.0
-animation_names = Dictionary[String, String]({
-"down": "down",
-"down end": "end",
-"down press": "down press",
-"down tail": "tail",
-"left": "left",
-"left end": "end",
-"left press": "left press",
-"left tail": "tail",
-"right": "right",
-"right end": "end",
-"right press": "right press",
-"right tail": "tail",
-"up": "up",
-"up end": "end",
-"up press": "up press",
-"up tail": "tail"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"end",
+&"down press": &"down press",
+&"down tail": &"tail",
+&"left": &"left",
+&"left end": &"end",
+&"left press": &"left press",
+&"left tail": &"tail",
+&"right": &"right",
+&"right end": &"end",
+&"right press": &"right press",
+&"right tail": &"tail",
+&"up": &"up",
+&"up end": &"end",
+&"up press": &"up press",
+&"up tail": &"tail"
 })
-offsets = Dictionary[String, Vector2]({})
 hit_sound = ExtResource("1_f86v8")
