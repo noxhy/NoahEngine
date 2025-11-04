@@ -167,7 +167,6 @@ func select_option(i: int):
 		get_tree().reload_current_scene()
 	
 	elif option == "exit":
-		get_tree().paused = false
 		self.get_parent().process_mode = PROCESS_MODE_DISABLED
 		GameManager.reset_stats()
 		
