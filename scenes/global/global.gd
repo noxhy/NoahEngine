@@ -43,7 +43,7 @@ func _process(delta):
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
-	elif Input.is_action_just_pressed("ui_plus"):
+	elif Input.is_action_just_pressed("ui_plus") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, false)
 		var master_volume = SettingsManager.get_setting("master_volume")
 		SettingsManager.set_setting("master_volume", clamp(master_volume + 0.1, 0, 1))
@@ -51,7 +51,7 @@ func _process(delta):
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1.5)
 	
-	elif Input.is_action_just_pressed("ui_minus"):
+	elif Input.is_action_just_pressed("ui_minus") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, false)
 		var master_volume = SettingsManager.get_setting("master_volume")
 		SettingsManager.set_setting("master_volume", clamp(master_volume - 0.1, 0, 1))
@@ -59,7 +59,7 @@ func _process(delta):
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1.5)
 	
-	elif Input.is_action_just_pressed("mute"):
+	elif Input.is_action_just_pressed("mute") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, !AudioServer.is_bus_mute(0))
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1)
@@ -136,13 +136,13 @@ func format_number(num:float) -> String:
 			if helper < 10:
 				zeroes += '0'
 		string = zeroes + str(int(helper)) + comma + string
-
+	
 	if string == '':
 		string = '0'
 	
 	if isNegative:
 		string = "-" + string
-		
+	
 	return string
 
 # referenced via https://youtu.be/LSNQuFEDOyQ
@@ -167,7 +167,6 @@ func show_volume():
 
 
 func hide_volume():
-	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property($"UI/Voume Node", "position", Vector2(0, -392), 0.5)

@@ -15,7 +15,6 @@ signal finished
 @onready var anim_sprite = $"UI/Display Panel/Preview"
 
 func do_it():
-	
 	var xml_parser = XMLParser.new()
 	xml_parser.open(load_path + ".xml")
 	
@@ -27,7 +26,6 @@ func do_it():
 	
 	var err = xml_parser.read()
 	while err == OK:
-		
 		if xml_parser.get_node_type() == XMLParser.NODE_ELEMENT or xml_parser.get_node_type() == XMLParser.NODE_ELEMENT_END:
 			
 			print("--- " + xml_parser.get_node_name() + " ---")
@@ -100,7 +98,6 @@ func do_it():
 
 
 func _ready():
-	
 	set_process(false)
 	Global.set_window_title("XML to SpriteFrames Converter")
 	
@@ -115,7 +112,6 @@ var bunce = false
 
 
 func _input(event):
-	
 	if event.is_action_pressed("ui_accept"):
 		if bunce == false:
 			

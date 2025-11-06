@@ -9,8 +9,8 @@ var grade: int
 var _grade: int = 0
 
 func _ready() -> void:
-	
 	Global.set_window_title("Results Screen")
+#region Debug Tallies
 	# GameManager.reset_stats()
 	# GameManager.tallies.sick = randi() % 1500
 	# GameManager.tallies.good = randi() % 1500
@@ -27,6 +27,7 @@ func _ready() -> void:
 	#GameManager.character = preload("res://assets/characters/boyfriend.tres")
 	#GameManager.difficulty = "nightmare"
 	#GameManager.current_song = load("res://assets/songs/playable songs/cocoa/cocoa.tres")
+#endregion
 	
 	rank = GameManager.get_rank()
 	if rank == "loss":
@@ -47,7 +48,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	
 	current_delta = delta
 	
 	update_display()
@@ -70,7 +70,6 @@ func _process(delta: float) -> void:
 
 
 func update_display():
-	
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".size = Vector2(0, 0)
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".text = str(
 		"[font_size=72][font=\"res://assets/fonts/Results Background.ttf\"]",
@@ -98,7 +97,6 @@ func update_display():
 
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-	
 	if anim_name == "intro":
 		$AnimationPlayer.play("score_tally")
 	elif anim_name == "score_tally":
@@ -106,7 +104,6 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 
 func tween_tally(node: NodePath, tally: String):
-	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_QUART).set_ease(Tween.EASE_OUT)
 	tween.tween_property(get_node(node), "number", GameManager.week_tallies[tally], 0.5)
@@ -117,9 +114,7 @@ func update_score():
 
 
 func highscore():
-	
 	if GameManager.highscore:
-		
 		await %"Score Display".finished
 		%Highscore.visible = true
 		%Highscore.play("highscoreAnim")
@@ -130,7 +125,6 @@ func _on_highscore_animation_finished() -> void:
 
 
 func clear_tally():
-	
 	$AnimationPlayer.pause()
 	
 	var tween = create_tween()
@@ -158,11 +152,8 @@ func clear_tally():
 
 
 func grade_step(g: float):
-	
 	if (int(g) != _grade):
-		
 		if (idx % 2) == 0:
-			
 			$Audio/Step.play(0.05)
 			$Audio/Step.pitch_scale = 1 + (g / 100.0)
 		

@@ -11,7 +11,13 @@ signal new_step(current_step: int, measure_relative: int)
 ## Node Path to an [code]AudioStreamPlayer[/code] that the Conductor will conduct.
 @export var stream_player: AudioStreamPlayer
 ## Beats per minute.
-@export var tempo = 60.0
+@export var tempo: float:
+	set(v):
+		tempo = v
+		seconds_per_beat = 60.0 / tempo
+		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
+	get():
+		return tempo
 
 # Time Singatures
 # Key:
@@ -49,9 +55,6 @@ func _process(_delta):
 	measure_relative_beat = current_beat % beats_per_measure
 	measure_relative_step = current_step % steps_per_measure
 	
-	seconds_per_beat = 60.0 / tempo
-	seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
-	
 	# This detects if the beat or step changes
 	if old_step != current_step:
 		old_step = current_step
@@ -63,15 +66,12 @@ func _process(_delta):
 
 
 func get_beat_at(time: float) -> int:
-	time += offset
-	return int(time / seconds_per_beat)
+	return int((time - self.offset) / seconds_per_beat)
 
 
 func get_step_at(time: float) -> int:
-	time -= offset
-	return int(time / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
+	return int((time - self.offset) / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
 
 
 func get_measure_at(time: float) -> int:
-	time -= offset
-	return int(time / (seconds_per_beat  * beats_per_measure))
+	return int((time - self.offset) / (seconds_per_beat  * beats_per_measure))

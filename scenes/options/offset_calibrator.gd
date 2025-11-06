@@ -9,7 +9,6 @@ var max_length: int = 832
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	Global.set_window_title("Calibrating Offset")
 	
 	for i in entries_required:
@@ -49,7 +48,6 @@ func _draw():
 	draw_rect(rect, Color(0.54509806632996, 0.61960786581039, 1), true)
 	
 	for i in previous_offsets:
-		
 		var base_position = i / $Conductor.seconds_per_beat
 		rect = Rect2(base_position * (max_length / 2) - 2 + rect_base_position.x, top, 4, rect_size)
 		draw_rect(rect, Color.SLATE_GRAY, true)
@@ -57,32 +55,28 @@ func _draw():
 
 # Input Manager
 func _input(event):
-	
 	if event.is_action_pressed("ui_cancel"):
 		$"Audio/Menu Cancel".play()
 		Global.change_scene_to("res://scenes/options/options.tscn")
-	
 	elif event.is_action_pressed("ui_accept"):
 		$"Audio/Hit Sound".play()
-		var song_position = snapped($Audio/Music.get_playback_position(), 0.001)
-		timing = snapped(timing, 0.001)
-		var distance = -snapped(song_position - timing, 0.001)
-		previous_offsets[index % entries_required] = -distance
+		var song_position: float = $Audio/Music.get_playback_position()
+		var distance: float = song_position - timing
+		previous_offsets[index % entries_required] = distance
 		
 		index += 1
-		
 		if index >= entries_required:
-			var sum = 0.0
-			for i in previous_offsets: sum += i
+			var sum: float = 0.0
+			for i in previous_offsets:
+				sum += i
 			SettingsManager.set_setting("offset", snapped(sum / previous_offsets.size(), 0.001))
 			SettingsManager.save_settings()
 
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	
 	$UI/Speaker.frame = 0
-	$UI/Speaker.play_animation("idle")
+	$UI/Speaker.play_animation(&"bump")
 	
 	timing = (current_beat + 1) * $Conductor.seconds_per_beat
 	timing -= AudioServer.get_time_since_last_mix() + AudioServer.get_output_latency()
