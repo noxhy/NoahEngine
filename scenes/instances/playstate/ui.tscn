@@ -151,13 +151,13 @@ libraries = {
 }
 
 [node name="Player Strum" parent="." groups=["strums"] instance=ExtResource("2_58g8k")]
-position = Vector2(288, -256)
+position = Vector2(288, -264)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
 can_splash = true
 
 [node name="Enemy Strum" parent="." groups=["strums"] instance=ExtResource("2_58g8k")]
-position = Vector2(-352, -256)
+position = Vector2(-352, -264)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
 id = 1

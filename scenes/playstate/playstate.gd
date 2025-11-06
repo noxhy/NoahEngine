@@ -8,7 +8,7 @@ const SCORING_OFFSET = 0.05499
 const MIN_SCORE = 9
 const MAX_SCORE = 500
 
-signal create_note(time: float, lane: int, note_length: float, note_type: int, tempo: float)
+signal create_note(time: float, lane: int, note_length: float, note_type: Variant, tempo: float)
 signal new_event(time: float, event_name: String, event_parameters: Array)
 signal combo_break()
 signal setup_finished()

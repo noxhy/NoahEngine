@@ -66,7 +66,7 @@ offsets = Dictionary[StringName, Vector2]({
 &"BF HEY!!": Vector2(-16, -163),
 &"BF NOTE DOWN": Vector2(-26, -131),
 &"BF NOTE DOWN MISS": Vector2(-27, -141),
-&"BF NOTE LEFT": Vector2(-37, -155),
+&"BF NOTE LEFT": Vector2(-51, -155),
 &"BF NOTE LEFT MISS": Vector2(-40, -168),
 &"BF NOTE RIGHT": Vector2(27, -158),
 &"BF NOTE RIGHT MISS": Vector2(24, -168),

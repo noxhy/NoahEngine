@@ -57,8 +57,8 @@ frequency = 0.0017
 fractal_type = 2
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ovujy"]
-seamless = true
 noise = SubResource("FastNoiseLite_gopr5")
+seamless = true
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_abbn4"]
 shader = ExtResource("3_kp02p")

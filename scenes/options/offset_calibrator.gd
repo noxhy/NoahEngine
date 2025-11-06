@@ -5,7 +5,7 @@ var index: int = 0
 var timing: float = 0.0
 var entries_required: int = 4
 
-var max_length: int = 832
+var max_length: float = 832.0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -29,17 +29,15 @@ func _process(delta):
 
 
 func _draw():
-	
 	var rect_base_position: Vector2i = $UI/Visualizer.global_position + $UI.offset
 	
 	var rect_size: int = 64
 	var top: int = rect_base_position.y - (rect_size / 2)
-	var bottom: int = rect_base_position.y + (rect_size / 2)
 	
 	var offset_position = SettingsManager.get_setting("offset") / $Conductor.seconds_per_beat
 	
 	var rect: Rect2 = Rect2(Vector2(rect_base_position.x - (max_length / 2), top), Vector2(max_length, rect_size))
-	draw_rect(rect, Color(0, 0, 0, 0.2549019753933), true)
+	draw_rect(rect, Color(0.0, 0.0, 0.0, 0.25), true)
 	
 	rect = Rect2(-2 + rect_base_position.x, top, 4, rect_size)
 	draw_rect(rect, Color.WHITE, true)
@@ -57,7 +55,7 @@ func _draw():
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		$"Audio/Menu Cancel".play()
-		Global.change_scene_to("res://scenes/options/options.tscn")
+		Global.change_scene_to("res://scenes/options/options.tscn", "down")
 	elif event.is_action_pressed("ui_accept"):
 		$"Audio/Hit Sound".play()
 		var song_position: float = $Audio/Music.get_playback_position()
@@ -73,14 +71,10 @@ func _input(event):
 			SettingsManager.save_settings()
 
 
-
 func _on_conductor_new_beat(current_beat, measure_relative):
 	$UI/Speaker.frame = 0
 	$UI/Speaker.play_animation(&"bump")
 	
 	timing = (current_beat + 1) * $Conductor.seconds_per_beat
-	timing -= AudioServer.get_time_since_last_mix() + AudioServer.get_output_latency()
-	
 	if SettingsManager.get_setting("ui_bops"):
-		
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

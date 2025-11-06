@@ -16,44 +16,43 @@ scale = Vector2(0.2, 0.2)
 sprite_frames = ExtResource("3_cik2r")
 animation = &"left glow"
 script = ExtResource("4_kjy2w")
-animation_names = Dictionary[String, String]({
-"down": "down",
-"down glow": "down glow",
-"down press": "down press",
-"left": "left",
-"left glow": "left glow",
-"left press": "left press",
-"right": "right",
-"right glow": "right glow",
-"right press": "right press",
-"up": "up",
-"up glow": "up glow",
-"up press": "up press"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down glow": &"down glow",
+&"down press": &"down press",
+&"left": &"left",
+&"left glow": &"left glow",
+&"left press": &"left press",
+&"right": &"right",
+&"right glow": &"right glow",
+&"right press": &"right press",
+&"up": &"up",
+&"up glow": &"up glow",
+&"up press": &"up press"
 })
 
 [node name="Hold Cover" type="AnimatedSprite2D" parent="."]
 visible = false
-z_index = 2
+z_index = 10
 position = Vector2(12, 21)
 scale = Vector2(1.4, 1.4)
 sprite_frames = ExtResource("5_f2el6")
 animation = &"cover left"
 script = ExtResource("4_kjy2w")
-animation_names = Dictionary[String, String]({
-"cover down": "cover down",
-"cover down end": "cover down end",
-"cover down start": "cover down start",
-"cover left": "cover left",
-"cover left end": "cover left end",
-"cover left start": "cover left start",
-"cover right": "cover right",
-"cover right end": "cover right end",
-"cover right start": "cover right start",
-"cover up": "cover up",
-"cover up end": "cover up end",
-"cover up start": "cover up start"
+animation_names = Dictionary[StringName, StringName]({
+&"cover down": &"cover down",
+&"cover down end": &"cover down end",
+&"cover down start": &"cover down start",
+&"cover left": &"cover left",
+&"cover left end": &"cover left end",
+&"cover left start": &"cover left start",
+&"cover right": &"cover right",
+&"cover right end": &"cover right end",
+&"cover right start": &"cover right start",
+&"cover up": &"cover up",
+&"cover up end": &"cover up end",
+&"cover up start": &"cover up start"
 })
-offsets = Dictionary[String, Vector2]({})
 
 [connection signal="animation_finished" from="OffsetSprite" to="." method="_on_offset_sprite_animation_finished"]
 [connection signal="animation_finished" from="Hold Cover" to="." method="_on_hold_cover_animation_finished"]

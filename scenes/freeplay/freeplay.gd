@@ -18,7 +18,7 @@ var dj: AtlasSprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	difficulty = difficulties[0] 
+	difficulty = difficulties[0]
 	$"Difficulty Selector".difficulties = difficulties
 	album = Preload.character_data[GameManager.current_character].album
 	var background: Texture2D = Preload.character_data[GameManager.current_character].background

@@ -18,52 +18,27 @@ uniform bool   do_normalize     = true;                // average by weights?
 uniform sampler2D screen_texture : hint_screen_texture, repeat_disable, filter_nearest;
 uniform vec4 modulate_color : source_color;
 
+vec4 blur_b(sampler2D Texture,vec2 uv,float val){
+	float Pi = PI * 2.0;
+	vec2 Texture_pixel_size = 1.0/vec2(textureSize(Texture,0));
+	float Directions = 12.0;
+	float Quality = 6.0;
+	float Size = 8.0 * val;
+
+	vec2 radius = Size/Texture_pixel_size.xy;
+	vec4 Color = texture(Texture,uv);
+	for( float d=0.0;d<Pi;d+=Pi/float(Directions) )
+	{
+		for( float i=1.0/float(Quality);i<=1.0;i+=1.0/float(Quality) )
+		{
+			vec2 this_uv = uv+vec2(cos(d),sin(d))*radius*i;
+			Color += texture(Texture,this_uv);
+		}
+	}
+	Color /= float(Quality)*float(Directions)+1.0;
+	return Color;
+}
+
 void fragment() {
-    // Base UV + per‑pixel size -------------------------------------------
-    vec2 base_uv = use_screen ? SCREEN_UV : UV;
-    vec2 texel   = use_screen ? 1.0 / vec2(textureSize(screen_texture, 0))
-                              : TEXTURE_PIXEL_SIZE;
-
-    vec4  sum        = vec4(0.0);
-    float weight_sum = 0.0;
-
-    // Pre‑compute step sizes so the samples are **evenly distributed**
-    float step_x = radius_x > 0.0 ? radius_x / float(num_pass) : 0.0;
-    float step_y = radius_y > 0.0 ? radius_y / float(num_pass) : 0.0;
-
-    // ---------------- Horizontal ----------------------------------------
-    if (radius_x > 0.0) {
-        for (int i = -num_pass; i <= num_pass; i++) {
-            vec2 offs  = vec2(float(i) * step_x * texel.x, 0.0);
-            float w    = 1.0 - abs(float(i)) / float(num_pass + 1); // simple weight
-            vec4  samp = use_screen ? texture(screen_texture, base_uv + offs)
-                                     : texture(TEXTURE,       base_uv + offs);
-            sum        += samp * w;
-            weight_sum += w;
-        }
-    }
-
-    // ---------------- Vertical ------------------------------------------
-    if (radius_y > 0.0) {
-        for (int j = -num_pass; j <= num_pass; j++) {
-            // Skip center once if horizontal already did it
-            if (radius_x > 0.0 && j == 0) continue;
-            vec2 offs  = vec2(0.0, float(j) * step_y * texel.y);
-            float w    = 1.0 - abs(float(j)) / float(num_pass + 1);
-            vec4  samp = use_screen ? texture(screen_texture, base_uv + offs)
-                                     : texture(TEXTURE,       base_uv + offs);
-            sum        += samp * w;
-            weight_sum += w;
-        }
-    }
-
-    // ---------------- Output --------------------------------------------
-    if (weight_sum == 0.0) {
-        COLOR = use_screen ? texture(screen_texture, base_uv)
-                           : texture(TEXTURE,       base_uv);
-    } else {
-        COLOR = do_normalize ? sum / weight_sum : sum;
-    }
-	
-	COLOR.a *= modulate_color.a;
+	COLOR = mix(COLOR,blur_b(TEXTURE,UV,abs(sin(radius_x/10.0 * .00001))),radius_y/5.0);
 }

@@ -95,17 +95,10 @@ func _ready():
 func _process(delta):
 	
 	if Input.is_action_just_pressed("ui_up"):
-		
-		selected -= 1
-		update_selection(selected)
-	
-	elif Input.is_action_just_pressed("ui_down"):
-		
-		selected += 1
-		update_selection(selected)
-	
+		update_selection(selected - 1)
+	if Input.is_action_just_pressed("ui_down"):
+		update_selection(selected + 1)
 	if Input.is_action_just_pressed("ui_cancel") or Input.is_action_just_pressed("ui_accept"):
-		
 		select_option(selected)
 
 

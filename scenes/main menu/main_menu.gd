@@ -65,15 +65,12 @@ func _input(event):
 	if can_press:
 		
 		if event.is_action_pressed("ui_up"):
-			
 			update_selection(selected - 1)
 		elif event.is_action_pressed("ui_down"):
-			
 			update_selection(selected + 1)
 		elif event.is_action_pressed("ui_accept"):
 			select_option(selected)
 		elif event.is_action_pressed("ui_cancel"):
-			
 			can_press = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("res://scenes/start menu/start_menu.tscn")
@@ -81,7 +78,6 @@ func _input(event):
 
 # Updates visually what happens when a new index is set for a selection
 func update_selection(i: int):
-	
 	var old_node = (options.get(options.keys()[selected])).node
 	old_node.play_animation("idle")
 	
@@ -103,7 +99,6 @@ func update_selection(i: int):
 
 # Called when an option was selected
 func select_option(i: int):
-	
 	var node = (options.get(options.keys()[i])).node
 	SoundManager.accept.play()
 	$Background/Background.play("selected")

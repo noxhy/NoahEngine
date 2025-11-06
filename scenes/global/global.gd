@@ -3,7 +3,7 @@ extends Node2D
 @export var debug_visible = true
 
 var loading_screen = preload("res://scenes/global/loading_screen.tscn")
-var fullscreen = false
+var fullscreen: bool = false
 
 var freeplay_difficulty: int = 0
 var freeplay_song_option: int = 0
@@ -173,4 +173,145 @@ func hide_volume():
 
 
 func _on_hide_timer_timeout(): hide_volume()
+#endregion
+
+#region String to Tween
+## Returns an array with index 0 containing transition type and
+## index 1 containing easing type
+func string_to_ease(tween: String) -> Array:
+	match tween:
+		"backIn":
+			return [Tween.TRANS_BACK, Tween.EASE_IN]
+		
+		"backInOut":
+			return [Tween.TRANS_BACK, Tween.EASE_IN_OUT]
+		
+		"backOut":
+			return [Tween.TRANS_BACK, Tween.EASE_OUT]
+		
+		"backOutIn":
+			return [Tween.TRANS_BACK, Tween.EASE_OUT_IN]
+		
+		"bounceIn":
+			return [Tween.TRANS_BOUNCE, Tween.EASE_IN]
+		
+		"bounceOut":
+			return [Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT]
+		
+		"bounceOut":
+			return [Tween.TRANS_BOUNCE, Tween.EASE_OUT]
+		
+		"bounceOutIn":
+			return [Tween.TRANS_BOUNCE, Tween.EASE_OUT_IN]
+		
+		"circkIn":
+			return [Tween.TRANS_CIRC, Tween.EASE_IN]
+		
+		"circInOut":
+			return [Tween.TRANS_CIRC, Tween.EASE_IN_OUT]
+		
+		"circOut":
+			return [Tween.TRANS_CIRC, Tween.EASE_OUT]
+		
+		"circOutIn":
+			return [Tween.TRANS_CIRC, Tween.EASE_OUT_IN]
+		
+		"cubeIn":
+			return [Tween.TRANS_CUBIC, Tween.EASE_IN]
+		
+		"cubeInOut":
+			return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
+		
+		"cubeOut":
+			return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+		
+		"cubeOutIn":
+			return [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN]
+		
+		"cubeIn":
+			return [Tween.TRANS_CUBIC, Tween.EASE_IN]
+		
+		"cubeInOut":
+			return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
+		
+		"cubeOut":
+			return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+		
+		"cubeOutIn":
+			return [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN]
+		
+		"elasticIn":
+			return [Tween.TRANS_ELASTIC, Tween.EASE_IN]
+		
+		"elasticInOut":
+			return [Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT]
+		
+		"elasticOut":
+			return [Tween.TRANS_ELASTIC, Tween.EASE_OUT]
+		
+		"elasticOutIn":
+			return [Tween.TRANS_ELASTIC, Tween.EASE_OUT_IN]
+		
+		"expoIn":
+			return [Tween.TRANS_EXPO, Tween.EASE_IN]
+		
+		"expoInOut":
+			return [Tween.TRANS_EXPO, Tween.EASE_IN_OUT]
+		
+		"expoOut":
+			return [Tween.TRANS_EXPO, Tween.EASE_OUT]
+		
+		"expoOutIn":
+			return [Tween.TRANS_EXPO, Tween.EASE_OUT_IN]
+		
+		"quadIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN]
+		
+		"quadInOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
+		
+		"quadOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
+		
+		"quadOutIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
+		
+		"quartIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN]
+		
+		"quartInOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
+		
+		"quartOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
+		
+		"quartOutIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
+		
+		"quintIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN]
+		
+		"quintInOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
+		
+		"quintOut":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
+		
+		"quintOutIn":
+			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
+		
+		"sineIn":
+			return [Tween.TRANS_SINE, Tween.EASE_IN]
+		
+		"sinetInOut":
+			return [Tween.TRANS_SINE, Tween.EASE_IN_OUT]
+		
+		"sineOut":
+			return [Tween.TRANS_SINE, Tween.EASE_OUT]
+		
+		"sineOutIn":
+			return [Tween.TRANS_SINE, Tween.EASE_OUT_IN]
+		
+		_:
+			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion

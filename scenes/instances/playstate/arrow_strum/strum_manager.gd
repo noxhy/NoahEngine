@@ -2,9 +2,9 @@
 
 extends Node2D
 
-signal note_hit(time: float, lane: int, note_type: int, hit_time: float, manager: Node2D)
-signal note_holding(time: float, lane: int, note_type: int, manager: Node2D)
-signal note_miss(time: float, lane: int, length: float, note_type: int, hit_time: float, manager: Node2D)
+signal note_hit(time: float, lane: int, note_type: Variant, hit_time: float, manager: Node2D)
+signal note_holding(time: float, lane: int, note_type: Variant, manager: Node2D)
+signal note_miss(time: float, lane: int, length: float, note_type: Variant, hit_time: float, manager: Node2D)
 
 @export var note_skin = NoteSkin.new()
 ## List of NodePaths of the strumlines.
@@ -81,8 +81,11 @@ func set_ignored_note_types(_note_types: Array):
 		get_node(i).ignored_note_types = _note_types
 
 
-func get_strumline(lane: int) -> ArrowStrum: return get_node(strums[lane])
-func get_scroll_speed(lane: int) -> float: return get_strumline(lane).scroll_speed
+func get_strumline(lane: int) -> ArrowStrum:
+	return get_node(strums[lane])
+
+func get_scroll_speed(lane: int) -> float:
+	return get_strumline(lane).scroll_speed
 
 
 func note_types(_note_types: Array):
@@ -96,8 +99,7 @@ func create_note(time: float, lane: int, length: float, note_type: int, tempo: f
 
 
 func create_splash(lane: int, animation_name: String):
-	
-	var strum = strums[ lane ]
+	var strum = strums[lane]
 	get_node(strum).create_splash(animation_name) 
 
 
@@ -105,13 +107,11 @@ func create_splash(lane: int, animation_name: String):
 
 
 func glow_strum(lane: int):
-	
 	var node = get_node(strums[lane])
 	node.glow_strum()
 
 
 func press_strum(lane: int):
-	
 	var node = get_node(strums[lane])
 	node.press_strum()
 
@@ -120,15 +120,12 @@ func press_strum(lane: int):
 
 
 func _on_note_hit(time, strum_name, note_type, hit_time):
-	
 	emit_signal("note_hit", time, strums.find(strum_name), note_type, hit_time, self)
 
 
 func _on_note_holding(time, strum_name, note_type):
-	
 	emit_signal("note_holding", time, strums.find(strum_name), note_type, self)
 
 
 func _on_note_miss(time, strum_name, length, note_type, hit_time):
-	
 	emit_signal("note_miss", time, strums.find(strum_name), length, note_type, hit_time, self)

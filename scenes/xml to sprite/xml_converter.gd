@@ -27,7 +27,6 @@ func do_it():
 	var err = xml_parser.read()
 	while err == OK:
 		if xml_parser.get_node_type() == XMLParser.NODE_ELEMENT or xml_parser.get_node_type() == XMLParser.NODE_ELEMENT_END:
-			
 			print("--- " + xml_parser.get_node_name() + " ---")
 			
 			if xml_parser.get_node_name() != "TextureAtlas":
@@ -69,7 +68,6 @@ func do_it():
 					if xml_parser.has_attribute("rotated"): frames.add_frame(cur_anim_name, prev_frame, 1.01)
 					else: frames.add_frame(cur_anim_name, prev_frame)
 				else:
-					
 					var new_frame = AtlasTexture.new()
 					new_frame.atlas = texture
 					new_frame.region = new_region
@@ -107,14 +105,12 @@ func _ready():
 	$"UI/Input Panel/Save Path".text = save_path
 	
 	$"UI/Input Panel/Label2".text = "Press " + "Enter" + " TO CONVERT"
-	
+
+
 var bunce = false
-
-
 func _input(event):
 	if event.is_action_pressed("ui_accept"):
 		if bunce == false:
-			
 			bunce = true
 			save_path = $"UI/Input Panel/Save Path".text.trim_suffix(".png").trim_suffix(".xml")
 			load_path = $"UI/Input Panel/Load Path".text.trim_suffix(".png").trim_suffix(".xml")
@@ -135,5 +131,3 @@ func _input(event):
 			$"UI/Input Panel/Load Path".show()
 			
 			bunce = false
-		
-	

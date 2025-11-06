@@ -14,13 +14,16 @@ signal note_holding(time: float, strum_name: StringName, note_type: Variant)
 signal note_miss(time: float, strum_name: StringName, length: float, note_type: Variant, hit_time: float)
 
 @export var note_skin: NoteSkin
+## Name of the input in the [code]InputMap[/code]
 @export var input: String = ""
+## Strum direction name
 @export var strum_name: String = ""
 
 @export var can_press: bool  = true
 @export var auto_play: bool  = false
 @export var can_splash: bool  = false
 @export var enemy_slot: bool = false
+## Note types that autoplay wont press
 @export var ignored_note_types: Array = []
 
 enum STATE {
@@ -29,7 +32,10 @@ enum STATE {
 	GLOW,
 }
 
-var note_types = [""]
+# <note_type>: <id>
+var note_types = {
+	0: ""
+}
 
 var scroll_speed: float = 1.0
 var scroll: float = 1.0
@@ -97,7 +103,7 @@ func _process(delta):
 						state = STATE.GLOW
 					
 					else:
-						reset_timer = GameManager.seconds_per_beat / 4 # shh
+						reset_timer = GameManager.seconds_per_beat / 4
 						state = STATE.GLOW
 						
 						if can_splash:
@@ -107,8 +113,6 @@ func _process(delta):
 						
 						note_list.erase(note)
 						note.queue_free()
-					
-					
 					continue
 		
 		if (time_difference + (note.start_length * GameManager.seconds_per_beat - offset - delta)) <= -GameManager.SHIT_RATING_WINDOW:
@@ -217,8 +221,12 @@ func _process(delta):
 		sprite.play_animation(strum_name)
 	elif state == STATE.PRESSED:
 		sprite.play_animation(strum_name + " press")
-	elif state == STATE.GLOW: 
-		sprite.play_animation(strum_name + " glow", false)
+	elif state == STATE.GLOW:
+		if enemy_slot:
+			if SettingsManager.get_setting("enemy_strum_glow"):
+				sprite.play_animation(strum_name + " glow", false)
+		else:
+			sprite.play_animation(strum_name + " glow", false)
 
 # Util
 
@@ -263,11 +271,8 @@ func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 	note_instance.scroll = scroll
 	
 	note_instance.direction = strum_name
-	if note_type is int:
-		note_type = clamp(note_type, 0, note_types.size() - 1)
-		note_instance.animation = note_types[note_type] + strum_name
-	else:
-		note_instance.animation = note_type + strum_name
+	note_type = note_types.get(note_type, "")
+	note_instance.animation = note_type + strum_name
 	
 	note_instance.note_skin = note_skin
 	
@@ -281,8 +286,10 @@ func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 
 
 func _on_offset_sprite_animation_finished():
-	if !can_press:
-		state = STATE.IDLE
+	if state == STATE.GLOW:
+		if pressing:
+			sprite.set_frame_and_progress(0, 0)
+			sprite.play()
 
 
 func _on_hold_cover_frame_changed():
