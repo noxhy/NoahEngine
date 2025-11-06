@@ -14,11 +14,6 @@ func _ready():
 	if tail_animation:
 		tail.texture = note_skin.notes_texture.get_frame_texture(tail_animation, 0)
 	
-	var end_animation = $Note.get_real_animation(StringName(animation + " end"))
-	if end_animation:
-		end.texture = note_skin.notes_texture.get_frame_texture(end_animation, 0)
-		end.size = end.texture.get_size()
-	
 	$Note.offsets = note_skin.offsets
 	
 	if note_skin.pixel_texture: 
@@ -28,7 +23,6 @@ func _ready():
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
 	tail.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
-	end.scale.x = tail.scale.x
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 
 
@@ -41,7 +35,6 @@ func _process(delta):
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length
-		end.position.x = line_length
 	else:
 		tail.visible = false
 

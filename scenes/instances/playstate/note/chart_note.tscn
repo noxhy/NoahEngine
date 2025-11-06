@@ -36,10 +36,5 @@ modulate = Color(1, 1, 1, 0.588)
 rotation = 1.5707964
 stretch_mode = 1
 
-[node name="End" type="TextureRect" parent="Tail"]
-texture_repeat = 2
-layout_mode = 0
-stretch_mode = 2
-
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
 rect = Rect2(-319.99997, -319.99997, 639.99994, 639.99994)
