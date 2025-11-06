@@ -333,6 +333,7 @@ func play_audios(time: float):
 		vocal_tracks.append(playback.play_stream(stream, chart.offset + song_start_offset + time, \
 		0.0, song_speed))
 	instrumental.play(chart.offset + song_start_offset + time)
+	instrumental.pitch_scale = song_speed
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time

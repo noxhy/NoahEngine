@@ -3,13 +3,13 @@ extends Node2D
 const MENU_OPTION_NODE = preload("res://scenes/instances/freeplay/capsule.tscn")
 
 @export var can_click: bool = true
-@export var difficulties: Array[String]
+@export var difficulties: PackedStringArray
 
 @onready var options: Array
 
 var difficulty: String
 var album: Album
-var difficulty_songs: Dictionary
+var difficulty_songs: Dictionary[String, Array]
 
 var current_grade: int
 var current_highscore: int
@@ -18,7 +18,7 @@ var dj: AtlasSprite
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	difficulty = difficulties[0]
+	difficulty = difficulties.get(0)
 	$"Difficulty Selector".difficulties = difficulties
 	album = Preload.character_data[GameManager.current_character].album
 	var background: Texture2D = Preload.character_data[GameManager.current_character].background
@@ -31,7 +31,6 @@ func _ready():
 		difficulty_songs[difficulty] = []
 	
 	for song in album.song_list:
-		
 		@warning_ignore("shadowed_variable")
 		for difficulty in song.difficulties:
 			difficulty_songs[difficulty].append(song)

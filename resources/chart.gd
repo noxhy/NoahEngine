@@ -31,7 +31,7 @@ func get_tempo_at(time: float) -> float:
 	var output: float = -1
 	for point in get_tempos_data():
 		if time >= point:
-				return get_tempos_data().get(point)
+			output = get_tempos_data().get(point)
 		else:
 			continue
 	
@@ -40,10 +40,11 @@ func get_tempo_at(time: float) -> float:
 
 func get_meter_at(time: float) -> Array:
 	var output: Array = []
-	for point in get_meters_data(): if time >= point:
-		output = get_meters_data().get(point)
-	else:
-		continue
+	for point in get_meters_data():
+		if time >= point:
+			output = get_meters_data().get(point)
+		else:
+			continue
 	
 	return output
 

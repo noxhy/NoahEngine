@@ -129,6 +129,13 @@ stream = ExtResource("2_lmn2j")
 bus = &"SFX"
 
 [node name="Difficulty Display" parent="." instance=ExtResource("3_nyydv")]
+animation_names = Dictionary[StringName, StringName]({
+&"easy": &"easy",
+&"erect": &"erect",
+&"hard": &"hard",
+&"nightmare": &"nightmare",
+&"normal": &"normal"
+})
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

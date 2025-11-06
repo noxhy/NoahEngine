@@ -18,7 +18,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
 	$"UI/Offset Label".text = "Offset: " + str(SettingsManager.get_setting("offset") * 1000) + " ms"
 	
 	var keycode = SettingsManager.get_keybind("ui_accept")

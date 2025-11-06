@@ -10,9 +10,9 @@ const DIFFICULTY_COLORS = {
 
 signal selected_difficulty(difficulty: String)
 
-@export var difficulties: Array[String] = []
+@export var difficulties: PackedStringArray = []
 @export var can_press: bool = false
-@export var available_difficulties: Array[String]:
+@export var available_difficulties: PackedStringArray:
 	set(v):
 		available_difficulties = v
 		update_separators()
@@ -29,11 +29,8 @@ func _ready() -> void:
 	
 	var i: int = 0
 	for difficulty in difficulties:
-		
 		var separator_instance = SEPARATOR_PRELOAD.instantiate()
-		
 		if DIFFICULTY_COLORS.has(difficulty):
-			
 			separator_instance.active_color = DIFFICULTY_COLORS[difficulty][0]
 			separator_instance.inactive_color = DIFFICULTY_COLORS[difficulty][1]
 			separator_instance.disabled_color = DIFFICULTY_COLORS[difficulty][2]
@@ -54,7 +51,6 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	
 	if can_press:
-		
 		if Input.is_action_just_pressed("ui_left"):
 			update_selection(Global.freeplay_difficulty - 1)
 		

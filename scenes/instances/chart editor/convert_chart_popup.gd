@@ -84,7 +84,7 @@ func new_file(dir: String):
 				)
 		
 		_:
-			difficulties = ["normal"]
+			difficulties = ["easy", "normal", "hard"]
 	
 	for difficulty in difficulties:
 		match chart_type:
@@ -161,6 +161,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 			
 			# Adding tempo data
 			for i in json.timeChanges:
+				if i.t < 0: i.t = 0.0
 				tempo_data[i.t] = i.bpm
 			
 			# Adding Note Data

@@ -287,7 +287,11 @@ func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 
 func _on_offset_sprite_animation_finished():
 	if state == STATE.GLOW:
-		if pressing:
+		if !auto_play:
+			if pressing:
+				sprite.set_frame_and_progress(0, 0)
+				sprite.play()
+		else:
 			sprite.set_frame_and_progress(0, 0)
 			sprite.play()
 

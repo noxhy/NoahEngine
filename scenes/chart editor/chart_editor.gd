@@ -863,8 +863,8 @@ func time_to_y_position(time: float) -> float:
 	var i: int = 0
 	var meter: Array = []
 	
-	var L: float = -chart.offset
-	var R: float = -chart.offset
+	var L: float = tempo_data.keys()[0]
+	var R: float = tempo_data.keys()[0]
 	
 	var tempo: float = 60.0
 	
