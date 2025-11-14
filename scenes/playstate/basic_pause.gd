@@ -69,7 +69,6 @@ func _ready():
 	music.volume_linear = 0
 	tween.tween_property(music, "volume_linear", 1, 4)
 	$AnimationPlayer.play("intro")
-	Global.set_window_title("Paused")
 	
 	%"Song Name".text = song_title
 	%"Other Info".text = "Artist: " + credits

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Song" load_steps=3 format=3 uid="uid://w4bp628gcfr7"]
+[gd_resource type="Resource" script_class="Song" load_steps=3 format=3 uid="uid://b31wtmx520o7m"]
 
 [ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://assets/sprites/playstate/icons/spirit.tres" id="1_r3sq6"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_k4vfv"]

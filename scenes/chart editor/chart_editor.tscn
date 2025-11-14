@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://c3lux2ajoe1g6"]
+[gd_scene load_steps=28 format=3 uid="uid://c3lux2ajoe1g6"]
 
 [ext_resource type="Script" uid="uid://ocjrud8madj7" path="res://scenes/chart editor/chart_editor.gd" id="1_ugmsy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/instances/conductor.gd" id="2_dontb"]
@@ -23,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://assets/sounds/chart editor/noteLay.ogg" id="14_am3li"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://scenes/instances/chart editor/history_window.tscn" id="19_ufjr2"]
+[ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://scenes/instances/chart editor/metadata_window.tscn" id="23_75w6f"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_50rmr"]
 
@@ -386,13 +387,21 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Window"
-item_count = 1
+item_count = 2
 popup/item_0/text = "History"
 popup/item_0/checkable = 1
 popup/item_0/id = 0
+popup/item_1/text = "Metadata"
+popup/item_1/checkable = 1
+popup/item_1/id = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="History Window" parent="UI/Upper UI/Window Button" instance=ExtResource("19_ufjr2")]
+unique_name_in_owner = true
+position = Vector2i(0, 24)
+visible = false
+
+[node name="Metadata Window" parent="UI/Upper UI/Window Button" instance=ExtResource("23_75w6f")]
 unique_name_in_owner = true
 visible = false
 
@@ -436,3 +445,9 @@ metadata/_edit_lock_ = true
 [connection signal="item_selected" from="UI/Lower UI/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
 [connection signal="value_changed" from="UI/Lower UI/Chart Snap" to="." method="_on_chart_snap_value_changed"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
+[connection signal="close_requested" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_close_requested"]
+[connection signal="updated_icon_texture" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_icon_texture"]
+[connection signal="updated_song_artist" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_artist"]
+[connection signal="updated_song_name" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_name"]
+[connection signal="updated_song_scene" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_scene"]
+[connection signal="updated_starting_tempo" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_starting_tempo"]

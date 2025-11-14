@@ -5,7 +5,6 @@ const HISTORY_BUTTON_PRELOAD = preload("res://scenes/instances/chart editor/hist
 signal selected(index: int)
 
 func add_action(action_name: String) -> Node:
-	
 	var history_button_instance = HISTORY_BUTTON_PRELOAD.instantiate()
 	
 	history_button_instance.action_name = action_name
@@ -17,6 +16,8 @@ func add_action(action_name: String) -> Node:
 
 func _on_close_requested() -> void:
 	self.visible = false
+	gui_release_focus()
 
 
-func select(index: int): emit_signal("selected", index)
+func select(index: int):
+	emit_signal("selected", index)

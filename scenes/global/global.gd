@@ -312,6 +312,9 @@ func string_to_ease(tween: String) -> Array:
 		"sineOutIn":
 			return [Tween.TRANS_SINE, Tween.EASE_OUT_IN]
 		
+		"CLASSIC":
+			return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+		
 		_:
 			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion

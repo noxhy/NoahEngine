@@ -212,7 +212,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 				if event == "FocusCamera":
 					parameters = [str(i.v.char)]
 				elif event == "ZoomCamera":
-					parameters = [str(i.v.zoom), str(i.v.duration * (seconds_per_beat / 16.0))]
+					parameters = [str(i.v.zoom), str(i.v.duration * (seconds_per_beat / 16.0)), i.get("ease", "CLASSIC")]
 				elif event == "SetCameraBop":
 					parameters = [str(i.v.rate * 4)]
 				

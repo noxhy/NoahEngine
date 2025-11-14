@@ -9,7 +9,7 @@ const MENU_OPTION_NODE = preload("res://scenes/instances/freeplay/capsule.tscn")
 
 var difficulty: String
 var album: Album
-var difficulty_songs: Dictionary[String, Array]
+var difficulty_songs: Dictionary[String, Array] = {}
 
 var current_grade: int
 var current_highscore: int

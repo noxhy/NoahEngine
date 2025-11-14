@@ -145,7 +145,7 @@ func _ready():
 	
 	ui.set_credits(song_data.title, song_data.artist)
 	play_song(0)
-	Global.set_window_title(song_data.title)
+	Global.set_window_title("Playing: " + song_data.title)
 	
 	pause_scene = ui_skin.pause_scene
 	
@@ -420,9 +420,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 		@warning_ignore("incompatible_ternary")
 		var zoom_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
+		var ease_string = event_parameters.get(2)
+		var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+		if ease_string != null:
+			_ease = Global.string_to_ease(ease_string)
 		
 		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT).set_parallel(true)
+		tween.set_trans(_ease[0]).set_ease(_ease[1]).set_parallel(true)
 		tween.tween_property(camera, "target_zoom", new_zoom, zoom_time * song_speed)
 		tween.tween_property(camera, "zoom", new_zoom, zoom_time * song_speed)
 	

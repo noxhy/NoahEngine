@@ -81,7 +81,6 @@ func _ready() -> void:
 	%"Chart Snap".value = chart_snap
 	
 	## Initializing Popup Signals
-	
 	%"File Button".get_popup().connect("id_pressed", self.file_button_item_pressed)
 	%"File Button".get_popup().set_item_checked(5, SettingsManager.get_setting("autosave"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
@@ -219,7 +218,7 @@ func _process(delta: float) -> void:
 					
 					if !Input.is_action_pressed("control"):
 						
-						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
+						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() == null:
 							
 							var lane: int = snapped_position.x - 1
 							var time: float = grid_position_to_time(snapped_position, true)
@@ -304,7 +303,9 @@ func _process(delta: float) -> void:
 										selected_notes[j] = k - 1
 									j += 1
 								
-								if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)
+								if SettingsManager.get_setting("autosave"):
+									ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
+									ResourceSaver.save(chart, chart.resource_path)
 	
 	if Input.is_action_pressed("mouse_left"):
 		
@@ -344,6 +345,7 @@ func _process(delta: float) -> void:
 										note_list[i].length = distance
 									
 									if SettingsManager.get_setting("autosave"): 
+										ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 										ResourceSaver.save(chart, chart.resource_path)
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
@@ -378,7 +380,8 @@ func _process(delta: float) -> void:
 											node.position = Vector2(%Grid.get_real_position(Vector2(1.5 + node.lane, 0)).x, time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
 											j += 1
 										
-										if SettingsManager.get_setting("autosave"): 
+										if SettingsManager.get_setting("autosave"):
+											ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 											ResourceSaver.save(chart, chart.resource_path)
 										
 										start_time += time_distance
@@ -681,6 +684,13 @@ func load_song(song: Song, difficulty: Variant = null):
 		%"Difficulty Button".get_popup().add_item(d)
 	
 	%"Difficulty Button".select(ChartManager.song.difficulties.keys().find(difficulty))
+	
+	%"Metadata Window".song_name = ChartManager.song.title
+	%"Metadata Window".song_artist = ChartManager.song.artist
+	%"Metadata Window".song_icon = ChartManager.song.icons.resource_path
+	%"Metadata Window".song_scene = ChartManager.song.scene
+	%"Metadata Window".starting_tempo = ChartManager.song.tempo
+	%"Metadata Window".update_stats()
 	
 	load_chart(chart)
 	can_chart = true
@@ -1069,7 +1079,9 @@ func file_button_item_pressed(id):
 		%"Open Window".play()
 	
 	# Save Chart
-	elif id == 2: ResourceSaver.save(chart, chart.resource_path)
+	elif id == 2:
+		ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
+		ResourceSaver.save(chart, chart.resource_path)
 	
 	# Convert Chart
 	elif id == 7:
@@ -1105,12 +1117,13 @@ func edit_button_item_pressed(id):
 
 ## Window button item pressed
 func window_button_item_pressed(id):
-	
-	if id == 0:
-		
-		%"History Window".position = get_local_mouse_position()
-		%"History Window".popup()
-		%"Window Button".get_popup().set_item_checked(0, true)
+	match id:
+		0:
+			%"History Window".popup()
+			%"Window Button".get_popup().set_item_checked(id, true)
+		1:
+			%"Metadata Window".popup()
+			%"Window Button".get_popup().set_item_checked(id, true)
 
 
 func disable_charting(): can_chart = false
@@ -1124,7 +1137,9 @@ func undo():
 	if undo_redo.has_undo():
 		%Undo.play()
 		undo_redo.undo()
-		if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)
+		if SettingsManager.get_setting("autosave"):
+			ResourceSaver.save(chart, chart.resource_path)
+			ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	
 	%"Edit Button".get_popup().set_item_checked(0, !undo_redo.has_undo())
 
@@ -1132,28 +1147,50 @@ func redo():
 	if undo_redo.has_redo():
 		%Redo.play()
 		undo_redo.redo()
-		if SettingsManager.get_setting("autosave"): ResourceSaver.save(chart, chart.resource_path)
+		if SettingsManager.get_setting("autosave"):
+			ResourceSaver.save(chart, chart.resource_path)
+			ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	
 	%"Edit Button".get_popup().set_item_checked(1, !undo_redo.has_redo())
 
 
 func updated_strums():
-	
 	can_chart = true
 	update_grid()
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
-	
 	# This is really dumb and janky
 	chart_snap = value
 
 
 func _on_difficulty_button_item_selected(index: int) -> void:
-	
 	var option = %"Difficulty Button".get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(option): load_song(ChartManager.song, option)
 
 
 func _on_history_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(0, false)
+
+
+func _on_metadata_window_close_requested() -> void:
+	%"Window Button".get_popup().set_item_checked(1, false)
+
+func _on_metadata_window_updated_icon_texture(path: String) -> void:
+	ChartManager.song.icons = load(path)
+
+
+func _on_metadata_window_updated_song_artist(text: String) -> void:
+	ChartManager.song.artist = text
+
+
+func _on_metadata_window_updated_song_name(text: String) -> void:
+	ChartManager.song.title = text
+
+
+func _on_metadata_window_updated_song_scene(path: String) -> void:
+	ChartManager.song.scene = path
+
+
+func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
+	ChartManager.song.tempo = tempo

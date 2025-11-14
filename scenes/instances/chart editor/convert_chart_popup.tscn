@@ -114,7 +114,7 @@ editable = false
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+text = "Select File"
 
 [node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer"]
 unique_name_in_owner = true
@@ -145,7 +145,7 @@ editable = false
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+text = "Select File"
 
 [node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3"]
 unique_name_in_owner = true
@@ -189,7 +189,7 @@ editable = false
 [node name="Button" type="Button" parent="FlowContainer/VBoxContainer/Export Location"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+text = "Select File"
 
 [node name="HSeparator2" type="HSeparator" parent="FlowContainer/VBoxContainer"]
 layout_mode = 2

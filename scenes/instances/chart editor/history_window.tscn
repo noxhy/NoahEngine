@@ -7,7 +7,6 @@
 transparent_bg = true
 oversampling_override = 1.0
 title = "History"
-position = Vector2i(520, 200)
 size = Vector2i(240, 320)
 transparent = true
 popup_window = true
