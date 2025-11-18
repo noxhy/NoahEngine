@@ -171,8 +171,7 @@ func _process(delta: float) -> void:
 		
 		if chart != null:
 			if Input.is_action_pressed("control") and Input.is_action_just_pressed("save"):
-				ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-				ResourceSaver.save(chart, chart.resource_path)
+				save()
 	
 	if chart != null:
 		
@@ -304,8 +303,7 @@ func _process(delta: float) -> void:
 									j += 1
 								
 								if SettingsManager.get_setting("autosave"):
-									ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-									ResourceSaver.save(chart, chart.resource_path)
+									save()
 	
 	if Input.is_action_pressed("mouse_left"):
 		
@@ -345,8 +343,7 @@ func _process(delta: float) -> void:
 										note_list[i].length = distance
 									
 									if SettingsManager.get_setting("autosave"): 
-										ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-										ResourceSaver.save(chart, chart.resource_path)
+										save()
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							
@@ -381,8 +378,7 @@ func _process(delta: float) -> void:
 											j += 1
 										
 										if SettingsManager.get_setting("autosave"):
-											ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-											ResourceSaver.save(chart, chart.resource_path)
+											save()
 										
 										start_time += time_distance
 										start_lane += lane_distance
@@ -1080,8 +1076,7 @@ func file_button_item_pressed(id):
 	
 	# Save Chart
 	elif id == 2:
-		ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-		ResourceSaver.save(chart, chart.resource_path)
+		save()
 	
 	# Convert Chart
 	elif id == 7:
@@ -1138,8 +1133,7 @@ func undo():
 		%Undo.play()
 		undo_redo.undo()
 		if SettingsManager.get_setting("autosave"):
-			ResourceSaver.save(chart, chart.resource_path)
-			ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
+			save()
 	
 	%"Edit Button".get_popup().set_item_checked(0, !undo_redo.has_undo())
 
@@ -1148,11 +1142,14 @@ func redo():
 		%Redo.play()
 		undo_redo.redo()
 		if SettingsManager.get_setting("autosave"):
-			ResourceSaver.save(chart, chart.resource_path)
-			ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
+			save()
 	
 	%"Edit Button".get_popup().set_item_checked(1, !undo_redo.has_redo())
 
+
+func save():
+	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
+	ResourceSaver.save(chart, chart.resource_path)
 
 func updated_strums():
 	can_chart = true

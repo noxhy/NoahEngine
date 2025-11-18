@@ -19,8 +19,8 @@ process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../Camera")
-rating_position = NodePath("")
-combo_position = NodePath("")
+rating_position = NodePath("../World/Rating Marker")
+combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_fnsyj")
 ui_skin = ExtResource("5_gia47")
 combo_scale_multiplier = Vector2(1.2, 1.2)
@@ -98,11 +98,10 @@ animation_names = Dictionary[StringName, StringName]({
 &"up": &"Pose Up"
 })
 
-[node name="Metronome" parent="Characters" node_paths=PackedStringArray("music_host") instance=ExtResource("11_6d88t")]
+[node name="Metronome" parent="Characters" instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true
 z_index = -1
 position = Vector2(80, 179)
-music_host = NodePath("")
 slope = 0.3
 update_rate = 0.04
 animation_names = Dictionary[StringName, StringName]({

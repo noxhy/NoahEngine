@@ -8,7 +8,6 @@
 
 [node name="Stage" type="Node2D"]
 script = ExtResource("1_5fq04")
-slow_boppers = Array[NodePath]([NodePath("CanvasLayer/Sniper"), NodePath("CanvasLayer/Guy")])
 metadata/_custom_type_script = "uid://bgx1imb2x4q8y"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
@@ -22,7 +21,7 @@ texture = ExtResource("2_xjsv1")
 centered = false
 metadata/_edit_lock_ = true
 
-[node name="Sniper" type="AnimatedSprite2D" parent="CanvasLayer"]
+[node name="Sniper" type="AnimatedSprite2D" parent="CanvasLayer" groups=["slow_bop"]]
 z_index = 20
 position = Vector2(-127, 349)
 scale = Vector2(1.15, 1.15)
@@ -32,7 +31,7 @@ frame = 14
 frame_progress = 1.0
 metadata/_edit_lock_ = true
 
-[node name="Guy" type="AnimatedSprite2D" parent="CanvasLayer"]
+[node name="Guy" type="AnimatedSprite2D" parent="CanvasLayer" groups=["slow_bop"]]
 z_index = 20
 position = Vector2(1398, 407)
 scale = Vector2(1.15, 1.15)
