@@ -620,7 +620,6 @@ func update_ui_stats():
 
 
 func show_combo(rating: String, _combo: int):
-	
 	var rating_instance = rating_node.instantiate()
 	
 	rating_instance.ui_skin = ui_skin

@@ -126,11 +126,11 @@ position = Vector2(576, 208)
 gizmo_extents = 26.5
 
 [node name="Rating Marker" type="Marker2D" parent="World"]
-position = Vector2(70, -138)
+position = Vector2(710, 222)
 gizmo_extents = 30.0
 
 [node name="Combo Marker" type="Marker2D" parent="World"]
-position = Vector2(198, -90)
+position = Vector2(838, 270)
 gizmo_extents = 40.0
 
 [node name="Characters" type="CanvasLayer" parent="."]

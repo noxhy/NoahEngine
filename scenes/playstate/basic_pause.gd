@@ -143,32 +143,26 @@ func update_selection(i: int):
 
 func select_option(i: int):
 	var option = options.keys()[i]
-	
-	if option == "resume":
-		get_tree().paused = false
-		queue_free()
-	
-	elif option == "options":
-		get_tree().paused = false
-		self.get_parent().process_mode = PROCESS_MODE_DISABLED
-		Global.change_scene_to("res://scenes/options/options.tscn", "down")
-	
-	elif option == "restart":
-		get_tree().paused = false
-		self.get_parent().process_mode = PROCESS_MODE_DISABLED
-		get_tree().reload_current_scene()
-	
-	elif option == "exit":
-		self.get_parent().process_mode = PROCESS_MODE_DISABLED
-		GameManager.reset_stats()
+	match option:
+		"resume":
+			get_tree().paused = false
+			queue_free()
 		
-		if GameManager.freeplay:
-			Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", "down")
-		else:
-			Global.change_scene_to("res://scenes/story mode/story_mode.tscn", "down")
-	
-	elif option == "chart_editor":
-		get_tree().paused = false
-		self.get_parent().process_mode = PROCESS_MODE_DISABLED
-		GameManager.reset_stats()
-		Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")
+		"options":
+			Global.change_scene_to("res://scenes/options/options.tscn", "down")
+		
+		"restart":
+			get_tree().paused = false
+			get_tree().reload_current_scene()
+		
+		"exit":
+			GameManager.reset_stats()
+			
+			if GameManager.freeplay:
+				Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", "down")
+			else:
+				Global.change_scene_to("res://scenes/story mode/story_mode.tscn", "down")
+		
+		"chart_editor":
+			GameManager.reset_stats()
+			Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")

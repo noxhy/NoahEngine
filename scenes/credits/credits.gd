@@ -15,7 +15,7 @@ extends Node2D
 	],
 	
 	"Friday Night Funkin\'": [
-		[ "The Funkin Crew\'", preload("res://assets/sprites/menus/credits/icons/funkin crew.png") ],
+		[ "The Funkin\' Crew", preload("res://assets/sprites/menus/credits/icons/funkin crew.png") ],
 	],
 	
 }
@@ -29,7 +29,7 @@ extends Node2D
 	
 	"Noah": ["Made the engine.", "link", "https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA"],
 	"Koi": ["Miss sprite", "link", "https://twitter.com/toasted_milk_"],
-	"The Funkin Crew\'": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
+	"The Funkin\' Crew": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
 	"KostyaGame": ["Dad losing icon", null],
 	
 }
