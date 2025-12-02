@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://scenes/freeplay/atlas_sprite.gd" id="1_uxy4b"]
 [ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="2_re7fs"]
-[ext_resource type="FontFile" uid="uid://c7hwqqieqbc47" path="res://assets/fonts/Results Background.ttf" id="3_dcg1w"]
+[ext_resource type="FontFile" uid="uid://c7hwqqieqbc47" path="res://assets/fonts/results_background.ttf" id="3_dcg1w"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6h7lv"]
 font = ExtResource("3_dcg1w")

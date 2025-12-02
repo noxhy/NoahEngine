@@ -4,14 +4,16 @@ extends Node2D
 
 @onready var week_icon_node = preload("res://scenes/instances/story mode/week_icon.tscn")
 ## Nested dictionary where each key has keys:
-## [br][code]animation[/code] - The animation name of the node.
-## [br][code]node[/code] - The node that will be visible when the week is selected.
+## animation - The animation name of the node that represents the week.
+## node - The node that will be visible when hovering over the week.
+## scene - The scene that you will be sent to when selecting the week.
+## name - The week name that displays
 @onready var options: Dictionary = {
 	"tutorial": {
 		"animation": "tutorial",
 		"node": $"UI/Week Display/SubViewport/Tutorial",
 		"scene": "res://test/test_scene.tscn",
-		"week_name": "Teaching Time",
+		"name": "Teaching Time",
 		"song_list": [],
 		"display_song_list": "Tutorial"
 	},
@@ -19,7 +21,7 @@ extends Node2D
 		"animation": "week1",
 		"node": $"UI/Week Display/SubViewport/Week 1",
 		"scene": "res://scenes/playstate/songs/fresh/fresh.tscn",
-		"week_name": "Daddy Dearest",
+		"name": "Daddy Dearest",
 		"display_song_list": "Bopeeboo\nFresh\nDadbattle",
 		"song_list": [load("res://assets/songs/playable songs/fresh/Fresh Erect.res")]
 	},
@@ -27,7 +29,7 @@ extends Node2D
 		"animation": "week2",
 		"node": $"UI/Week Display/SubViewport/Week 2",
 		"scene": "res://test/test_scene.tscn",
-		"week_name": "Spooky Month",
+		"name": "Spooky Month",
 		"display_song_list": "Spokeez\nSouth\nMonster",
 		"song_list": []
 	},
@@ -35,7 +37,7 @@ extends Node2D
 		"animation": "week3",
 		"node": $"UI/Week Display/SubViewport/Week 3",
 		"scene": "res://test/test_scene.tscn",
-		"week_name": "Pico",
+		"name": "Pico",
 		"display_song_list": "Pico\nPhilly\nBlammed",
 		"song_list": []
 	},
@@ -43,7 +45,7 @@ extends Node2D
 		"animation": "week4",
 		"node": $"UI/Week Display/SubViewport/Week 4",
 		"scene": "res://test/test_scene.tscn",
-		"week_name": "Mommy Must Murder",
+		"name": "Mommy Must Murder",
 		"display_song_list": "Satin-Panties\nHigh\nMilf",
 		"song_list": []
 	},
@@ -51,7 +53,7 @@ extends Node2D
 		"animation": "week5",
 		"node": $"UI/Week Display/SubViewport/Week 5",
 		"scene": "res://scenes/playstate/songs/eggnog/eggnog.tscn",
-		"week_name": "Red Snow",
+		"name": "Red Snow",
 		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
 		"song_list": [load("res://assets/songs/playable songs/cocoa/Cocoa Erect.res")]
 	},
@@ -59,7 +61,7 @@ extends Node2D
 		"animation": "week6",
 		"node": $"UI/Week Display/SubViewport/Week 6",
 		"scene": "res://scenes/playstate/songs/senpai/senpai.tscn",
-		"week_name": "Hating Simulator Ft. Moawling",
+		"name": "Hating Simulator Ft. Moawling",
 		"display_song_list": "Senpai\nRoses\nThorns",
 		"song_list": [load("res://assets/songs/playable songs/senpai/Senpai.res")]
 	},
@@ -67,7 +69,7 @@ extends Node2D
 		"animation": "week7",
 		"node": $"UI/Week Display/SubViewport/Week 7",
 		"scene": "res://test/test_scene.tscn",
-		"week_name": "Tankman",
+		"name": "Tankman",
 		"display_song_list": "Ugh\nGuns\nStress",
 		"song_list": []
 	},
@@ -75,7 +77,7 @@ extends Node2D
 		"animation": "weekend1",
 		"node": $"UI/Week Display/SubViewport/Weekend 1",
 		"scene": "res://scenes/playstate/songs/darnell/darnell.tscn",
-		"week_name": "Due Debts",
+		"name": "Due Debts",
 		"display_song_list": "Darnell\nLit Up\n2Hot\nBlazin\'",
 		"character": "pico",
 		"song_list": [load("res://assets/songs/playable songs/darnell/Darnell.res")]
@@ -161,7 +163,7 @@ func update_week_selection(i: int):
 	Global.bop_tween(node, "scale", node.scale, node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
 	
 	$"UI/Week UI/SubViewport/Song List Label".text = options.get(week).display_song_list
-	$"UI/Week Name".text = options.get(week).week_name
+	$"UI/Week Name".text = options.get(week).name
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
@@ -182,8 +184,8 @@ func update_difficulty_selection(i: int, week: String = options.keys()[selected_
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
 	tween.tween_property(%"Difficulty Display", "scale", Vector2(1, 1), 0.2)
 	
-	var week_name = options.get(options.keys()[selected_week]).week_name
-	var _week_score = SaveManager.get_week_highscore(week_name, difficulties[i])
+	var display_name = options.get(options.keys()[selected_week]).get("name", "")
+	var _week_score = SaveManager.get_week_highscore(display_name, difficulties[i])
 	if _week_score == -1:
 		update_week_score(-1)
 	else:
@@ -202,7 +204,7 @@ func select_option(i: int):
 		
 		can_click = false
 		SoundManager.accept.play()
-		GameManager.current_week = options.get(week).week_name
+		GameManager.current_week = options.get(week).name
 		GameManager.week_songs = options.get(week).song_list
 		GameManager.current_week_song = 0
 		GameManager.current_character = options.get(options.keys()[i]).get("character", "boyfriend")
@@ -237,8 +239,8 @@ func update_week_score(score: int):
 
 
 ## Checks if every song in a week has all the same difficulties
-func validate_week(week_name: StringName) -> bool:
-	var song_list = options.get(week_name).song_list
+func validate_week(id: StringName) -> bool:
+	var song_list = options.get(id).song_list
 	if song_list.size() == 0:
 		printerr("(Week Validation) Empty song list")
 		return false

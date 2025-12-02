@@ -1,7 +1,7 @@
 [gd_resource type="Theme" load_steps=21 format=3 uid="uid://cbwyjej6x2d78"]
 
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/Normal Text.ttf" id="1_2j3pj"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/Bold Normal Text.ttf" id="2_hk0cw"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="1_2j3pj"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="2_hk0cw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0b34a"]
 content_margin_left = 8.0

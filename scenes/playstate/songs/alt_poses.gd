@@ -5,7 +5,7 @@ func note_hit(time, lane, note_type, hit_time, strumhandler):
 	var animations = ["left", "down", "up", "right"]
 	
 	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[ lane ])
+		characters[0].play_animation(animations[lane])
 	else:
 		if note_type == 1:
 			characters[1].current_prefix = &"mom_"
@@ -20,7 +20,7 @@ func note_holding(time, lane, note_type, strumhandler):
 	var animations = ["left", "down", "up", "right"]
 	
 	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[ lane ])
+		characters[0].play_animation(animations[lane])
 	else:
 		if note_type == 1:
 			characters[1].play_animation(str("mom_", animations[lane]))

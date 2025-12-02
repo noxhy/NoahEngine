@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://c7hwqqieqbc47"
-path="res://.godot/imported/Results Background.ttf-b6e7618d811e4aceacf266a508480bd2.fontdata"
+uid="uid://dmnmbpo1uy8px"
+path="res://.godot/imported/fnf_font_outline.ttf-241d63a8bbd364564d8a11bacec0d3f5.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Results Background.ttf"
-dest_files=["res://.godot/imported/Results Background.ttf-b6e7618d811e4aceacf266a508480bd2.fontdata"]
+source_file="res://assets/fonts/fnf_font_outline.ttf"
+dest_files=["res://.godot/imported/fnf_font_outline.ttf-241d63a8bbd364564d8a11bacec0d3f5.fontdata"]
 
 [params]
 
@@ -21,8 +21,9 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
-subpixel_positioning=4
+subpixel_positioning=1
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null

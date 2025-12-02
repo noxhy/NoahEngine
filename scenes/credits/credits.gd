@@ -5,23 +5,24 @@ extends Node2D
 @onready var menu_option_node = preload("res://scenes/instances/menu_option.tscn")
 
 # To add a new credit, add an array with this format:
-# [ <credit name> , <credit icon (recommended size: 150x150)> ]
+# [<credit name> , <credit icon (recommended size: 150x150)>]
 @onready var options: Dictionary = {
 	
 	"Nexus Engine": [
-		[ "Noah", preload("res://assets/sprites/menus/credits/icons/noah.png") ],
-		[ "Koi", preload("res://assets/sprites/menus/credits/icons/icon-koi.png") ],
-		[ "KostyaGame", preload("res://assets/sprites/menus/credits/icons/empty.png") ],
+		["Noah", preload("res://assets/sprites/menus/credits/icons/noah.png")],
+		["data5", preload("res://assets/sprites/menus/credits/icons/data5.png")],
+		["Koi", preload("res://assets/sprites/menus/credits/icons/icon-koi.png")],
+		["KostyaGame", preload("res://assets/sprites/menus/credits/icons/empty.png")]
 	],
 	
 	"Friday Night Funkin\'": [
-		[ "The Funkin\' Crew", preload("res://assets/sprites/menus/credits/icons/funkin crew.png") ],
-	],
+		["The Funkin\' Crew", preload("res://assets/sprites/menus/credits/icons/funkin crew.png")],
+	]
 	
 }
 
 # To set the statistics of a credit node follow this format:
-# <credit name>: [ <description>, <action name>, <action paramater> ]
+# <credit name>: [<description>, <action name>, <action paramater>]
 
 # Actions:
 # link - Parameters: String = <link>
@@ -31,6 +32,7 @@ extends Node2D
 	"Koi": ["Miss sprite", "link", "https://twitter.com/toasted_milk_"],
 	"The Funkin\' Crew": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
 	"KostyaGame": ["Dad losing icon", null],
+	"data5": ["Helped with stuff.", "link", "https://x.com/_data5?s=20"]
 	
 }
 
@@ -54,7 +56,7 @@ func _ready():
 		menu_option_instance.option_name = i
 		menu_option_instance.position = Vector2(-1000, object_amount * 175)
 		menu_option_instance.modulate = Color(1, 1, 1, 1)
-		menu_option_instance.get_node("Label").label_settings.font = preload("res://assets/fonts/Bold Italitc Normal Text.ttf")
+		menu_option_instance.get_node("Label").label_settings.font = preload("res://assets/fonts/bold_italic_font.ttf")
 		menu_option_instance.get_node("Label").label_settings.font_size = 56
 		
 		$UI.add_child(menu_option_instance)

@@ -9,7 +9,7 @@ func random_splash():
 	var rng = RandomNumberGenerator.new()
 	rng.randomize()
 	
-	text = splashes[ rng.randi_range(0, splashes.size() - 1) ].trim_prefix("\n")
+	text = splashes[rng.randi_range(0, splashes.size() - 1)].trim_prefix("\n")
 
 func show_splash(splash: String): text = splash.replace("\\n", "\n")
 

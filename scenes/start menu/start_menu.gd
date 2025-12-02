@@ -63,7 +63,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 			time = 0.5
 			
 			# Background color phase
-			$Background/ColorRect.color = flashing_colors[ current_beat % flashing_colors.size() ]
+			$Background/ColorRect.color = flashing_colors[current_beat % flashing_colors.size()]
 			tween.tween_property($Background/ColorRect, "color", Color(0, 0, 0), 0.3)
 			
 			# "Press enter" text color phasing, i most definitely could've done a sine equation

@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://c1yqml3y7c8j2"
-path="res://.godot/imported/Bold Italitc Normal Text.ttf-726c7b3d59b298679b89606cd0674539.fontdata"
+path="res://.godot/imported/bold_italic_font.ttf-34e3fb845672ca03f6d71806bedead56.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Bold Italitc Normal Text.ttf"
-dest_files=["res://.godot/imported/Bold Italitc Normal Text.ttf-726c7b3d59b298679b89606cd0674539.fontdata"]
+source_file="res://assets/fonts/bold_italic_font.ttf"
+dest_files=["res://.godot/imported/bold_italic_font.ttf-34e3fb845672ca03f6d71806bedead56.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=1
 keep_rounding_remainders=true

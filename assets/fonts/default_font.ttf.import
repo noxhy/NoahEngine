@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://8cxhkah8id6n"
-path="res://.godot/imported/Bold Normal Text.ttf-912c1adaeb05714e8fae3ea426ec48ac.fontdata"
+uid="uid://ede277aql5vu"
+path="res://.godot/imported/default_font.ttf-1179220519e1b888467efa01d0bf4154.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Bold Normal Text.ttf"
-dest_files=["res://.godot/imported/Bold Normal Text.ttf-912c1adaeb05714e8fae3ea426ec48ac.fontdata"]
+source_file="res://assets/fonts/default_font.ttf"
+dest_files=["res://.godot/imported/default_font.ttf-1179220519e1b888467efa01d0bf4154.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=1
 keep_rounding_remainders=true
@@ -29,12 +30,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

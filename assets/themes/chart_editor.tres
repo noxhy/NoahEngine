@@ -1,8 +1,8 @@
 [gd_resource type="Theme" load_steps=35 format=3 uid="uid://bebg8dyoq0am0"]
 
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/Normal Text.ttf" id="1_gx4r6"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/Bold Normal Text.ttf" id="2_ktiq5"]
-[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/Bold Italitc Normal Text.ttf" id="3_ooxhh"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="1_gx4r6"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="2_ktiq5"]
+[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/bold_italic_font.ttf" id="3_ooxhh"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4ipw"]
 bg_color = Color(0, 0, 0, 1)

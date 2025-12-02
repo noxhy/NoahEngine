@@ -80,5 +80,5 @@ func _on_animated_sprite_2d_frame_changed():
 	
 	if offsets.get(sprite.animation) is PackedVector2Array:
 		
-		sprite.position = offsets.get(sprite.animation)[ sprite.frame ]
-		print("Frame: ", sprite.frame, " Offset: ", offsets.get(sprite.animation)[ sprite.frame ])
+		sprite.position = offsets.get(sprite.animation)[sprite.frame]
+		print("Frame: ", sprite.frame, " Offset: ", offsets.get(sprite.animation)[sprite.frame])

@@ -16,7 +16,7 @@ class_name Chart
 	"notes": [],
 	"events": [],
 	"tempos": { 0.0: 60 },
-	"meters": { 0.0: [ 4, 16 ] },
+	"meters": { 0.0: [4, 16] },
 	
 }
 

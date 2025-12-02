@@ -62,11 +62,11 @@ func _on_paste_display_pressed(): %Input.text = current_line
 func _on_input_text_submitted(new_text):
 	
 	var dialogue_array = dialogue.dialogue.split("\n")
-	dialogue_array[ current_index ] = new_text
+	dialogue_array[current_index] = new_text
 	dialogue.dialogue = convert_array_to_string(dialogue_array)
 	
 	load_dialogue_nagivator()
-	dialogue_line_pressed(dialogue_naviagtor_nodes[ current_index ])
+	dialogue_line_pressed(dialogue_naviagtor_nodes[current_index])
 
 
 func _on_add_line_pressed():
@@ -76,7 +76,7 @@ func _on_add_line_pressed():
 	dialogue.dialogue = convert_array_to_string(dialogue_array)
 	
 	load_dialogue_nagivator()
-	dialogue_line_pressed(dialogue_naviagtor_nodes[ current_index ])
+	dialogue_line_pressed(dialogue_naviagtor_nodes[current_index])
 
 
 func _on_remove_line_pressed():
@@ -86,7 +86,7 @@ func _on_remove_line_pressed():
 	dialogue.dialogue = convert_array_to_string(dialogue_array)
 	
 	load_dialogue_nagivator()
-	dialogue_line_pressed(dialogue_naviagtor_nodes[ current_index ])
+	dialogue_line_pressed(dialogue_naviagtor_nodes[current_index])
 
 
 # Util
@@ -126,7 +126,7 @@ func _on_save_button_pressed():
 
 func read_dialogue_line(index: int):
 	
-	var line = dialogue.dialogue.split("\n")[ index ]
+	var line = dialogue.dialogue.split("\n")[index]
 	
 	var character = line.split(":")[0]
 	var line_said = line.split(":")[1].trim_prefix(" ")

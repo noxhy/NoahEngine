@@ -72,7 +72,7 @@ func _process(delta: float) -> void:
 func update_display():
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".size = Vector2(0, 0)
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".text = str(
-		"[font_size=72][font=\"res://assets/fonts/Results Background.ttf\"]",
+		"[font_size=72][font=\"res://assets/fonts/results_background.ttf\"]",
 		scrolling_text,
 		"[/font]"
 	)
@@ -80,7 +80,7 @@ func update_display():
 	
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".size = Vector2(48, 0)
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".text = str(
-		"[font_size=72][font=\"res://assets/fonts/Results Background.ttf\"][font bt=-16.0][pulse freq=1.5 color=#ffffff90 ease=-2.0]",
+		"[font_size=72][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=1.5 color=#ffffff90 ease=-2.0]",
 		scrolling_text,
 		"[/pulse][/font]"
 	)

@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/instances/playstate/playstate_camera.tscn" id="4_y3wph"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/instances/playstate/ui.tscn" id="5_g7go4"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="11_6k7lv"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/Normal Text.ttf" id="12_chcqi"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="12_chcqi"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
 font = ExtResource("12_chcqi")

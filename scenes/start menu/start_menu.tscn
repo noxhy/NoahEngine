@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://2abrkhbxxlab" path="res://scenes/instances/conductor.tscn" id="2_n68yt"]
 [ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://assets/sounds/menu sounds/menu confirm.ogg" id="4_kki2g"]
 [ext_resource type="Texture2D" uid="uid://bm0kcxd60e8qn" path="res://assets/sprites/logo.png" id="5_7gvni"]
-[ext_resource type="FontFile" uid="uid://dmnmbpo1uy8px" path="res://assets/fonts/fnf font outline.ttf" id="6_88h0l"]
+[ext_resource type="FontFile" uid="uid://dmnmbpo1uy8px" path="res://assets/fonts/fnf_font_outline.ttf" id="6_88h0l"]
 [ext_resource type="PackedScene" uid="uid://dirqojr6g5tpn" path="res://scenes/instances/characters/girlfriend_title.tscn" id="6_amf35"]
 [ext_resource type="Script" uid="uid://bj3gjfclyuoto" path="res://scenes/start menu/splash_messages.gd" id="8_oue0e"]
 

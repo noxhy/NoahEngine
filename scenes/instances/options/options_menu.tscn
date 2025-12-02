@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://uj644hsg8thl" path="res://scenes/instances/options/options_node_bool.tscn" id="2_tn18n"]
 [ext_resource type="PackedScene" uid="uid://77c763qfjduu" path="res://scenes/instances/options/options_node_number.tscn" id="3_ae3rr"]
 [ext_resource type="PackedScene" uid="uid://hhmw8wb13s7f" path="res://scenes/instances/options/options_node_range.tscn" id="4_733y8"]
-[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/Bold Italitc Normal Text.ttf" id="5_w6h8c"]
+[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/bold_italic_font.ttf" id="5_w6h8c"]
 [ext_resource type="PackedScene" uid="uid://cx81a4x2e26yh" path="res://scenes/instances/options/options_keybind.tscn" id="6_kbse5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_j08hc"]

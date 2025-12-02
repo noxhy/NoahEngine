@@ -62,9 +62,9 @@ func update_health_bar(health: float):
 	$"Health Bar/Icon Manager".position = Vector2(display_x, 10)
 	
 	var conditions = [
-		[ health >= 85, "winning", "losing" ],
-		[ health <= 15, "losing", "winning" ],
-		[ true, "default", "default" ],
+		[health >= 80, "winning", "losing"],
+		[health <= 20, "losing", "winning"],
+		[true, "default", "default"],
 	]
 	
 	for condition in conditions:
@@ -85,9 +85,7 @@ func downscroll_ui():
 
 
 func set_credits(song_name: String, artist_names: String):
-	$"Song Credits/ColorRect/Label".text = song_name
-	$"Song Credits/ColorRect/Label".text += "\n-\n"
-	$"Song Credits/ColorRect/Label".text += artist_names
+	pass
 
 
 func show_credits(): $AnimationPlayer.play("credits_show")

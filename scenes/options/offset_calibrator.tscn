@@ -7,7 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://baajtpwp5hvdp" path="res://assets/sounds/menu sounds/snare.mp3" id="5_picn5"]
 [ext_resource type="AudioStream" uid="uid://dyy2yik0yf60r" path="res://assets/sounds/menu sounds/menu cancel.ogg" id="6_q07ox"]
 [ext_resource type="PackedScene" uid="uid://by2sf7r6otryi" path="res://scenes/instances/objects/speaker.tscn" id="6_rhpjf"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/Bold Normal Text.ttf" id="8_48d4v"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="8_48d4v"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3110b"]
 font = ExtResource("8_48d4v")

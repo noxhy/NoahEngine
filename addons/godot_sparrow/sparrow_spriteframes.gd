@@ -14,7 +14,7 @@ func _get_visible_name() -> String:
 
 
 func _get_recognized_extensions() -> PackedStringArray:
-	return ['xml' ]
+	return ['xml']
 
 
 func _get_save_extension() -> String:
@@ -40,7 +40,7 @@ func _get_import_options(path: String, preset_index: int):
 				'property_hint': PROPERTY_HINT_RANGE,
 				'hint_string': '0,128,1,or_greater'},
 		{'name': 'animations_looped', 'default_value': false},
-		{'name': 'store_external_spriteframes', 'default_value': false}, ]
+		{'name': 'store_external_spriteframes', 'default_value': false},]
 
 
 func _get_priority() -> float:

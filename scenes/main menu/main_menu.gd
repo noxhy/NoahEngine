@@ -3,7 +3,8 @@ extends Node2D
 @export var can_press: bool = true
 
 ## Nested dictionaries where each key is an option.
-## Each key requires two keys: [code]node[/code] and [code]scene[/code].
+## Each key requires two keys: "node" and "scene".
+## Adding a key, "stop_music", will mute the SoundManager's music player.
 @onready var options: Dictionary = {
 	"story_mode": {
 		"node": $"UI/Button Manager/Story Mode",
@@ -21,7 +22,7 @@ extends Node2D
 	"options": {
 		"node": $"UI/Button Manager/Options",
 		"scene": "res://scenes/options/options.tscn"
-	},
+	}
 	
 }
 var selected: int = 0
