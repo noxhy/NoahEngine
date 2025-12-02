@@ -179,7 +179,6 @@ func _process(delta):
 	ui.target_health = health
 	
 	if health <= 0:
-		
 		GameManager.deaths += 1
 		death_stats.camera_zoom = camera.zoom
 		Global.song_scene = get_tree().current_scene.scene_file_path

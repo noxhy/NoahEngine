@@ -37,13 +37,12 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("fullscreen"):
 		fullscreen = !fullscreen
-		
 		if fullscreen:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
-	elif Input.is_action_just_pressed("ui_plus") and !get_viewport().gui_get_focus_owner():
+	if Input.is_action_just_pressed("ui_plus") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, false)
 		var master_volume = SettingsManager.get_setting("master_volume")
 		SettingsManager.set_setting("master_volume", clamp(master_volume + 0.1, 0, 1))
@@ -51,7 +50,7 @@ func _process(delta):
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1.5)
 	
-	elif Input.is_action_just_pressed("ui_minus") and !get_viewport().gui_get_focus_owner():
+	if Input.is_action_just_pressed("ui_minus") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, false)
 		var master_volume = SettingsManager.get_setting("master_volume")
 		SettingsManager.set_setting("master_volume", clamp(master_volume - 0.1, 0, 1))
@@ -59,12 +58,12 @@ func _process(delta):
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1.5)
 	
-	elif Input.is_action_just_pressed("mute") and !get_viewport().gui_get_focus_owner():
+	if Input.is_action_just_pressed("mute") and !get_viewport().gui_get_focus_owner():
 		AudioServer.set_bus_mute(0, !AudioServer.is_bus_mute(0))
 		show_volume()
 		$"UI/Voume Node/Hide Timer".start(1)
 	
-	elif Input.is_action_just_pressed("reload"): 
+	if Input.is_action_just_pressed("reload"): 
 		get_tree().reload_current_scene()
 		get_tree().paused = false
 

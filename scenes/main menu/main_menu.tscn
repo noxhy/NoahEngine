@@ -44,35 +44,33 @@ tempo = 102.0
 [node name="UI" type="CanvasLayer" parent="."]
 layer = 0
 offset = Vector2(640, 360)
-scale = Vector2(5, 5)
-transform = Transform2D(5, 0, 0, 5, 640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
-follow_viewport_scale = 0.2
 
 [node name="Button Manager" type="Node2D" parent="UI"]
 
-[node name="Story Mode" parent="UI/Button Manager" instance=ExtResource("2_ll3w7")]
+[node name="Story Mode" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("2_ll3w7")]
 position = Vector2(-12.5, -267)
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"story_mode basic",
 &"selected": &"story_mode white"
 })
 
-[node name="Freeplay" parent="UI/Button Manager" instance=ExtResource("4_hiw7n")]
+[node name="Freeplay" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("4_hiw7n")]
 position = Vector2(-12.5, -87)
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"freeplay basic",
 &"selected": &"freeplay white"
 })
 
-[node name="Credits" parent="UI/Button Manager" instance=ExtResource("8_ya104")]
+[node name="Credits" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("8_ya104")]
 position = Vector2(-12.5, 93)
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"credits idle",
 &"selected": &"credits selected"
 })
 
-[node name="Options" parent="UI/Button Manager" instance=ExtResource("6_v3nl2")]
+[node name="Options" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("6_v3nl2")]
 position = Vector2(-12.5, 273)
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"options basic",
@@ -82,12 +80,15 @@ animation_names = Dictionary[StringName, StringName]({
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1
 offset = Vector2(640, 360)
-scale = Vector2(10.64, 10.64)
-transform = Transform2D(10.64, 0, 0, 10.64, 640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
-follow_viewport_scale = 0.1
 
-[node name="Background" type="AnimatedSprite2D" parent="Background"]
+[node name="Parallax2D" type="Parallax2D" parent="Background"]
+scroll_scale = Vector2(0.05, 0.05)
+
+[node name="Background" type="AnimatedSprite2D" parent="Background/Parallax2D"]
+unique_name_in_owner = true
+scale = Vector2(1.1, 1.1)
 sprite_frames = SubResource("SpriteFrames_tynp6")
 animation = &"idle"
 metadata/_edit_lock_ = true

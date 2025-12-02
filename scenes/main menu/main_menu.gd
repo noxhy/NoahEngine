@@ -2,12 +2,12 @@ extends Node2D
 
 @export var can_press: bool = true
 
+## Nested dictionaries where each key is an option.
+## Each key requires two keys: [code]node[/code] and [code]scene[/code].
 @onready var options: Dictionary = {
-	
 	"story_mode": {
 		"node": $"UI/Button Manager/Story Mode",
-		"scene": "res://scenes/story mode/story_mode.tscn",
-		"stop_music": false,
+		"scene": "res://scenes/story mode/story_mode.tscn"
 	},
 	"freeplay": {
 		"node": $"UI/Button Manager/Freeplay",
@@ -16,13 +16,11 @@ extends Node2D
 	},
 	"credits": {
 		"node": $"UI/Button Manager/Credits",
-		"scene": "res://scenes/credits/credits.tscn",
-		"stop_music": false,
+		"scene": "res://scenes/credits/credits.tscn"
 	},
 	"options": {
 		"node": $"UI/Button Manager/Options",
-		"scene": "res://scenes/options/options.tscn",
-		"stop_music": false,
+		"scene": "res://scenes/options/options.tscn"
 	},
 	
 }
@@ -30,24 +28,20 @@ var selected: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	Global.set_window_title("Main Menu")
 	Global.song_scene = null
 	
 	# Button Positions
 	
 	var i = 0
-	var button_count = $"UI/Button Manager".get_children().size()
-	
-	for button in $"UI/Button Manager".get_children():
-		
-		button.position.y = (720.0 / (button_count)) * (i - (button_count / 2.0) + 0.5)
+	var button_count = options.size()
+	for button in get_tree().get_nodes_in_group("buttons"):
+		button.position.y = (720.0 / button_count) * (i - (button_count / 2.0) + 0.5)
 		button.play(button.animation)
 		i += 1
 	
 	# Initalization
-	
-	update_selection(selected)
+	update(selected)
 	
 	if not SoundManager.music.playing:
 		SoundManager.music.play()
@@ -61,15 +55,13 @@ func _ready():
 
 # Input Manager
 func _input(event):
-	
 	if can_press:
-		
 		if event.is_action_pressed("ui_up"):
-			update_selection(selected - 1)
+			update(selected - 1)
 		elif event.is_action_pressed("ui_down"):
-			update_selection(selected + 1)
+			update(selected + 1)
 		elif event.is_action_pressed("ui_accept"):
-			select_option(selected)
+			select(selected)
 		elif event.is_action_pressed("ui_cancel"):
 			can_press = false
 			SoundManager.cancel.play()
@@ -77,7 +69,7 @@ func _input(event):
 
 
 # Updates visually what happens when a new index is set for a selection
-func update_selection(i: int):
+func update(i: int):
 	var old_node = (options.get(options.keys()[selected])).node
 	old_node.play_animation("idle")
 	
@@ -90,18 +82,17 @@ func update_selection(i: int):
 	var new_node = (options.get(options.keys()[selected])).node
 	new_node.play_animation("selected")
 	
-	var camera_tween = create_tween()
-	camera_tween.tween_property($Camera2D, "position", new_node.position, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	
-	var new_node_tween = create_tween()
-	new_node_tween.tween_property(new_node, "scale", new_node.scale + Vector2(0.05, 0.05), 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	var tween = create_tween()
+	tween.set_parallel(true)
+	tween.tween_property($Camera2D, "position", new_node.position, 0.25).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(new_node, "scale", new_node.scale + Vector2(0.05, 0.05), 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 
 
 # Called when an option was selected
-func select_option(i: int):
+func select(i: int):
 	var node = (options.get(options.keys()[i])).node
 	SoundManager.accept.play()
-	$Background/Background.play("selected")
+	%Background.play("selected")
 	
 	can_press = false
 	
@@ -109,15 +100,13 @@ func select_option(i: int):
 	camera_tween.tween_property($Camera2D, "zoom", Vector2(1.1, 1.1), 0.5).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	
 	for n in options.keys():
-		
 		var temp_node = options.get(n).node
-		
 		if n != options.keys()[i]:
 			
 			var node_tween = create_tween()
 			node_tween.tween_property(temp_node, "scale", Vector2(0, 0), 0.2).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 	
-	var stop_music = (options.get(options.keys()[i])).stop_music
+	var stop_music = (options.get(options.keys()[i])).get("stop_music", false)
 	
 	if stop_music:
 		SoundManager.music.stop()
@@ -129,8 +118,6 @@ func select_option(i: int):
 func _on_conductor_new_beat(current_beat, measure_relative):
 	
 	if can_press:
-		
 		if SettingsManager.get_setting("ui_bops"):
-			
 			Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
-			Global.bop_tween($Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
+			Global.bop_tween(%Background, "scale", Vector2(1.1, 1.1), Vector2(1.105, 1.105), 0.2, Tween.TRANS_CUBIC)

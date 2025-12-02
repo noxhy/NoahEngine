@@ -3,75 +3,77 @@ extends Node2D
 @export var can_click: bool = true
 
 @onready var week_icon_node = preload("res://scenes/instances/story mode/week_icon.tscn")
-
+## Nested dictionary where each key has keys:
+## [br][code]animation[/code] - The animation name of the node.
+## [br][code]node[/code] - The node that will be visible when the week is selected.
 @onready var options: Dictionary = {
 	"tutorial": {
-		"animation_name": "tutorial",
-		"display_node": $"UI/Week Display/SubViewport/Tutorial",
+		"animation": "tutorial",
+		"node": $"UI/Week Display/SubViewport/Tutorial",
 		"scene": "res://test/test_scene.tscn",
 		"week_name": "Teaching Time",
 		"song_list": [],
 		"display_song_list": "Tutorial"
 	},
 	"week1": {
-		"animation_name": "week1",
-		"display_node": $"UI/Week Display/SubViewport/Week 1",
+		"animation": "week1",
+		"node": $"UI/Week Display/SubViewport/Week 1",
 		"scene": "res://scenes/playstate/songs/fresh/fresh.tscn",
 		"week_name": "Daddy Dearest",
 		"display_song_list": "Bopeeboo\nFresh\nDadbattle",
 		"song_list": [load("res://assets/songs/playable songs/fresh/Fresh Erect.res")]
 	},
 	"week2": {
-		"animation_name": "week2",
-		"display_node": $"UI/Week Display/SubViewport/Week 2",
+		"animation": "week2",
+		"node": $"UI/Week Display/SubViewport/Week 2",
 		"scene": "res://test/test_scene.tscn",
 		"week_name": "Spooky Month",
 		"display_song_list": "Spokeez\nSouth\nMonster",
 		"song_list": []
 	},
 	"week3": {
-		"animation_name": "week3",
-		"display_node": $"UI/Week Display/SubViewport/Week 3",
+		"animation": "week3",
+		"node": $"UI/Week Display/SubViewport/Week 3",
 		"scene": "res://test/test_scene.tscn",
 		"week_name": "Pico",
 		"display_song_list": "Pico\nPhilly\nBlammed",
 		"song_list": []
 	},
 	"week4": {
-		"animation_name": "week4",
-		"display_node": $"UI/Week Display/SubViewport/Week 4",
+		"animation": "week4",
+		"node": $"UI/Week Display/SubViewport/Week 4",
 		"scene": "res://test/test_scene.tscn",
 		"week_name": "Mommy Must Murder",
 		"display_song_list": "Satin-Panties\nHigh\nMilf",
 		"song_list": []
 	},
 	"week5": {
-		"animation_name": "week5",
-		"display_node": $"UI/Week Display/SubViewport/Week 5",
+		"animation": "week5",
+		"node": $"UI/Week Display/SubViewport/Week 5",
 		"scene": "res://scenes/playstate/songs/eggnog/eggnog.tscn",
 		"week_name": "Red Snow",
 		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
 		"song_list": [load("res://assets/songs/playable songs/cocoa/Cocoa Erect.res")]
 	},
 	"week6": {
-		"animation_name": "week6",
-		"display_node": $"UI/Week Display/SubViewport/Week 6",
+		"animation": "week6",
+		"node": $"UI/Week Display/SubViewport/Week 6",
 		"scene": "res://scenes/playstate/songs/senpai/senpai.tscn",
 		"week_name": "Hating Simulator Ft. Moawling",
 		"display_song_list": "Senpai\nRoses\nThorns",
 		"song_list": [load("res://assets/songs/playable songs/senpai/Senpai.res")]
 	},
 	"week7": {
-		"animation_name": "week7",
-		"display_node": $"UI/Week Display/SubViewport/Week 7",
+		"animation": "week7",
+		"node": $"UI/Week Display/SubViewport/Week 7",
 		"scene": "res://test/test_scene.tscn",
 		"week_name": "Tankman",
 		"display_song_list": "Ugh\nGuns\nStress",
 		"song_list": []
 	},
 	"weekend1": {
-		"animation_name": "weekend1",
-		"display_node": $"UI/Week Display/SubViewport/Weekend 1",
+		"animation": "weekend1",
+		"node": $"UI/Week Display/SubViewport/Weekend 1",
 		"scene": "res://scenes/playstate/songs/darnell/darnell.tscn",
 		"week_name": "Due Debts",
 		"display_song_list": "Darnell\nLit Up\n2Hot\nBlazin\'",
@@ -99,7 +101,7 @@ func _ready():
 		week_icon_instance.position = Vector2(1280 / 2, 1000)
 		
 		$"UI/Week UI/SubViewport".add_child(week_icon_instance)
-		week_icon_instance.play_animation(options.get(options.keys()[object_amount]).animation_name)
+		week_icon_instance.play_animation(options.get(options.keys()[object_amount]).animation)
 		
 		object_amount += 1
 		option_nodes.append(week_icon_instance)
@@ -143,22 +145,20 @@ func update_week_selection(i: int):
 	var index = -selected_week
 	SoundManager.scroll.play()
 	
+	var tween = create_tween()
+	tween.set_parallel(true)
 	for j in option_nodes:
-		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(1280 / 2, index * 135 + 64)
 		tween.tween_property(j, "position", node_position, 0.5)
-		
 		j.modulate = Color(0.5, 0.5, 0.5)
-		
 		index += 1
 	
-	for j in $"UI/Week Display/SubViewport".get_children():
-		j.visible = false
-	var display_node = options.get(week).display_node
+	get_tree().call_group(&"weeks", "set_visible", false)
+	var node = options.get(week).get("node")
 	update_difficulty_selection(selected_difficulty)
-	display_node.visible = true
-	Global.bop_tween(display_node, "scale", display_node.scale, display_node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
+	node.visible = true
+	Global.bop_tween(node, "scale", node.scale, node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
 	
 	$"UI/Week UI/SubViewport/Song List Label".text = options.get(week).display_song_list
 	$"UI/Week Name".text = options.get(week).week_name
