@@ -10,7 +10,7 @@ extends OptionNode
 
 # Called when the node enters the scene tree for the first time.
 func _ready(): 
-	var savedValue = clampf(SettingsManager.get_setting(setting_name) / value_scale, min, max);
+	var savedValue = clampf(SaveManager.get_setting(setting_name) / value_scale, min, max);
 	
 	spin_box.min_value = min
 	spin_box.max_value = max
@@ -38,5 +38,5 @@ func _on_spin_box_value_changed(value):
 	if value_scale == 1: 
 		int(value_scale)
 		
-	SettingsManager.set_setting(setting_name, newValue * value_scale)
+	SaveManager.set_setting(setting_name, newValue * value_scale)
 	

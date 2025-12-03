@@ -16,7 +16,6 @@ var transitioning: bool = false
 
 
 func _ready():
-	SettingsManager.load_settings()
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
@@ -27,8 +26,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Peformance Test
-	$"UI/Performance Label".visible = SettingsManager.get_setting("show_performance")
-	if SettingsManager.get_setting("show_performance"):
+	$"UI/Performance Label".visible = SaveManager.get_value("debug", "show_performance")
+	if SaveManager.get_value("debug", "show_performance"):
 		var performance_string: String = "FPS: " + str(Engine.get_frames_per_second())
 		performance_string += "\nMEM: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
@@ -42,30 +41,10 @@ func _process(delta):
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
-	if Input.is_action_just_pressed("ui_plus") and !get_viewport().gui_get_focus_owner():
-		AudioServer.set_bus_mute(0, false)
-		var master_volume = SettingsManager.get_setting("master_volume")
-		SettingsManager.set_setting("master_volume", clamp(master_volume + 0.1, 0, 1))
-		SettingsManager.save_settings()
-		show_volume()
-		$"UI/Voume Node/Hide Timer".start(1.5)
-	
-	if Input.is_action_just_pressed("ui_minus") and !get_viewport().gui_get_focus_owner():
-		AudioServer.set_bus_mute(0, false)
-		var master_volume = SettingsManager.get_setting("master_volume")
-		SettingsManager.set_setting("master_volume", clamp(master_volume - 0.1, 0, 1))
-		SettingsManager.save_settings()
-		show_volume()
-		$"UI/Voume Node/Hide Timer".start(1.5)
-	
-	if Input.is_action_just_pressed("mute") and !get_viewport().gui_get_focus_owner():
-		AudioServer.set_bus_mute(0, !AudioServer.is_bus_mute(0))
-		show_volume()
-		$"UI/Voume Node/Hide Timer".start(1)
-	
-	if Input.is_action_just_pressed("reload"): 
-		get_tree().reload_current_scene()
-		get_tree().paused = false
+	if OS.is_debug_build():
+		if Input.is_action_just_pressed("reload"): 
+			get_tree().reload_current_scene()
+			get_tree().paused = false
 
 #region Auto Pause
 var manual_pause: bool = false
@@ -76,7 +55,6 @@ func _notification(what: int) -> void:
 				return
 			manual_pause = false
 			get_tree().paused = true
-
 	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		if !manual_pause:
 			get_tree().paused = false
@@ -144,6 +122,13 @@ func format_number(num:float) -> String:
 	
 	return string
 
+func get_keycode_string(keycodes: Array):
+	var strings: PackedStringArray
+	for keycode in keycodes:
+		strings.append(OS.get_keycode_string(keycode))
+	
+	return "/".join(strings)
+
 # referenced via https://youtu.be/LSNQuFEDOyQ
 ## A frame independent lerp. Primary purpose is for the camera
 ## your decay should be around 1 - 25
@@ -157,7 +142,7 @@ func show_volume():
 	tween.tween_property($"UI/Voume Node", "position", Vector2(0, -360), 0.5)
 	$"UI/Voume Node/Volume Sound".play()
 	
-	var master_volume = SettingsManager.get_setting("master_volume")
+	var master_volume = SaveManager.get_value(SaveManager.SEC_AUDIO, "master_volume")
 	
 	if AudioServer.is_bus_mute(0):
 		$"UI/Voume Node/ColorRect/Label".text = "Muted"

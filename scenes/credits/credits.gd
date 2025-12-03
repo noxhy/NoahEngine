@@ -27,13 +27,11 @@ extends Node2D
 # Actions:
 # link - Parameters: String = <link>
 @onready var option_stats: Dictionary = {
-	
 	"Noah": ["Made the engine.", "link", "https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA"],
 	"Koi": ["Miss sprite", "link", "https://twitter.com/toasted_milk_"],
 	"The Funkin\' Crew": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
 	"KostyaGame": ["Dad losing icon", null],
 	"data5": ["Helped with stuff.", "link", "https://x.com/_data5?s=20"]
-	
 }
 
 
@@ -44,13 +42,10 @@ var selected: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	Global.set_window_title("Credits Menu")
-	
 	var object_amount: int = 0
 	
 	for i in options:
-		
 		var menu_option_instance = menu_option_node.instantiate()
 		
 		menu_option_instance.option_name = i
@@ -65,7 +60,6 @@ func _ready():
 		object_amount += 1
 		
 		for j in options.get(i):
-			
 			menu_option_instance = menu_option_node.instantiate()
 			
 			menu_option_instance.option_name = j[0]
@@ -135,17 +129,14 @@ func update_selection(i: int):
 		tween.tween_property(j, "position", node_position, 0.5)
 		
 		if credit_indexes.has(option_nodes.find(j)):
-			
 			j.modulate = Color(0.5, 0.5, 0.5)
 		
 		index += 1
 	
 	if option_stats.has(option_nodes[i].option_name):
-		
 		var stats = option_stats.get(option_nodes[i].option_name)
 		$Background/ColorRect/Label.text = stats[0]
 	else:
-		
 		$Background/ColorRect/Label.text = option_nodes[i].option_name
 	
 	option_nodes[i].modulate = Color(1, 1, 1)
@@ -153,21 +144,14 @@ func update_selection(i: int):
 
 # Called when an option was selected
 func select_option(i: int):
-	
 	if option_stats.has(option_nodes[i].option_name):
-		
 		var stats = option_stats.get(option_nodes[i].option_name)
-		
 		if stats[1] != null:
-			
 			if stats[1] == "link":
-				
 				OS.shell_open(stats[2])
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	
-	if SettingsManager.get_setting("ui_bops"):
-		
+	if SaveManager.get_value("preferences", "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 		Global.bop_tween($Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

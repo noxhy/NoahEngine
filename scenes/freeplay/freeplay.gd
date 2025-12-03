@@ -50,11 +50,11 @@ func _ready():
 	
 	load_page()
 	
-	var keycode = SettingsManager.get_keybind("character_select")
+	var keycode = SaveManager.get_keybind("character_select")
 	
 	$Above/ColorRect/RichTextLabel.text = str(
 		"[font_size=32][font=\"res://assets/fonts/Results Background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]",
-		"Press [", SettingsManager.get_keycode_string(keycode).to_upper(), "] to change character",
+		"Press [", Global.get_keycode_string(keycode).to_upper(), "] to change character",
 		"[/pulse][/font]"
 	)
 
@@ -240,7 +240,7 @@ func play_song(song: Song, difficulty: String):
 @warning_ignore("unused_parameter")
 func _on_conductor_new_beat(current_beat, measure_relative):
 	
-	if SettingsManager.get_setting("ui_bops"):
+	if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 
 

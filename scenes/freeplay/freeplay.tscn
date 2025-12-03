@@ -81,7 +81,7 @@ offset_left = 3.0
 offset_right = 1283.0
 offset_bottom = 57.0
 bbcode_enabled = true
-text = "[font_size=32][font=\"res://assets/fonts/Results Background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]Press [TAB] to change characters[/pulse][/font]"
+text = "[font_size=32][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]Press [TAB] to change characters[/pulse][/font]"
 horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true

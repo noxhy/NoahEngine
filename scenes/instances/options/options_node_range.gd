@@ -1,32 +1,32 @@
 extends OptionNode
+class_name NumberOptionNode
 
-@export var min: float = 0.0
-@export var max: float = 100.0
+@export var minimum: float = 0.0
+@export var maximum: float = 100.0
 @export var step: float = 1.0
 @export var value_name: String = ""
 @export var value_scale = 1.0 # Multiplies this value (Used for shit like milliseconds)
 
-@onready var slider = $HSlider
+@onready var spin_box:SpinBox = %Value
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var savedValue = clampf(SettingsManager.get_setting(setting_name) / value_scale, min, max);
+	var savedValue = clampf(SaveManager.get_pref(setting_category, setting_name, 1.0) / value_scale, minimum, maximum);
 	
-	slider.min_value = min
-	slider.max_value = max
-	slider.step = step
-	slider.value = savedValue
+	#print('obj ' ,setting_name, ' min ', minimum, ' max ', maximum, ' savedVal ', savedValue)
+	spin_box.get_line_edit().context_menu_enabled = false
+	spin_box.step = step
+	spin_box.set_value_no_signal(savedValue)
+	spin_box.min_value = minimum
+	spin_box.max_value = maximum
+	%Label.text = display_name
+	%Value.suffix = value_name
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _on_spin_box_value_changed(value):
+	if value == 1.0:
+		value = int(value)
+	if value_scale == 1.0:
+		int(value_scale)
 	
-	$HSlider.position.x = $Label.size.x + 20
-	$Label.text = display_name + ": " + str($HSlider.value) + " " + value_name
-
-
-func _on_h_slider_value_changed(value):
-	
-	if step == 1: value = int(value)
-	SettingsManager.set_setting(setting_name, value * value_scale)
-	SettingsManager.save_settings()
+	SaveManager.set_pref(setting_category, setting_name, value * value_scale)
+	SoundManager.scroll.play()

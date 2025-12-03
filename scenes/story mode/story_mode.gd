@@ -221,7 +221,7 @@ func select_option(i: int):
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if can_click:
-		if SettingsManager.get_setting("ui_bops"):
+		if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
 			Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 		if (current_beat % 2):
 			get_tree().call_group("bop", "play_animation", "idle")

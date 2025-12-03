@@ -1,21 +1,71 @@
 extends Node
 
-@onready var music: AudioStreamPlayer = $MusicPlayer
-@onready var scroll: AudioStreamPlayer = $UI/ScrollPlayer
-@onready var cancel: AudioStreamPlayer = $UI/CancelPlayer
-@onready var accept: AudioStreamPlayer = $UI/AcceptPlayer
-@onready var miss: AudioStreamPlayer = $Game/MissPlayer
-@onready var hit: AudioStreamPlayer = $Game/HitPlayer
-@onready var anti_spam: AudioStreamPlayer = $Game/AntiSpamPlayer
+@onready var music: AudioStreamPlayer = $MusicPlayer ## global music player
+@onready var scroll: AudioStreamPlayer = $UI/ScrollPlayer ## global menu scroll sfx
+@onready var cancel: AudioStreamPlayer = $UI/CancelPlayer ## global menu cancel sfx
+@onready var accept: AudioStreamPlayer = $UI/AcceptPlayer ## global menu accept sfx
 
-# Called when the node enters the scene tree for the first time.
+@onready var miss: AudioStreamPlayer = $Game/MissPlayer ## note miss sfx
+@onready var hit: AudioStreamPlayer = $Game/HitPlayer ## note hit sfx
+@onready var anti_spam: AudioStreamPlayer = $Game/AntiSpamPlayer ## anti spam sfx
+
 func _ready() -> void:
-	pass # Replace with function body.
+	AudioServer.set_bus_mute(0, SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
+	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
+	AudioServer.set_bus_volume_linear(1, SaveManager.get_value('audio', "music_volume", 1.0))
+	AudioServer.set_bus_volume_linear(2, SaveManager.get_value('audio', "sfx_volume", 1.0))
 
 func _process(delta: float) -> void:
-	AudioServer.set_bus_volume_linear(0, SettingsManager.get_setting("master_volume"))
-	AudioServer.set_bus_volume_linear(1, SettingsManager.get_setting("music_volume"))
-	AudioServer.set_bus_volume_linear(2, SettingsManager.get_setting("sfx_volume"))
+	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
+	AudioServer.set_bus_volume_linear(1, SaveManager.get_value('audio', "music_volume", 1.0))
+	AudioServer.set_bus_volume_linear(2, SaveManager.get_value('audio', "sfx_volume", 1.0))
+
+func _input(event: InputEvent) -> void:
+	if not event.is_pressed():
+		return
+	if event.is_echo():
+		return
+	if event is not InputEventKey:
+		return
+	#if Global.lock_keybinds:
+		#return
+	var ev:InputEventKey = event
+	
+	if ev.pressed:
+		if ev.is_action('mute'):
+			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', !SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
+			
+			_updated_volume()
+		elif ev.is_action('ui_plus'):
+			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', false)
+			
+			var new_vol = clampf(SaveManager.get_value(SaveManager.SEC_AUDIO,'master_volume') + 0.1, 0.0, 1.0)
+			SaveManager.set_value(SaveManager.SEC_AUDIO, 'master_volume', new_vol)
+			
+			_updated_volume()
+		elif ev.is_action('ui_minus'):
+			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', false)
+			
+			var new_vol = clampf(SaveManager.get_value(SaveManager.SEC_AUDIO,'master_volume') - 0.1, 0.0, 1.0)
+			SaveManager.set_value(SaveManager.SEC_AUDIO, 'master_volume', new_vol)
+			
+			_updated_volume()
+
+func _updated_volume():
+	AudioServer.set_bus_mute(0, SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
+	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
+	
+	SaveManager.flush()
+	Global.show_volume()
+
+
+## plays the global audio track from stream or path
+func play_music(stream: Variant, start_time: float = 0) -> void:
+	
+	stream = _get_stream(stream)
+	music.stream = stream
+	
+	music.play(start_time)
 
 ## Plays a sfx once and frees it after its use
 func play_sound_once(stream: Variant, volume_linear: float = 1) -> void:
@@ -33,16 +83,16 @@ func play_sound_once(stream: Variant, volume_linear: float = 1) -> void:
 
 ## asserts a given stream IS a AudioStream
 func _get_stream(stream: Variant) -> AudioStream:
-	if stream is AudioStream:
+	if stream is AudioStream or stream is AudioStreamOggVorbis:
 		return stream
 	elif stream is String:
 		assert(ResourceLoader.exists(stream), '%s could not be found and played.' % stream)
 		
 		var loaded_sound = load(stream)
-		assert(loaded_sound is AudioStream, '%s was not a audio stream' % stream)
+		assert((loaded_sound is AudioStream or stream is AudioStreamOggVorbis), '%s was not a audio stream' % stream)
 		
 		return loaded_sound
 	else:
 		assert(false, '%s provided is not a valid stream' % stream)
-		
+	
 	return null

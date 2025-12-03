@@ -19,7 +19,6 @@ config/icon="res://icon.png"
 
 Global="*res://scenes/global/global.tscn"
 Transitions="*res://scenes/global/transitions.tscn"
-SettingsManager="*res://scenes/global/settings_manager.gd"
 GameManager="*res://scenes/global/game_manager.gd"
 SaveManager="*res://scenes/global/save_manager.gd"
 ChartManager="*res://scenes/global/chart_manager.gd"
