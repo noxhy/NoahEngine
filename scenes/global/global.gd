@@ -34,6 +34,11 @@ func _process(delta):
 		
 		$"UI/Performance Label".text = performance_string
 	
+	if SaveManager.get_value('debug', "cap_fps"):
+		Engine.max_fps = SaveManager.get_value('debug', "fps_cap")
+	else:
+		Engine.max_fps = 0
+	
 	if Input.is_action_just_pressed("fullscreen"):
 		fullscreen = !fullscreen
 		if fullscreen:
@@ -148,6 +153,8 @@ func show_volume():
 		$"UI/Voume Node/ColorRect/Label".text = "Muted"
 	else:
 		$"UI/Voume Node/ColorRect/Label".text = "Master Volume: " + str(int(master_volume * 100)) + "%"
+	
+	$"UI/Voume Node/Hide Timer".start()
 
 
 func hide_volume():
@@ -156,7 +163,8 @@ func hide_volume():
 	tween.tween_property($"UI/Voume Node", "position", Vector2(0, -392), 0.5)
 
 
-func _on_hide_timer_timeout(): hide_volume()
+func _on_hide_timer_timeout():
+	hide_volume()
 #endregion
 
 #region String to Tween

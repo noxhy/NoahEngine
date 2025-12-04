@@ -119,7 +119,7 @@ func update(i: int):
 	tween.set_parallel(true)
 	for j in option_nodes:
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		var node_position = Vector2(-565 + (50 * index), index * 175)
+		var node_position = Vector2(-565 + (25 * index), index * 175)
 		tween.tween_property(j, "position", node_position, 0.5)
 		if credit_indexes.has(option_nodes.find(j)):
 			j.modulate = Color(0.5, 0.5, 0.5)

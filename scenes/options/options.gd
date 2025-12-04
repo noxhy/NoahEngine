@@ -4,6 +4,7 @@ const OPTION_MENU_PRELOAD = preload("res://scenes/instances/options/options_menu
 const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 
 @export var can_click = true
+
 @onready var pages: Dictionary = {
 	SaveManager.SEC_KEY_BINDS: {
 		"name": "Keybinds",

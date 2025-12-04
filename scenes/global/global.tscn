@@ -67,7 +67,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Hide Timer" type="Timer" parent="UI/Voume Node"]
-wait_time = 2.0
+wait_time = 1.5
 one_shot = true
 
 [node name="Volume Sound" type="AudioStreamPlayer" parent="UI/Voume Node"]

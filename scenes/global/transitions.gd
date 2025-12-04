@@ -10,7 +10,6 @@ func transition(transition_name: StringName):
 	$AnimationPlayer.seek(0)
 
 func pause():
-	
 	if Global.transitioning:
 		$AnimationPlayer.pause()
 		emit_signal("waiting")

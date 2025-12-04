@@ -469,9 +469,7 @@ func song_finished():
 	GameManager.finished_song(score)
 	
 	if GameManager.freeplay:
-		
 		match GameManager.play_mode:
-			
 			GameManager.PLAY_MODE.CHARTING:
 				Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn")
 			_:

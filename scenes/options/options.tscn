@@ -32,7 +32,7 @@ scale = Vector2(0.729, 0.729)
 sprite_frames = ExtResource("6_vpqee")
 animation = &"options white"
 autoplay = "options white"
-frame_progress = 0.430115
+frame_progress = 0.6558338
 script = ExtResource("7_4x7vq")
 metadata/_edit_lock_ = true
 

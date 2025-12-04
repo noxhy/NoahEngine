@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bjdxmixessnk2"
-path="res://.godot/imported/checkboxThingie.png-237202fc360c5be5e46eae60b275b74b.ctex"
+uid="uid://cxln6kj4u8gtj"
+path="res://.godot/imported/checked.png-19574eab463f0e40b0324f41b8fc9416.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus/options/checkboxThingie.png"
-dest_files=["res://.godot/imported/checkboxThingie.png-237202fc360c5be5e46eae60b275b74b.ctex"]
+source_file="res://assets/sprites/menus/options/checked.png"
+dest_files=["res://.godot/imported/checked.png-19574eab463f0e40b0324f41b8fc9416.ctex"]
 
 [params]
 

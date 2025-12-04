@@ -2,7 +2,7 @@ extends Node
 
 # based off funkin cherry smile
 # no it's not data shut up
-const LOAD_PATH:String = 'user://prefs.cfg'
+const LOAD_PATH: String = 'user://save.cfg'
 
 ## categories (this is our way of doing text enums
 const SEC_PREFERENCES: String = 'preferences'
@@ -14,7 +14,7 @@ const SEC_KEY_BINDS: String = 'keybinds'
 const SEC_SONGS: String = 'songs'
 const SEC_WEEKS: String = 'weeks'
 
-var instance:ConfigFile
+var instance: ConfigFile
 #these are the only functions u need to worry about
 
 ## Grabs a save value from instance
@@ -191,89 +191,65 @@ func get_number_info(category: String, setting_name: String) -> Array:
 ## Sets the results data of a song for a certain difficulty
 ## Returns true if the new score is a highscore.
 func set_song_stats(song: String, difficulty: String, score: int, grade: float) -> bool:
-	var output: bool = false
-	if !get_value("songs", song):
-		set_value("songs", song, {})
-	
-	if !get_value("songs", song).has(difficulty):
-		set_value("songs", song, get_value("songs", song).set(difficulty, {"highscore": -1, "grade": -1}))
-	
+	var is_highscore: bool = false
+	var song_data = get_value("songs", song, {})
+	if !song_data.has(difficulty):
+		song_data[difficulty] = {}
 	# So you don't have to worry about checking it yourself
 	var highscore: int = get_highscore(song, difficulty)
-	if (highscore == -1 || highscore < score):
-		set_value("songs", song, get_value("songs", song).get(difficulty).set("highscore", score))
-		output = true
+	if (highscore < score):
+		song_data[difficulty]["highscore"] = score
+		is_highscore = true
 	
 	# So you don't have to worry about checking it yourself
 	var _grade: float = get_grade(song, difficulty)
-	if (_grade == -1 || _grade < grade):
-		set_value("songs", song, get_value("songs", song).get(difficulty).set("grade", grade))
+	if (_grade < grade):
+		song_data[difficulty]["grade"] = grade
 	
+	set_value("songs", song, song_data)
 	flush()
-	return output
+	return is_highscore
 
 
 ## Sets the results data of a week for a certain difficulty
 ## Returns true if the new score is a highscore.
 func set_week_stats(week: String, difficulty: String, score: int, grade: float) -> bool:
-	var output: bool = false
-	if !get_value("weeks", week):
-		set_value("weeks", week, {})
-	
-	if !get_value("weeks", week).has(difficulty):
-		set_value("weeks", week, get_value("weeks", week).set(difficulty, {"highscore": -1, "grade": -1}))
-	
+	var is_highscore: bool = false
+	var week_data = get_value("weeks", week, {})
+	if !week_data.has(difficulty):
+		week_data[difficulty] = {}
 	# So you don't have to worry about checking it yourself
 	var highscore: int = get_highscore(week, difficulty)
-	if (highscore == -1 || highscore < score):
-		set_value("weeks", week, get_value("weeks", week).get(difficulty).set("highscore", score))
-		output = true
+	if (highscore < score):
+		week_data[difficulty]["highscore"] = score
+		is_highscore = true
 	
 	# So you don't have to worry about checking it yourself
 	var _grade: float = get_grade(week, difficulty)
-	if (_grade == -1 || _grade < grade):
-		set_value("weeks", week, get_value("weeks", week).get(difficulty).set("grade", grade))
+	if (_grade < grade):
+		week_data[difficulty]["grade"] = grade
 	
+	set_value("weeks", week, week_data)
 	flush()
-	return output
+	return is_highscore
 
 
 ## Gets the highscore of the difficulty of the song
 func get_highscore(song: String, difficulty: String) -> int:
-	if !get_value("songs", song):
-		return -1
-	
-	if !get_value("songs", song).has(difficulty):
-		return -1
-	
-	return get_value("songs", song).get(difficulty).get("highscore")
+	var highscore = get_value("songs", song, {}).get(difficulty, {}).get("highscore", -1)
+	return highscore
 
 ## Gets the grade of the difficulty of the song
 func get_grade(song: String, difficulty: String) -> float:
-	if !get_value("songs", song):
-		return -1
-	
-	if !get_value("songs", song).has(difficulty):
-		return -1
-	
-	return get_value("songs", song).get(difficulty).get("grade")
+	var grade = get_value("songs", song, {}).get(difficulty, {}).get("grade", -1)
+	return grade
 
 ## Gets the highscore of the difficulty of the week
 func get_week_highscore(week: String, difficulty: String) -> int:
-	if !get_value("weeks", week):
-		return -1
-	
-	if !get_value("weeks", week).has(difficulty):
-		return -1
-	
-	return get_value("weeks", week).get(difficulty).get("highscore")
+	var highscore = get_value("week", week, {}).get(difficulty, {}).get("highscore", -1)
+	return highscore
 
 ## Gets the grade of the difficulty of the week
 func get_week_grade(week: String, difficulty: String) -> float:
-	if !get_value("weeks", week):
-		return -1
-	
-	if !get_value("weeks", week).has(difficulty):
-		return -1
-	
-	return get_value("weeks", week).get(difficulty).get("grade")
+	var grade = get_value("week", week, {}).get(difficulty, {}).get("grade", -1)
+	return grade

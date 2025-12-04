@@ -30,7 +30,6 @@ func do_it():
 			print("--- " + xml_parser.get_node_name() + " ---")
 			
 			if xml_parser.get_node_name() != "TextureAtlas":
-				
 				var loaded_anim_name: String = xml_parser.get_named_attribute_value("name")
 				loaded_anim_name = loaded_anim_name.left(len(loaded_anim_name) - 4)
 				print("loaded name: " + loaded_anim_name)
@@ -49,14 +48,11 @@ func do_it():
 				if xml_parser.has_attribute("frameX"):
 					
 					if !xml_parser.has_attribute("rotated"):
-						
 						new_margin = Rect2(-int(xml_parser.get_named_attribute_value("frameX")), -int(xml_parser.get_named_attribute_value("frameY")),
 											int(xml_parser.get_named_attribute_value("frameWidth")) - new_region.size.x, int(xml_parser.get_named_attribute_value("frameHeight")) - new_region.size.y)
 					else:
-						
 						new_margin = Rect2(-int(xml_parser.get_named_attribute_value("frameX")), -int(xml_parser.get_named_attribute_value("frameY")),
 									int(xml_parser.get_named_attribute_value("frameWidth")) - new_region.size.y, int(xml_parser.get_named_attribute_value("frameHeight")) - new_region.size.x)
-				
 				
 				var num_frames = frames.get_frame_count(cur_anim_name)
 				var prev_frame = frames.get_frame_texture(cur_anim_name, num_frames - 1) if num_frames > 0 else null
@@ -64,9 +60,7 @@ func do_it():
 				if optimize and prev_frame and new_region == prev_frame.region and new_margin == prev_frame.margin:
 					
 					print("optimizing " + str(num_frames))
-					
-					if xml_parser.has_attribute("rotated"): frames.add_frame(cur_anim_name, prev_frame, 1.01)
-					else: frames.add_frame(cur_anim_name, prev_frame)
+					frames.add_frame(cur_anim_name, prev_frame)
 				else:
 					var new_frame = AtlasTexture.new()
 					new_frame.atlas = texture
@@ -74,8 +68,9 @@ func do_it():
 					new_frame.margin = new_margin
 					new_frame.filter_clip = true
 					
-					if xml_parser.has_attribute("rotated"): frames.add_frame(cur_anim_name, new_frame, 1.01)
-					else: frames.add_frame(cur_anim_name, new_frame)
+					if xml_parser.has_attribute("rotated"):
+						new_frame = ImageTexture.create_from_image(new_frame.get_image())
+					frames.add_frame(cur_anim_name, new_frame)
 				
 				anim_sprite.scale = Vector2(176, 176) / new_region.size
 				anim_sprite.scale.y = anim_sprite.scale.x

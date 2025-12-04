@@ -9,7 +9,7 @@ func _ready():
 
 func _on_check_button_toggled(button_pressed):
 	SaveManager.set_value(setting_category, setting_name, button_pressed)
-	SoundManager.scroll.play()
+	SoundManager.accept.play()
 	update()
 
 func update():

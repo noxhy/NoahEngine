@@ -1,6 +1,8 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://b02clh77m72y7"]
+[gd_resource type="Theme" load_steps=9 format=3 uid="uid://b02clh77m72y7"]
 
 [ext_resource type="FontFile" uid="uid://coivso5sghc2p" path="res://assets/fonts/fnf_font.ttf" id="1_bk422"]
+[ext_resource type="Texture2D" uid="uid://cxln6kj4u8gtj" path="res://assets/sprites/menus/options/checked.png" id="1_nkri3"]
+[ext_resource type="Texture2D" uid="uid://beqw8ru25pvhn" path="res://assets/sprites/menus/options/empty.png" id="2_x7jjx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkri3"]
 bg_color = Color(0.6640625, 0.6640625, 0.6640625, 0.8)
@@ -11,6 +13,10 @@ bg_color = Color(0.14733289, 0.14733289, 0.14733289, 0.8)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2hkwo"]
 bg_color = Color(0.84375, 0.84375, 0.84375, 0.8)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nkri3"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x7jjx"]
+
 [resource]
 default_font = ExtResource("1_bk422")
 default_font_size = 28
@@ -19,4 +25,8 @@ Button/font_sizes/font_size = 18
 Button/styles/hover = SubResource("StyleBoxFlat_nkri3")
 Button/styles/normal = SubResource("StyleBoxFlat_bk422")
 Button/styles/pressed = SubResource("StyleBoxFlat_2hkwo")
+CheckButton/icons/checked = ExtResource("1_nkri3")
+CheckButton/icons/unchecked = ExtResource("2_x7jjx")
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_nkri3")
 Label/constants/outline_size = 12
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_x7jjx")
