@@ -1,7 +1,6 @@
 extends Node2D
 
 @export var can_click: bool = true
-
 @onready var menu_option_node = preload("res://scenes/instances/menu_option.tscn")
 
 # To add a new credit, add an array with this format:
@@ -34,11 +33,9 @@ extends Node2D
 	"data5": ["Helped with stuff.", "link", "https://x.com/_data5?s=20"]
 }
 
-
 var option_nodes = []
 var credit_indexes: Array[int] = []
 var selected: int = 0
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -75,7 +72,7 @@ func _ready():
 			credit_indexes.append(object_amount)
 			object_amount += 1
 	
-	update_selection(0)
+	update(0)
 	
 	if not SoundManager.music.playing:
 		SoundManager.music.play()
@@ -97,37 +94,33 @@ func _input(event):
 	if can_click:
 		
 		if event.is_action_pressed("ui_up"):
-			
-			update_selection(selected - 1)
-		elif event.is_action_pressed("ui_down"):
-			
-			update_selection(selected + 1)
-		elif event.is_action_pressed("ui_accept"):
-			
-			select_option(selected)
-		elif event.is_action_pressed("ui_cancel"):
-			
+			update(selected - 1)
+		
+		if event.is_action_pressed("ui_down"):
+			update(selected + 1)
+		
+		if event.is_action_pressed("ui_accept"):
+			select(selected)
+		
+		if event.is_action_pressed("ui_cancel"):
 			can_click = false
-			
 			SoundManager.cancel.play()
 			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
 
 
 # Updates visually what happens when a new index is set for a selection
-func update_selection(i: int):
-	
+func update(i: int):
 	selected = wrapi(i, 0, option_nodes.size())
 	i = selected
 	var index = -selected
 	SoundManager.scroll.play()
 	
+	var tween = create_tween()
+	tween.set_parallel(true)
 	for j in option_nodes:
-		
-		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(-565 + (50 * index), index * 175)
 		tween.tween_property(j, "position", node_position, 0.5)
-		
 		if credit_indexes.has(option_nodes.find(j)):
 			j.modulate = Color(0.5, 0.5, 0.5)
 		
@@ -143,7 +136,7 @@ func update_selection(i: int):
 
 
 # Called when an option was selected
-func select_option(i: int):
+func select(i: int):
 	if option_stats.has(option_nodes[i].option_name):
 		var stats = option_stats.get(option_nodes[i].option_name)
 		if stats[1] != null:

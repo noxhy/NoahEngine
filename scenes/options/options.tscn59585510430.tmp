@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="7_4x7vq"]
 
 [node name="Options" type="Node2D"]
-process_mode = 1
 script = ExtResource("1_kjctr")
 
 [node name="Camera2D" type="Camera2D" parent="."]
@@ -25,14 +24,13 @@ transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
 [node name="Options" type="AnimatedSprite2D" parent="Foreground"]
-process_mode = 3
 z_index = 1
 position = Vector2(0, -296)
 scale = Vector2(0.729, 0.729)
 sprite_frames = ExtResource("6_vpqee")
 animation = &"options white"
 autoplay = "options white"
-frame_progress = 0.430115
+frame_progress = 0.9128182
 script = ExtResource("7_4x7vq")
 metadata/_edit_lock_ = true
 
@@ -47,21 +45,7 @@ color = Color(0, 0, 0, 0.505882)
 metadata/_edit_lock_ = true
 
 [node name="UI" type="CanvasLayer" parent="."]
-follow_viewport_enabled = true
-
-[node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
-anchors_preset = -1
-anchor_right = 0.012
-anchor_bottom = 0.18900001
-offset_top = 128.0
-offset_right = 1267.64
-offset_bottom = 583.92
-
-[node name="SubViewport" type="SubViewport" parent="UI/SubViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(1283, 592)
-render_target_update_mode = 4
+layer = 2
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1

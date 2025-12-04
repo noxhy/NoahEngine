@@ -5,16 +5,10 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	$Label.text = option_name
-	if icon != null: $Sprite2D.texture = icon
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	
-	$Label.text = option_name
-	
 	if icon != null:
 		$Sprite2D.texture = icon
+		
+		await Engine.get_main_loop().process_frame
+		
 		$Sprite2D.position.x = $Label.size.x + $Sprite2D.texture.get_width() * 0.5 + 15

@@ -53,7 +53,7 @@ func _ready():
 	var keycode = SaveManager.get_keybind("character_select")
 	
 	$Above/ColorRect/RichTextLabel.text = str(
-		"[font_size=32][font=\"res://assets/fonts/Results Background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]",
+		"[font_size=32][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]",
 		"Press [", Global.get_keycode_string(keycode).to_upper(), "] to change character",
 		"[/pulse][/font]"
 	)
@@ -91,14 +91,12 @@ func _process(_delta):
 
 
 func load_page():
-	
-	get_tree().call_group("instances", "queue_free")
+	get_tree().call_group(&"instances", &"queue_free")
 	
 	options = difficulty_songs[difficulty]
 	
 	var index: int = 0
 	for song_file in options:
-		
 		var menu_option_instance = MENU_OPTION_NODE.instantiate()
 		
 		menu_option_instance.text = song_file.title

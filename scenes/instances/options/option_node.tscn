@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cx81a4x2e26yh"]
+[gd_scene load_steps=3 format=3 uid="uid://ykvf5e2ynoe1"]
 
-[ext_resource type="Script" uid="uid://b8nt4l0h5kl87" path="res://scenes/instances/options/options_keybind.gd" id="1_1sqax"]
+[ext_resource type="Script" uid="uid://djswyhcohm8tk" path="res://scenes/instances/options/option_node.gd" id="1_b3lcr"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bf8dt"]
 font_size = 24
@@ -19,7 +19,7 @@ offset_bottom = -704.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(0, 16)
-script = ExtResource("1_1sqax")
+script = ExtResource("1_b3lcr")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

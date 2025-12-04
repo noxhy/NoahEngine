@@ -54,6 +54,7 @@ offset_bottom = 32.0
 color = Color(0.176471, 0.176471, 0.176471, 0.686275)
 
 [node name="Label" type="Label" parent="UI/Voume Node/ColorRect"]
+process_mode = 3
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

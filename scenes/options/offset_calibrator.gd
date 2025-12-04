@@ -66,7 +66,7 @@ func _input(event):
 			var sum: float = 0.0
 			for i in previous_offsets:
 				sum += i
-			SaveManager.set_setting(SaveManager.SEC_GAMEPLAY, "offset", snapped(sum / previous_offsets.size(), 0.001))
+			SaveManager.set_value(SaveManager.SEC_GAMEPLAY, "offset", snapped(sum / previous_offsets.size(), 0.001))
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):

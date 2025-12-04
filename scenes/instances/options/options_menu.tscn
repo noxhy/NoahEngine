@@ -1,319 +1,43 @@
-[gd_scene load_steps=9 format=3 uid="uid://bp581x6mu5f1w"]
+[gd_scene load_steps=3 format=3 uid="uid://bp581x6mu5f1w"]
 
-[ext_resource type="Theme" uid="uid://cbwyjej6x2d78" path="res://assets/themes/tool.tres" id="1_tg56e"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="1_tg56e"]
 [ext_resource type="Script" uid="uid://dg85pn3cqf6yj" path="res://scenes/instances/options/options_menu.gd" id="2_f8jhe"]
-[ext_resource type="PackedScene" uid="uid://uj644hsg8thl" path="res://scenes/instances/options/options_node_bool.tscn" id="2_tn18n"]
-[ext_resource type="PackedScene" uid="uid://77c763qfjduu" path="res://scenes/instances/options/options_node_number.tscn" id="3_ae3rr"]
-[ext_resource type="PackedScene" uid="uid://hhmw8wb13s7f" path="res://scenes/instances/options/options_node_range.tscn" id="4_733y8"]
-[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/bold_italic_font.ttf" id="5_w6h8c"]
-[ext_resource type="PackedScene" uid="uid://cx81a4x2e26yh" path="res://scenes/instances/options/options_keybind.tscn" id="6_kbse5"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_j08hc"]
-font = ExtResource("5_w6h8c")
-font_size = 24
-outline_size = 12
-outline_color = Color(0, 0, 0, 1)
-
-[node name="Options Menu" type="TabContainer"]
-process_mode = 3
-offset_left = -576.0
-offset_top = -200.0
-offset_right = 576.0
-offset_bottom = 328.0
-theme = ExtResource("1_tg56e")
-theme_override_constants/outline_size = 12
-theme_override_font_sizes/font_size = 24
-tab_alignment = 1
-current_tab = 0
+[node name="Options Menu" type="Node2D"]
+process_mode = 2
 script = ExtResource("2_f8jhe")
 
-[node name="Gameplay" type="TabBar" parent="."]
-layout_mode = 2
-metadata/_tab_index = 0
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 10
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Gameplay"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 17.0
-offset_right = 1136.0
-offset_bottom = 425.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Gameplay/ScrollContainer"]
-layout_mode = 2
-
-[node name="Downscroll" parent="Gameplay/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-setting_name = "downscroll"
-display_name = "Downscroll"
-
-[node name="Ghost Tapping" parent="Gameplay/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "ghost_tapping"
-display_name = "Ghost Tapping"
-
-[node name="Offset" parent="Gameplay/ScrollContainer/VBoxContainer" instance=ExtResource("3_ae3rr")]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-focus_mode = 1
-min = -500.0
-max = 500.0
-value_name = "ms"
-value_scale = 0.001
-setting_name = "offset"
-display_name = "Offset"
-
-[node name="Button" type="Button" parent="Gameplay/ScrollContainer/VBoxContainer/Offset"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
+[node name="ColorRect" type="ColorRect" parent="UI"]
+show_behind_parent = true
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = 108.0
-offset_top = -12.0
-offset_right = 236.0
-offset_bottom = 13.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
-text = "Calibrate Offset"
+color = Color(0, 0, 0, 0.47500002)
+metadata/_edit_lock_ = true
 
-[node name="Botplay" parent="Gameplay/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "botplay"
-display_name = "Botplay"
+[node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
+anchors_preset = -1
+anchor_right = 0.012
+anchor_bottom = 0.18900001
+offset_top = 128.0
+offset_right = 1267.64
+offset_bottom = 583.92
 
-[node name="Preferences" type="TabBar" parent="."]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 1
+[node name="SubViewport" type="SubViewport" parent="UI/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1283, 592)
+render_target_update_mode = 4
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Preferences"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 17.0
-offset_right = 1136.0
-offset_bottom = 425.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Preferences/ScrollContainer"]
-layout_mode = 2
-
-[node name="Master Volume" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("4_733y8")]
-layout_mode = 2
-max = 1.0
-step = 0.05
-value_name = "x"
-setting_name = "master_volume"
-display_name = "Master Volume"
-
-[node name="Music Volume2" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("4_733y8")]
-layout_mode = 2
-max = 1.0
-step = 0.05
-value_name = "x"
-setting_name = "music_volume"
-display_name = "Music Volume"
-
-[node name="SFX Volume3" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("4_733y8")]
-layout_mode = 2
-max = 1.0
-step = 0.05
-value_name = "x"
-setting_name = "sfx_volume"
-display_name = "SFX Volume"
-
-[node name="Enemy Note Glow" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "enemy_strum_glow"
-display_name = "Enemy Strums Glow"
-
-[node name="Combo UI" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "combo_ui"
-display_name = "Combo as UI Element"
-
-[node name="Glow Notes" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "glow_notes"
-display_name = "Glow Notes when Active"
-
-[node name="Ui Bops" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "ui_bops"
-display_name = "Ui Bopping"
-
-[node name="Hit Sounds" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "hit_sounds"
-display_name = "Hit Sounds"
-
-[node name="Note Splashes" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "note_splashes"
-display_name = "Note Splashes"
-
-[node name="Tween Strums" parent="Preferences/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "tween_strums"
-display_name = "Tween Stumlines"
-
-[node name="Controls" type="TabBar" parent="."]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Controls"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 17.0
-offset_right = 1136.0
-offset_bottom = 425.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Controls/ScrollContainer"]
-layout_mode = 2
-
-[node name="Gameplay Label" type="Label" parent="Controls/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "GAMEPLAY
- "
-label_settings = SubResource("LabelSettings_j08hc")
-
-[node name="Press Left" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "press_left"
-display_name = "Left"
-
-[node name="Press Down" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "press_down"
-display_name = "Down"
-
-[node name="Press Up" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "press_up"
-display_name = "Up"
-
-[node name="Press Right" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "press_right"
-display_name = "Right"
-
-[node name="Kill" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "kill"
-display_name = "Kill"
-
-[node name="UI Label" type="Label" parent="Controls/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "
-UI
- "
-label_settings = SubResource("LabelSettings_j08hc")
-
-[node name="Accept" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_accept"
-display_name = "Accept"
-
-[node name="Decline" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_cancel"
-display_name = "Cancel/Exit"
-
-[node name="Character Select" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "character_select"
-display_name = "Character Select"
-
-[node name="Left" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_left"
-display_name = "Left"
-
-[node name="Down" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_down"
-display_name = "Down"
-
-[node name="Up" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_up"
-display_name = "Up
-"
-
-[node name="Right" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_right"
-display_name = "Right"
-
-[node name="Fullscreen" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "fullscreen"
-display_name = "Fullscreen"
-
-[node name="Increase Volume" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_plus"
-display_name = "Increase Volume"
-
-[node name="Decrease Volume" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "ui_minus"
-display_name = "Decrease Volume"
-
-[node name="Mute" parent="Controls/ScrollContainer/VBoxContainer" instance=ExtResource("6_kbse5")]
-layout_mode = 2
-setting_name = "mute"
-display_name = "Mute"
-
-[node name="Miscellaneous" type="TabBar" parent="."]
-visible = false
-layout_mode = 2
-metadata/_tab_index = 3
-
-[node name="ScrollContainer" type="ScrollContainer" parent="Miscellaneous"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 17.0
-offset_right = 1136.0
-offset_bottom = 425.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Miscellaneous/ScrollContainer"]
-layout_mode = 2
-
-[node name="Song Speed" parent="Miscellaneous/ScrollContainer/VBoxContainer" instance=ExtResource("3_ae3rr")]
-layout_mode = 2
-min = 0.1
-max = 2.0
-step = 0.05
-value_name = "x"
-setting_name = "song_speed"
-display_name = "Song Speed"
-
-[node name="Scroll Speed Scale" parent="Miscellaneous/ScrollContainer/VBoxContainer" instance=ExtResource("3_ae3rr")]
-layout_mode = 2
-min = 0.1
-max = 2.0
-step = 0.1
-value_name = "x"
-setting_name = "scroll_speed_scale"
-display_name = "Scroll Speed Multiplier"
-
-[node name="Streamer Mode" parent="Miscellaneous/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "streamer_mode"
-display_name = "Streamer Mode"
-
-[node name="Show Performance" parent="Miscellaneous/ScrollContainer/VBoxContainer" instance=ExtResource("2_tn18n")]
-layout_mode = 2
-setting_name = "show_performance"
-display_name = "Show Performance"
-
-[node name="Clear Save" type="Button" parent="Miscellaneous/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-text = "Clear Save Data"
-
-[connection signal="pressed" from="Gameplay/ScrollContainer/VBoxContainer/Offset/Button" to="." method="_on_button_pressed"]
-[connection signal="pressed" from="Miscellaneous/ScrollContainer/VBoxContainer/Clear Save" to="." method="_on_clear_save_pressed"]
+[node name="Options" type="VBoxContainer" parent="UI/SubViewportContainer/SubViewport"]
+unique_name_in_owner = true
+offset_left = 512.0
+offset_top = 64.0
+offset_right = 1152.0
+offset_bottom = 384.0
+theme = ExtResource("1_tg56e")

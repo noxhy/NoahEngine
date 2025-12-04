@@ -59,7 +59,7 @@ static var _defaults: Dictionary = {
 	"debug": {
 		"show_performance": true, ## Shows FPS, Memory, delta and shit,
 		"cap_fps": false, ## caps fps
-		"fps_cap": int(DisplayServer.screen_get_refresh_rate()),
+		"fps_cap": int(DisplayServer.screen_get_refresh_rate())
 	},
 	
 	"chart": {
@@ -71,9 +71,6 @@ static var _defaults: Dictionary = {
 		"press_down": [KEY_DOWN, KEY_S],
 		"press_up": [KEY_UP, KEY_W],
 		"press_right": [KEY_RIGHT, KEY_D],
-		"dodge": [KEY_SPACE],
-		"attack_left": [KEY_SHIFT],
-		"attack_right": [KEY_SHIFT],
 		
 		"kill": [KEY_R],
 		
