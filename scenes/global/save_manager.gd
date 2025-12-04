@@ -90,7 +90,10 @@ static var _defaults: Dictionary = {
 		"ui_up": [KEY_UP],
 		"ui_right": [KEY_RIGHT],
 		"mute": [KEY_0]
-	}
+	},
+	
+	"songs": {},
+	"weeks": {}
 }
 
 
