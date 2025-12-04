@@ -20,10 +20,11 @@ config/icon="res://icon.png"
 Global="*res://scenes/global/global.tscn"
 Transitions="*res://scenes/global/transitions.tscn"
 GameManager="*res://scenes/global/game_manager.gd"
-SaveManager="*res://scenes/global/save_manager.gd"
+SettingsManager="*res://scenes/global/settings_manager.gd"
 ChartManager="*res://scenes/global/chart_manager.gd"
 Preload="*res://preload.gd"
 SoundManager="*res://scenes/global/sound_manager.tscn"
+SaveManager="*res://scenes/global/save_manager.gd"
 
 [debug]
 

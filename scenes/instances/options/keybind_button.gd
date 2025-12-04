@@ -5,7 +5,7 @@ extends OptionNode
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	self.text = OS.get_keycode_string(SaveManager.get_keybind(setting_name)[index])
+	self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
 
 func _input(event):
 	if checking:
@@ -15,9 +15,9 @@ func _input(event):
 					event.keycode = KEY_NONE
 				
 				checking = false
-				SaveManager.set_keybind(setting_name, event.keycode, index)
-				SaveManager.flush()
-				self.text = OS.get_keycode_string(SaveManager.get_keybind(setting_name)[index])
+				SettingsManager.set_keybind(setting_name, event.keycode, index)
+				SettingsManager.flush()
+				self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
 				self.button_pressed = false
 				SoundManager.accept.play()
 
@@ -35,6 +35,6 @@ func select():
 func normal():
 	remove_theme_stylebox_override("normal")
 	checking = false
-	self.text = OS.get_keycode_string(SaveManager.get_keybind(setting_name)[index])
+	self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
 	self.button_pressed = false
 	_on_toggled(false)

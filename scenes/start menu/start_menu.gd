@@ -18,7 +18,7 @@ func _ready():
 	$AnimationPlayer.play("start")
 	Global.set_window_title("Start Screen")
 	
-	var keycode = SaveManager.get_keybind("ui_accept")
+	var keycode = SettingsManager.get_keybind("ui_accept")
 	$"UI/Play Label".text = "Press " + Global.get_keycode_string(keycode) + " to Play"
 	
 	$Conductor.stream_player = SoundManager.music

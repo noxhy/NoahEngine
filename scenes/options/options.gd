@@ -6,7 +6,7 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 @export var can_click = true
 
 @onready var pages: Dictionary = {
-	SaveManager.SEC_KEY_BINDS: {
+	SettingsManager.SEC_KEY_BINDS: {
 		"name": "Keybinds",
 		"options": [
 			[&"label", "Gameplay".to_upper()],
@@ -30,7 +30,7 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 			[&"option", "character_select"]
 		]
 	},
-	SaveManager.SEC_GAMEPLAY: {
+	SettingsManager.SEC_GAMEPLAY: {
 		"name": "Gameplay",
 		"options": [
 			[&"option", "offset"],
@@ -41,7 +41,7 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 			[&"option", "scroll_speed_scale"]
 		]
 	},
-	SaveManager.SEC_PREFERENCES: {
+	SettingsManager.SEC_PREFERENCES: {
 		"name": "Preferences",
 		"options": [
 			[&"option", "combo_ui"],
@@ -51,7 +51,7 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 			[&"option", "hit_sounds"]
 		]
 	},
-	SaveManager.SEC_AUDIO: {
+	SettingsManager.SEC_AUDIO: {
 		"name": "Audio",
 		"options": [
 			[&"option", "master_volume"],
@@ -59,7 +59,7 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 			[&"option", "music_volume"]
 		]
 	},
-	SaveManager.SEC_DEBUG: {
+	SettingsManager.SEC_DEBUG: {
 		"name": "Debug",
 		"options": [
 			[&"option", "show_performance"],
@@ -117,7 +117,7 @@ func _process(delta: float) -> void:
 			select(selected)
 
 func _exit_tree() -> void:
-	SaveManager.load_keybinds()
+	SettingsManager.load_keybinds()
 
 func update(i: int):
 	selected = wrapi(i, 0, pages.size())
@@ -143,5 +143,5 @@ func select(i: int):
 	option_menu_instance.load_category(page, pages.get(page).get("options", [[&"label", "This page is empty."]]))
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
+	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

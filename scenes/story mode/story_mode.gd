@@ -55,7 +55,8 @@ extends Node2D
 		"scene": "res://scenes/playstate/songs/eggnog/eggnog.tscn",
 		"name": "Red Snow",
 		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
-		"song_list": [load("res://assets/songs/playable songs/cocoa/Cocoa Erect.res")]
+		"song_list": [load("res://assets/songs/playable songs/cocoa/Cocoa Erect.res"),
+		load("res://assets/songs/playable songs/eggnog/Eggnog Erect.res")]
 	},
 	"week6": {
 		"animation": "week6",
@@ -221,7 +222,7 @@ func select_option(i: int):
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if can_click:
-		if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
+		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 			Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 		if (current_beat % 2):
 			get_tree().call_group("bop", "play_animation", "idle")

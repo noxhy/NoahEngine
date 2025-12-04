@@ -61,7 +61,7 @@ var max_lane: int = 0
 func _ready() -> void:
 	
 	Global.set_window_title("Chart Editor")
-	song_speed = SaveManager.get_value("gameplay", "song_speed")
+	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
 	if ChartManager.song != null:
 		
@@ -82,7 +82,7 @@ func _ready() -> void:
 	
 	## Initializing Popup Signals
 	%"File Button".get_popup().connect("id_pressed", self.file_button_item_pressed)
-	%"File Button".get_popup().set_item_checked(5, SaveManager.get_value("chart", "auto_save"))
+	%"File Button".get_popup().set_item_checked(5, SettingsManager.get_value("chart", "auto_save"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
 	%"Edit Button".get_popup().connect("id_pressed", self.edit_button_item_pressed)
@@ -302,7 +302,7 @@ func _process(delta: float) -> void:
 										selected_notes[j] = k - 1
 									j += 1
 								
-								if SaveManager.get_value("chart", "auto_save"):
+								if SettingsManager.get_value("chart", "auto_save"):
 									save()
 	
 	if Input.is_action_pressed("mouse_left"):
@@ -342,7 +342,7 @@ func _process(delta: float) -> void:
 										if (note_list[i].length != distance): %"Note Stretch".play()
 										note_list[i].length = distance
 									
-									if SaveManager.get_value("chart", "auto_save"): 
+									if SettingsManager.get_value("chart", "auto_save"): 
 										save()
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
@@ -377,7 +377,7 @@ func _process(delta: float) -> void:
 											node.position = Vector2(%Grid.get_real_position(Vector2(1.5 + node.lane, 0)).x, time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
 											j += 1
 										
-										if SaveManager.get_value("chart", "auto_save"):
+										if SettingsManager.get_value("chart", "auto_save"):
 											save()
 										
 										start_time += time_distance
@@ -1094,8 +1094,8 @@ func file_button_item_pressed(id):
 	
 	# Autosave
 	elif id == 3:
-		SaveManager.set_value("chart", "auto_save", !SaveManager.get_value("chart", "auto_save"))
-		%"File Button".get_popup().set_item_checked(5, SaveManager.get_value("chart", "auto_save"))
+		SettingsManager.set_value("chart", "auto_save", !SettingsManager.get_value("chart", "auto_save"))
+		%"File Button".get_popup().set_item_checked(5, SettingsManager.get_value("chart", "auto_save"))
 		%"Note Place".play()
 	
 	# Exit
@@ -1131,7 +1131,7 @@ func undo():
 	if undo_redo.has_undo():
 		%Undo.play()
 		undo_redo.undo()
-		if SaveManager.get_value("chart", "auto_save"):
+		if SettingsManager.get_value("chart", "auto_save"):
 			save()
 	
 	%"Edit Button".get_popup().set_item_checked(0, !undo_redo.has_undo())
@@ -1140,7 +1140,7 @@ func redo():
 	if undo_redo.has_redo():
 		%Redo.play()
 		undo_redo.redo()
-		if SaveManager.get_value("chart", "auto_save"):
+		if SettingsManager.get_value("chart", "auto_save"):
 			save()
 	
 	%"Edit Button".get_popup().set_item_checked(1, !undo_redo.has_redo())

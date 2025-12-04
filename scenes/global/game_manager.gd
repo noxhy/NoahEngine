@@ -75,7 +75,7 @@ func finished_song(score: int):
 			week_tallies[tally] = tallies[tally]
 	
 	get_rank()
-	if !SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "botplay"):
+	if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
 		match play_mode:
 			PLAY_MODE.CHARTING:
 				highscore = false

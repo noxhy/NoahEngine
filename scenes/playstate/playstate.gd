@@ -141,7 +141,7 @@ func _ready():
 	chart = load(song_data.difficulties[GameManager.difficulty].chart)
 	assert(chart, 'Failed to load chart. is (%s) correct?' % (song_data.difficulties[GameManager.difficulty].chart))
 	
-	song_speed = SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "song_speed")
+	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 	
 	ui.set_credits(song_data.title, song_data.artist)
 	play_song(0)
@@ -151,21 +151,21 @@ func _ready():
 	
 	strums = ui.strums
 	
-	if SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "botplay"):
+	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
 		get_tree().call_group("strums", "set_auto_play", true)
 		get_tree().call_group("strums", "set_press", false)
 	
-	if SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "downscroll"):
+	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		ui.downscroll_ui()
 	# Streamer mode is supposed to be for when you're recording a video or streaming
 	# If you wanted a spook where the game says your user's name I recommend utilizing this
 	
-	get_tree().call_group("strums", "set_scroll_speed", chart.scroll_speed * SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "scroll_speed_scale"))
+	get_tree().call_group("strums", "set_scroll_speed", chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))
 	get_tree().call_group("strums", "connect", "note_hit", host.note_hit)
 	get_tree().call_group("strums", "connect", "note_holding", host.note_holding)
 	get_tree().call_group("strums", "connect", "note_miss", host.note_miss)
 	get_tree().call_group("strums", "set_skin", note_skin)
-	if SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "downscroll"):
+	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		get_tree().call_group("strums", "set_scroll", -1)
 	
 	emit_signal("setup_finished")
@@ -215,7 +215,7 @@ func _process(delta):
 				AudioServer.get_time_since_last_mix() - \
 				AudioServer.get_output_latency()
 		
-		conductor.offset = chart.offset + SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "offset")
+		conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
 		conductor.offset += chart.get_tempo_time_at(GameManager.song_position)
 		
 		# Idk how exactly this works I stole this code from sqirradotdev
@@ -295,7 +295,7 @@ func play_song(time: float):
 	conductor.stream_player = instrumental
 	conductor.tempo = get_tempo_at(-chart.offset + time)
 	conductor.seconds_per_beat = 60.0 / conductor.tempo
-	conductor.offset = chart.offset + SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "offset")
+	conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
 	var seconds_per_beat = (60.0 / conductor.tempo)
 	
 	GameManager.seconds_per_beat = seconds_per_beat
@@ -454,7 +454,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				
 				var tween = create_tween()
 				tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-				var scroll_speed_scale: float = SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "scroll_speed_scale")
+				var scroll_speed_scale: float = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
 				tween.tween_method(
 					strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed * scroll_speed_scale, tween_time * song_speed
 					)
@@ -486,7 +486,7 @@ func new_beat(current_beat, measure_relative):
 func new_step(current_step, measure_relative):
 	if current_step % bop_rate == 0:
 		camera.zoom += camera_bop_strength * camera.zoom
-		if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
+		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 			ui.scale += ui_bop_strength
 
 # Strum Util
@@ -497,7 +497,7 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 	
 	if !strum_manager.enemy_slot:
 		
-		if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "hit_sounds"):
+		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
 			SoundManager.hit.play()
 		
 		var rating = get_rating(abs(hit_time))
@@ -630,7 +630,7 @@ func show_combo(rating: String, _combo: int):
 	if misses == 0:
 		combo_numbers_manager_instance.fc = true
 	
-	if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "combo_ui"):
+	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "combo_ui"):
 		rating_instance.position = Vector2(-32, 88)
 		combo_numbers_manager_instance.position = Vector2(96, 152)
 		

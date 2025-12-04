@@ -10,15 +10,15 @@ extends Node
 @onready var anti_spam: AudioStreamPlayer = $Game/AntiSpamPlayer ## anti spam sfx
 
 func _ready() -> void:
-	AudioServer.set_bus_mute(0, SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
-	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
-	AudioServer.set_bus_volume_linear(1, SaveManager.get_value('audio', "music_volume", 1.0))
-	AudioServer.set_bus_volume_linear(2, SaveManager.get_value('audio', "sfx_volume", 1.0))
+	AudioServer.set_bus_mute(0, SettingsManager.get_value(SettingsManager.SEC_AUDIO, 'is_muted', false))
+	AudioServer.set_bus_volume_linear(0, SettingsManager.get_value('audio', "master_volume", 1.0))
+	AudioServer.set_bus_volume_linear(1, SettingsManager.get_value('audio', "music_volume", 1.0))
+	AudioServer.set_bus_volume_linear(2, SettingsManager.get_value('audio', "sfx_volume", 1.0))
 
 func _process(delta: float) -> void:
-	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
-	AudioServer.set_bus_volume_linear(1, SaveManager.get_value('audio', "music_volume", 1.0))
-	AudioServer.set_bus_volume_linear(2, SaveManager.get_value('audio', "sfx_volume", 1.0))
+	AudioServer.set_bus_volume_linear(0, SettingsManager.get_value('audio', "master_volume", 1.0))
+	AudioServer.set_bus_volume_linear(1, SettingsManager.get_value('audio', "music_volume", 1.0))
+	AudioServer.set_bus_volume_linear(2, SettingsManager.get_value('audio', "sfx_volume", 1.0))
 
 func _input(event: InputEvent) -> void:
 	if not event.is_pressed():
@@ -33,29 +33,29 @@ func _input(event: InputEvent) -> void:
 	
 	if ev.pressed:
 		if ev.is_action('mute'):
-			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', !SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
+			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'is_muted', !SettingsManager.get_value(SettingsManager.SEC_AUDIO, 'is_muted', false))
 			
 			_updated_volume()
 		elif ev.is_action('ui_plus'):
-			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', false)
+			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'is_muted', false)
 			
-			var new_vol = clampf(SaveManager.get_value(SaveManager.SEC_AUDIO,'master_volume') + 0.1, 0.0, 1.0)
-			SaveManager.set_value(SaveManager.SEC_AUDIO, 'master_volume', new_vol)
+			var new_vol = clampf(SettingsManager.get_value(SettingsManager.SEC_AUDIO,'master_volume') + 0.1, 0.0, 1.0)
+			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'master_volume', new_vol)
 			
 			_updated_volume()
 		elif ev.is_action('ui_minus'):
-			SaveManager.set_value(SaveManager.SEC_AUDIO, 'is_muted', false)
+			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'is_muted', false)
 			
-			var new_vol = clampf(SaveManager.get_value(SaveManager.SEC_AUDIO,'master_volume') - 0.1, 0.0, 1.0)
-			SaveManager.set_value(SaveManager.SEC_AUDIO, 'master_volume', new_vol)
+			var new_vol = clampf(SettingsManager.get_value(SettingsManager.SEC_AUDIO,'master_volume') - 0.1, 0.0, 1.0)
+			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'master_volume', new_vol)
 			
 			_updated_volume()
 
 func _updated_volume():
-	AudioServer.set_bus_mute(0, SaveManager.get_value(SaveManager.SEC_AUDIO, 'is_muted', false))
-	AudioServer.set_bus_volume_linear(0, SaveManager.get_value('audio', "master_volume", 1.0))
+	AudioServer.set_bus_mute(0, SettingsManager.get_value(SettingsManager.SEC_AUDIO, 'is_muted', false))
+	AudioServer.set_bus_volume_linear(0, SettingsManager.get_value('audio', "master_volume", 1.0))
 	
-	SaveManager.flush()
+	SettingsManager.flush()
 	Global.show_volume()
 
 

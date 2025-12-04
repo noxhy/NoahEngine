@@ -75,7 +75,7 @@ func _process(delta):
 			
 			if !enemy_slot:
 				if note == note_list[0]:
-					if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "glow_notes"):
+					if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "glow_notes"):
 						note.modulate = Color(1.5, 1.5, 1.5)
 		
 		if auto_play:
@@ -152,10 +152,10 @@ func _process(delta):
 						pressing = true
 	
 				else:
-					if !SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "ghost_tapping"):
+					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 						emit_signal("note_miss", 0, self.get_name(), 0, -1, 0)
 			else:
-				if !SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "ghost_tapping"):
+				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 					emit_signal("note_miss", 0, self.get_name(), 0, -1, 0)
 	
 	elif Input.is_action_pressed(input):
@@ -312,7 +312,7 @@ func _on_hold_cover_animation_finished():
 
 func create_splash(animation_name: String = strum_name + " splash"):
 	if can_splash:
-		if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "note_splashes"):
+		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "note_splashes"):
 			var splash_instance = splash_preload.instantiate()
 			
 			splash_instance.note_skin = note_skin

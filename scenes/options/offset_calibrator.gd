@@ -18,9 +18,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$"UI/Offset Label".text = "Offset: " + str(SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "offset") * 1000) + " ms"
+	$"UI/Offset Label".text = "Offset: " + str(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset") * 1000) + " ms"
 	
-	var keycode = SaveManager.get_keybind("ui_accept")
+	var keycode = SettingsManager.get_keybind("ui_accept")
 	$UI/Instructions.text = "Press " + Global.get_keycode_string(keycode) + " to calibrate your offset"
 	$UI/Instructions.text += "\n(This may not be entirely accurate)"
 	
@@ -33,7 +33,7 @@ func _draw():
 	var rect_size: int = 64
 	var top: int = rect_base_position.y - (rect_size / 2)
 	
-	var offset_position = SaveManager.get_value(SaveManager.SEC_GAMEPLAY, "offset") / $Conductor.seconds_per_beat
+	var offset_position = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset") / $Conductor.seconds_per_beat
 	
 	var rect: Rect2 = Rect2(Vector2(rect_base_position.x - (max_length / 2), top), Vector2(max_length, rect_size))
 	draw_rect(rect, Color(0.0, 0.0, 0.0, 0.25), true)
@@ -66,7 +66,7 @@ func _input(event):
 			var sum: float = 0.0
 			for i in previous_offsets:
 				sum += i
-			SaveManager.set_value(SaveManager.SEC_GAMEPLAY, "offset", snapped(sum / previous_offsets.size(), 0.001))
+			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "offset", snapped(sum / previous_offsets.size(), 0.001))
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
@@ -74,5 +74,5 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	$UI/Speaker.play_animation(&"bump")
 	
 	timing = (current_beat + 1) * $Conductor.seconds_per_beat
-	if SaveManager.get_value(SaveManager.SEC_PREFERENCES, "ui_bops"):
+	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

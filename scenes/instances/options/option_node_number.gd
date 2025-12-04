@@ -11,7 +11,7 @@ class_name NumberOptionNode
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var savedValue = clampf(SaveManager.get_value(setting_category, setting_name, 1.0) / value_scale, minimum, maximum);
+	var savedValue = clampf(SettingsManager.get_value(setting_category, setting_name, 1.0) / value_scale, minimum, maximum);
 	
 	spin_box.get_line_edit().context_menu_enabled = false
 	spin_box.step = step
@@ -27,5 +27,5 @@ func _on_spin_box_value_changed(value):
 	if value_scale == 1.0:
 		int(value_scale)
 	
-	SaveManager.set_value(setting_category, setting_name, value * value_scale)
+	SettingsManager.set_value(setting_category, setting_name, value * value_scale)
 	SoundManager.scroll.play()

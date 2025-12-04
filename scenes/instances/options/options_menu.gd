@@ -93,10 +93,10 @@ func load_category(category: String, options: Array):
 		
 		if type == &"option":
 			option_name = data
-			var option = SaveManager._defaults.get(category).get(option_name)
+			var option = SettingsManager._defaults.get(category).get(option_name)
 			if (option is float) or (option is int):
 				instance = NUMBER_PRELOAD.instantiate()
-				var number_info: Array = SaveManager.get_number_info(category, option_name)
+				var number_info: Array = SettingsManager.get_number_info(category, option_name)
 				instance.minimum = number_info[0]
 				instance.maximum = number_info[1]
 				instance.step = number_info[2]
@@ -131,7 +131,7 @@ func load_category(category: String, options: Array):
 	update(0)
 
 func _exit_tree() -> void:
-	SaveManager.flush()
+	SettingsManager.flush()
 
 func update(i: int, mouse: bool = false):
 	var options = get_tree().get_nodes_in_group(&"options")
