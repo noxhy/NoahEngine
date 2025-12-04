@@ -91,25 +91,24 @@ static var _defaults: Dictionary = {
 		"ui_right": [KEY_RIGHT],
 		"mute": [KEY_0]
 	}
-	
 }
 
 
 func _ready() -> void:
 	instance = get_default()
-	load_prefs()
+	load_values()
 	load_keybinds()
 
-func load_prefs() -> void:
+func load_values() -> void:
 	if not FileAccess.file_exists(LOAD_PATH):
 		print('[SaveManager]: Preferences not detected. Using defaults')
 		return
 	
 	var temp_config = ConfigFile.new()
-	var loadError:Error = temp_config.load(LOAD_PATH)
+	var loadError: Error = temp_config.load(LOAD_PATH)
 	
 	if loadError == Error.OK:
-		for section:String in temp_config.get_sections():
+		for section: String in temp_config.get_sections():
 			for key in temp_config.get_section_keys(section):
 				if instance.has_section_key(section, key):
 					instance.set_value(section, key, temp_config.get_value(section, key))
@@ -133,7 +132,7 @@ func get_default() -> ConfigFile:
 	return temp_config
 
 func get_keybind(keybind_name: String) -> Array : 
-	return instance.get_value(SEC_KEY_BINDS,keybind_name)
+	return instance.get_value(SEC_KEY_BINDS, keybind_name)
 
 func set_keybind(keybind_name: String, keycode: int, index: int):
 	var new_keycodes = instance.get_value(SEC_KEY_BINDS, keybind_name)
