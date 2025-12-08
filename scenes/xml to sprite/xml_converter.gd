@@ -69,7 +69,9 @@ func do_it():
 					new_frame.filter_clip = true
 					
 					if xml_parser.has_attribute("rotated"):
-						new_frame = ImageTexture.create_from_image(new_frame.get_image())
+						var image: Image = new_frame.get_image()
+						image.rotate_90(COUNTERCLOCKWISE)
+						new_frame = ImageTexture.create_from_image(image)
 					frames.add_frame(cur_anim_name, new_frame)
 				
 				anim_sprite.scale = Vector2(176, 176) / new_region.size

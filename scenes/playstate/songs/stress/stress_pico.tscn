@@ -26,36 +26,69 @@ stream_2/stream = ExtResource("10_56sr7")
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kuluq"]
 shader = ExtResource("13_th3hl")
-shader_parameter/angle = 90.0
-shader_parameter/distance = 15.0
-shader_parameter/rimlight_color = Color(1, 1, 0.576471, 1)
-shader_parameter/threshold = 0.5
+shader_parameter/blur_strength = 0.0
+shader_parameter/inline_scale = 1.0
+shader_parameter/tolerance = 0.0
+shader_parameter/strength = 1.0
+shader_parameter/rim_mix = 2.0
+shader_parameter/affect_black = false
+shader_parameter/pixel_perfect = false
+shader_parameter/shadow_color = Color(0.8745098, 0.9372549, 0.23529412, 1)
+shader_parameter/shadow_color_2 = Color(0, 0, 0, 1)
+shader_parameter/angle = 90.00000670553999
+shader_parameter/angle_2 = 0.0
+shader_parameter/dist = 15.000000223518
+shader_parameter/dist_2 = 0.0
+shader_parameter/blend_mode = 1
 shader_parameter/hue = -46.0
 shader_parameter/saturation = -38.0
-shader_parameter/contrast = -25.0
 shader_parameter/brightness = -20.0
+shader_parameter/contrast = -25.0
+shader_parameter/alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_th3hl"]
 shader = ExtResource("13_th3hl")
-shader_parameter/angle = 90.0
-shader_parameter/distance = 15.0
-shader_parameter/rimlight_color = Color(1, 1, 0.576471, 1)
-shader_parameter/threshold = 0.3
+shader_parameter/blur_strength = 0.0
+shader_parameter/inline_scale = 1.0
+shader_parameter/tolerance = 0.30000001425
+shader_parameter/strength = 1.0
+shader_parameter/rim_mix = 2.0
+shader_parameter/affect_black = false
+shader_parameter/pixel_perfect = false
+shader_parameter/shadow_color = Color(0.5, 0.5, 0.5, 1)
+shader_parameter/shadow_color_2 = Color(0.8745098, 0.9372549, 0.23529412, 1)
+shader_parameter/angle = 0.0
+shader_parameter/angle_2 = 135.000007376094
+shader_parameter/dist = 0.0
+shader_parameter/dist_2 = 20.000000298024
+shader_parameter/blend_mode = 1
 shader_parameter/hue = -46.0
 shader_parameter/saturation = -38.0
-shader_parameter/contrast = -25.0
 shader_parameter/brightness = -20.0
+shader_parameter/contrast = -25.0
+shader_parameter/alpha = 1.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_0hbr4"]
 shader = ExtResource("13_th3hl")
-shader_parameter/angle = 90.0
-shader_parameter/distance = 10.0
-shader_parameter/rimlight_color = Color(1, 1, 0.576471, 1)
-shader_parameter/threshold = 0.15
+shader_parameter/blur_strength = 0.0
+shader_parameter/inline_scale = 1.0
+shader_parameter/tolerance = 0.0
+shader_parameter/strength = 1.0
+shader_parameter/rim_mix = 2.0
+shader_parameter/affect_black = false
+shader_parameter/pixel_perfect = false
+shader_parameter/shadow_color = Color(0.8745098, 0.9372549, 0.23529412, 1)
+shader_parameter/shadow_color_2 = Color(0, 0, 0, 1)
+shader_parameter/angle = 90.00000670553999
+shader_parameter/angle_2 = 0.0
+shader_parameter/dist = 12.10000018030452
+shader_parameter/dist_2 = 0.0
+shader_parameter/blend_mode = 1
 shader_parameter/hue = -46.0
 shader_parameter/saturation = -38.0
-shader_parameter/contrast = -25.0
 shader_parameter/brightness = -20.0
+shader_parameter/contrast = -25.0
+shader_parameter/alpha = 1.0
 
 [node name="Stress Pico" type="Node2D"]
 editor_description = "I know nene's speaker looks like shit I just didn't feel like porting the masks."

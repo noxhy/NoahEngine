@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://ccu114dgokxwt"]
+[gd_scene load_steps=10 format=3 uid="uid://ccu114dgokxwt"]
 
 [ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://assets/sprites/menus/background/main menu/menuDesat.png" id="1_2uxlt"]
 [ext_resource type="Script" uid="uid://7jq7a5sbpcgr" path="res://scenes/dialogue editor/dialogue_editor.gd" id="1_qnh8h"]
-[ext_resource type="Theme" uid="uid://cbwyjej6x2d78" path="res://assets/themes/options.tres" id="3_5f2t6"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="3_5f2t6"]
 [ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/bold_italic_font.ttf" id="4_6y6ni"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="4_w8ow7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bq5l8"]
 font_size = 24
@@ -37,7 +38,7 @@ offset_bottom = 24.0
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme = ExtResource("3_5f2t6")
-color = Color(0.0352941, 0.0352941, 0.0352941, 0.733333)
+color = Color(0.14733289, 0.1680183, 0.20285092, 1)
 metadata/_edit_lock_ = true
 
 [node name="ScrollContainer" type="ScrollContainer" parent="UI/Dialogue Navigator"]
@@ -48,6 +49,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_w8ow7")
 metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/Dialogue Navigator/ScrollContainer"]
@@ -148,7 +150,7 @@ anchor_bottom = 0.1
 offset_left = 4.15997
 offset_top = -0.32
 offset_right = -0.320068
-theme = ExtResource("3_5f2t6")
+theme = ExtResource("4_w8ow7")
 theme_override_colors/font_color = Color(0.490196, 0.603922, 1, 1)
 text = "+"
 
@@ -161,7 +163,7 @@ anchor_bottom = 0.1
 offset_left = 0.319946
 offset_top = -0.32
 offset_right = -0.320007
-theme = ExtResource("3_5f2t6")
+theme = ExtResource("4_w8ow7")
 theme_override_colors/font_color = Color(1, 0.294118, 0.509804, 1)
 text = "-"
 
@@ -202,7 +204,7 @@ anchor_right = 0.25
 anchor_bottom = 0.276
 offset_top = 0.23999
 offset_bottom = 0.279984
-theme = ExtResource("3_5f2t6")
+theme = ExtResource("4_w8ow7")
 placeholder_text = "Text Input"
 
 [node name="Paste Display" type="Button" parent="UI/Input"]
@@ -229,7 +231,7 @@ offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="Background" type="Sprite2D" parent="Background"]
-modulate = Color(0.12, 0.12, 0.12, 1)
+modulate = Color(0.11372549, 0.13333334, 0.16078432, 1)
 texture = ExtResource("1_2uxlt")
 metadata/_edit_lock_ = true
 

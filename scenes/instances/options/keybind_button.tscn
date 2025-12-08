@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://darhx23v4e15y"]
 
-[ext_resource type="Theme" uid="uid://jg2nnteum11j" path="res://tools/themes/options.tres" id="1_4vhs0"]
-[ext_resource type="Script" uid="uid://do062uyfox1je" path="res://scenes/menus/options/keybind_button.gd" id="2_nnenw"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="1_4vhs0"]
+[ext_resource type="Script" uid="uid://do062uyfox1je" path="res://scenes/instances/options/keybind_button.gd" id="2_nnenw"]
 
 [node name="Button" type="Button" groups=["buttons"]]
 anchors_preset = 6
