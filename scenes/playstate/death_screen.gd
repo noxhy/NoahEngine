@@ -1,4 +1,5 @@
 extends Node2D
+class_name DeathScreen
 
 var can_press = true
 
@@ -9,7 +10,7 @@ func _ready():
 	$AnimationPlayer.play("intro")
 	
 	%Player.position = Global.death_stats.player_position 
-	$Camera2D.position = %Player.global_position + $UI.offset
+	$Camera2D.position = %Player.global_position
 	
 	var tween = create_tween()
 	tween.set_parallel(true)

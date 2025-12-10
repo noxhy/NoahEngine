@@ -67,10 +67,10 @@ static var _defaults: Dictionary = {
 	},
 	
 	"keybinds": {
-		"press_left": [KEY_LEFT, KEY_A],
-		"press_down": [KEY_DOWN, KEY_S],
-		"press_up": [KEY_UP, KEY_W],
-		"press_right": [KEY_RIGHT, KEY_D],
+		"note_left": [KEY_LEFT, KEY_A],
+		"note_down": [KEY_DOWN, KEY_S],
+		"note_up": [KEY_UP, KEY_W],
+		"note_right": [KEY_RIGHT, KEY_D],
 		
 		"kill": [KEY_R],
 		

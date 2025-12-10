@@ -167,20 +167,24 @@ libraries = {
 }
 
 [node name="UI" type="CanvasLayer" parent="."]
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
 [node name="Player" parent="UI" instance=ExtResource("6_0wmjs")]
 unique_name_in_owner = true
 position = Vector2(0, 80)
 scale = Vector2(0.6, 0.6)
+animation_names = Dictionary[StringName, StringName]({
+&"accept": &"BF Dead confirm",
+&"idle": &"BF Dead Loop",
+&"intro": &"BF dies"
+})
 
 [node name="ColorRect" type="ColorRect" parent="UI"]
-offset_left = -976.0
-offset_top = -560.0
-offset_right = 1016.0
-offset_bottom = 448.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 0)
 metadata/_edit_lock_ = true
 

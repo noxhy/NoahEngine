@@ -13,7 +13,7 @@ func _ready():
 	playstate_host.ui.set_enemy_icons(%Enemy.icons)
 	playstate_host.ui.set_enemy_color(%Enemy.color)
 	
-	playstate_host.death_stats.player_position = characters[0].position
+	playstate_host.death_stats.player_position = characters[0].global_position
 	playstate_host.death_stats.player_scale = characters[0].scale
 	
 	await playstate_host.setup_finished

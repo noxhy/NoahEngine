@@ -38,11 +38,11 @@ texture = ExtResource("5_7foaj")
 metadata/_edit_lock_ = true
 
 [node name="ColorRect2" type="ColorRect" parent="Background"]
-offset_left = -875.0
-offset_top = -295.0
-offset_right = -125.0
-offset_bottom = 671.0
-rotation = -0.329867
+offset_left = -891.7222
+offset_top = -397.1165
+offset_right = -141.72223
+offset_bottom = 672.3601
+rotation = -0.16231562
 color = Color(0, 0, 0, 0.505882)
 metadata/_edit_lock_ = true
 
