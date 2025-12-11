@@ -31,9 +31,10 @@ func _ready() -> void:
 	
 	rank = GameManager.get_rank()
 	if rank == "loss":
-		$Audio/Intro.stream = GameManager.character["loss_intro"]
+		$Audio/Intro.stream = load(GameManager.character["loss_intro"])
 	else:
-		$Audio/Intro.stream = GameManager.character["normal_intro"]
+		$Audio/Intro.stream = load(GameManager.character["normal_intro"])
+	$Audio/Music.stream = load(GameManager.character["result_songs"][rank])
 	$Audio/Intro.play()
 	
 	%Difficulty.play(GameManager.difficulty)
@@ -147,7 +148,6 @@ func clear_tally():
 	
 	await $Audio/Intro.finished
 	
-	$Audio/Music.stream = GameManager.character["result_songs"][rank]
 	$Audio/Music.play()
 
 

@@ -8,7 +8,7 @@ func _ready():
 	
 	await playstate_host.setup_finished
 	
-	if get_node_or_null("%Stage") != null:
+	if get_node_or_null("%Stage"):
 		playstate_host.conductor.connect("new_beat", %Stage._on_conductor_new_beat)
 	
 	playstate_host.conductor.connect("new_beat", self._on_conductor_new_beat)
@@ -28,8 +28,10 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	pass
 
 func _on_create_note(time, lane, note_length, note_type, tempo):
-	if lane > 3: playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
-	else: playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
+	if lane > 3:
+		playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
+	else:
+		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
 func note_hit(time, lane, note_type, hit_time, strumhandler):
@@ -43,8 +45,10 @@ func note_holding(time, lane, note_type, strumhandler):
 func note_miss(time, lane, length, note_type, hit_time, strumhandler):
 	if !strumhandler.enemy_slot: if note_type == -1:
 		SoundManager.anti_spam.play()
+	else:
+		SoundManager.miss.play()
 	playstate_host.note_miss(time, lane, length, note_type, hit_time, strumhandler)
 
 
 func _on_combo_break():
-	SoundManager.miss.play()
+	pass

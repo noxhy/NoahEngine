@@ -13,8 +13,8 @@ func _ready():
 	playstate_host.ui.set_enemy_icons(%Enemy.icons)
 	playstate_host.ui.set_enemy_color(%Enemy.color)
 	
-	playstate_host.death_stats.player_position = characters[0].global_position
-	playstate_host.death_stats.player_scale = characters[0].scale
+	DeathScreen.player_position = characters[0].global_position
+	DeathScreen.player_scale = characters[0].scale
 	
 	await playstate_host.setup_finished
 	
@@ -70,6 +70,11 @@ func note_miss(time, lane, length, note_type, hit_time, strumhandler):
 	if !strumhandler.enemy_slot:
 		if note_type == -1:
 			SoundManager.anti_spam.play()
+		else:
+			SoundManager.miss.play()
+			if characters.get(2):
+				characters[2].play_animation("cry")
+		
 		characters[0].play_animation("miss_" + animations[lane])
 	else:
 		characters[1].play_animation("miss_" + animations[lane])
@@ -82,6 +87,4 @@ func _on_new_event(time, event_name, event_parameters):
 
 
 func _on_combo_break():
-	SoundManager.miss.play()
-	if characters.get(2):
-		characters[2].play_animation("cry")
+	pass

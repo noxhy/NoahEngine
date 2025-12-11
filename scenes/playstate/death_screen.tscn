@@ -102,24 +102,10 @@ tracks/0/use_blend = true
 tracks/1/type = "method"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Audio/Music")
+tracks/1/path = NodePath("UI/Player")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(2.5),
-"transitions": PackedFloat32Array(1),
-"values": [{
-"args": [0.0],
-"method": &"play"
-}]
-}
-tracks/2/type = "method"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("UI/Player")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "values": [{
@@ -138,7 +124,7 @@ _data = {
 [node name="Death Screen" type="Node2D"]
 script = ExtResource("1_3knol")
 
-[node name="Conductor" type="Node" parent="."]
+[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_24go6")
 stream_player = NodePath("../Audio/Music")
 tempo = 100.0
@@ -171,13 +157,7 @@ follow_viewport_enabled = true
 
 [node name="Player" parent="UI" instance=ExtResource("6_0wmjs")]
 unique_name_in_owner = true
-position = Vector2(0, 80)
 scale = Vector2(0.6, 0.6)
-animation_names = Dictionary[StringName, StringName]({
-&"accept": &"BF Dead confirm",
-&"idle": &"BF Dead Loop",
-&"intro": &"BF dies"
-})
 
 [node name="ColorRect" type="ColorRect" parent="UI"]
 anchors_preset = 15
@@ -190,14 +170,13 @@ metadata/_edit_lock_ = true
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = 0
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="ColorRect" type="ColorRect" parent="Background"]
-offset_left = -1080.0
-offset_top = -672.0
-offset_right = 1144.0
-offset_bottom = 616.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 

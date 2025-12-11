@@ -8,8 +8,6 @@ var fullscreen: bool = false
 var freeplay_difficulty: int = 0
 var freeplay_song_option: int = 0
 
-var death_stats: Dictionary = {}
-
 var song_scene = "res://test/test_scene.tscn"
 
 var transitioning: bool = false
@@ -20,7 +18,7 @@ func _ready():
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
 	# Input responsiveness
-	Input.set_use_accumulated_input(false)
+	# Input.set_use_accumulated_input(false)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

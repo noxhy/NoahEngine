@@ -158,33 +158,75 @@ func load_keybinds():
 ## Janky helper function that gets the min and max a setting should be
 ## [min, max, snap, suffix, scale]
 ## Indexes 3 and 4 aren't necessary
-func get_number_info(category: String, setting_name: String) -> Array:
+func get_number_info(category: String, setting_name: String) -> Dictionary:
 	match category:
 		"gameplay":
 			match setting_name:
 				"offset":
-					return [-500, 500, 1, "ms", 0.001]
+					return {
+						"min": -500,
+						"max": 500,
+						"snap": 1,
+						"unit": "ms",
+						"scale": 0.001
+					}
 				
 				"song_speed":
-					return [0.5, 2, 0.05, "x"]
+					return {
+						"min": 0.5,
+						"max": 2,
+						"snap": 0.05,
+						"unit": "x"
+					}
 				
 				"scroll_speed_scale":
-					return [0.5, 2, 0.05, "x"]
+					return {
+						"min": 0.5,
+						"max": 2,
+						"snap": 0.05,
+						"unit": "x"
+					}
 		
 		"audio":
 			match setting_name:
 				"master_volume":
-					return [0, 100, 5, "%", 0.01]
+					return {
+						"min": 0,
+						"max": 100,
+						"snap": 5,
+						"unit": "%",
+						"scale": 0.01
+					}
 				
 				"sfx_volume":
-					return [0, 100, 5, "%", 0.01]
+					return {
+						"min": 0,
+						"max": 100,
+						"snap": 5,
+						"unit": "%",
+						"scale": 0.01
+					}
 				
 				"music_volume":
-					return [0, 100, 5, "%", 0.01]
+					return {
+						"min": 0,
+						"max": 100,
+						"snap": 5,
+						"unit": "%",
+						"scale": 0.01
+					}
 		
 		"debug":
 			match setting_name:
 				"fps_cap":
-					return [30, 3000, 1, "FPS"]
+					return {
+						"min": 30,
+						"max": 3000,
+						"snap": 1,
+						"unit": "FPS"
+					}
 	
-	return [-9999, 9999, 0.1]
+	return {
+		"min": 0,
+		"max": 1000
+	}

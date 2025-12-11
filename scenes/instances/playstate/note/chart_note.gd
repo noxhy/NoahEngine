@@ -35,6 +35,7 @@ func _process(delta):
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length
+		$VisibleOnScreenEnabler2D.rect.size.y = line_length + grid_size.y
 	else:
 		tail.visible = false
 
@@ -44,5 +45,17 @@ func _on_visible_on_screen_notifier_2d_screen_entered() -> void:
 	tail.visible = on_screen
 
 func _on_visible_on_screen_notifier_2d_screen_exited() -> void: 
+	$Note.visible = on_screen
+	tail.visible = on_screen
+
+
+func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
+	on_screen = true
+	$Note.visible = on_screen
+	tail.visible = on_screen
+
+
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	on_screen = false
 	$Note.visible = on_screen
 	tail.visible = on_screen

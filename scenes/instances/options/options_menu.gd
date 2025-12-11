@@ -96,14 +96,12 @@ func load_category(category: String, options: Array):
 			var option = SettingsManager._defaults.get(category).get(option_name)
 			if (option is float) or (option is int):
 				instance = NUMBER_PRELOAD.instantiate()
-				var number_info: Array = SettingsManager.get_number_info(category, option_name)
-				instance.minimum = number_info[0]
-				instance.maximum = number_info[1]
-				instance.step = number_info[2]
-				if number_info.size() > 3:
-					instance.value_name = number_info[3]
-				if number_info.size() > 4:
-					instance.value_scale = number_info[4]
+				var number_info: Dictionary = SettingsManager.get_number_info(category, option_name)
+				instance.minimum = number_info.get("min")
+				instance.maximum = number_info.get("max")
+				instance.step = number_info.get("snap", 1)
+				instance.value_name = number_info.get("unit", "")
+				instance.value_scale = number_info.get("scale", 1)
 			elif (option is bool):
 				instance = BOOL_PRELOAD.instantiate()
 			elif (category == "keybinds"):
@@ -142,6 +140,8 @@ func update(i: int, mouse: bool = false):
 	SoundManager.scroll.play()
 	get_viewport().gui_release_focus()
 	
+	set_description()
+	
 	if !mouse:
 		var tween = create_tween()
 		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
@@ -154,3 +154,6 @@ func update(i: int, mouse: bool = false):
 func get_selected_node() -> Node:
 	var options = get_tree().get_nodes_in_group(&"options")
 	return options[selected]
+
+func set_description(text: String = ""):
+	%Description.text = text

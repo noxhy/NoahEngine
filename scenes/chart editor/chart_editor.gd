@@ -9,8 +9,6 @@ const NEW_FILE_POPUP_PRELOAD = preload("res://scenes/instances/chart editor/new_
 const OPEN_FILE_POPUP_PRELOAD = preload("res://scenes/instances/chart editor/open_file_popup.tscn")
 const CONVERT_CHART_POPUP_PRELOAD = preload("res://scenes/instances/chart editor/convert_chart_popup.tscn")
 
-const WAVEFORM_PRELOAD = preload("res://addons/audio_preview/AudioStreamPreview.tscn")
-
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
 @onready var undo_redo: UndoRedo = UndoRedo.new()
@@ -38,7 +36,6 @@ var current_beats_per_measure: int = 4
 var current_steps_per_measure: int = 16
 var current_difficulty: String
 var note_list: Array = []
-var waveform_list: Array = []
 var can_chart: bool = false
 
 var current_snap: int = 3
@@ -96,9 +93,7 @@ func _process(delta: float) -> void:
 	if start_offset < 0: start_offset = 0
 	
 	if ChartManager.song != null:
-		
 		if %Instrumental.playing:
-			
 			song_position = %Instrumental.get_playback_position() - start_offset
 			%"Song Slider".value = song_position
 			
@@ -107,38 +102,25 @@ func _process(delta: float) -> void:
 			var notes_list = chart.get_notes_data()
 			
 			if notes_list.size() > 0:
-				
 				if current_note < notes_list.size():
-					
 					var note = notes_list[current_note]
-					
 					if note[0] <= (song_position + start_offset):
-						
-						var time: float = note[0]
 						var lane: float = note[1]
-						
-						for strum in ChartManager.strum_data:
-							
-							if ((lane >= ChartManager.strum_data[strum]["strums"][0]) and (lane <= ChartManager.strum_data[strum]["strums"][1])):
-								
-								if (!ChartManager.strum_data[strum]["muted"]):
+						for id in ChartManager.strum_data.size():
+							if ((lane >= ChartManager.strum_data[id]["strums"][0]) and (lane <= ChartManager.strum_data[id]["strums"][1])):
+								if (!ChartManager.strum_data[id]["muted"]):
 									%"Hit Sound".play()
 						
 						current_note += 1
 			
-			for strum in ChartManager.strum_data:
-				
+			for strum in ChartManager.strum_data.size():
 				var track = ChartManager.strum_data[strum]["track"]
-				
 				if track < vocal_tracks.size():
-					
 					if ChartManager.strum_data[strum]["muted"]:
 						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], -80)
 					else:
 						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], 0)
-			
 		else:
-			
 			if Input.is_action_just_pressed("mouse_scroll_up"):
 				
 				if !Input.is_action_pressed("control"):
@@ -174,7 +156,6 @@ func _process(delta: float) -> void:
 				save()
 	
 	if chart != null:
-		
 		current_tempo = chart.get_tempo_at(song_position + start_offset)
 		$Conductor.tempo = current_tempo
 		var meter = chart.get_meter_at(song_position + start_offset)
@@ -194,7 +175,8 @@ func _process(delta: float) -> void:
 	else:
 		%"Time Left Label".text = "- ??:??"
 	
-	if Input.is_action_just_pressed("ui_accept"): _on_play_button_toggled(!%Instrumental.stream_paused)
+	if Input.is_action_just_pressed("ui_accept"):
+		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
 	var measure_height = %Grid.get_size().y
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
@@ -346,9 +328,7 @@ func _process(delta: float) -> void:
 										save()
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
-							
 							if moving_notes:
-								
 								var cursor_time = grid_position_to_time(snapped_position, true)
 								var cursor_lane = snapped_position.x - 1
 								
@@ -478,9 +458,9 @@ func _process(delta: float) -> void:
 		bounding_box = false
 	
 	if Input.is_action_pressed("ui_text_delete"):
-		
 		GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
 		GameManager.difficulty = current_difficulty
+		GameManager.current_song = ChartManager.song
 		Global.change_scene_to("res://scenes/playstate/chart_tester.tscn")
 	
 	queue_redraw()
@@ -558,17 +538,16 @@ func _draw() -> void:
 		draw_rect(rect, divider_color)
 		
 		## Strum Markers
-		for strum_name in ChartManager.strum_data:
-			
-			var start_strum = ChartManager.strum_data[strum_name]["strums"][0]
-			var end_strum = ChartManager.strum_data[strum_name]["strums"][1]
+		for id in ChartManager.strum_data.size():
+			var start_strum = ChartManager.strum_data[id]["strums"][0]
+			var end_strum = ChartManager.strum_data[id]["strums"][1]
 			
 			## Measure Divider
 			rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(end_strum + 2, time_to_y.y)) - Vector2(1, 2), \
 			%Grid.get_real_position(Vector2(0, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(2, 2))
 			draw_rect(rect, divider_color)
 			
-			if ChartManager.strum_data[strum_name]["muted"]:
+			if ChartManager.strum_data[id]["muted"]:
 				
 				rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(start_strum + 1, time_to_y.y)), \
 				%Grid.get_real_position(Vector2(end_strum - start_strum + 1, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)))
@@ -586,20 +565,15 @@ func _draw() -> void:
 
 
 func update_grid():
-	
 	%Grid.columns = 2 + ChartManager.strum_count
 	%Grid.rows = current_steps_per_measure
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
 	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * %Grid.grid_size.x * %Grid.zoom.x + 4
 	
-	for n in %"Strum Labels".get_children(): n.queue_free()
-	
-	for n in waveform_list:
+	for n in %"Strum Labels".get_children():
 		n.queue_free()
-	waveform_list = []
-	
-	for id in ChartManager.strum_data:
-		
+
+	for id in ChartManager.strum_data.size():
 		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
 		
 		strum_label_instance.id = id
@@ -609,28 +583,10 @@ func update_grid():
 		strum_label_instance.custom_minimum_size.x = (ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]) * %Grid.grid_size.x * %Grid.zoom.x
 		strum_label_instance.size.y = 32
 		
-		if ChartManager.strum_data[id]["strums"][0] == 0: strum_label_instance.get_node("Move Lane Left").visible = false
-		if ChartManager.strum_data[id]["strums"][1] == ChartManager.strum_count - 1: strum_label_instance.get_node("Move Lane Right").visible = false
-		
-		if ChartManager.song != null:
-			var waveform_instance = WAVEFORM_PRELOAD.instantiate()
-			
-			waveform_instance.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 2, 0))
-			waveform_instance.size.y = (ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]) * %Grid.grid_size.x * %Grid.zoom.x
-			waveform_instance.rotation_degrees = 90
-			
-			var track: int = ChartManager.strum_data[id]["track"]
-			if ChartManager.song != null:
-				if track < ChartManager.song.vocals.size():
-					
-					var stream = ChartManager.song.vocals[track]
-					if stream is AudioStreamWAV:
-						
-						waveform_instance.stream_path = stream.resource_path
-						print(stream.resource_path)
-			
-			waveform_list.append(waveform_instance)
-			$"Waveform Layer".add_child(waveform_instance)
+		if ChartManager.strum_data[id]["strums"][0] == 0:
+			strum_label_instance.get_node("Move Lane Left").visible = false
+		if ChartManager.strum_data[id]["strums"][1] == ChartManager.strum_count - 1:
+			strum_label_instance.get_node("Move Lane Right").visible = false
 		
 		strum_label_instance.connect("move_bound_left", self.move_bound_left)
 		strum_label_instance.connect("move_bound_right", self.move_bound_right)
@@ -639,20 +595,6 @@ func update_grid():
 		strum_label_instance.connect("updated", self.updated_strums)
 	
 	%"Strum Labels".size.y = 32
-	update_waveforms()
-
-
-func update_waveforms():
-	if ChartManager.song == null:
-		return
-	
-	var i: int = 0
-	for n in waveform_list:
-		
-		var id: String = ChartManager.strum_data.keys()[i]
-		n.size.y = (ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]) * %Grid.grid_size.x * %Grid.zoom.x
-		n.size.x = time_to_y_position(%Instrumental.stream.get_length()) - time_to_y_position(0.0)
-		i += 1
 
 
 func load_song(song: Song, difficulty: Variant = null):
@@ -665,6 +607,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	scene = song.scene if !difficulty_data.has("scene") else difficulty_data.scene
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
+	%Instrumental.stream = load(ChartManager.song.instrumental)
 	play_audios(0.0)
 	
 	%"Song Slider".max_value = %Instrumental.stream.get_length()
@@ -689,6 +632,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Metadata Window".update_stats()
 	
 	load_chart(chart)
+	update_grid()
+	load_waveforms()
 	can_chart = true
 
 
@@ -711,14 +656,10 @@ func load_song_path(path: String, difficulty: Variant = null):
 func load_chart(file: Chart, ghost: bool = false):
 	selected_notes = []
 	selected_note_nodes = []
+	get_tree().call_group(&"notes", &"queue_free")
+	note_list = []
 	
-	if !ghost:
-		
-		for n in note_list:
-			n.queue_free()
-		note_list = []
-	
-	for note in file.get_notes_data():
+	for note in file.get_notes_data(): 
 		place_note(note[0], note[1], note[2], note[3])
 
 
@@ -792,6 +733,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 		output = note_list.size()
 	
 	$"Notes Layer".add_child(note_instance)
+	note_instance.add_to_group(&"notes")
 	return output
 
 
@@ -820,9 +762,7 @@ func find_note(lane: int, time: float) -> int:
 	
 	return -1
 
-
 func play_audios(time: float):
-	%Instrumental.stream = load(ChartManager.song.instrumental)
 	%Vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
 	%Vocals.play()
@@ -830,8 +770,9 @@ func play_audios(time: float):
 	
 	var playback = %Vocals.get_stream_playback()
 	vocal_tracks = []
-	for stream in ChartManager.song.vocals: vocal_tracks.append(\
-	playback.play_stream(load(stream), time - chart.offset + start_offset, 0.0, song_speed))
+	for stream in ChartManager.song.vocals:
+		vocal_tracks.append(playback.play_stream(load(stream),
+		time - chart.offset + start_offset, 0.0, song_speed))
 	
 	time = clamp(time, 0, %Instrumental.stream.get_length() - 0.1)
 	%Instrumental.play(time - chart.offset + start_offset)
@@ -841,9 +782,7 @@ func play_audios(time: float):
 	current_note = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), song_position)
 	
 	if chart.get_notes_data().size() > 0:
-		
 		if song_position > chart.get_notes_data()[chart.get_notes_data().size() - 1][0]:
-			
 			current_note = chart.get_notes_data().size() - 1
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
@@ -895,7 +834,6 @@ func time_to_y_position(time: float) -> float:
 
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var tempo_data: Dictionary = chart.get_tempos_data()
-	var meter_data: Dictionary = chart.get_meters_data()
 	var i: int = 0
 	var meter: Array = []
 	var L: float = tempo_data.keys()[0]
@@ -907,7 +845,6 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var output: float = chart.offset
 	
 	while yL <= yC:
-		
 		if i + 1 >= tempo_data.keys().size(): R = %Instrumental.stream.get_length()
 		else: R = tempo_data.keys()[i + 1]
 		
@@ -917,7 +854,8 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		yL = time_to_y_position(L)
 		yR = time_to_y_position(R)
 		yC = p.y * %Grid.grid_size.y * %Grid.zoom.y
-		if factor_in_snap: yC *= meter[1] / chart_snap
+		if factor_in_snap:
+			yC *= meter[1] / chart_snap
 		
 		if (yC >= yL and yC < yR):
 			
@@ -939,7 +877,6 @@ func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int
 	var high: int = length - 1
 	
 	while (low <= high):
-		
 		@warning_ignore("integer_division")
 		var mid: int = low + ((high - low) / 2)
 		
@@ -957,7 +894,6 @@ func bsearch_right_range(value_set: Array, length: int, right_range: float) -> i
 	var high: int = length - 1
 	
 	while (low <= high):
-		
 		@warning_ignore("integer_division")
 		var mid: int = low + ((high - low) / 2)
 		
@@ -982,32 +918,45 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		
 		%"Play Button".icon = load("res://assets/sprites/menus/chart editor/pause_button.png")
-		if song_position != %Instrumental.get_playback_position(): play_audios(song_position)
+		if song_position != %Instrumental.get_playback_position():
+			play_audios(song_position)
 	
 	else: %"Play Button".icon = load("res://assets/sprites/menus/chart editor/play_button.png")
 
 
-func move_bound_left(strum_id: String):
-	ChartManager.strum_data[strum_id]["strums"][0] = clamp(ChartManager.strum_data[strum_id]["strums"][0] - 1, 0, ChartManager.strum_count - 1)
+func move_bound_left(strum_name: String):
+	var strum_id: int = find_strum_id(strum_name)
+	var strum_data = ChartManager.strum_data[strum_id]
+	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartManager.strum_count - 1)
 	
-	for id in ChartManager.strum_data:
-		if ChartManager.strum_data[id]["strums"][1] == ChartManager.strum_data[strum_id]["strums"][0]:
+	for id in ChartManager.strum_data.size():
+		if ChartManager.strum_data[id]["strums"][1] == strum_data["strums"][0]:
 			ChartManager.strum_data[id]["strums"][1] = clamp(ChartManager.strum_data[id]["strums"][1] - 1, 0, ChartManager.strum_count - 1)
 	
 	update_grid()
 
 
-func move_bound_right(strum_id: String):
-	ChartManager.strum_data[strum_id]["strums"][1] = clamp(ChartManager.strum_data[strum_id]["strums"][1] + 1, 0, ChartManager.strum_count - 1)
+func move_bound_right(strum_name: String):
+	var strum_id: int = find_strum_id(strum_name)
+	var strum_data = ChartManager.strum_data[strum_id]
+	strum_data["strums"][1] = clamp(strum_data["strums"][1] - 1, 0, ChartManager.strum_count - 1)
 	
-	for id in ChartManager.strum_data:
-		if ChartManager.strum_data[id]["strums"][0] == ChartManager.strum_data[strum_id]["strums"][1]:
+	for id in ChartManager.strum_data.size():
+		if ChartManager.strum_data[id]["strums"][0] ==  strum_data["strums"][1]:
 			ChartManager.strum_data[id]["strums"][0] = clamp(ChartManager.strum_data[id]["strums"][0] + 1, 0, ChartManager.strum_count - 1)
 	
 	update_grid()
 
 
-func _on_song_slider_value_changed(value: float) -> void: song_position = value
+func find_strum_id(strum_name: String) -> int:
+	for id in ChartManager.strum_data.size():
+		var strum_data = ChartManager.strum_data[id]
+		if strum_data["name"] == strum_name:
+			return id
+	return -1
+
+func _on_song_slider_value_changed(value: float) -> void:
+	song_position = value
 
 
 func _on_skip_forward_pressed() -> void:
@@ -1030,7 +979,8 @@ func _on_skip_to_end_pressed() -> void:
 	_on_play_button_toggled(true)
 
 
-func _on_instrumental_finished() -> void: _on_play_button_toggled(false)
+func _on_instrumental_finished() -> void:
+	_on_play_button_toggled(false)
 
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
@@ -1154,6 +1104,34 @@ func updated_strums():
 	can_chart = true
 	update_grid()
 
+func load_waveforms():
+	get_tree().call_group(&"waveforms", &"queue_free")
+	if ChartManager.song:
+		for id in ChartManager.strum_data.size():
+			var track: int = ChartManager.strum_data[id]["track"]
+			if track < ChartManager.song.vocals.size():
+				for i in chart.get_tempos_data().size():
+					var L: float = chart.get_tempos_data().keys()[i]
+					var R: float
+					if (i + 1) == chart.get_tempos_data().size():
+						R = %Instrumental.stream.get_length()
+					else:
+						R = chart.get_tempos_data().keys()[i + 1]
+					var waveform = WaveformRenderer.new()
+					
+					var stream = ChartManager.song.vocals[track]
+					waveform.keepData = true
+					waveform.width = time_to_y_position(R) - time_to_y_position(L)
+					waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0.5))
+					waveform.position.y += time_to_y_position(L)
+					waveform.duration = R - L
+					
+					$"Waveform Layer".add_child(waveform)
+					waveform.setOrientation("VERTICAL")
+					waveform.add_to_group(&"waveforms")
+					waveform.create(stream, Color.MEDIUM_PURPLE, null, (R - L) * 1000)
+			else:
+				printerr("(load_waveforms) Track ", track, " does not exist.")
 
 func _on_chart_snap_value_changed(value: float) -> void:
 	# This is really dumb and janky
@@ -1162,7 +1140,8 @@ func _on_chart_snap_value_changed(value: float) -> void:
 
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var option = %"Difficulty Button".get_popup().get_item_text(index)
-	if ChartManager.song.difficulties.keys().has(option): load_song(ChartManager.song, option)
+	if ChartManager.song.difficulties.keys().has(option):
+		load_chart(load(ChartManager.song.difficulties.get(option).get("chart")))
 
 
 func _on_history_window_close_requested() -> void:

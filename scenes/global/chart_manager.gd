@@ -8,20 +8,18 @@ static var strum_count: int = 8
 static var snap: float = 16
 
 ## Settings per strum, each key is it's label
-var strum_data: Dictionary = {
-	
-	"Player": {
-		
+var strum_data: Array = [
+	{
+		"name": "Player",
 		"strums": [0, 3],
 		"muted": false,
 		"track": 0,
-		
 	},
-	"Enemy": {
-		
+	{
+		"name": "Enemy",
 		"strums": [4, 7],
 		"muted": false,
 		"track": 1,
 		
-	},
-}
+	}
+]

@@ -59,9 +59,10 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 auto_height = true
-item_count = 2
+item_count = 3
 item_0/text = "Easy/Normal/Hard"
 item_1/text = "Erect/Nightmare"
+item_2/text = "Hard Only"
 
 [node name="Convert Chart" type="VBoxContainer" parent="FlowContainer"]
 visible = false

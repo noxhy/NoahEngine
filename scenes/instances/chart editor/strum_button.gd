@@ -6,7 +6,7 @@ signal updated
 signal opened
 signal closed
 
-@export var id: String
+@export var id: int
 @export var muted: bool
 @export var track: int
 
@@ -16,34 +16,11 @@ func _ready() -> void:
 
 
 func _on_button_pressed() -> void:
-	
 	$Window.popup()
 
 
 func _on_save_button_pressed() -> void:
-	
-	var temp_i = ChartManager.strum_data.keys().find(id)
-	var temp: String = %"Strum ID".text
-	var input: Dictionary = ChartManager.strum_data[id]
-	ChartManager.strum_data.erase(id)
-	var temp_dict: Dictionary = ChartManager.strum_data
-	ChartManager.strum_data = {}
-	
-	var offset: int = 0
-	for i in range(ChartManager.strum_data.size() + 2):
-		
-		
-		if i == temp_i:
-			
-			ChartManager.strum_data[temp] = input
-			offset = 1
-		else:
-			
-			var key = temp_dict.keys()[i - offset]
-			ChartManager.strum_data.merge({key: temp_dict[key]})
-	
-	id = temp
-	
+	ChartManager.strum_data[id]["name"] = %"Strum ID".text
 	muted = $"Window/VBoxContainer/HBoxContainer4/Check Box".button_pressed
 	ChartManager.strum_data[id]["muted"] = muted
 	track = %"Vocal Track".value
@@ -54,22 +31,22 @@ func _on_save_button_pressed() -> void:
 
 
 func _on_window_close_requested() -> void:
-	
 	$Window.hide()
 	emit_signal("closed")
 
 
-func _on_move_lane_left_pressed() -> void: emit_signal("move_bound_left", id)
-func _on_move_lane_right_pressed() -> void: emit_signal("move_bound_right", id)
+func _on_move_lane_left_pressed() -> void:
+	emit_signal("move_bound_left", id)
+func _on_move_lane_right_pressed() -> void:
+	emit_signal("move_bound_right", id)
 
 
 func _on_window_about_to_popup() -> void:
-	
-	$Button.text = id
+	$Button.text = ChartManager.strum_data[id].get("name", "")
 	%"Vocal Track".min_value = 0
 	if ChartManager.song != null:
 		%"Vocal Track".max_value = ChartManager.song.vocals.size() - 1
 	%"Vocal Track".value = ChartManager.strum_data[id]["track"]
-	%"Strum ID".text = id
+	%"Strum ID".text = ChartManager.strum_data[id].get("name", "")
 	$"Window/VBoxContainer/HBoxContainer4/Check Box".button_pressed = muted
 	emit_signal("opened")

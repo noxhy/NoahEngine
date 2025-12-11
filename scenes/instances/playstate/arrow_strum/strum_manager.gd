@@ -1,4 +1,4 @@
-@icon("res://assets/sprites/nodes/strum Manager.png")
+@icon("res://assets/sprites/nodes/strum_manager.png")
 
 extends Node2D
 

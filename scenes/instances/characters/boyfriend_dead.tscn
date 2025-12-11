@@ -5,19 +5,20 @@
 
 [node name="Boyfriend Dead" type="Node2D"]
 script = ExtResource("1_rej3p")
-idle_animation = ""
-animation_names = {
-"accept": "BF Dead confirm",
-"idle": "BF Dead Loop",
-"intro": "BF dies"
-}
-offsets = {
-"BF Dead Loop": Vector2(-24, -152),
-"BF Dead confirm": Vector2(-25, -185),
-"BF dies": Vector2(-24, -152)
-}
+animation_names = Dictionary[StringName, StringName]({
+&"accept": &"BF Dead confirm",
+&"idle": &"BF Dead Loop",
+&"intro": &"BF dies"
+})
+offsets = Dictionary[StringName, Vector2]({
+&"BF Dead Loop": Vector2(-24, -152),
+&"BF Dead confirm": Vector2(-25, -185),
+&"BF dies": Vector2(-24, -152)
+})
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-24, -152)
 sprite_frames = ExtResource("2_tjdis")
 animation = &"BF Dead Loop"
+frame = 33
+frame_progress = 1.0

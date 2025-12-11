@@ -8,7 +8,6 @@ var save_dir: String
 
 # Creates a new file that will send out a signal to the chart editor
 func new_file(dir: String):
-	
 	# Creates the file base properties
 	var song_file = Song.new()
 	song_file.artist = %"Song Credits".text
@@ -28,6 +27,8 @@ func new_file(dir: String):
 		difficulties = ["easy", "normal", "hard"]
 	elif selected == 1:
 		difficulties = ["erect", "nightmare"]
+	elif selected == 2:
+		difficulties = ["hard"]
 	else:
 		difficulties = []
 	
@@ -67,13 +68,11 @@ func _on_inst_button_pressed(): %"Inst File Dialog".popup()
 
 # When the vocals file is selected
 func _on_vocals_file_dialog_files_selected(paths: PackedStringArray) -> void:
-	
 	selected_vocals = paths
 	%"Vocals File Location".text = str(selected_vocals)
 
 # When the Inst file is selected
 func _on_inst_file_dialog_file_selected(path):
-	
 	selected_instrumental = path
 	%"Inst File Location".text = selected_instrumental
 

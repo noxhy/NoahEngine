@@ -9,7 +9,7 @@ class_name PlayableCharacter
 @export var dj: PackedScene
 @export var background: Texture2D
 @export_category("Results")
-@export var result_songs: Dictionary[String, AudioStream] = {"default": AudioStream.new()}
-@export var normal_intro: AudioStream
-@export var loss_intro: AudioStream
+@export var result_songs: Dictionary[String, String]
+@export var normal_intro: String
+@export var loss_intro: String
 @export var result_nodes: Dictionary[String, String] = {"default": ""}

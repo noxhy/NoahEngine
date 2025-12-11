@@ -57,15 +57,6 @@ signal setup_finished()
 ## The scene that will be switched to when the song ends.
 @export_file('*.tscn') var next_scene = "res://scenes/results/results.tscn"
 
-var death_stats = {
-	
-	"death_screen" = death_scene,
-	"player_scale" = Vector2(1, 1),
-	"player_position" = Vector2(640, 360),
-	"camera_zoom" = Vector2(1, 1),
-	
-}
-
 # How often the damera bops. Based off the step rate in the conductor.
 var bop_rate: int = 16
 
@@ -180,9 +171,8 @@ func _process(delta):
 	
 	if health <= 0:
 		GameManager.deaths += 1
-		death_stats.camera_zoom = camera.zoom
+		DeathScreen.camera_zoom = camera.zoom
 		Global.song_scene = get_tree().current_scene.scene_file_path
-		Global.death_stats = death_stats
 		get_tree().change_scene_to_file(death_scene)
 	
 	GameManager.seconds_per_beat = conductor.seconds_per_beat
@@ -523,21 +513,15 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 			timings_sum += 0.65
 		
 		elif rating == "bad":
-			
-			health -= 0.5
+			health -= 0.35
 			timings_sum += 0.25
 			combo = -1
-			
-			note_miss(time, lane, 0, -1, hit_time, strum_manager)
 			emit_signal("combo_break")
 		
 		elif rating == "shit":
-			
-			health -= 1
+			health -= 0.35
 			timings_sum += -1
 			combo = -1
-			
-			note_miss(time, lane, 0, -1, hit_time, strum_manager)
 			emit_signal("combo_break")
 		
 		else:

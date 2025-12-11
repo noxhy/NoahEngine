@@ -39,7 +39,9 @@ var orientation := WaveformOrientation.HORIZONTAL
 
 var time = 0
 
-enum WaveformOrientation {VERTICAL, HORIZONTAL}
+enum WaveformOrientation {
+	VERTICAL, HORIZONTAL
+	}
 
 
 var color = DEFAULT_COLOR
@@ -77,7 +79,6 @@ func create(InitialData, this_color:Color = DEFAULT_COLOR,background_color = nul
 	if height == null:
 		height = DEFAULT_HEIGHT
 	
-	
 	color = this_color
 	
 	if background_color != null:
@@ -102,7 +103,7 @@ func create(InitialData, this_color:Color = DEFAULT_COLOR,background_color = nul
 
 
 
-func setOrientation(value:String):
+func setOrientation(value: String):
 	match value:
 		"HORIZONTAL":
 			orientation = WaveformOrientation.HORIZONTAL
@@ -122,8 +123,7 @@ func drawWaveform():
 	if waveformdata.data.is_empty():
 		push_error("waveform data is empty, re-gen the waveform data!!")
 		return
-		
-		
+	
 	var waveformCenterPos = int(height / 2)
 	
 	
