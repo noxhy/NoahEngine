@@ -41,7 +41,7 @@ func _ready():
 	
 	Global.set_window_title("Freeplay Menu")
 	
-	var dj_scene = Preload.character_data[GameManager.current_character].dj
+	var dj_scene = load(Preload.character_data[GameManager.current_character].dj)
 	
 	dj = dj_scene.instantiate()
 	

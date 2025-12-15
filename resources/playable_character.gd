@@ -6,7 +6,7 @@ class_name PlayableCharacter
 @export_category("Pause")
 @export var pause_song: AudioStream
 @export_subgroup("Freeplay")
-@export var dj: PackedScene
+@export_file('*.tscn') var dj: String
 @export var background: Texture2D
 @export_category("Results")
 @export var result_songs: Dictionary[String, String]
