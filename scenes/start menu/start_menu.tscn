@@ -153,7 +153,6 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_b3jfc"]
 resource_name = "intro_finish"
-length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -161,7 +160,7 @@ tracks/0/path = NodePath("Screen Flash/ColorRect:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
