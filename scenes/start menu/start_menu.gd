@@ -46,22 +46,14 @@ func _process(_delta):
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	
 	# Metronome Bop Animation
-	
 	if(measure_relative % 2 == 0):
-		
 		%Metronome.can_idle = true
 		%Metronome.play_animation("idle", $Conductor.seconds_per_beat * 2)
 	
-	var time = 0
-	
+	var tween = create_tween()
+	tween.set_parallel(true)
 	if intro_done:
-			
-			var tween = create_tween()
-			
-			time = 0.5
-			
 			# Background color phase
 			$Background/ColorRect.color = flashing_colors[current_beat % flashing_colors.size()]
 			tween.tween_property($Background/ColorRect, "color", Color(0, 0, 0), 0.3)
@@ -73,15 +65,8 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 			else:
 				
 				tween.tween_property($"UI/Play Label", "theme_override_colors/font_color", Color(0.501961, 0.682353, 1, 0.8), $Conductor.seconds_per_beat * 2)
-	
-	# Logo Bopping
-	var tween2 = create_tween()
-	tween2.set_trans(Tween.TRANS_CUBIC)
-	
-	time = 0.2
-	
-	tween2.tween_property($UI/Logo, "scale", Vector2(0.95, 0.95), time * 0.0625).set_ease(Tween.EASE_IN_OUT)
-	tween2.tween_property($UI/Logo, "scale", Vector2(0.9, 0.9), time).set_delay(time * 0.0625).set_ease(Tween.EASE_OUT)
+	Global.bop_tween($UI/Logo, "scale", Vector2(0.95, 0.95), Vector2(0.9, 0.9), 0.2, Tween.TRANS_QUAD)
+
 
 
 func _on_animation_player_animation_finished(anim_name):
