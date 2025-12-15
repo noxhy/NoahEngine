@@ -101,14 +101,16 @@ metadata/_edit_lock_ = true
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Parallax2D4"]
 position = Vector2(0, -472)
 sprite_frames = ExtResource("4_f3030")
-animation = &"base"
+animation = &"rifle info"
+frame = 37
+frame_progress = 1.0
 
 [node name="AnimateSymbol" type="Node2D" parent="."]
 z_index = 1
 position = Vector2(448, -312)
 script = ExtResource("3_f3030")
 atlas = "res://assets/sprites/menus/freeplay/characters/pico"
-frame = 25
+frame = 134
 playing = true
 auto_start = true
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"

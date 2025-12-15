@@ -5,17 +5,17 @@ const LOCK_PRELOAD = preload("res://scenes/instances/character_select/lock.tscn"
 var option_data: Dictionary = {
 	0: {
 		"character": "boyfriend",
-		"icons": preload("res://assets/sprites/playstate/icons/boyfriend.tres"),
+		"icons": load("res://assets/sprites/playstate/icons/boyfriend.tres"),
 		"color": Color(0.192, 0.69, 0.82),
-		"player": preload("res://scenes/instances/character_select/characters/boyfriend/boyfriend.tscn"),
-		"partner": preload("res://scenes/instances/character_select/characters/boyfriend/girlfriend.tscn")
+		"player": load("res://scenes/instances/character_select/characters/boyfriend/boyfriend.tscn"),
+		"partner": load("res://scenes/instances/character_select/characters/boyfriend/girlfriend.tscn")
 	},
 	1: {
 		"character": "pico",
-		"icons": preload("res://assets/sprites/playstate/icons/pico.tres"),
+		"icons": load("res://assets/sprites/playstate/icons/pico.tres"),
 		"color": Color(0.141, 0.851, 0.91),
-		"player": preload("res://scenes/instances/character_select/characters/pico/pico.tscn"),
-		"partner": preload("res://scenes/instances/character_select/characters/pico/nene.tscn")
+		"player": load("res://scenes/instances/character_select/characters/pico/pico.tscn"),
+		"partner": load("res://scenes/instances/character_select/characters/pico/nene.tscn")
 	},
 	2: {
 		"color": Color(0.125, 0.608, 0.867),
