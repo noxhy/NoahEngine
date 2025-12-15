@@ -17,13 +17,13 @@ notes_scale = 0.78
 sustain_width = 50
 hold_covers_scale = 1.2
 offsets = Dictionary[StringName, Vector2]({
-&"cover down": Vector2(-20, 30),
-&"cover down end": Vector2(-20, 30),
-&"cover left": Vector2(-20, 30),
-&"cover left end": Vector2(-20, 30),
-&"cover right": Vector2(-20, 30),
-&"cover right end": Vector2(-20, 30),
-&"cover up": Vector2(-20, 30),
-&"cover up end": Vector2(0, 30)
+&"cover down": Vector2(-20, 32.5),
+&"cover down end": Vector2(-20, 32.5),
+&"cover left": Vector2(-20, 32.5),
+&"cover left end": Vector2(-20, 32.5),
+&"cover right": Vector2(-20, 32.5),
+&"cover right end": Vector2(-20, 32.5),
+&"cover up": Vector2(-20, 32.5),
+&"cover up end": Vector2(-20, 30)
 })
 hit_sound = ExtResource("1_7y8y0")

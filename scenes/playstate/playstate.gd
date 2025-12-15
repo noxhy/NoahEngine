@@ -253,7 +253,7 @@ func _process(delta):
 					var event_name: String = event[1]
 					var event_parameters: Array = event[2]
 					
-					print("Song Event: \"", event_name, "\" ", str(event_parameters))
+					print("(PlayState) Song Event: \"", event_name, "\" ", str(event_parameters))
 					basic_event(time, event_name, event_parameters)
 					current_event += 1
 
@@ -595,7 +595,6 @@ func update_ui_stats():
 	ui.misses = misses
 	ui.target_health = health
 	ui.score = score
-	ui.rank = GameManager.get_rank()
 
 
 # Visual Util

@@ -29,7 +29,7 @@ func _ready() -> void:
 	#GameManager.current_song = load("res://assets/songs/playable songs/cocoa/cocoa.tres")
 #endregion
 	
-	rank = GameManager.get_rank()
+	rank = GameManager.get_rank(GameManager.get_grade(GameManager.tallies))
 	if rank == "loss":
 		$Audio/Intro.stream = load(GameManager.character["loss_intro"])
 	else:

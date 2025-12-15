@@ -74,7 +74,8 @@ func finished_song(score: int):
 		else:
 			week_tallies[tally] = tallies[tally]
 	
-	get_rank()
+	grade = get_grade(week_tallies)
+	get_rank(grade)
 	if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
 		match play_mode:
 			PLAY_MODE.CHARTING:
@@ -84,9 +85,9 @@ func finished_song(score: int):
 				highscore = false
 			
 			_:
-				highscore = SaveManager.set_song_stats(current_song.title, difficulty, score, grade)
-				if !GameManager.freeplay:
-					highscore = SaveManager.set_week_stats(current_week, difficulty, score, grade)
+				highscore = SaveManager.set_song_stats(current_song.title, difficulty, score, get_grade(tallies))
+				if !GameManager.freeplay and current_week_song == week_songs.size():
+					highscore = SaveManager.set_week_stats(current_week, difficulty, week_score, grade)
 	else:
 		highscore = false
 
@@ -104,22 +105,16 @@ func reset_stats():
 func get_week_accuracy() -> float:
 	return total_accuracy / songs_played
 
-func get_rank(_grade: Variant = null) -> String:
-	var _tallies = week_tallies
-	
-	if _grade == null:
-		
-		if _tallies.total_notes > 0:
-			
-			if (_tallies.sick) == _tallies.total_notes:
-				_grade = 2
-			else:
-				_grade = float(_tallies.sick + _tallies.good - _tallies.miss) / _tallies.total_notes
+func get_grade(_tallies: Dictionary) -> float:
+	if _tallies.total_notes > 0:
+		if _tallies.sick == _tallies.total_notes:
+			return 2
 		else:
-			_grade = 0
-		
-		grade = _grade
-	
+			return float(_tallies.sick + _tallies.good - _tallies.miss) / _tallies.total_notes
+	else:
+		return 0
+
+func get_rank(_grade: float) -> String:
 	var accuracies = [
 		[_grade == 2, "gold"],
 		[_grade == 1, "perfect"],
