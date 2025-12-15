@@ -1,21 +1,21 @@
 extends Node2D
 
+const MENU_OPTION_NODE = preload("res://scenes/instances/menu_option.tscn")
 @export var can_click: bool = true
-@onready var menu_option_node = preload("res://scenes/instances/menu_option.tscn")
 
 # To add a new credit, add an array with this format:
 # [<credit name> , <credit icon (recommended size: 150x150)>]
 @onready var options: Dictionary = {
 	
 	"Nexus Engine": [
-		["Noah", preload("res://assets/sprites/menus/credits/icons/noah.png")],
-		["data5", preload("res://assets/sprites/menus/credits/icons/data5.png")],
-		["Koi", preload("res://assets/sprites/menus/credits/icons/icon-koi.png")],
-		["KostyaGame", preload("res://assets/sprites/menus/credits/icons/empty.png")]
+		["Noah", load("res://assets/sprites/menus/credits/icons/noah.png")],
+		["data5", load("res://assets/sprites/menus/credits/icons/data5.png")],
+		["Koi", load("res://assets/sprites/menus/credits/icons/icon-koi.png")],
+		["KostyaGame", load("res://assets/sprites/menus/credits/icons/empty.png")]
 	],
 	
 	"Friday Night Funkin\'": [
-		["The Funkin\' Crew", preload("res://assets/sprites/menus/credits/icons/funkin crew.png")],
+		["The Funkin\' Crew", load("res://assets/sprites/menus/credits/icons/funkin crew.png")],
 	]
 	
 }
@@ -43,7 +43,7 @@ func _ready():
 	var object_amount: int = 0
 	
 	for i in options:
-		var menu_option_instance = menu_option_node.instantiate()
+		var menu_option_instance = MENU_OPTION_NODE.instantiate()
 		
 		menu_option_instance.option_name = i
 		menu_option_instance.position = Vector2(-1000, object_amount * 175)
@@ -57,7 +57,7 @@ func _ready():
 		object_amount += 1
 		
 		for j in options.get(i):
-			menu_option_instance = menu_option_node.instantiate()
+			menu_option_instance = MENU_OPTION_NODE.instantiate()
 			
 			menu_option_instance.option_name = j[0]
 			if j[1] != null: menu_option_instance.icon = j[1]

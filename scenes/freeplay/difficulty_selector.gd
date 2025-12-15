@@ -19,10 +19,9 @@ signal selected_difficulty(difficulty: String)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	await get_parent().ready
 	
-	update_selection(Global.freeplay_difficulty)
+	update_selection(Freeplay.selected_difficulty)
 	$AnimationPlayer.play("start")
 	
 	await $AnimationPlayer.animation_finished
@@ -52,16 +51,15 @@ func _process(_delta: float) -> void:
 	
 	if can_press:
 		if Input.is_action_just_pressed("ui_left"):
-			update_selection(Global.freeplay_difficulty - 1)
+			update_selection(Freeplay.selected_difficulty - 1)
 		
 		if Input.is_action_just_pressed("ui_right"):
-			update_selection(Global.freeplay_difficulty + 1)
+			update_selection(Freeplay.selected_difficulty + 1)
 
 
 func update_selection(i: int):
-	
-	Global.freeplay_difficulty = wrapi(i, 0, difficulties.size())
-	i = Global.freeplay_difficulty
+	Freeplay.selected_difficulty = wrapi(i, 0, difficulties.size())
+	i = Freeplay.selected_difficulty
 	var difficulty = difficulties[i]
 	
 	%"Difficulty Display".play_animation(difficulties[i])
@@ -78,7 +76,7 @@ func update_selection(i: int):
 
 func update_separators():
 	
-	var difficulty = difficulties[Global.freeplay_difficulty]
+	var difficulty = difficulties[Freeplay.selected_difficulty]
 	
 	for node in get_tree().get_nodes_in_group("separators"):
 		

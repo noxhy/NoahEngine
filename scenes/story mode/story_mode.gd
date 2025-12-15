@@ -1,8 +1,9 @@
 extends Node2D
+class_name StoryMode
 
+const WEEK_ICON_NODE = preload("res://scenes/instances/story mode/week_icon.tscn")
 @export var can_click: bool = true
 
-@onready var week_icon_node = preload("res://scenes/instances/story mode/week_icon.tscn")
 ## Nested dictionary where each key has keys:
 ## animation - The animation name of the node that represents the week.
 ## node - The node that will be visible when hovering over the week.
@@ -86,8 +87,8 @@ extends Node2D
 }
 
 var option_nodes = []
-var selected_week: int = 0
-var selected_difficulty: int = 0
+static var selected_week: int = 0
+static var selected_difficulty: int = 0
 var week_score: int = 0
 
 # Called when the node enters the scene tree for the first time.
@@ -99,7 +100,7 @@ func _ready():
 	
 	for i in options:
 		
-		var week_icon_instance = week_icon_node.instantiate()
+		var week_icon_instance = WEEK_ICON_NODE.instantiate()
 		
 		week_icon_instance.position = Vector2(1280 / 2, 1000)
 		
@@ -109,7 +110,7 @@ func _ready():
 		object_amount += 1
 		option_nodes.append(week_icon_instance)
 	
-	update_week_selection(selected_week)
+	update_week(selected_week)
 	
 	if not SoundManager.music.playing:
 		SoundManager.music.play()
@@ -125,13 +126,13 @@ func _ready():
 func _input(event):
 	if can_click:
 		if event.is_action_pressed("ui_up"):
-			update_week_selection(selected_week - 1)
+			update_week(selected_week - 1)
 		elif event.is_action_pressed("ui_down"):
-			update_week_selection(selected_week + 1)
+			update_week(selected_week + 1)
 		elif event.is_action_pressed("ui_left"):
-			update_difficulty_selection(selected_difficulty - 1)
+			update_difficulty(selected_difficulty - 1)
 		elif event.is_action_pressed("ui_right"):
-			update_difficulty_selection(selected_difficulty + 1)
+			update_difficulty(selected_difficulty + 1)
 		elif event.is_action_pressed("ui_accept"):
 			select_option(selected_week)
 		elif event.is_action_pressed("ui_cancel"):
@@ -141,7 +142,7 @@ func _input(event):
 
 
 # Updates visually what happens when a new index is set for a selection
-func update_week_selection(i: int):
+func update_week(i: int):
 	selected_week = wrapi(i, 0, option_nodes.size())
 	i = selected_week
 	var week: String = options.keys()[i]
@@ -159,7 +160,7 @@ func update_week_selection(i: int):
 	
 	get_tree().call_group(&"weeks", "set_visible", false)
 	var node = options.get(week).get("node")
-	update_difficulty_selection(selected_difficulty)
+	update_difficulty(selected_difficulty)
 	node.visible = true
 	Global.bop_tween(node, "scale", node.scale, node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
 	
@@ -168,10 +169,9 @@ func update_week_selection(i: int):
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
-func update_difficulty_selection(i: int, week: String = options.keys()[selected_week]):
+func update_difficulty(i: int, week: String = options.keys()[selected_week]):
 	if !validate_week(week):
 		return
-	
 	var difficulties = options.get(week).song_list[0].difficulties.keys()
 	
 	selected_difficulty = wrapi(i, 0, difficulties.size())

@@ -1,4 +1,5 @@
 extends Node2D
+class_name Freeplay
 
 const MENU_OPTION_NODE = preload("res://scenes/instances/freeplay/capsule.tscn")
 
@@ -6,6 +7,9 @@ const MENU_OPTION_NODE = preload("res://scenes/instances/freeplay/capsule.tscn")
 @export var difficulties: PackedStringArray
 
 @onready var options: Array
+
+static var selected_difficulty: int = 0
+static var selected_song: int = 0
 
 var difficulty: String
 var album: Album
@@ -64,13 +68,13 @@ func _process(_delta):
 	if can_click:
 		
 		if Input.is_action_just_pressed("ui_up"):
-			update_selection(Global.freeplay_song_option - 1)
+			update(selected_song - 1)
 		
 		elif Input.is_action_just_pressed("ui_down"):
-			update_selection(Global.freeplay_song_option + 1)
+			update(selected_song + 1)
 		
 		elif Input.is_action_just_pressed("ui_accept"):
-			select_option(Global.freeplay_song_option)
+			select(selected_song)
 		
 		elif Input.is_action_just_pressed("ui_cancel"):
 			
@@ -118,13 +122,12 @@ func load_page():
 	%"Album Song List".text = album.credits
 
 
-func update_selection(i: int):
+func update(i: int):
 	var instances = get_tree().get_nodes_in_group("instances")
-	
-	Global.freeplay_song_option = wrapi(
+	selected_song = wrapi(
 		i, 0, instances.size()
 		)
-	i = Global.freeplay_song_option
+	i = selected_song
 	var index: int = 0
 	
 	$Audio/Music.volume_db = -60
@@ -147,7 +150,6 @@ func update_selection(i: int):
 	tween.set_parallel()
 	
 	for j in instances:
-		
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(-270 + (60 * sin(index - i + 1)), (index - i) * 115 - 60)
 		tween.tween_property(j, "position", node_position, 0.25)
@@ -182,10 +184,8 @@ func update_selection(i: int):
 
 
 # Called when an option was selected
-func select_option(i: int):
-	
+func select(i: int):
 	if can_click:
-		
 		var song_file = options[get_tree().get_nodes_in_group("instances")[i].index]
 		
 		# Null Protection
@@ -216,7 +216,7 @@ func select_option(i: int):
 				tween.tween_property(j, "position", j.position - Vector2(2000, 0), 0.5)
 		
 		dj.animation = "confirm"
-		Global.freeplay_song_option = i
+		selected_song = i
 		Transitions.transition("down")
 		play_song(song_file, difficulty)
 
@@ -247,7 +247,7 @@ func _on_difficulty_selector_selected_difficulty(difficulty: String) -> void:
 	self.difficulty = difficulty
 	load_page()
 	await Engine.get_main_loop().process_frame
-	update_selection(Global.freeplay_song_option)
+	update(selected_song)
 	SoundManager.scroll.play()
 
 

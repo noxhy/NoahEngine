@@ -15,7 +15,6 @@ var total: float = 0.0
 
 @export var state: String:
 	set(v):
-		
 		state = v
 		$Capsule.play_animation(state)
 		
@@ -37,7 +36,6 @@ var total: float = 0.0
 
 
 func _process(delta: float) -> void:
-	
 	var scroll_bar: HScrollBar = %Scroll.get_h_scroll_bar()
 	var diff = %Label.size.x - %Scroll.size.x
 	var half_diff = diff / 2

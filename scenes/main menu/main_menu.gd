@@ -1,4 +1,5 @@
 extends Node2D
+class_name MainMenu
 
 @export var can_press: bool = true
 
@@ -25,7 +26,7 @@ extends Node2D
 	}
 	
 }
-var selected: int = 0
+static var selected: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

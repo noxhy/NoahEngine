@@ -2,11 +2,8 @@ extends Node2D
 
 @export var debug_visible = true
 
-var loading_screen = preload("res://scenes/global/loading_screen.tscn")
+var loading_screen = load("res://scenes/global/loading_screen.tscn")
 var fullscreen: bool = false
-
-var freeplay_difficulty: int = 0
-var freeplay_song_option: int = 0
 
 var song_scene = "res://test/test_scene.tscn"
 

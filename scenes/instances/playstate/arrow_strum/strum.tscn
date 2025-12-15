@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://bbyq5kxppcvc8"]
 
-[ext_resource type="Script" uid="uid://cvn8o3a2v55bt" path="res://scenes/instances/playstate/arrow_strum/arrow_strum.gd" id="1_ixlu2"]
+[ext_resource type="Script" uid="uid://cvn8o3a2v55bt" path="res://scenes/instances/playstate/arrow_strum/strum.gd" id="1_ixlu2"]
 [ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://assets/sprites/playstate/developer/developer_note_skin.tres" id="2_aqqtq"]
 [ext_resource type="SpriteFrames" uid="uid://chk3joc6hfc23" path="res://assets/sprites/playstate/developer/arrow/strums.tres" id="3_cik2r"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="4_kjy2w"]
