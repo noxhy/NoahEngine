@@ -151,7 +151,8 @@ func _ready():
 	# Streamer mode is supposed to be for when you're recording a video or streaming
 	# If you wanted a spook where the game says your user's name I recommend utilizing this
 	
-	get_tree().call_group(&"strums", "set_scroll_speed", chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))
+	get_tree().call_group(&"strums", "set_scroll_speed", chart.scroll_speed
+	* SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))
 	get_tree().call_group(&"strums", "connect", "note_hit", host.note_hit)
 	get_tree().call_group(&"strums", "connect", "note_holding", host.note_holding)
 	get_tree().call_group(&"strums", "connect", "note_miss", host.note_miss)

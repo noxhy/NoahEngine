@@ -21,11 +21,14 @@ hold_covers_scale = 6.0
 offsets = Dictionary[StringName, Vector2]({
 &"cover down": Vector2(25, -3),
 &"cover down end": Vector2(25, -3),
+&"cover down start": Vector2(25, -3),
 &"cover left": Vector2(25, -3),
 &"cover left end": Vector2(25, -3),
 &"cover right": Vector2(25, -3),
 &"cover right end": Vector2(25, -3),
+&"cover right start": Vector2(25, -3),
 &"cover up": Vector2(25, -3),
-&"cover up end": Vector2(25, -3)
+&"cover up end": Vector2(25, -3),
+&"cover up start": Vector2(25, -3)
 })
 hit_sound = ExtResource("1_piid7")
