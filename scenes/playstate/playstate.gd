@@ -498,36 +498,29 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		GameManager.tallies["total_notes"] += 1
 		score_note(hit_time)
 		
-		if rating == "epic":
-			
-			health += 2
-			timings_sum += 1
-			strum_manager.create_splash(lane, strum_node.strum_name + " splash")
-		
-		elif rating == "sick":
-			
-			health += 1
-			timings_sum += 0.9825
-			strum_manager.create_splash(lane, strum_node.strum_name + " splash")
-		
-		elif rating == "good":
-			timings_sum += 0.65
-		
-		elif rating == "bad":
-			health -= 0.35
-			timings_sum += 0.25
-			combo = -1
-			emit_signal("combo_break")
-		
-		elif rating == "shit":
-			health -= 0.35
-			timings_sum += -1
-			combo = -1
-			emit_signal("combo_break")
-		
-		else:
-			
-			note_miss(time, lane, 0, note_type, hit_time, strum_manager)
+		match rating:
+			"epic":
+				health += 2
+				timings_sum += 1
+				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+			"sick":
+				health += 1
+				timings_sum += 0.9825
+				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+			"good":
+				timings_sum += 0.65
+			"bad":
+				health -= 0.35
+				timings_sum += 0.25
+				combo = -1
+				emit_signal("combo_break")
+			"shit":
+				health -= 0.35
+				timings_sum += -1
+				combo = -1
+				emit_signal("combo_break")
+			_:
+				note_miss(time, lane, 0, note_type, hit_time, strum_manager)
 		
 		entries += 1
 		combo += 1
