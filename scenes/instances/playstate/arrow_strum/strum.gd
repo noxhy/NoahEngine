@@ -4,9 +4,8 @@ extends Node2D
 class_name ArrowStrum
 
 const PIXELS_PER_SECOND = 450
-
-@onready var note_preload = preload("res://scenes/instances/playstate/note/note.tscn")
-@onready var splash_preload = preload("res://scenes/instances/playstate/note/note_splash.tscn")
+const NOTE_PRELOAD = preload("res://scenes/instances/playstate/note/note.tscn")
+const SPLASH_PRELOAD = preload("res://scenes/instances/playstate/note/note_splash.tscn")
 
 signal created_note(time: float, strum_name: StringName, length: float, note_type: Variant)
 signal note_hit(time: float, strum_name: StringName, note_type: Variant, hit_time: float)
@@ -257,7 +256,7 @@ func set_note_types(types: Array):
 func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 	self.tempo = tempo
 	
-	var note_instance = note_preload.instantiate()
+	var note_instance = NOTE_PRELOAD.instantiate()
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -313,7 +312,7 @@ func _on_hold_cover_animation_finished():
 func create_splash(animation_name: String = strum_name + " splash"):
 	if can_splash:
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "note_splashes"):
-			var splash_instance = splash_preload.instantiate()
+			var splash_instance = SPLASH_PRELOAD.instantiate()
 			
 			splash_instance.note_skin = note_skin
 			splash_instance.scale = Vector2.ONE * note_skin.splash_scale

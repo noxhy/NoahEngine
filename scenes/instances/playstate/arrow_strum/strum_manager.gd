@@ -1,5 +1,4 @@
 @icon("res://assets/sprites/nodes/strum_manager.png")
-
 extends Node2D
 
 signal note_hit(time: float, lane: int, note_type: Variant, hit_time: float, manager: Node2D)

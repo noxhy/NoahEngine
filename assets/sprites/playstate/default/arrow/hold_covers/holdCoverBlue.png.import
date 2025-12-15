@@ -2,22 +2,24 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://k0h35h1aqfkv"
-path="res://.godot/imported/sustain_cover_blue.png-0fc21ac06b034796f5713a56ee17c896.ctex"
+uid="uid://5uh73364wk0f"
+path="res://.godot/imported/holdCoverBlue.png-bcc219378d1551fb434e417599b4345d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/playstate/default/arrow/hold_covers/sustain_cover_blue.png"
-dest_files=["res://.godot/imported/sustain_cover_blue.png-0fc21ac06b034796f5713a56ee17c896.ctex"]
+source_file="res://assets/sprites/playstate/default/arrow/hold_covers/holdCoverBlue.png"
+dest_files=["res://.godot/imported/holdCoverBlue.png-bcc219378d1551fb434e417599b4345d.ctex"]
 
 [params]
 
 compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
+compress/uastc_level=0
+compress/rdo_quality_loss=0.0
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
@@ -25,6 +27,10 @@ mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
+process/channel_remap/red=0
+process/channel_remap/green=1
+process/channel_remap/blue=2
+process/channel_remap/alpha=3
 process/fix_alpha_border=true
 process/premult_alpha=false
 process/normal_map_invert_y=false

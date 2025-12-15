@@ -14,9 +14,7 @@ func play_animation(animation_name: StringName, forced: bool = true):
 			return
 		
 		play(real_animation_name)
-		
-		if offsets.has(real_animation_name):
-			offset = offsets.get(real_animation_name)
+		offset = offsets.get(real_animation_name, Vector2.ZERO)
 
 ## Returns the animation name of the given id in SpriteFrames.
 func get_real_animation(animation_name: StringName) -> Variant:
