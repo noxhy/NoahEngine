@@ -1,5 +1,6 @@
 @icon("res://assets/sprites/nodes/strum_manager.png")
 extends Node2D
+class_name StrumManager
 
 signal note_hit(time: float, lane: int, note_type: Variant, hit_time: float, manager: Node2D)
 signal note_holding(time: float, lane: int, note_type: Variant, manager: Node2D)
@@ -80,7 +81,7 @@ func set_ignored_note_types(_note_types: Array):
 		get_node(i).ignored_note_types = _note_types
 
 
-func get_strumline(lane: int) -> ArrowStrum:
+func get_strumline(lane: int) -> Strum:
 	return get_node(strums[lane])
 
 func get_scroll_speed(lane: int) -> float:

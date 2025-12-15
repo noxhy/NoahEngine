@@ -24,6 +24,6 @@ offsets = Dictionary[StringName, Vector2]({
 &"cover right": Vector2(-20, 32.5),
 &"cover right end": Vector2(-20, 32.5),
 &"cover up": Vector2(-20, 32.5),
-&"cover up end": Vector2(-20, 30)
+&"cover up end": Vector2(-20, 32.5)
 })
 hit_sound = ExtResource("1_7y8y0")

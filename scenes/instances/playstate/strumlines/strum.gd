@@ -1,7 +1,7 @@
 @icon("res://tools/node_sprites/strum arrows.png")
 
 extends Node2D
-class_name ArrowStrum
+class_name Strum
 
 const PIXELS_PER_SECOND = 450
 const NOTE_PRELOAD = preload("res://scenes/instances/playstate/note/note.tscn")
@@ -289,17 +289,6 @@ func _on_offset_sprite_animation_finished():
 		else:
 			sprite.set_frame_and_progress(0, 0)
 			sprite.play()
-
-
-func _on_hold_cover_frame_changed():
-	# Ugly fix for that rotates sprite bullshit
-	if hold_cover_sprite.animation.contains("idle"):
-		if (hold_cover_sprite.frame == 0) or (hold_cover_sprite.frame == 3):
-			hold_cover_sprite.rotation_degrees = 90
-		else:
-			hold_cover_sprite.rotation_degrees = 0
-	else:
-		hold_cover_sprite.rotation_degrees = 0
 
 
 func _on_hold_cover_animation_finished():

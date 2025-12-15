@@ -143,21 +143,21 @@ func _ready():
 	strums = ui.strums
 	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
-		get_tree().call_group("strums", "set_auto_play", true)
-		get_tree().call_group("strums", "set_press", false)
+		get_tree().call_group(&"strums", "set_auto_play", true)
+		get_tree().call_group(&"strums", "set_press", false)
 	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		ui.downscroll_ui()
 	# Streamer mode is supposed to be for when you're recording a video or streaming
 	# If you wanted a spook where the game says your user's name I recommend utilizing this
 	
-	get_tree().call_group("strums", "set_scroll_speed", chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))
-	get_tree().call_group("strums", "connect", "note_hit", host.note_hit)
-	get_tree().call_group("strums", "connect", "note_holding", host.note_holding)
-	get_tree().call_group("strums", "connect", "note_miss", host.note_miss)
-	get_tree().call_group("strums", "set_skin", note_skin)
+	get_tree().call_group(&"strums", "set_scroll_speed", chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))
+	get_tree().call_group(&"strums", "connect", "note_hit", host.note_hit)
+	get_tree().call_group(&"strums", "connect", "note_holding", host.note_holding)
+	get_tree().call_group(&"strums", "connect", "note_miss", host.note_miss)
+	get_tree().call_group(&"strums", "set_skin", note_skin)
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
-		get_tree().call_group("strums", "set_scroll", -1)
+		get_tree().call_group(&"strums", "set_scroll", -1)
 	
 	emit_signal("setup_finished")
 
@@ -590,7 +590,6 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 
 
 func update_ui_stats():
-	
 	ui.accuracy = accuracy
 	ui.misses = misses
 	ui.target_health = health

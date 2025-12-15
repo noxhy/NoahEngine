@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://ce3dgr61438sa"]
 
-[ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://scenes/instances/playstate/arrow_strum/strum_manager.gd" id="1_7u4ah"]
+[ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://scenes/instances/playstate/strumlines/strum_manager.gd" id="1_7u4ah"]
 [ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://assets/sprites/playstate/developer/developer_note_skin.tres" id="2_bdnme"]
-[ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://scenes/instances/playstate/arrow_strum/strum.tscn" id="3_aabop"]
+[ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://scenes/instances/playstate/strumlines/strum.tscn" id="3_aabop"]
 
-[node name="Strum Handeler" type="Node2D"]
+[node name="Strum Handeler" type="Node2D" groups=["strums"]]
 script = ExtResource("1_7u4ah")
 note_skin = ExtResource("2_bdnme")
 strums = PackedStringArray("Left", "Down", "Up", "Right")
