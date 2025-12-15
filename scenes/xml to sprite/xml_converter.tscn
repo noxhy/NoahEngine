@@ -1,97 +1,88 @@
-[gd_scene load_steps=6 format=3 uid="uid://lyuw3kua1kwc"]
+[gd_scene load_steps=7 format=3 uid="uid://lyuw3kua1kwc"]
 
 [ext_resource type="Script" uid="uid://cdjdqjrjntu1f" path="res://scenes/xml to sprite/xml_converter.gd" id="1_ieiou"]
 [ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://assets/sounds/menu sounds/menu confirm.ogg" id="2_jxfro"]
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="3_ieiou"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="3_dn752"]
 [ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://assets/sprites/menus/background/main menu/menuDesat.png" id="4_o3a0u"]
 
-[sub_resource type="SpriteFrames" id="5"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yre5q"]
+bg_color = Color(0, 0, 0, 0.40784314)
+corner_detail = 1
 
-[node name="XML to SpriteFrames" type="Node2D"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_yre5q"]
+
+[node name="XML to SpriteFrames" type="Node"]
 script = ExtResource("1_ieiou")
 optimize = true
+metadata/_edit_lock_ = true
+
+[node name="Background2" type="Sprite2D" parent="."]
+modulate = Color(0.22265625, 0.22265625, 0.22265625, 1)
+texture = ExtResource("4_o3a0u")
+centered = false
+metadata/_edit_lock_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -319.5
+offset_top = 111.0
+offset_right = 319.5
+offset_bottom = 231.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("3_dn752")
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("3_dn752")
+text = "Sparrow To SpriteFrames converter"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="State" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "inactive"
+horizontal_alignment = 1
+
+[node name="Search" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Search for File"
+
+[node name="LoadTxt" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_yre5q")
+text = "res://"
+
+[node name="Convert" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Convert"
+
+[node name="PreviewSpr" type="AnimatedSprite2D" parent="VBoxContainer"]
+position = Vector2(319.5, 273)
+sprite_frames = SubResource("SpriteFrames_yre5q")
 
 [node name="Success Sound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_jxfro")
 bus = &"SFX"
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="SaveDialog" type="FileDialog" parent="."]
+mode_overrides_title = false
+display_mode = 1
+root_subfolder = "res://assets/sprites"
 
-[node name="Input Panel" type="Panel" parent="UI"]
-custom_minimum_size = Vector2(250, 23)
-offset_left = 320.0
-offset_top = 192.0
-offset_right = 576.0
-offset_bottom = 448.0
-theme = ExtResource("3_ieiou")
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+mode_overrides_title = false
+file_mode = 0
+display_mode = 1
+root_subfolder = "res://assets/sprites"
+filters = PackedStringArray("*.png", "*.xml")
 
-[node name="Label" type="Label" parent="UI/Input Panel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 248.0
-offset_bottom = 40.0
-text = "SPRITE CONVERTER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Load Path" type="LineEdit" parent="UI/Input Panel"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 88.0
-offset_right = 240.0
-offset_bottom = 113.0
-placeholder_text = "Load Path (res://sprites/characters/boyfriend/BOYFRIEND.png)"
-context_menu_enabled = false
-
-[node name="Save Path" type="LineEdit" parent="UI/Input Panel"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 144.0
-offset_right = 240.0
-offset_bottom = 169.0
-placeholder_text = "Save Path (res://)"
-
-[node name="Label2" type="Label" parent="UI/Input Panel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 216.0
-offset_right = 248.0
-offset_bottom = 250.0
-text = "ENTER TO CONVERT"
-horizontal_alignment = 1
-vertical_alignment = 1
-uppercase = true
-
-[node name="Display Panel" type="Panel" parent="UI"]
-custom_minimum_size = Vector2(256, 12)
-offset_left = 704.0
-offset_top = 192.0
-offset_right = 960.0
-offset_bottom = 448.0
-theme = ExtResource("3_ieiou")
-
-[node name="Label" type="Label" parent="UI/Display Panel"]
-layout_mode = 0
-offset_left = 7.0
-offset_top = 8.0
-offset_right = 247.0
-offset_bottom = 40.0
-text = "PREVIEW"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Preview" type="AnimatedSprite2D" parent="UI/Display Panel"]
-z_index = 1
-position = Vector2(128, 128)
-sprite_frames = SubResource("5")
-
-[node name="Background" type="CanvasLayer" parent="."]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-
-[node name="Background" type="Sprite2D" parent="Background"]
-modulate = Color(0.11372549, 0.13333334, 0.16078432, 1)
-texture = ExtResource("4_o3a0u")
-metadata/_edit_lock_ = true
+[connection signal="pressed" from="VBoxContainer/Search" to="FileDialog" method="popup_centered"]
+[connection signal="pressed" from="VBoxContainer/Convert" to="SaveDialog" method="popup_centered"]
+[connection signal="file_selected" from="SaveDialog" to="." method="_on_save_dialog_file_selected"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
