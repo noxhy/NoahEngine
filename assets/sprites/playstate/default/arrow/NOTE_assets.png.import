@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ddli7hca8yk8q"
-path="res://.godot/imported/topLoop.png-5b633ab5155bb052b384c5071a720b4e.ctex"
+uid="uid://ds1go87if8q0o"
+path="res://.godot/imported/NOTE_assets.png-5d935d4cd7f6b880b81bd2cae0e381ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus/freeplay/characters/pico/topLoop.png"
-dest_files=["res://.godot/imported/topLoop.png-5b633ab5155bb052b384c5071a720b4e.ctex"]
+source_file="res://assets/sprites/playstate/default/arrow/NOTE_assets.png"
+dest_files=["res://.godot/imported/NOTE_assets.png-5d935d4cd7f6b880b81bd2cae0e381ba.ctex"]
 
 [params]
 
