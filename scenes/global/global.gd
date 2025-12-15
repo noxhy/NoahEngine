@@ -24,7 +24,7 @@ func _process(delta):
 	$"UI/Performance Label".visible = SettingsManager.get_value("debug", "show_performance")
 	if SettingsManager.get_value("debug", "show_performance"):
 		var performance_string: String = "FPS: " + str(Engine.get_frames_per_second())
-		performance_string += "\nMEM: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED)))
+		performance_string += "\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
 		
 		$"UI/Performance Label".text = performance_string
