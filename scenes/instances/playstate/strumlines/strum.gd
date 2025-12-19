@@ -219,7 +219,7 @@ func _process(delta):
 	if state == STATE.IDLE:
 		sprite.play_animation(strum_name)
 	elif state == STATE.PRESSED:
-		sprite.play_animation(strum_name + " press")
+		sprite.play_animation(strum_name + " press", false)
 	elif state == STATE.GLOW:
 		sprite.play_animation(strum_name + " glow", false)
 

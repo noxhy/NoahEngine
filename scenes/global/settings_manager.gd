@@ -85,10 +85,10 @@ static var _defaults: Dictionary = {
 		"ui_accept": [KEY_ENTER, KEY_SPACE],
 		"character_select": [KEY_TAB],
 		
-		"ui_left": [KEY_LEFT],
-		"ui_down": [KEY_DOWN],
-		"ui_up": [KEY_UP],
-		"ui_right": [KEY_RIGHT],
+		"ui_left": [KEY_LEFT, KEY_W],
+		"ui_down": [KEY_DOWN, KEY_S],
+		"ui_up": [KEY_UP, KEY_W],
+		"ui_right": [KEY_RIGHT, KEY_D],
 		"mute": [KEY_0]
 	},
 	
@@ -111,9 +111,23 @@ func load_values() -> void:
 	var loadError: Error = temp_config.load(LOAD_PATH)
 	
 	if loadError == Error.OK:
-		for section: String in temp_config.get_sections():
+		for section:String in temp_config.get_sections():
 			for key in temp_config.get_section_keys(section):
 				if instance.has_section_key(section, key):
+					
+					var instance_value = instance.get_value(section, key)
+					
+					if instance_value is Array: # this is kinda weird but sure
+						var saved_value = temp_config.get_value(section, key)
+						
+						if saved_value and instance_value.size() > saved_value.size():
+							
+							for idx in range(instance_value.size() - 1):
+								instance_value[idx] = saved_value[idx]
+							
+							instance.set_value(section, key, instance_value)
+							continue
+					
 					instance.set_value(section, key, temp_config.get_value(section, key))
 	
 	# sets fullscreen

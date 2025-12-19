@@ -33,12 +33,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	
 	# Pressing enter
 	if Input.is_action_just_pressed("ui_accept"):
-		
 		if intro_done:
-			
 			$AnimationPlayer.play("press_enter")
 			can_click = false
 		else:
@@ -60,10 +57,8 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 			
 			# "Press enter" text color phasing, i most definitely could've done a sine equation
 			if(current_beat % 2 == 0):
-				
 				tween.tween_property($"UI/Play Label", "theme_override_colors/font_color", Color(0, 0.366667, 1, 0.8), $Conductor.seconds_per_beat * 2)
 			else:
-				
 				tween.tween_property($"UI/Play Label", "theme_override_colors/font_color", Color(0.501961, 0.682353, 1, 0.8), $Conductor.seconds_per_beat * 2)
 	Global.bop_tween($UI/Logo, "scale", Vector2(0.95, 0.95), Vector2(0.9, 0.9), 0.2, Tween.TRANS_QUAD)
 
