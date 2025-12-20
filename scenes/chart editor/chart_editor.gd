@@ -1142,7 +1142,8 @@ func _on_chart_snap_value_changed(value: float) -> void:
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var option = %"Difficulty Button".get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(option):
-		load_chart(load(ChartManager.song.difficulties.get(option).get("chart")))
+		chart = load(ChartManager.song.difficulties.get(option).get("chart"))
+		load_chart(chart)
 
 
 func _on_history_window_close_requested() -> void:
