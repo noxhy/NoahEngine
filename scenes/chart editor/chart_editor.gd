@@ -54,6 +54,8 @@ var start_time: float = 0.0
 var min_lane: int = 0
 var max_lane: int = 0
 
+var hovered_note: int = 0
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -122,7 +124,6 @@ func _process(delta: float) -> void:
 						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], 0)
 		else:
 			if Input.is_action_just_pressed("mouse_scroll_up"):
-				
 				if !Input.is_action_pressed("control"):
 					
 					if can_chart:
@@ -137,16 +138,12 @@ func _process(delta: float) -> void:
 					%"Chart Snap".value = chart_snap
 			
 			if Input.is_action_just_pressed("mouse_scroll_down"):
-				
 				if !Input.is_action_pressed("control"):
-					
 					if can_chart:
-						
 						song_position += $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
 						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
 				else:
-					
 					current_snap -= 1
 					chart_snap = SNAPS[current_snap % SNAPS.size()]
 					%"Chart Snap".value = chart_snap
@@ -205,7 +202,6 @@ func _process(delta: float) -> void:
 							var time: float = grid_position_to_time(snapped_position, true)
 							
 							if !is_note_at(lane, Vector2i(snapped_position).y / chart_snap * $Conductor.seconds_per_beat * current_steps_per_measure / current_beats_per_measure):
-								
 								var action: String = "Add Note"
 								undo_redo.create_action(action)
 								undo_redo.add_do_method(self.place_note.bind(time, lane, 0, 0, true))
@@ -214,12 +210,9 @@ func _process(delta: float) -> void:
 								undo_redo.commit_action()
 								%"Note Place".play()
 								placing_note = true
-							
 							else:
-								
 								var i: int = find_note(lane, time)
 								if selected_notes.has(i):
-									
 									moving_notes = true
 									start_lane = lane
 									start_time = time
@@ -248,67 +241,50 @@ func _process(delta: float) -> void:
 				start_box = get_global_mouse_position()
 	
 	if Input.is_action_pressed("mouse_right"):
-		
 		if !Input.is_action_pressed("control"):
-				
 				if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
-					
 					if can_chart:
-						
 						if !Input.is_action_pressed("control"):
-							
 							var lane: int = snapped_position.x - 1
 							var time: float = grid_position_to_time(snapped_position, true)
 							
-							if is_note_at(lane, time):
-								
-								var i: int = find_note(lane, time)
-								var note = chart.get_notes_data()[i]
+							if hovered_note != -1:
+								var i: int = hovered_note
+								var note = chart.chart_data.notes[i]
 								var length: float = note[2]
 								var note_type: int = note[3]
 								
 								var action: String = "Remove Note"
 								undo_redo.create_action(action)
-								undo_redo.add_do_method(self.remove_note.bind(lane, time))
+								undo_redo.add_do_method(self.remove_note.bind(i))
 								undo_redo.add_do_reference(%"History Window".add_action(action))
 								undo_redo.add_undo_method(self.place_note.bind(time, lane, length, note_type, true))
 								undo_redo.commit_action()
-								
 								%"Note Remove".play()
-								
 								selected_notes.erase(i)
 								var j: int = 0
 								for k in selected_notes:
-									
 									if k > i:
 										selected_notes[j] = k - 1
 									j += 1
+								
+								hovered_note = -1
 								
 								if SettingsManager.get_value("chart", "auto_save"):
 									save()
 	
 	if Input.is_action_pressed("mouse_left"):
-		
 		if !Input.is_action_pressed("control"):
-			
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
-				
 				if !%Instrumental.playing:
-					
 					if can_chart:
-						
 						## Song Position Slider
-						if int(grid_position.x) == 0:
+						if grid_position.x < 1 and grid_position.x >= 0:
 							start_offset = grid_position_to_time(grid_position) - song_position
-						
-						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
-							
+						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
-								
 								var cursor_time = grid_position_to_time(snapped_position, true)
-								
 								for i in selected_notes:
-									
 									var note: Array = chart.get_notes_data()[i]
 									
 									var time: float = note[0]
@@ -430,7 +406,6 @@ func _process(delta: float) -> void:
 				%"Note Place".play()
 		
 		if moving_notes:
-			
 			print("before move: ", selected_notes)
 			var temp: Array = []
 			for note in selected_note_nodes:
@@ -688,6 +663,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	note_instance.lane = lane
 	note_instance.note_type = type
 	note_instance.position = Vector2(%Grid.get_real_position(Vector2(1.5 + lane, 0)).x, time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+	note_instance.position += Vector2(640, 64)
 	note_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
@@ -699,12 +675,9 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	
 	var output: int
 	
-	if placed: 
-		
+	if placed:
 		var L: int = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), time)
-		
 		if L != -1:
-			
 			note_list.insert(L, note_instance)
 			chart.chart_data["notes"].insert(L, [time, lane, length, type])
 			
@@ -716,9 +689,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 				max_lane = lane
 			
 			output = L
-		
 		else:
-			
 			note_list.append(note_instance)
 			chart.chart_data["notes"].append([time, lane, length, type])
 			selected_notes = [chart.get_notes_data().size() - 1]
@@ -726,20 +697,26 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			min_lane = lane
 			max_lane = lane
 			output = note_list.size()
-		
 	else:
-		
 		note_list.append(note_instance)
 		output = note_list.size()
 	
+	note_instance.index = output
 	$"Notes Layer".add_child(note_instance)
 	note_instance.add_to_group(&"notes")
+	note_instance.area.connect(&"mouse_entered", self.update_note.bind(note_instance))
+	note_instance.area.connect(&"mouse_exited", self.update_note.bind(null))
 	return output
 
-
-func remove_note(lane: int, time: float):
-	var i: int = find_note(lane, time)
-	if i <= -1: return
+func remove_note(lane: int, time: float = -1):
+	var i: int
+	if time != -1:
+		i = find_note(lane, time)
+	else:
+		i = lane
+	
+	if i <= -1:
+		return
 	note_list[i].queue_free()
 	note_list.remove_at(i)
 	chart.chart_data["notes"].remove_at(i)
@@ -1171,3 +1148,9 @@ func _on_metadata_window_updated_song_scene(path: String) -> void:
 
 func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
 	ChartManager.song.tempo = tempo
+
+func update_note(note):
+	if note:
+		hovered_note = find_note(note.lane, note.time)
+	else:
+		hovered_note = -1

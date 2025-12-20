@@ -1,6 +1,11 @@
 extends BasicNote
 class_name ChartNote
 
+@onready var area = $Area2D
+@onready var collision_shape = $Area2D/CollisionShape2D
+
+var index: float
+
 # Applying Note Skin
 func _ready(): 
 	$Note.sprite_frames = note_skin.notes_texture
@@ -22,8 +27,10 @@ func _ready():
 	
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
-	tail.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
+	tail.scale = $Note.scale
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+	collision_shape.shape = RectangleShape2D.new()
+	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size * $Note.scale)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

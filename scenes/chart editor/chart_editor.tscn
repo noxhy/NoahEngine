@@ -148,8 +148,6 @@ follow_viewport_enabled = true
 
 [node name="Notes Layer" type="CanvasLayer" parent="."]
 layer = 2
-offset = Vector2(640, 64)
-transform = Transform2D(1, 0, 0, 1, 640, 64)
 follow_viewport_enabled = true
 
 [node name="UI Borders" type="CanvasLayer" parent="."]

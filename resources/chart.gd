@@ -10,7 +10,6 @@ class_name Chart
 @export var offset = 0.0
 
 # Actual Chart Storage
-
 @export var chart_data = {
 	
 	"notes": [],
@@ -20,12 +19,10 @@ class_name Chart
 	
 }
 
-
 func get_notes_data() -> Array: return chart_data.get("notes")
 func get_events_data() -> Array: return chart_data.get("events")
 func get_tempos_data() -> Dictionary: return chart_data.get("tempos")
 func get_meters_data() -> Dictionary: return chart_data.get("meters")
-
 
 func get_tempo_at(time: float) -> float:
 	var output: float = -1
@@ -36,7 +33,6 @@ func get_tempo_at(time: float) -> float:
 			continue
 	
 	return output
-
 
 func get_meter_at(time: float) -> Array:
 	var output: Array = []
