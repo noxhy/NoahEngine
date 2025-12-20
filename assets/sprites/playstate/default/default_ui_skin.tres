@@ -8,11 +8,7 @@
 script = ExtResource("1_6u2p5")
 rating_texture = ExtResource("2_ewjdd")
 numbers_texture = ExtResource("1_r6qog")
-pixel_texture = false
 rating_scale = 0.6
 numbers_scale = 0.4
 numbers_spacing = 92
-animation_names = Dictionary[String, String]({})
-offsets = Dictionary[String, Vector2]({})
 countdown_animation = "default_countdown"
-pause_scene = "res://scenes/playstate/pause_menu.tscn"

@@ -1,7 +1,7 @@
 extends Node2D
 
-@onready var menu_option_node = preload("res://scenes/instances/menu_option.tscn")
-@onready var options_menu_node = preload("res://scenes/instances/options/options_menu.tscn")
+const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
+
 @onready var music = $Audio/Music
 
 @export var song_title: String = ""
@@ -97,7 +97,7 @@ func load_page(page: String):
 	var index = 0
 	
 	for i in options.keys():
-		var menu_option_instance = menu_option_node.instantiate()
+		var menu_option_instance = MENU_OPTION_PRELOAD.instantiate()
 		
 		menu_option_instance.position.x = -640 + 45 + (25 * index) - 1000
 		menu_option_instance.position.y = index * 175

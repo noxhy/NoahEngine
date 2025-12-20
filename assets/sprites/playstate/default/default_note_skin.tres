@@ -352,7 +352,7 @@ offsets = Dictionary[StringName, Vector2]({
 &"cover right end": Vector2(-22, 31),
 &"cover up": Vector2(-22, 31),
 &"cover up end": Vector2(-22, 31),
-&"down glow": Vector2(-1, 0),
+&"down glow": Vector2(0.8, 1.2),
 &"left glow": Vector2(1, 2),
 &"right glow": Vector2(2, 0),
 &"up glow": Vector2(1, 1)

@@ -37,7 +37,7 @@ static var _defaults: Dictionary = {
 		"downscroll": false, ## Notes go down instead of up, downscroll ui function is called
 		"botplay": false, ## By default it only works for one strumline, more support for botplay on strumlines will be need to be per song script.
 		"song_speed": 1.0,
-		"scroll_speed_scale": 1.0,
+		"scroll_speed_scale": 1.0
 	},
 	
 	"preferences": {
@@ -46,7 +46,7 @@ static var _defaults: Dictionary = {
 		"note_splashes": true,
 		"ui_bops": true, ## The UI w"ill bop when called, this affetcs the main menus too
 		"hit_sounds": false,
-		"fullscreen": false, ##i dont like this here but where else
+		"fullscreen": false ##i dont like this here but where else
 	},
 	
 	"audio": {
@@ -82,7 +82,7 @@ static var _defaults: Dictionary = {
 		"fullscreen": [KEY_F11],
 		
 		"ui_cancel": [KEY_ESCAPE, KEY_BACKSPACE],
-		"ui_accept": [KEY_ENTER, KEY_SPACE],
+		"ui_accept": [KEY_ENTER, KEY_KP_ENTER],
 		"character_select": [KEY_TAB],
 		
 		"ui_left": [KEY_LEFT, KEY_W],

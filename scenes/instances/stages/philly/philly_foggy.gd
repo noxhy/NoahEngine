@@ -1,7 +1,6 @@
 extends "res://scenes/instances/stage.gd"
 
-@onready var CAR_PRELOAD = preload("res://scenes/instances/stages/philly/car_foggy.tscn")
-
+var CAR_PRELOAD = load("res://scenes/instances/stages/philly/car_foggy.tscn")
 var red_light: bool = true
 var car_list: Array[Node2D] = []
 

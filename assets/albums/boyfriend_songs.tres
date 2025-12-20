@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://c85optaap1atb" path="res://resources/album.gd" id="2_de8bw"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="3_dndsk"]
 [ext_resource type="Resource" uid="uid://d0ojv1av5rdfm" path="res://assets/songs/playable songs/fresh/Fresh Erect.res" id="4_nld3m"]
-[ext_resource type="Resource" path="res://assets/songs/playable songs/darnell/Darnell (Bf Mix).res" id="6_nld3m"]
+[ext_resource type="Resource" uid="uid://cbhtkf2yfue6x" path="res://assets/songs/playable songs/darnell/Darnell (Bf Mix).res" id="6_nld3m"]
 [ext_resource type="Resource" uid="uid://b31wtmx520o7m" path="res://assets/songs/playable songs/thorns/thorns.tres" id="7_net75"]
 [ext_resource type="Resource" path="res://assets/songs/playable songs/lit up/Lit Up (Bf Mix).res" id="10_de8bw"]
 [ext_resource type="Resource" uid="uid://cirawr3vu3a0u" path="res://assets/songs/playable songs/eggnog/Eggnog Erect.res" id="10_nf846"]

@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var combo_number_node = preload("res://scenes/instances/playstate/combo_number.tscn")
+const COMBO_NUMBER_PRELOAD = preload("res://scenes/instances/playstate/combo_number.tscn")
 
 @export var ui_skin: UISkin
 @export var combo = 0
@@ -12,7 +12,7 @@ func _ready():
 		var digits = str(combo).length()
 		for digit in digits:
 			
-			var combo_number_instance = combo_number_node.instantiate()
+			var combo_number_instance = COMBO_NUMBER_PRELOAD.instantiate()
 			
 			combo_number_instance.position.x = ui_skin.numbers_spacing * (digit - (digits / 2.0)) * ui_skin.numbers_scale
 			combo_number_instance.ui_skin = ui_skin

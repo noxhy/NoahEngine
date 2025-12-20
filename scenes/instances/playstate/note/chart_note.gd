@@ -35,7 +35,7 @@ func _process(delta):
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length
-		$VisibleOnScreenEnabler2D.rect.size.y = line_length + grid_size.y
+		$VisibleOnScreenEnabler2D.rect.size.y = (line_length + grid_size.y) * scroll / $Note.scale.y
 	else:
 		tail.visible = false
 

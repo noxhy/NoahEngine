@@ -1,7 +1,7 @@
 extends Node2D
 
 
-@onready var dialogue_line_preload = preload("res://scenes/instances/dialgoue editor/dialogue_line.tscn")
+const DIALOGUE_LINE_PRELOAD = preload("res://scenes/instances/dialgoue editor/dialogue_line.tscn")
 
 
 @export var dialogue: Dialogue = Dialogue.new()
@@ -104,7 +104,7 @@ func load_dialogue_nagivator():
 	for line in dialogue.dialogue.split("\n"):
 		
 		
-		var dialogue_line_instance = dialogue_line_preload.instantiate()
+		var dialogue_line_instance = DIALOGUE_LINE_PRELOAD.instantiate()
 		
 		dialogue_line_instance.line = line
 		dialogue_line_instance.index = i

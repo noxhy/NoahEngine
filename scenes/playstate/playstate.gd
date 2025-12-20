@@ -13,9 +13,9 @@ signal new_event(time: float, event_name: String, event_parameters: Array)
 signal combo_break()
 signal setup_finished()
 
-@onready var rating_node = preload("res://scenes/instances/playstate/rating.tscn")
-@onready var combo_numbers_manager_node = preload("res://scenes/instances/playstate/combo_numbers_manager.tscn")
-@onready var countdown_node = preload("res://scenes/playstate/countdown.tscn")
+@onready var rating_node = load("res://scenes/instances/playstate/rating.tscn")
+@onready var combo_numbers_manager_node = load("res://scenes/instances/playstate/combo_numbers_manager.tscn")
+@onready var countdown_node = load("res://scenes/playstate/countdown.tscn")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
 @onready var instrumental: AudioStreamPlayer

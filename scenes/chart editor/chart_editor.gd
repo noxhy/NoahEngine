@@ -1106,6 +1106,7 @@ func updated_strums():
 
 func load_waveforms():
 	get_tree().call_group(&"waveforms", &"queue_free")
+	return
 	if ChartManager.song:
 		for id in ChartManager.strum_data.size():
 			var track: int = ChartManager.strum_data[id]["track"]
@@ -1129,7 +1130,7 @@ func load_waveforms():
 					$"Waveform Layer".add_child(waveform)
 					waveform.setOrientation("VERTICAL")
 					waveform.add_to_group(&"waveforms")
-					waveform.create(stream, Color.MEDIUM_PURPLE, null, (R - L) * 1000)
+					waveform.create(stream, Color.MEDIUM_PURPLE, null, (R - L) * 130)
 			else:
 				printerr("(load_waveforms) Track ", track, " does not exist.")
 

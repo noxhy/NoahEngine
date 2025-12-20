@@ -23,5 +23,5 @@ class_name Song
 
 @export var title: String
 @export var artist: String
-@export var icons: SpriteFrames = preload("res://assets/sprites/playstate/icons/face.tres")
+@export var icons: SpriteFrames = load("res://assets/sprites/playstate/icons/face.tres")
 @export var locked: bool = false
