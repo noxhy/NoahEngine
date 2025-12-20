@@ -168,7 +168,7 @@ func _process(delta: float) -> void:
 	
 	%"Current Time Label".text = float_to_time(song_position + start_offset)
 	if ChartManager.song != null:
-		%"Time Left Label".text = "-" + float_to_time(snapped(%Instrumental.stream.get_length() - song_position, 0.1))
+		%"Time Left Label".text = "-" + float_to_time(%Instrumental.stream.get_length() - song_position)
 	else:
 		%"Time Left Label".text = "- ??:??"
 	
@@ -446,12 +446,10 @@ func _draw() -> void:
 	
 	## Box when you're holding control
 	if bounding_box:
-		
 		rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 		draw_rect(rect, box_color)
 	
 	if chart != null:
-		
 		## The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -472,7 +470,6 @@ func _draw() -> void:
 		
 		## Hover Box
 		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and (get_viewport().gui_get_hovered_control() == %Grid.get_node("TextureRect"))):
-			
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, current_steps_per_measure / chart_snap))
 			draw_rect(rect, hover_color)
@@ -489,7 +486,6 @@ func _draw() -> void:
 			time_to_y = Vector2(0, time_to_y_position(time_at_row))
 			
 			if ((current_step + row) % current_beats_per_measure) == 0:
-				
 				var size: float = 4.0 if (step_at_row % current_steps_per_measure / current_beats_per_measure) == 0 else 2.0
 				rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y.y - (size / 2)), \
 				%Grid.get_real_position(Vector2(%Grid.columns + 1, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, size))
@@ -530,7 +526,6 @@ func _draw() -> void:
 		
 		## Note Highlighting
 		for index in selected_notes:
-			
 			var note = note_list[index]
 			var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
 			length *= %Grid.grid_size.y * %Grid.zoom.y
@@ -764,16 +759,11 @@ func play_audios(time: float):
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
 func float_to_time(time: float) -> String:
+	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
+	var seconds: int = floor(fmod(time, 60.0))
+	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
 	
-	var minutes = int(time / 60)
-	var seconds = int(time) % 60
-	var milliseconds = (time - int(time))
-	milliseconds = snapped(milliseconds, 0.01)
-	
-	if seconds < 10:
-		return str(minutes) + ":0" + str(int(seconds) % 60) + str(milliseconds).trim_prefix("0")
-	else:
-		return str(minutes) + ":" + str(int(seconds) % 60) + str(milliseconds).trim_prefix("0")
+	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
 
 
 ## This assumes that the tempo and meter dictionaries are sorted
