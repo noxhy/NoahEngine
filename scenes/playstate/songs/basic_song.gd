@@ -3,6 +3,7 @@ extends Node2D
 @onready var characters = [%Player, %Enemy, %Metronome]
 @onready var camera_positions = [%"Position 1", %"Position 2", %"Position 3"]
 @onready var playstate_host: PlayState = $"PlayState Host"
+@onready var stage = %Stage
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,8 +19,8 @@ func _ready():
 	
 	await playstate_host.setup_finished
 	
-	if !get_node_or_null("%Stage"):
-		playstate_host.conductor.connect("new_beat", %Stage._on_conductor_new_beat)
+	if stage:
+		playstate_host.conductor.connect("new_beat", stage._on_conductor_new_beat)
 	
 	playstate_host.conductor.connect("new_beat", self._on_conductor_new_beat)
 

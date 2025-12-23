@@ -440,9 +440,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		var tween_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
 		
 		for strum in strums:
-			
 			for lane in strum.strums.size() - 1:
-				
 				var tween = create_tween()
 				tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 				var scroll_speed_scale: float = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")

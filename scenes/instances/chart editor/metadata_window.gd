@@ -20,6 +20,7 @@ func update_stats():
 	_on_scene_file_dailog_file_selected(song_scene)
 
 func _on_icon_file_dailog_file_selected(path: String) -> void:
+	path = ResourceUID.path_to_uid(path)
 	if !ResourceLoader.exists(path):
 		printerr("Icon file doesn't exist.")
 		return
@@ -39,6 +40,7 @@ func _on_icon_button_pressed() -> void:
 	$"VBoxContainer/Icons/Icon Button/Icon FileDailog".popup()
 
 func _on_scene_file_dailog_file_selected(path: String) -> void:
+	path = ResourceUID.path_to_uid(path)
 	if !ResourceLoader.exists(path):
 		printerr("Scene doesn't exist.")
 		return

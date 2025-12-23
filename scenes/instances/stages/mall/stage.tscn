@@ -59,6 +59,7 @@ scroll_scale = Vector2(0.9, 0.9)
 material = SubResource("ShaderMaterial_s1ajr")
 sprite_frames = ExtResource("3_imb35")
 animation = &"bottomBop"
+autoplay = "bottomBop"
 centered = false
 offset = Vector2(-410, 100)
 

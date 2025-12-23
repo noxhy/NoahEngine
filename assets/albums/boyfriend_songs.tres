@@ -6,8 +6,8 @@
 [ext_resource type="Resource" uid="uid://d0ojv1av5rdfm" path="res://playable songs/fresh/Fresh Erect.res" id="4_nld3m"]
 [ext_resource type="Resource" uid="uid://cbhtkf2yfue6x" path="res://playable songs/darnell/Darnell (Bf Mix).res" id="6_nld3m"]
 [ext_resource type="Resource" uid="uid://cehmam4q7t60r" path="res://playable songs/thorns/thorns.tres" id="7_net75"]
-[ext_resource type="Resource" path="res://playable songs/lit up/Lit Up (Bf Mix).res" id="10_de8bw"]
-[ext_resource type="Resource" uid="uid://cirawr3vu3a0u" path="res://playable songs/eggnog/Eggnog Erect.res" id="10_nf846"]
+[ext_resource type="Resource" path="res://playable songs/lit up/Lit Up (Bf Mix).tres" id="7_nld3m"]
+[ext_resource type="Resource" uid="uid://ffoq1xhder6s" path="res://playable songs/eggnog/Eggnog Erect.res" id="10_nf846"]
 [ext_resource type="Resource" uid="uid://dpltg8uhgh3gy" path="res://playable songs/cocoa/Cocoa Erect.res" id="11_de8bw"]
 [ext_resource type="Resource" uid="uid://bibqchwfcku16" path="res://playable songs/senpai/Senpai.res" id="12_dndsk"]
 
@@ -16,4 +16,4 @@ script = ExtResource("2_de8bw")
 name = "Friday Night Funkin'"
 cover = ExtResource("1_nld3m")
 credits = "kawai sprite, Saruky, Saster and Kohta Takahashi"
-song_list = Array[ExtResource("3_dndsk")]([ExtResource("4_nld3m"), ExtResource("7_net75"), ExtResource("6_nld3m"), ExtResource("10_de8bw"), ExtResource("12_dndsk"), ExtResource("11_de8bw"), ExtResource("10_nf846")])
+song_list = Array[ExtResource("3_dndsk")]([ExtResource("4_nld3m"), ExtResource("7_net75"), ExtResource("6_nld3m"), ExtResource("7_nld3m"), ExtResource("12_dndsk"), ExtResource("11_de8bw"), ExtResource("10_nf846")])

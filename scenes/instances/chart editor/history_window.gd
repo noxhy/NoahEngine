@@ -10,6 +10,7 @@ func add_action(action_name: String) -> Node:
 	history_button_instance.action_name = action_name
 	
 	$ScrollContainer/VBoxContainer.add_child(history_button_instance)
+	history_button_instance.add_to_group(&"history")
 	# history_button_instance.connect("selected", self.select)
 	return history_button_instance
 

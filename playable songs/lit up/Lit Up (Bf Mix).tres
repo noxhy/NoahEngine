@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="Song" load_steps=3 format=3 uid="uid://dy4ixrqpou4a6"]
+
+[ext_resource type="SpriteFrames" uid="uid://digynxqrdoj3g" path="res://assets/sprites/playstate/icons/darnell.tres" id="1_7etcb"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_66dyh"]
+
+[resource]
+script = ExtResource("2_66dyh")
+vocals = Array[String](["res://playable songs/lit up/audio/Voices-bf-bf.ogg", "res://playable songs/lit up/audio/Voices-darnell-bf.ogg"])
+instrumental = "res://playable songs/lit up/audio/Inst-bf.ogg"
+tempo = 176.0
+scene = "uid://bg3coqaywlx5b"
+difficulties = Dictionary[String, Dictionary]({
+"easy": {
+"chart": "res://playable songs/lit up/data/Lit Up (Bf Mix)-easy.tres"
+},
+"hard": {
+"chart": "res://playable songs/lit up/data/Lit Up (Bf Mix)-hard.tres"
+},
+"normal": {
+"chart": "res://playable songs/lit up/data/Lit Up (Bf Mix)-normal.tres"
+}
+})
+title = "Lit Up (Bf Mix)"
+artist = "Saruky"
+icons = ExtResource("1_7etcb")

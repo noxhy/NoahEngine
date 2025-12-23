@@ -53,6 +53,8 @@ var start_lane: int = 0
 var start_time: float = 0.0
 var min_lane: int = 0
 var max_lane: int = 0
+var moved_time_distance: float
+var moved_lane_distance: int
 
 var hovered_note: int = 0
 
@@ -225,6 +227,7 @@ func _process(delta: float) -> void:
 								max_lane = ChartManager.strum_count - 1
 					elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() != null:
 						get_viewport().gui_release_focus()
+						print("clicked during focus")
 		else:
 			
 			if can_chart:
@@ -324,6 +327,8 @@ func _process(delta: float) -> void:
 										if SettingsManager.get_value("chart", "auto_save"):
 											save()
 										
+										moved_time_distance = time_distance
+										moved_lane_distance = lane_distance
 										# start_time += time_distance
 										# start_lane += lane_distance
 										# min_lane = 0 + (start_lane - min_lane)
@@ -381,15 +386,9 @@ func _process(delta: float) -> void:
 		if moving_notes:
 			var temp: Array = []
 			var i: int = 0
-			var cursor_time = grid_position_to_time(snapped_position, true)
-			var cursor_lane = snapped_position.x - 1
-			var lane_distance = cursor_lane - start_lane
-			var time_distance = cursor_time - start_time
 			for note in selected_note_nodes:
-				temp.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
-				chart.chart_data["notes"].remove_at(selected_notes[i] - i)
-				note_list.erase(note)
-				note.queue_free()
+				temp.append([note.time + moved_time_distance, note.lane + moved_lane_distance, note.length, note.note_type])
+				remove_note(selected_notes[i] - i)
 				i += 1
 			
 			selected_notes = []
@@ -411,10 +410,20 @@ func _process(delta: float) -> void:
 		bounding_box = false
 	
 	if Input.is_action_pressed("ui_text_delete"):
-		GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
-		GameManager.difficulty = current_difficulty
-		GameManager.current_song = ChartManager.song
-		Global.change_scene_to("res://scenes/playstate/chart_tester.tscn")
+		if can_chart:
+			if selected_notes.size() > 0:
+				var temp: Array = []
+				for i in selected_notes:
+					var note = chart.get_notes_data()[i]
+					temp.append([note[0], note[1], note[2], note[3]])
+				var action: String = "Remove Notes"
+				undo_redo.create_action(action)
+				undo_redo.add_do_method(self.remove_notes.bind(selected_notes))
+				undo_redo.add_do_reference(%"History Window".add_action(action))
+				undo_redo.add_undo_method(self.place_notes.bind(temp))
+				undo_redo.commit_action()
+				selected_notes = []
+				%"Note Remove".play()
 	
 	queue_redraw()
 
@@ -555,6 +564,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	scene = song.scene if !difficulty_data.has("scene") else difficulty_data.scene
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
+	get_tree().call_group(&"history", &"queue_free")
 	%Instrumental.stream = load(ChartManager.song.instrumental)
 	play_audios(0.0)
 	
@@ -592,13 +602,6 @@ func load_song_path(path: String, difficulty: Variant = null):
 		printerr("File: ", path, " is not a song file.")
 		return
 	load_song(song, difficulty)
-	var action: String = "Loaded Song"
-	undo_redo.create_action(action)
-	undo_redo.add_do_property(self, "song", song)
-	undo_redo.add_do_reference(%"History Window".add_action(action))
-	undo_redo.add_undo_property(self, "song", old_song)
-	undo_redo.commit_action()
-	can_chart = true
 
 
 func load_chart(file: Chart, ghost: bool = false):
@@ -606,7 +609,14 @@ func load_chart(file: Chart, ghost: bool = false):
 	selected_note_nodes = []
 	get_tree().call_group(&"notes", &"queue_free")
 	note_list = []
-	
+	undo_redo.clear_history()
+	get_tree().call_group(&"history", &"queue_free")
+	var action: String = "Loaded Chart"
+	undo_redo.create_action(action)
+	undo_redo.add_do_property(self, "chart", file)
+	undo_redo.add_do_reference(%"History Window".add_action(action))
+	undo_redo.commit_action()
+	can_chart = true
 	for note in file.get_notes_data(): 
 		place_note(note[0], note[1], note[2], note[3])
 
@@ -679,6 +689,11 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	note_instance.area.connect(&"mouse_exited", self.update_note.bind(null))
 	return output
 
+func place_notes(notes: Array):
+	for note in notes:
+		place_note(note[0], note[1], note[2], note[3], true)
+
+## Giving only 1 parameter removes the note at the given index
 func remove_note(lane: int, time: float = -1):
 	var i: int
 	if time != -1:
@@ -691,6 +706,12 @@ func remove_note(lane: int, time: float = -1):
 	note_list[i].queue_free()
 	note_list.remove_at(i)
 	chart.chart_data["notes"].remove_at(i)
+
+func remove_notes(notes: Array):
+	var i: int = 0
+	for note in notes:
+		remove_note(note - i)
+		i += 1
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
@@ -706,7 +727,8 @@ func find_note(lane: int, time: float) -> int:
 		var note: Array = chart.get_notes_data()[i]
 		
 		if (note[1] == lane):
-			if is_equal_approx(note[0], time): return i
+			if is_equal_approx(note[0], time):
+				return i
 	
 	return -1
 

@@ -12,7 +12,7 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UI/ColorRect:color")
+tracks/0/path = NodePath("Over/ColorRect:color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -43,7 +43,7 @@ tracks/0/use_blend = true
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("UI/ColorRect:color")
+tracks/1/path = NodePath("Over/ColorRect:color")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -127,7 +127,6 @@ script = ExtResource("1_3knol")
 [node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_24go6")
 stream_player = NodePath("../Audio/Music")
-tempo = 100.0
 
 [node name="Audio" type="Node" parent="."]
 
@@ -159,15 +158,6 @@ follow_viewport_enabled = true
 unique_name_in_owner = true
 scale = Vector2(0.6, 0.6)
 
-[node name="ColorRect" type="ColorRect" parent="UI"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0, 0)
-metadata/_edit_lock_ = true
-
 [node name="Background" type="CanvasLayer" parent="."]
 layer = 0
 
@@ -178,6 +168,18 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Over" type="CanvasLayer" parent="."]
+layer = 1000
+
+[node name="ColorRect" type="ColorRect" parent="Over"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
 metadata/_edit_lock_ = true
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]

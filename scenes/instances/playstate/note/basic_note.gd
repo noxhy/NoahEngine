@@ -24,11 +24,11 @@ func _ready():
 	$Note.play_animation(animation)
 	
 	var tail_animation = $Note.get_real_animation(StringName(animation + " tail"))
-	if tail_animation:
+	if tail_animation and tail:
 		tail.texture = note_skin.notes_texture.get_frame_texture(tail_animation, 0)
 	
 	var end_animation = $Note.get_real_animation(StringName(animation + " end"))
-	if end_animation:
+	if end_animation and end:
 		end.texture = note_skin.notes_texture.get_frame_texture(end_animation, 0)
 		end.size = end.texture.get_size()
 	
@@ -40,9 +40,13 @@ func _ready():
 	
 	scale = Vector2(1, 1)
 	$Note.scale = Vector2.ONE * note_skin.notes_scale
-	tail.scale = Vector2.ONE * note_skin.notes_scale
-	end.scale.x = note_skin.notes_scale
-	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+	
+	if tail:
+		tail.scale = Vector2.ONE * note_skin.notes_scale
+		tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+	
+	if end:
+		end.scale.x = note_skin.notes_scale
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

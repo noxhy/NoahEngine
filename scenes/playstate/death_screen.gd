@@ -20,6 +20,8 @@ func _ready():
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property(%Player, "scale", player_scale, 2)
 	tween.tween_property($Camera2D, "zoom", camera_zoom, 2)
+	
+	$Conductor.tempo = $Audio/Music.stream.get_bpm()
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if can_press:

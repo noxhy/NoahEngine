@@ -122,7 +122,7 @@ func new_file(dir: String):
 		difficulty_dict[difficulty] = {"chart": ResourceUID.path_to_uid(chart_path)}
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = dir + "/" + song_file.title + ".tres"
+	var song_path: String = dir + "/" + song_file.title + ".res"
 	ResourceSaver.save(song_file, ResourceUID.path_to_uid(song_path))
 	
 	# Emits signal to return to the chart editor
