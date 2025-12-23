@@ -63,7 +63,7 @@ var pages: Dictionary = {
 	SettingsManager.SEC_PREFERENCES: {
 		"name": "Preferences",
 		"options": [
-			[&"option", {"id": "combo_ui", "description": "Displays the rating and combo on the UI layer rather than the World layer"}],
+			[&"option", {"id": "combo_ui", "description": "Displays the rating and combo on the UI layer rather than the world layer."}],
 			[&"option", {"id": "glow_notes", "description": "Makes the notes brighter when active."}],
 			[&"option", {"id": "note_splashes", "description": "Makes the notes brighter when active."}],
 			[&"option", {"id": "ui_bops", "description": "Makes the UI layer bop in menus and gameplay."}],

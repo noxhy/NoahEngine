@@ -56,5 +56,6 @@ offset_top = 608.0
 offset_right = 1152.0
 offset_bottom = 672.0
 theme = ExtResource("1_tg56e")
+theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_d2gin")
 autowrap_mode = 3

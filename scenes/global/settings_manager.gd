@@ -28,7 +28,7 @@ func set_value(section: String, key: String, value: Variant) -> void:
 ## Saves to disk
 func flush() -> void:
 	instance.save(LOAD_PATH)
-	print('[SettingsManager]: Saved preferences')
+	print('(SettingsManager): Saved preferences')
 
 static var _defaults: Dictionary = {
 	"gameplay": {
@@ -104,7 +104,7 @@ func _ready() -> void:
 
 func load_values() -> void:
 	if not FileAccess.file_exists(LOAD_PATH):
-		print('[SettingsManager]: Preferences not detected. Using defaults')
+		print('(SettingsManager): Preferences not detected. Using defaults')
 		return
 	
 	var temp_config = ConfigFile.new()
@@ -135,7 +135,7 @@ func load_values() -> void:
 	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
 	DisplayServer.window_set_mode(mode)
 	
-	print("[SettingsManager]: Preferences loaded")
+	print("(SettingsManager): Preferences loaded")
 
 func get_default() -> ConfigFile:
 	var temp_config = ConfigFile.new()
@@ -165,4 +165,4 @@ func load_keybinds():
 			new_key.keycode = bind
 			InputMap.action_add_event(key, new_key)
 		
-	print("[SettingsManager]: Keybinds loaded")
+	print("(SettingsManager): Keybinds loaded")

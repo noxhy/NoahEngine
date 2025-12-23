@@ -241,17 +241,11 @@ func _process(delta):
 				current_note += 1
 	
 	if instrumental.playing:
-		
 		var events_list = chart.get_events_data()
-		
 		if events_list.size() > 0:
-			
 			if current_event < events_list.size():
-				
 				var event = events_list[current_event]
-				
 				if event[0] <= GameManager.song_position:
-					
 					var time: float = event[0]
 					var event_name: String = event[1]
 					var event_parameters: Array = event[2]
@@ -259,10 +253,6 @@ func _process(delta):
 					print("(PlayState) Song Event: \"", event_name, "\" ", str(event_parameters))
 					basic_event(time, event_name, event_parameters)
 					current_event += 1
-
-#
-# Util
-#
 
 ##  Gets the tempo at a certain time in seconds
 func get_tempo_at(time: float) -> float:
@@ -274,7 +264,6 @@ func get_tempo_at(time: float) -> float:
 	
 	for i in keys.size():
 		var dict_time = keys[i]
-		
 		if time >= dict_time:
 			tempo_output = tempo_dict.get(keys[i])
 		else:
@@ -347,9 +336,7 @@ func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int
 	
 	return high + 1
 
-
 static func get_rating(time: float) -> String:
-	
 	var rating: String
 	
 	var ratings = [
@@ -363,14 +350,11 @@ static func get_rating(time: float) -> String:
 	]
 	
 	for condition in ratings:
-		
 		if condition[0]:
-			
 			rating = condition[1]
 			break
 	
 	return rating
-
 
 func pause():
 	var pause_scene_instance = pause_preload.instantiate()
@@ -453,7 +437,6 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 	
 	emit_signal("new_event", time, event_name, event_parameters)
 
-
 func song_finished():
 	GameManager.finished_song(score)
 	
@@ -467,10 +450,8 @@ func song_finished():
 		Global.change_scene_to(next_scene)
 
 # Conductor Util
-
 func new_beat(current_beat, measure_relative):
 	ui.icon_bop(conductor.seconds_per_beat * 0.5 * (1 / instrumental.pitch_scale))
-
 
 func new_step(current_step, measure_relative):
 	if current_step % bop_rate == 0:
@@ -479,7 +460,6 @@ func new_step(current_step, measure_relative):
 			ui.scale += ui_bop_strength
 
 # Strum Util
-
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
@@ -532,7 +512,6 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		
 		update_ui_stats()
 
-
 func note_holding(time, lane, note_type, strum_manager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
@@ -547,7 +526,6 @@ func note_holding(time, lane, note_type, strum_manager):
 		accuracy = (timings_sum / entries)
 		
 		update_ui_stats()
-
 
 func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 	var playback = vocals.get_stream_playback()
@@ -573,17 +551,13 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			emit_signal("combo_break")
 			update_ui_stats()
 
-
 func update_ui_stats():
 	ui.accuracy = accuracy
 	ui.misses = misses
 	ui.target_health = health
 	ui.score = score
 
-
 # Visual Util
-
-
 func show_combo(rating: String, _combo: int):
 	var rating_instance = rating_node.instantiate()
 	

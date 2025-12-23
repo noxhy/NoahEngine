@@ -23,6 +23,7 @@ const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
 ## Chart Variables
 var chart: Chart = null
+var backup_chart: Chart = null
 # So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
 var vocal_tracks: Array = []
 var scene: String
@@ -603,6 +604,7 @@ func load_song_path(path: String, difficulty: Variant = null):
 
 
 func load_chart(file: Chart, ghost: bool = false):
+	backup_chart = file.duplicate(true)
 	selected_notes = []
 	selected_note_nodes = []
 	get_tree().call_group(&"notes", &"queue_free")
@@ -977,6 +979,9 @@ func file_button_item_pressed(id):
 			%"File Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "auto_save"))
 		%"Note Place".play()
 	elif id == 6:
+		chart.chart_data = backup_chart.chart_data
+		chart.scroll_speed = backup_chart.scroll_speed
+		chart.offset = backup_chart.offset
 		Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
 		can_chart = false
 	elif id == 8:
@@ -1028,6 +1033,8 @@ func redo():
 func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	ResourceSaver.save(chart, chart.resource_path)
+	backup_chart = chart
+	print("save chart")
 
 func updated_strums():
 	can_chart = true
