@@ -126,14 +126,12 @@ func _process(delta: float) -> void:
 		else:
 			if Input.is_action_just_pressed("mouse_scroll_up"):
 				if !Input.is_action_pressed("control"):
-					
 					if can_chart:
-						
 						song_position -= $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
 						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
+						%"Song Slider".value = song_position
 				else:
-					
 					current_snap += 1
 					chart_snap = SNAPS[current_snap % SNAPS.size()]
 					%"Chart Snap".value = chart_snap
@@ -144,6 +142,7 @@ func _process(delta: float) -> void:
 						song_position += $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
 						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
+						%"Song Slider".value = song_position
 				else:
 					current_snap -= 1
 					chart_snap = SNAPS[current_snap % SNAPS.size()]
@@ -191,7 +190,8 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed("control"):
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
 				if can_chart:
-					if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() == null:
+					if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
+					and (!get_viewport().gui_get_focus_owner() or !get_viewport().gui_get_hovered_control())):
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						
@@ -225,13 +225,11 @@ func _process(delta: float) -> void:
 								selected_note_nodes = [note_list[index]]
 								min_lane = 0
 								max_lane = ChartManager.strum_count - 1
-					elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() != null:
+					elif (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
+					and (!get_viewport().gui_get_focus_owner() or !get_viewport().gui_get_hovered_control())):
 						get_viewport().gui_release_focus()
-						print("clicked during focus")
 		else:
-			
 			if can_chart:
-				
 				bounding_box = true
 				start_box = get_global_mouse_position()
 	
@@ -763,7 +761,6 @@ func float_to_time(time: float) -> String:
 	
 	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
 
-
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
 	var tempo_data: Dictionary = chart.get_tempos_data()
@@ -867,14 +864,8 @@ func bsearch_right_range(value_set: Array, length: int, right_range: float) -> i
 	
 	return low - 1
 
-
 func is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)
-
-
-func add_action(state_name: String, song: Song = ChartManager.song.duplicate(true), chart_file: Chart = chart.duplicate(true)):
-	pass
-
 
 func _on_play_button_toggled(toggled_on: bool) -> void:
 	%Vocals.stream_paused = !toggled_on
@@ -887,7 +878,6 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	
 	else: %"Play Button".icon = load("res://assets/sprites/menus/chart editor/play_button.png")
 
-
 func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
 	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartManager.strum_count - 1)
@@ -897,7 +887,6 @@ func move_bound_left(strum_id: int):
 			ChartManager.strum_data[id]["strums"][1] = clamp(ChartManager.strum_data[id]["strums"][1] - 1, 0, ChartManager.strum_count - 1)
 	
 	update_grid()
-
 
 func move_bound_right(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
@@ -909,7 +898,6 @@ func move_bound_right(strum_id: int):
 	
 	update_grid()
 
-
 func find_strum_id(strum_name: String) -> int:
 	for id in ChartManager.strum_data.size():
 		var strum_data = ChartManager.strum_data[id]
@@ -920,37 +908,30 @@ func find_strum_id(strum_name: String) -> int:
 func _on_song_slider_value_changed(value: float) -> void:
 	song_position = value
 
-
 func _on_skip_forward_pressed() -> void:
 	song_position += 10
 	_on_play_button_toggled(true)
-
 
 func _on_skip_backward_pressed() -> void:
 	song_position -= 10
 	_on_play_button_toggled(true)
 
-
 func _on_skip_to_beginning_pressed() -> void:
 	song_position = start_offset
 	_on_play_button_toggled(true)
-
 
 func _on_skip_to_end_pressed() -> void:
 	song_position = %Instrumental.stream.get_length() - 0.1
 	_on_play_button_toggled(true)
 
-
 func _on_instrumental_finished() -> void:
 	_on_play_button_toggled(false)
-
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if measure_relative == 0:
 		%"Conductor Beat".play(0.55)
 	else:
 		%"Conductor Off Beat".play(0.55)
-
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	%"Conductor Step".play(0.55)
@@ -1005,9 +986,10 @@ func file_button_item_pressed(id):
 
 ## Edit button item pressed
 func edit_button_item_pressed(id):
-	
-	if id == 0: undo()
-	elif id == 1: redo()
+	if id == 0:
+		undo()
+	elif id == 1:
+		redo()
 
 ## Window button item pressed
 func window_button_item_pressed(id):
@@ -1019,13 +1001,11 @@ func window_button_item_pressed(id):
 			%"Metadata Window".popup()
 			%"Window Button".get_popup().set_item_checked(id, true)
 
-
-func disable_charting(): can_chart = false
+func disable_charting():
+	can_chart = false
 func close_popup():
-	
 	can_chart = true
 	%"Close Window".play()
-
 
 func undo():
 	if undo_redo.has_undo():
@@ -1044,7 +1024,6 @@ func redo():
 			save()
 	
 	%"Edit Button".get_popup().set_item_checked(1, !undo_redo.has_redo())
-
 
 func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
@@ -1088,17 +1067,14 @@ func _on_chart_snap_value_changed(value: float) -> void:
 	# This is really dumb and janky
 	chart_snap = value
 
-
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var option = %"Difficulty Button".get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(option):
 		chart = load(ChartManager.song.difficulties.get(option).get("chart"))
 		load_chart(chart)
 
-
 func _on_history_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(0, false)
-
 
 func _on_metadata_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(1, false)
@@ -1106,18 +1082,14 @@ func _on_metadata_window_close_requested() -> void:
 func _on_metadata_window_updated_icon_texture(path: String) -> void:
 	ChartManager.song.icons = load(path)
 
-
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
-
 
 func _on_metadata_window_updated_song_name(text: String) -> void:
 	ChartManager.song.title = text
 
-
 func _on_metadata_window_updated_song_scene(path: String) -> void:
 	ChartManager.song.scene = path
-
 
 func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
 	ChartManager.song.tempo = tempo

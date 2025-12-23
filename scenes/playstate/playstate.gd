@@ -598,8 +598,8 @@ func show_combo(rating: String, _combo: int):
 		combo_numbers_manager_instance.fc = true
 	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "combo_ui"):
-		rating_instance.position = Vector2(-32, 88)
-		combo_numbers_manager_instance.position = Vector2(96, 152)
+		rating_instance.position = Vector2(-32, 182)
+		combo_numbers_manager_instance.position = Vector2(96, 232)
 		
 		ui.add_child(rating_instance)
 		ui.add_child(combo_numbers_manager_instance)

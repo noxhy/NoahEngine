@@ -64,7 +64,7 @@ const WEEK_ICON_NODE = preload("res://scenes/instances/story mode/week_icon.tscn
 		"scene": "res://scenes/playstate/songs/senpai/senpai.tscn",
 		"name": "Hating Simulator Ft. Moawling",
 		"display_song_list": "Senpai\nRoses\nThorns",
-		"song_list": [load("uid://bibqchwfcku16")]
+		"song_list": [load("uid://bl42wsxmex11p")]
 	},
 	"week7": {
 		"animation": "week7",

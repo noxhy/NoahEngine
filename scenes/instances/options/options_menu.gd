@@ -126,8 +126,8 @@ func load_category(category: String, options: Array):
 		instance.modulate.a = 0
 		instance.connect("mouse_entered", self.update.bind(i, true))
 		
-		tween.tween_method(instance.set_offset_left, 200, 0, 1).set_delay(i * 0.05)
-		tween.tween_property(instance, "modulate", Color.WHITE, 1).set_delay(i * 0.05)
+		tween.tween_method(instance.set_offset_left, 200, 0, 1).set_delay(i * 0.025)
+		tween.tween_property(instance, "modulate", Color.WHITE, 1).set_delay(i * 0.025)
 	
 	update(0)
 

@@ -85,7 +85,7 @@ static var _defaults: Dictionary = {
 		"ui_accept": [KEY_ENTER, KEY_KP_ENTER],
 		"character_select": [KEY_TAB],
 		
-		"ui_left": [KEY_LEFT, KEY_W],
+		"ui_left": [KEY_LEFT, KEY_A],
 		"ui_down": [KEY_DOWN, KEY_S],
 		"ui_up": [KEY_UP, KEY_W],
 		"ui_right": [KEY_RIGHT, KEY_D],
@@ -120,8 +120,7 @@ func load_values() -> void:
 					if instance_value is Array: # this is kinda weird but sure
 						var saved_value = temp_config.get_value(section, key)
 						
-						if saved_value and instance_value.size() > saved_value.size():
-							
+						if saved_value and instance_value.size() != saved_value.size():
 							for idx in range(instance_value.size() - 1):
 								instance_value[idx] = saved_value[idx]
 							
