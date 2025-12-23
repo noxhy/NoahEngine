@@ -60,23 +60,6 @@ z_index = 300
 material = SubResource("ShaderMaterial_8k6f7")
 position = Vector2(936, 662.4)
 scale = Vector2(0.8, 0.8)
-animation_names = Dictionary[StringName, StringName]({
-&"attack": &"boyfriend attack",
-&"cheer": &"BF HEY!!",
-&"dodge": &"boyfriend dodge",
-&"down": &"BF NOTE DOWN",
-&"hit": &"BF hit",
-&"idle": &"BF idle dance",
-&"left": &"BF NOTE LEFT",
-&"miss_down": &"BF NOTE DOWN MISS",
-&"miss_left": &"BF NOTE LEFT MISS",
-&"miss_right": &"BF NOTE RIGHT MISS",
-&"miss_up": &"BF NOTE UP MISS",
-&"pre_attack": &"bf pre attack",
-&"right": &"BF NOTE RIGHT",
-&"scared": &"BF idle shaking",
-&"up": &"BF NOTE UP"
-})
 
 [node name="Enemy" parent="." instance=ExtResource("14_5qnon")]
 unique_name_in_owner = true
@@ -91,16 +74,6 @@ z_index = 100
 material = SubResource("ShaderMaterial_ccl2s")
 position = Vector2(641.6, 656)
 scale = Vector2(0.8, 0.8)
-animation_names = Dictionary[StringName, StringName]({
-&"cheer": &"GF Cheer",
-&"cry": &"gf sad",
-&"down": &"GF Down Note",
-&"idle": &"GF Dancing Beat",
-&"left": &"GF left note",
-&"right": &"GF Right Note",
-&"shake": &"GF FEAR ",
-&"up": &"GF Up Note"
-})
 
 [node name="World" type="CanvasLayer" parent="."]
 follow_viewport_enabled = true

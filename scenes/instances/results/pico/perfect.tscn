@@ -8,6 +8,7 @@
 position = Vector2(0, 40)
 script = ExtResource("1_7x3nl")
 atlas = "res://assets/sprites/menus/results/results-pico/resultsPERFECT"
+playing = true
 auto_start = true
 loop_frame = 88
 loop_end_frame = 399

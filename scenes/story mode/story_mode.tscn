@@ -120,13 +120,6 @@ input = "ui_right"
 
 [node name="Difficulty Display" parent="UI/Week UI/SubViewport" instance=ExtResource("10_fvhjj")]
 position = Vector2(1088, 60.5)
-animation_names = Dictionary[StringName, StringName]({
-&"easy": &"easy",
-&"erect": &"erect",
-&"hard": &"hard",
-&"nightmare": &"nightmare",
-&"normal": &"normal"
-})
 
 [node name="Week Display" type="SubViewportContainer" parent="UI"]
 offset_top = 88.0
@@ -153,16 +146,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 132)
 scale = Vector2(0.425, 0.425)
-animation_names = Dictionary[StringName, StringName]({
-&"cheer": &"GF Cheer",
-&"cry": &"gf sad",
-&"down": &"GF Down Note",
-&"idle": &"GF Dancing Beat",
-&"left": &"GF left note",
-&"right": &"GF Right Note",
-&"shake": &"GF FEAR ",
-&"up": &"GF Up Note"
-})
 
 [node name="Week 1" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -177,13 +160,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(0.4, 0.4)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Dad Sing Note DOWN",
-&"idle": &"Dad idle dance",
-&"left": &"Dad Sing Note LEFT",
-&"right": &"Dad Sing Note RIGHT",
-&"up": &"Dad Sing Note UP"
-})
 
 [node name="Week 2" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -198,13 +174,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(0.575, 0.575)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"spooky DOWN note",
-&"idle": &"spooky dance idle",
-&"left": &"note sing left",
-&"right": &"spooky sing right",
-&"up": &"spooky UP NOTE"
-})
 
 [node name="Week 3" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -219,17 +188,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 124)
 scale = Vector2(-0.7, 0.7)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Pico Down Note",
-&"idle": &"Pico Idle Dance",
-&"left": &"Pico NOTE LEFT",
-&"miss_down": &"Pico Down Note MISS",
-&"miss_left": &"Pico NOTE LEFT miss",
-&"miss_right": &"Pico Note Right Miss",
-&"miss_up": &"pico Up note miss",
-&"right": &"Pico Note Right",
-&"up": &"pico Up note"
-})
 
 [node name="Week 4" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -244,13 +202,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(0.374, 0.374)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"MOM DOWN POSE",
-&"idle": &"Mom Idle",
-&"left": &"Mom Left Pose",
-&"right": &"Mom Pose Left",
-&"up": &"Mom Up Pose"
-})
 
 [node name="Week 5" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -285,29 +236,11 @@ position = Vector2(640, 164)
 material = SubResource("ShaderMaterial_20mkd")
 position = Vector2(192, 124)
 scale = Vector2(5, 5)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"BF DOWN NOTE instance 1",
-&"idle": &"BF IDLE instance 1",
-&"left": &"BF LEFT NOTE instance 1",
-&"miss_down": &"BF DOWN MISS instance 1",
-&"miss_left": &"BF LEFT MISS instance 1",
-&"miss_right": &"BF RIGHT MISS instance 1",
-&"miss_up": &"BF UP MISS instance 1",
-&"right": &"BF RIGHT NOTE instance 1",
-&"up": &"BF UP NOTE instance 1"
-})
 
 [node name="Senpai" parent="UI/Week Display/SubViewport/Week 6" groups=["smooth_bop"] instance=ExtResource("15_tem1l")]
 material = SubResource("ShaderMaterial_20mkd")
 position = Vector2(-192, 132)
 scale = Vector2(2.535, 2.535)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"SENPAI DOWN NOTE instance 1",
-&"idle": &"Senpai Idle instance 1",
-&"left": &"SENPAI LEFT NOTE instance 1",
-&"right": &"SENPAI RIGHT NOTE instance 1",
-&"up": &"SENPAI UP NOTE instance 1"
-})
 
 [node name="Week 7" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -322,19 +255,6 @@ scale = Vector2(0.7, 0.7)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(-0.525, 0.525)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Tankman DOWN note 1",
-&"idle": &"Tankman Idle Dance 1",
-&"left": &"Tankman Note Left 1",
-&"miss_down": &"Tankman DOWN note MISS",
-&"miss_left": &"Tankman Note Left MISS",
-&"miss_right": &"Tankman Right Note MISS",
-&"miss_up": &"Tankman UP note MISS",
-&"pretty good": &"PRETTY GOOD tankman 1",
-&"right": &"Tankman Right Note 1",
-&"ugh": &"TANKMAN UGH 1",
-&"up": &"Tankman UP note 1"
-})
 
 [node name="Weekend 1" type="Node2D" parent="UI/Week Display/SubViewport" groups=["weeks"]]
 visible = false
@@ -344,33 +264,11 @@ position = Vector2(640, 164)
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(192, 124)
 scale = Vector2(0.7, 0.7)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Pico Down Note",
-&"idle": &"Pico Idle Dance",
-&"left": &"Pico NOTE LEFT",
-&"miss_down": &"Pico Down Note MISS",
-&"miss_left": &"Pico NOTE LEFT miss",
-&"miss_right": &"Pico Note Right Miss",
-&"miss_up": &"pico Up note miss",
-&"right": &"Pico Note Right",
-&"up": &"pico Up note"
-})
 
 [node name="Darnell" parent="UI/Week Display/SubViewport/Weekend 1" groups=["smooth_bop"] instance=ExtResource("17_wjhul")]
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 124)
 scale = Vector2(0.7, 0.7)
-animation_names = Dictionary[StringName, StringName]({
-&"attack": &"Kick Up",
-&"attack_prepare": &"Knee Forward",
-&"cheer": &"Laugh",
-&"down": &"Pose Down",
-&"idle": &"Idle",
-&"left": &"Pose Left",
-&"light_can": &"Light Can",
-&"right": &"Pose Right",
-&"up": &"Pose Up"
-})
 
 [node name="Week Name" type="Label" parent="UI"]
 offset_left = 16.0

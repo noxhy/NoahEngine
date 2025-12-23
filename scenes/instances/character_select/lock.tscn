@@ -18,7 +18,6 @@ material = SubResource("ShaderMaterial_127s4")
 position = Vector2(-56, -72)
 script = ExtResource("2_748hf")
 atlas = "res://assets/sprites/menus/character_select/lock"
-frame = 1
 symbol = "LOCK TA"
 playing = true
 loop_end_frame = 2

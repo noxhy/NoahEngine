@@ -4,6 +4,7 @@ class_name OptionNode
 @export var setting_category:String = ''
 @export var setting_name: String = ""
 @export var display_name = ""
+@export var description: String
 
 @onready var background = %Background
 

@@ -447,7 +447,7 @@ animations = [{
 
 [node name="Countdown" type="AnimationPlayer"]
 libraries = {
-"": SubResource("AnimationLibrary_ix61x")
+&"": SubResource("AnimationLibrary_ix61x")
 }
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

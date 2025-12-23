@@ -28,13 +28,13 @@ sprite_frames = ExtResource("1_vbem7")
 animation = &"mp3 capsule w backing"
 centered = false
 script = ExtResource("2_v1ul3")
-animation_names = Dictionary[String, String]({
-"idle": "mp3 capsule w backing NOT SELECTED",
-"selected": "mp3 capsule w backing"
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"mp3 capsule w backing NOT SELECTED",
+&"selected": &"mp3 capsule w backing"
 })
-offsets = Dictionary[String, Vector2]({
-"mp3 capsule w backing": Vector2(0, 0),
-"mp3 capsule w backing NOT SELECTED": Vector2(8, 0)
+offsets = Dictionary[StringName, Vector2]({
+&"mp3 capsule w backing": Vector2(0, 0),
+&"mp3 capsule w backing NOT SELECTED": Vector2(8, 0)
 })
 metadata/_custom_type_script = "uid://d17yv6wfgl74w"
 
@@ -72,13 +72,13 @@ stretch_mode = 6
 visible = false
 sprite_frames = ExtResource("6_lcnhi")
 script = ExtResource("2_v1ul3")
-animation_names = Dictionary[String, String]({
-"?": "default",
-"excellent": "EXCELLENT rank",
-"gold": "PERFECT rank GOLD",
-"good": "GOOD rank",
-"great": "GREAT rank",
-"loss": "LOSS rank",
-"perfect": "PERFECT rank"
+animation_names = Dictionary[StringName, StringName]({
+&"?": &"default",
+&"excellent": &"EXCELLENT rank",
+&"gold": &"PERFECT rank GOLD",
+&"good": &"GOOD rank",
+&"great": &"GREAT rank",
+&"loss": &"LOSS rank",
+&"perfect": &"PERFECT rank"
 })
 metadata/_custom_type_script = "uid://d17yv6wfgl74w"

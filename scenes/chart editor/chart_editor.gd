@@ -58,12 +58,10 @@ var hovered_note: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
 	if ChartManager.song != null:
-		
 		var old_song = null
 		var song = ChartManager.song
 		load_song(song, ChartManager.difficulty)
@@ -81,7 +79,8 @@ func _ready() -> void:
 	
 	## Initializing Popup Signals
 	%"File Button".get_popup().connect("id_pressed", self.file_button_item_pressed)
-	%"File Button".get_popup().set_item_checked(5, SettingsManager.get_value("chart", "auto_save"))
+	%"File Button".get_popup().set_item_checked(
+		%"File Button".get_popup().get_item_index(3), SettingsManager.get_value("chart", "auto_save"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
 	%"Edit Button".get_popup().connect("id_pressed", self.edit_button_item_pressed)
@@ -187,52 +186,45 @@ func _process(delta: float) -> void:
 	
 	
 	if Input.is_action_just_pressed("mouse_left"):
-		
 		if !Input.is_action_pressed("control"):
-			
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
-				
 				if can_chart:
-					
-					if !Input.is_action_pressed("control"):
+					if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() == null:
+						var lane: int = snapped_position.x - 1
+						var time: float = grid_position_to_time(snapped_position, true)
 						
-						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() == null:
-							
-							var lane: int = snapped_position.x - 1
-							var time: float = grid_position_to_time(snapped_position, true)
-							
-							if !is_note_at(lane, Vector2i(snapped_position).y / chart_snap * $Conductor.seconds_per_beat * current_steps_per_measure / current_beats_per_measure):
-								var action: String = "Add Note"
-								undo_redo.create_action(action)
-								undo_redo.add_do_method(self.place_note.bind(time, lane, 0, 0, true))
-								undo_redo.add_do_reference(%"History Window".add_action(action))
-								undo_redo.add_undo_method(self.remove_note.bind(lane, time))
-								undo_redo.commit_action()
-								%"Note Place".play()
-								placing_note = true
-							else:
-								var i: int = find_note(lane, time)
-								if selected_notes.has(i):
-									moving_notes = true
-									start_lane = lane
-									start_time = time
-									
-									print("Selected notes: ", selected_notes)
-									var k: int = 0
-									for j in selected_notes:
-										
-										chart.chart_data["notes"].remove_at(j - k)
-										print("j - k: ", j - k)
-										k += 1
+						if !is_note_at(lane, Vector2i(snapped_position).y / chart_snap * $Conductor.seconds_per_beat * current_steps_per_measure / current_beats_per_measure):
+							var action: String = "Add Note"
+							undo_redo.create_action(action)
+							undo_redo.add_do_method(self.place_note.bind(time, lane, 0, 0, true))
+							undo_redo.add_do_reference(%"History Window".add_action(action))
+							undo_redo.add_undo_method(self.remove_note.bind(lane, time))
+							undo_redo.commit_action()
+							%"Note Place".play()
+							placing_note = true
+						else:
+							var i: int = find_note(lane, time)
+							if selected_notes.has(i):
+								moving_notes = true
+								start_lane = lane
+								start_time = time
+								min_lane = ChartManager.strum_count
+								max_lane = 0
+								for j in selected_notes:
+									var note = chart.get_notes_data()[j]
+									min_lane = min(min_lane, note[1])
+									max_lane = max(max_lane, note[1])
 								
-								else:
-									
-									var index: int = find_note(lane, time)
-									selected_notes = [index]
-									selected_note_nodes = [note_list[index]]
-									min_lane = lane
-									max_lane = lane
-		
+								min_lane = 0 + (start_lane - min_lane)
+								max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
+							else:
+								var index: int = find_note(lane, time)
+								selected_notes = [index]
+								selected_note_nodes = [note_list[index]]
+								min_lane = 0
+								max_lane = ChartManager.strum_count - 1
+					elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count) and get_viewport().gui_get_focus_owner() != null:
+						get_viewport().gui_release_focus()
 		else:
 			
 			if can_chart:
@@ -296,7 +288,6 @@ func _process(delta: float) -> void:
 									
 									changed_length = (distance > 0)
 									if changed_length:
-										
 										if (note_list[i].length != distance): %"Note Stretch".play()
 										note_list[i].length = distance
 									
@@ -314,13 +305,10 @@ func _process(delta: float) -> void:
 								
 								var diff: int = max_lane - min_lane
 								
-								if ((min_lane + lane_distance) >= 0 and (max_lane + lane_distance) < ChartManager.strum_count):
-									
+								if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
 									if changed_length:
-										
 										var j: int = 0
 										for i in selected_notes:
-											
 											var node = selected_note_nodes[j]
 											
 											var time: float = node.time
@@ -328,30 +316,26 @@ func _process(delta: float) -> void:
 											var length: float = node.length
 											var note_type: int = node.note_type
 											
-											node.time += time_distance
-											node.lane += lane_distance
-											node.position = Vector2(%Grid.get_real_position(Vector2(1.5 + node.lane, 0)).x, time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+											node.position = Vector2(
+												%Grid.get_real_position(Vector2(1.5 + node.lane + lane_distance, 0)).x,
+												time_to_y_position(node.time + time_distance) + %Grid.grid_size.y * %Grid.zoom.y / 2) + $"Grid Layer".offset
 											j += 1
 										
 										if SettingsManager.get_value("chart", "auto_save"):
 											save()
 										
-										start_time += time_distance
-										start_lane += lane_distance
-										min_lane += lane_distance
-										max_lane = min_lane + diff
+										# start_time += time_distance
+										# start_lane += lane_distance
+										# min_lane = 0 + (start_lane - min_lane)
+										# max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
 	
 	
 	if Input.is_action_just_released("mouse_left"):
-		
 		if placing_note:
-			
 			if changed_length:
-				
 				var action: String = "Changed Note Length(s)"
 				undo_redo.create_action(action)
 				for i in selected_notes:
-					
 					undo_redo.add_do_property(note_list[i], "length", note_list[i].length)
 					undo_redo.add_undo_property(note_list[i], "length", 0.0)
 				
@@ -362,7 +346,6 @@ func _process(delta: float) -> void:
 			changed_length = false
 		
 		if bounding_box:
-			
 			bounding_box = false
 			
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
@@ -380,52 +363,46 @@ func _process(delta: float) -> void:
 			L = max(0, L)
 			selected_notes = range(L, R + 1)
 			selected_note_nodes = []
-			for i in selected_notes:
-				selected_note_nodes.append(note_list[i])
 			
 			var j: int = 0
-			min_lane = ChartManager.strum_count
-			max_lane = 0
 			for i in range(selected_notes.size()):
-				
 				i -= j
 				var lane: int = int(chart.get_notes_data()[selected_notes[i]][1])
 				if !(range(int(pos_1.x), int(pos_2.x) + 1).has(lane)):
-					
 					selected_notes.erase(selected_notes[i])
 					j += 1
-				else:
-					
-					min_lane = min(min_lane, lane)
-					max_lane = max(max_lane, lane)
 			
-			print("selected notes: ", selected_notes)
-			print("bounds set: ", min_lane, " - ", max_lane)
+			for i in selected_notes:
+				selected_note_nodes.append(note_list[i])
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
 		
 		if moving_notes:
-			print("before move: ", selected_notes)
 			var temp: Array = []
+			var i: int = 0
+			var cursor_time = grid_position_to_time(snapped_position, true)
+			var cursor_lane = snapped_position.x - 1
+			var lane_distance = cursor_lane - start_lane
+			var time_distance = cursor_time - start_time
 			for note in selected_note_nodes:
-				
-				place_note(note.time, note.lane, note.length, note.note_type, true)
-				temp.append([note.lane, note.time])
+				temp.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
+				chart.chart_data["notes"].remove_at(selected_notes[i] - i)
 				note_list.erase(note)
 				note.queue_free()
+				i += 1
 			
 			selected_notes = []
 			selected_note_nodes = []
 			for packet in temp:
-				
-				var index: int = find_note(packet[0], packet[1])
-				selected_notes.append(index)
-				selected_note_nodes.append(note_list[index])
+				place_note(packet[0], packet[1], packet[2], packet[3], true, true)
 			
+			for packet in temp:
+				i = find_note(packet[1], packet[0])
+				selected_notes.append(i)
+				selected_note_nodes.append(note_list[i])
 			selected_notes.sort()
 			
-			print("after move: ", selected_notes)
 			moving_notes = false
 			%"Note Place".play()
 	
@@ -530,7 +507,7 @@ func _draw() -> void:
 			var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
 			length *= %Grid.grid_size.y * %Grid.zoom.y
 			length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-			rect = Rect2(note.global_position + grid_offset - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
+			rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
 			draw_rect(rect, selected_color)
 
 
@@ -677,11 +654,10 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			chart.chart_data["notes"].insert(L, [time, lane, length, type])
 			
 			if !moved:
-				
 				selected_notes = [L]
 				selected_note_nodes = [note_instance]
-				min_lane = lane
-				max_lane = lane
+				min_lane = 0
+				max_lane = ChartManager.strum_count - 1
 			
 			output = L
 		else:
@@ -689,14 +665,13 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			chart.chart_data["notes"].append([time, lane, length, type])
 			selected_notes = [chart.get_notes_data().size() - 1]
 			selected_note_nodes = [note_instance]
-			min_lane = lane
-			max_lane = lane
+			min_lane = 0
+			max_lane = ChartManager.strum_count - 1
 			output = note_list.size()
 	else:
 		note_list.append(note_instance)
 		output = note_list.size()
 	
-	note_instance.index = output
 	$"Notes Layer".add_child(note_instance)
 	note_instance.add_to_group(&"notes")
 	note_instance.area.connect(&"mouse_entered", self.update_note.bind(note_instance))
@@ -883,7 +858,6 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	%Instrumental.stream_paused = !toggled_on
 	
 	if toggled_on:
-		
 		%"Play Button".icon = load("res://assets/sprites/menus/chart editor/pause_button.png")
 		if song_position != %Instrumental.get_playback_position():
 			play_audios(song_position)
@@ -891,8 +865,7 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	else: %"Play Button".icon = load("res://assets/sprites/menus/chart editor/play_button.png")
 
 
-func move_bound_left(strum_name: String):
-	var strum_id: int = find_strum_id(strum_name)
+func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
 	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartManager.strum_count - 1)
 	
@@ -903,10 +876,9 @@ func move_bound_left(strum_name: String):
 	update_grid()
 
 
-func move_bound_right(strum_name: String):
-	var strum_id: int = find_strum_id(strum_name)
+func move_bound_right(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
-	strum_data["strums"][1] = clamp(strum_data["strums"][1] - 1, 0, ChartManager.strum_count - 1)
+	strum_data["strums"][1] = clamp(strum_data["strums"][1] + 1, 0, ChartManager.strum_count - 1)
 	
 	for id in ChartManager.strum_data.size():
 		if ChartManager.strum_data[id]["strums"][0] ==  strum_data["strums"][1]:
@@ -963,12 +935,8 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 ## File button item pressed
 func file_button_item_pressed(id):
 	var item_name: String = %"File Button".get_popup().get_item_text(id)
-	
-	# Create New Song
 	if item_name == "Create New Song":
-		
 		can_chart = false
-		
 		var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
 		
 		add_child(new_file_popup_instance)
@@ -976,12 +944,8 @@ func file_button_item_pressed(id):
 		new_file_popup_instance.connect("file_created", self.new_file)
 		new_file_popup_instance.connect("close_requested", self.close_popup)
 		%"Open Window".play()
-	
-	# Open Song
 	elif item_name == "Open Song":
-		
 		can_chart = false
-		
 		var open_file_popup_instance = OPEN_FILE_POPUP_PRELOAD.instantiate()
 		
 		add_child(open_file_popup_instance)
@@ -990,14 +954,9 @@ func file_button_item_pressed(id):
 		open_file_popup_instance.connect("close_requested", self.close_popup)
 		open_file_popup_instance.connect("canceled", self.close_popup)
 		%"Open Window".play()
-	
-	# Save Chart
 	elif id == 2:
 		save()
-	
-	# Convert Chart
 	elif id == 7:
-		
 		can_chart = false
 		
 		var convert_chart_popup_instance = CONVERT_CHART_POPUP_PRELOAD.instantiate()
@@ -1008,17 +967,18 @@ func file_button_item_pressed(id):
 		convert_chart_popup_instance.connect("file_created", self.new_file)
 		convert_chart_popup_instance.connect("close_requested", self.close_popup)
 		%"Open Window".play()
-	
-	# Autosave
 	elif id == 3:
 		SettingsManager.set_value("chart", "auto_save", !SettingsManager.get_value("chart", "auto_save"))
-		%"File Button".get_popup().set_item_checked(5, SettingsManager.get_value("chart", "auto_save"))
+		%"File Button".get_popup().set_item_checked(
+			%"File Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "auto_save"))
 		%"Note Place".play()
-	
-	# Exit
 	elif id == 6:
 		Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
 		can_chart = false
+	elif id == 8:
+		can_chart = false
+		%"Export External Popup".popup()
+		%"Open Window".play()
 
 ## Edit button item pressed
 func edit_button_item_pressed(id):
@@ -1144,3 +1104,7 @@ func update_note(note):
 		hovered_note = find_note(note.lane, note.time)
 	else:
 		hovered_note = -1
+
+func _on_export_external_popup_file_selected(path: String) -> void:
+	ResourceSaver.save(chart, path)
+	%"Export External Popup".hide()

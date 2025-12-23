@@ -98,32 +98,11 @@ position = Vector2(640, 288)
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_kw6yb")
 position = Vector2(-528, 240)
-animation_names = Dictionary[StringName, StringName]({
-&"attack": &"Kick Up",
-&"attack_prepare": &"Knee Forward",
-&"cheer": &"Laugh",
-&"down": &"Pose Down",
-&"idle": &"Idle",
-&"left": &"Pose Left",
-&"light_can": &"Light Can",
-&"right": &"Pose Right",
-&"up": &"Pose Up"
-})
 
 [node name="Metronome" parent="Characters" instance=ExtResource("14_1x41t")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_040ww")
 position = Vector2(80, 176)
-animation_names = Dictionary[StringName, StringName]({
-&"cheer": &"GF Cheer",
-&"cry": &"gf sad",
-&"down": &"GF Down Note",
-&"idle": &"GF Dancing Beat",
-&"left": &"GF left note",
-&"right": &"GF Right Note",
-&"shake": &"GF FEAR ",
-&"up": &"GF Up Note"
-})
 
 [node name="UI" parent="." instance=ExtResource("15_dj0ml")]
 layer = 10

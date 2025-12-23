@@ -7,8 +7,7 @@
 sprite_frames = ExtResource("1_8sw2w")
 animation = &"story_mode basic"
 script = ExtResource("2_1n74k")
-animation_names = {
-"idle": "story_mode basic",
-"selected": "story_mode white"
-}
-offsets = {}
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"story_mode basic",
+&"selected": &"story_mode white"
+})

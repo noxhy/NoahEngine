@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://boann8nscwxeu"
+path="res://.godot/imported/Voices-parents-christmas-erect.ogg-3972c1ddeb496a0385ffabf1dd231c42.oggvorbisstr"
+
+[deps]
+
+source_file="res://playable songs/eggnog/audio/Voices-parents-christmas-erect.ogg"
+dest_files=["res://.godot/imported/Voices-parents-christmas-erect.ogg-3972c1ddeb496a0385ffabf1dd231c42.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

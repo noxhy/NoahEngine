@@ -7,7 +7,7 @@
 sprite_frames = ExtResource("1_85wfu")
 animation = &"credits idle"
 script = ExtResource("2_40krp")
-animation_names = {
-"idle": "credits idle",
-"selected": "credits white"
-}
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"credits idle",
+&"selected": &"credits white"
+})

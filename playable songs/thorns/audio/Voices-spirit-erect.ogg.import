@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bta0y1rxk8sx"
+path="res://.godot/imported/Voices-spirit-erect.ogg-5fc25dd82b6f55ad8b9bdc9b75943bc6.oggvorbisstr"
+
+[deps]
+
+source_file="res://playable songs/thorns/audio/Voices-spirit-erect.ogg"
+dest_files=["res://.godot/imported/Voices-spirit-erect.ogg-5fc25dd82b6f55ad8b9bdc9b75943bc6.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

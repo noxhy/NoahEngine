@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b2uxiv65p4tkb"
+path="res://.godot/imported/Inst-pico.ogg-48f6415d6cec3b54393582c9913a6573.oggvorbisstr"
+
+[deps]
+
+source_file="res://playable songs/stress/audio/Inst-pico.ogg"
+dest_files=["res://.godot/imported/Inst-pico.ogg-48f6415d6cec3b54393582c9913a6573.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

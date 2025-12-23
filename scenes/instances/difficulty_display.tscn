@@ -9,10 +9,10 @@ z_index = 1
 sprite_frames = ExtResource("1_jakc6")
 animation = &"erect"
 script = ExtResource("2_g1448")
-animation_names = {
-"easy": "easy",
-"erect": "erect",
-"hard": "hard",
-"nightmare": "nightmare",
-"normal": "normal"
-}
+animation_names = Dictionary[StringName, StringName]({
+&"easy": &"easy",
+&"erect": &"erect",
+&"hard": &"hard",
+&"nightmare": &"nightmare",
+&"normal": &"normal"
+})

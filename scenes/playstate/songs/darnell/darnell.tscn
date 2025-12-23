@@ -71,32 +71,10 @@ follow_viewport_enabled = true
 unique_name_in_owner = true
 z_index = 1
 position = Vector2(640, 288)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Pico Down Note",
-&"idle": &"Pico Idle Dance",
-&"left": &"Pico NOTE LEFT",
-&"miss_down": &"Pico Down Note MISS",
-&"miss_left": &"Pico NOTE LEFT miss",
-&"miss_right": &"Pico Note Right Miss",
-&"miss_up": &"pico Up note miss",
-&"right": &"Pico Note Right",
-&"up": &"pico Up note"
-})
 
 [node name="Enemy" parent="Characters" instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
 position = Vector2(-528, 240)
-animation_names = Dictionary[StringName, StringName]({
-&"attack": &"Kick Up",
-&"attack_prepare": &"Knee Forward",
-&"cheer": &"Laugh",
-&"down": &"Pose Down",
-&"idle": &"Idle",
-&"left": &"Pose Left",
-&"light_can": &"Light Can",
-&"right": &"Pose Right",
-&"up": &"Pose Up"
-})
 
 [node name="Metronome" parent="Characters" instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true
@@ -104,17 +82,6 @@ z_index = -1
 position = Vector2(80, 179)
 slope = 0.3
 update_rate = 0.04
-animation_names = Dictionary[StringName, StringName]({
-&"cheer": &"combo celebration 1 nene instance 1",
-&"cheer_2": &"fawn nene instance 1",
-&"cry": &"laughing nene instance 1",
-&"idle": &"Nene Abot Idle instance 1",
-&"knife_idle": &"knife high held instance 1",
-&"knife_lower": &"knife lower instance 1",
-&"knife_raise": &"knife raise instance 1",
-&"knife_throw": &"knife toss instance 1",
-&"laugh": &"laughing nene instance 1"
-})
 
 [node name="UI" parent="." instance=ExtResource("12_a2iw0")]
 layer = 10

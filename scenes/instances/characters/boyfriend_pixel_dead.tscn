@@ -6,16 +6,16 @@
 [node name="Boyfriend Pixel Dead" type="Node2D"]
 script = ExtResource("1_ybjrm")
 idle_animation = ""
-animation_names = {
-"accept": "BF continue",
-"idle": "BF dead",
-"intro": "BF dies"
-}
-offsets = {
-"BF continue": Vector2(0, -24),
-"BF dead": Vector2(0, -24),
-"BF dies": Vector2(1.5, -23.5)
-}
+animation_names = Dictionary[StringName, StringName]({
+&"accept": &"BF continue",
+&"idle": &"BF dead",
+&"intro": &"BF dies"
+})
+offsets = Dictionary[StringName, Vector2]({
+&"BF continue": Vector2(0, -24),
+&"BF dead": Vector2(0, -24),
+&"BF dies": Vector2(1.5, -23.5)
+})
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1

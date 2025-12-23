@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://4k4ic3uap0fg"
+path="res://.godot/imported/Voices-darnell-bf.ogg-bcf32e219ddee49311e66b7792b58d9b.oggvorbisstr"
+
+[deps]
+
+source_file="res://playable songs/lit up/audio/Voices-darnell-bf.ogg"
+dest_files=["res://.godot/imported/Voices-darnell-bf.ogg-bcf32e219ddee49311e66b7792b58d9b.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

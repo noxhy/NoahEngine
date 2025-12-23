@@ -12,7 +12,4 @@ pixel_texture = true
 rating_scale = 5.0
 numbers_scale = 5.0
 numbers_spacing = 10
-animation_names = Dictionary[String, String]({})
-offsets = Dictionary[String, Vector2]({})
 countdown_animation = "pixel_countdown"
-pause_scene = "res://scenes/playstate/pause_menu.tscn"

@@ -37,39 +37,18 @@ unique_name_in_owner = true
 z_index = 1
 position = Vector2(972, 678)
 scale = Vector2(6, 6)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"BF DOWN NOTE instance 1",
-&"idle": &"BF IDLE instance 1",
-&"left": &"BF LEFT NOTE instance 1",
-&"miss_down": &"BF DOWN MISS instance 1",
-&"miss_left": &"BF LEFT MISS instance 1",
-&"miss_right": &"BF RIGHT MISS instance 1",
-&"miss_up": &"BF UP MISS instance 1",
-&"right": &"BF RIGHT NOTE instance 1",
-&"up": &"BF UP NOTE instance 1"
-})
 
 [node name="Enemy" parent="." instance=ExtResource("10_bowlb")]
 unique_name_in_owner = true
 z_index = 1
 position = Vector2(344, 726)
 scale = Vector2(6, 6)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"pixel_down",
-&"idle": &"df_idle",
-&"left": &"pixel_left",
-&"right": &"pixel_right",
-&"up": &"pixel_up"
-})
 
 [node name="Metronome" parent="." instance=ExtResource("11_vat3l")]
 unique_name_in_owner = true
 z_index = -1
 position = Vector2(660, 670)
 scale = Vector2(6, 6)
-animation_names = Dictionary[StringName, StringName]({
-&"idle": &"GF IDLE"
-})
 
 [node name="Conductor" type="Node" parent="."]
 script = ExtResource("8_ijcj0")

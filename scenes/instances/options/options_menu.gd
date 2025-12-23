@@ -90,25 +90,27 @@ func load_category(category: String, options: Array):
 		var type: StringName = packet[0]
 		var data = packet[1]
 		var option_name: String;
+		var description: String = ""
 		
 		if type == &"option":
-			option_name = data
+			option_name = data["id"]
 			var option = SettingsManager._defaults.get(category).get(option_name)
 			if (option is float) or (option is int):
 				instance = NUMBER_PRELOAD.instantiate()
-				var number_info: Dictionary = SettingsManager.get_number_info(category, option_name)
-				instance.minimum = number_info.get("min")
-				instance.maximum = number_info.get("max")
-				instance.step = number_info.get("snap", 1)
-				instance.value_name = number_info.get("unit", "")
-				instance.value_scale = number_info.get("scale", 1)
+				instance.minimum = data.get("min", 0)
+				instance.maximum = data.get("max", 100)
+				instance.step = data.get("snap", 1)
+				instance.value_name = data.get("unit", "")
+				instance.value_scale = data.get("scale", 1)
 			elif (option is bool):
 				instance = BOOL_PRELOAD.instantiate()
 			elif (category == "keybinds"):
 				instance = KEYBIND_PRELOAD.instantiate()
 			else:
 				printerr("Not a valid option type: ", option.get_class())
+			
 			instance.display_name = option_name.replace("_", " ")
+			description = data.get("description", "")
 		elif type == &"label":
 			instance = LABEL_PRELOAD.instantiate()
 			instance.display_name = data
@@ -117,6 +119,7 @@ func load_category(category: String, options: Array):
 		
 		instance.setting_category = category
 		instance.setting_name = option_name
+		instance.description = description
 		
 		%Options.add_child(instance)
 		instance.add_to_group(&"options")
@@ -140,16 +143,16 @@ func update(i: int, mouse: bool = false):
 	SoundManager.scroll.play()
 	get_viewport().gui_release_focus()
 	
-	set_description()
+	set_description(get_selected_node().description)
 	
 	if !mouse:
 		var tween = create_tween()
 		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		if get_selected_node().position.y >= box_limit:
-			tween.tween_property(%Options, "position",
-			Vector2(%Options.position.x, -(get_selected_node().position.y - box_limit) + 64), 0.2)
+			tween.tween_property(%Options, "position:y",
+			-(get_selected_node().position.y - box_limit) + 64, 0.2)
 		else:
-			tween.tween_property(%Options, "position", Vector2(%Options.position.x, 64), 0.2)
+			tween.tween_property(%Options, "position:y", 64, 0.2)
 
 func get_selected_node() -> Node:
 	var options = get_tree().get_nodes_in_group(&"options")

@@ -117,12 +117,12 @@ func new_file(dir: String):
 		var chart: Chart = convert_chart(chart_file, chart_type, difficulty)
 		song_file.tempo = chart.get_tempos_data().get(chart.get_tempos_data().keys()[0])
 		
-		var chart_path: String = dir + "/" + song_file.title + "-" + difficulty + ".res"
+		var chart_path: String = dir + "/" + song_file.title + "-" + difficulty + ".tres"
 		ResourceSaver.save(chart, chart_path)
 		difficulty_dict[difficulty] = {"chart": ResourceUID.path_to_uid(chart_path)}
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = dir + "/" + song_file.title + ".res"
+	var song_path: String = dir + "/" + song_file.title + ".tres"
 	ResourceSaver.save(song_file, ResourceUID.path_to_uid(song_path))
 	
 	# Emits signal to return to the chart editor

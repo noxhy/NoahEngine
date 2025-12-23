@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bbxa2e6jyyebr"
+path="res://.godot/imported/Inst-erect.ogg-90699bb59a14a76f29dc5db9bcf3ed59.oggvorbisstr"
+
+[deps]
+
+source_file="res://playable songs/cocoa/audio/Inst-erect.ogg"
+dest_files=["res://.godot/imported/Inst-erect.ogg-90699bb59a14a76f29dc5db9bcf3ed59.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

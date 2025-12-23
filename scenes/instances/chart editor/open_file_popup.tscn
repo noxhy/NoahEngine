@@ -16,7 +16,7 @@ min_size = Vector2i(480, 0)
 theme = ExtResource("1_gikln")
 ok_button_text = "Open"
 file_mode = 0
-root_subfolder = "res://assets/songs/playable songs/"
+root_subfolder = "res://playable songs/"
 filters = PackedStringArray("*.tres", "*.res")
 script = ExtResource("1_umk2k")
 

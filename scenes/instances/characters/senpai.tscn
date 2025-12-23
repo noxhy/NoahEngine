@@ -6,24 +6,24 @@
 
 [node name="Senpai" type="Node2D"]
 script = ExtResource("1_e2dgr")
-animation_names = Dictionary[String, String]({
-"down": "SENPAI DOWN NOTE instance 1",
-"idle": "Senpai Idle instance 1",
-"left": "SENPAI LEFT NOTE instance 1",
-"right": "SENPAI RIGHT NOTE instance 1",
-"up": "SENPAI UP NOTE instance 1"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"SENPAI DOWN NOTE instance 1",
+&"idle": &"Senpai Idle instance 1",
+&"left": &"SENPAI LEFT NOTE instance 1",
+&"right": &"SENPAI RIGHT NOTE instance 1",
+&"up": &"SENPAI UP NOTE instance 1"
 })
-offsets = Dictionary[String, Vector2]({
-"Angry Senpai DOWN NOTE instance 1": Vector2(-1.5, -64),
-"Angry Senpai Idle instance 1": Vector2(2.08189e-12, -64),
-"Angry Senpai LEFT NOTE instance 1": Vector2(-3.5, -64),
-"Angry Senpai RIGHT NOTE instance 1": Vector2(-0.5, -64),
-"Angry Senpai UP NOTE instance 1": Vector2(-2.5, -69.5),
-"SENPAI DOWN NOTE instance 1": Vector2(-1.5, -64),
-"SENPAI LEFT NOTE instance 1": Vector2(-3.5, -64),
-"SENPAI RIGHT NOTE instance 1": Vector2(-0.5, -64),
-"SENPAI UP NOTE instance 1": Vector2(-2.5, -69.5),
-"Senpai Idle instance 1": Vector2(2.08189e-12, -64)
+offsets = Dictionary[StringName, Vector2]({
+&"Angry Senpai DOWN NOTE instance 1": Vector2(-1.5, -64),
+&"Angry Senpai Idle instance 1": Vector2(2.08189e-12, -64),
+&"Angry Senpai LEFT NOTE instance 1": Vector2(-3.5, -64),
+&"Angry Senpai RIGHT NOTE instance 1": Vector2(-0.5, -64),
+&"Angry Senpai UP NOTE instance 1": Vector2(-2.5, -69.5),
+&"SENPAI DOWN NOTE instance 1": Vector2(-1.5, -64),
+&"SENPAI LEFT NOTE instance 1": Vector2(-3.5, -64),
+&"SENPAI RIGHT NOTE instance 1": Vector2(-0.5, -64),
+&"SENPAI UP NOTE instance 1": Vector2(-2.5, -69.5),
+&"Senpai Idle instance 1": Vector2(2.08189e-12, -64)
 })
 icons = ExtResource("2_ue7od")
 color = Color(0.890196, 0.533333, 0.294118, 1)

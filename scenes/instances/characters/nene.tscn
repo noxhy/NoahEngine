@@ -102,26 +102,26 @@ _data = {
 script = ExtResource("1_4sh7w")
 visualizer_nodes = [NodePath("Visualizer Nodes/Visualizer 1"), NodePath("Visualizer Nodes/Visualizer 2"), NodePath("Visualizer Nodes/Visualizer 3"), NodePath("Visualizer Nodes/Visualizer 4"), NodePath("Visualizer Nodes/Visualizer 5"), NodePath("Visualizer Nodes/Visualizer 6"), NodePath("Visualizer Nodes/Visualizer 7")]
 slope = 0.45
-animation_names = Dictionary[String, String]({
-"cheer": "combo celebration 1 nene instance 1",
-"cheer_2": "fawn nene instance 1",
-"cry": "laughing nene instance 1",
-"idle": "Nene Abot Idle instance 1",
-"knife_idle": "knife high held instance 1",
-"knife_lower": "knife lower instance 1",
-"knife_raise": "knife raise instance 1",
-"knife_throw": "knife toss instance 1",
-"laugh": "laughing nene instance 1"
+animation_names = Dictionary[StringName, StringName]({
+&"cheer": &"combo celebration 1 nene instance 1",
+&"cheer_2": &"fawn nene instance 1",
+&"cry": &"laughing nene instance 1",
+&"idle": &"Nene Abot Idle instance 1",
+&"knife_idle": &"knife high held instance 1",
+&"knife_lower": &"knife lower instance 1",
+&"knife_raise": &"knife raise instance 1",
+&"knife_throw": &"knife toss instance 1",
+&"laugh": &"laughing nene instance 1"
 })
-offsets = Dictionary[String, Vector2]({
-"Nene Abot Idle instance 1": Vector2(0, -311),
-"combo celebration 1 nene instance 1": Vector2(8, -456),
-"fawn nene instance 1": Vector2(-17, -405),
-"knife high held instance 1": Vector2(-4, -434),
-"knife lower instance 1": Vector2(-5, -335),
-"knife raise instance 1": Vector2(-50, -434),
-"knife toss instance 1": Vector2(14, -416),
-"laughing nene instance 1": Vector2(-49, -387)
+offsets = Dictionary[StringName, Vector2]({
+&"Nene Abot Idle instance 1": Vector2(0, -311),
+&"combo celebration 1 nene instance 1": Vector2(8, -456),
+&"fawn nene instance 1": Vector2(-17, -405),
+&"knife high held instance 1": Vector2(-4, -434),
+&"knife lower instance 1": Vector2(-5, -335),
+&"knife raise instance 1": Vector2(-50, -434),
+&"knife toss instance 1": Vector2(14, -416),
+&"laughing nene instance 1": Vector2(-49, -387)
 })
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

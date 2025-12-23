@@ -7,7 +7,7 @@
 sprite_frames = ExtResource("1_dundt")
 animation = &"options basic"
 script = ExtResource("2_1l3ep")
-animation_names = {
-"idle": "options basic",
-"selected": "options white"
-}
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"options basic",
+&"selected": &"options white"
+})

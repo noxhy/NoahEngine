@@ -58,10 +58,6 @@ animation_names = Dictionary[StringName, StringName]({
 
 [node name="Freeplay" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("4_hiw7n")]
 position = Vector2(-12.5, -87)
-animation_names = Dictionary[StringName, StringName]({
-&"idle": &"freeplay basic",
-&"selected": &"freeplay white"
-})
 
 [node name="Credits" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("8_ya104")]
 position = Vector2(-12.5, 93)

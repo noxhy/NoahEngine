@@ -8,7 +8,6 @@
 position = Vector2(-248, 0)
 script = ExtResource("1_fi00i")
 atlas = "res://assets/sprites/menus/results/results-bf/resultsSHIT"
-frame = 241
 playing = true
 auto_start = true
 loop_frame = 149

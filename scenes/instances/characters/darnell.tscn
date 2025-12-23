@@ -33,19 +33,19 @@ animations = [{
 
 [node name="Darnell" type="Node2D"]
 script = ExtResource("1_h007o")
-animation_names = Dictionary[String, String]({
-"attack": "Kick Up",
-"attack_prepare": "Knee Forward",
-"cheer": "Laugh",
-"down": "Pose Down",
-"idle": "Idle",
-"left": "Pose Left",
-"light_can": "Light Can",
-"right": "Pose Right",
-"up": "Pose Up"
+animation_names = Dictionary[StringName, StringName]({
+&"attack": &"Kick Up",
+&"attack_prepare": &"Knee Forward",
+&"cheer": &"Laugh",
+&"down": &"Pose Down",
+&"idle": &"Idle",
+&"left": &"Pose Left",
+&"light_can": &"Light Can",
+&"right": &"Pose Right",
+&"up": &"Pose Up"
 })
-offsets = Dictionary[String, Vector2]({
-"Idle": Vector2(93, -155)
+offsets = Dictionary[StringName, Vector2]({
+&"Idle": Vector2(93, -155)
 })
 icons = SubResource("SpriteFrames_mh2u5")
 color = Color(0.45098, 0.329412, 0.670588, 1)

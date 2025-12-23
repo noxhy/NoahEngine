@@ -6,12 +6,12 @@
 
 [node name="Spirit" type="Node2D"]
 script = ExtResource("1_8s5sa")
-animation_names = Dictionary[String, String]({
-"down": "pixel_down",
-"idle": "df_idle",
-"left": "pixel_left",
-"right": "pixel_right",
-"up": "pixel_up"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"pixel_down",
+&"idle": &"df_idle",
+&"left": &"pixel_left",
+&"right": &"pixel_right",
+&"up": &"pixel_up"
 })
 icons = ExtResource("2_s66hv")
 color = Color(0.8, 0.262745, 0.439216, 1)

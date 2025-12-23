@@ -67,10 +67,10 @@ func _process(_delta):
 	
 	if can_click:
 		
-		if Input.is_action_just_pressed("ui_up"):
+		if Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("mouse_scroll_up"):
 			update(selected_song - 1)
 		
-		elif Input.is_action_just_pressed("ui_down"):
+		elif Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("mouse_scroll_down"):
 			update(selected_song + 1)
 		
 		elif Input.is_action_just_pressed("ui_accept"):

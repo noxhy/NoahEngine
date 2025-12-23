@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://cmwlnqqj5h0xy"]
+[gd_scene load_steps=32 format=3 uid="uid://cmwlnqqj5h0xy"]
 
 [ext_resource type="Texture2D" uid="uid://cqa3tks0w6o1y" path="res://assets/sprites/menus/results/diff_easy.png" id="1_gxan6"]
 [ext_resource type="Script" uid="uid://dy5fv0hfnamvk" path="res://scenes/results/results.gd" id="1_qwq5p"]
@@ -10,12 +10,12 @@
 [ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://assets/sounds/menu sounds/menu confirm.ogg" id="3_vy634"]
 [ext_resource type="Texture2D" uid="uid://g1fi6qskp1rs" path="res://assets/sprites/menus/results/diff_nightmare.png" id="4_2wc5m"]
 [ext_resource type="Texture2D" uid="uid://cf2rwo3crp3vw" path="res://assets/sprites/menus/results/diff_normal.png" id="5_6nhr5"]
-[ext_resource type="FontFile" uid="uid://d23vxklp5i75g" path="res://assets/fonts/results_song_name.png" id="7_gsu1s"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/menus/results/results.res" id="8_6nhr5"]
+[ext_resource type="FontVariation" uid="uid://dl6wa7fjpfkfs" path="res://assets/fonts/results_song_name_variation.tres" id="6_vy634"]
+[ext_resource type="SpriteFrames" uid="uid://bxe4t16cyra6t" path="res://assets/sprites/menus/results/results.res" id="8_6nhr5"]
 [ext_resource type="Texture2D" uid="uid://dtu4q8ff0jkuj" path="res://assets/sprites/menus/results/topBarBlack.png" id="9_8p8t4"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/menus/results/sound_system.res" id="10_gxgws"]
+[ext_resource type="SpriteFrames" uid="uid://dgcl3vvmvwfpi" path="res://assets/sprites/menus/results/sound_system.res" id="10_gxgws"]
 [ext_resource type="SpriteFrames" uid="uid://c6pwb5syt5i6n" path="res://assets/sprites/menus/results/score.res" id="11_37f5i"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/menus/results/tallies.res" id="12_37f5i"]
+[ext_resource type="SpriteFrames" uid="uid://bpp3l0at1e1j1" path="res://assets/sprites/menus/results/tallies.res" id="12_37f5i"]
 [ext_resource type="SpriteFrames" uid="uid://meis7b0c2ay" path="res://assets/sprites/menus/results/highscore.res" id="12_pxgxe"]
 [ext_resource type="PackedScene" uid="uid://d1wj3tkjvp2xi" path="res://scenes/instances/results/score_display.tscn" id="13_acbi1"]
 [ext_resource type="Texture2D" uid="uid://dg02nq8n2nt3u" path="res://assets/sprites/menus/results/clearPercent/clearPercentText.png" id="17_dd5hj"]
@@ -39,13 +39,8 @@ spacing_glyph = -10
 font = SubResource("FontVariation_ca5lo")
 font_size = 48
 
-[sub_resource type="FontVariation" id="FontVariation_gxgws"]
-base_font = ExtResource("7_gsu1s")
-spacing_glyph = -11
-baseline_offset = 0.03
-
 [sub_resource type="LabelSettings" id="LabelSettings_2wc5m"]
-font = SubResource("FontVariation_gxgws")
+font = ExtResource("6_vy634")
 font_size = 64
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_8p8t4"]

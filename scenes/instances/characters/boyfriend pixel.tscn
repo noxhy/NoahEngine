@@ -6,16 +6,16 @@
 
 [node name="Boyfriend Pixel" type="Node2D"]
 script = ExtResource("1_gqt7p")
-animation_names = Dictionary[String, String]({
-"down": "BF DOWN NOTE instance 1",
-"idle": "BF IDLE instance 1",
-"left": "BF LEFT NOTE instance 1",
-"miss_down": "BF DOWN MISS instance 1",
-"miss_left": "BF LEFT MISS instance 1",
-"miss_right": "BF RIGHT MISS instance 1",
-"miss_up": "BF UP MISS instance 1",
-"right": "BF RIGHT NOTE instance 1",
-"up": "BF UP NOTE instance 1"
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"BF DOWN NOTE instance 1",
+&"idle": &"BF IDLE instance 1",
+&"left": &"BF LEFT NOTE instance 1",
+&"miss_down": &"BF DOWN MISS instance 1",
+&"miss_left": &"BF LEFT MISS instance 1",
+&"miss_right": &"BF RIGHT MISS instance 1",
+&"miss_up": &"BF UP MISS instance 1",
+&"right": &"BF RIGHT NOTE instance 1",
+&"up": &"BF UP NOTE instance 1"
 })
 icons = ExtResource("2_m6lar")
 color = Color(0.501961, 0.729412, 0.811765, 1)

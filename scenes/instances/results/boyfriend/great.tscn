@@ -8,7 +8,6 @@
 position = Vector2(40, -16)
 script = ExtResource("1_k5vj2")
 atlas = "res://assets/sprites/menus/results/results-bf/resultsGREAT/bf"
-frame = 36
 playing = true
 auto_start = true
 loop_frame = 13
@@ -18,7 +17,6 @@ metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 position = Vector2(-120, -64)
 script = ExtResource("1_k5vj2")
 atlas = "res://assets/sprites/menus/results/results-bf/resultsGREAT/gf"
-frame = 31
 playing = true
 auto_start = true
 loop_frame = 8

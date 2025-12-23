@@ -18,7 +18,7 @@ script = ExtResource("2_yyjwr")
 
 [node name="Move Lane Left" type="Button" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 0
 size_flags_stretch_ratio = 0.5
 text = "<"
 
@@ -30,7 +30,7 @@ autowrap_mode = 3
 
 [node name="Move Lane Right" type="Button" parent="."]
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 8
 size_flags_stretch_ratio = 0.5
 text = ">"
 

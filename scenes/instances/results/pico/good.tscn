@@ -8,6 +8,7 @@
 position = Vector2(-64, 56)
 script = ExtResource("1_hik54")
 atlas = "res://assets/sprites/menus/results/results-pico/resultsGOOD"
+playing = true
 auto_start = true
 loop_frame = 36
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"

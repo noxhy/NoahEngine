@@ -1,7 +1,7 @@
 extends HFlowContainer
 
-signal move_bound_left(strum_id: String)
-signal move_bound_right(strum_id: String)
+signal move_bound_left(strum_id: int)
+signal move_bound_right(strum_id: int)
 signal updated
 signal opened
 signal closed

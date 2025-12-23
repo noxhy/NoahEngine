@@ -112,7 +112,6 @@ label_settings = SubResource("LabelSettings_jjooh")
 position = Vector2(448, -312)
 script = ExtResource("2_re7fs")
 atlas = "res://assets/sprites/menus/freeplay/characters/boyfriend"
-frame = 418
 playing = true
 auto_start = true
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"

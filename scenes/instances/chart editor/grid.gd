@@ -58,7 +58,6 @@ func _draw():
 
 ## Returns the relative position of a grid position from the top left corner of a gridspace
 func get_real_position(location: Vector2, snap: Vector2 = grid_size) -> Vector2:
-	
 	var output: Vector2 = Vector2(location) * snap * zoom
 	output += $TextureRect.position
 	return output

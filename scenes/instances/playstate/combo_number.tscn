@@ -10,31 +10,31 @@ script = ExtResource("1_derg0")
 ui_skin = ExtResource("2_kwa5s")
 
 [node name="OffsetSprite" type="AnimatedSprite2D" parent="."]
-frames = ExtResource("1_wdlcl")
+sprite_frames = ExtResource("1_wdlcl")
 animation = &"fc_9"
 script = ExtResource("2_oy3lu")
-animation_names = {
-"0": "0",
-"1": "1",
-"2": "2",
-"3": "3",
-"4": "4",
-"5": "5",
-"6": "6",
-"7": "7",
-"8": "8",
-"9": "9",
-"fc_0": "fc_0",
-"fc_1": "fc_1",
-"fc_2": "fc_2",
-"fc_3": "fc_3",
-"fc_4": "fc_4",
-"fc_5": "fc_5",
-"fc_6": "fc_6",
-"fc_7": "fc_7",
-"fc_8": "fc_8",
-"fc_9": "fc_9"
-}
+animation_names = Dictionary[StringName, StringName]({
+&"0": &"0",
+&"1": &"1",
+&"2": &"2",
+&"3": &"3",
+&"4": &"4",
+&"5": &"5",
+&"6": &"6",
+&"7": &"7",
+&"8": &"8",
+&"9": &"9",
+&"fc_0": &"fc_0",
+&"fc_1": &"fc_1",
+&"fc_2": &"fc_2",
+&"fc_3": &"fc_3",
+&"fc_4": &"fc_4",
+&"fc_5": &"fc_5",
+&"fc_6": &"fc_6",
+&"fc_7": &"fc_7",
+&"fc_8": &"fc_8",
+&"fc_9": &"fc_9"
+})
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.5

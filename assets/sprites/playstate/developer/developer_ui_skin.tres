@@ -8,11 +8,5 @@
 script = ExtResource("1_viwnt")
 rating_texture = ExtResource("1_ifch6")
 numbers_texture = ExtResource("1_n60qe")
-pixel_texture = false
 rating_scale = 0.5
 numbers_scale = 0.5
-numbers_spacing = 64
-animation_names = {}
-offsets = {}
-countdown_animation = "developer_countdown"
-pause_scene = "res://scenes/playstate/pause_menu.tscn"

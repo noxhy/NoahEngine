@@ -2,11 +2,13 @@
 extends Node
 class_name PlayState
 
-const COMPENSATION = 1.0 / 30.0
-const SCORING_SLOPE = 0.08
-const SCORING_OFFSET = 0.05499
-const MIN_SCORE = 9
-const MAX_SCORE = 500
+const COMPENSATION: float = 1.0 / 30.0
+const SCORING_SLOPE: float = 0.08
+const SCORING_OFFSET: float = 0.05499
+const MIN_SCORE: int = 9
+const MAX_SCORE: int = 500
+const HOLD_SCORE: float = 250
+const HOLD_HEALTH: float = 6
 
 signal create_note(time: float, lane: int, note_length: float, note_type: Variant, tempo: float)
 signal new_event(time: float, event_name: String, event_parameters: Array)
@@ -386,7 +388,6 @@ func pause():
 
 
 func score_note(hit_time: float):
-	
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-SCORING_SLOPE * ((hit_time - SCORING_OFFSET) * 1000))))
 	var add: int = int(MAX_SCORE * factor + MIN_SCORE)
 	add = clamp(add, MIN_SCORE, MAX_SCORE)
@@ -394,7 +395,6 @@ func score_note(hit_time: float):
 
 
 func basic_event(time: float, event_name: String, event_parameters: Array):
-	
 	if event_name == "camera_position":
 		var camera_position = host.camera_positions[int(event_parameters[0])].global_position
 		if camera_position != null: camera.position = camera_position
@@ -536,14 +536,12 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 
 
 func note_holding(time, lane, note_type, strum_manager):
-	
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		
 		health += abs(time) * 4
-		score += int(abs(time) * 1000)
+		score += int(abs(time) * HOLD_SCORE)
 		
 		timings_sum += time
 		entries += time
@@ -554,22 +552,17 @@ func note_holding(time, lane, note_type, strum_manager):
 
 
 func note_miss(time, lane, length, note_type, hit_time, strum_manager):
-	
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
 	
 	if !strum_manager.enemy_slot:
-		
 		if note_type == -1:
-			
 			score -= 10
-			health -= (1 + clamp(combo / 20.0, 0, 20)) * (length + 1)
+			health -= 1
 			update_ui_stats()
-		
 		else:
-			
 			score -= 100
-			health -= (4 + clamp(combo / 20.0, 0, 20)) * (length + 1)
+			health -= (1 + clamp(combo / 20.0, 0, 20)) * (length + 4.5)
 			combo = 0
 			misses += 1
 			 

@@ -18,7 +18,7 @@ func _ready():
 	
 	await playstate_host.setup_finished
 	
-	if get_node_or_null("%Stage") != null:
+	if !get_node_or_null("%Stage"):
 		playstate_host.conductor.connect("new_beat", %Stage._on_conductor_new_beat)
 	
 	playstate_host.conductor.connect("new_beat", self._on_conductor_new_beat)

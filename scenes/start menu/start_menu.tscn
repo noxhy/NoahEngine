@@ -363,9 +363,6 @@ unique_name_in_owner = true
 visible = false
 position = Vector2(256, 312)
 scale = Vector2(0.95, 0.95)
-animation_names = Dictionary[StringName, StringName]({
-&"idle": &"gfDance"
-})
 
 [node name="Play Label" type="Label" parent="UI"]
 anchors_preset = -1

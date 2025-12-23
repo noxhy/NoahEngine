@@ -104,13 +104,6 @@ z_index = 1
 material = SubResource("ShaderMaterial_orev5")
 position = Vector2(-344, 288)
 scale = Vector2(0.7, 0.7)
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"Dad Sing Note DOWN",
-&"idle": &"Dad idle dance",
-&"left": &"Dad Sing Note LEFT",
-&"right": &"Dad Sing Note RIGHT",
-&"up": &"Dad Sing Note UP"
-})
 metadata/_edit_lock_ = true
 
 [node name="Metronome" parent="Characters" instance=ExtResource("11_pruvp")]
@@ -119,16 +112,6 @@ z_index = -1
 material = SubResource("ShaderMaterial_8srk8")
 position = Vector2(96, 272)
 scale = Vector2(0.7, 0.7)
-animation_names = Dictionary[StringName, StringName]({
-&"cheer": &"GF Cheer",
-&"cry": &"gf sad",
-&"down": &"GF Down Note",
-&"idle": &"GF Dancing Beat",
-&"left": &"GF left note",
-&"right": &"GF Right Note",
-&"shake": &"GF FEAR ",
-&"up": &"GF Up Note"
-})
 metadata/_edit_lock_ = true
 
 [node name="UI" parent="." instance=ExtResource("12_b2bjn")]

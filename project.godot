@@ -46,6 +46,7 @@ enabled=PackedStringArray("res://addons/gdanimate/plugin.cfg")
 
 folder_colors={
 "res://assets/": "orange",
+"res://playable songs/": "purple",
 "res://resources/": "green",
 "res://scenes/": "blue"
 }

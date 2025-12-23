@@ -11,34 +11,22 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UI/ColorRect2:size")
+tracks/0/path = NodePath("UI/Song Name:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(936, 732)]
+"values": [Vector2(1280, -344)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("UI/Song Name:position")
+tracks/1/path = NodePath("UI/Other Info:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1280, -344)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("UI/Other Info:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -50,34 +38,22 @@ resource_name = "intro"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UI/ColorRect2:size")
+tracks/0/path = NodePath("UI/Song Name:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(0.241484, 1),
 "update": 0,
-"values": [Vector2(936, 1), Vector2(936, 732)]
+"values": [Vector2(1280, -344), Vector2(-128, -344)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("UI/Song Name:position")
+tracks/1/path = NodePath("UI/Other Info:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.241484, 1),
-"update": 0,
-"values": [Vector2(1280, -344), Vector2(-128, -344)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("UI/Other Info:position")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
 "times": PackedFloat32Array(0, 0.5),
 "transitions": PackedFloat32Array(0.241484, 1),
 "update": 0,
@@ -168,11 +144,3 @@ offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
 offset_bottom = 360.0
-
-[node name="ColorRect2" type="ColorRect" parent="UI"]
-offset_left = -688.0
-offset_top = 568.0
-offset_right = 248.0
-offset_bottom = 1300.0
-rotation = -1.71042
-color = Color(0, 0, 0, 0.564706)

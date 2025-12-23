@@ -315,7 +315,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "File"
-item_count = 8
+item_count = 9
 popup/item_0/text = "Create New Song"
 popup/item_0/id = 0
 popup/item_1/text = "Open Song"
@@ -326,15 +326,24 @@ popup/item_3/id = 4
 popup/item_3/separator = true
 popup/item_4/text = "Save Song"
 popup/item_4/id = 2
-popup/item_5/text = "Autosave"
-popup/item_5/checkable = 1
-popup/item_5/checked = true
-popup/item_5/id = 3
-popup/item_6/id = 5
-popup/item_6/separator = true
-popup/item_7/text = "Exit"
-popup/item_7/id = 6
+popup/item_5/text = "Export Chart Externally"
+popup/item_5/id = 8
+popup/item_6/text = "Autosave"
+popup/item_6/checkable = 1
+popup/item_6/checked = true
+popup/item_6/id = 3
+popup/item_7/id = 5
+popup/item_7/separator = true
+popup/item_8/text = "Exit"
+popup/item_8/id = 6
 metadata/_edit_use_anchors_ = true
+
+[node name="Export External Popup" type="FileDialog" parent="UI/Upper UI/File Button"]
+unique_name_in_owner = true
+initial_position = 4
+size = Vector2i(640, 480)
+display_mode = 1
+access = 2
 
 [node name="Edit Button" type="MenuButton" parent="UI/Upper UI"]
 unique_name_in_owner = true
@@ -442,6 +451,9 @@ metadata/_edit_lock_ = true
 [connection signal="pressed" from="UI/Lower UI/Skip to End" to="." method="_on_skip_to_end_pressed"]
 [connection signal="item_selected" from="UI/Lower UI/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
 [connection signal="value_changed" from="UI/Lower UI/Chart Snap" to="." method="_on_chart_snap_value_changed"]
+[connection signal="canceled" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
+[connection signal="close_requested" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
+[connection signal="file_selected" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_export_external_popup_file_selected"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_close_requested"]
 [connection signal="updated_icon_texture" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_icon_texture"]

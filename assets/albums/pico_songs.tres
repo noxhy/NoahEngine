@@ -3,8 +3,8 @@
 [ext_resource type="Script" uid="uid://c85optaap1atb" path="res://resources/album.gd" id="1_5iepq"]
 [ext_resource type="Texture2D" uid="uid://bwxact2hluls0" path="res://assets/sprites/menus/freeplay/album covers/volume4.png" id="1_yohgl"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_c0fke"]
-[ext_resource type="Resource" uid="uid://7o7st57jogk0" path="res://assets/songs/playable songs/stress/Stress (Pico Mix).res" id="5_v7y5o"]
-[ext_resource type="Resource" uid="uid://6vm4kpp1ccq7" path="res://assets/songs/playable songs/darnell/Darnell.res" id="5_yohgl"]
+[ext_resource type="Resource" uid="uid://7o7st57jogk0" path="res://playable songs/stress/Stress (Pico Mix).res" id="5_v7y5o"]
+[ext_resource type="Resource" uid="uid://6vm4kpp1ccq7" path="res://playable songs/darnell/Darnell.res" id="5_yohgl"]
 
 [resource]
 script = ExtResource("1_5iepq")

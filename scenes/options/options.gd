@@ -5,66 +5,104 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 
 @export var can_click = true
 
-@onready var pages: Dictionary = {
+var pages: Dictionary = {
 	SettingsManager.SEC_KEY_BINDS: {
 		"name": "Keybinds",
 		"options": [
 			[&"label", "Gameplay".to_upper()],
-			[&"option", "note_left"],
-			[&"option", "note_down"],
-			[&"option", "note_up"],
-			[&"option", "note_right"],
-			[&"option", "kill"],
+			[&"option", {"id": "note_left"}],
+			[&"option", {"id": "note_down"}],
+			[&"option", {"id": "note_up"}],
+			[&"option", {"id": "note_right"}],
+			[&"option", {"id": "kill"}],
 			[&"label", "Volume".to_upper()],
-			[&"option", "ui_plus"],
-			[&"option", "ui_minus"],
-			[&"option", "mute"],
+			[&"option", {"id": "ui_plus"}],
+			[&"option", {"id": "ui_minus"}],
+			[&"option", {"id": "mute"}],
 			[&"label", "UI".to_upper()],
-			[&"option", "ui_left"],
-			[&"option", "ui_down"],
-			[&"option", "ui_up"],
-			[&"option", "ui_right"],
-			[&"option", "ui_accept"],
-			[&"option", "ui_cancel"],
+			[&"option", {"id": "ui_left"}],
+			[&"option", {"id": "ui_down"}],
+			[&"option", {"id": "ui_up"}],
+			[&"option", {"id": "ui_right"}],
+			[&"option", {"id": "ui_accept"}],
+			[&"option", {"id": "ui_cancel"}],
 			[&"label", "Miscellaneous".to_upper()],
-			[&"option", "character_select"]
+			[&"option", {"id": "character_select"}]
 		]
 	},
 	SettingsManager.SEC_GAMEPLAY: {
 		"name": "Gameplay",
 		"options": [
-			[&"option", "offset"],
-			[&"option", "ghost_tapping"],
-			[&"option", "downscroll"],
-			[&"option", "botplay"],
-			[&"option", "song_speed"],
-			[&"option", "scroll_speed_scale"]
+			[&"option", {"id": "offset",
+			"description": "Visual note offset.",
+			"min": -500,
+			"max": 500,
+			"snap": 1,
+			"unit": "ms",
+			"scale": 0.001
+			}],
+			[&"option", {"id": "ghost_tapping", "description": "Disables the health and score penalty on hitting a key when there's no active notes."}],
+			[&"option", {"id": "downscroll", "description": "Makes the notes go downwards rather than upwards."}],
+			[&"option", {"id": "botplay", "description": "Automatically hits perfect notes."}],
+			[&"option", {"id": "song_speed",
+			"description": "Adjusts the speed of the song.\nWARNING: Some events do not work properly with different song speeds.",
+			"min": 0.5,
+			"max": 2,
+			"snap": 0.05,
+			"unit": "x"
+			}],
+			[&"option", {"id": "scroll_speed_scale",
+			"description": "Adjusts the scroll speed of the notes.",
+			"min": 0.5,
+			"max": 2,
+			"snap": 0.05,
+			"unit": "x"
+			}]
 		]
 	},
 	SettingsManager.SEC_PREFERENCES: {
 		"name": "Preferences",
 		"options": [
-			[&"option", "combo_ui"],
-			[&"option", "glow_notes"],
-			[&"option", "note_splashes"],
-			[&"option", "ui_bops"],
-			[&"option", "hit_sounds"]
+			[&"option", {"id": "combo_ui", "description": "Displays the rating and combo on the UI layer rather than the World layer"}],
+			[&"option", {"id": "glow_notes", "description": "Makes the notes brighter when active."}],
+			[&"option", {"id": "note_splashes", "description": "Makes the notes brighter when active."}],
+			[&"option", {"id": "ui_bops", "description": "Makes the UI layer bop in menus and gameplay."}],
+			[&"option", {"id": "hit_sounds", "description": "Plays a sound upon hitting a note."}]
 		]
 	},
 	SettingsManager.SEC_AUDIO: {
 		"name": "Audio",
 		"options": [
-			[&"option", "master_volume"],
-			[&"option", "sfx_volume"],
-			[&"option", "music_volume"]
+			[&"option", {"id": "master_volume",
+			"min": 0,
+			"max": 100,
+			"snap": 5,
+			"unit": "%",
+			"scale": 0.01}],
+			[&"option", {"id": "sfx_volume",
+			"min": 0,
+			"max": 100,
+			"snap": 5,
+			"unit": "%",
+			"scale": 0.01}],
+			[&"option", {"id": "music_volume",
+			"min": 0,
+			"max": 100,
+			"snap": 5,
+			"unit": "%",
+			"scale": 0.01}],
 		]
 	},
 	SettingsManager.SEC_DEBUG: {
 		"name": "Debug",
 		"options": [
-			[&"option", "show_performance"],
-			[&"option", "cap_fps"],
-			[&"option", "fps_cap"]
+			[&"option", {"id": "show_performance"}],
+			[&"option", {"id": "cap_fps"}],
+			[&"option", {"id": "fps_cap",
+			"min": 30,
+			"max": 3000,
+			"snap": 1,
+			"unit": "FPS"}]
 		]
 	}
 }
