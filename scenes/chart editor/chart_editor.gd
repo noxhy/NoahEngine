@@ -395,7 +395,8 @@ func _process(delta: float) -> void:
 			selected_notes = []
 			selected_note_nodes = []
 			for packet in temp:
-				place_note(packet[0], packet[1], packet[2], packet[3], true, true)
+				if !is_note_at(packet[1], packet[0]):
+					place_note(packet[0], packet[1], packet[2], packet[3], true, true)
 			
 			for packet in temp:
 				i = find_note(packet[1], packet[0])
