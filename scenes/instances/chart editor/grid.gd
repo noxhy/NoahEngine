@@ -16,7 +16,6 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	
 	$TextureRect.size = Vector2(16, 16) * Vector2(columns, rows)
 	$TextureRect.scale = grid_size / Vector2(16, 16)
 	$TextureRect.scale *= zoom
@@ -32,7 +31,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	
 	$TextureRect.size = Vector2(16, 16) * Vector2(columns, rows)
 	$TextureRect.scale = grid_size / Vector2(16, 16)
 	$TextureRect.scale *= zoom
@@ -47,7 +45,6 @@ func _process(_delta):
 
 
 func _draw():
-	
 	## Color's the events column (the first one)
 	var rect = Rect2(get_real_position(Vector2(0, 0)), get_real_position(Vector2(columns, rows)) - get_real_position(Vector2(columns - 1, 0)))
 	draw_rect(rect, event_column_color)

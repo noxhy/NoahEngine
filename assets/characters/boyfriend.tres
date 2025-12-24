@@ -20,7 +20,7 @@ result_songs = Dictionary[String, String]({
 "perfect": "res://assets/songs/menu songs/results/boyfriend/resultsPERFECT.ogg"
 })
 normal_intro = "res://assets/songs/menu songs/results/boyfriend/resultsEXCELLENT-intro.ogg"
-loss_intro = "res://assets/songs/menu songs/results/boyfriend/resultsSHIT-intro.ogg"
+loss_intro = "res://assets/sonts/songs/menu songs/results/boyfriend/regs/menu songs/results/boyfriend/resultsSHIT-intro.ogg"
 result_nodes = Dictionary[String, String]({
 "excellent": "res://scenes/instances/results/boyfriend/excellent.tscn",
 "gold": "res://scenes/instances/results/boyfriend/perfect.tscn",

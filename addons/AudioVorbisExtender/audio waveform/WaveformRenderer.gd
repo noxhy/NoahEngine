@@ -64,7 +64,6 @@ func create(InitialData, this_color:Color = DEFAULT_COLOR,background_color = nul
 				push_error("Initial Waveform input must be Waveform data or a path to the sound!!")
 				return
 	
-	print("songLength = ", waveformdata.songLength)
 	if visible_duration == null:
 		#something something pixel something something, basically 130 
 		#allows me to actually see the whole waveform
