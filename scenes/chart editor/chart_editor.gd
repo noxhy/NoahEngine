@@ -59,7 +59,8 @@ var moved_lane_distance: int
 var hovered_note: int = 0
 var current_focus_owner = null
 var current_focus_viewport: Viewport = null
-var current_visible_note_start: int = -1
+var current_visible_notes_L: int = -1
+var current_visible_notes_R: int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -295,8 +296,8 @@ func _process(delta: float) -> void:
 									
 									changed_length = (distance > 0)
 									if changed_length:
-										if (note_list[i - current_visible_note_start].length != distance): %"Note Stretch".play()
-										note_list[i - current_visible_note_start].length = distance
+										if (note_list[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
+										note_list[i - current_visible_notes_L].length = distance
 									
 									if SettingsManager.get_value("chart", "auto_save"): 
 										save()
@@ -339,9 +340,9 @@ func _process(delta: float) -> void:
 				var action: String = "Changed Note Length(s)"
 				undo_redo.create_action(action)
 				for i in selected_notes:
-					undo_redo.add_do_property(note_list[i - current_visible_note_start],
-					"length", note_list[i - current_visible_note_start].length)
-					undo_redo.add_undo_property(note_list[i - current_visible_note_start],
+					undo_redo.add_do_property(note_list[i - current_visible_notes_L],
+					"length", note_list[i - current_visible_notes_L].length)
+					undo_redo.add_undo_property(note_list[i - current_visible_notes_L],
 					"length", 0.0)
 				
 				undo_redo.add_do_reference(%"History Window".add_action(action))
@@ -378,7 +379,7 @@ func _process(delta: float) -> void:
 					j += 1
 			
 			for i in selected_notes:
-				selected_note_nodes.append(note_list[i - current_visible_note_start])
+				selected_note_nodes.append(note_list[i - current_visible_notes_L])
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
@@ -400,7 +401,7 @@ func _process(delta: float) -> void:
 			for packet in temp:
 				i = find_note(packet[1], packet[0])
 				selected_notes.append(i)
-				selected_note_nodes.append(note_list[i - current_visible_note_start])
+				selected_note_nodes.append(note_list[i - current_visible_notes_L])
 			selected_notes.sort()
 			
 			moving_notes = false
@@ -460,7 +461,7 @@ func _draw() -> void:
 		
 		## Note Highlighting
 		for index in selected_notes:
-			var note = note_list[index]
+			var note = note_list[index - current_visible_notes_L]
 			var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
 			length *= %Grid.grid_size.y * %Grid.zoom.y
 			length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
@@ -573,7 +574,19 @@ func load_section(time: float):
 	var L: int = bsearch_left_range(chart.get_notes_data(), time - _range)
 	var R: int = bsearch_left_range(chart.get_notes_data(), time + _range)
 	if L > -1 and R > -1:
-		current_visible_note_start = L
+		# Clearing any invisible notes
+		if current_visible_notes_L != L or current_visible_notes_R != R:
+			var i: int = current_visible_notes_L
+			var j: int = 0
+			for note in note_list:
+				if !((i + j) >= L and (i + j) <= R):
+					note_list[i - current_visible_notes_L].queue_free()
+					note_list.remove_at(i - current_visible_notes_L)
+					i -= 1
+					j += 1
+				i += 1
+		current_visible_notes_L = L
+		current_visible_notes_R = R
 		for i in range(L, R + 1):
 			var note = chart.get_notes_data()[i]
 			place_note(note[0], note[1], note[2], note[3])
@@ -661,8 +674,8 @@ func remove_note(lane: int, time: float = -1):
 	
 	if i <= -1:
 		return
-	note_list[i - current_visible_note_start].queue_free()
-	note_list.remove_at(i - current_visible_note_start)
+	note_list[i - current_visible_notes_L].queue_free()
+	note_list.remove_at(i - current_visible_notes_L)
 	chart.chart_data["notes"].remove_at(i)
 
 func remove_notes(notes: Array):
@@ -902,8 +915,6 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		%"Conductor Off Beat".play(0.55)
 	
 	if chart:
-		get_tree().call_group(&"notes", &"queue_free")
-		note_list = []
 		load_section(song_position)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
