@@ -30,7 +30,6 @@ func _ready():
 	collision_shape.shape = RectangleShape2D.new()
 	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size * $Note.scale  * Vector2(0.8, 0.8))
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time_difference = (time - GameManager.offset) - GameManager.song_position
@@ -43,16 +42,6 @@ func _process(delta):
 		$VisibleOnScreenEnabler2D.rect.size.y = (line_length + grid_size.y) * scroll / $Note.scale.y
 	else:
 		tail.visible = false
-
-
-func _on_visible_on_screen_notifier_2d_screen_entered() -> void: 
-	$Note.visible = on_screen
-	tail.visible = on_screen
-
-func _on_visible_on_screen_notifier_2d_screen_exited() -> void: 
-	$Note.visible = on_screen
-	tail.visible = on_screen
-
 
 func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
 	on_screen = true

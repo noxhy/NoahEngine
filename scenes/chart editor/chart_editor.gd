@@ -56,11 +56,14 @@ var min_lane: int = 0
 var max_lane: int = 0
 var moved_time_distance: float
 var moved_lane_distance: int
-
 var hovered_note: int = 0
+var current_focus_owner = null
+var current_focus_viewport: Viewport = null
+var current_visible_note_start: int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	get_viewport().gui_focus_changed.connect(_on_gui_focus_changed)
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
@@ -148,6 +151,8 @@ func _process(delta: float) -> void:
 					current_snap -= 1
 					chart_snap = SNAPS[current_snap % SNAPS.size()]
 					%"Chart Snap".value = chart_snap
+			
+			$Conductor.time = song_position
 		
 		if chart != null:
 			if Input.is_action_pressed("control") and Input.is_action_just_pressed("save"):
@@ -176,7 +181,6 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
-	var measure_height = %Grid.get_size().y
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
@@ -192,7 +196,7 @@ func _process(delta: float) -> void:
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
 				if can_chart:
 					if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
-					and (!get_viewport().gui_get_focus_owner() or !get_viewport().gui_get_hovered_control())):
+					and !current_focus_owner):
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						
@@ -227,8 +231,9 @@ func _process(delta: float) -> void:
 								min_lane = 0
 								max_lane = ChartManager.strum_count - 1
 					elif (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
-					and (!get_viewport().gui_get_focus_owner() or !get_viewport().gui_get_hovered_control())):
-						get_viewport().gui_release_focus()
+					and current_focus_owner):
+						current_focus_viewport.gui_release_focus()
+						current_focus_owner = null
 		else:
 			if can_chart:
 				bounding_box = true
@@ -290,8 +295,8 @@ func _process(delta: float) -> void:
 									
 									changed_length = (distance > 0)
 									if changed_length:
-										if (note_list[i].length != distance): %"Note Stretch".play()
-										note_list[i].length = distance
+										if (note_list[i - current_visible_note_start].length != distance): %"Note Stretch".play()
+										note_list[i - current_visible_note_start].length = distance
 									
 									if SettingsManager.get_value("chart", "auto_save"): 
 										save()
@@ -305,18 +310,13 @@ func _process(delta: float) -> void:
 								var time_distance = cursor_time - start_time
 								changed_length = (abs(lane_distance) > 0 or abs(time_distance) > 0)
 								
-								var diff: int = max_lane - min_lane
-								
 								if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
 									if changed_length:
 										var j: int = 0
 										for i in selected_notes:
 											var node = selected_note_nodes[j]
-											
 											var time: float = node.time
 											var lane: int = node.lane
-											var length: float = node.length
-											var note_type: int = node.note_type
 											
 											node.position = Vector2(
 												%Grid.get_real_position(Vector2(1.5 + node.lane + lane_distance, 0)).x,
@@ -333,15 +333,16 @@ func _process(delta: float) -> void:
 										# min_lane = 0 + (start_lane - min_lane)
 										# max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
 	
-	
 	if Input.is_action_just_released("mouse_left"):
 		if placing_note:
 			if changed_length:
 				var action: String = "Changed Note Length(s)"
 				undo_redo.create_action(action)
 				for i in selected_notes:
-					undo_redo.add_do_property(note_list[i], "length", note_list[i].length)
-					undo_redo.add_undo_property(note_list[i], "length", 0.0)
+					undo_redo.add_do_property(note_list[i - current_visible_note_start],
+					"length", note_list[i - current_visible_note_start].length)
+					undo_redo.add_undo_property(note_list[i - current_visible_note_start],
+					"length", 0.0)
 				
 				undo_redo.add_do_reference(%"History Window".add_action(action))
 				undo_redo.commit_action()
@@ -359,8 +360,8 @@ func _process(delta: float) -> void:
 			var time_a: float = grid_position_to_time(pos_1, true)
 			var time_b: float = grid_position_to_time(pos_2, true)
 			
-			var L: int = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), time_a)
-			var R: int = bsearch_right_range(chart.get_notes_data(), chart.get_notes_data().size(), time_b)
+			var L: int = bsearch_left_range(chart.get_notes_data(), time_a)
+			var R: int = bsearch_right_range(chart.get_notes_data(), time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -377,7 +378,7 @@ func _process(delta: float) -> void:
 					j += 1
 			
 			for i in selected_notes:
-				selected_note_nodes.append(note_list[i])
+				selected_note_nodes.append(note_list[i - current_visible_note_start])
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
@@ -399,7 +400,7 @@ func _process(delta: float) -> void:
 			for packet in temp:
 				i = find_note(packet[1], packet[0])
 				selected_notes.append(i)
-				selected_note_nodes.append(note_list[i])
+				selected_note_nodes.append(note_list[i - current_visible_note_start])
 			selected_notes.sort()
 			
 			moving_notes = false
@@ -442,10 +443,7 @@ func _draw() -> void:
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
 		
-		var measure_height = %Grid.get_size().y
-		
 		## Song Start Offset Marker
-		var time_to_y: Vector2
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
@@ -455,60 +453,10 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		## Hover Box
-		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and (get_viewport().gui_get_hovered_control() == %Grid.get_node("TextureRect"))):
+		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, current_steps_per_measure / chart_snap))
 			draw_rect(rect, hover_color)
-		
-		## Measure Markers
-		var current_beat = $Conductor.get_beat_at(song_position)
-		var current_step = $Conductor.get_step_at(song_position)
-		var seconds_per_step = ($Conductor.seconds_per_beat * 1.0 / ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure))
-		
-		for row in range(current_steps_per_measure * 2):
-			
-			var time_at_row: float = (current_step + row) * seconds_per_step
-			var step_at_row: int = $Conductor.get_step_at(time_at_row)
-			time_to_y = Vector2(0, time_to_y_position(time_at_row))
-			
-			if ((current_step + row) % current_beats_per_measure) == 0:
-				var size: float = 4.0 if (step_at_row % current_steps_per_measure / current_beats_per_measure) == 0 else 2.0
-				rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y.y - (size / 2)), \
-				%Grid.get_real_position(Vector2(%Grid.columns + 1, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, size))
-				draw_rect(rect, divider_color)
-				
-				draw_string(LABEL_FONT, \
-				grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y.y + 16), \
-				str($Conductor.get_beat_at(time_at_row) + 1), HORIZONTAL_ALIGNMENT_LEFT, %Grid.grid_size.x * %Grid.zoom.x, 16)
-		
-		var time_at_row = current_step * seconds_per_step
-		time_to_y = %Grid.get_grid_position(Vector2(0, time_to_y_position(time_at_row)))
-		
-		## Events Divider
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, time_to_y.y)) - Vector2(2, 2), \
-		%Grid.get_real_position(Vector2(0, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(4, 2))
-		draw_rect(rect, divider_color)
-		
-		## Position Divider
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(%Grid.columns - 1, time_to_y.y)) - Vector2(2, 2), \
-		%Grid.get_real_position(Vector2(0, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(4, 2))
-		draw_rect(rect, divider_color)
-		
-		## Strum Markers
-		for id in ChartManager.strum_data.size():
-			var start_strum = ChartManager.strum_data[id]["strums"][0]
-			var end_strum = ChartManager.strum_data[id]["strums"][1]
-			
-			## Measure Divider
-			rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(end_strum + 2, time_to_y.y)) - Vector2(1, 2), \
-			%Grid.get_real_position(Vector2(0, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(2, 2))
-			draw_rect(rect, divider_color)
-			
-			if ChartManager.strum_data[id]["muted"]:
-				
-				rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(start_strum + 1, time_to_y.y)), \
-				%Grid.get_real_position(Vector2(end_strum - start_strum + 1, %Grid.rows * 2)) - %Grid.get_real_position(Vector2(0, 0)))
-				draw_rect(rect, muted_color)
 		
 		## Note Highlighting
 		for index in selected_notes:
@@ -544,11 +492,12 @@ func update_grid():
 		if ChartManager.strum_data[id]["strums"][1] == ChartManager.strum_count - 1:
 			strum_label_instance.get_node("Move Lane Right").visible = false
 		
-		strum_label_instance.connect("move_bound_left", self.move_bound_left)
-		strum_label_instance.connect("move_bound_right", self.move_bound_right)
-		strum_label_instance.connect("opened", self.disable_charting)
-		strum_label_instance.connect("closed", self.close_popup)
-		strum_label_instance.connect("updated", self.updated_strums)
+		strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
+		strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
+		strum_label_instance.connect(&"opened", self.disable_charting)
+		strum_label_instance.connect(&"closed", self.close_popup)
+		strum_label_instance.connect(&"updated", self.updated_strums)
+		strum_label_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 	
 	%"Strum Labels".size.y = 32
 
@@ -595,7 +544,6 @@ func load_song(song: Song, difficulty: Variant = null):
 
 
 func load_song_path(path: String, difficulty: Variant = null):
-	var old_song = ChartManager.song
 	var song = load(path)
 	if song is not Song:
 		printerr("File: ", path, " is not a song file.")
@@ -617,8 +565,18 @@ func load_chart(file: Chart, ghost: bool = false):
 	undo_redo.add_do_reference(%"History Window".add_action(action))
 	undo_redo.commit_action()
 	can_chart = true
-	for note in file.get_notes_data(): 
-		place_note(note[0], note[1], note[2], note[3])
+	load_section(song_position)
+
+## Loads all the notes and waveforms for the next two waveforms.
+func load_section(time: float):
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
+	var L: int = bsearch_left_range(chart.get_notes_data(), time - _range)
+	var R: int = bsearch_left_range(chart.get_notes_data(), time + _range)
+	if L > -1 and R > -1:
+		current_visible_note_start = L
+		for i in range(L, R + 1):
+			var note = chart.get_notes_data()[i]
+			place_note(note[0], note[1], note[2], note[3])
 
 
 func new_file(path: String, song: Song):
@@ -659,7 +617,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), time)
+		var L: int = bsearch_left_range(chart.get_notes_data(), time)
 		if L != -1:
 			note_list.insert(L, note_instance)
 			chart.chart_data["notes"].insert(L, [time, lane, length, type])
@@ -703,8 +661,8 @@ func remove_note(lane: int, time: float = -1):
 	
 	if i <= -1:
 		return
-	note_list[i].queue_free()
-	note_list.remove_at(i)
+	note_list[i - current_visible_note_start].queue_free()
+	note_list.remove_at(i - current_visible_note_start)
 	chart.chart_data["notes"].remove_at(i)
 
 func remove_notes(notes: Array):
@@ -715,17 +673,16 @@ func remove_notes(notes: Array):
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), time - 0.1)
-	var R: int = bsearch_right_range(chart.get_notes_data(), chart.get_notes_data().size(), time + 0.1)
+	var L: int = bsearch_left_range(chart.get_notes_data(), time - 0.1)
+	var R: int = bsearch_right_range(chart.get_notes_data(), time + 0.1)
 	
 	if (L == -1 or R == -1): return -1
 	
 	# Just so I don't have to make a new return case because I'm lazy
-	if (L == R + 1): L -= 1
+	if (L == R + 1):
+		L -= 1
 	for i in range(L, R + 1):
-		
 		var note: Array = chart.get_notes_data()[i]
-		
 		if (note[1] == lane):
 			if is_equal_approx(note[0], time):
 				return i
@@ -749,7 +706,7 @@ func play_audios(time: float):
 	%Instrumental.pitch_scale = song_speed
 	song_position = time - chart.offset + start_offset
 	
-	current_note = bsearch_left_range(chart.get_notes_data(), chart.get_notes_data().size(), song_position)
+	current_note = bsearch_left_range(chart.get_notes_data(), song_position)
 	
 	if chart.get_notes_data().size() > 0:
 		if song_position > chart.get_notes_data()[chart.get_notes_data().size() - 1][0]:
@@ -766,7 +723,7 @@ func float_to_time(time: float) -> String:
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
 	var tempo_data: Dictionary = chart.get_tempos_data()
-	var offset: float = -chart.offset
+	var _offset: float = -chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
@@ -778,16 +735,18 @@ func time_to_y_position(time: float) -> float:
 	var tempo: float = 60.0
 	
 	while R < time:
+		if i + 1 >= tempo_data.size():
+			R = time
+		else:
+			R = tempo_data.keys()[i + 1]
 		
-		if i + 1 >= tempo_data.size(): R = time
-		else: R = tempo_data.keys()[i + 1]
-		
-		if R > time: R = time
+		if R > time:
+			R = time
 		
 		tempo = tempo_data.get(L)
 		meter = chart.get_meter_at(L)
 		
-		offset += R - L
+		_offset += R - L
 		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
 		
 		L = R
@@ -833,26 +792,33 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	return output
 
 ## Binary searches for both notes and events
-func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int:
-	if (length == 0): return -1
-	if (value_set[length - 1][0] < left_range): return -1
+func bsearch_left_range(value_set: Array, left_range: float) -> int:
+	var length: int = value_set.size()
+	if (length == 0):
+		return -1
+	if (value_set[length - 1][0] < left_range):
+		return -1
 	
 	var low: int = 0
 	var high: int = length - 1
 	
 	while (low <= high):
-		@warning_ignore("integer_division")
 		var mid: int = low + ((high - low) / 2)
 		
-		if (value_set[mid][0] >= left_range): high = mid - 1
-		else: low = mid + 1
+		if (value_set[mid][0] >= left_range):
+			high = mid - 1
+		else:
+			low = mid + 1
 	
 	return high + 1
 
 
-func bsearch_right_range(value_set: Array, length: int, right_range: float) -> int:
-	if (length == 0): return -1
-	if (value_set[0][0] > right_range): return -1
+func bsearch_right_range(value_set: Array, right_range: float) -> int:
+	var length: int = value_set.size()
+	if (length == 0):
+		return -1
+	if (value_set[0][0] > right_range):
+		return -1
 	
 	var low: int = 0
 	var high: int = length - 1
@@ -934,6 +900,11 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		%"Conductor Beat".play(0.55)
 	else:
 		%"Conductor Off Beat".play(0.55)
+	
+	if chart:
+		get_tree().call_group(&"notes", &"queue_free")
+		note_list = []
+		load_section(song_position)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	%"Conductor Step".play(0.55)
@@ -949,6 +920,7 @@ func file_button_item_pressed(id):
 		new_file_popup_instance.popup()
 		new_file_popup_instance.connect("file_created", self.new_file)
 		new_file_popup_instance.connect("close_requested", self.close_popup)
+		new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 		%"Open Window".play()
 	elif item_name == "Open Song":
 		can_chart = false
@@ -959,6 +931,7 @@ func file_button_item_pressed(id):
 		open_file_popup_instance.connect("file_selected", self.load_song_path)
 		open_file_popup_instance.connect("close_requested", self.close_popup)
 		open_file_popup_instance.connect("canceled", self.close_popup)
+		open_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 		%"Open Window".play()
 	elif id == 2:
 		save()
@@ -972,6 +945,7 @@ func file_button_item_pressed(id):
 		# convert_chart_popup_instance.connect("file_created", self._on_save_folder_dialog_dir_selected)
 		convert_chart_popup_instance.connect("file_created", self.new_file)
 		convert_chart_popup_instance.connect("close_requested", self.close_popup)
+		convert_chart_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 		%"Open Window".play()
 	elif id == 3:
 		SettingsManager.set_value("chart", "auto_save", !SettingsManager.get_value("chart", "auto_save"))
@@ -979,9 +953,7 @@ func file_button_item_pressed(id):
 			%"File Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "auto_save"))
 		%"Note Place".play()
 	elif id == 6:
-		chart.chart_data = backup_chart.chart_data
-		chart.scroll_speed = backup_chart.scroll_speed
-		chart.offset = backup_chart.offset
+		set_chart_from_chart(backup_chart)
 		Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
 		can_chart = false
 	elif id == 8:
@@ -1110,3 +1082,12 @@ func update_note(note):
 func _on_export_external_popup_file_selected(path: String) -> void:
 	ResourceSaver.save(chart, path)
 	%"Export External Popup".hide()
+
+func _on_gui_focus_changed(node):
+	current_focus_owner = node
+	current_focus_viewport = node.get_viewport()
+
+func set_chart_from_chart(_chart: Chart):
+	chart.chart_data = backup_chart.chart_data
+	chart.scroll_speed = backup_chart.scroll_speed
+	chart.offset = backup_chart.offset

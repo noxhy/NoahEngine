@@ -103,4 +103,5 @@ text = "Save Settings"
 [connection signal="pressed" from="Move Lane Right" to="." method="_on_move_lane_right_pressed"]
 [connection signal="about_to_popup" from="Window" to="." method="_on_window_about_to_popup"]
 [connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]
+[connection signal="gui_focus_changed" from="Window" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="pressed" from="Window/VBoxContainer/HBoxContainer3/Button" to="." method="_on_save_button_pressed"]

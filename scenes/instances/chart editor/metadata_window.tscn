@@ -141,6 +141,8 @@ filters = PackedStringArray("*.tscn")
 [connection signal="text_changed" from="VBoxContainer/Song Artist/Song Artist" to="." method="_on_song_artist_text_changed"]
 [connection signal="pressed" from="VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
 [connection signal="file_selected" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="value_changed" from="VBoxContainer/Starting Tempo/Starting Tempo" to="." method="_on_starting_tempo_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
 [connection signal="file_selected" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]

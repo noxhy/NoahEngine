@@ -326,7 +326,7 @@ popup/item_3/id = 4
 popup/item_3/separator = true
 popup/item_4/text = "Save Song"
 popup/item_4/id = 2
-popup/item_5/text = "Export Chart Externally"
+popup/item_5/text = "Save Chart As"
 popup/item_5/id = 8
 popup/item_6/text = "Autosave"
 popup/item_6/checkable = 1
@@ -454,8 +454,11 @@ metadata/_edit_lock_ = true
 [connection signal="canceled" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
 [connection signal="close_requested" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
 [connection signal="file_selected" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_export_external_popup_file_selected"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_gui_focus_changed"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/History Window" to="." method="_on_gui_focus_changed"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_close_requested"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_gui_focus_changed"]
 [connection signal="updated_icon_texture" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_icon_texture"]
 [connection signal="updated_song_artist" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_artist"]
 [connection signal="updated_song_name" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_name"]

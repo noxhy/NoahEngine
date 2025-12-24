@@ -238,9 +238,12 @@ text = "Create New Song"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="dir_selected" from="SaveFolderDialog" to="." method="_on_save_folder_dialog_dir_selected"]
+[connection signal="gui_focus_changed" from="SaveFolderDialog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="pressed" from="FlowContainer/Audio Files/HBoxContainer/Button" to="." method="_on_vocals_button_pressed"]
 [connection signal="files_selected" from="FlowContainer/Audio Files/HBoxContainer/Vocals File Dialog" to="." method="_on_vocals_file_dialog_files_selected"]
+[connection signal="gui_focus_changed" from="FlowContainer/Audio Files/HBoxContainer/Vocals File Dialog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="pressed" from="FlowContainer/Audio Files/HBoxContainer3/Button" to="." method="_on_inst_button_pressed"]
 [connection signal="file_selected" from="FlowContainer/Audio Files/HBoxContainer3/Inst File Dialog" to="." method="_on_inst_file_dialog_file_selected"]
+[connection signal="gui_focus_changed" from="FlowContainer/Audio Files/HBoxContainer3/Inst File Dialog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="pressed" from="FlowContainer/VBoxContainer/Export Location/Button" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="FlowContainer/VBoxContainer/HBoxContainer/Create Button" to="." method="_on_create_button_pressed"]

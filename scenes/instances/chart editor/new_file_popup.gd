@@ -40,12 +40,10 @@ func new_file(dir: String):
 		
 		# Barebones chart data
 		chart.chart_data = {
-			
 			"notes": [],
 			"events": [],
 			"tempos": {0.0: song_file.tempo},
-			"meters": {0.0: [4, 16]},
-			
+			"meters": {0.0: [4, 16]}
 		}
 		
 		var chart_path: String = dir + "/" + song_file.title + "-" + difficulty + ".res"
@@ -89,7 +87,6 @@ func _on_export_button_pressed() -> void:
 
 # "Create New Song" button pressed
 func _on_create_button_pressed() -> void:
-	
 	if %"Difficulty Options".get_selected_items().size() == 0:
 		printerr("Difficulties not selected")
 		return
@@ -104,3 +101,6 @@ func _on_create_button_pressed() -> void:
 	
 	new_file(save_dir)
 	_on_close_requested()
+
+func file_dailog_gui_focus_changed(node: Control) -> void:
+	emit_signal(&"gui_focus_changed", node)

@@ -50,3 +50,6 @@ func _on_window_about_to_popup() -> void:
 	%"Strum ID".text = ChartManager.strum_data[id].get("name", "")
 	$"Window/VBoxContainer/HBoxContainer4/Check Box".button_pressed = muted
 	emit_signal("opened")
+
+func file_dailog_gui_focus_changed(node: Control) -> void:
+	emit_signal(&"gui_focus_changed", node)

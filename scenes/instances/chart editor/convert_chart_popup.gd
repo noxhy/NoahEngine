@@ -605,3 +605,6 @@ func _on_create_button_pressed() -> void:
 	
 	new_file(save_dir)
 	self.queue_free()
+
+func file_dailog_gui_focus_changed(node: Control) -> void:
+	emit_signal(&"gui_focus_changed", node)
