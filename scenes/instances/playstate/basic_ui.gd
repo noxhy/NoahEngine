@@ -26,7 +26,7 @@ func _process(delta):
 	# $Performance.text = "Accuracy: " + str(snappedf(accuracy * 100, 0.01)) + "%"
 	# $Performance.text += " • " + "Rank: " + rank
 	$"Health Bar/Performance".text = "Score: " + Global.format_number(score)
-	# $"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
+	$"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
 	
 	update_health_bar(lerp($"Health Bar".value, target_health, 0.115))
 
