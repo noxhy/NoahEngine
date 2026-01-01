@@ -24,7 +24,7 @@ const WEEK_ICON_NODE = preload("res://scenes/instances/story mode/week_icon.tscn
 		"scene": "res://scenes/playstate/songs/fresh/fresh.tscn",
 		"name": "Daddy Dearest",
 		"display_song_list": "Bopeeboo\nFresh\nDadbattle",
-		"song_list": [load("uid://d0ojv1av5rdfm")]
+		"song_list": [load("uid://brqmb60ca111g")]
 	},
 	"week2": {
 		"animation": "week2",
@@ -56,7 +56,7 @@ const WEEK_ICON_NODE = preload("res://scenes/instances/story mode/week_icon.tscn
 		"scene": "res://scenes/playstate/songs/eggnog/eggnog.tscn",
 		"name": "Red Snow",
 		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
-		"song_list": [load("uid://dpltg8uhgh3gy")]
+		"song_list": [load("res://playable songs/cocoa/Cocoa Erect.res")]
 	},
 	"week6": {
 		"animation": "week6",

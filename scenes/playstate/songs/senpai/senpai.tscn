@@ -31,13 +31,13 @@ position_smoothing_speed = 3.0
 [node name="Stage" parent="." instance=ExtResource("7_mjcyn")]
 unique_name_in_owner = true
 
-[node name="Player" parent="." instance=ExtResource("9_cvimb")]
+[node name="Player" parent="." groups=["player"] instance=ExtResource("9_cvimb")]
 unique_name_in_owner = true
 z_index = 300
 position = Vector2(480, 880.00006)
 scale = Vector2(6, 6)
 
-[node name="Enemy" parent="." instance=ExtResource("10_2o85c")]
+[node name="Enemy" parent="." groups=["player"] instance=ExtResource("10_2o85c")]
 unique_name_in_owner = true
 z_index = 200
 position = Vector2(-160, 904.00006)

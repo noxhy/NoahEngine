@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/instances/characters/character.gd" id="1_krhuq"]
 [ext_resource type="Texture2D" uid="uid://cxu20hb7y7adt" path="res://assets/sprites/playstate/icons/girlfriend.png" id="2_hksi1"]
-[ext_resource type="SpriteFrames" path="res://assets/sprites/characters/girlfriend/girlfriend.res" id="3_0woem"]
+[ext_resource type="SpriteFrames" uid="uid://ca4xphjrx5apl" path="res://assets/sprites/characters/girlfriend/girlfriend.res" id="3_0woem"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7d0qj"]
 atlas = ExtResource("2_hksi1")
@@ -43,7 +43,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Girlfriend" type="Node2D"]
+[node name="Girlfriend" type="Node2D" groups=["metronome"]]
 script = ExtResource("1_krhuq")
 animation_names = Dictionary[StringName, StringName]({
 &"cheer": &"GF Cheer",

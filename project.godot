@@ -51,6 +51,12 @@ folder_colors={
 "res://scenes/": "blue"
 }
 
+[global_group]
+
+player="The characters that should play an animation when the player notes are played"
+enemy="The characters that should play an animation when the enemy notes are played"
+metronome="the characters that should play an animations every other beat (gf)"
+
 [input]
 
 ui_cancel={

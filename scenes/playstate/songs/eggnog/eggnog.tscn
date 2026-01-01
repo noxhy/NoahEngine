@@ -54,14 +54,14 @@ unique_name_in_owner = true
 position = Vector2(640, 360)
 position_smoothing_speed = 3.0
 
-[node name="Player" parent="." instance=ExtResource("12_8k6f7")]
+[node name="Player" parent="." groups=["player"] instance=ExtResource("12_8k6f7")]
 unique_name_in_owner = true
 z_index = 300
 material = SubResource("ShaderMaterial_8k6f7")
 position = Vector2(936, 662.4)
 scale = Vector2(0.8, 0.8)
 
-[node name="Enemy" parent="." instance=ExtResource("14_5qnon")]
+[node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("14_5qnon")]
 unique_name_in_owner = true
 z_index = 100
 material = SubResource("ShaderMaterial_2etw8")

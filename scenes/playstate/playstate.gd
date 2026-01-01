@@ -462,7 +462,8 @@ func new_step(current_step, measure_relative):
 # Strum Util
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	var playback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
+	if vocal_tracks.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
 		
@@ -477,10 +478,6 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		score_note(hit_time)
 		
 		match rating:
-			"epic":
-				health += 2
-				timings_sum += 1
-				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
 			"sick":
 				health += 1
 				timings_sum += 0.9825
@@ -502,14 +499,14 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		
 		entries += 1
 		combo += 1
-		if combo > GameManager.tallies["max_combo"]: GameManager.tallies["max_combo"] = combo
+		if combo > GameManager.tallies["max_combo"]:
+			GameManager.tallies["max_combo"] = combo
 		
 		accuracy = (timings_sum / entries)
 		if GameManager.tallies.sick == GameManager.tallies.total_notes:
 			rating = "fc_" + rating
 		
 		show_combo(rating, combo)
-		
 		update_ui_stats()
 
 func note_holding(time, lane, note_type, strum_manager):

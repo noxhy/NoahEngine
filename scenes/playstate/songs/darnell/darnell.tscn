@@ -67,12 +67,12 @@ offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
-[node name="Player" parent="Characters" instance=ExtResource("9_vixx2")]
+[node name="Player" parent="Characters" groups=["player"] instance=ExtResource("9_vixx2")]
 unique_name_in_owner = true
 z_index = 1
 position = Vector2(640, 288)
 
-[node name="Enemy" parent="Characters" instance=ExtResource("10_1osac")]
+[node name="Enemy" parent="Characters" groups=["enemy"] instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
 position = Vector2(-528, 240)
 

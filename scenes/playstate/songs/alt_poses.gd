@@ -1,30 +1,13 @@
 extends "res://scenes/playstate/songs/basic_song.gd"
 
+func note_hit(time, lane, note_type, hit_time, strum_manager):
+	get_tree().call_group(
+		&"enemy" if strum_manager.enemy_slot else &"player", &"set_prefix",
+		&"mom_" if note_type == 1 else &"")
+	super(time, lane, note_type, hit_time, strum_manager)
 
-func note_hit(time, lane, note_type, hit_time, strumhandler):
-	var animations = ["left", "down", "up", "right"]
-	
-	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[lane])
-	else:
-		if note_type == 1:
-			characters[1].current_prefix = &"mom_"
-		else:
-			characters[1].current_prefix = &""
-		characters[1].play_animation(animations[lane])
-	
-	playstate_host.note_hit(time, lane, note_type, hit_time, strumhandler)
-
-
-func note_holding(time, lane, note_type, strumhandler):
-	var animations = ["left", "down", "up", "right"]
-	
-	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[lane])
-	else:
-		if note_type == 1:
-			characters[1].play_animation(str("mom_", animations[lane]))
-		else:
-			characters[1].play_animation(animations[lane])
-	
-	playstate_host.note_holding(time, lane, note_type, strumhandler)
+func note_holding(time, lane, note_type, strum_manager):
+	get_tree().call_group(
+		&"enemy" if strum_manager.enemy_slot else &"player", &"set_prefix",
+		&"mom_" if note_type == 1 else &"")
+	super(time, lane, note_type, strum_manager)

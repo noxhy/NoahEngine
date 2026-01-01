@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/instances/characters/character.gd" id="1_i5vds"]
 [ext_resource type="SpriteFrames" uid="uid://10hdgdiid2vo" path="res://assets/sprites/characters/girlfriend pixel/girlfriend_pixel.res" id="2_4vb5r"]
 
-[node name="Girlfriend Pixel" type="Node2D"]
+[node name="Girlfriend Pixel" type="Node2D" groups=["metronome"]]
 script = ExtResource("1_i5vds")
 animation_names = Dictionary[StringName, StringName]({
 &"idle": &"GF IDLE"

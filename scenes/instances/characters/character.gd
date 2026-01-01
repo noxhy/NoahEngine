@@ -32,7 +32,6 @@ func play_animation(animation_name: StringName = &"", time: float = -1.0):
 		can_idle = false
 		
 		if (time >= 0):
-			
 			# Calculates the speed it would need to go at the time requested
 			var animatiom_speed: float = sprite.sprite_frames.get_animation_speed(real_animation_name)
 			var frame_count: int = sprite.sprite_frames.get_frame_count(real_animation_name) 
@@ -63,6 +62,8 @@ func get_real_animation(animation_name: String = ""):
 	else:
 		return null
 
+func set_prefix(prefix: StringName):
+	current_prefix = prefix
 
 func _on_animated_sprite_2d_animation_finished():
 	if self.is_in_group("back_to_idle"):
@@ -74,11 +75,9 @@ func _on_animated_sprite_2d_animation_finished():
 
 
 func _on_animated_sprite_2d_frame_changed():
-	
 	var duration = sprite.sprite_frames.get_frame_duration(sprite.animation, sprite.frame)
 	sprite.rotation_degrees = 0 if duration == 1 else -90
 	
 	if offsets.get(sprite.animation) is PackedVector2Array:
-		
 		sprite.position = offsets.get(sprite.animation)[sprite.frame]
 		print("Frame: ", sprite.frame, " Offset: ", offsets.get(sprite.animation)[sprite.frame])

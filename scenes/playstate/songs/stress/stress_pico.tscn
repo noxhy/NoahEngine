@@ -172,13 +172,13 @@ offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
-[node name="Player" parent="Characters" instance=ExtResource("12_5fyjp")]
+[node name="Player" parent="Characters" groups=["player"] instance=ExtResource("12_5fyjp")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_kuluq")
 position = Vector2(392, 266)
 scale = Vector2(0.9, 0.9)
 
-[node name="Enemy" parent="Characters" instance=ExtResource("14_ctps2")]
+[node name="Enemy" parent="Characters" groups=["enemy"] instance=ExtResource("14_ctps2")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_th3hl")
 position = Vector2(-568, 264)

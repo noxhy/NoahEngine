@@ -1,6 +1,5 @@
 extends Node2D
 
-@onready var characters = [%Player, %Enemy, %Metronome]
 @onready var camera_positions = [%"Position 1", %"Position 2", %"Position 3"]
 @onready var playstate_host: PlayState = $"PlayState Host"
 @onready var stage = %Stage
@@ -14,8 +13,8 @@ func _ready():
 	playstate_host.ui.set_enemy_icons(%Enemy.icons)
 	playstate_host.ui.set_enemy_color(%Enemy.color)
 	
-	DeathScreen.player_position = characters[0].global_position
-	DeathScreen.player_scale = characters[0].scale
+	DeathScreen.player_position = %Player.global_position
+	DeathScreen.player_scale = %Enemy.scale
 	
 	await playstate_host.setup_finished
 	
@@ -28,11 +27,13 @@ func _ready():
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if measure_relative % 2 == 0:
-		characters[0].play_animation(characters[0].idle_animation)
-		characters[1].play_animation(characters[1].idle_animation)
-		if (characters[2].current_animation == characters[2].idle_animation):
-			characters[2].can_idle = true
-		characters[2].play_animation(characters[2].idle_animation, GameManager.seconds_per_beat * 2)
+		get_tree().call_group(&"player", &"play_animation", &"idle")
+		get_tree().call_group(&"enemy", &"play_animation", &"idle")
+		for node in get_tree().get_nodes_in_group(&"metronome"):
+			if (node.current_animation == node.idle_animation):
+				node.can_idle = true
+		
+		get_tree().call_group(&"metronome", &"play_animation", &"idle", GameManager.seconds_per_beat * 2)
 
 # Util
 
@@ -43,44 +44,39 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
-func note_hit(time, lane, note_type, hit_time, strumhandler):
-	var animations = ["left", "down", "up", "right"]
-	
-	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[lane])
-	else:
-		characters[1].play_animation(animations[lane])
-	
-	playstate_host.note_hit(time, lane, note_type, hit_time, strumhandler)
+func note_hit(time, lane, note_type, hit_time, strum_manager):
+	get_tree().call_group(
+		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
+		get_direction(lane % 4))
+	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
 
 
-func note_holding(time, lane, note_type, strumhandler):
-	var animations = ["left", "down", "up", "right"]
-	
-	if !strumhandler.enemy_slot:
-		characters[0].play_animation(animations[lane])
-	else:
-		characters[1].play_animation(animations[lane])
-	
-	playstate_host.note_holding(time, lane, note_type, strumhandler)
+func note_holding(time, lane, note_type, strum_manager):
+	get_tree().call_group(
+		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
+		get_direction(lane % 4))
+	playstate_host.note_holding(time, lane, note_type, strum_manager)
 
 
-func note_miss(time, lane, length, note_type, hit_time, strumhandler):
-	var animations = ["left", "down", "up", "right"]
-	
-	if !strumhandler.enemy_slot:
+func note_miss(time, lane, length, note_type, hit_time, strum_manager):
+	if !strum_manager.enemy_slot:
 		if note_type == -1:
 			SoundManager.anti_spam.play()
 		else:
 			SoundManager.miss.play()
-			if characters.get(2):
-				characters[2].play_animation("cry")
-		
-		characters[0].play_animation("miss_" + animations[lane])
-	else:
-		characters[1].play_animation("miss_" + animations[lane])
+			get_tree().call_group(
+			&"enemy" if strum_manager.enemy_slot else &"player", &"metronome",
+			&"cry")
 	
-	playstate_host.note_miss(time, lane, length, note_type, hit_time, strumhandler)
+	get_tree().call_group(
+		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
+		&"miss" + get_direction(lane % 4))
+	
+	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
+
+func get_direction(direction: int):
+	var animations = ["left", "down", "up", "right"]
+	return animations[direction]
 
 
 func _on_new_event(time, event_name, event_parameters):
