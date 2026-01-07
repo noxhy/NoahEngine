@@ -572,7 +572,7 @@ func load_chart(file: Chart, ghost: bool = false):
 func load_section(time: float):
 	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
 	var L: int = bsearch_left_range(chart.get_notes_data(), time - _range)
-	var R: int = bsearch_left_range(chart.get_notes_data(), time + _range)
+	var R: int = bsearch_right_range(chart.get_notes_data(), time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes[0], L)
@@ -597,6 +597,19 @@ func load_section(time: float):
 		for i in range(L, R + 1):
 			var note = chart.get_notes_data()[i]
 			place_note(note[0], note[1], note[2], note[3])
+	
+	get_tree().call_group(&"dividers",  &"queue_free")
+	for i in range($Conductor.beats_per_measure):
+		var rect = ColorRect.new()
+		
+		rect.size = Vector2(%Grid.get_size().x, 4)
+		rect.position = %Grid.position
+		rect.position.x -= %Grid.get_size().x / 2
+		rect.position.y += %Grid.grid_size.y * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.y -= rect.size.y / 2
+		
+		$"Grid Layer/Parallax2D".add_child(rect)
+		rect.add_to_group(&"dividers")
 
 
 func new_file(path: String, song: Song):

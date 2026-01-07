@@ -20,6 +20,7 @@ var can_idle: bool = true
 
 func _ready():
 	sprite.play()
+	sprite.connect(&"animation_finished", self._on_animated_sprite_2d_animation_finished)
 
 func play_animation(animation_name: StringName = &"", time: float = -1.0):
 	# Will not run idle animation if you can not run
@@ -72,12 +73,3 @@ func _on_animated_sprite_2d_animation_finished():
 			play_animation(idle_animation)
 			sprite.stop()
 	can_idle = true
-
-
-func _on_animated_sprite_2d_frame_changed():
-	var duration = sprite.sprite_frames.get_frame_duration(sprite.animation, sprite.frame)
-	sprite.rotation_degrees = 0 if duration == 1 else -90
-	
-	if offsets.get(sprite.animation) is PackedVector2Array:
-		sprite.position = offsets.get(sprite.animation)[sprite.frame]
-		print("Frame: ", sprite.frame, " Offset: ", offsets.get(sprite.animation)[sprite.frame])
