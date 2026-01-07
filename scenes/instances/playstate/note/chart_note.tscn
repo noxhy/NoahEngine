@@ -5,10 +5,10 @@
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="3_gsgsu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ud7f5"]
+size = Vector2(640.0001, 640.0001)
 
 [node name="Note" type="Node2D" groups=["note"]]
 use_parent_material = true
-scale = Vector2(0.2, 0.2)
 script = ExtResource("1_ud7f5")
 
 [node name="Note" type="AnimatedSprite2D" parent="."]
@@ -39,12 +39,12 @@ rotation = 1.5707964
 stretch_mode = 1
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
-rect = Rect2(-319.99997, -319.99997, 639.99994, 639.99994)
+rect = Rect2(-320, -320, 640, 640)
 
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(0.99999976, 0.99999976)
+scale = Vector2(0.99999964, 0.99999964)
 shape = SubResource("RectangleShape2D_ud7f5")
 
 [connection signal="screen_entered" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_entered"]

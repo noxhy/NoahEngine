@@ -28,7 +28,9 @@ func _ready():
 	tail.scale = $Note.scale
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 	collision_shape.shape = RectangleShape2D.new()
-	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size * $Note.scale  * Vector2(0.8, 0.8))
+	$VisibleOnScreenEnabler2D.scale *= $Note.scale
+	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * Vector2(0.8, 1)
+	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -39,7 +41,12 @@ func _process(delta):
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length
+		# apparently godot is culling the notes regardless of what i do so idk a solution
+		# RenderingServer.canvas_item_set_custom_rect(get_canvas_item(), true, get_viewport_rect())
 		$VisibleOnScreenEnabler2D.rect.size.y = (line_length + grid_size.y) * scroll / $Note.scale.y
+		collision_shape.shape.size.y = $VisibleOnScreenEnabler2D.rect.size.y
+		collision_shape.position.y = $VisibleOnScreenEnabler2D.rect.size.y / 2 * $Note.scale.y
+		collision_shape.position.y -= grid_size.y / 2
 	else:
 		tail.visible = false
 

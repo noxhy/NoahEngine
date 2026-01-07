@@ -61,6 +61,8 @@ var current_focus_owner = null
 var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
+var min_visible_note_time: float
+var max_visible_note_time: float
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -315,7 +317,7 @@ func _process(delta: float) -> void:
 									if changed_length:
 										var j: int = 0
 										for i in selected_notes:
-											var node = selected_note_nodes[j - current_visible_notes_L]
+											var node = selected_note_nodes[j]
 											var time: float = node.time
 											var lane: int = node.lane
 											
@@ -553,7 +555,8 @@ func load_song_path(path: String, difficulty: Variant = null):
 
 
 func load_chart(file: Chart, ghost: bool = false):
-	backup_chart = file.duplicate(true)
+	if file:
+		backup_chart = file.duplicate(true)
 	selected_notes = []
 	selected_note_nodes = []
 	get_tree().call_group(&"notes", &"queue_free")
@@ -594,6 +597,8 @@ func load_section(time: float):
 		note_list = []
 		current_visible_notes_L = L
 		current_visible_notes_R = R
+		min_visible_note_time = INF
+		max_visible_note_time = 0
 		for i in range(L, R + 1):
 			var note = chart.get_notes_data()[i]
 			place_note(note[0], note[1], note[2], note[3])
@@ -601,12 +606,39 @@ func load_section(time: float):
 	get_tree().call_group(&"dividers",  &"queue_free")
 	for i in range($Conductor.beats_per_measure):
 		var rect = ColorRect.new()
+		var size: float = 4 if i == 0 else 2
 		
-		rect.size = Vector2(%Grid.get_size().x, 4)
+		rect.size = Vector2(%Grid.get_size().x, size)
 		rect.position = %Grid.position
 		rect.position.x -= %Grid.get_size().x / 2
 		rect.position.y += %Grid.grid_size.y * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
 		rect.position.y -= rect.size.y / 2
+		
+		$"Grid Layer/Parallax2D".add_child(rect)
+		rect.add_to_group(&"dividers")
+	
+	for i in [1]:
+		var rect = ColorRect.new()
+		var size: float = 4 if i == 0 else 2
+		
+		rect.size = Vector2(size, %Grid.get_size().y)
+		rect.position = %Grid.position
+		rect.position.x += %Grid.grid_size.x * i
+		rect.position.x -= %Grid.get_size().x / 2
+		rect.position.x -= rect.size.x / 2
+		
+		$"Grid Layer/Parallax2D".add_child(rect)
+		rect.add_to_group(&"dividers")
+	
+	for packet in ChartManager.strum_data:
+		var rect = ColorRect.new()
+		var size: float = 2
+		
+		rect.size = Vector2(size, %Grid.get_size().y)
+		rect.position = %Grid.position
+		rect.position.x += %Grid.grid_size.x * (packet.get("strums")[1] + 2)
+		rect.position.x -= %Grid.get_size().x / 2
+		rect.position.x -= rect.size.x / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
@@ -1121,6 +1153,8 @@ func _on_gui_focus_changed(node):
 	current_focus_viewport = node.get_viewport()
 
 func set_chart_from_chart(_chart: Chart):
+	if !_chart:
+		return
 	chart.chart_data = backup_chart.chart_data
 	chart.scroll_speed = backup_chart.scroll_speed
 	chart.offset = backup_chart.offset

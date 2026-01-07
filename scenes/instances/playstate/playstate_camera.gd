@@ -6,7 +6,7 @@ class_name PlayStateCamera
 
 @export_subgroup("Essentials")
 
-@export var target_zoom: Vector2 = Vector2(1, 1)
+@export_custom(PROPERTY_HINT_LINK, 'x') var target_zoom: Vector2 = Vector2(1, 1)
 @export_range(1, 25) var lerp_weight: float = 5
 
 @export var lerping = true
@@ -63,7 +63,6 @@ func shake(amount: int, time: float):
 
 
 func end_shake():
-	
 	shaking = false
 	
 	var tween = create_tween()
@@ -72,7 +71,6 @@ func end_shake():
 
 
 func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
-	
 	noise_i += delta * speed
 	# Set the x values of each call to 'get_noise_2d' to a different value
 	# so that our x and y vectors will be reading from unrelated areas of noise
