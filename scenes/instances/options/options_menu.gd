@@ -94,6 +94,11 @@ func load_category(category: String, options: Array):
 		
 		if type == &"option":
 			option_name = data["id"]
+			# No botplay for people without a debug build
+			if option_name == "botplay":
+				if !OS.is_debug_build():
+					continue
+			
 			var option = SettingsManager._defaults.get(category).get(option_name)
 			if (option is float) or (option is int):
 				instance = NUMBER_PRELOAD.instantiate()
