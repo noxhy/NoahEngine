@@ -150,8 +150,6 @@ func _ready():
 	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		ui.downscroll_ui()
-	# Streamer mode is supposed to be for when you're recording a video or streaming
-	# If you wanted a spook where the game says your user's name I recommend utilizing this
 	
 	get_tree().call_group(&"strums", "set_scroll_speed", chart.scroll_speed
 	* SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale"))

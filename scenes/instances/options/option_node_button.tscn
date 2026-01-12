@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://oi2cyiu5cgsq"]
+
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="1_cu3px"]
+[ext_resource type="Script" uid="uid://maaic73my3s6" path="res://scenes/instances/options/option_node_button.gd" id="2_cu3px"]
+
+[node name="Options Node" type="MarginContainer"]
+custom_minimum_size = Vector2(0, 48)
+anchors_preset = -1
+anchor_top = -0.026
+anchor_right = 0.35000002
+anchor_bottom = 0.041
+offset_top = 0.22000122
+offset_right = -3.0517578e-05
+offset_bottom = -0.020000458
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 16)
+theme = ExtResource("1_cu3px")
+script = ExtResource("2_cu3px")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+focus_mode = 0
+theme = ExtResource("1_cu3px")
+toggle_mode = true
+
+[node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

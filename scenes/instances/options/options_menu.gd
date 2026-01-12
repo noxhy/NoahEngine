@@ -4,6 +4,7 @@ const BOOL_PRELOAD = preload("res://scenes/instances/options/option_node_bool.ts
 const NUMBER_PRELOAD = preload("res://scenes/instances/options/option_node_number.tscn")
 const KEYBIND_PRELOAD = preload("res://scenes/instances/options/option_node_keybind.tscn")
 const LABEL_PRELOAD = preload("res://scenes/instances/options/option_node_label.tscn")
+const BUTTON_PRELOAD = preload("res://scenes/instances/options/option_node_button.tscn")
 
 @export var box_limit: float = 320
 
@@ -44,6 +45,8 @@ func _process(delta: float) -> void:
 		if get_selected_node() is KeyBindOptionNode:
 			get_selected_node().buttons[get_selected_node().selected]._on_toggled(true)
 			get_selected_node().buttons[get_selected_node().selected].button_pressed = true
+		elif get_selected_node() is ButtonOptionNode:
+			get_selected_node().button.emit_signal(&"pressed")
 	
 	if Input.is_action_just_pressed(&"ui_left"):
 		if get_selected_node() is NumberOptionNode:
@@ -119,6 +122,9 @@ func load_category(category: String, options: Array):
 		elif type == &"label":
 			instance = LABEL_PRELOAD.instantiate()
 			instance.display_name = data
+		elif type == &"button":
+			instance = BUTTON_PRELOAD.instantiate()
+			instance.display_name = data["text"]
 		else:
 			printerr("Unknown type: ", type)
 		
@@ -128,6 +134,9 @@ func load_category(category: String, options: Array):
 		
 		%Options.add_child(instance)
 		instance.add_to_group(&"options")
+		if type == &"button":
+			instance.button.connect(&"pressed", self.pressed_button.bind(data["id"]))
+		
 		instance.modulate.a = 0
 		instance.connect("mouse_entered", self.update.bind(i, true))
 		
@@ -165,3 +174,14 @@ func get_selected_node() -> Node:
 
 func set_description(text: String = ""):
 	%Description.text = text
+
+func pressed_button(id: StringName):
+	match id:
+		
+		&"offset":
+			Global.change_scene_to("res://scenes/options/offset_calibrator.tscn")
+			SoundManager.accept.play()
+			SoundManager.music.stop()
+		
+		_:
+			printerr("No function assigned to: ", id)

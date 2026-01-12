@@ -42,11 +42,7 @@ func _process(delta):
 		tail.scale.x = scroll
 		tail.size.x = line_length
 		# apparently godot is culling the notes regardless of what i do so idk a solution
-		# RenderingServer.canvas_item_set_custom_rect(get_canvas_item(), true, get_viewport_rect())
-		$VisibleOnScreenEnabler2D.rect.size.y = (line_length + grid_size.y) * scroll / $Note.scale.y
-		collision_shape.shape.size.y = $VisibleOnScreenEnabler2D.rect.size.y
-		collision_shape.position.y = $VisibleOnScreenEnabler2D.rect.size.y / 2 * $Note.scale.y
-		collision_shape.position.y -= grid_size.y / 2
+
 	else:
 		tail.visible = false
 

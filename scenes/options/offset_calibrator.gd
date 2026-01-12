@@ -2,6 +2,7 @@ extends Node2D
 
 var previous_offsets: Array[float]
 var index: int = 0
+var current_timing: float = 0.0
 var timing: float = 0.0
 var entries_required: int = 4
 
@@ -13,7 +14,10 @@ func _ready():
 	
 	for i in entries_required:
 		previous_offsets.append(0.0)
-	$Audio/Music.play()
+	
+	$Conductor.tempo = $Audio/Base.stream.get_bpm()
+	$Audio/Base.play()
+	$Audio/Drums.play()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -57,9 +61,11 @@ func _input(event):
 		Global.change_scene_to("res://scenes/options/options.tscn", "down")
 	elif event.is_action_pressed("ui_accept"):
 		$"Audio/Hit Sound".play()
-		var song_position: float = $Audio/Music.get_playback_position()
+		var song_position: float = $Audio/Base.get_playback_position()
 		var distance: float = song_position - timing
 		previous_offsets[index % entries_required] = distance
+		
+		print("distance: ", distance, " timing: ", timing, " current_timing: ", current_timing)
 		
 		index += 1
 		if index >= entries_required:
@@ -73,6 +79,8 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	$UI/Speaker.frame = 0
 	$UI/Speaker.play_animation(&"bump")
 	
+	current_timing = current_beat * $Conductor.seconds_per_beat
 	timing = (current_beat + 1) * $Conductor.seconds_per_beat
+	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

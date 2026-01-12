@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://coivso5sghc2p" path="res://assets/fonts/fnf_font.ttf" id="6_arlsh"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="7_5xrda"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/instances/characters/boyfriend.tscn" id="8_npxap"]
-[ext_resource type="Shader" uid="uid://biwtmuarqekfa" path="res://scenes/story mode/replace_colour.gdshader" id="9_20mkd"]
+[ext_resource type="Shader" uid="uid://biwtmuarqekfa" path="res://assets/shaders/replace_colour.gdshader" id="9_20mkd"]
 [ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://scenes/instances/freeplay/freeplay_arrow.tscn" id="9_gdyqo"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/instances/characters/girlfriend.tscn" id="9_qcirc"]
 [ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://scenes/instances/difficulty_display.tscn" id="10_fvhjj"]
