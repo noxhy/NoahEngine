@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cdjdqjrjntu1f" path="res://scenes/xml to sprite/xml_converter.gd" id="1_ieiou"]
 [ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://assets/sounds/menu sounds/menu confirm.ogg" id="2_jxfro"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="3_dn752"]
-[ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://assets/sprites/menus/background/main menu/menuDesat.png" id="4_o3a0u"]
+[ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://assets/sprites/menus/background/menuDesat.png" id="4_o3a0u"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yre5q"]
 bg_color = Color(0, 0, 0, 0.40784314)

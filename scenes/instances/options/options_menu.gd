@@ -6,10 +6,15 @@ const KEYBIND_PRELOAD = preload("res://scenes/instances/options/option_node_keyb
 const LABEL_PRELOAD = preload("res://scenes/instances/options/option_node_label.tscn")
 const BUTTON_PRELOAD = preload("res://scenes/instances/options/option_node_button.tscn")
 
+const HOLD_THRESHOLD = 0.5
+const HOLD_RATE = 50
+
 @export var box_limit: float = 320
 
 var selected: int = 0
-var old_selected: int;
+var old_selected: int
+var elapsed: float
+
 func _process(delta: float) -> void:
 	if get_viewport().gui_get_focus_owner():
 		if Input.is_action_just_pressed(&"ui_cancel") or Input.is_action_just_pressed(&'mouse_right'):
@@ -51,7 +56,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"ui_left"):
 		if get_selected_node() is NumberOptionNode:
 			var spin_box: SpinBox = get_selected_node().spin_box
-			spin_box.value -= spin_box.step * 5 if Input.is_action_pressed("shift") else spin_box.step
+			spin_box.value -= spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
 		elif get_selected_node() is KeyBindOptionNode:
 			get_selected_node().selected = get_selected_node().selected - 1
 			get_selected_node().select_button(get_selected_node().selected)
@@ -60,10 +65,20 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"ui_right"):
 		if get_selected_node() is NumberOptionNode:
 			var spin_box: SpinBox = get_selected_node().spin_box
-			spin_box.value += spin_box.step * 5 if Input.is_action_pressed("shift") else spin_box.step
+			spin_box.value += spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
 		elif get_selected_node() is KeyBindOptionNode:
 			get_selected_node().selected = get_selected_node().selected + 1
 			get_selected_node().select_button(get_selected_node().selected)
+	
+	if Input.is_action_pressed(&"ui_left") or Input.is_action_pressed(&"ui_right"):
+		elapsed += delta
+		if elapsed >= HOLD_THRESHOLD:
+			if get_selected_node() is NumberOptionNode:
+				var spin_box: SpinBox = get_selected_node().spin_box
+				spin_box.value += spin_box.step * -1 if Input.is_action_pressed(&"ui_left") else spin_box.step
+	
+	if Input.is_action_just_released(&"ui_left") or Input.is_action_just_released(&"ui_right"):
+		elapsed = 0
 	
 	if Input.is_action_just_pressed(&"mouse_scroll_up"):
 		if %Options.size.y > box_limit:

@@ -63,7 +63,7 @@ func _input(event):
 		$"Audio/Hit Sound".play()
 		var song_position: float = $Audio/Base.get_playback_position()
 		var distance: float = song_position - current_timing
-		previous_offsets[index % entries_required] = distance
+		previous_offsets[index % entries_required] = -distance
 		current_timing = timing
 		
 		index += 1

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dix7cy7ydksfi"
-path="res://.godot/imported/menuDesat.png-5c51cc652dffea3f96356d9240fc176a.ctex"
+uid="uid://djuslh4ulkynw"
+path="res://.godot/imported/menuBGMagenta.png-7e8912c5cf1ab631eea91d676302cd06.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus/background/main menu/menuDesat.png"
-dest_files=["res://.godot/imported/menuDesat.png-5c51cc652dffea3f96356d9240fc176a.ctex"]
+source_file="res://assets/sprites/menus/background/menuBGMagenta.png"
+dest_files=["res://.godot/imported/menuBGMagenta.png-7e8912c5cf1ab631eea91d676302cd06.ctex"]
 
 [params]
 

@@ -41,7 +41,7 @@ var pages: Dictionary = {
 			"unit": "ms",
 			"scale": 0.001
 			}],
-			[&"button", {"text": "Offset Calibrator", "id": &"offset"}],
+			[&"button", {"text": "Offset Calibrator".to_upper(), "id": &"offset"}],
 			[&"option", {"id": "ghost_tapping", "description": "Disables the health and score penalty on hitting a key when there's no active notes."}],
 			[&"option", {"id": "downscroll", "description": "Makes the notes go downwards rather than upwards."}],
 			[&"option", {"id": "botplay", "description": "Automatically hits perfect notes."}],

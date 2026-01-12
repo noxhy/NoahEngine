@@ -1,6 +1,6 @@
 @icon("res://assets/sprites/nodes/character.png")
 
-extends Node2D
+extends Node
 class_name Character
 
 @export_group("Animation Offset")

@@ -37,7 +37,7 @@ z_index = 300
 position = Vector2(480, 880.00006)
 scale = Vector2(6, 6)
 
-[node name="Enemy" parent="." groups=["player"] instance=ExtResource("10_2o85c")]
+[node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("10_2o85c")]
 unique_name_in_owner = true
 z_index = 200
 position = Vector2(-160, 904.00006)
