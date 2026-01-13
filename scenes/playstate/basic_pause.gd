@@ -20,6 +20,10 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 			"name": "Options"
 		},
 		
+		"change_difficulty": {
+			"name": "Change Difficulty"
+		},
+		
 		"restart": {
 			"name": "Restart"
 		},
@@ -44,6 +48,12 @@ const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
 		
 		"chart_editor": {
 			"name": "Go to Chart Editor"
+		}
+	},
+	
+	"difficulties": {
+		"back": {
+			"name": "Back"
 		}
 	}
 }
@@ -74,15 +84,18 @@ func _ready():
 	%"Other Info".text += "\n" + mode_display
 	
 	match GameManager.play_mode:
-		GameManager.PLAY_MODE.CHARTING: load_page("charting")
-		_: load_page("default")
+		GameManager.PLAY_MODE.CHARTING:
+			load_page("charting")
+		_:
+			load_page("default")
 	
 	update(selected)
+	for difficulty in GameManager.current_song.difficulties:
+		pages.difficulties[difficulty] = {"name": difficulty}
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	
 	if Input.is_action_just_pressed("ui_up"):
 		update(selected - 1)
 	if Input.is_action_just_pressed("ui_down"):
@@ -92,10 +105,11 @@ func _process(delta):
 
 
 func load_page(page: String):
+	option_nodes = []
+	get_tree().call_group(&"options", &"queue_free")
 	options = pages.get(page)
 	
-	var index = 0
-	
+	var index: int = 0
 	for i in options.keys():
 		var menu_option_instance = MENU_OPTION_PRELOAD.instantiate()
 		
@@ -106,6 +120,7 @@ func load_page(page: String):
 		
 		$UI.add_child(menu_option_instance)
 		option_nodes.append(menu_option_instance)
+		menu_option_instance.add_to_group(&"options")
 		
 		index += 1
 
@@ -153,3 +168,35 @@ func select_option(i: int):
 		"chart_editor":
 			GameManager.reset_stats()
 			Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")
+		
+		"change_difficulty":
+			load_page("difficulties")
+			update(0)
+		
+		"back":
+			load_page("default")
+			update(0)
+		
+		# Difficulties
+		
+		"easy":
+			change_difficulty("easy")
+		
+		"normal":
+			change_difficulty("normal")
+		
+		"hard":
+			change_difficulty("hard")
+		
+		"erect":
+			change_difficulty("erect")
+		
+		"nightmare":
+			change_difficulty("nightmare")
+
+
+func change_difficulty(difficulty: String):
+	GameManager.difficulty = difficulty
+	GameManager.deaths = 0
+	get_tree().paused = false
+	get_tree().reload_current_scene()

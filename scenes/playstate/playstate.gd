@@ -26,7 +26,6 @@ signal setup_finished()
 @onready var characters: Array = []
 
 @export_group("Nodes")
-
 ## The host song script. Usually the parent of this node.
 @export var host: Node2D
 ## The UI node that requires a list: [code]strums[/code].
@@ -35,23 +34,20 @@ signal setup_finished()
 @export var camera: PlayStateCamera
 
 @export_group("Positions")
-
 ## Where the "Sick!" or "Good!" sprites will spawn
 @export var rating_position: Marker2D
 ## Where the combo number will spawn, origin is to the left.
 @export var combo_position: Marker2D
 
 @export_group("Resources")
-
 @export var note_skin: NoteSkin
 @export var ui_skin: UISkin
 
 @export_group("Values")
 ## Scales the Rating and Combo sprites.
-@export var combo_scale_multiplier = Vector2(1, 1)
+@export_custom(PROPERTY_HINT_LINK, "x") var combo_scale_multiplier = Vector2(1, 1)
 
 @export_group("Scenes")
-
 ## What scene the player will be sent to upon death.
 @export_file('*.tscn') var death_scene = "res://scenes/playstate/death_screen.tscn"
 ## What scene will instantiate when pausing,
@@ -213,11 +209,13 @@ func _process(delta):
 		# Idk how exactly this works I stole this code from sqirradotdev
 		position_delta = abs(position_lerp - GameManager.song_position)
 		position_lerp += delta * instrumental.pitch_scale
-		GameManager.song_position = position_lerp
 		
 		if delta > COMPENSATION or sync_timer <= 0.0 or position_delta >= 0.01 * instrumental.pitch_scale:
-			if position_delta >= 0.025 * instrumental.pitch_scale: position_lerp = GameManager.song_position
+			if position_delta >= 0.025 * instrumental.pitch_scale:
+				position_lerp = GameManager.song_position
 			sync_timer = 0.5
+		
+		GameManager.song_position = position_lerp
 		sync_timer -= delta
 	
 	conductor.tempo = get_tempo_at(clamp(GameManager.song_position, 0, instrumental.stream.get_length()))
@@ -288,11 +286,11 @@ func play_song(time: float):
 	GameManager.song_position = song_start_offset
 	
 	if time >= seconds_per_beat * 4:
-		play_audios(time)
+		play_audios(song_start_offset)
 	else:
 		var countdown_instance = countdown_node.instantiate()
 		
-		countdown_instance.speed_scale = get_tempo_at(-chart.offset + time) / 60.0
+		countdown_instance.speed_scale = get_tempo_at(time - chart.offset) / 60.0
 		
 		ui.add_child(countdown_instance)
 		
@@ -300,9 +298,9 @@ func play_song(time: float):
 		countdown_instance.seek(time)
 	
 	var notes_list = chart.get_notes_data()
-	current_note = bsearch_left_range(notes_list, notes_list.size(), time)
+	current_note = bsearch_left_range(notes_list, time)
 	var events_list = chart.get_events_data()
-	current_event = bsearch_left_range(events_list, events_list.size(), time)
+	current_event = bsearch_left_range(events_list, max(song_start_offset, 0))
 
 # This if for actually playing the audio tracks, the reason this is a function is because
 # I also call it in the process function for when the song starts before 4 beats are possible.
@@ -310,24 +308,24 @@ func play_audios(time: float):
 	var playback = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
-		vocal_tracks.append(playback.play_stream(stream, chart.offset + song_start_offset + time, \
+		vocal_tracks.append(playback.play_stream(stream, time, \
 		0.0, song_speed))
-	instrumental.play(chart.offset + song_start_offset + time)
+	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
-func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int:
-	
-	if (length == 0): return -1
-	if (value_set[length - 1][0] < left_range): return -1
+func bsearch_left_range(value_set: Array, left_range: float) -> int:
+	var length = value_set.size()
+	if (length == 0):
+		return -1
+	if (value_set[length - 1][0] < left_range):
+		return -1
 	
 	var low: int = 0
 	var high: int = length - 1
 	
 	while (low <= high):
-		
-		@warning_ignore("integer_division")
 		var mid: int = low + int((high - low) / 2)
 		
 		if (value_set[mid][0] >= left_range): high = mid - 1
@@ -336,24 +334,19 @@ func bsearch_left_range(value_set: Array, length: int, left_range: float) -> int
 	return high + 1
 
 static func get_rating(time: float) -> String:
-	var rating: String
-	
 	var ratings = [
-		# [time <= 0.0125, "epic"], This is useless now because of how gold perfect works
-		# im keeping it tho just in case people want it
 		[time <= GameManager.SICK_RATING_WINDOW, "sick"],
 		[time <= GameManager.GOOD_RATING_WINDOW, "good"],
 		[time <= GameManager.BAD_RATING_WINDOW, "bad"],
 		[time <= GameManager.SHIT_RATING_WINDOW, "shit"],
-		[true, "miss"],
+		[true, ],
 	]
 	
 	for condition in ratings:
 		if condition[0]:
-			rating = condition[1]
-			break
+			return condition[1]
 	
-	return rating
+	return "miss"
 
 func pause():
 	var pause_scene_instance = pause_preload.instantiate()
@@ -378,61 +371,55 @@ func score_note(hit_time: float):
 
 
 func basic_event(time: float, event_name: String, event_parameters: Array):
-	if event_name == "camera_position":
-		var camera_position = host.camera_positions[int(event_parameters[0])].global_position
-		if camera_position != null: camera.position = camera_position
-	
-	elif event_name == "camera_bop":
-		var camera_bop = float(event_parameters[0])
-		var ui_bop = float(event_parameters[1])
-		
-		camera.zoom += Vector2(camera_bop, camera_bop) * camera.zoom
-		ui.scale += Vector2(ui_bop, ui_bop)
-	
-	elif event_name == "camera_zoom":
-		var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
-		@warning_ignore("incompatible_ternary")
-		var zoom_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
-		var ease_string = event_parameters.get(2)
-		var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
-		if ease_string != null:
-			_ease = Global.string_to_ease(ease_string)
-		
-		var tween = create_tween()
-		tween.set_trans(_ease[0]).set_ease(_ease[1]).set_parallel(true)
-		tween.tween_property(camera, "target_zoom", new_zoom, zoom_time * song_speed)
-		tween.tween_property(camera, "zoom", new_zoom, zoom_time * song_speed)
-	
-	elif event_name == "bop_delay" or event_name == "bop_rate":
-		bop_rate = int(event_parameters[0])
-	
-	elif event_name == "camera_bop_strength":
-		camera_bop_strength = Vector2(float(event_parameters[0]), float(event_parameters[0]))
-	
-	elif event_name == "ui_bop_strength":
-		ui_bop_strength = Vector2(float(event_parameters[0]), float(event_parameters[0]))
-	
-	elif event_name == "lerping":
-		var lerping = true if event_parameters[0] == "true" else false
-		ui.lerping = lerping
-		camera.lerping = lerping
-	
-	elif event_name == "scroll_speed":
-		var scroll_speed = float(event_parameters[0])
-		@warning_ignore("incompatible_ternary")
-		var tween_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
-		
-		for strum in strums:
-			for lane in strum.strums.size() - 1:
-				var tween = create_tween()
-				tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-				var scroll_speed_scale: float = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
-				tween.tween_method(
-					strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed * scroll_speed_scale, tween_time * song_speed
-					)
-	
-	elif event_name == "camera_shake":
-		camera.shake(int(event_parameters[0]), float(event_parameters[1]))
+	match event_name:
+		"camera_position":
+			var camera_position = host.camera_positions[int(event_parameters[0])].global_position
+			if camera_position != null: camera.position = camera_position
+		"camera_bop":
+			var camera_bop = float(event_parameters[0])
+			var ui_bop = float(event_parameters[1])
+			
+			camera.zoom += Vector2(camera_bop, camera_bop) * camera.zoom
+			ui.scale += Vector2(ui_bop, ui_bop)
+		"camera_zoom":
+			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
+			@warning_ignore("incompatible_ternary")
+			var zoom_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
+			var ease_string = event_parameters.get(2)
+			var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+			if ease_string != null:
+				_ease = Global.string_to_ease(ease_string)
+			
+			var tween = create_tween()
+			tween.set_trans(_ease[0]).set_ease(_ease[1]).set_parallel(true)
+			tween.tween_property(camera, "target_zoom", new_zoom, zoom_time * song_speed)
+			tween.tween_property(camera, "zoom", new_zoom, zoom_time * song_speed)
+		"bop_rate":
+			bop_rate = int(event_parameters[0])
+		"bop_delay":
+			bop_rate = int(event_parameters[0])
+		"camera_bop_strength":
+			camera_bop_strength = Vector2(float(event_parameters[0]), float(event_parameters[0]))
+		"ui_bop_strength":
+			ui_bop_strength = Vector2(float(event_parameters[0]), float(event_parameters[0]))
+		"lerping":
+			var lerping = true if event_parameters[0] == "true" else false
+			ui.lerping = lerping
+			camera.lerping = lerping
+		"scroll_speed":
+			var scroll_speed = float(event_parameters[0])
+			var tween_time = 0.0 if event_parameters[1] == "" else float(event_parameters[1])
+			
+			for strum in strums:
+				for lane in strum.strums.size() - 1:
+					var tween = create_tween()
+					tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+					var scroll_speed_scale: float = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
+					tween.tween_method(
+						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed * scroll_speed_scale, tween_time * song_speed
+						)
+		"camera_shake":
+			camera.shake(int(event_parameters[0]), float(event_parameters[1]))
 	
 	emit_signal("new_event", time, event_name, event_parameters)
 
@@ -465,7 +452,6 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
 			SoundManager.hit.play()
 		
@@ -534,7 +520,7 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			update_ui_stats()
 		else:
 			score -= 100
-			health -= (1 + clamp(combo / 20.0 * (length + 4.5), 0, 20))
+			health -= (1 + clamp(combo / 20.0 + (length * HOLD_HEALTH), 0, 20))
 			combo = 0
 			misses += 1
 			 
