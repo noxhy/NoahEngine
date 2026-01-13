@@ -1,4 +1,4 @@
-extends "res://scenes/playstate/songs/basic_song.gd"
+extends "res://scenes/game/songs/basic_song.gd"
 
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	get_tree().call_group(

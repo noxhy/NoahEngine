@@ -21,7 +21,7 @@ const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 	"week1": {
 		"animation": "week1",
 		"node": $"UI/Week Display/SubViewport/Week 1",
-		"scene": "res://scenes/playstate/songs/fresh/fresh.tscn",
+		"scene": "res://scenes/game/songs/fresh/fresh.tscn",
 		"name": "Daddy Dearest",
 		"display_song_list": "Bopeeboo\nFresh\nDadbattle",
 		"song_list": [load("uid://brqmb60ca111g")]
@@ -53,7 +53,7 @@ const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 	"week5": {
 		"animation": "week5",
 		"node": $"UI/Week Display/SubViewport/Week 5",
-		"scene": "res://scenes/playstate/songs/eggnog/eggnog.tscn",
+		"scene": "res://scenes/game/songs/eggnog/eggnog.tscn",
 		"name": "Red Snow",
 		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
 		"song_list": [load("res://playable songs/cocoa/Cocoa Erect.res")]
@@ -61,7 +61,7 @@ const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 	"week6": {
 		"animation": "week6",
 		"node": $"UI/Week Display/SubViewport/Week 6",
-		"scene": "res://scenes/playstate/songs/senpai/senpai.tscn",
+		"scene": "res://scenes/game/songs/senpai/senpai.tscn",
 		"name": "Hating Simulator Ft. Moawling",
 		"display_song_list": "Senpai\nRoses\nThorns",
 		"song_list": [load("uid://bl42wsxmex11p")]
@@ -77,7 +77,7 @@ const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 	"weekend1": {
 		"animation": "weekend1",
 		"node": $"UI/Week Display/SubViewport/Weekend 1",
-		"scene": "res://scenes/playstate/songs/darnell/darnell.tscn",
+		"scene": "res://scenes/game/songs/darnell/darnell.tscn",
 		"name": "Due Debts",
 		"display_song_list": "Darnell\nLit Up\n2Hot\nBlazin\'",
 		"character": "pico",

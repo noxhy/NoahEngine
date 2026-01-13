@@ -1,4 +1,4 @@
-extends "res://scenes/playstate/songs/basic_song.gd"
+extends "res://scenes/game/songs/basic_song.gd"
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if measure_relative % 2 == 0:

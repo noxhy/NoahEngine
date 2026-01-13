@@ -17,7 +17,7 @@ signal setup_finished()
 
 @onready var rating_node = load("res://scenes/game/rating.tscn")
 @onready var combo_numbers_manager_node = load("res://scenes/game/combo_numbers_manager.tscn")
-@onready var countdown_node = load("res://scenes/playstate/countdown.tscn")
+@onready var countdown_node = load("res://scenes/game/countdown.tscn")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
 @onready var instrumental: AudioStreamPlayer
@@ -49,9 +49,9 @@ signal setup_finished()
 
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
-@export_file('*.tscn') var death_scene = "res://scenes/playstate/death_screen.tscn"
+@export_file('*.tscn') var death_scene = "res://scenes/game/death_screen.tscn"
 ## What scene will instantiate when pausing,
-@export_file('*.tscn') var pause_scene = "res://scenes/playstate/pause_menu.tscn"
+@export_file('*.tscn') var pause_scene = "res://scenes/game/pause_menu.tscn"
 ## The scene that will be switched to when the song ends.
 @export_file('*.tscn') var next_scene = "res://scenes/results/results.tscn"
 
