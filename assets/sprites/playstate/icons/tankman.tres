@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://assets/sprites/playstate/icons/icon-tankman.png" id="1_x8mop"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_jdded"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_65wdv"]
 atlas = ExtResource("1_x8mop")
 region = Rect2(0, 0, 150, 150)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vkl4x"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_exbtv"]
 atlas = ExtResource("1_x8mop")
 region = Rect2(150, 0, 150, 150)
 
@@ -14,7 +14,7 @@ region = Rect2(150, 0, 150, 150)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jdded")
+"texture": SubResource("AtlasTexture_65wdv")
 }],
 "loop": true,
 "name": &"default",
@@ -22,7 +22,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vkl4x")
+"texture": SubResource("AtlasTexture_exbtv")
 }],
 "loop": true,
 "name": &"losing",
