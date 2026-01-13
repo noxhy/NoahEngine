@@ -169,6 +169,7 @@ func _process(delta: float) -> void:
 		current_steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
 		$Conductor.offset = chart.offset + chart.get_tempo_time_at(song_position + start_offset)
+		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
 		
 		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"):
 			undo()
@@ -726,6 +727,7 @@ func remove_note(lane: int, time: float = -1):
 	
 	if i <= -1:
 		return
+	
 	if range(note_list.size()).has(i - current_visible_notes_L):
 		note_list[i - current_visible_notes_L].queue_free()
 		note_list.remove_at(i - current_visible_notes_L)
@@ -834,7 +836,8 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var output: float = chart.offset
 	
 	while yL <= yC:
-		if i + 1 >= tempo_data.keys().size(): R = %Instrumental.stream.get_length()
+		if i + 1 >= tempo_data.keys().size():
+			R = %Instrumental.stream.get_length()
 		else: R = tempo_data.keys()[i + 1]
 		
 		meter = chart.get_meter_at(L)
@@ -850,7 +853,8 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 			
 			output += (yC - yL) / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
 			return output
-		else: output += R - L
+		else:
+			output += R - L
 		
 		L = R
 		i += 1
@@ -1070,7 +1074,6 @@ func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	ResourceSaver.save(chart, chart.resource_path)
 	backup_chart = chart
-	print("save chart")
 
 func updated_strums():
 	can_chart = true
