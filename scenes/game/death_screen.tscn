@@ -1,0 +1,186 @@
+[gd_scene load_steps=11 format=3 uid="uid://bd083xcqslcsd"]
+
+[ext_resource type="Script" uid="uid://brbf61eud6vql" path="res://scenes/game/death_screen.gd" id="1_3knol"]
+[ext_resource type="AudioStream" uid="uid://c7jqa5mdxivnd" path="res://assets/sounds/menu sounds/lose sfx.ogg" id="1_l87ty"]
+[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_24go6"]
+[ext_resource type="AudioStream" uid="uid://cqoad5jx15ele" path="res://assets/songs/menu songs/game over/gameOver.ogg" id="3_3040t"]
+[ext_resource type="AudioStream" uid="uid://dbdx3d7yv6085" path="res://assets/sounds/menu sounds/game over end.ogg" id="5_23pry"]
+[ext_resource type="PackedScene" uid="uid://de1orr6su5xmc" path="res://scenes/game/characters/boyfriend_dead.tscn" id="6_0wmjs"]
+
+[sub_resource type="Animation" id="Animation_shx3s"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Over/ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_kbv4s"]
+resource_name = "end"
+length = 3.0
+tracks/0/type = "audio"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Audio/Continue Sound")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("5_23pry")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/0/use_blend = true
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Over/ColorRect:color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 2.5),
+"transitions": PackedFloat32Array(2.2974, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(3),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"exit_scene"
+}]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Audio/Music")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"stop"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_tdai2"]
+resource_name = "intro"
+length = 2.5
+tracks/0/type = "audio"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Audio/Intro Sound")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("1_l87ty")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/0/use_blend = true
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("UI/Player")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": ["intro", -1.0],
+"method": &"play_animation"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_6l7ld"]
+_data = {
+&"RESET": SubResource("Animation_shx3s"),
+&"end": SubResource("Animation_kbv4s"),
+&"intro": SubResource("Animation_tdai2")
+}
+
+[node name="Death Screen" type="Node2D"]
+script = ExtResource("1_3knol")
+
+[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
+script = ExtResource("2_24go6")
+stream_player = NodePath("../Audio/Music")
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="Intro Sound" type="AudioStreamPlayer" parent="Audio"]
+bus = &"SFX"
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("3_3040t")
+bus = &"Music"
+
+[node name="Continue Sound" type="AudioStreamPlayer" parent="Audio"]
+bus = &"SFX"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+drag_vertical_offset = -0.5
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_6l7ld")
+}
+
+[node name="UI" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Player" parent="UI" instance=ExtResource("6_0wmjs")]
+unique_name_in_owner = true
+scale = Vector2(0.6, 0.6)
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+metadata/_edit_lock_ = true
+
+[node name="Over" type="CanvasLayer" parent="."]
+layer = 1000
+
+[node name="ColorRect" type="ColorRect" parent="Over"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
+
+[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

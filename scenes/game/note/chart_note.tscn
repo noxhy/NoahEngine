@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://yyfqg2jvwcmt"]
+
+[ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://scenes/game/note/chart_note.gd" id="1_ud7f5"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://assets/sprites/playstate/developer/arrow/notes.tres" id="2_jcxlk"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="3_gsgsu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ud7f5"]
+size = Vector2(640.0001, 640.0001)
+
+[node name="Note" type="Node2D" groups=["note"]]
+use_parent_material = true
+script = ExtResource("1_ud7f5")
+
+[node name="Note" type="AnimatedSprite2D" parent="."]
+z_index = 1
+use_parent_material = true
+scale = Vector2(1.065, 1.065)
+sprite_frames = ExtResource("2_jcxlk")
+animation = &"left"
+script = ExtResource("3_gsgsu")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"down end",
+&"down tail": &"down tail",
+&"left": &"left",
+&"left end": &"left end",
+&"left tail": &"left tail",
+&"right": &"right",
+&"right end": &"right end",
+&"right tail": &"right tail",
+&"up": &"up",
+&"up end": &"up end",
+&"up tail": &"up tail"
+})
+
+[node name="Tail" type="TextureRect" parent="."]
+modulate = Color(1, 1, 1, 0.588)
+rotation = 1.5707964
+stretch_mode = 1
+
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+rect = Rect2(-320, -320, 640, 640)
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(0.99999964, 0.99999964)
+shape = SubResource("RectangleShape2D_ud7f5")
+
+[connection signal="screen_entered" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]

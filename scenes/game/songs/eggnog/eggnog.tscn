@@ -1,0 +1,108 @@
+[gd_scene load_steps=15 format=3 uid="uid://7dnhab71cxfx"]
+
+[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://scenes/game/songs/alt_poses.gd" id="1_8k6f7"]
+[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_vb00p"]
+[ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="4_aqdoj"]
+[ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="5_f88c2"]
+[ext_resource type="PackedScene" uid="uid://ofcr80jgray3" path="res://scenes/game/stages/mall/stage.tscn" id="6_8k6f7"]
+[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="7_l0m3a"]
+[ext_resource type="PackedScene" uid="uid://cs1tqndyp3ow6" path="res://scenes/game/characters/boyfriend_christmas.tscn" id="12_8k6f7"]
+[ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://assets/shaders/adjust_hsv.gdshader" id="13_vkil6"]
+[ext_resource type="PackedScene" uid="uid://civkgglbefejt" path="res://scenes/game/characters/mom_dad_christmas.tscn" id="14_5qnon"]
+[ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="15_pd6oi"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="16_2vulp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8k6f7"]
+shader = ExtResource("13_vkil6")
+shader_parameter/hue = -5.0
+shader_parameter/saturation = -5.0
+shader_parameter/contrast = 0.0
+shader_parameter/brightness = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2etw8"]
+shader = ExtResource("13_vkil6")
+shader_parameter/hue = -5.0
+shader_parameter/saturation = -5.0
+shader_parameter/contrast = 0.0
+shader_parameter/brightness = 0.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ccl2s"]
+shader = ExtResource("13_vkil6")
+shader_parameter/hue = -5.0
+shader_parameter/saturation = -5.0
+shader_parameter/contrast = 0.0
+shader_parameter/brightness = 0.0
+
+[node name="Eggnog" type="Node2D"]
+script = ExtResource("1_8k6f7")
+
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_vb00p")]
+process_mode = 1
+host = NodePath("..")
+ui = NodePath("../UI")
+camera = NodePath("../Camera")
+rating_position = NodePath("../World/Rating Marker")
+combo_position = NodePath("../World/Combo Marker")
+note_skin = ExtResource("4_aqdoj")
+ui_skin = ExtResource("5_f88c2")
+death_scene = "uid://bd083xcqslcsd"
+
+[node name="Stage" parent="." instance=ExtResource("6_8k6f7")]
+unique_name_in_owner = true
+
+[node name="Camera" parent="." instance=ExtResource("7_l0m3a")]
+position = Vector2(640, 360)
+position_smoothing_speed = 3.0
+
+[node name="Player" parent="." groups=["player"] instance=ExtResource("12_8k6f7")]
+unique_name_in_owner = true
+z_index = 300
+material = SubResource("ShaderMaterial_8k6f7")
+position = Vector2(936, 662.4)
+scale = Vector2(0.8, 0.8)
+
+[node name="Enemy" parent="." groups=["enemy"] instance=ExtResource("14_5qnon")]
+unique_name_in_owner = true
+z_index = 100
+material = SubResource("ShaderMaterial_2etw8")
+position = Vector2(136, 662.4)
+scale = Vector2(0.8, 0.8)
+
+[node name="Metronome" parent="." instance=ExtResource("15_pd6oi")]
+unique_name_in_owner = true
+z_index = 100
+material = SubResource("ShaderMaterial_ccl2s")
+position = Vector2(641.6, 656)
+scale = Vector2(0.8, 0.8)
+
+[node name="World" type="CanvasLayer" parent="."]
+follow_viewport_enabled = true
+
+[node name="Position 1" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(757, 424)
+gizmo_extents = 18.3
+
+[node name="Position 2" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(192, 356)
+gizmo_extents = 26.5
+
+[node name="Position 3" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(536, 368)
+gizmo_extents = 26.5
+
+[node name="Rating Marker" type="Marker2D" parent="World"]
+position = Vector2(788, 324)
+gizmo_extents = 20.0
+
+[node name="Combo Marker" type="Marker2D" parent="World"]
+position = Vector2(880, 368)
+gizmo_extents = 20.0
+
+[node name="UI" parent="." instance=ExtResource("16_2vulp")]
+
+[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
+[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
+[connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]

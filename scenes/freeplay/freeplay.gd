@@ -1,7 +1,7 @@
 extends Node2D
 class_name Freeplay
 
-const MENU_OPTION_NODE = preload("res://scenes/instances/freeplay/capsule.tscn")
+const MENU_OPTION_NODE = preload("res://scenes/freeplay/capsule.tscn")
 
 @export var can_click: bool = true
 @export var difficulties: PackedStringArray

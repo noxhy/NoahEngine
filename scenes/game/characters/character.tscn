@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://biy78xe1wlp27"]
+
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_oe8gf"]
+
+[node name="Character" type="Node2D"]
+script = ExtResource("1_oe8gf")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

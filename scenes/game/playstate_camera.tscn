@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://s0oblvodh51d"]
+
+[ext_resource type="Script" uid="uid://d4hcn78t8rdxo" path="res://scenes/game/playstate_camera.gd" id="1_l0i75"]
+
+[node name="PlayState Camera" type="Camera2D"]
+position_smoothing_enabled = true
+script = ExtResource("1_l0i75")

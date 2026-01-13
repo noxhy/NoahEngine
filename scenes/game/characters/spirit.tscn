@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://dghi5ce8cupic"]
+
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_8s5sa"]
+[ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://assets/sprites/playstate/icons/spirit.tres" id="2_s66hv"]
+[ext_resource type="SpriteFrames" uid="uid://c62bnqtxmntid" path="res://assets/sprites/characters/spirit/spirit.res" id="3_1ui7q"]
+
+[node name="Spirit" type="Node2D"]
+script = ExtResource("1_8s5sa")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"pixel_down",
+&"idle": &"df_idle",
+&"left": &"pixel_left",
+&"right": &"pixel_right",
+&"up": &"pixel_up"
+})
+icons = ExtResource("2_s66hv")
+color = Color(0.8, 0.262745, 0.439216, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -64)
+sprite_frames = ExtResource("3_1ui7q")
+animation = &"df_idle"
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

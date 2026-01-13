@@ -1,7 +1,7 @@
 extends Node2D
 
-const OPTION_MENU_PRELOAD = preload("res://scenes/instances/options/options_menu.tscn")
-const MENU_OPTION_PRELOAD = preload("res://scenes/instances/menu_option.tscn")
+const OPTION_MENU_PRELOAD = preload("res://scenes/options/options_menu.tscn")
+const MENU_OPTION_PRELOAD = preload("res://scenes/menu_option.tscn")
 
 @export var can_click = true
 

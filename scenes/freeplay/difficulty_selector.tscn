@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ce03uftq0kk3j" path="res://scenes/freeplay/difficulty_selector.gd" id="1_1tipg"]
 [ext_resource type="AudioStream" uid="uid://svn606p6k0w0" path="res://assets/sounds/menu sounds/menu scroll.ogg" id="2_lmn2j"]
-[ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://scenes/instances/freeplay/freeplay_arrow.tscn" id="3_8hml4"]
-[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://scenes/instances/difficulty_display.tscn" id="3_nyydv"]
+[ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://scenes/freeplay/freeplay_arrow.tscn" id="3_8hml4"]
+[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://scenes/difficulty_display.tscn" id="3_nyydv"]
 
 [sub_resource type="Animation" id="Animation_a31c2"]
 length = 0.001
@@ -129,13 +129,6 @@ stream = ExtResource("2_lmn2j")
 bus = &"SFX"
 
 [node name="Difficulty Display" parent="." instance=ExtResource("3_nyydv")]
-animation_names = Dictionary[StringName, StringName]({
-&"easy": &"easy",
-&"erect": &"erect",
-&"hard": &"hard",
-&"nightmare": &"nightmare",
-&"normal": &"normal"
-})
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -1,0 +1,148 @@
+[gd_scene load_steps=5 format=3 uid="uid://bflvolhan5xvh"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_n6ac0"]
+[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://assets/sprites/playstate/icons/icon-face.png" id="2_4ci21"]
+[ext_resource type="Script" uid="uid://jbhtf0t57xw3" path="res://scenes/chart_editor/metadata_window.gd" id="2_bkkpl"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ci21"]
+atlas = ExtResource("2_4ci21")
+region = Rect2(0, 0, 150, 150)
+
+[node name="Metadata Window" type="Window"]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Metadata"
+position = Vector2i(0, 24)
+size = Vector2i(320, 188)
+transparent = true
+popup_window = true
+theme = ExtResource("1_n6ac0")
+script = ExtResource("2_bkkpl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Song Name" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Song Name"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Song Title:"
+
+[node name="Song Name" type="LineEdit" parent="VBoxContainer/Song Name"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Song Artist" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Song Artist"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Song Artist:"
+
+[node name="Song Artist" type="LineEdit" parent="VBoxContainer/Song Artist"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Icons" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Icons"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Icon Texture:"
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/Icons"]
+unique_name_in_owner = true
+layout_mode = 2
+texture = SubResource("AtlasTexture_4ci21")
+expand_mode = 3
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Icons"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="Icon Button" type="Button" parent="VBoxContainer/Icons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Select File"
+
+[node name="Icon FileDailog" type="FileDialog" parent="VBoxContainer/Icons/Icon Button"]
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+file_mode = 0
+root_subfolder = "res://assets/sprites/playstate/icons/"
+filters = PackedStringArray("*.tres")
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Starting Tempo" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Starting Tempo"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Starting Tempo:"
+
+[node name="Starting Tempo" type="SpinBox" parent="VBoxContainer/Starting Tempo"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 30.0
+max_value = 500.0
+step = 0.1
+value = 60.0
+
+[node name="Song Scene" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/Song Scene"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Song Scene:"
+
+[node name="Song Scene" type="LineEdit" parent="VBoxContainer/Song Scene"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="Song Scene Button" type="Button" parent="VBoxContainer/Song Scene"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Select Scene"
+
+[node name="Scene FileDailog" type="FileDialog" parent="VBoxContainer/Song Scene/Song Scene Button"]
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+file_mode = 0
+root_subfolder = "res://scenes/playstate/songs/"
+filters = PackedStringArray("*.tscn")
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="text_changed" from="VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
+[connection signal="text_changed" from="VBoxContainer/Song Artist/Song Artist" to="." method="_on_song_artist_text_changed"]
+[connection signal="pressed" from="VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
+[connection signal="file_selected" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="value_changed" from="VBoxContainer/Starting Tempo/Starting Tempo" to="." method="_on_starting_tempo_value_changed"]
+[connection signal="pressed" from="VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
+[connection signal="file_selected" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]

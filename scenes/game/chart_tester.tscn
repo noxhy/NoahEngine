@@ -1,0 +1,82 @@
+[gd_scene load_steps=10 format=3 uid="uid://c56g0k7u2k6wo"]
+
+[ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://scenes/game/chart_tester.gd" id="1_ep6vc"]
+[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_ajkug"]
+[ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://assets/sprites/playstate/developer/developer_ui_skin.tres" id="2_srd2m"]
+[ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://assets/sprites/playstate/developer/developer_note_skin.tres" id="4_laa4w"]
+[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="4_y3wph"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="5_g7go4"]
+[ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="11_6k7lv"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="12_chcqi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
+font = ExtResource("12_chcqi")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Chart Tester" type="Node2D"]
+script = ExtResource("1_ep6vc")
+metadata/_edit_vertical_guides_ = []
+
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_ajkug")]
+host = NodePath("..")
+ui = NodePath("../UI")
+camera = NodePath("../Camera")
+rating_position = NodePath("../World/Rating Marker")
+combo_position = NodePath("../World/Combo Marker")
+note_skin = ExtResource("4_laa4w")
+ui_skin = ExtResource("2_srd2m")
+next_scene = "res://scenes/chart editor/chart_editor.tscn"
+
+[node name="Camera" parent="." instance=ExtResource("4_y3wph")]
+position = Vector2(640, 360)
+
+[node name="Background" type="CanvasLayer" parent="."]
+layer = -128
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+
+[node name="Background" type="Sprite2D" parent="Background"]
+unique_name_in_owner = true
+show_behind_parent = true
+z_index = -256
+texture = ExtResource("11_6k7lv")
+
+[node name="World" type="CanvasLayer" parent="."]
+layer = -1
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+follow_viewport_enabled = true
+
+[node name="Position 1" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+gizmo_extents = 18.3
+
+[node name="Position 2" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+gizmo_extents = 18.3
+
+[node name="Position 3" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+gizmo_extents = 18.3
+
+[node name="Rating Marker" type="Marker2D" parent="World"]
+position = Vector2(256, -104)
+gizmo_extents = 20.0
+
+[node name="Combo Marker" type="Marker2D" parent="World"]
+position = Vector2(352, -64)
+gizmo_extents = 20.0
+
+[node name="UI" parent="." instance=ExtResource("5_g7go4")]
+
+[node name="Chart Stats" type="Label" parent="UI"]
+offset_left = -128.0
+offset_top = -104.0
+offset_right = 128.0
+offset_bottom = 152.0
+label_settings = SubResource("LabelSettings_xphcd")
+autowrap_mode = 3
+
+[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
+[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]

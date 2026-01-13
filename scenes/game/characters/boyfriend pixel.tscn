@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcuxa2yfg27xc"]
+
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_gqt7p"]
+[ext_resource type="SpriteFrames" uid="uid://co2q6ydrkmts7" path="res://assets/sprites/playstate/icons/boyfriend pixel.tres" id="2_m6lar"]
+[ext_resource type="SpriteFrames" uid="uid://5dsbn21thfnn" path="res://assets/sprites/characters/boyfriend pixel/boyfriend_pixel.res" id="2_rn51i"]
+
+[node name="Boyfriend Pixel" type="Node2D"]
+script = ExtResource("1_gqt7p")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"BF DOWN NOTE instance 1",
+&"idle": &"BF IDLE instance 1",
+&"left": &"BF LEFT NOTE instance 1",
+&"miss_down": &"BF DOWN MISS instance 1",
+&"miss_left": &"BF LEFT MISS instance 1",
+&"miss_right": &"BF RIGHT MISS instance 1",
+&"miss_up": &"BF UP MISS instance 1",
+&"right": &"BF RIGHT NOTE instance 1",
+&"up": &"BF UP NOTE instance 1"
+})
+icons = ExtResource("2_m6lar")
+color = Color(0.501961, 0.729412, 0.811765, 1)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+use_parent_material = true
+position = Vector2(0, -28)
+sprite_frames = ExtResource("2_rn51i")
+animation = &"BF IDLE instance 1"
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

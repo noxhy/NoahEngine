@@ -1,0 +1,40 @@
+[gd_scene load_steps=3 format=3 uid="uid://cx81a4x2e26yh"]
+
+[ext_resource type="Script" uid="uid://b8nt4l0h5kl87" path="res://scenes/options/option_node_keybind.gd" id="1_1sqax"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="1_048qk"]
+
+[node name="Options Node" type="MarginContainer"]
+custom_minimum_size = Vector2(0, 48)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -16.0
+offset_right = -768.0
+offset_bottom = -702.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(0, 16)
+theme = ExtResource("1_048qk")
+script = ExtResource("1_1sqax")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Option Name"
+vertical_alignment = 1
+uppercase = true
+
+[node name="Background" type="ColorRect" parent="."]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.5)

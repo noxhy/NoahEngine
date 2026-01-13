@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://stil5xd6xto6"]
 
-[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/instances/conductor.gd" id="1_eqg0q"]
+[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="1_eqg0q"]
 [ext_resource type="Script" uid="uid://bfi44vdv3xve1" path="res://scenes/options/options.gd" id="1_kjctr"]
 [ext_resource type="Texture2D" uid="uid://boepmdvh5sknc" path="res://assets/sprites/menus/background/menuBGBlue.png" id="2_i3c72"]
 [ext_resource type="SpriteFrames" uid="uid://dgb77avcfsrwk" path="res://assets/sprites/menus/main menu/menu_options.res" id="6_vpqee"]
-[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/instances/offset_sprite.gd" id="7_4x7vq"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="7_4x7vq"]
 
 [node name="Options" type="Node2D"]
 process_mode = 1

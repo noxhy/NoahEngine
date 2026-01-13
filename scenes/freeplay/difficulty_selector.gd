@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const SEPARATOR_PRELOAD = preload("res://scenes/instances/freeplay/separator.tscn")
+const SEPARATOR_PRELOAD = preload("res://scenes/freeplay/separator.tscn")
 const DIFFICULTY_COLORS = {
 	
 	"erect": [Color(0.761, 0.541, 1.0), Color(0.204, 0.161, 0.416), Color(0.204, 0.161, 0.416, 0.5)],

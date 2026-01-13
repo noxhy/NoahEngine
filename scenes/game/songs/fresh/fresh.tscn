@@ -1,0 +1,122 @@
+[gd_scene load_steps=15 format=3 uid="uid://blj8dbuorj1h0"]
+
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://scenes/game/songs/basic_song.gd" id="1_xeyw4"]
+[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_y6xle"]
+[ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="4_8nme4"]
+[ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="5_uia00"]
+[ext_resource type="PackedScene" uid="uid://cymgv4pu0e1rh" path="res://scenes/game/stages/stage/stage.tscn" id="6_egett"]
+[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="7_e1lys"]
+[ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/game/characters/boyfriend.tscn" id="9_dqjx1"]
+[ext_resource type="PackedScene" uid="uid://dwn3bvltjsem4" path="res://scenes/game/characters/daddy_dearest.tscn" id="10_f8uei"]
+[ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="11_pruvp"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="12_b2bjn"]
+[ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://assets/shaders/adjust_hsv.gdshader" id="14_orev5"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ygtui"]
+shader = ExtResource("14_orev5")
+shader_parameter/hue = 12.0
+shader_parameter/saturation = 0.0
+shader_parameter/contrast = 7.0
+shader_parameter/brightness = -23.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_orev5"]
+shader = ExtResource("14_orev5")
+shader_parameter/hue = -33.0
+shader_parameter/saturation = 0.0
+shader_parameter/contrast = -23.0
+shader_parameter/brightness = -33.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_8srk8"]
+shader = ExtResource("14_orev5")
+shader_parameter/hue = -9.0
+shader_parameter/saturation = 0.0
+shader_parameter/contrast = -4.0
+shader_parameter/brightness = -30.0
+
+[node name="Fresh" type="Node2D"]
+script = ExtResource("1_xeyw4")
+
+[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_y6xle")]
+process_mode = 1
+host = NodePath("..")
+ui = NodePath("../UI")
+camera = NodePath("../Camera")
+rating_position = NodePath("../World/Rating Marker")
+combo_position = NodePath("../World/Combo Marker")
+note_skin = ExtResource("4_8nme4")
+ui_skin = ExtResource("5_uia00")
+combo_scale_multiplier = Vector2(0.8, 0.8)
+
+[node name="Stage" parent="." instance=ExtResource("6_egett")]
+unique_name_in_owner = true
+
+[node name="Camera" parent="." instance=ExtResource("7_e1lys")]
+position = Vector2(640, 432)
+position_smoothing_speed = 3.0
+target_zoom = Vector2(1.1, 1.1)
+
+[node name="World" type="CanvasLayer" parent="."]
+layer = 10
+follow_viewport_enabled = true
+
+[node name="Position 1" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(754.5, 370.5)
+gizmo_extents = 18.3
+
+[node name="Position 2" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(570.5, 354.5)
+gizmo_extents = 26.5
+
+[node name="Position 3" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(650.5, 338.5)
+gizmo_extents = 26.5
+
+[node name="Rating Marker" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(900, 316)
+gizmo_extents = 20.0
+
+[node name="Combo Marker" type="Marker2D" parent="World"]
+unique_name_in_owner = true
+position = Vector2(977, 348)
+gizmo_extents = 20.0
+
+[node name="Characters" type="CanvasLayer" parent="."]
+layer = -1
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+follow_viewport_enabled = true
+
+[node name="Player" parent="Characters" groups=["player"] instance=ExtResource("9_dqjx1")]
+unique_name_in_owner = true
+z_index = 1
+material = SubResource("ShaderMaterial_ygtui")
+position = Vector2(400, 288)
+scale = Vector2(0.7, 0.7)
+metadata/_edit_lock_ = true
+
+[node name="Enemy" parent="Characters" groups=["enemy"] instance=ExtResource("10_f8uei")]
+unique_name_in_owner = true
+z_index = 1
+material = SubResource("ShaderMaterial_orev5")
+position = Vector2(-344, 288)
+scale = Vector2(0.7, 0.7)
+metadata/_edit_lock_ = true
+
+[node name="Metronome" parent="Characters" instance=ExtResource("11_pruvp")]
+unique_name_in_owner = true
+z_index = -1
+material = SubResource("ShaderMaterial_8srk8")
+position = Vector2(96, 272)
+scale = Vector2(0.7, 0.7)
+metadata/_edit_lock_ = true
+
+[node name="UI" parent="." instance=ExtResource("12_b2bjn")]
+layer = 10
+
+[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
+[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
+[connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]

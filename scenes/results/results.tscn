@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://cqa3tks0w6o1y" path="res://assets/sprites/menus/results/diff_easy.png" id="1_gxan6"]
 [ext_resource type="Script" uid="uid://dy5fv0hfnamvk" path="res://scenes/results/results.gd" id="1_qwq5p"]
-[ext_resource type="PackedScene" uid="uid://dfpj0jopo6l1a" path="res://scenes/instances/results/tally_display.tscn" id="2_m42l6"]
+[ext_resource type="PackedScene" uid="uid://dfpj0jopo6l1a" path="res://scenes/results/tally_display.tscn" id="2_m42l6"]
 [ext_resource type="Texture2D" uid="uid://dt6dabr8eiqfk" path="res://assets/sprites/menus/results/diff_erect.png" id="2_qwq5p"]
 [ext_resource type="AudioStream" uid="uid://svn606p6k0w0" path="res://assets/sounds/menu sounds/menu scroll.ogg" id="2_vy634"]
 [ext_resource type="Texture2D" uid="uid://cko4jhy74vlrg" path="res://assets/sprites/menus/results/diff_hard.png" id="3_gsu1s"]
@@ -17,7 +17,7 @@
 [ext_resource type="SpriteFrames" uid="uid://c6pwb5syt5i6n" path="res://assets/sprites/menus/results/score.res" id="11_37f5i"]
 [ext_resource type="SpriteFrames" uid="uid://bpp3l0at1e1j1" path="res://assets/sprites/menus/results/tallies.res" id="12_37f5i"]
 [ext_resource type="SpriteFrames" uid="uid://meis7b0c2ay" path="res://assets/sprites/menus/results/highscore.res" id="12_pxgxe"]
-[ext_resource type="PackedScene" uid="uid://d1wj3tkjvp2xi" path="res://scenes/instances/results/score_display.tscn" id="13_acbi1"]
+[ext_resource type="PackedScene" uid="uid://d1wj3tkjvp2xi" path="res://scenes/results/score_display.tscn" id="13_acbi1"]
 [ext_resource type="Texture2D" uid="uid://dg02nq8n2nt3u" path="res://assets/sprites/menus/results/clearPercent/clearPercentText.png" id="17_dd5hj"]
 
 [sub_resource type="Environment" id="Environment_m42l6"]
