@@ -145,8 +145,9 @@ func _ready():
 	strums = ui.strums
 	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
-		get_tree().call_group(&"strums", "set_auto_play", true)
-		get_tree().call_group(&"strums", "set_press", false)
+		if OS.is_debug_build():
+			get_tree().call_group(&"strums", "set_auto_play", true)
+			get_tree().call_group(&"strums", "set_press", false)
 	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		ui.downscroll_ui()
@@ -533,7 +534,7 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			update_ui_stats()
 		else:
 			score -= 100
-			health -= (1 + clamp(combo / 20.0, 0, 20)) * (length + 4.5)
+			health -= (1 + clamp(combo / 20.0 * (length + 4.5), 0, 20))
 			combo = 0
 			misses += 1
 			 

@@ -70,7 +70,7 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 	
 	get_tree().call_group(
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		&"miss" + get_direction(lane % 4))
+		&"miss_" + get_direction(lane % 4))
 	
 	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
 

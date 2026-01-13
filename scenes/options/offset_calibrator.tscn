@@ -82,8 +82,9 @@ metadata/_edit_lock_ = true
 visible = false
 position = Vector2(0, -200)
 
-[node name="MenuBgMagenta" type="Sprite2D" parent="UI"]
+[node name="MenuBgMagenta" type="Sprite2D" parent="."]
 z_index = -4096
+position = Vector2(640, 360)
 texture = ExtResource("9_0fft6")
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
