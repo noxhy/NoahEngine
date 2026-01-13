@@ -65,7 +65,6 @@ func change_scene_to(path: String, transition: Variant = "down", screen: bool = 
 	transitioning = true
 	
 	if transition != null: 
-		
 		Transitions.transition(transition)
 		await Transitions.waiting
 	

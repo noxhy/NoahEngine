@@ -189,7 +189,7 @@ func _process(delta):
 	elif Input.is_action_just_pressed("chart_editor") and OS.is_debug_build():
 		ChartManager.song = song_data
 		ChartManager.difficulty = GameManager.difficulty
-		Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn")
+		Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
 	
 	if !song_started:
 		song_start_offset += delta

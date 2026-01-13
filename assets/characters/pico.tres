@@ -2,13 +2,13 @@
 
 [ext_resource type="Resource" uid="uid://b30g8jurwop0d" path="res://assets/albums/pico_songs.tres" id="1_hf6k2"]
 [ext_resource type="Texture2D" uid="uid://cemqnoop727he" path="res://assets/sprites/menus/freeplay/characters/pico/freeplayBGweek1-pico.png" id="2_hf6k2"]
-[ext_resource type="AudioStream" uid="uid://d2rjiccf1wlul" path="res://assets/songs/menu songs/pause menu/breakfast-pico.ogg" id="6_i3vd0"]
+[ext_resource type="AudioStream" uid="uid://d2rjiccf1wlul" path="res://assets/songs/menu songs/pause_menu/breakfast-pico.ogg" id="3_rd8vi"]
 [ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="11_r1hcg"]
 
 [resource]
 script = ExtResource("11_r1hcg")
 album = ExtResource("1_hf6k2")
-pause_song = ExtResource("6_i3vd0")
+pause_song = ExtResource("3_rd8vi")
 dj = "uid://bnx6yfjfa6wcj"
 background = ExtResource("2_hf6k2")
 result_songs = Dictionary[String, String]({
@@ -19,13 +19,13 @@ result_songs = Dictionary[String, String]({
 "loss": "res://assets/songs/menu songs/results/pico/resultsSHIT-pico.ogg",
 "perfect": "res://assets/songs/menu songs/results/pico/resultsPERFECT-pico.ogg"
 })
-normal_intro = "res://assets/songs/menu songs/results/boyfriend/resultsEXCELLENT-intro.ogg"
-loss_intro = "res://assets/songs/menu songs/results/pico/loss-intro.ogg"
+normal_intro = "uid://cfndri37mey1i"
+loss_intro = "uid://bb3dlwx5dct1e"
 result_nodes = Dictionary[String, String]({
-"excellent": "res://scenes/instances/results/pico/great.tscn",
-"gold": "res://scenes/instances/results/pico/perfect.tscn",
-"good": "res://scenes/instances/results/pico/good.tscn",
-"great": "res://scenes/instances/results/pico/great.tscn",
-"loss": "res://scenes/instances/results/pico/shit.tscn",
-"perfect": "res://scenes/instances/results/pico/perfect.tscn"
+"excellent": "res://scenes/results/pico/great.tscn",
+"gold": "res://scenes/results/pico/perfect.tscn",
+"good": "res://scenes/results/pico/good.tscn",
+"great": "res://scenes/results/pico/great.tscn",
+"loss": "res://scenes/results/pico/loss.tscn",
+"perfect": "res://scenes/results/pico/perfect.tscn"
 })

@@ -67,23 +67,19 @@ func _process(_delta):
 	
 	if can_click:
 		
-		if Input.is_action_just_pressed("ui_up") or Input.is_action_just_pressed("mouse_scroll_up"):
+		if Input.is_action_just_pressed(&"ui_up") or Input.is_action_just_pressed(&"mouse_scroll_up"):
 			update(selected_song - 1)
-		
-		elif Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("mouse_scroll_down"):
+		elif Input.is_action_just_pressed(&"ui_down") or Input.is_action_just_pressed(&"mouse_scroll_down"):
 			update(selected_song + 1)
-		
-		elif Input.is_action_just_pressed("ui_accept"):
+		elif Input.is_action_just_pressed(&"ui_accept"):
 			select(selected_song)
-		
-		elif Input.is_action_just_pressed("ui_cancel"):
-			
+		elif Input.is_action_just_pressed(&'chart_editor') and OS.is_debug_build():
+			select(selected_song, true)
+		elif Input.is_action_just_pressed(&"ui_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
-		
-		elif Input.is_action_just_pressed("character_select"):
-			
+		elif Input.is_action_just_pressed(&"character_select"):
 			can_click = false
 			dj.animation = "character_select"
 			
@@ -184,9 +180,14 @@ func update(i: int):
 
 
 # Called when an option was selected
-func select(i: int):
+func select(i: int, chart: bool = false):
 	if can_click:
 		var song_file = options[get_tree().get_nodes_in_group("instances")[i].index]
+		
+		if chart:
+			$Audio/Music.volume_linear = 0
+			chart_song(song_file, difficulty)
+			return
 		
 		# Null Protection
 		var scene = song_file.scene
@@ -196,7 +197,8 @@ func select(i: int):
 			return
 		
 		# Lock Check
-		if song_file.locked: return
+		if song_file.locked:
+			return
 		
 		can_click = false
 		$"Difficulty Selector".set_process(false)
@@ -205,19 +207,16 @@ func select(i: int):
 		var tween = create_tween()
 		tween.set_parallel()
 		
-		tween.tween_property($Audio/Music, "volume_db", -60, 1)
+		tween.tween_property($Audio/Music, "volume_linear", 0, 1).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		
 		var option_nodes = get_tree().get_nodes_in_group("instances")
 		for j in option_nodes:
-			
 			if j != option_nodes[i]:
-				
 				tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
 				tween.tween_property(j, "position", j.position - Vector2(2000, 0), 0.5)
 		
 		dj.animation = "confirm"
 		selected_song = i
-		Transitions.transition("down")
 		play_song(song_file, difficulty)
 
 
@@ -233,6 +232,14 @@ func play_song(song: Song, difficulty: String):
 	GameManager.difficulty = difficulty
 	GameManager.freeplay = true
 	Global.change_scene_to(scene)
+
+
+@warning_ignore("shadowed_variable")
+# Doesn't actually play the audio, just sends you to the scene
+func chart_song(song: Song, difficulty: String):
+	ChartManager.song = song
+	ChartManager.difficulty = difficulty
+	Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
 
 
 @warning_ignore("unused_parameter")

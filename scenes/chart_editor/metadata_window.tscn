@@ -133,7 +133,7 @@ title = "Open a File"
 initial_position = 1
 size = Vector2i(640, 480)
 file_mode = 0
-root_subfolder = "res://scenes/playstate/songs/"
+root_subfolder = "res://scenes/game/songs/"
 filters = PackedStringArray("*.tscn")
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]

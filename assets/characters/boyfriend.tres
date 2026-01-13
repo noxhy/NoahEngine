@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="1_la1qj"]
 [ext_resource type="Resource" uid="uid://c0coafka6m5vs" path="res://assets/albums/boyfriend_songs.tres" id="1_ue4wv"]
-[ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://assets/songs/menu songs/pause menu/breakfast.ogg" id="1_ww678"]
 [ext_resource type="Texture2D" uid="uid://dkupmrky3qwx" path="res://assets/sprites/menus/freeplay/characters/boyfriend/freeplayBGweek1-bf.png" id="2_iol30"]
+[ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://assets/songs/menu songs/pause_menu/breakfast.ogg" id="3_2uaqf"]
 
 [resource]
 script = ExtResource("1_la1qj")
 album = ExtResource("1_ue4wv")
-pause_song = ExtResource("1_ww678")
+pause_song = ExtResource("3_2uaqf")
 dj = "uid://c1s7cbxg2o4m0"
 background = ExtResource("2_iol30")
 result_songs = Dictionary[String, String]({
@@ -19,13 +19,13 @@ result_songs = Dictionary[String, String]({
 "loss": "res://assets/songs/menu songs/results/boyfriend/resultsSHIT.ogg",
 "perfect": "res://assets/songs/menu songs/results/boyfriend/resultsPERFECT.ogg"
 })
-normal_intro = "res://assets/songs/menu songs/results/boyfriend/resultsEXCELLENT-intro.ogg"
-loss_intro = "res://assets/sonts/songs/menu songs/results/boyfriend/regs/menu songs/results/boyfriend/resultsSHIT-intro.ogg"
+normal_intro = "uid://cfndri37mey1i"
+loss_intro = "uid://dp3j2qhpuv6xd"
 result_nodes = Dictionary[String, String]({
-"excellent": "res://scenes/instances/results/boyfriend/excellent.tscn",
-"gold": "res://scenes/instances/results/boyfriend/perfect.tscn",
-"good": "res://scenes/instances/results/boyfriend/good.tscn",
-"great": "res://scenes/instances/results/boyfriend/great.tscn",
-"loss": "res://scenes/instances/results/boyfriend/loss.tscn",
-"perfect": "res://scenes/instances/results/boyfriend/perfect.tscn"
+"excellent": "res://scenes/results/boyfriend/excellent.tscn",
+"gold": "res://scenes/results/boyfriend/perfect.tscn",
+"good": "res://scenes/results/boyfriend/good.tscn",
+"great": "res://scenes/results/boyfriend/great.tscn",
+"loss": "res://scenes/results/boyfriend/loss.tscn",
+"perfect": "res://scenes/results/boyfriend/perfect.tscn"
 })
