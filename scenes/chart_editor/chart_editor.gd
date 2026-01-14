@@ -136,7 +136,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						song_position -= $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
-						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
+						song_position = clamp(song_position, start_offset - chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
 					current_snap += 1
@@ -148,7 +148,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						song_position += $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
-						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
+						song_position = clamp(song_position, start_offset - chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
 					current_snap -= 1
@@ -168,7 +168,7 @@ func _process(delta: float) -> void:
 		current_beats_per_measure = meter[0]
 		current_steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
-		$Conductor.offset = chart.offset + chart.get_tempo_time_at(song_position + start_offset)
+		$Conductor.offset = chart.get_tempo_time_at(song_position + start_offset) - chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
 		
 		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"):
@@ -185,7 +185,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
-	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
+	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset - $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
@@ -194,9 +194,8 @@ func _process(delta: float) -> void:
 	
 	var screen_mouse_position = get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360)
 	
-	
-	if Input.is_action_just_pressed("mouse_left"):
-		if !Input.is_action_pressed("control"):
+	if Input.is_action_just_pressed(&"mouse_left"):
+		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
 				if can_chart:
 					if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
@@ -283,6 +282,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
+							%Debug.text = str(song_position)
 							start_offset = grid_position_to_time(grid_position) - song_position
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
@@ -441,17 +441,17 @@ func _draw() -> void:
 	
 	if chart != null:
 		## The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
+		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
 		
 		## Song Start Offset Marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position + start_offset) - 2), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		# The box at the end of the marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position + start_offset) - 4), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 4), \
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
 		
@@ -744,7 +744,8 @@ func find_note(lane: int, time: float) -> int:
 	var L: int = bsearch_left_range(chart.get_notes_data(), time - 0.1)
 	var R: int = bsearch_right_range(chart.get_notes_data(), time + 0.1)
 	
-	if (L == -1 or R == -1): return -1
+	if (L == -1 or R == -1):
+		return -1
 	
 	# Just so I don't have to make a new return case because I'm lazy
 	if (L == R + 1):
@@ -838,7 +839,8 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	while yL <= yC:
 		if i + 1 >= tempo_data.keys().size():
 			R = %Instrumental.stream.get_length()
-		else: R = tempo_data.keys()[i + 1]
+		else:
+			R = tempo_data.keys()[i + 1]
 		
 		meter = chart.get_meter_at(L)
 		var tempo = tempo_data.get(L)
