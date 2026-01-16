@@ -11,7 +11,6 @@ This is version 2 of the engine with a complete overhaul of the code.
 - KostyaGame - Dad losing icon
 - [sqirradotdev](https://github.com/sqirradotdev) - Smooth arrow Lerping function.
 - [cherrythecool](https://github.com/cherrythecool/gdanimate) - GDAnimate
-- [aojiaoxiaolinlin](https://github.com/aojiaoxiaolinlin) - Flash shaders
 
 ## The Funkin' Crew
 - [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programmer

@@ -41,7 +41,7 @@ stream_1/stream = ExtResource("9_v13a8")
 [node name="chart_editor" type="Node2D"]
 script = ExtResource("1_ugmsy")
 divider_color = Color(1, 1, 1, 1)
-current_time_color = Color(0.758, 0, 1, 1)
+current_time_color = Color(0.75668746, 0, 1, 0.79)
 muted_color = Color(0.16, 0.16, 0.16, 0.502)
 box_color = Color(0.151337, 0.445313, 0.17072, 0.287)
 selected_color = Color(0.404297, 0.75, 0.442108, 0.734)
@@ -67,14 +67,12 @@ bus = &"Music"
 [node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
-volume_db = -80.0
 pitch_scale = 2.0
 bus = &"SFX"
 
 [node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
-volume_db = -80.0
 bus = &"SFX"
 
 [node name="Conductor Step" type="AudioStreamPlayer" parent="Audio"]

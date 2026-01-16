@@ -2,7 +2,7 @@ extends Node2D
 
 const LABEL_FONT: Font = preload("res://assets/fonts/bold_font.ttf")
 const NOTE_PRELOAD = preload("res://scenes/game/note/chart_note.tscn")
-const NOTE_SKIN = preload("res://assets/sprites/playstate/developer/developer_note_skin.tres")
+const NOTE_SKIN = preload("res://assets/sprites/playstate/default/default_note_skin.tres")
 const STRUM_BUTTON_PRELOAD = preload("res://scenes/chart_editor/strum_button.tscn")
 
 const NEW_FILE_POPUP_PRELOAD = preload("res://scenes/chart_editor/new_file_popup.tscn")
@@ -37,6 +37,7 @@ var current_beats_per_measure: int = 4
 var current_steps_per_measure: int = 16
 var current_difficulty: String
 var note_list: Array = []
+var clipboard: Array = []
 var can_chart: bool = false
 
 var current_snap: int = 3
@@ -177,7 +178,7 @@ func _process(delta: float) -> void:
 			redo()
 	
 	%"Current Time Label".text = float_to_time(song_position + start_offset)
-	if ChartManager.song != null:
+	if ChartManager.song:
 		%"Time Left Label".text = "-" + float_to_time(%Instrumental.stream.get_length() - song_position)
 	else:
 		%"Time Left Label".text = "- ??:??"
@@ -185,7 +186,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
-	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset - $"Grid Layer/Parallax2D".scroll_offset
+	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
@@ -203,7 +204,7 @@ func _process(delta: float) -> void:
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						
-						if !is_note_at(lane, Vector2i(snapped_position).y / chart_snap * $Conductor.seconds_per_beat * current_steps_per_measure / current_beats_per_measure):
+						if !is_note_at(lane, time):
 							var action: String = "Add Note"
 							undo_redo.create_action(action)
 							undo_redo.add_do_method(self.place_note.bind(time, lane, 0, 0, true))
@@ -282,7 +283,6 @@ func _process(delta: float) -> void:
 					if can_chart:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
-							%Debug.text = str(song_position)
 							start_offset = grid_position_to_time(grid_position) - song_position
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
@@ -312,7 +312,7 @@ func _process(delta: float) -> void:
 								
 								var lane_distance = cursor_lane - start_lane
 								var time_distance = cursor_time - start_time
-								changed_length = (abs(lane_distance) > 0 or abs(time_distance) > 0)
+								changed_length = true
 								
 								if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
 									if changed_length:
@@ -397,8 +397,7 @@ func _process(delta: float) -> void:
 			selected_notes = []
 			selected_note_nodes = []
 			for packet in temp:
-				if !is_note_at(packet[1], packet[0]):
-					place_note(packet[0], packet[1], packet[2], packet[3], true, true)
+				place_note(packet[0], packet[1], packet[2], packet[3], true, true)
 			
 			for packet in temp:
 				i = find_note(packet[1], packet[0])
@@ -428,6 +427,21 @@ func _process(delta: float) -> void:
 				selected_notes = []
 				%"Note Remove".play()
 	
+	# Postponed
+	#if Input.is_action_just_pressed("ui_copy"):
+		#clipboard = []
+		#for note in selected_notes:
+			#clipboard.append(chart.get_notes_data()[note])
+		#print("copied notes: ", clipboard)
+	#
+	#if Input.is_action_just_pressed("ui_paste"):
+		#if clipboard.size() > 0:
+			#selected_notes = place_notes(clipboard)
+			#selected_note_nodes = []
+			#for index in selected_notes:
+				#selected_note_nodes.append(note_list[index - current_visible_notes_L])
+			#print("pasted notes: ", clipboard)
+	
 	queue_redraw()
 
 
@@ -441,7 +455,7 @@ func _draw() -> void:
 	
 	if chart != null:
 		## The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
+		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
@@ -450,7 +464,7 @@ func _draw() -> void:
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
-		# The box at the end of the marker
+		# The box at the start of the marker
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 4), \
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
@@ -582,27 +596,34 @@ func load_section(time: float):
 		L = min(selected_notes[0], L)
 		R = max(R, selected_notes[selected_notes.size() - 1])
 	
+	var cache = []
 	if L > -1 and R > -1:
 		## Clearing any invisible notes
-		#if current_visible_notes_L != L or current_visible_notes_R != R:
-			#var i: int = current_visible_notes_L
-			#var j: int = 0
-			#for note in note_list:
-				#if !((i + j) >= L and (i + j) <= R):
-					#note_list[i - current_visible_notes_L].queue_free()
-					#note_list.remove_at(i - current_visible_notes_L)
-					#i -= 1
-					#j += 1
-				#i += 1
-		get_tree().call_group(&"notes",  &"queue_free")
-		note_list = []
+		if current_visible_notes_L != L or current_visible_notes_R != R:
+			var i: int = 0
+			for note in note_list:
+				if note:
+					if (note.time < chart.get_notes_data()[L][0]
+					or note.time > chart.get_notes_data()[R][0]):
+						note_list[i].queue_free()
+						note_list.remove_at(i)
+						i -= 1
+					else:
+						cache.append(note.time)
+				
+				i += 1
+		
+		for i in range(L, R + 1):
+			if cache.has(chart.get_notes_data()[i][0]):
+				continue
+			
+			var note = chart.get_notes_data()[i]
+			place_note(note[0], note[1], note[2], note[3], false, false, true)
+		
 		current_visible_notes_L = L
 		current_visible_notes_R = R
 		min_visible_note_time = INF
 		max_visible_note_time = 0
-		for i in range(L, R + 1):
-			var note = chart.get_notes_data()[i]
-			place_note(note[0], note[1], note[2], note[3])
 	
 	get_tree().call_group(&"dividers",  &"queue_free")
 	for i in range($Conductor.beats_per_measure):
@@ -658,7 +679,7 @@ func new_file(path: String, song: Song):
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
-func place_note(time: float, lane: int, length: float, type: int, placed: bool = false, moved: bool = false) -> int:
+func place_note(time: float, lane: int, length: float, type: int, placed: bool = false, moved: bool = false, sorted: bool = false) -> int:
 	var directions = ["left", "down", "up", "right"]
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
@@ -704,8 +725,20 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			max_lane = ChartManager.strum_count - 1
 			output = note_list.size()
 	else:
-		note_list.append(note_instance)
-		output = note_list.size()
+		if sorted:
+			var L: int = bsearch_left_range_note(note_list, time)
+			if L == -1:
+				note_list.append(note_instance)
+				output = note_list.size()
+			else:
+				note_list.insert(L, note_instance)
+				output = L
+			
+			# This is just here to see if the insertion sort worked
+			# note_list.sort_custom(self.sort_note)
+		else:
+			note_list.append(note_instance)
+			output = note_list.size()
 	
 	$"Notes Layer".add_child(note_instance)
 	note_instance.add_to_group(&"notes")
@@ -713,9 +746,16 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	note_instance.area.connect(&"mouse_exited", self.update_note.bind(null))
 	return output
 
-func place_notes(notes: Array):
+func sort_note(a, b):
+	return a.time < b.time
+
+# Returns the indexes of the new notes
+func place_notes(notes: Array) -> Array:
+	var indices: Array = []
 	for note in notes:
-		place_note(note[0], note[1], note[2], note[3], true)
+		indices.append(place_note(note[0], note[1], note[2], note[3], true))
+	
+	return indices
 
 ## Giving only 1 parameter removes the note at the given index
 func remove_note(lane: int, time: float = -1):
@@ -852,7 +892,6 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 			yC *= meter[1] / chart_snap
 		
 		if (yC >= yL and yC < yR):
-			
 			output += (yC - yL) / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
 			return output
 		else:
@@ -903,6 +942,27 @@ func bsearch_right_range(value_set: Array, right_range: float) -> int:
 		else: low = mid + 1
 	
 	return low - 1
+
+## Binary searches for note nodes
+func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
+	var length: int = value_set.size()
+	if (length == 0):
+		return -1
+	if (value_set[length - 1].time < left_range):
+		return -1
+	
+	var low: int = 0
+	var high: int = length - 1
+	
+	while (low <= high):
+		var mid: int = low + ((high - low) / 2)
+		
+		if (value_set[mid].time >= left_range):
+			high = mid - 1
+		else:
+			low = mid + 1
+	
+	return high + 1
 
 func is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)
@@ -975,6 +1035,8 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	
 	if chart:
 		load_section(song_position)
+	
+	%Debug.text = str("Beat: ", current_beat)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	%"Conductor Step".play(0.55)
