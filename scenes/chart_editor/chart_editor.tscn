@@ -67,12 +67,14 @@ bus = &"Music"
 [node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
+volume_db = -80.0
 pitch_scale = 2.0
 bus = &"SFX"
 
 [node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
+volume_db = -80.0
 bus = &"SFX"
 
 [node name="Conductor Step" type="AudioStreamPlayer" parent="Audio"]

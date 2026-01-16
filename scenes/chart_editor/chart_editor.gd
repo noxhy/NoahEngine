@@ -364,6 +364,9 @@ func _process(delta: float) -> void:
 			var time_a: float = grid_position_to_time(pos_1, true)
 			var time_b: float = grid_position_to_time(pos_2, true)
 			
+			print("time a: ", time_a, " time b: ", time_b)
+			print("lane a: ", pos_1.x, " lane b: ", (pos_2.x))
+			
 			var L: int = bsearch_left_range(chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(chart.get_notes_data(), time_b)
 			
@@ -377,11 +380,13 @@ func _process(delta: float) -> void:
 			for i in range(selected_notes.size()):
 				var lane: int = int(chart.get_notes_data()[selected_notes[i - j]][1])
 				if !(range(int(pos_1.x), int(pos_2.x) + 1).has(lane)):
-					selected_notes.erase(selected_notes[i - j])
+					selected_notes.remove_at(selected_notes[i - j])
 					j += 1
 			
 			for i in selected_notes:
 				selected_note_nodes.append(note_list[i - current_visible_notes_L])
+				print(current_visible_notes_L)
+				print(note_list[i - current_visible_notes_L].time)
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
@@ -608,13 +613,11 @@ func load_section(time: float):
 						note_list[i].queue_free()
 						note_list.remove_at(i)
 						i -= 1
-					else:
-						cache.append(note.time)
 				
 				i += 1
 		
 		for i in range(L, R + 1):
-			if cache.has(chart.get_notes_data()[i][0]):
+			if i >= current_visible_notes_L and i <= current_visible_notes_R:
 				continue
 			
 			var note = chart.get_notes_data()[i]
