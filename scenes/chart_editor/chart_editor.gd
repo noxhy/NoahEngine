@@ -481,14 +481,13 @@ func _draw() -> void:
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
-		for i in selected_notes:
-			if i >= current_visible_notes_L and i <= current_visible_notes_R:
-				var note = note_list[i - current_visible_notes_L]
-				var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
-				length *= %Grid.grid_size.y * %Grid.zoom.y
-				length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-				rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
-				draw_rect(rect, selected_color)
+		for note in selected_note_nodes:
+			if note:
+					var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
+					length *= %Grid.grid_size.y * %Grid.zoom.y
+					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
+					rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
+					draw_rect(rect, selected_color)
 
 
 func update_grid():
@@ -579,6 +578,8 @@ func load_chart(file: Chart, ghost: bool = false):
 		backup_chart = file.duplicate(true)
 	selected_notes = []
 	selected_note_nodes = []
+	current_visible_notes_L = -1
+	current_visible_notes_R = -1
 	get_tree().call_group(&"notes", &"queue_free")
 	note_list = []
 	undo_redo.clear_history()
