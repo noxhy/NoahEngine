@@ -130,6 +130,7 @@ offset = Vector2(640, 64)
 transform = Transform2D(1, 0, 0, 1, 640, 64)
 
 [node name="Parallax2D" type="Parallax2D" parent="Grid Layer"]
+repeat_times = 3
 follow_viewport = false
 
 [node name="Grid" parent="Grid Layer/Parallax2D" instance=ExtResource("2_i6pv1")]

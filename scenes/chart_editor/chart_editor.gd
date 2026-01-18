@@ -601,7 +601,6 @@ func load_section(time: float):
 		L = min(selected_notes[0], L)
 		R = max(R, selected_notes[selected_notes.size() - 1])
 	
-	var cache = []
 	if L > -1 and R > -1:
 		## Clearing any invisible notes
 		if current_visible_notes_L != L or current_visible_notes_R != R:

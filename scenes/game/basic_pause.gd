@@ -151,6 +151,7 @@ func select_option(i: int):
 			queue_free()
 		
 		"options":
+			self.process_mode = Node.PROCESS_MODE_DISABLED
 			Global.change_scene_to("res://scenes/options/options.tscn", "down")
 		
 		"restart":
@@ -159,6 +160,7 @@ func select_option(i: int):
 		
 		"exit":
 			GameManager.reset_stats()
+			self.process_mode = Node.PROCESS_MODE_DISABLED
 			
 			if GameManager.freeplay:
 				Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", "down")
@@ -167,6 +169,7 @@ func select_option(i: int):
 		
 		"chart_editor":
 			GameManager.reset_stats()
+			self.process_mode = Node.PROCESS_MODE_DISABLED
 			Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")
 		
 		"change_difficulty":
