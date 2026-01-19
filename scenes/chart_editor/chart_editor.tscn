@@ -38,7 +38,7 @@ streams_count = 2
 stream_0/stream = ExtResource("8_s4ovn")
 stream_1/stream = ExtResource("9_v13a8")
 
-[node name="chart_editor" type="Node2D"]
+[node name="Chart Editor" type="Node2D"]
 script = ExtResource("1_ugmsy")
 divider_color = Color(1, 1, 1, 1)
 current_time_color = Color(0.75668746, 0, 1, 0.79)
@@ -203,28 +203,56 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 1
 theme = ExtResource("17_75w6f")
-alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Current Time Label" type="Label" parent="UI/Lower UI"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Current Time Label" type="Label" parent="UI/Lower UI/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "CURRENT TIME"
 vertical_alignment = 1
 
-[node name="Debug" type="Label" parent="UI/Lower UI"]
+[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "TEMPO"
+vertical_alignment = 1
+
+[node name="Beat" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "BEAT"
+vertical_alignment = 1
+
+[node name="Step" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "STEP"
+vertical_alignment = 1
+
+[node name="Debug" type="Label" parent="UI/Lower UI/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 vertical_alignment = 1
 
-[node name="VSeparator4" type="VSeparator" parent="UI/Lower UI"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 6
+alignment = 1
+
+[node name="VSeparator4" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Skip to Beginning" type="Button" parent="UI/Lower UI"]
+[node name="Skip to Beginning" type="Button" parent="UI/Lower UI/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -232,7 +260,7 @@ size_flags_vertical = 4
 icon = ExtResource("5_ruic6")
 flat = true
 
-[node name="Skip Backward" type="Button" parent="UI/Lower UI"]
+[node name="Skip Backward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -240,7 +268,7 @@ size_flags_vertical = 4
 icon = ExtResource("6_henw2")
 flat = true
 
-[node name="Play Button" type="Button" parent="UI/Lower UI"]
+[node name="Play Button" type="Button" parent="UI/Lower UI/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
@@ -249,7 +277,7 @@ toggle_mode = true
 icon = ExtResource("4_f11ek")
 flat = true
 
-[node name="Skip Forward" type="Button" parent="UI/Lower UI"]
+[node name="Skip Forward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -257,7 +285,7 @@ size_flags_vertical = 4
 icon = ExtResource("6_u1nu8")
 flat = true
 
-[node name="Skip to End" type="Button" parent="UI/Lower UI"]
+[node name="Skip to End" type="Button" parent="UI/Lower UI/HBoxContainer2"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -265,11 +293,15 @@ size_flags_vertical = 4
 icon = ExtResource("9_jmk4o")
 flat = true
 
-[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI"]
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="Difficulty Button" type="OptionButton" parent="UI/Lower UI"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Difficulty Button" type="OptionButton" parent="UI/Lower UI/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -280,11 +312,11 @@ item_count = 1
 popup/item_0/text = "difficulty"
 popup/item_0/id = 0
 
-[node name="VSeparator2" type="VSeparator" parent="UI/Lower UI"]
+[node name="VSeparator2" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Chart Snap" type="SpinBox" parent="UI/Lower UI"]
+[node name="Chart Snap" type="SpinBox" parent="UI/Lower UI/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -296,11 +328,11 @@ value = 16.0
 update_on_text_changed = true
 prefix = "1 /"
 
-[node name="VSeparator" type="VSeparator" parent="UI/Lower UI"]
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Time Left Label" type="Label" parent="UI/Lower UI"]
+[node name="Time Left Label" type="Label" parent="UI/Lower UI/HBoxContainer3"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -449,15 +481,16 @@ metadata/_edit_lock_ = true
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
 [connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]
+[connection signal="new_tempo" from="Conductor" to="." method="_on_conductor_new_tempo"]
 [connection signal="finished" from="Audio/Instrumental" to="." method="_on_instrumental_finished"]
 [connection signal="value_changed" from="UI/Song Slider" to="." method="_on_song_slider_value_changed"]
-[connection signal="pressed" from="UI/Lower UI/Skip to Beginning" to="." method="_on_skip_to_beginning_pressed"]
-[connection signal="pressed" from="UI/Lower UI/Skip Backward" to="." method="_on_skip_backward_pressed"]
-[connection signal="toggled" from="UI/Lower UI/Play Button" to="." method="_on_play_button_toggled"]
-[connection signal="pressed" from="UI/Lower UI/Skip Forward" to="." method="_on_skip_forward_pressed"]
-[connection signal="pressed" from="UI/Lower UI/Skip to End" to="." method="_on_skip_to_end_pressed"]
-[connection signal="item_selected" from="UI/Lower UI/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
-[connection signal="value_changed" from="UI/Lower UI/Chart Snap" to="." method="_on_chart_snap_value_changed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip to Beginning" to="." method="_on_skip_to_beginning_pressed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip Backward" to="." method="_on_skip_backward_pressed"]
+[connection signal="toggled" from="UI/Lower UI/HBoxContainer2/Play Button" to="." method="_on_play_button_toggled"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip Forward" to="." method="_on_skip_forward_pressed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip to End" to="." method="_on_skip_to_end_pressed"]
+[connection signal="item_selected" from="UI/Lower UI/HBoxContainer3/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
+[connection signal="value_changed" from="UI/Lower UI/HBoxContainer3/Chart Snap" to="." method="_on_chart_snap_value_changed"]
 [connection signal="canceled" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
 [connection signal="close_requested" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
 [connection signal="file_selected" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_export_external_popup_file_selected"]

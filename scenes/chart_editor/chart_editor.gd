@@ -101,7 +101,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if start_offset < 0: start_offset = 0
+	if start_offset < 0:
+		start_offset = 0
 	
 	if ChartManager.song != null:
 		if %Instrumental.playing:
@@ -243,9 +244,9 @@ func _process(delta: float) -> void:
 				bounding_box = true
 				start_box = get_global_mouse_position()
 	
-	if Input.is_action_pressed("mouse_right"):
-		if !Input.is_action_pressed("control"):
-				if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
+	if Input.is_action_pressed(&"mouse_right"):
+		if !Input.is_action_pressed(&"control"):
+				if screen_mouse_position.y > 64 and screen_mouse_position.y < 640 and !current_focus_owner:
 					if can_chart:
 						if !Input.is_action_pressed("control"):
 							var lane: int = snapped_position.x - 1
@@ -281,8 +282,8 @@ func _process(delta: float) -> void:
 								if SettingsManager.get_value("chart", "auto_save"):
 									save()
 	
-	if Input.is_action_pressed("mouse_left"):
-		if !Input.is_action_pressed("control"):
+	if Input.is_action_pressed(&"mouse_left"):
+		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
 				if !%Instrumental.playing:
 					if can_chart:
@@ -342,7 +343,7 @@ func _process(delta: float) -> void:
 										# min_lane = 0 + (start_lane - min_lane)
 										# max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
 	
-	if Input.is_action_just_released("mouse_left"):
+	if Input.is_action_just_released(&"mouse_left"):
 		if placing_note:
 			if changed_length:
 				var action: String = "Changed Note Length(s)"
@@ -371,8 +372,6 @@ func _process(delta: float) -> void:
 			var time_b: float = grid_position_to_time(pos_2, true)
 			var lane_a: int = int(pos_1.x)
 			var lane_b: int = int(pos_2.x)
-			
-			print("lane a: ", lane_a, " lane b: ", lane_b)
 			
 			var L: int = bsearch_left_range(chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(chart.get_notes_data(), time_b)
@@ -412,15 +411,14 @@ func _process(delta: float) -> void:
 				i = place_note(packet[0], packet[1], packet[2], packet[3], true, true)
 				selected_notes.append(i)
 				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-			selected_notes.sort()
 			
 			moving_notes = false
 			%"Note Place".play()
 	
-	if Input.is_action_just_released("control"):
+	if Input.is_action_just_released(&"control"):
 		bounding_box = false
 	
-	if Input.is_action_pressed("ui_text_delete"):
+	if Input.is_action_pressed(&"ui_text_delete"):
 		if can_chart:
 			if selected_notes.size() > 0:
 				var temp: Array = []
@@ -437,19 +435,19 @@ func _process(delta: float) -> void:
 				%"Note Remove".play()
 	
 	# Postponed
-	#if Input.is_action_just_pressed("ui_copy"):
-		#clipboard = []
-		#for note in selected_notes:
-			#clipboard.append(chart.get_notes_data()[note])
-		#print("copied notes: ", clipboard)
-	#
-	#if Input.is_action_just_pressed("ui_paste"):
-		#if clipboard.size() > 0:
-			#selected_notes = place_notes(clipboard)
-			#selected_note_nodes = []
-			#for index in selected_notes:
-				#selected_note_nodes.append(note_nodes[index - current_visible_notes_L])
-			#print("pasted notes: ", clipboard)
+	if Input.is_action_just_pressed(&"ui_copy"):
+		clipboard = []
+		for note in selected_notes:
+			clipboard.append(chart.get_notes_data()[note])
+		print("copied notes: ", clipboard)
+	
+	if Input.is_action_just_pressed(&"ui_paste"):
+		if clipboard.size() > 0:
+			selected_notes = place_notes(clipboard)
+			selected_note_nodes = []
+			for i in selected_notes:
+				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+			print("pasted notes: ", clipboard)
 	
 	queue_redraw()
 
@@ -470,11 +468,11 @@ func _draw() -> void:
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
 		
 		## Song Start Offset Marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 2), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position - chart.offset + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		# The box at the start of the marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position + chart.offset + start_offset) - 4), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - chart.offset + start_offset) - 4), \
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
 		
@@ -1051,10 +1049,14 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if chart:
 		load_section(song_position)
 	
-	%Debug.text = str("Beat: ", current_beat)
+	%Beat.text = str("Beat: ", current_beat)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	%"Conductor Step".play(0.55)
+	%Step.text = str("Step: ", current_step)
+
+func _on_conductor_new_tempo(_tempo: float) -> void:
+	%Tempo.text = str("BPM: ", _tempo)
 
 ## File button item pressed
 func file_button_item_pressed(id):

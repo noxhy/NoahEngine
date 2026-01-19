@@ -29,7 +29,7 @@ func _ready():
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 	collision_shape.shape = RectangleShape2D.new()
 	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
-	collision_shape.scale = $VisibleOnScreenEnabler2D.scale
+	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
 	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
