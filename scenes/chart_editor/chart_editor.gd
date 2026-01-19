@@ -264,12 +264,17 @@ func _process(delta: float) -> void:
 								undo_redo.add_undo_method(self.place_note.bind(time, lane, length, note_type, true))
 								undo_redo.commit_action()
 								%"Note Remove".play()
-								selected_notes.erase(i)
-								var j: int = 0
-								for k in selected_notes:
-									if k > i:
-										selected_notes[j] = k - 1
-									j += 1
+								
+								var j: int = selected_notes.find(i)
+								selected_notes.remove_at(j)
+								selected_note_nodes.remove_at(j)
+								
+								if selected_notes.size() > 1:
+									var k: int = 0
+									for _i in range(selected_notes.size()):
+										if k >= j:
+											selected_notes[k] -= 1
+										k += 1
 								
 								hovered_note = -1
 								
@@ -361,11 +366,13 @@ func _process(delta: float) -> void:
 			# Added leniency since notes are centered from the top
 			var pos_1: Vector2 = %Grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
 			var pos_2: Vector2 = %Grid.get_grid_position(rect.end - grid_offset) - Vector2(1, 0.5)
+			
 			var time_a: float = grid_position_to_time(pos_1, true)
 			var time_b: float = grid_position_to_time(pos_2, true)
+			var lane_a: int = int(pos_1.x)
+			var lane_b: int = int(pos_2.x)
 			
-			print("time a: ", time_a, " time b: ", time_b)
-			print("lane a: ", pos_1.x, " lane b: ", (pos_2.x))
+			print("lane a: ", lane_a, " lane b: ", lane_b)
 			
 			var L: int = bsearch_left_range(chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(chart.get_notes_data(), time_b)
@@ -376,17 +383,17 @@ func _process(delta: float) -> void:
 			selected_notes = range(L, R + 1)
 			selected_note_nodes = []
 			
-			var j: int = 0
+			var _i: int = 0
 			for i in range(selected_notes.size()):
-				var lane: int = int(chart.get_notes_data()[selected_notes[i - j]][1])
-				if !(range(int(pos_1.x), int(pos_2.x) + 1).has(lane)):
-					selected_notes.remove_at(selected_notes[i - j])
-					j += 1
+				var lane: int = int(chart.get_notes_data()[selected_notes[_i]][1])
+				if !(lane >= lane_a and lane <= lane_b):
+					selected_notes.remove_at(_i)
+					_i -= 1
+				
+				_i += 1
 			
 			for i in selected_notes:
 				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-				print(current_visible_notes_L)
-				print(note_nodes[i - current_visible_notes_L].time)
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
@@ -402,10 +409,7 @@ func _process(delta: float) -> void:
 			selected_notes = []
 			selected_note_nodes = []
 			for packet in temp:
-				place_note(packet[0], packet[1], packet[2], packet[3], true, true)
-			
-			for packet in temp:
-				i = find_note(packet[1], packet[0])
+				i = place_note(packet[0], packet[1], packet[2], packet[3], true, true)
 				selected_notes.append(i)
 				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
 			selected_notes.sort()
@@ -481,7 +485,8 @@ func _draw() -> void:
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
-		for note in selected_note_nodes:
+		for i in selected_notes.size():
+			var note = selected_note_nodes[i]
 			if note:
 					var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
 					length *= %Grid.grid_size.y * %Grid.zoom.y
@@ -606,13 +611,13 @@ func load_section(time: float):
 		## Clearing any invisible notes
 		if current_visible_notes_L != L or current_visible_notes_R != R:
 			var i: int = 0
-			for note in note_nodes:
-				if note:
-					if (note.time < chart.get_notes_data()[L][0]
-					or note.time > chart.get_notes_data()[R][0]):
-						note_nodes[i].queue_free()
-						note_nodes.remove_at(i)
-						i -= 1
+			for _i in range(note_nodes.size()):
+				var note = note_nodes[i]
+				if (note.time < chart.get_notes_data()[L][0]
+				or note.time > chart.get_notes_data()[R][0]):
+					note.queue_free()
+					note_nodes.remove_at(i)
+					i -= 1
 				
 				i += 1
 		
@@ -774,6 +779,13 @@ func remove_note(lane: int, time: float = -1):
 	if range(note_nodes.size()).has(i - current_visible_notes_L):
 		note_nodes[i - current_visible_notes_L].queue_free()
 		note_nodes.remove_at(i - current_visible_notes_L)
+	
+	#if selected_notes.size() > 0:
+		#for j in range(selected_notes.size()):
+			#var note: int = selected_notes[j]
+			#if note > i:
+				#selected_notes[j] -= 1
+	
 	chart.chart_data["notes"].remove_at(i)
 
 func remove_notes(notes: Array):
