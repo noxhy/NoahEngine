@@ -36,7 +36,7 @@ var current_tempo: float = 60.0
 var current_beats_per_measure: int = 4
 var current_steps_per_measure: int = 16
 var current_difficulty: String
-var note_list: Array = []
+var note_nodes: Array = []
 var clipboard: Array = []
 var can_chart: bool = false
 
@@ -231,7 +231,7 @@ func _process(delta: float) -> void:
 							else:
 								var index: int = find_note(lane, time)
 								selected_notes = [index]
-								selected_note_nodes = [note_list[index - current_visible_notes_L]]
+								selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
 								min_lane = 0
 								max_lane = ChartManager.strum_count - 1
 					elif (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
@@ -299,8 +299,8 @@ func _process(delta: float) -> void:
 									
 									changed_length = (distance > 0)
 									if changed_length:
-										if (note_list[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
-										note_list[i - current_visible_notes_L].length = distance
+										if (note_nodes[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
+										note_nodes[i - current_visible_notes_L].length = distance
 									
 									if SettingsManager.get_value("chart", "auto_save"): 
 										save()
@@ -343,9 +343,9 @@ func _process(delta: float) -> void:
 				var action: String = "Changed Note Length(s)"
 				undo_redo.create_action(action)
 				for i in selected_notes:
-					undo_redo.add_do_property(note_list[i - current_visible_notes_L],
-					"length", note_list[i - current_visible_notes_L].length)
-					undo_redo.add_undo_property(note_list[i - current_visible_notes_L],
+					undo_redo.add_do_property(note_nodes[i - current_visible_notes_L],
+					"length", note_nodes[i - current_visible_notes_L].length)
+					undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L],
 					"length", 0.0)
 				
 				undo_redo.add_do_reference(%"History Window".add_action(action))
@@ -384,9 +384,9 @@ func _process(delta: float) -> void:
 					j += 1
 			
 			for i in selected_notes:
-				selected_note_nodes.append(note_list[i - current_visible_notes_L])
+				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
 				print(current_visible_notes_L)
-				print(note_list[i - current_visible_notes_L].time)
+				print(note_nodes[i - current_visible_notes_L].time)
 			
 			if selected_notes.size() > 0:
 				%"Note Place".play()
@@ -407,7 +407,7 @@ func _process(delta: float) -> void:
 			for packet in temp:
 				i = find_note(packet[1], packet[0])
 				selected_notes.append(i)
-				selected_note_nodes.append(note_list[i - current_visible_notes_L])
+				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
 			selected_notes.sort()
 			
 			moving_notes = false
@@ -444,7 +444,7 @@ func _process(delta: float) -> void:
 			#selected_notes = place_notes(clipboard)
 			#selected_note_nodes = []
 			#for index in selected_notes:
-				#selected_note_nodes.append(note_list[index - current_visible_notes_L])
+				#selected_note_nodes.append(note_nodes[index - current_visible_notes_L])
 			#print("pasted notes: ", clipboard)
 	
 	queue_redraw()
@@ -581,7 +581,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	current_visible_notes_L = -1
 	current_visible_notes_R = -1
 	get_tree().call_group(&"notes", &"queue_free")
-	note_list = []
+	note_nodes = []
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
 	var action: String = "Loaded Chart"
@@ -606,12 +606,12 @@ func load_section(time: float):
 		## Clearing any invisible notes
 		if current_visible_notes_L != L or current_visible_notes_R != R:
 			var i: int = 0
-			for note in note_list:
+			for note in note_nodes:
 				if note:
 					if (note.time < chart.get_notes_data()[L][0]
 					or note.time > chart.get_notes_data()[R][0]):
-						note_list[i].queue_free()
-						note_list.remove_at(i)
+						note_nodes[i].queue_free()
+						note_nodes.remove_at(i)
 						i -= 1
 				
 				i += 1
@@ -709,7 +709,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	if placed:
 		var L: int = bsearch_left_range(chart.get_notes_data(), time)
 		if L != -1:
-			note_list.insert(L - current_visible_notes_L, note_instance)
+			note_nodes.insert(L - current_visible_notes_L, note_instance)
 			chart.chart_data["notes"].insert(L, [time, lane, length, type])
 			
 			if !moved:
@@ -720,28 +720,28 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			
 			output = L
 		else:
-			note_list.append(note_instance)
+			note_nodes.append(note_instance)
 			chart.chart_data["notes"].append([time, lane, length, type])
 			selected_notes = [chart.get_notes_data().size() - 1]
 			selected_note_nodes = [note_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
-			output = note_list.size()
+			output = note_nodes.size()
 	else:
 		if sorted:
-			var L: int = bsearch_left_range_note(note_list, time)
+			var L: int = bsearch_left_range_note(note_nodes, time)
 			if L == -1:
-				note_list.append(note_instance)
-				output = note_list.size()
+				note_nodes.append(note_instance)
+				output = note_nodes.size()
 			else:
-				note_list.insert(L, note_instance)
+				note_nodes.insert(L, note_instance)
 				output = L
 			
 			# This is just here to see if the insertion sort worked
-			# note_list.sort_custom(self.sort_note)
+			# note_nodes.sort_custom(self.sort_note)
 		else:
-			note_list.append(note_instance)
-			output = note_list.size()
+			note_nodes.append(note_instance)
+			output = note_nodes.size()
 	
 	$"Notes Layer".add_child(note_instance)
 	note_instance.add_to_group(&"notes")
@@ -771,9 +771,9 @@ func remove_note(lane: int, time: float = -1):
 	if i <= -1:
 		return
 	
-	if range(note_list.size()).has(i - current_visible_notes_L):
-		note_list[i - current_visible_notes_L].queue_free()
-		note_list.remove_at(i - current_visible_notes_L)
+	if range(note_nodes.size()).has(i - current_visible_notes_L):
+		note_nodes[i - current_visible_notes_L].queue_free()
+		note_nodes.remove_at(i - current_visible_notes_L)
 	chart.chart_data["notes"].remove_at(i)
 
 func remove_notes(notes: Array):
