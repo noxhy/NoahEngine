@@ -26,7 +26,7 @@ func _ready() -> void:
 	#GameManager.highscore = true
 	#GameManager.character = preload("res://assets/characters/boyfriend.tres")
 	#GameManager.difficulty = "nightmare"
-	#GameManager.current_song = load("res://assets/songs/playable songs/cocoa/cocoa.tres")
+	#GameManager.current_song = load("res://assets/songs/playable_songs/cocoa/cocoa.tres")
 #endregion
 	
 	rank = GameManager.get_rank(GameManager.get_grade(GameManager.tallies))
@@ -82,8 +82,8 @@ func update_display():
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".size = Vector2(48, 0)
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".text = str(
 		"[font_size=72][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=1.5 color=#ffffff90 ease=-2.0]",
-		scrolling_text,
-		"[/pulse][/font]"
+		"[outline_size=8][outline_color=ffffff]",
+		scrolling_text
 	)
 	
 	var size: Vector2 = $"Scrolling Text/ParallaxLayer/RichTextLabel".size

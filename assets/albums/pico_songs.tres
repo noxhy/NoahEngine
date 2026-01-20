@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://c85optaap1atb" path="res://resources/album.gd" id="1_5iepq"]
 [ext_resource type="Texture2D" uid="uid://bwxact2hluls0" path="res://assets/sprites/menus/freeplay/album covers/volume4.png" id="1_yohgl"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_c0fke"]
-[ext_resource type="Resource" uid="uid://7o7st57jogk0" path="res://playable songs/stress/Stress (Pico Mix).res" id="5_v7y5o"]
-[ext_resource type="Resource" uid="uid://6vm4kpp1ccq7" path="res://playable songs/darnell/Darnell.res" id="5_yohgl"]
+[ext_resource type="Resource" uid="uid://btreqv7gcaypy" path="res://playable_songs/stress/Stress (Pico Mix).res" id="4_yohgl"]
+[ext_resource type="Resource" uid="uid://bnfg0g3g2hdaw" path="res://playable_songs/darnell/Darnell.res" id="5_rfqhp"]
 
 [resource]
 script = ExtResource("1_5iepq")
 name = "Pico Funkin'"
 cover = ExtResource("1_yohgl")
-song_list = Array[ExtResource("2_c0fke")]([ExtResource("5_v7y5o"), ExtResource("5_yohgl")])
+song_list = Array[ExtResource("2_c0fke")]([ExtResource("4_yohgl"), ExtResource("5_rfqhp")])
 metadata/_custom_type_script = "uid://c85optaap1atb"
