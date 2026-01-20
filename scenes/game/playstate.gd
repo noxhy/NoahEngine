@@ -524,7 +524,7 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			update_ui_stats()
 		else:
 			score -= 100
-			health -= (1 + clamp(combo / 20.0 + (length * HOLD_HEALTH), 0, 20))
+			health -= clamp(4 + combo / 20.0 + (length * HOLD_HEALTH), 0, 20)
 			combo = 0
 			misses += 1
 			 
