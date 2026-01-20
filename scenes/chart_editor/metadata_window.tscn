@@ -176,6 +176,7 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
+allow_reselect = true
 item_count = 1
 popup/item_0/text = "00:00.00 - BPM: 60.0 in TS: 4/4"
 popup/item_0/id = 0

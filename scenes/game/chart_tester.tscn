@@ -80,3 +80,4 @@ autowrap_mode = 3
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
+[connection signal="setup_finished" from="PlayState Host" to="." method="_on_play_state_host_setup_finished"]

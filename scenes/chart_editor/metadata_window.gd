@@ -112,6 +112,7 @@ func _on_remove_time_change_pressed() -> void:
 	ChartManager.chart.chart_data["tempos"].erase(time)
 	%"Time Changes".remove_item(current_time_change)
 	%"Time Changes".select(current_time_change - 1)
+	_on_time_changes_item_selected(current_time_change - 1)
 
 func _on_tempo_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()

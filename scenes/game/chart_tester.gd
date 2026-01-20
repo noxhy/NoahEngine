@@ -18,3 +18,7 @@ func _process(delta):
 	$"UI/Chart Stats".text += "\n" + "Tempo: " + str(playstate_host.conductor.tempo)
 	$"UI/Chart Stats".text += "\n" + "Scroll Speed: " + str(playstate_host.ui.strums[0].get_node(playstate_host.ui.strums[0].strums[0]).scroll_speed)
 	$"UI/Chart Stats".text += "\n" + str(GameManager.tallies).replace("{", "").replace("}", "").replace(",", "\n")
+
+
+func _on_play_state_host_setup_finished() -> void:
+	get_tree().call_group(&"strums", "set_skin", ChartEditor.note_skin)

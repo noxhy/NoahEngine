@@ -545,7 +545,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		difficulty = ChartManager.song.difficulties.keys()[0]
 	var difficulty_data: Dictionary = song.difficulties.get(difficulty)
 	ChartManager.chart = load(difficulty_data.chart)
-	scene = song.scene if !difficulty_data.has("scene") else difficulty_data.scene
+	scene = difficulty_data.get("scene", song.scene)
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
@@ -1152,6 +1152,14 @@ func window_button_item_pressed(id):
 ## Edit button item pressed
 func test_button_item_pressed(id):
 	match id:
+		0:
+			GameManager.current_song = ChartManager.song
+			GameManager.difficulty = ChartManager.difficulty
+			GameManager.freeplay = true
+			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
+			Global.change_scene_to(scene)
+			self.process_mode = Node.PROCESS_MODE_DISABLED
+		
 		1:
 			GameManager.current_song = ChartManager.song
 			GameManager.difficulty = ChartManager.difficulty
@@ -1268,8 +1276,9 @@ func _on_metadata_window_selected_time_change(time: float) -> void:
 	_on_play_button_toggled(false)
 
 func _on_metadata_window_add_time_change() -> void:
-	ChartManager.chart.chart_data["tempos"][song_position] = $Conductor.tempo
-	ChartManager.chart.chart_data["meters"][song_position] = [
+	var time: float = song_position + start_offset
+	ChartManager.chart.chart_data["tempos"][time] = $Conductor.tempo
+	ChartManager.chart.chart_data["meters"][time] = [
 		$Conductor.beats_per_measure, $Conductor.steps_per_measure
 	]
 	

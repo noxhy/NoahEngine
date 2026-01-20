@@ -25,6 +25,7 @@ func _ready():
 	
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
+	$Note.scale *= 0.9
 	tail.scale = $Note.scale
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 	collision_shape.shape = RectangleShape2D.new()
