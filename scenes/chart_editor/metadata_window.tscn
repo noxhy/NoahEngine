@@ -11,75 +11,78 @@ region = Rect2(0, 0, 150, 150)
 [node name="Metadata Window" type="Window"]
 transparent_bg = true
 oversampling_override = 1.0
-title = "Metadata"
+title = "Song Metadata"
 position = Vector2i(0, 24)
-size = Vector2i(320, 188)
+size = Vector2i(640, 360)
 transparent = true
 popup_window = true
 theme = ExtResource("1_n6ac0")
 script = ExtResource("2_bkkpl")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Song Name" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Song Name" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Song Name"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Name"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Title:"
 
-[node name="Song Name" type="LineEdit" parent="VBoxContainer/Song Name"]
+[node name="Song Name" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Name"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Song Artist" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Song Artist" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Song Artist"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Artist"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Artist:"
 
-[node name="Song Artist" type="LineEdit" parent="VBoxContainer/Song Artist"]
+[node name="Song Artist" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Artist"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Icons" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Icons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Icons"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Icons"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Icon Texture:"
 
-[node name="Icon" type="TextureRect" parent="VBoxContainer/Icons"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/Icons"]
 unique_name_in_owner = true
 layout_mode = 2
 texture = SubResource("AtlasTexture_4ci21")
 expand_mode = 3
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer/Icons"]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Icons"]
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 
-[node name="Icon Button" type="Button" parent="VBoxContainer/Icons"]
+[node name="Icon Button" type="Button" parent="HBoxContainer/VBoxContainer/Icons"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File"
 
-[node name="Icon FileDailog" type="FileDialog" parent="VBoxContainer/Icons/Icon Button"]
+[node name="Icon FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Icons/Icon Button"]
 oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
@@ -88,46 +91,29 @@ file_mode = 0
 root_subfolder = "res://assets/sprites/playstate/icons/"
 filters = PackedStringArray("*.tres")
 
-[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Starting Tempo" type="HBoxContainer" parent="VBoxContainer"]
+[node name="Song Scene" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/Starting Tempo"]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Starting Tempo:"
-
-[node name="Starting Tempo" type="SpinBox" parent="VBoxContainer/Starting Tempo"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-min_value = 30.0
-max_value = 500.0
-step = 0.1
-value = 60.0
-
-[node name="Song Scene" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="VBoxContainer/Song Scene"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Scene"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Scene:"
 
-[node name="Song Scene" type="LineEdit" parent="VBoxContainer/Song Scene"]
+[node name="Song Scene" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Scene"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 
-[node name="Song Scene Button" type="Button" parent="VBoxContainer/Song Scene"]
+[node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene"]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Select Scene"
 
-[node name="Scene FileDailog" type="FileDialog" parent="VBoxContainer/Song Scene/Song Scene Button"]
+[node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button"]
 oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
@@ -136,13 +122,98 @@ file_mode = 0
 root_subfolder = "res://scenes/game/songs/"
 filters = PackedStringArray("*.tscn")
 
+[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Hbox" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Difficulty Label" type="Label" parent="HBoxContainer/VBoxContainer/Hbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Difficulty:"
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer/Hbox"]
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Scroll Speed Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Scroll Speed: 1.0x"
+
+[node name="Scroll Speed" type="HSlider" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.1
+max_value = 5.0
+step = 0.1
+value = 1.0
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "00:00.00 - BPM: 60.0 in TS: 4/4"
+popup/item_0/id = 0
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Starting Tempo" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Starting Tempo"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Tempo:"
+
+[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Starting Tempo"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 30.0
+max_value = 500.0
+step = 0.1
+value = 60.0
+suffix = "BPM"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+text = "Time Signature"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
-[connection signal="text_changed" from="VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
-[connection signal="text_changed" from="VBoxContainer/Song Artist/Song Artist" to="." method="_on_song_artist_text_changed"]
-[connection signal="pressed" from="VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
-[connection signal="file_selected" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
-[connection signal="gui_focus_changed" from="VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]
-[connection signal="value_changed" from="VBoxContainer/Starting Tempo/Starting Tempo" to="." method="_on_starting_tempo_value_changed"]
-[connection signal="pressed" from="VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
-[connection signal="file_selected" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
-[connection signal="gui_focus_changed" from="VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Artist/Song Artist" to="." method="_on_song_artist_text_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/Starting Tempo/Tempo" to="." method="_on_starting_tempo_value_changed"]

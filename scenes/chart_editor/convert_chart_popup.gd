@@ -161,8 +161,9 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 			
 			# Adding tempo data
 			for i in json.timeChanges:
-				if i.t < 0: i.t = 0.0
-				tempo_data[i.t] = i.bpm
+				if i.t < 0:
+					i.t = 0.0
+				tempo_data[i.t / 1000.0] = i.bpm
 			
 			# Adding Note Data
 			var note_types = []

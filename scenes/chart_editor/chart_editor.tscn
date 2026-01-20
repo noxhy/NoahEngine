@@ -216,12 +216,8 @@ size_flags_horizontal = 3
 text = "CURRENT TIME"
 vertical_alignment = 1
 
-[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer"]
-unique_name_in_owner = true
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 8
-text = "TEMPO"
-vertical_alignment = 1
 
 [node name="Beat" type="Label" parent="UI/Lower UI/HBoxContainer"]
 unique_name_in_owner = true
@@ -312,6 +308,17 @@ item_count = 1
 popup/item_0/text = "difficulty"
 popup/item_0/id = 0
 
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "TEMPO"
+vertical_alignment = 1
+
 [node name="VSeparator2" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
 layout_mode = 2
 size_flags_horizontal = 10
@@ -390,11 +397,31 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Edit"
-item_count = 2
-popup/item_0/text = "Undo | Ctrl + Z"
+item_count = 12
+popup/item_0/text = "Undo"
 popup/item_0/id = 0
-popup/item_1/text = "Redo | Ctrl + Y"
+popup/item_1/text = "Redo"
 popup/item_1/id = 1
+popup/item_2/id = 2
+popup/item_2/separator = true
+popup/item_3/text = "Cut"
+popup/item_3/id = 3
+popup/item_4/text = "Copy"
+popup/item_4/id = 4
+popup/item_5/text = "Paste"
+popup/item_5/id = 5
+popup/item_6/text = "Delete Stacked Notes"
+popup/item_6/id = 6
+popup/item_7/id = 7
+popup/item_7/separator = true
+popup/item_8/text = "Flip Selected Notes"
+popup/item_8/id = 8
+popup/item_9/id = 9
+popup/item_9/separator = true
+popup/item_10/text = "Select All Notes"
+popup/item_10/id = 10
+popup/item_11/text = "Deselect All"
+popup/item_11/id = 11
 metadata/_edit_use_anchors_ = true
 
 [node name="View Button" type="MenuButton" parent="UI/Upper UI"]
@@ -403,8 +430,11 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "View"
-item_count = 1
+item_count = 2
+popup/item_0/text = "Switch Editors"
 popup/item_0/id = 0
+popup/item_1/text = "Change Note Skin"
+popup/item_1/id = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Audio Button" type="MenuButton" parent="UI/Upper UI"]
@@ -413,8 +443,13 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Audio"
-item_count = 1
+item_count = 3
+popup/item_0/text = "Play/Pause"
 popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Edit Audios"
+popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="Test Button" type="MenuButton" parent="UI/Upper UI"]
@@ -423,8 +458,11 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Test"
-item_count = 1
+item_count = 2
+popup/item_0/text = "Playtest Chart"
 popup/item_0/id = 0
+popup/item_1/text = "Playtest Chart (Minimal)"
+popup/item_1/id = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Window Button" type="MenuButton" parent="UI/Upper UI"]

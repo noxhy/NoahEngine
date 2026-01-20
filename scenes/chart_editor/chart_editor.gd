@@ -1,8 +1,8 @@
 extends Node2D
+class_name ChartEditor
 
 const LABEL_FONT: Font = preload("res://assets/fonts/bold_font.ttf")
 const NOTE_PRELOAD = preload("res://scenes/game/note/chart_note.tscn")
-const NOTE_SKIN = preload("res://assets/sprites/playstate/default/default_note_skin.tres")
 const STRUM_BUTTON_PRELOAD = preload("res://scenes/chart_editor/strum_button.tscn")
 
 const NEW_FILE_POPUP_PRELOAD = preload("res://scenes/chart_editor/new_file_popup.tscn")
@@ -11,7 +11,7 @@ const CONVERT_CHART_POPUP_PRELOAD = preload("res://scenes/chart_editor/convert_c
 
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
-@onready var undo_redo: UndoRedo = UndoRedo.new()
+static var note_skin: NoteSkin = load("res://assets/sprites/playstate/default/default_note_skin.tres")
 
 @export_group("Colors")
 @export var hover_color: Color = Color(1, 1, 1, 0.5)
@@ -20,6 +20,8 @@ const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 @export var muted_color: Color = Color(0.8, 0.8, 0.8, 0.5)
 @export var box_color: Color = Color.LIGHT_GREEN
 @export var selected_color: Color = Color.GREEN
+
+@onready var undo_redo: UndoRedo = UndoRedo.new()
 
 ## Chart Variables
 var chart: Chart = null
@@ -95,6 +97,10 @@ func _ready() -> void:
 	
 	%"Edit Button".get_popup().connect("id_pressed", self.edit_button_item_pressed)
 	%"Edit Button".get_popup().set_hide_on_checkable_item_selection(false)
+	%"Edit Button".get_popup().set_item_tooltip(
+		%"Edit Button".get_popup().get_item_index(0), "Ctrl+Z")
+	%"Edit Button".get_popup().set_item_tooltip(
+		%"Edit Button".get_popup().get_item_index(1), "Ctrl+Y")
 	
 	%"Window Button".get_popup().connect("id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
@@ -235,7 +241,7 @@ func _process(delta: float) -> void:
 								selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
 								min_lane = 0
 								max_lane = ChartManager.strum_count - 1
-					elif (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
+					elif (((grid_position.x - 1) >= -1 and (grid_position.x - 1) <= ChartManager.strum_count)
 					and current_focus_owner):
 						current_focus_viewport.gui_release_focus()
 						current_focus_owner = null
@@ -266,16 +272,18 @@ func _process(delta: float) -> void:
 								undo_redo.commit_action()
 								%"Note Remove".play()
 								
-								var j: int = selected_notes.find(i)
-								selected_notes.remove_at(j)
-								selected_note_nodes.remove_at(j)
-								
-								if selected_notes.size() > 1:
-									var k: int = 0
-									for _i in range(selected_notes.size()):
-										if k >= j:
-											selected_notes[k] -= 1
-										k += 1
+								if selected_notes.has(i):
+									var j: int = selected_notes.find(i)
+									
+									selected_notes.remove_at(j)
+									selected_note_nodes.remove_at(j)
+									
+									if selected_notes.size() > 1:
+										var k: int = 0
+										for _i in range(selected_notes.size()):
+											if k >= j:
+												selected_notes[k] -= 1
+											k += 1
 								
 								hovered_note = -1
 								
@@ -286,10 +294,13 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
 				if !%Instrumental.playing:
-					if can_chart:
+					if can_chart and !current_focus_owner:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
-							start_offset = grid_position_to_time(grid_position) - song_position
+							if Input.is_action_pressed("shift"):
+								start_offset = grid_position_to_time(snapped_position) - song_position
+							else:
+								start_offset = grid_position_to_time(grid_position) - song_position
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
 								var cursor_time = grid_position_to_time(snapped_position, true)
@@ -402,7 +413,7 @@ func _process(delta: float) -> void:
 			var i: int = 0
 			for note in selected_note_nodes:
 				temp.append([note.time + moved_time_distance, note.lane + moved_lane_distance, note.length, note.note_type])
-				remove_note(selected_notes[i] - i)
+				remove_note(note.lane, note.time)
 				i += 1
 			
 			selected_notes = []
@@ -418,7 +429,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_released(&"control"):
 		bounding_box = false
 	
-	if Input.is_action_pressed(&"ui_text_delete"):
+	if Input.is_action_pressed(&"ui_cut"):
 		if can_chart:
 			if selected_notes.size() > 0:
 				var temp: Array = []
@@ -443,7 +454,8 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed(&"ui_paste"):
 		if clipboard.size() > 0:
-			selected_notes = place_notes(clipboard)
+			var temp = place_notes(clipboard)
+			selected_notes = temp
 			selected_note_nodes = []
 			for i in selected_notes:
 				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
@@ -630,7 +642,8 @@ func load_section(time: float):
 		current_visible_notes_R = R
 		min_visible_note_time = INF
 		max_visible_note_time = 0
-	
+
+func load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
 	for i in range($Conductor.beats_per_measure):
 		var rect = ColorRect.new()
@@ -705,7 +718,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	note_instance.direction = directions[int(lane) % 4]
 	note_instance.animation = directions[int(lane) % 4]
 	
-	note_instance.note_skin = NOTE_SKIN
+	note_instance.note_skin = note_skin
 	
 	var output: int
 	
@@ -1049,14 +1062,15 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if chart:
 		load_section(song_position)
 	
-	%Beat.text = str("Beat: ", current_beat)
+	%Beat.text = str("Beat: ", current_beat + 1)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	%"Conductor Step".play(0.55)
-	%Step.text = str("Step: ", current_step)
+	%Step.text = str("Step: ", current_step + 1)
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
-	%Tempo.text = str("BPM: ", _tempo)
+	%Tempo.text = str("Tempo: ", _tempo)
+	load_dividers()
 
 ## File button item pressed
 func file_button_item_pressed(id):

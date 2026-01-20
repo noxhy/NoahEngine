@@ -16,7 +16,7 @@ func update_stats():
 	%"Song Name".text = song_name
 	%"Song Artist".text = song_artist
 	_on_icon_file_dailog_file_selected(song_icon)
-	%"Starting Tempo".value = starting_tempo
+	%Tempo.value = starting_tempo
 	_on_scene_file_dailog_file_selected(song_scene)
 
 func _on_icon_file_dailog_file_selected(path: String) -> void:
@@ -33,7 +33,7 @@ func _on_icon_file_dailog_file_selected(path: String) -> void:
 	assert(sprite_frames.has_animation("default"), "Animation \"default\" doesn't exist")
 	var texture: Texture = sprite_frames.get_frame_texture("default", 0)
 	%Icon.texture = texture
-	$VBoxContainer/Icons/LineEdit.text = path
+	$HBoxContainer/VBoxContainer/Icons/LineEdit.text = path
 	updated_icon_texture.emit(path)
 
 func _on_icon_button_pressed() -> void:
@@ -49,7 +49,7 @@ func _on_scene_file_dailog_file_selected(path: String) -> void:
 	updated_song_scene.emit(path)
 
 func _on_starting_tempo_value_changed(value: float) -> void:
-	%"Starting Tempo".value = value
+	%"Tempo".value = value
 	updated_starting_tempo.emit(value)
 
 func _on_song_name_text_changed(new_text: String) -> void:

@@ -15,10 +15,11 @@ signal new_tempo(_tempo: float)
 ## Beats per minute.
 @export var tempo: float:
 	set(v):
+		if tempo != v:
+			emit_signal(&"new_tempo", v)
 		tempo = v
 		seconds_per_beat = 60.0 / tempo
 		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
-		emit_signal(&"new_tempo", v)
 	get():
 		return tempo
 
@@ -37,17 +38,19 @@ var seconds_per_step: float = 0.25
 
 var current_beat: int:
 	set(v):
-		current_beat = v
 		measure_relative_beat = current_beat % beats_per_measure
-		emit_signal(&"new_beat", v, measure_relative_beat)
+		if current_beat != v:
+			emit_signal(&"new_beat", v, measure_relative_beat)
+		current_beat = v
 	get():
 		return current_beat
 
 var current_step: int:
 	set(v):
-		current_step = v
 		measure_relative_step = current_step % steps_per_measure
-		emit_signal(&"new_step", v, measure_relative_step)
+		if current_step != v:
+			emit_signal(&"new_step", v, measure_relative_step)
+		current_step = v
 	get():
 		return current_step
 
@@ -64,14 +67,11 @@ func _process(_delta):
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)
 
-
 func get_beat_at(_time: float) -> int:
 	return int((_time - self.offset) / seconds_per_beat)
 
-
 func get_step_at(_time: float) -> int:
 	return int((_time - self.offset) / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
-
 
 func get_measure_at(_time: float) -> int:
 	return int((_time - self.offset) / (seconds_per_beat * beats_per_measure))

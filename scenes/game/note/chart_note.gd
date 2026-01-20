@@ -42,6 +42,7 @@ func _process(delta):
 		tail.scale.x = scroll
 		tail.size.x = line_length
 		# apparently godot is culling the notes regardless of what i do so idk a solution
+		$VisibleOnScreenEnabler2D.rect.size.y = line_length
 
 	else:
 		tail.visible = false

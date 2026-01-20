@@ -121,8 +121,8 @@ func _ready():
 	
 	conductor = Conductor.new()
 	self.add_child(conductor)
-	conductor.connect("new_beat", self.new_beat)
-	conductor.connect("new_step", self.new_step)
+	conductor.connect(&"new_beat", self.new_beat)
+	conductor.connect(&"new_step", self.new_step)
 	
 	pause_preload = load(pause_scene)
 	Global.song_scene = LoadingScreen.scene

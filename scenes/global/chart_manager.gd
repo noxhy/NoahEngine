@@ -5,7 +5,6 @@ static var difficulty: String = ""
 
 static var difficulties: Dictionary = {}
 static var strum_count: int = 8
-static var snap: float = 16
 
 ## Settings per strum, each key is it's label
 var strum_data: Array = [
