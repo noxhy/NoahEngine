@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://yyfqg2jvwcmt"]
+[gd_scene load_steps=6 format=3 uid="uid://yyfqg2jvwcmt"]
 
 [ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://scenes/game/note/chart_note.gd" id="1_ud7f5"]
 [ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://assets/sprites/playstate/developer/arrow/notes.tres" id="2_jcxlk"]
@@ -6,6 +6,12 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ud7f5"]
 size = Vector2(640.0001, 640.0001)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wqobl"]
+font_size = 256
+font_color = Color(1, 1, 0, 1)
+outline_size = 48
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Note" type="Node2D" groups=["note"]]
 use_parent_material = true
@@ -34,7 +40,6 @@ animation_names = Dictionary[StringName, StringName]({
 })
 
 [node name="Tail" type="TextureRect" parent="."]
-modulate = Color(1, 1, 1, 0.588)
 rotation = 1.5707964
 stretch_mode = 1
 
@@ -46,6 +51,20 @@ rect = Rect2(-320, -320, 640, 640)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 scale = Vector2(0.99999964, 0.99999964)
 shape = SubResource("RectangleShape2D_ud7f5")
+
+[node name="Special Note Label" type="Label" parent="."]
+unique_name_in_owner = true
+visible = false
+z_index = 1
+offset_left = -320.0
+offset_top = -320.0
+offset_right = 320.0
+offset_bottom = 320.0
+pivot_offset = Vector2(320, 320)
+text = "*"
+label_settings = SubResource("LabelSettings_wqobl")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="screen_entered" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenEnabler2D" to="." method="_on_visible_on_screen_enabler_2d_screen_exited"]

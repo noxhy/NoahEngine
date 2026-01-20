@@ -13,7 +13,7 @@ transparent_bg = true
 oversampling_override = 1.0
 title = "Song Metadata"
 position = Vector2i(0, 24)
-size = Vector2i(640, 240)
+size = Vector2i(640, 229)
 transparent = true
 popup_window = true
 theme = ExtResource("1_n6ac0")
@@ -136,11 +136,11 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Difficulty:"
 
-[node name="Difficulty" type="OptionButton" parent="HBoxContainer/VBoxContainer/Hbox"]
+[node name="Difficulty" type="LineEdit" parent="HBoxContainer/VBoxContainer/Hbox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-disabled = true
+editable = false
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
 layout_mode = 2
@@ -198,7 +198,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 min_value = 30.0
 max_value = 500.0
-step = 0.1
+step = 0.001
 value = 60.0
 suffix = "BPM"
 

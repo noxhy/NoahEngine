@@ -93,7 +93,7 @@ func note_types(_note_types: Array):
 		get_node(i).note_types = _note_types
 
 
-func create_note(time: float, lane: int, length: float, note_type: int, tempo: float):
+func create_note(time: float, lane: int, length: float, note_type: Variant, tempo: float):
 	var strum = strums[lane]
 	get_node(strum).create_note(time, length, note_type, tempo)
 

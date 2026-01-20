@@ -166,9 +166,6 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 				tempo_data[i.t / 1000.0] = i.bpm
 				meter_data[i.t / 1000.0] = [i.n, i.n * i.d]
 			
-			# Adding Note Data
-			var note_types = []
-			
 			for i in chart_json.notes.get(difficulty):
 				var time = i.t / 1000.0
 				var lane = int(i.d)
@@ -180,13 +177,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 				if i.has("l"):
 					length = i.l / 1000.0 / seconds_per_beat
 				
-				# Enumerating note types
-				var note_type = 0
-				if i.has("k"):
-					if !note_types.has(i.k):
-						note_types.append(i.k)
-					note_type = note_types.find(i.k) + 1
-				
+				var note_type = i.get("k", 0)
 				note_data.append([time, lane, length, note_type])
 			
 			note_data.sort_custom(self.sort_notes)
@@ -208,7 +199,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 					event_name = EVENT_NAMES.get(event)
 				
 				if i.v is Dictionary:
-					for j in i.v: parameters.append(str(i.v.get(j)))
+					parameters.append_array(i.v.values())
 				else:
 					parameters.append(str(i.v))
 				

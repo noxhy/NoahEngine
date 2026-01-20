@@ -170,7 +170,7 @@ func select_option(i: int):
 		"chart_editor":
 			GameManager.reset_stats()
 			self.process_mode = Node.PROCESS_MODE_DISABLED
-			Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn", "down")
+			Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn", "down")
 		
 		"change_difficulty":
 			load_page("difficulties")

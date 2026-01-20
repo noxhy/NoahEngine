@@ -11,7 +11,7 @@ const CONVERT_CHART_POPUP_PRELOAD = preload("res://scenes/chart_editor/convert_c
 
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
-static var note_skin: NoteSkin = load("res://assets/sprites/playstate/default/default_note_skin.tres")
+static var note_skin: NoteSkin = load("res://assets/sprites/playstate/developer/developer_note_skin.tres")
 
 @export_group("Colors")
 @export var hover_color: Color = Color(1, 1, 1, 0.5)
@@ -64,6 +64,8 @@ var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var min_visible_note_time: float
 var max_visible_note_time: float
+var default_font = ThemeDB.fallback_font
+var default_font_size = ThemeDB.fallback_font_size
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -143,7 +145,7 @@ func _process(delta: float) -> void:
 				if !Input.is_action_pressed("control"):
 					if can_chart:
 						song_position -= $Conductor.seconds_per_beat
-						song_position = snapped(song_position, $Conductor.seconds_per_beat)
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
 						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
@@ -155,7 +157,7 @@ func _process(delta: float) -> void:
 				if !Input.is_action_pressed("control"):
 					if can_chart:
 						song_position += $Conductor.seconds_per_beat
-						song_position = snapped(song_position, $Conductor.seconds_per_beat)
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
 						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
@@ -262,7 +264,7 @@ func _process(delta: float) -> void:
 								var i: int = hovered_note
 								var note = ChartManager.chart.chart_data.notes[i]
 								var length: float = note[2]
-								var note_type: int = note[3]
+								var note_type = note[3]
 								
 								var action: String = "Remove Note"
 								undo_redo.create_action(action)
@@ -309,7 +311,7 @@ func _process(delta: float) -> void:
 									
 									var time: float = note[0]
 									var lane: int = note[1]
-									var note_type: int = note[3]
+									var note_type = note[3]
 									
 									var distance = snappedf(clamp(cursor_time - time, 0.0, 16.0) / $Conductor.seconds_per_beat, 1.0 / chart_snap)
 									ChartManager.chart.chart_data.notes[i] = [time, lane, distance, note_type]
@@ -503,6 +505,15 @@ func _draw() -> void:
 					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
 					rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
 					draw_rect(rect, selected_color)
+	
+	if hovered_note:
+		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
+		if int(note_type) != 0 or str(note_type) != "0":
+			draw_string_outline(default_font, get_global_mouse_position(), str("Type: ", note_type),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
+			draw_string(default_font, get_global_mouse_position(), str("Type: ", note_type),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+
 
 
 func update_grid():
@@ -694,7 +705,7 @@ func new_file(path: String, song: Song):
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
-func place_note(time: float, lane: int, length: float, type: int, placed: bool = false, moved: bool = false, sorted: bool = false) -> int:
+func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false, moved: bool = false, sorted: bool = false) -> int:
 	var directions = ["left", "down", "up", "right"]
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
@@ -1001,6 +1012,7 @@ func move_bound_left(strum_id: int):
 			ChartManager.strum_data[id]["strums"][1] = clamp(ChartManager.strum_data[id]["strums"][1] - 1, 0, ChartManager.strum_count - 1)
 	
 	update_grid()
+	load_dividers()
 
 func move_bound_right(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
@@ -1011,6 +1023,7 @@ func move_bound_right(strum_id: int):
 			ChartManager.strum_data[id]["strums"][0] = clamp(ChartManager.strum_data[id]["strums"][0] + 1, 0, ChartManager.strum_count - 1)
 	
 	update_grid()
+	load_dividers()
 
 func find_strum_id(strum_name: String) -> int:
 	for id in ChartManager.strum_data.size():

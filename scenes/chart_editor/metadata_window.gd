@@ -19,9 +19,7 @@ func update_stats():
 	_on_icon_file_dailog_file_selected(ChartManager.song.icons.resource_path)
 	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
 	
-	%Difficulty.clear()
-	%Difficulty.add_item(ChartManager.difficulty)
-	%Difficulty.select(0)
+	%Difficulty.text = ChartManager.difficulty
 	if has_updated_scroll_speed:
 		%"Scroll Speed".value = ChartManager.chart.scroll_speed
 	else:

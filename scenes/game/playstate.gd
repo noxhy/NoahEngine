@@ -232,7 +232,7 @@ func _process(delta):
 				var time: float = note[0]
 				var lane: int = note[1]
 				var length: float = note[2]
-				var type: int = note[3]
+				var type = note[3]
 				
 				emit_signal("create_note", time, lane, length, type, get_tempo_at(time))
 				current_note += 1

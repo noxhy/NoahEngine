@@ -25,8 +25,12 @@ func _process(delta):
 	# Just in case anyone wants to display this information
 	# $Performance.text = "Accuracy: " + str(snappedf(accuracy * 100, 0.01)) + "%"
 	# $Performance.text += " • " + "Rank: " + rank
-	$"Health Bar/Performance".text = "Score: " + Global.format_number(score)
-	$"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
+	
+	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
+		$"Health Bar/Performance".text = "Botplay"
+	else:
+		$"Health Bar/Performance".text = "Score: " + Global.format_number(score)
+		$"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
 	
 	update_health_bar(lerp($"Health Bar".value, target_health, 0.115))
 
