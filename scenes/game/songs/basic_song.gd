@@ -2,19 +2,23 @@ extends Node2D
 
 @onready var camera_positions = [%"Position 1", %"Position 2", %"Position 3"]
 @onready var playstate_host: PlayState = $"PlayState Host"
+
 @onready var stage = %Stage
+@onready var player = %Player
+@onready var enemy = %Enemy
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	assert(playstate_host, "Playstate host not found")
-	playstate_host.ui.set_player_icons(%Player.icons)
-	playstate_host.ui.set_player_color(%Player.color)
+	if player:
+		playstate_host.ui.set_player_icons(player.icons)
+		playstate_host.ui.set_player_color(player.color)
+		DeathScreen.player_position = player.global_position
+		DeathScreen.player_scale = player.scale
 	
-	playstate_host.ui.set_enemy_icons(%Enemy.icons)
-	playstate_host.ui.set_enemy_color(%Enemy.color)
-	
-	DeathScreen.player_position = %Player.global_position
-	DeathScreen.player_scale = %Enemy.scale
+	if enemy:
+		playstate_host.ui.set_enemy_icons(enemy.icons)
+		playstate_host.ui.set_enemy_color(enemy.color)
 	
 	await playstate_host.setup_finished
 	

@@ -117,6 +117,7 @@ func _on_tempo_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var time: float = tempo_data.keys()[current_time_change]
 	
+	ChartManager.song.tempo = tempo_data.get(0.0)
 	ChartManager.chart.chart_data["tempos"][time] = value
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 

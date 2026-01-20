@@ -1153,8 +1153,12 @@ func window_button_item_pressed(id):
 func test_button_item_pressed(id):
 	match id:
 		1:
-			can_chart = false
+			GameManager.current_song = ChartManager.song
+			GameManager.difficulty = ChartManager.difficulty
+			GameManager.freeplay = true
+			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
 			Global.change_scene_to("res://scenes/game/chart_tester.tscn")
+			self.process_mode = Node.PROCESS_MODE_DISABLED
 		
 		_:
 			print("id: ", id)

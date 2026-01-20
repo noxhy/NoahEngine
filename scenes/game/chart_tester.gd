@@ -3,6 +3,11 @@ extends "res://scenes/game/songs/basic_song.gd"
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
+	playstate_host.ui.set_player_color(Color.GREEN)
+	playstate_host.ui.set_enemy_color(Color.RED)
+	playstate_host.ui.player_icon.visible = false
+	playstate_host.ui.enemy_icon.visible = false
+	
 	%Background.modulate = Color(randf(), randf(), randf())
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

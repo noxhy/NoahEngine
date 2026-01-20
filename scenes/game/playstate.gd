@@ -203,7 +203,7 @@ func _process(delta):
 				AudioServer.get_time_since_last_mix() - \
 				AudioServer.get_output_latency()
 		
-		conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
+		conductor.offset = chart.offset
 		conductor.offset += chart.get_tempo_time_at(GameManager.song_position)
 		
 		# Idk how exactly this works I stole this code from sqirradotdev
@@ -339,7 +339,7 @@ static func get_rating(time: float) -> String:
 		[time <= GameManager.GOOD_RATING_WINDOW, "good"],
 		[time <= GameManager.BAD_RATING_WINDOW, "bad"],
 		[time <= GameManager.SHIT_RATING_WINDOW, "shit"],
-		[true, ],
+		[true, "miss"],
 	]
 	
 	for condition in ratings:
@@ -424,15 +424,19 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 	emit_signal("new_event", time, event_name, event_parameters)
 
 func song_finished():
-	GameManager.finished_song(score)
-	
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
-				Global.change_scene_to("res://scenes/chart editor/chart_editor.tscn")
+				Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+			
+			GameManager.PLAY_MODE.PRACTICE:
+				Global.change_scene_to("res://scenes/results/results.tscn")
+			
 			_:
+				GameManager.finished_song(score)
 				Global.change_scene_to("res://scenes/results/results.tscn")
 	else:
+		GameManager.finished_song(score)
 		Global.change_scene_to(next_scene)
 
 # Conductor Util
