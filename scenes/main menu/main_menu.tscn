@@ -51,10 +51,6 @@ follow_viewport_enabled = true
 
 [node name="Story Mode" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("2_ll3w7")]
 position = Vector2(-12.5, -267)
-animation_names = Dictionary[StringName, StringName]({
-&"idle": &"story_mode basic",
-&"selected": &"story_mode white"
-})
 
 [node name="Freeplay" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("4_hiw7n")]
 position = Vector2(-12.5, -87)
@@ -68,10 +64,6 @@ animation_names = Dictionary[StringName, StringName]({
 
 [node name="Options" parent="UI/Button Manager" groups=["buttons"] instance=ExtResource("6_v3nl2")]
 position = Vector2(-12.5, 273)
-animation_names = Dictionary[StringName, StringName]({
-&"idle": &"options basic",
-&"selected": &"options white"
-})
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -1

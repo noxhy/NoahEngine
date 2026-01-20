@@ -34,6 +34,7 @@ func _ready() -> void:
 		$Audio/Intro.stream = load(GameManager.character.get(&"loss_intro"))
 	else:
 		$Audio/Intro.stream = load(GameManager.character.get(&"normal_intro"))
+	
 	$Audio/Music.stream = load(GameManager.character.get(&"result_songs")[rank])
 	$Audio/Intro.play()
 	
@@ -57,7 +58,6 @@ func _process(delta: float) -> void:
 	)
 	
 	if Input.is_action_just_pressed("ui_accept"):
-		
 		GameManager.reset_stats()
 		var tween = create_tween()
 		tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)

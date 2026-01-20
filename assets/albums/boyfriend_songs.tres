@@ -3,12 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://cgytynqqgidyi" path="res://assets/sprites/menus/freeplay/album covers/volume1.png" id="1_nld3m"]
 [ext_resource type="Script" uid="uid://c85optaap1atb" path="res://resources/album.gd" id="2_de8bw"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="3_dndsk"]
-[ext_resource type="Resource" uid="uid://d0ojv1av5rdfm" path="res://playable songs/fresh/Fresh Erect.res" id="4_nld3m"]
-[ext_resource type="Resource" uid="uid://dsdqkx3gel8yj" path="res://playable songs/darnell/Darnell (Bf Mix).res" id="6_nld3m"]
-[ext_resource type="Resource" uid="uid://dlr3l60wbh750" path="res://playable songs/lit up/Lit Up (Bf Mix).tres" id="7_nld3m"]
-[ext_resource type="Resource" uid="uid://cl4moamwib3md" path="res://playable songs/eggnog/Eggnog Erect.res" id="10_nf846"]
-[ext_resource type="Resource" uid="uid://ehml1umodoyq" path="res://playable songs/cocoa/Cocoa Erect.res" id="11_de8bw"]
-[ext_resource type="Resource" uid="uid://bl42wsxmex11p" path="res://playable songs/senpai/Senpai.res" id="12_dndsk"]
+[ext_resource type="Resource" uid="uid://brqmb60ca111g" path="res://playable_songs/fresh/Fresh Erect.res" id="4_nld3m"]
+[ext_resource type="Resource" uid="uid://dsdqkx3gel8yj" path="res://playable_songs/darnell/Darnell (Bf Mix).res" id="6_nld3m"]
+[ext_resource type="Resource" uid="uid://dlr3l60wbh750" path="res://playable_songs/lit up/Lit Up (Bf Mix).tres" id="7_nld3m"]
+[ext_resource type="Resource" uid="uid://cj626re7vl114" path="res://playable_songs/eggnog/Eggnog Erect.res" id="10_nf846"]
+[ext_resource type="Resource" uid="uid://ehml1umodoyq" path="res://playable_songs/cocoa/Cocoa Erect.res" id="11_de8bw"]
+[ext_resource type="Resource" uid="uid://drcl3wnutydky" path="res://playable_songs/senpai/Senpai.res" id="12_dndsk"]
 
 [resource]
 script = ExtResource("2_de8bw")

@@ -9,7 +9,7 @@ class_name MainMenu
 @onready var options: Dictionary = {
 	"story_mode": {
 		"node": $"UI/Button Manager/Story Mode",
-		"scene": "res://scenes/story mode/story_mode.tscn"
+		"scene": "res://scenes/story_mode/story_mode.tscn"
 	},
 	"freeplay": {
 		"node": $"UI/Button Manager/Freeplay",
