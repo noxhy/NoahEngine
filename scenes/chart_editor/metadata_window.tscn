@@ -13,7 +13,7 @@ transparent_bg = true
 oversampling_override = 1.0
 title = "Song Metadata"
 position = Vector2i(0, 24)
-size = Vector2i(640, 360)
+size = Vector2i(640, 240)
 transparent = true
 popup_window = true
 theme = ExtResource("1_n6ac0")
@@ -29,6 +29,7 @@ size_flags_horizontal = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Song Name" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
@@ -83,6 +84,7 @@ size_flags_horizontal = 8
 text = "Select File"
 
 [node name="Icon FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Icons/Icon Button"]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
@@ -134,7 +136,8 @@ layout_mode = 2
 size_flags_horizontal = 0
 text = "Difficulty:"
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer/Hbox"]
+[node name="Difficulty" type="OptionButton" parent="HBoxContainer/VBoxContainer/Hbox"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 disabled = true
@@ -163,12 +166,14 @@ ticks_position = 3
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="OptionButton" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
+[node name="Time Changes" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
 layout_mode = 2
 selected = 0
 item_count = 1
@@ -178,15 +183,15 @@ popup/item_0/id = 0
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Starting Tempo" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="Tempo Change" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Starting Tempo"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Tempo Change"]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Tempo:"
 
-[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Starting Tempo"]
+[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Tempo Change"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -201,11 +206,36 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
 layout_mode = 2
-text = "Time Signature"
+text = "Time Signature:"
 
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Numerator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+min_value = 1.0
+max_value = 32.0
+value = 1.0
+rounded = true
+prefix = "N:"
+
+[node name="Denominator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 2.0
+max_value = 16.0
+step = 2.0
+value = 2.0
+rounded = true
+prefix = "D:"
+
+[node name="Add Time Change" type="Button" parent="HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add Time Change"
+
+[node name="Remove Time Change" type="Button" parent="HBoxContainer/VBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Remove Current Time Change"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
@@ -216,4 +246,10 @@ size_flags_horizontal = 3
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
 [connection signal="file_selected" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
 [connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]
-[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/Starting Tempo/Tempo" to="." method="_on_starting_tempo_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/HBoxContainer2/Scroll Speed" to="." method="_on_scroll_speed_value_changed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer2/Time Changes" to="." method="_on_time_changes_item_selected"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/Tempo Change/Tempo" to="." method="_on_tempo_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/HBoxContainer/Numerator" to="." method="_on_numerator_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/HBoxContainer/Denominator" to="." method="_on_denominator_value_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/Add Time Change" to="." method="_on_add_time_change_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/Remove Time Change" to="." method="_on_remove_time_change_pressed"]

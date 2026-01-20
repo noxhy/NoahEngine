@@ -1,10 +1,11 @@
 extends Node
 
-static var song: Song = null
-static var difficulty: String = ""
+var song: Song
+var chart: Chart
+var difficulty: String = ""
 
-static var difficulties: Dictionary = {}
-static var strum_count: int = 8
+var difficulties: Dictionary = {}
+var strum_count: int = 8
 
 ## Settings per strum, each key is it's label
 var strum_data: Array = [

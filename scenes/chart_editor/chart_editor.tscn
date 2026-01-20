@@ -408,8 +408,10 @@ popup/item_3/text = "Cut"
 popup/item_3/id = 3
 popup/item_4/text = "Copy"
 popup/item_4/id = 4
+popup/item_4/disabled = true
 popup/item_5/text = "Paste"
 popup/item_5/id = 5
+popup/item_5/disabled = true
 popup/item_6/text = "Delete Stacked Notes"
 popup/item_6/id = 6
 popup/item_7/id = 7
@@ -535,9 +537,12 @@ metadata/_edit_lock_ = true
 [connection signal="gui_focus_changed" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_gui_focus_changed"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/History Window" to="." method="_on_gui_focus_changed"]
+[connection signal="add_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_add_time_change"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_close_requested"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_gui_focus_changed"]
+[connection signal="selected_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_selected_time_change"]
 [connection signal="updated_icon_texture" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_icon_texture"]
+[connection signal="updated_scroll_speed" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_scroll_speed"]
 [connection signal="updated_song_artist" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_artist"]
 [connection signal="updated_song_name" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_name"]
 [connection signal="updated_song_scene" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_scene"]

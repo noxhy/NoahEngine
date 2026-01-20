@@ -142,7 +142,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 	var note_data = []
 	var event_data = []
 	var tempo_data = {}
-	
+	var meter_data = {0.0: [4, 16]}
 	
 	#
 	## Vanilla FnF Chart
@@ -164,6 +164,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 				if i.t < 0:
 					i.t = 0.0
 				tempo_data[i.t / 1000.0] = i.bpm
+				meter_data[i.t / 1000.0] = [i.n, i.n * i.d]
 			
 			# Adding Note Data
 			var note_types = []
@@ -176,7 +177,8 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 				var seconds_per_beat = 60.0 / tempo
 				
 				var length = 0
-				if i.has("l"): length = i.l / 1000.0 / seconds_per_beat
+				if i.has("l"):
+					length = i.l / 1000.0 / seconds_per_beat
 				
 				# Enumerating note types
 				var note_type = 0
@@ -538,7 +540,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 		"notes": note_data,
 		"events": event_data,
 		"tempos": tempo_data,
-		"meters": {0.0: [4, 16]}
+		"meters": meter_data
 	}
 	
 	return chart

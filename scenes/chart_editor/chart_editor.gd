@@ -24,7 +24,6 @@ static var note_skin: NoteSkin = load("res://assets/sprites/playstate/default/de
 @onready var undo_redo: UndoRedo = UndoRedo.new()
 
 ## Chart Variables
-var chart: Chart = null
 var backup_chart: Chart = null
 # So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
 var vocal_tracks: Array = []
@@ -37,7 +36,6 @@ var song_speed: float = 1.0
 var current_tempo: float = 60.0
 var current_beats_per_measure: int = 4
 var current_steps_per_measure: int = 16
-var current_difficulty: String
 var note_nodes: Array = []
 var clipboard: Array = []
 var can_chart: bool = false
@@ -73,7 +71,7 @@ func _ready() -> void:
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
-	if ChartManager.song != null:
+	if ChartManager.song:
 		var old_song = null
 		var song = ChartManager.song
 		load_song(song, ChartManager.difficulty)
@@ -102,6 +100,8 @@ func _ready() -> void:
 	%"Edit Button".get_popup().set_item_tooltip(
 		%"Edit Button".get_popup().get_item_index(1), "Ctrl+Y")
 	
+	%"Test Button".get_popup().connect("id_pressed", self.test_button_item_pressed)
+	
 	%"Window Button".get_popup().connect("id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
 
@@ -117,7 +117,7 @@ func _process(delta: float) -> void:
 			
 			GameManager.seconds_per_beat = $Conductor.seconds_per_beat
 			
-			var notes_list = chart.get_notes_data()
+			var notes_list = ChartManager.chart.get_notes_data()
 			
 			if notes_list.size() > 0:
 				if current_note < notes_list.size():
@@ -144,7 +144,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						song_position -= $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
-						song_position = clamp(song_position, start_offset - chart.offset, %Instrumental.stream.get_length())
+						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
 					current_snap += 1
@@ -156,7 +156,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						song_position += $Conductor.seconds_per_beat
 						song_position = snapped(song_position, $Conductor.seconds_per_beat)
-						song_position = clamp(song_position, start_offset - chart.offset, %Instrumental.stream.get_length())
+						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
 					current_snap -= 1
@@ -165,18 +165,18 @@ func _process(delta: float) -> void:
 			
 			$Conductor.time = song_position
 		
-		if chart != null:
+		if ChartManager.chart:
 			if Input.is_action_pressed("control") and Input.is_action_just_pressed("save"):
 				save()
 	
-	if chart != null:
-		current_tempo = chart.get_tempo_at(song_position + start_offset)
+	if ChartManager.chart:
+		current_tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
 		$Conductor.tempo = current_tempo
-		var meter = chart.get_meter_at(song_position + start_offset)
+		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
 		current_beats_per_measure = meter[0]
 		current_steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
-		$Conductor.offset = chart.get_tempo_time_at(song_position + start_offset) - chart.offset
+		$Conductor.offset = ChartManager.chart.get_tempo_time_at(song_position + start_offset) - ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
 		
 		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"):
@@ -184,9 +184,9 @@ func _process(delta: float) -> void:
 		if Input.is_action_pressed("control") and Input.is_action_just_pressed("redo"):
 			redo()
 	
-	%"Current Time Label".text = float_to_time(song_position + start_offset)
+	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
 	if ChartManager.song:
-		%"Time Left Label".text = "-" + float_to_time(%Instrumental.stream.get_length() - song_position)
+		%"Time Left Label".text = "-" + Global.float_to_time(%Instrumental.stream.get_length() - song_position)
 	else:
 		%"Time Left Label".text = "- ??:??"
 	
@@ -229,7 +229,7 @@ func _process(delta: float) -> void:
 								min_lane = ChartManager.strum_count
 								max_lane = 0
 								for j in selected_notes:
-									var note = chart.get_notes_data()[j]
+									var note = ChartManager.chart.get_notes_data()[j]
 									min_lane = min(min_lane, note[1])
 									max_lane = max(max_lane, note[1])
 								
@@ -260,7 +260,7 @@ func _process(delta: float) -> void:
 							
 							if hovered_note != -1:
 								var i: int = hovered_note
-								var note = chart.chart_data.notes[i]
+								var note = ChartManager.chart.chart_data.notes[i]
 								var length: float = note[2]
 								var note_type: int = note[3]
 								
@@ -305,14 +305,14 @@ func _process(delta: float) -> void:
 							if placing_note:
 								var cursor_time = grid_position_to_time(snapped_position, true)
 								for i in selected_notes:
-									var note: Array = chart.get_notes_data()[i]
+									var note: Array = ChartManager.chart.get_notes_data()[i]
 									
 									var time: float = note[0]
 									var lane: int = note[1]
 									var note_type: int = note[3]
 									
 									var distance = snappedf(clamp(cursor_time - time, 0.0, 16.0) / $Conductor.seconds_per_beat, 1.0 / chart_snap)
-									chart.chart_data.notes[i] = [time, lane, distance, note_type]
+									ChartManager.chart.chart_data.notes[i] = [time, lane, distance, note_type]
 									
 									changed_length = (distance > 0)
 									if changed_length:
@@ -384,8 +384,8 @@ func _process(delta: float) -> void:
 			var lane_a: int = int(pos_1.x)
 			var lane_b: int = int(pos_2.x)
 			
-			var L: int = bsearch_left_range(chart.get_notes_data(), time_a)
-			var R: int = bsearch_right_range(chart.get_notes_data(), time_b)
+			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
+			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -395,7 +395,7 @@ func _process(delta: float) -> void:
 			
 			var _i: int = 0
 			for i in range(selected_notes.size()):
-				var lane: int = int(chart.get_notes_data()[selected_notes[_i]][1])
+				var lane: int = int(ChartManager.chart.get_notes_data()[selected_notes[_i]][1])
 				if !(lane >= lane_a and lane <= lane_b):
 					selected_notes.remove_at(_i)
 					_i -= 1
@@ -434,7 +434,7 @@ func _process(delta: float) -> void:
 			if selected_notes.size() > 0:
 				var temp: Array = []
 				for i in selected_notes:
-					var note = chart.get_notes_data()[i]
+					var note = ChartManager.chart.get_notes_data()[i]
 					temp.append([note[0], note[1], note[2], note[3]])
 				var action: String = "Remove Notes"
 				undo_redo.create_action(action)
@@ -449,7 +449,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"ui_copy"):
 		clipboard = []
 		for note in selected_notes:
-			clipboard.append(chart.get_notes_data()[note])
+			clipboard.append(ChartManager.chart.get_notes_data()[note])
 		print("copied notes: ", clipboard)
 	
 	if Input.is_action_just_pressed(&"ui_paste"):
@@ -472,7 +472,7 @@ func _draw() -> void:
 		rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 		draw_rect(rect, box_color)
 	
-	if chart != null:
+	if ChartManager.chart:
 		## The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -480,11 +480,11 @@ func _draw() -> void:
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
 		
 		## Song Start Offset Marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position - chart.offset + start_offset) - 2), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		# The box at the start of the marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - chart.offset + start_offset) - 4), \
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 4), \
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
 		
@@ -543,9 +543,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	ChartManager.song = song
 	if difficulty == null:
 		difficulty = ChartManager.song.difficulties.keys()[0]
-	current_difficulty = difficulty
 	var difficulty_data: Dictionary = song.difficulties.get(difficulty)
-	chart = load(difficulty_data.chart)
+	ChartManager.chart = load(difficulty_data.chart)
 	scene = song.scene if !difficulty_data.has("scene") else difficulty_data.scene
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
@@ -555,26 +554,20 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	%"Song Slider".max_value = %Instrumental.stream.get_length()
 	%"Song Slider".value = 0.0
-	current_tempo = chart.get_tempo_at(0.0)
-	var meter = chart.get_meter_at(0.0)
+	current_tempo = ChartManager.chart.get_tempo_at(0.0)
+	var meter = ChartManager.chart.get_meter_at(0.0)
 	current_beats_per_measure = meter[0]
 	current_steps_per_measure = meter[1]
-	$Conductor.offset = chart.offset
+	$Conductor.offset = ChartManager.chart.offset
 	
 	%"Difficulty Button".get_popup().clear()
 	for d in ChartManager.song.difficulties.keys():
 		%"Difficulty Button".get_popup().add_item(d)
 	
 	%"Difficulty Button".select(ChartManager.song.difficulties.keys().find(difficulty))
-	
-	%"Metadata Window".song_name = ChartManager.song.title
-	%"Metadata Window".song_artist = ChartManager.song.artist
-	%"Metadata Window".song_icon = ChartManager.song.icons.resource_path
-	%"Metadata Window".song_scene = ChartManager.song.scene
-	%"Metadata Window".starting_tempo = ChartManager.song.tempo
 	%"Metadata Window".update_stats()
 	
-	load_chart(chart)
+	load_chart(ChartManager.chart)
 	update_grid()
 	load_waveforms()
 	can_chart = true
@@ -597,6 +590,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	current_visible_notes_R = -1
 	get_tree().call_group(&"notes", &"queue_free")
 	note_nodes = []
+	
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
 	var action: String = "Loaded Chart"
@@ -604,14 +598,16 @@ func load_chart(file: Chart, ghost: bool = false):
 	undo_redo.add_do_property(self, "chart", file)
 	undo_redo.add_do_reference(%"History Window".add_action(action))
 	undo_redo.commit_action()
+
+	%"Metadata Window".update_stats()
 	can_chart = true
 	load_section(song_position)
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
 	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
-	var L: int = bsearch_left_range(chart.get_notes_data(), time - _range)
-	var R: int = bsearch_right_range(chart.get_notes_data(), time + _range)
+	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
+	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes[0], L)
@@ -623,8 +619,8 @@ func load_section(time: float):
 			var i: int = 0
 			for _i in range(note_nodes.size()):
 				var note = note_nodes[i]
-				if (note.time < chart.get_notes_data()[L][0]
-				or note.time > chart.get_notes_data()[R][0]):
+				if (note.time < ChartManager.chart.get_notes_data()[L][0]
+				or note.time > ChartManager.chart.get_notes_data()[R][0]):
 					note.queue_free()
 					note_nodes.remove_at(i)
 					i -= 1
@@ -635,7 +631,7 @@ func load_section(time: float):
 			if i >= current_visible_notes_L and i <= current_visible_notes_R:
 				continue
 			
-			var note = chart.get_notes_data()[i]
+			var note = ChartManager.chart.get_notes_data()[i]
 			place_note(note[0], note[1], note[2], note[3], false, false, true)
 		
 		current_visible_notes_L = L
@@ -703,7 +699,7 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter = chart.get_meter_at(time)
+	var meter = ChartManager.chart.get_meter_at(time)
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -723,10 +719,10 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(chart.get_notes_data(), time)
+		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
 		if L != -1:
 			note_nodes.insert(L - current_visible_notes_L, note_instance)
-			chart.chart_data["notes"].insert(L, [time, lane, length, type])
+			ChartManager.chart.chart_data["notes"].insert(L, [time, lane, length, type])
 			
 			if !moved:
 				selected_notes = [L]
@@ -737,8 +733,8 @@ func place_note(time: float, lane: int, length: float, type: int, placed: bool =
 			output = L
 		else:
 			note_nodes.append(note_instance)
-			chart.chart_data["notes"].append([time, lane, length, type])
-			selected_notes = [chart.get_notes_data().size() - 1]
+			ChartManager.chart.chart_data["notes"].append([time, lane, length, type])
+			selected_notes = [ChartManager.chart.get_notes_data().size() - 1]
 			selected_note_nodes = [note_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
@@ -797,7 +793,7 @@ func remove_note(lane: int, time: float = -1):
 			#if note > i:
 				#selected_notes[j] -= 1
 	
-	chart.chart_data["notes"].remove_at(i)
+	ChartManager.chart.chart_data["notes"].remove_at(i)
 
 func remove_notes(notes: Array):
 	var i: int = 0
@@ -807,8 +803,8 @@ func remove_notes(notes: Array):
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(chart.get_notes_data(), time - 0.1)
-	var R: int = bsearch_right_range(chart.get_notes_data(), time + 0.1)
+	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - 0.1)
+	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + 0.1)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -817,7 +813,7 @@ func find_note(lane: int, time: float) -> int:
 	if (L == R + 1):
 		L -= 1
 	for i in range(L, R + 1):
-		var note: Array = chart.get_notes_data()[i]
+		var note: Array = ChartManager.chart.get_notes_data()[i]
 		if (note[1] == lane):
 			if is_equal_approx(note[0], time):
 				return i
@@ -834,31 +830,23 @@ func play_audios(time: float):
 	vocal_tracks = []
 	for stream in ChartManager.song.vocals:
 		vocal_tracks.append(playback.play_stream(load(stream),
-		time - chart.offset + start_offset, 0.0, song_speed))
+		time - ChartManager.chart.offset + start_offset, 0.0, song_speed))
 	
 	time = clamp(time, 0, %Instrumental.stream.get_length() - 0.1)
-	%Instrumental.play(time - chart.offset + start_offset)
+	%Instrumental.play(time - ChartManager.chart.offset + start_offset)
 	%Instrumental.pitch_scale = song_speed
-	song_position = time - chart.offset + start_offset
+	song_position = time - ChartManager.chart.offset + start_offset
 	
-	current_note = bsearch_left_range(chart.get_notes_data(), song_position)
+	current_note = bsearch_left_range(ChartManager.chart.get_notes_data(), song_position)
 	
-	if chart.get_notes_data().size() > 0:
-		if song_position > chart.get_notes_data()[chart.get_notes_data().size() - 1][0]:
-			current_note = chart.get_notes_data().size() - 1
-
-## Converts a float of seconds into a time format of MM:SS.mmm
-func float_to_time(time: float) -> String:
-	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
-	var seconds: int = floor(fmod(time, 60.0))
-	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
-	
-	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
+	if ChartManager.chart.get_notes_data().size() > 0:
+		if song_position > ChartManager.chart.get_notes_data()[ChartManager.chart.get_notes_data().size() - 1][0]:
+			current_note = ChartManager.chart.get_notes_data().size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = chart.get_tempos_data()
-	var _offset: float = -chart.offset
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var _offset: float = -ChartManager.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
@@ -879,7 +867,7 @@ func time_to_y_position(time: float) -> float:
 			R = time
 		
 		tempo = tempo_data.get(L)
-		meter = chart.get_meter_at(L)
+		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
 		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
@@ -891,7 +879,7 @@ func time_to_y_position(time: float) -> float:
 
 
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	var tempo_data: Dictionary = chart.get_tempos_data()
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var i: int = 0
 	var meter: Array = []
 	var L: float = tempo_data.keys()[0]
@@ -900,7 +888,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var yR: float = 0.0
 	var yC: float = yL
 	var seconds_per_beat: float = 0.0
-	var output: float = chart.offset
+	var output: float = ChartManager.chart.offset
 	
 	while yL <= yC:
 		if i + 1 >= tempo_data.keys().size():
@@ -908,7 +896,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		else:
 			R = tempo_data.keys()[i + 1]
 		
-		meter = chart.get_meter_at(L)
+		meter = ChartManager.chart.get_meter_at(L)
 		var tempo = tempo_data.get(L)
 		seconds_per_beat = 60.0 / tempo
 		yL = time_to_y_position(L)
@@ -1059,7 +1047,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	else:
 		%"Conductor Off Beat".play(0.55)
 	
-	if chart:
+	if ChartManager.chart:
 		load_section(song_position)
 	
 	%Beat.text = str("Beat: ", current_beat + 1)
@@ -1126,10 +1114,30 @@ func file_button_item_pressed(id):
 
 ## Edit button item pressed
 func edit_button_item_pressed(id):
-	if id == 0:
-		undo()
-	elif id == 1:
-		redo()
+	match id:
+		0:
+			undo()
+		
+		1:
+			redo()
+		
+		3:
+			if selected_notes.size() > 0:
+				var temp: Array = []
+				for i in selected_notes:
+					var note = ChartManager.chart.get_notes_data()[i]
+					temp.append([note[0], note[1], note[2], note[3]])
+				var action: String = "Remove Notes"
+				undo_redo.create_action(action)
+				undo_redo.add_do_method(self.remove_notes.bind(selected_notes))
+				undo_redo.add_do_reference(%"History Window".add_action(action))
+				undo_redo.add_undo_method(self.place_notes.bind(temp))
+				undo_redo.commit_action()
+				selected_notes = []
+				%"Note Remove".play()
+		
+		_:
+			print("id: ", id)
 
 ## Window button item pressed
 func window_button_item_pressed(id):
@@ -1140,6 +1148,16 @@ func window_button_item_pressed(id):
 		1:
 			%"Metadata Window".popup()
 			%"Window Button".get_popup().set_item_checked(id, true)
+
+## Edit button item pressed
+func test_button_item_pressed(id):
+	match id:
+		1:
+			can_chart = false
+			Global.change_scene_to("res://scenes/game/chart_tester.tscn")
+		
+		_:
+			print("id: ", id)
 
 func disable_charting():
 	can_chart = false
@@ -1167,8 +1185,8 @@ func redo():
 
 func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-	ResourceSaver.save(chart, chart.resource_path)
-	backup_chart = chart
+	ResourceSaver.save(ChartManager.chart, ChartManager.chart.resource_path)
+	backup_chart = ChartManager.chart
 
 func updated_strums():
 	can_chart = true
@@ -1182,13 +1200,13 @@ func load_waveforms():
 		for id in ChartManager.strum_data.size():
 			var track: int = ChartManager.strum_data[id]["track"]
 			if track < ChartManager.song.vocals.size():
-				for i in chart.get_tempos_data().size():
-					var L: float = chart.get_tempos_data().keys()[i]
+				for i in ChartManager.chart.get_tempos_data().size():
+					var L: float = ChartManager.chart.get_tempos_data().keys()[i]
 					var R: float
-					if (i + 1) == chart.get_tempos_data().size():
+					if (i + 1) == ChartManager.chart.get_tempos_data().size():
 						R = %Instrumental.stream.get_length()
 					else:
-						R = chart.get_tempos_data().keys()[i + 1]
+						R = ChartManager.chart.get_tempos_data().keys()[i + 1]
 					var waveform = WaveformRenderer.new()
 					
 					var stream = ChartManager.song.vocals[track]
@@ -1210,10 +1228,11 @@ func _on_chart_snap_value_changed(value: float) -> void:
 	chart_snap = value
 
 func _on_difficulty_button_item_selected(index: int) -> void:
-	var option = %"Difficulty Button".get_popup().get_item_text(index)
-	if ChartManager.song.difficulties.keys().has(option):
-		chart = load(ChartManager.song.difficulties.get(option).get("chart"))
-		load_chart(chart)
+	var _difficulty = %"Difficulty Button".get_popup().get_item_text(index)
+	if ChartManager.song.difficulties.keys().has(_difficulty):
+		ChartManager.chart = load(ChartManager.song.difficulties.get(_difficulty).get("chart"))
+		ChartManager.difficulty = _difficulty
+		load_chart(ChartManager.chart)
 
 func _on_history_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(0, false)
@@ -1236,6 +1255,22 @@ func _on_metadata_window_updated_song_scene(path: String) -> void:
 func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
 	ChartManager.song.tempo = tempo
 
+func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
+	ChartManager.chart.scroll_speed = speed
+
+func _on_metadata_window_selected_time_change(time: float) -> void:
+	song_position = time
+	start_offset = 0
+	_on_play_button_toggled(false)
+
+func _on_metadata_window_add_time_change() -> void:
+	ChartManager.chart.chart_data["tempos"][song_position] = $Conductor.tempo
+	ChartManager.chart.chart_data["meters"][song_position] = [
+		$Conductor.beats_per_measure, $Conductor.steps_per_measure
+	]
+	
+	%"Metadata Window".update_stats()
+
 func update_note(note):
 	if note:
 		hovered_note = find_note(note.lane, note.time)
@@ -1243,7 +1278,7 @@ func update_note(note):
 		hovered_note = -1
 
 func _on_export_external_popup_file_selected(path: String) -> void:
-	ResourceSaver.save(chart, path)
+	ResourceSaver.save(ChartManager.chart, path)
 	%"Export External Popup".hide()
 
 func _on_gui_focus_changed(node):
@@ -1253,6 +1288,6 @@ func _on_gui_focus_changed(node):
 func set_chart_from_chart(_chart: Chart):
 	if !_chart:
 		return
-	chart.chart_data = backup_chart.chart_data
-	chart.scroll_speed = backup_chart.scroll_speed
-	chart.offset = backup_chart.offset
+	ChartManager.chart.chart_data = backup_chart.chart_data
+	ChartManager.chart.scroll_speed = backup_chart.scroll_speed
+	ChartManager.chart.offset = backup_chart.offset

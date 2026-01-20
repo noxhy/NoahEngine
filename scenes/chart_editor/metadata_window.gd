@@ -5,19 +5,36 @@ signal updated_song_artist(text: String)
 signal updated_icon_texture(path: String)
 signal updated_starting_tempo(tempo: float)
 signal updated_song_scene(path: String)
+signal updated_scroll_speed(speed: float)
+signal selected_time_change(time: float)
+signal add_time_change
 
-var song_name: String
-var song_artist: String
-var song_icon: String
-var starting_tempo: float
-var song_scene: String
+var scroll_speed: float
+var has_updated_scroll_speed: bool = false
+var current_time_change: int = -1
 
 func update_stats():
-	%"Song Name".text = song_name
-	%"Song Artist".text = song_artist
-	_on_icon_file_dailog_file_selected(song_icon)
-	%Tempo.value = starting_tempo
-	_on_scene_file_dailog_file_selected(song_scene)
+	%"Song Name".text = ChartManager.song.title
+	%"Song Artist".text = ChartManager.song.artist
+	_on_icon_file_dailog_file_selected(ChartManager.song.icons.resource_path)
+	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
+	
+	%Difficulty.clear()
+	%Difficulty.add_item(ChartManager.difficulty)
+	%Difficulty.select(0)
+	if has_updated_scroll_speed:
+		%"Scroll Speed".value = ChartManager.chart.scroll_speed
+	else:
+		%"Scroll Speed".set_value_no_signal(ChartManager.chart.scroll_speed)
+		%"Scroll Speed Label".text = str("Scroll Speed: ", ChartManager.chart.scroll_speed, "x")
+	
+	%"Time Changes".clear()
+	var chart: Chart = ChartManager.chart
+	var i: int = 0
+	for time in chart.get_tempos_data():
+		%"Time Changes".add_item(format_time_change(i))
+		i += 1
+	_on_time_changes_item_selected(0)
 
 func _on_icon_file_dailog_file_selected(path: String) -> void:
 	path = ResourceUID.path_to_uid(path)
@@ -37,7 +54,7 @@ func _on_icon_file_dailog_file_selected(path: String) -> void:
 	updated_icon_texture.emit(path)
 
 func _on_icon_button_pressed() -> void:
-	$"VBoxContainer/Icons/Icon Button/Icon FileDailog".popup()
+	%"Icon FileDailog".popup()
 
 func _on_scene_file_dailog_file_selected(path: String) -> void:
 	path = ResourceUID.path_to_uid(path)
@@ -67,3 +84,59 @@ func _on_song_scene_button_pressed() -> void:
 
 func file_dailog_gui_focus_changed(node: Control) -> void:
 	emit_signal(&"gui_focus_changed", node)
+
+func _on_scroll_speed_value_changed(value: float) -> void:
+	%"Scroll Speed Label".text = str("Scroll Speed: ", value, "x")
+	emit_signal(&"updated_scroll_speed", value)
+
+func _on_time_changes_item_selected(index: int) -> void:
+	%"Remove Time Change".disabled = (index == 0)
+	current_time_change = index
+	
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var time: float = tempo_data.keys()[index]
+	%Tempo.value = tempo_data.get(time, 60)
+	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
+	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
+	%Numerator.value = meter[0]
+	%Denominator.value = meter[1] / meter[0]
+	emit_signal(&"selected_time_change", time)
+
+func _on_add_time_change_pressed() -> void:
+	emit_signal(&"add_time_change")
+
+func _on_remove_time_change_pressed() -> void:
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var time: float = tempo_data.keys()[current_time_change]
+	
+	ChartManager.chart.chart_data["tempos"].erase(time)
+	%"Time Changes".remove_item(current_time_change)
+	%"Time Changes".select(current_time_change - 1)
+
+func _on_tempo_value_changed(value: float) -> void:
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var time: float = tempo_data.keys()[current_time_change]
+	
+	ChartManager.chart.chart_data["tempos"][time] = value
+	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+func format_time_change(index: int) -> String:
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
+	var time: float = tempo_data.keys()[index]
+	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
+	return str(Global.float_to_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1] / meter[0])
+
+func _on_numerator_value_changed(value: float) -> void:
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var time: float = tempo_data.keys()[current_time_change]
+	
+	ChartManager.chart.chart_data["meters"][time] = [int(value), int(%Denominator.value) * int(value)]
+	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+func _on_denominator_value_changed(value: float) -> void:
+	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var time: float = tempo_data.keys()[current_time_change]
+	
+	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(%Numerator.value) * int(value)]
+	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))

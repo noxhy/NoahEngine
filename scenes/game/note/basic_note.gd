@@ -4,7 +4,7 @@ extends Note
 class_name BasicNote
 
 @onready var tail = $Tail
-@onready var end = $Tail/End
+@onready var end = null
 
 var start_length: float = 0.0
 
@@ -16,6 +16,7 @@ var on_screen = false
 
 # Applying Note Skin
 func _ready(): 
+	end = $Tail/End
 	$Note.sprite_frames = note_skin.notes_texture
 	if note_skin.animation_names != null: 
 		if note_skin.animation_names.keys().size() > 0: 
