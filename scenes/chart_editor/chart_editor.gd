@@ -1202,6 +1202,13 @@ func edit_button_item_pressed(id):
 			selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
 			%"Note Place".play()
 		
+		11:
+			if selected_notes.size() > 0:
+				%"Note Place".play()
+			
+			selected_notes = []
+			selected_note_nodes = []
+		
 		_:
 			print("id: ", id)
 
