@@ -1151,13 +1151,17 @@ func edit_button_item_pressed(id):
 				selected_notes = []
 				%"Note Remove".play()
 		
+		10:
+			selected_notes = range(current_visible_notes_L, current_visible_notes_R + 1)
+			selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
+			%"Note Place".play()
+		
 		_:
 			print("id: ", id)
 
 ## View button item pressed
 func view_button_item_pressed(id):
 	match id:
-		
 		1:
 			can_chart = false
 			%"Note Skin Window".popup()

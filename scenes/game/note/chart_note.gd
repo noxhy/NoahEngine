@@ -25,7 +25,7 @@ func _ready():
 	
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
-	$Note.scale *= 0.9
+	#$Note.scale *= 0.9
 	%"Special Note Label".scale = $Note.scale
 	tail.scale = $Note.scale
 	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
