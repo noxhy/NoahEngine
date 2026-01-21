@@ -517,7 +517,6 @@ func _draw() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
 
 
-
 func update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
 	%Grid.rows = current_steps_per_measure
@@ -1150,6 +1149,35 @@ func edit_button_item_pressed(id):
 				undo_redo.commit_action()
 				selected_notes = []
 				%"Note Remove".play()
+		
+		8:
+			if selected_notes.size() > 1:
+				var _min_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
+				var _max_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
+				var temp: Array = []
+				for i in selected_notes:
+					var note = ChartManager.chart.get_notes_data()[i]
+					_min_lane = min(_min_lane, note[1])
+					_max_lane = max(_max_lane, note[1])
+					temp.append(note)
+				
+				remove_notes(selected_notes)
+				
+				var length: int = _max_lane - _min_lane
+				
+				selected_note_nodes = []
+				for note in temp:
+					var lane: int = -(note[1] - _min_lane)
+					lane += length
+					lane += _min_lane
+					
+					print("flipped: ", note[1], " to: ", lane)
+					place_note(note[0], lane, note[2], note[3], true, true)
+				
+				for i in selected_notes:
+					selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+				
+				%"Note Place".play()
 		
 		10:
 			selected_notes = range(current_visible_notes_L, current_visible_notes_R + 1)
