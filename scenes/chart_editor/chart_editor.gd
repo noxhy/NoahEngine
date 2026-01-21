@@ -546,7 +546,7 @@ func update_grid():
 		strum_label_instance.connect(&"opened", self.disable_charting)
 		strum_label_instance.connect(&"closed", self.close_popup)
 		strum_label_instance.connect(&"updated", self.updated_strums)
-		strum_label_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
+		#strum_label_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 	
 	%"Strum Labels".size.y = 32
 
@@ -795,7 +795,7 @@ func remove_note(lane: int, time: float = -1):
 	if i <= -1:
 		return
 	
-	if range(note_nodes.size()).has(i - current_visible_notes_L):
+	if (i - current_visible_notes_L) < note_nodes.size() and (i - current_visible_notes_L) >= 0:
 		note_nodes[i - current_visible_notes_L].queue_free()
 		note_nodes.remove_at(i - current_visible_notes_L)
 	
@@ -1149,6 +1149,24 @@ func edit_button_item_pressed(id):
 				undo_redo.commit_action()
 				selected_notes = []
 				%"Note Remove".play()
+		
+		6:
+			if note_nodes.size() > 1:
+				var i: int = 0
+				var deleted: bool = false
+				selected_notes = []
+				selected_note_nodes = []
+				for index in range(current_visible_notes_L, current_visible_notes_R):
+					var note_a = ChartManager.chart.get_notes_data()[index - i]
+					var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
+					
+					if (note_a[0] == note_b[0] and note_a[1] == note_b[1]):
+						deleted = true
+						remove_note(index - i)
+						i += 1
+					
+					if deleted:
+						%"Note Remove".play()
 		
 		8:
 			if selected_notes.size() > 1:
