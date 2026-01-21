@@ -439,6 +439,15 @@ popup/item_1/text = "Change Note Skin"
 popup/item_1/id = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="Note Skin Window" type="FileDialog" parent="UI/Upper UI/View Button"]
+unique_name_in_owner = true
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+file_mode = 0
+root_subfolder = "res://assets/sprites/playstate/"
+filters = PackedStringArray("*.tres", "*.res")
+
 [node name="Audio Button" type="MenuButton" parent="UI/Upper UI"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
@@ -535,6 +544,10 @@ metadata/_edit_lock_ = true
 [connection signal="close_requested" from="UI/Upper UI/File Button/Export External Popup" to="." method="close_popup"]
 [connection signal="file_selected" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_export_external_popup_file_selected"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/File Button/Export External Popup" to="." method="_on_gui_focus_changed"]
+[connection signal="canceled" from="UI/Upper UI/View Button/Note Skin Window" to="." method="close_popup"]
+[connection signal="close_requested" from="UI/Upper UI/View Button/Note Skin Window" to="." method="close_popup"]
+[connection signal="file_selected" from="UI/Upper UI/View Button/Note Skin Window" to="." method="_on_note_skin_window_file_selected"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/View Button/Note Skin Window" to="." method="_on_gui_focus_changed"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/History Window" to="." method="_on_gui_focus_changed"]
 [connection signal="add_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_add_time_change"]

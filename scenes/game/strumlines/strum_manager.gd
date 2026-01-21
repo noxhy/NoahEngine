@@ -31,6 +31,11 @@ func _ready():
 	set_auto_play(auto_play)
 	set_can_splash(can_splash)
 	set_enemy_slot(enemy_slot)
+	
+	for strum in strums:
+		get_node(strum).connect(&"note_hit", self._on_note_hit)
+		get_node(strum).connect(&"note_holding", self._on_note_hit)
+		get_node(strum).connect(&"note_miss", self._on_note_hit)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

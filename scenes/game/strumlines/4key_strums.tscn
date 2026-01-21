@@ -33,9 +33,6 @@ input = "note_right"
 strum_name = "right"
 can_splash = true
 
-[connection signal="note_hit" from="Left" to="." method="_on_note_hit"]
-[connection signal="note_holding" from="Left" to="." method="_on_note_holding"]
-[connection signal="note_miss" from="Left" to="." method="_on_note_miss"]
 [connection signal="note_hit" from="Down" to="." method="_on_note_hit"]
 [connection signal="note_holding" from="Down" to="." method="_on_note_holding"]
 [connection signal="note_miss" from="Down" to="." method="_on_note_miss"]

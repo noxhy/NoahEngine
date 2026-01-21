@@ -90,21 +90,23 @@ func _ready() -> void:
 	%"Chart Snap".value = chart_snap
 	
 	## Initializing Popup Signals
-	%"File Button".get_popup().connect("id_pressed", self.file_button_item_pressed)
+	%"File Button".get_popup().connect(&"id_pressed", self.file_button_item_pressed)
 	%"File Button".get_popup().set_item_checked(
 		%"File Button".get_popup().get_item_index(3), SettingsManager.get_value("chart", "auto_save"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
-	%"Edit Button".get_popup().connect("id_pressed", self.edit_button_item_pressed)
+	%"Edit Button".get_popup().connect(&"id_pressed", self.edit_button_item_pressed)
 	%"Edit Button".get_popup().set_hide_on_checkable_item_selection(false)
 	%"Edit Button".get_popup().set_item_tooltip(
 		%"Edit Button".get_popup().get_item_index(0), "Ctrl+Z")
 	%"Edit Button".get_popup().set_item_tooltip(
 		%"Edit Button".get_popup().get_item_index(1), "Ctrl+Y")
 	
-	%"Test Button".get_popup().connect("id_pressed", self.test_button_item_pressed)
+	%"View Button".get_popup().connect(&"id_pressed", self.view_button_item_pressed)
 	
-	%"Window Button".get_popup().connect("id_pressed", self.window_button_item_pressed)
+	%"Test Button".get_popup().connect(&"id_pressed", self.test_button_item_pressed)
+	
+	%"Window Button".get_popup().connect(&"id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -1152,6 +1154,18 @@ func edit_button_item_pressed(id):
 		_:
 			print("id: ", id)
 
+## View button item pressed
+func view_button_item_pressed(id):
+	match id:
+		
+		1:
+			can_chart = false
+			%"Note Skin Window".popup()
+			%"Open Window".play()
+		
+		_:
+			print("id: ", id)
+
 ## Window button item pressed
 func window_button_item_pressed(id):
 	match id:
@@ -1186,6 +1200,7 @@ func test_button_item_pressed(id):
 
 func disable_charting():
 	can_chart = false
+
 func close_popup():
 	can_chart = true
 	%"Close Window".play()
@@ -1317,3 +1332,18 @@ func set_chart_from_chart(_chart: Chart):
 	ChartManager.chart.chart_data = backup_chart.chart_data
 	ChartManager.chart.scroll_speed = backup_chart.scroll_speed
 	ChartManager.chart.offset = backup_chart.offset
+
+
+func _on_note_skin_window_file_selected(path: String) -> void:
+	if !FileAccess.file_exists(path):
+		printerr("File does not exist is (%s) correct?" % path)
+		return
+	
+	var skin = load(path)
+	
+	if skin is not NoteSkin:
+		printerr("File is not a noteskin.")
+		return
+	
+	note_skin = skin
+	%"Open Window".play()
