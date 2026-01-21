@@ -52,7 +52,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	time_difference = (time - GameManager.offset) - GameManager.song_position
+	time_difference = time - GameManager.song_position
 	
 	if length > 0:
 		var line_length = length * scroll_speed * grid_size.y

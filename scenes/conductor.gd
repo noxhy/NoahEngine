@@ -6,6 +6,8 @@ class_name Conductor
 signal new_beat(beat: int, measure_relative: int)
 signal new_step(step: int, measure_relative: int)
 signal new_tempo(_tempo: float)
+signal new_beats_per_measure(_beats_per_measure: int)
+signal new_steps_per_measure(_steps_per_measure: int)
 
 ## The time where the conductor will [b]start[/b].
 @export_range(-1000, 1000, 1) var offset = 0
@@ -27,8 +29,24 @@ signal new_tempo(_tempo: float)
 ## Key:
 ## 4/16 = (♬♬ ♬♬ ♬♬ ♬♬) - Default
 ## 4/12 = (♪♪♪ ♪♪♪ ♪♪♪ ♪♪♪) - Triplets
-var beats_per_measure: int = 4  	# The amount of beats in a measure (Default: 4)
-var steps_per_measure: int = 4 * beats_per_measure  	# The amount of notes in a measure (Default: 16)
+# The amount of beats in a measure (Default: 4)
+var beats_per_measure: int = 4:
+	set(v):
+		if beats_per_measure != v:
+			emit_signal(&"new_beats_per_measure", v)
+		beats_per_measure = v
+	get():
+		return beats_per_measure
+
+# The amount of notes in a measure (Default: 16)
+var steps_per_measure: int = 4 * beats_per_measure:
+	set(v):
+		if steps_per_measure != v:
+			emit_signal(&"new_steps_per_measure", v)
+		steps_per_measure = v
+		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
+	get():
+		return steps_per_measure
 
 var seconds_per_beat: float = 1.0
 var seconds_per_step: float = 0.25

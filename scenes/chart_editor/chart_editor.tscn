@@ -4,23 +4,23 @@
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_dontb"]
 [ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://scenes/chart_editor/grid.tscn" id="2_i6pv1"]
 [ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://assets/sounds/conductor/conductor sfx.mp3" id="3_myxvx"]
-[ext_resource type="AudioStream" uid="uid://bodc4sfit172e" path="res://assets/sounds/chart editor/sound-hit.wav" id="4_1k01c"]
+[ext_resource type="AudioStream" uid="uid://bodc4sfit172e" path="res://assets/sounds/chart_editor/sound-hit.wav" id="4_1k01c"]
 [ext_resource type="Texture2D" uid="uid://byl3boevtc02p" path="res://assets/sprites/menus/chart editor/play_button.png" id="4_f11ek"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="4_g6hlb"]
-[ext_resource type="AudioStream" uid="uid://s88wsjen8kj7" path="res://assets/sounds/chart editor/keyboard1.ogg" id="5_ewdb4"]
+[ext_resource type="AudioStream" uid="uid://s88wsjen8kj7" path="res://assets/sounds/chart_editor/keyboard1.ogg" id="5_ewdb4"]
 [ext_resource type="Texture2D" uid="uid://dpb5afc48uqvb" path="res://assets/sprites/menus/chart editor/restart_button.png" id="5_ruic6"]
-[ext_resource type="AudioStream" uid="uid://cdoo62fj7frd" path="res://assets/sounds/chart editor/keyboard2.ogg" id="6_0ge7q"]
+[ext_resource type="AudioStream" uid="uid://cdoo62fj7frd" path="res://assets/sounds/chart_editor/keyboard2.ogg" id="6_0ge7q"]
 [ext_resource type="Texture2D" uid="uid://c7ka0o15iv6a3" path="res://assets/sprites/menus/chart editor/rewind_button.png" id="6_henw2"]
 [ext_resource type="Texture2D" uid="uid://hf58qhc23n5c" path="res://assets/sprites/menus/chart editor/fast_forward_button.png" id="6_u1nu8"]
-[ext_resource type="AudioStream" uid="uid://dr4m1bpeomae5" path="res://assets/sounds/chart editor/keyboard3.ogg" id="7_5qx4x"]
-[ext_resource type="AudioStream" uid="uid://rrkhugilc67r" path="res://assets/sounds/chart editor/noteErase.ogg" id="8_3odt1"]
-[ext_resource type="AudioStream" uid="uid://dq71x4q0d1q18" path="res://assets/sounds/chart editor/stretch1_UI.ogg" id="8_s4ovn"]
+[ext_resource type="AudioStream" uid="uid://dr4m1bpeomae5" path="res://assets/sounds/chart_editor/keyboard3.ogg" id="7_5qx4x"]
+[ext_resource type="AudioStream" uid="uid://rrkhugilc67r" path="res://assets/sounds/chart_editor/noteErase.ogg" id="8_3odt1"]
+[ext_resource type="AudioStream" uid="uid://dq71x4q0d1q18" path="res://assets/sounds/chart_editor/stretch1_UI.ogg" id="8_s4ovn"]
 [ext_resource type="Texture2D" uid="uid://dwtgyv6xf866j" path="res://assets/sprites/menus/chart editor/skip_button.png" id="9_jmk4o"]
-[ext_resource type="AudioStream" uid="uid://cl352to0t51ux" path="res://assets/sounds/chart editor/stretch2_UI.ogg" id="9_v13a8"]
-[ext_resource type="AudioStream" uid="uid://bittkmfqaayks" path="res://assets/sounds/chart editor/openWindow.ogg" id="11_iakv7"]
-[ext_resource type="AudioStream" uid="uid://bdbqayhnogbk5" path="res://assets/sounds/chart editor/exitWindow.ogg" id="12_qymoy"]
-[ext_resource type="AudioStream" uid="uid://bmj7ckgd3tlt1" path="res://assets/sounds/chart editor/undo.ogg" id="13_am3li"]
-[ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://assets/sounds/chart editor/noteLay.ogg" id="14_am3li"]
+[ext_resource type="AudioStream" uid="uid://cl352to0t51ux" path="res://assets/sounds/chart_editor/stretch2_UI.ogg" id="9_v13a8"]
+[ext_resource type="AudioStream" uid="uid://bittkmfqaayks" path="res://assets/sounds/chart_editor/openWindow.ogg" id="11_iakv7"]
+[ext_resource type="AudioStream" uid="uid://bdbqayhnogbk5" path="res://assets/sounds/chart_editor/exitWindow.ogg" id="12_qymoy"]
+[ext_resource type="AudioStream" uid="uid://bmj7ckgd3tlt1" path="res://assets/sounds/chart_editor/undo.ogg" id="13_am3li"]
+[ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://assets/sounds/chart_editor/noteLay.ogg" id="14_am3li"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://scenes/chart_editor/history_window.tscn" id="19_ufjr2"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://scenes/chart_editor/metadata_window.tscn" id="23_75w6f"]
@@ -408,7 +408,6 @@ popup/item_3/text = "Cut"
 popup/item_3/id = 3
 popup/item_4/text = "Copy"
 popup/item_4/id = 4
-popup/item_4/disabled = true
 popup/item_5/text = "Paste"
 popup/item_5/id = 5
 popup/item_5/disabled = true
@@ -529,7 +528,9 @@ texture = ExtResource("4_g6hlb")
 metadata/_edit_lock_ = true
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
+[connection signal="new_beats_per_measure" from="Conductor" to="." method="_on_conductor_new_beats_per_measure"]
 [connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]
+[connection signal="new_steps_per_measure" from="Conductor" to="." method="_on_conductor_new_steps_per_measure"]
 [connection signal="new_tempo" from="Conductor" to="." method="_on_conductor_new_tempo"]
 [connection signal="finished" from="Audio/Instrumental" to="." method="_on_instrumental_finished"]
 [connection signal="value_changed" from="UI/Song Slider" to="." method="_on_song_slider_value_changed"]

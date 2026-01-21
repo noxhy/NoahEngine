@@ -223,7 +223,6 @@ unique_name_in_owner = true
 layout_mode = 2
 min_value = 2.0
 max_value = 16.0
-step = 2.0
 value = 2.0
 rounded = true
 prefix = "D:"

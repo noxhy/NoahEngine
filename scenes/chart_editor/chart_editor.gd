@@ -33,9 +33,6 @@ var scene: String
 var song_position: float = 0.0
 var start_offset: float = 0.0
 var song_speed: float = 1.0
-var current_tempo: float = 60.0
-var current_beats_per_measure: int = 4
-var current_steps_per_measure: int = 16
 var note_nodes: Array = []
 var clipboard: Array = []
 var can_chart: bool = false
@@ -143,11 +140,11 @@ func _process(delta: float) -> void:
 					else:
 						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], 0)
 		else:
-			if Input.is_action_just_pressed("mouse_scroll_up"):
-				if !Input.is_action_pressed("control"):
+			if Input.is_action_just_pressed(&"mouse_scroll_up"):
+				if !Input.is_action_pressed(&"control"):
 					if can_chart:
 						song_position -= $Conductor.seconds_per_beat
-						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset + ChartManager.chart.offset
 						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
@@ -155,8 +152,8 @@ func _process(delta: float) -> void:
 					chart_snap = SNAPS[current_snap % SNAPS.size()]
 					%"Chart Snap".value = chart_snap
 			
-			if Input.is_action_just_pressed("mouse_scroll_down"):
-				if !Input.is_action_pressed("control"):
+			if Input.is_action_just_pressed(&"mouse_scroll_down"):
+				if !Input.is_action_pressed(&"control"):
 					if can_chart:
 						song_position += $Conductor.seconds_per_beat
 						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
@@ -174,11 +171,10 @@ func _process(delta: float) -> void:
 				save()
 	
 	if ChartManager.chart:
-		current_tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
-		$Conductor.tempo = current_tempo
+		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
 		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
-		current_beats_per_measure = meter[0]
-		current_steps_per_measure = meter[1]
+		$Conductor.beats_per_measure = meter[0]
+		$Conductor.steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(song_position + start_offset) - ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
@@ -200,7 +196,7 @@ func _process(delta: float) -> void:
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
-	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
+	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
@@ -451,19 +447,10 @@ func _process(delta: float) -> void:
 	
 	# Postponed
 	if Input.is_action_just_pressed(&"ui_copy"):
-		clipboard = []
-		for note in selected_notes:
-			clipboard.append(ChartManager.chart.get_notes_data()[note])
-		print("copied notes: ", clipboard)
+		copy()
 	
 	if Input.is_action_just_pressed(&"ui_paste"):
-		if clipboard.size() > 0:
-			var temp = place_notes(clipboard)
-			selected_notes = temp
-			selected_note_nodes = []
-			for i in selected_notes:
-				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-			print("pasted notes: ", clipboard)
+		paste()
 	
 	queue_redraw()
 
@@ -481,7 +468,7 @@ func _draw() -> void:
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
-		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)))
+		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
 		
 		## Song Start Offset Marker
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
@@ -494,8 +481,8 @@ func _draw() -> void:
 		
 		## Hover Box
 		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
-			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, current_steps_per_measure / chart_snap)) + grid_offset, \
-			%Grid.grid_size * %Grid.zoom * Vector2(1, current_steps_per_measure / chart_snap))
+			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)) + grid_offset, \
+			%Grid.grid_size * %Grid.zoom * Vector2(1, $Conductor.steps_per_measure / chart_snap))
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
@@ -519,7 +506,7 @@ func _draw() -> void:
 
 func update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
-	%Grid.rows = current_steps_per_measure
+	%Grid.rows = $Conductor.steps_per_measure
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
 	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * %Grid.grid_size.x * %Grid.zoom.x + 4
 	
@@ -566,10 +553,10 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	%"Song Slider".max_value = %Instrumental.stream.get_length()
 	%"Song Slider".value = 0.0
-	current_tempo = ChartManager.chart.get_tempo_at(0.0)
+	$Conductor.tempo = ChartManager.chart.get_tempo_at(0.0)
 	var meter = ChartManager.chart.get_meter_at(0.0)
-	current_beats_per_measure = meter[0]
-	current_steps_per_measure = meter[1]
+	$Conductor.beats_per_measure = meter[0]
+	$Conductor.steps_per_measure = meter[1]
 	$Conductor.offset = ChartManager.chart.offset
 	
 	%"Difficulty Button".get_popup().clear()
@@ -779,8 +766,15 @@ func sort_note(a, b):
 # Returns the indexes of the new notes
 func place_notes(notes: Array) -> Array:
 	var indices: Array = []
+	var i: int = 0
 	for note in notes:
-		indices.append(place_note(note[0], note[1], note[2], note[3], true))
+		var j: int = place_note(note[0], note[1], note[2], note[3], true)
+		if i > 0:
+			if j == indices[i - 1]:
+				j += 1
+		
+		indices.append(j)
+		i += 1
 	
 	return indices
 
@@ -1150,17 +1144,23 @@ func edit_button_item_pressed(id):
 				selected_notes = []
 				%"Note Remove".play()
 		
+		4:
+			copy()
+		
+		5:
+			paste()
+		
 		6:
-			if note_nodes.size() > 1:
+			if ChartManager.chart.get_notes_data().size() > 1:
 				var i: int = 0
 				var deleted: bool = false
 				selected_notes = []
 				selected_note_nodes = []
-				for index in range(current_visible_notes_L, current_visible_notes_R):
+				for index in range(ChartManager.chart.get_notes_data().size() - 1):
 					var note_a = ChartManager.chart.get_notes_data()[index - i]
 					var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
 					
-					if (note_a[0] == note_b[0] and note_a[1] == note_b[1]):
+					if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
 						deleted = true
 						remove_note(index - i)
 						i += 1
@@ -1189,7 +1189,6 @@ func edit_button_item_pressed(id):
 					lane += length
 					lane += _min_lane
 					
-					print("flipped: ", note[1], " to: ", lane)
 					place_note(note[0], lane, note[2], note[3], true, true)
 				
 				for i in selected_notes:
@@ -1237,12 +1236,15 @@ func window_button_item_pressed(id):
 func test_button_item_pressed(id):
 	match id:
 		0:
-			GameManager.current_song = ChartManager.song
-			GameManager.difficulty = ChartManager.difficulty
-			GameManager.freeplay = true
-			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
-			Global.change_scene_to(scene)
-			self.process_mode = Node.PROCESS_MODE_DISABLED
+			if FileAccess.file_exists(scene):
+				GameManager.current_song = ChartManager.song
+				GameManager.difficulty = ChartManager.difficulty
+				GameManager.freeplay = true
+				GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
+				Global.change_scene_to(scene)
+				self.process_mode = Node.PROCESS_MODE_DISABLED
+			else:
+				printerr("(Chart Editor) Scene does not exist")
 		
 		1:
 			GameManager.current_song = ChartManager.song
@@ -1392,6 +1394,7 @@ func set_chart_from_chart(_chart: Chart):
 
 
 func _on_note_skin_window_file_selected(path: String) -> void:
+	can_chart = true
 	if !FileAccess.file_exists(path):
 		printerr("File does not exist is (%s) correct?" % path)
 		return
@@ -1404,3 +1407,28 @@ func _on_note_skin_window_file_selected(path: String) -> void:
 	
 	note_skin = skin
 	%"Open Window".play()
+
+func copy():
+	clipboard = []
+	for note in selected_notes:
+		clipboard.append(ChartManager.chart.get_notes_data()[note])
+	%"Note Place".play()
+
+func paste():
+	if clipboard.size() == 0:
+		return
+	
+	var temp = place_notes(clipboard)
+	selected_notes = temp
+	selected_note_nodes = []
+	for i in selected_notes:
+		selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+	%"Note Place".play()
+
+
+func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
+	load_dividers()
+
+
+func _on_conductor_new_steps_per_measure(_steps_per_measure: int) -> void:
+	load_dividers()
