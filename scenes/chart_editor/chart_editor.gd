@@ -54,7 +54,7 @@ var min_lane: int = 0
 var max_lane: int = 0
 var moved_time_distance: float
 var moved_lane_distance: int
-var hovered_note: int = 0
+var hovered_note: int = -1
 var current_focus_owner = null
 var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
@@ -495,7 +495,7 @@ func _draw() -> void:
 					rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
 					draw_rect(rect, selected_color)
 	
-	if hovered_note:
+	if hovered_note != -1 and ChartManager.chart:
 		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
 		if int(note_type) != 0 or str(note_type) != "0":
 			draw_string_outline(default_font, get_global_mouse_position(), str("Type: ", note_type),
@@ -604,6 +604,9 @@ func load_chart(file: Chart, ghost: bool = false):
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
+	if ChartManager.chart.get_notes_data().size() == 0:
+		return
+	
 	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
 	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
@@ -631,7 +634,7 @@ func load_section(time: float):
 				continue
 			
 			var note = ChartManager.chart.get_notes_data()[i]
-			place_note(note[0], note[1], note[2], note[3], false, false, true)
+			place_note(note[0], note[1], note[2], note[3], false, false, true, i - L)
 		
 		current_visible_notes_L = L
 		current_visible_notes_R = R
@@ -693,7 +696,8 @@ func new_file(path: String, song: Song):
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
-func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false, moved: bool = false, sorted: bool = false) -> int:
+func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false,moved: bool = false,
+sorted: bool = false, sort_index: int = -1) -> int:
 	var directions = ["left", "down", "up", "right"]
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
@@ -720,8 +724,8 @@ func place_note(time: float, lane: int, length: float, type: Variant, placed: bo
 	if placed:
 		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
 		if L != -1:
-			note_nodes.insert(L - current_visible_notes_L, note_instance)
 			ChartManager.chart.chart_data["notes"].insert(L, [time, lane, length, type])
+			note_nodes.insert(L - current_visible_notes_L, note_instance)
 			
 			if !moved:
 				selected_notes = [L]
@@ -740,19 +744,18 @@ func place_note(time: float, lane: int, length: float, type: Variant, placed: bo
 			output = note_nodes.size()
 	else:
 		if sorted:
-			var L: int = bsearch_left_range_note(note_nodes, time)
-			if L == -1:
+			var L: int = sort_index
+			
+			if note_nodes.size() == 0:
 				note_nodes.append(note_instance)
-				output = note_nodes.size()
+			elif L < 0:
+				note_nodes.insert(0, note_instance)
+			elif L >= note_nodes.size():
+				note_nodes.append(note_instance)
 			else:
 				note_nodes.insert(L, note_instance)
-				output = L
-			
-			# This is just here to see if the insertion sort worked
-			# note_nodes.sort_custom(self.sort_note)
 		else:
 			note_nodes.append(note_instance)
-			output = note_nodes.size()
 	
 	$"Notes Layer".add_child(note_instance)
 	note_instance.add_to_group(&"notes")
@@ -818,6 +821,7 @@ func find_note(lane: int, time: float) -> int:
 	# Just so I don't have to make a new return case because I'm lazy
 	if (L == R + 1):
 		L -= 1
+	
 	for i in range(L, R + 1):
 		var note: Array = ChartManager.chart.get_notes_data()[i]
 		if (note[1] == lane):

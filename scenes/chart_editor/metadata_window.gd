@@ -78,7 +78,7 @@ func _on_close_requested() -> void:
 	gui_release_focus()
 
 func _on_song_scene_button_pressed() -> void:
-	$"VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog".popup()
+	%"Scene FileDailog".popup()
 
 func file_dailog_gui_focus_changed(node: Control) -> void:
 	emit_signal(&"gui_focus_changed", node)

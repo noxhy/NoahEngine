@@ -116,6 +116,7 @@ size_flags_horizontal = 8
 text = "Select Scene"
 
 [node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button"]
+unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
