@@ -45,9 +45,9 @@ func _process(delta):
 		tail.scale.x = scroll
 		tail.size.x = line_length
 		$VisibleOnScreenEnabler2D.rect.size.y = length * scroll_speed * 640
-
 	else:
 		tail.visible = false
+
 
 func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
 	on_screen = true

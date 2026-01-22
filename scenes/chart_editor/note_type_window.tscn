@@ -1,0 +1,54 @@
+[gd_scene load_steps=3 format=3 uid="uid://b1ei656025t8s"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_r7p1t"]
+[ext_resource type="Script" uid="uid://b1sdk54cyb2jy" path="res://scenes/chart_editor/note_type_window.gd" id="2_v8ejw"]
+
+[node name="Note Type Window" type="Window"]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Note Types"
+position = Vector2i(0, 24)
+size = Vector2i(240, 110)
+transparent = true
+popup_window = true
+theme = ExtResource("1_r7p1t")
+script = ExtResource("2_v8ejw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Options" type="OptionButton" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="type" type="HBoxContainer" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/type"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Note Type:"
+
+[node name="Note Type" type="LineEdit" parent="VBoxContainer/type"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(1, 0.56640625, 0.56640625, 1)
+text = "Note type not found!"
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="item_selected" from="VBoxContainer/Options" to="." method="_on_options_item_selected"]
+[connection signal="text_changed" from="VBoxContainer/type/Note Type" to="." method="_on_note_type_text_changed"]

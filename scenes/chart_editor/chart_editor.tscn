@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://c3lux2ajoe1g6"]
+[gd_scene load_steps=29 format=3 uid="uid://c3lux2ajoe1g6"]
 
 [ext_resource type="Script" uid="uid://ocjrud8madj7" path="res://scenes/chart_editor/chart_editor.gd" id="1_ugmsy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_dontb"]
@@ -24,6 +24,7 @@
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://scenes/chart_editor/history_window.tscn" id="19_ufjr2"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://scenes/chart_editor/metadata_window.tscn" id="23_75w6f"]
+[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://scenes/chart_editor/note_type_window.tscn" id="24_j0j2p"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_50rmr"]
 
@@ -511,6 +512,10 @@ visible = false
 unique_name_in_owner = true
 visible = false
 
+[node name="Note Type Window" parent="UI/Upper UI/Window Button" instance=ExtResource("24_j0j2p")]
+unique_name_in_owner = true
+visible = false
+
 [node name="Help Button" type="MenuButton" parent="UI/Upper UI"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
@@ -573,3 +578,6 @@ metadata/_edit_lock_ = true
 [connection signal="updated_song_name" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_name"]
 [connection signal="updated_song_scene" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_song_scene"]
 [connection signal="updated_starting_tempo" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_updated_starting_tempo"]
+[connection signal="close_requested" from="UI/Upper UI/Window Button/Note Type Window" to="." method="_on_note_type_window_close_requested"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/Note Type Window" to="." method="_on_gui_focus_changed"]
+[connection signal="selected_note_type" from="UI/Upper UI/Window Button/Note Type Window" to="." method="set_note_type"]

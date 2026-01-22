@@ -33,7 +33,6 @@ enum STATE {
 
 # <note_type>: <id>
 static var note_types = {
-	0: "",
 	"mom": "",
 }
 

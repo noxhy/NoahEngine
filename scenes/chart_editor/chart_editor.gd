@@ -63,6 +63,7 @@ var min_visible_note_time: float
 var max_visible_note_time: float
 var default_font = ThemeDB.fallback_font
 var default_font_size = ThemeDB.fallback_font_size
+var current_note_type = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -219,7 +220,7 @@ func _process(delta: float) -> void:
 						if !is_note_at(lane, time):
 							var action: String = "Add Note"
 							undo_redo.create_action(action)
-							undo_redo.add_do_method(self.place_note.bind(time, lane, 0, 0, true))
+							undo_redo.add_do_method(self.place_note.bind(time, lane, 0, current_note_type, true))
 							undo_redo.add_do_reference(%"History Window".add_action(action))
 							undo_redo.add_undo_method(self.remove_note.bind(lane, time))
 							undo_redo.commit_action()
@@ -652,7 +653,7 @@ func load_dividers():
 		rect.size = Vector2(%Grid.get_size().x, size)
 		rect.position = %Grid.position
 		rect.position.x -= %Grid.get_size().x / 2
-		rect.position.y += %Grid.grid_size.y * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.y += (%Grid.grid_size.y * %Grid.zoom.y) * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
 		rect.position.y -= rect.size.y / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
@@ -664,7 +665,7 @@ func load_dividers():
 		
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
-		rect.position.x += %Grid.grid_size.x * i
+		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * i
 		rect.position.x -= %Grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
@@ -677,7 +678,7 @@ func load_dividers():
 		
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
-		rect.position.x += %Grid.grid_size.x * (packet.get("strums")[1] + 2)
+		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * (packet.get("strums")[1] + 2)
 		rect.position.x -= %Grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
@@ -1270,6 +1271,15 @@ func window_button_item_pressed(id):
 				%"Open Window".play()
 			
 			%"Window Button".get_popup().set_item_checked(id, %"Metadata Window".visible)
+		2:
+			if %"Note Type Window".visible:
+				%"Note Type Window".hide()
+				%"Close Window".play()
+			else:
+				%"Note Type Window".popup()
+				%"Open Window".play()
+			
+			%"Window Button".get_popup().set_item_checked(id, %"Note Type Window".visible)
 
 ## Edit button item pressed
 func test_button_item_pressed(id):
@@ -1480,3 +1490,15 @@ func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
 
 func _on_conductor_new_steps_per_measure(_steps_per_measure: int) -> void:
 	load_dividers()
+
+
+func set_note_type(note_type):
+	if note_type == "":
+		note_type = 0
+	
+	current_note_type = note_type
+
+
+func _on_note_type_window_close_requested() -> void:
+	%"Window Button".get_popup().set_item_checked(2, false)
+	%"Close Window".play()
