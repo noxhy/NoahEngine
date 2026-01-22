@@ -712,7 +712,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	# sizing purposes
 	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
 	note_instance.direction = directions[int(lane) % 4]
-	note_instance.animation = directions[int(lane) % 4]
+	note_instance.animation = str(Strum.note_types.get(type, ""), directions[int(lane) % 4])
 	
 	note_instance.note_skin = note_skin
 	

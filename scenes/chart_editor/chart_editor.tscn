@@ -409,7 +409,6 @@ popup/item_4/text = "Copy"
 popup/item_4/id = 4
 popup/item_5/text = "Paste"
 popup/item_5/id = 5
-popup/item_5/disabled = true
 popup/item_6/text = "Delete Stacked Notes"
 popup/item_6/id = 6
 popup/item_7/id = 7

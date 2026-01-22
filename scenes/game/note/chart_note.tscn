@@ -8,9 +8,9 @@
 size = Vector2(640.0001, 640.0001)
 
 [sub_resource type="LabelSettings" id="LabelSettings_wqobl"]
-font_size = 256
+font_size = 320
 font_color = Color(1, 1, 0, 1)
-outline_size = 48
+outline_size = 64
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Note" type="Node2D" groups=["note"]]

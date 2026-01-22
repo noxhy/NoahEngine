@@ -32,8 +32,9 @@ enum STATE {
 }
 
 # <note_type>: <id>
-var note_types = {
-	0: ""
+static var note_types = {
+	0: "",
+	"mom": "",
 }
 
 var scroll_speed: float = 1.0
