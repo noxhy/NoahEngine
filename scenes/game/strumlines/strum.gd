@@ -6,6 +6,9 @@ class_name Strum
 const PIXELS_PER_SECOND = 450
 const NOTE_PRELOAD = preload("res://scenes/game/note/note.tscn")
 const SPLASH_PRELOAD = preload("res://scenes/game/note/note_splash.tscn")
+const NOTE_TYPES: Dictionary = {
+	"mom": "",
+}
 
 signal created_note(time: float, strum_name: StringName, length: float, note_type: Variant)
 signal note_hit(time: float, strum_name: StringName, note_type: Variant, hit_time: float)
@@ -23,17 +26,12 @@ signal note_miss(time: float, strum_name: StringName, length: float, note_type: 
 @export var can_splash: bool  = false
 @export var enemy_slot: bool = false
 ## Note types that autoplay wont press
-@export var ignored_note_types: Array = []
+@export var ignored_NOTE_TYPES: Array = []
 
 enum STATE {
 	IDLE,
 	PRESSED,
 	GLOW,
-}
-
-# <note_type>: <id>
-static var note_types = {
-	"mom": "",
 }
 
 var scroll_speed: float = 1.0
@@ -79,7 +77,7 @@ func _process(delta):
 		
 		if auto_play:
 			if time_difference <= 0:
-				if !ignored_note_types.has(note.note_type):
+				if !ignored_NOTE_TYPES.has(note.note_type):
 					if note != previous_note:
 						emit_signal("note_hit", note.time, self.get_name(), note.note_type, 0)
 						previous_note = note
@@ -246,11 +244,8 @@ func set_skin(new_skin: NoteSkin):
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
 
-func set_ignored_note_types(types: Array):
-	ignored_note_types = types
-
-func set_note_types(types: Array):
-	note_types = types
+func set_ignored_NOTE_TYPES(types: Array):
+	ignored_NOTE_TYPES = types
 
 
 func create_note(time: float, length: float, note_type: Variant, _tempo: float):
@@ -266,7 +261,7 @@ func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 	note_instance.scroll = scroll
 	
 	note_instance.direction = strum_name
-	note_type = note_types.get(note_type, "")
+	note_type = NOTE_TYPES.get(note_type, "")
 	note_instance.animation = note_type + strum_name
 	
 	note_instance.note_skin = note_skin

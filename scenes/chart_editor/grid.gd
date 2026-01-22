@@ -1,18 +1,18 @@
 extends Node2D
 
 @export_group("Zoom")
-@export var zoom = Vector2(1, 1)
+@export var zoom: Vector2 = Vector2(1, 1)
 
 @export_group("Grid Settings")
-@export var grid_size = Vector2(16, 16)
-@export var columns = 4
-@export var rows = 16
-@export var centered = true
+@export var grid_size: Vector2 = Vector2(16, 16)
+@export var columns: int = 4
+@export var rows: int = 16
+@export var centered: bool = true
 @export var grid_color: Color = Color(0, 0)
 
 @export_group("Colors")
-@export var event_column_color = Color(1, 1, 1, 0.5)
-@export var position_column_color = Color(1, 1, 1, 0.5)
+@export var event_column_color: Color = Color(1, 1, 1, 0.5)
+@export var position_column_color: Color = Color(1, 1, 1, 0.5)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -24,9 +24,7 @@ func _ready():
 	if centered:
 		$TextureRect.position.x = ($TextureRect.size.x * $TextureRect.scale.x) / -2.0
 	else:
-		$TextureRect.position = Vector2(0, 0)
-	
-	queue_redraw()
+		$TextureRect.position = Vector2.ZERO
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -39,7 +37,7 @@ func _process(_delta):
 	if centered:
 		$TextureRect.position.x = ($TextureRect.size.x * $TextureRect.scale.x) / -2.0
 	else:
-		$TextureRect.position = Vector2(0, 0)
+		$TextureRect.position = Vector2.ZERO
 	
 	queue_redraw()
 

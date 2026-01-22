@@ -44,28 +44,29 @@ texture = ExtResource("11_6k7lv")
 
 [node name="World" type="CanvasLayer" parent="."]
 layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
 [node name="Position 1" type="Marker2D" parent="World"]
 unique_name_in_owner = true
+position = Vector2(640.3, 360)
 gizmo_extents = 18.3
 
 [node name="Position 2" type="Marker2D" parent="World"]
 unique_name_in_owner = true
+position = Vector2(640.3, 360)
 gizmo_extents = 18.3
 
 [node name="Position 3" type="Marker2D" parent="World"]
 unique_name_in_owner = true
+position = Vector2(640.3, 360)
 gizmo_extents = 18.3
 
 [node name="Rating Marker" type="Marker2D" parent="World"]
-position = Vector2(256, -104)
+position = Vector2(896.3, 256)
 gizmo_extents = 20.0
 
 [node name="Combo Marker" type="Marker2D" parent="World"]
-position = Vector2(352, -64)
+position = Vector2(992.3, 296)
 gizmo_extents = 20.0
 
 [node name="UI" parent="." instance=ExtResource("5_g7go4")]

@@ -436,17 +436,11 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "View"
-item_count = 5
+item_count = 2
 popup/item_0/text = "Switch Editors"
 popup/item_0/id = 0
 popup/item_1/text = "Change Note Skin"
 popup/item_1/id = 1
-popup/item_2/id = 2
-popup/item_2/separator = true
-popup/item_3/text = "Zoom In"
-popup/item_3/id = 3
-popup/item_4/text = "Zoom Out"
-popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="Note Skin Window" type="FileDialog" parent="UI/Upper UI/View Button"]

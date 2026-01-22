@@ -22,7 +22,7 @@ func _on_about_to_popup() -> void:
 	%Options.add_item("Default")
 	%Options.add_item("Custom")
 	
-	for type in Strum.note_types:
+	for type in Strum.NOTE_TYPES:
 		%Options.add_item(type)
 	
 	if %Options.selected == -1:
@@ -32,8 +32,6 @@ func _on_about_to_popup() -> void:
 func _on_options_item_selected(index: int) -> void:
 	var type: Variant
 	$VBoxContainer/type.visible = (index == 1)
-	$VBoxContainer/Label2.visible = (!Strum.note_types.has(%"Note Type".text)
-	and $VBoxContainer/type.visible)
 	match index:
 		0:
 			type = ""
@@ -51,5 +49,4 @@ func _on_options_item_selected(index: int) -> void:
 
 
 func _on_note_type_text_changed(new_text: String) -> void:
-	$VBoxContainer/Label2.visible = !Strum.note_types.has(new_text)
 	emit_signal(&"selected_note_type", new_text)

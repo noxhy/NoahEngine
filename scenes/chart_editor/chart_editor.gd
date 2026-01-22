@@ -21,6 +21,7 @@ static var song_position: float = 0.0
 @export var muted_color: Color = Color(0.8, 0.8, 0.8, 0.5)
 @export var box_color: Color = Color.LIGHT_GREEN
 @export var selected_color: Color = Color.GREEN
+@export var time_change_color: Color = Color.PURPLE
 
 @onready var undo_redo: UndoRedo = UndoRedo.new()
 
@@ -684,6 +685,24 @@ func load_dividers():
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
+	
+	var times: Array = [%Instrumental.stream.get_length()]
+	times.append_array(ChartManager.chart.get_tempos_data().keys())
+	times.erase(0.0)
+	for i in times:
+		var rect = ColorRect.new()
+		var size: float = 2
+		
+		rect.size = Vector2(%Grid.get_size().x, size)
+		rect.position = %Grid.position
+		rect.position.x -= %Grid.get_size().x / 2
+		rect.position.y = time_to_y_position(i)
+		rect.position.y -= rect.size.y / 2
+		rect.position += %Grid.position + $"Grid Layer".offset
+		rect.color = time_change_color
+		
+		self.add_child(rect)
+		rect.add_to_group(&"dividers")
 
 
 func new_file(path: String, song: Song):
@@ -718,7 +737,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	# sizing purposes
 	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
 	note_instance.direction = directions[int(lane) % 4]
-	note_instance.animation = str(Strum.note_types.get(type, ""), directions[int(lane) % 4])
+	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[int(lane) % 4])
 	
 	note_instance.note_skin = note_skin
 	
@@ -1238,7 +1257,6 @@ func audio_button_item_pressed(id):
 		_:
 			print("id: ", id)
 
-
 ## View button item pressed
 func view_button_item_pressed(id):
 	match id:
@@ -1246,6 +1264,18 @@ func view_button_item_pressed(id):
 			can_chart = false
 			%"Note Skin Window".popup()
 			%"Open Window".play()
+		
+		3:
+			%Grid.zoom = clamp(%Grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			update_grid()
+			load_dividers()
+			load_section(song_position)
+		
+		4:
+			%Grid.zoom = clamp(%Grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			update_grid()
+			load_dividers()
+			load_section(song_position)
 		
 		_:
 			print("id: ", id)

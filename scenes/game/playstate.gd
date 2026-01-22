@@ -133,7 +133,16 @@ func _ready():
 	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 	
 	ui.set_credits(song_data.title, song_data.artist)
-	play_song(0)
+	match GameManager.play_mode:
+		
+		GameManager.PLAY_MODE.CHARTING:
+			if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):
+				play_song(ChartEditor.song_position)
+			else:
+				play_song(0)
+		
+		_:
+			play_song(0)
 	Global.set_window_title("Playing: " + song_data.title)
 	
 	pause_scene = ui_skin.pause_scene
