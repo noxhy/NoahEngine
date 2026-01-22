@@ -409,18 +409,15 @@ func _process(delta: float) -> void:
 				%"Note Place".play()
 		
 		if moving_notes:
-			var temp: Array = []
-			var i: int = 0
+			var notes: Array = []
 			for note in selected_note_nodes:
-				temp.append([note.time + moved_time_distance, note.lane + moved_lane_distance, note.length, note.note_type])
+				notes.append([note.time + moved_time_distance, note.lane + moved_lane_distance, note.length, note.note_type])
 				remove_note(note.lane, note.time)
-				i += 1
 			
-			selected_notes = []
+			var temp = place_notes(notes)
+			selected_notes = temp
 			selected_note_nodes = []
-			for packet in temp:
-				i = place_note(packet[0], packet[1], packet[2], packet[3], true, true)
-				selected_notes.append(i)
+			for i in selected_notes:
 				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
 			
 			moving_notes = false
@@ -604,7 +601,7 @@ func load_chart(file: Chart, ghost: bool = false):
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
-	if ChartManager.chart.get_notes_data().size() == 0:
+	if ChartManager.chart.get_notes_data().is_empty():
 		return
 	
 	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
@@ -741,12 +738,12 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			selected_note_nodes = [note_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
-			output = note_nodes.size()
+			output = note_nodes.size() - 1
 	else:
 		if sorted:
 			var L: int = sort_index
 			
-			if note_nodes.size() == 0:
+			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
 			elif L < 0:
 				note_nodes.insert(0, note_instance)
@@ -769,16 +766,16 @@ func sort_note(a, b):
 # Returns the indexes of the new notes
 func place_notes(notes: Array) -> Array:
 	var indices: Array = []
-	var i: int = 0
 	for note in notes:
-		var j: int = place_note(note[0], note[1], note[2], note[3], true)
-		if i > 0:
-			if j == indices[i - 1]:
-				j += 1
-		
-		indices.append(j)
-		i += 1
+		place_note(note[0], note[1], note[2], note[3], true)
 	
+	# Surely there's a cleaner way to do this
+	for note in notes:
+		var i: int = find_note(note[1], note[0])
+		if i != -1:
+			indices.append(i)
+	
+	indices.sort()
 	return indices
 
 ## Giving only 1 parameter removes the note at the given index
@@ -807,7 +804,8 @@ func remove_note(lane: int, time: float = -1):
 func remove_notes(notes: Array):
 	var i: int = 0
 	for note in notes:
-		remove_note(note - i)
+		var _note = ChartManager.chart.get_notes_data()[note - i]
+		remove_note(_note[1], _note[0])
 		i += 1
 
 ## Returns the index of the given note in the notes list.
@@ -1185,18 +1183,28 @@ func edit_button_item_pressed(id):
 				
 				remove_notes(selected_notes)
 				
-				var length: int = _max_lane - _min_lane
-				
+				selected_notes = []
 				selected_note_nodes = []
+				var length: int = _max_lane - _min_lane
+				var j: int = 0
 				for note in temp:
 					var lane: int = -(note[1] - _min_lane)
 					lane += length
 					lane += _min_lane
+					temp[j][1] = lane
 					
 					place_note(note[0], lane, note[2], note[3], true, true)
+					j += 1
 				
-				for i in selected_notes:
-					selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+				# I need a cleaner and less intensive way of doing this.
+				for note in temp:
+					var i: int = find_note(note[1], note[0])
+					
+					if !selected_notes.has(i):
+						selected_notes.append(i)
+						selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+				
+				selected_notes.sort()
 				
 				%"Note Place".play()
 		
@@ -1230,11 +1238,23 @@ func view_button_item_pressed(id):
 func window_button_item_pressed(id):
 	match id:
 		0:
-			%"History Window".popup()
-			%"Window Button".get_popup().set_item_checked(id, true)
+			if %"History Window".visible:
+				%"History Window".hide()
+				%"Close Window".play()
+			else:
+				%"History Window".popup()
+				%"Open Window".play()
+			
+			%"Window Button".get_popup().set_item_checked(id, %"History Window".visible)
 		1:
-			%"Metadata Window".popup()
-			%"Window Button".get_popup().set_item_checked(id, true)
+			if %"Metadata Window".visible:
+				%"Metadata Window".hide()
+				%"Close Window".play()
+			else:
+				%"Metadata Window".popup()
+				%"Open Window".play()
+			
+			%"Window Button".get_popup().set_item_checked(id, %"Metadata Window".visible)
 
 ## Edit button item pressed
 func test_button_item_pressed(id):
@@ -1339,9 +1359,11 @@ func _on_difficulty_button_item_selected(index: int) -> void:
 
 func _on_history_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(0, false)
+	%"Close Window".play()
 
 func _on_metadata_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(1, false)
+	%"Close Window".play()
 
 func _on_metadata_window_updated_icon_texture(path: String) -> void:
 	ChartManager.song.icons = load(path)
@@ -1419,7 +1441,7 @@ func copy():
 	%"Note Place".play()
 
 func paste():
-	if clipboard.size() == 0:
+	if clipboard.is_empty():
 		return
 	
 	var temp = place_notes(clipboard)

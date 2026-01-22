@@ -186,7 +186,6 @@ offset_bottom = 312.0
 focus_mode = 1
 theme = ExtResource("17_75w6f")
 step = 0.001
-ticks_on_borders = true
 metadata/_edit_lock_ = true
 
 [node name="Lower UI" type="HBoxContainer" parent="UI"]
