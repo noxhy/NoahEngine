@@ -277,10 +277,7 @@ func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 	
 	emit_signal("created_note", time, self.get_name(), length, note_type)
 
-
 # Visuals
-
-
 func _on_offset_sprite_animation_finished():
 	if state == STATE.GLOW:
 		if !auto_play:

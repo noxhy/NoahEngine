@@ -63,7 +63,8 @@ static var _defaults: Dictionary = {
 	},
 	
 	"chart": {
-		"auto_save": true 
+		"auto_save": true,
+		"start_at_current_position": false,
 	},
 	
 	"keybinds": {
@@ -92,8 +93,6 @@ static var _defaults: Dictionary = {
 		"mute": [KEY_0]
 	},
 	
-	"songs": {},
-	"weeks": {}
 }
 
 

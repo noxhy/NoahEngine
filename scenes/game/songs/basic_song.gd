@@ -23,9 +23,12 @@ func _ready():
 	await playstate_host.setup_finished
 	
 	if stage:
-		playstate_host.conductor.connect("new_beat", stage._on_conductor_new_beat)
+		playstate_host.conductor.connect(&"new_beat", stage._on_conductor_new_beat)
 	
-	playstate_host.conductor.connect("new_beat", self._on_conductor_new_beat)
+	playstate_host.conductor.connect(&"new_beat", self._on_conductor_new_beat)
+	playstate_host.conductor.connect(&"combo_break", self._on_combo_break)
+	playstate_host.conductor.connect(&"create_note", self._on_create_note)
+	playstate_host.conductor.connect(&"new_event", self._on_new_event)
 
 # Conductor Util
 

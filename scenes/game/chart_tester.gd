@@ -22,3 +22,5 @@ func _process(delta):
 
 func _on_play_state_host_setup_finished() -> void:
 	get_tree().call_group(&"strums", "set_skin", ChartEditor.note_skin)
+	if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):
+		playstate_host.play_song(ChartEditor.song_position)

@@ -91,6 +91,11 @@ bus = &"SFX"
 
 [node name="Note Place" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
+stream = ExtResource("14_am3li")
+bus = &"SFX"
+
+[node name="Mouse Click" type="AudioStreamPlayer" parent="Audio"]
+unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_q5g7a")
 bus = &"SFX"
 
@@ -466,11 +471,14 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Test"
-item_count = 2
+item_count = 3
 popup/item_0/text = "Playtest Chart"
 popup/item_0/id = 0
 popup/item_1/text = "Playtest Chart (Minimal)"
 popup/item_1/id = 1
+popup/item_2/text = "Start at Current Position"
+popup/item_2/checkable = 1
+popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
 [node name="Window Button" type="MenuButton" parent="UI/Upper UI"]
@@ -479,13 +487,19 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Window"
-item_count = 2
+item_count = 4
 popup/item_0/text = "History"
 popup/item_0/checkable = 1
 popup/item_0/id = 0
 popup/item_1/text = "Metadata"
 popup/item_1/checkable = 1
 popup/item_1/id = 1
+popup/item_2/text = "Notes"
+popup/item_2/checkable = 1
+popup/item_2/id = 2
+popup/item_3/text = "Events"
+popup/item_3/checkable = 1
+popup/item_3/id = 3
 metadata/_edit_use_anchors_ = true
 
 [node name="History Window" parent="UI/Upper UI/Window Button" instance=ExtResource("19_ufjr2")]

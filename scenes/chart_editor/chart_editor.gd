@@ -12,6 +12,7 @@ const CONVERT_CHART_POPUP_PRELOAD = preload("res://scenes/chart_editor/convert_c
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
 static var note_skin: NoteSkin = load("res://assets/sprites/playstate/developer/developer_note_skin.tres")
+static var song_position: float = 0.0
 
 @export_group("Colors")
 @export var hover_color: Color = Color(1, 1, 1, 0.5)
@@ -30,7 +31,6 @@ var vocal_tracks: Array = []
 var scene: String
 
 ## Editor Variables
-var song_position: float = 0.0
 var start_offset: float = 0.0
 var song_speed: float = 1.0
 var note_nodes: Array = []
@@ -99,9 +99,14 @@ func _ready() -> void:
 	%"Edit Button".get_popup().set_item_tooltip(
 		%"Edit Button".get_popup().get_item_index(1), "Ctrl+Y")
 	
+	%"Audio Button".get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
+	
 	%"View Button".get_popup().connect(&"id_pressed", self.view_button_item_pressed)
 	
 	%"Test Button".get_popup().connect(&"id_pressed", self.test_button_item_pressed)
+	%"Test Button".get_popup().set_item_checked(
+		%"Test Button".get_popup().get_item_index(3), SettingsManager.get_value("chart", "start_at_current_position"))
+	%"Test Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
 	%"Window Button".get_popup().connect(&"id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
@@ -1223,6 +1228,16 @@ func edit_button_item_pressed(id):
 		_:
 			print("id: ", id)
 
+## Audio button item pressed
+func audio_button_item_pressed(id):
+	match id:
+		0:
+			_on_play_button_toggled(!%Instrumental.playing)
+		
+		_:
+			print("id: ", id)
+
+
 ## View button item pressed
 func view_button_item_pressed(id):
 	match id:
@@ -1277,6 +1292,13 @@ func test_button_item_pressed(id):
 			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
 			Global.change_scene_to("res://scenes/game/chart_tester.tscn")
 			self.process_mode = Node.PROCESS_MODE_DISABLED
+		
+		2:
+			SettingsManager.set_value("chart", "start_at_current_position",
+			!SettingsManager.get_value("chart", "start_at_current_position"))
+			%"Test Button".get_popup().set_item_checked(
+			%"Test Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "start_at_current_position"))
+			%"Mouse Click".play()
 		
 		_:
 			print("id: ", id)
