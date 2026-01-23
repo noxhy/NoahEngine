@@ -35,3 +35,41 @@ func view_button_item_pressed(id):
 		
 		_:
 			print("id: ", id)
+
+
+## Loads all the notes and waveforms for the next two waveforms.
+func load_section(time: float):
+	if ChartManager.chart.get_notes_data().is_empty():
+		return
+	
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2 / %Grid.zoom.y
+	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
+	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
+	
+	if selected_notes.size() > 0:
+		L = min(selected_notes[0], L)
+		R = max(R, selected_notes[selected_notes.size() - 1])
+	
+	if L > -1 and R > -1:
+		## Clearing any invisible notes
+		if current_visible_events_L != L or current_visible_events_R != R:
+			var i: int = 0
+			for _i in range(event_nodes.size()):
+				var event = event_nodes[i]
+				if (event.time < ChartManager.chart.get_events_data()[L][0]
+				or event.time > ChartManager.chart.get_events_data()[R][0]):
+					event.queue_free()
+					event_nodes.remove_at(i)
+					i -= 1
+				
+				i += 1
+		
+		for i in range(L, R + 1):
+			if i >= current_visible_events_L and i <= current_visible_events_R:
+				continue
+			
+			var event = ChartManager.chart.get_events_data()[i]
+			place_event(event[0], event[1], event[2], false, false, true, i - L)
+		
+		current_visible_events_L = L
+		current_visible_events_R = R

@@ -752,7 +752,6 @@ func load_section(time: float):
 		current_visible_notes_L = L
 		current_visible_notes_R = R
 #endregion
-	return
 #region Loading Events
 	L = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	R = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
@@ -778,8 +777,8 @@ func load_section(time: float):
 			var event = ChartManager.chart.get_events_data()[i]
 			place_event(event[0], event[1], event[2], false, false, true, i - L)
 		
-		current_visible_notes_L = L
-		current_visible_notes_R = R
+		current_visible_events_L = L
+		current_visible_events_R = R
 #endregion
 
 func load_dividers():
