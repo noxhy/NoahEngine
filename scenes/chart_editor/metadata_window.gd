@@ -32,7 +32,7 @@ func update_stats():
 	for time in chart.get_tempos_data():
 		%"Time Changes".add_item(format_time_change(i))
 		i += 1
-	_on_time_changes_item_selected(0)
+	_on_time_changes_item_selected(0, false)
 
 func _on_icon_file_dailog_file_selected(path: String) -> void:
 	path = ResourceUID.path_to_uid(path)
@@ -87,7 +87,7 @@ func _on_scroll_speed_value_changed(value: float) -> void:
 	%"Scroll Speed Label".text = str("Scroll Speed: ", value, "x")
 	emit_signal(&"updated_scroll_speed", value)
 
-func _on_time_changes_item_selected(index: int) -> void:
+func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	%"Remove Time Change".disabled = (index == 0)
 	current_time_change = index
 	
@@ -98,7 +98,8 @@ func _on_time_changes_item_selected(index: int) -> void:
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	%Numerator.value = meter[0]
 	%Denominator.value = meter[1] / meter[0]
-	emit_signal(&"selected_time_change", time)
+	if emit:
+		emit_signal(&"selected_time_change", time)
 
 func _on_add_time_change_pressed() -> void:
 	emit_signal(&"add_time_change")

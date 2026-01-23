@@ -31,6 +31,9 @@ func _input(event: InputEvent) -> void:
 		#return
 	var ev:InputEventKey = event
 	
+	if event.shift_pressed or event.ctrl_pressed:
+		return
+	
 	if ev.pressed:
 		if ev.is_action('mute'):
 			SettingsManager.set_value(SettingsManager.SEC_AUDIO, 'is_muted', !SettingsManager.get_value(SettingsManager.SEC_AUDIO, 'is_muted', false))

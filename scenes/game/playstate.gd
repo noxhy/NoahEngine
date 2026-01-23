@@ -563,7 +563,7 @@ func show_combo(rating: String, _combo: int):
 	
 	combo_numbers_manager_instance.ui_skin = ui_skin
 	combo_numbers_manager_instance.combo = _combo
-	if misses == 0:
+	if GameManager.tallies.max_combo == GameManager.tallies.total_notes:
 		combo_numbers_manager_instance.fc = true
 	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "combo_ui"):

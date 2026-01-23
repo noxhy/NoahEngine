@@ -94,7 +94,8 @@ func _ready() -> void:
 		%"File Button".get_popup().get_item_index(3), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
-	var shortcut = Shortcut.new()
+	var shortcut: Shortcut = Shortcut.new()
+	var key_event: InputEventKey
 	shortcut.events = InputMap.action_get_events(&"save")
 	
 	%"File Button".get_popup().set_item_shortcut(
@@ -152,10 +153,44 @@ func _ready() -> void:
 	
 	%"View Button".get_popup().connect(&"id_pressed", self.view_button_item_pressed)
 	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_EQUAL
+	key_event.ctrl_pressed = true
+	key_event.command_or_control_autoremap = true
+	shortcut.events = [key_event]
+	%"View Button".get_popup().set_item_shortcut(
+		%"View Button".get_popup().get_item_index(3), shortcut)
+	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_MINUS
+	key_event.ctrl_pressed = true
+	key_event.command_or_control_autoremap = true
+	shortcut.events = [key_event]
+	%"View Button".get_popup().set_item_shortcut(
+		%"View Button".get_popup().get_item_index(4), shortcut)
+	
 	%"Test Button".get_popup().connect(&"id_pressed", self.test_button_item_pressed)
 	%"Test Button".get_popup().set_item_checked(
-		%"Test Button".get_popup().get_item_index(3), SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+		%"Test Button".get_popup().get_item_index(3),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
 	%"Test Button".get_popup().set_hide_on_checkable_item_selection(false)
+	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_ENTER
+	shortcut.events = [key_event]
+	%"Test Button".get_popup().set_item_shortcut(
+		%"Test Button".get_popup().get_item_index(0), shortcut)
+	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_ENTER
+	key_event.shift_pressed = true
+	shortcut.events = [key_event]
+	%"Test Button".get_popup().set_item_shortcut(
+		%"Test Button".get_popup().get_item_index(1), shortcut)
 	
 	%"Window Button".get_popup().connect(&"id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
@@ -258,33 +293,34 @@ func _process(delta: float) -> void:
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						
-						if !is_note_at(lane, time):
-							add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
-							self.remove_note.bind(lane, time))
-							
-							%"Note Place".play()
-							placing_note = true
-						else:
-							var i: int = find_note(lane, time)
-							if selected_notes.has(i):
-								moving_notes = true
-								start_lane = lane
-								start_time = time
-								min_lane = ChartManager.strum_count
-								max_lane = 0
-								for j in selected_notes:
-									var note = ChartManager.chart.get_notes_data()[j]
-									min_lane = min(min_lane, note[1])
-									max_lane = max(max_lane, note[1])
+						if time <= %Instrumental.stream.get_length():
+							if !is_note_at(lane, time):
+								add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
+								self.remove_note.bind(lane, time))
 								
-								min_lane = 0 + (start_lane - min_lane)
-								max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
+								%"Note Place".play()
+								placing_note = true
 							else:
-								var index: int = find_note(lane, time)
-								selected_notes = [index]
-								selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
-								min_lane = 0
-								max_lane = ChartManager.strum_count - 1
+								var i: int = find_note(lane, time)
+								if selected_notes.has(i):
+									moving_notes = true
+									start_lane = lane
+									start_time = time
+									min_lane = ChartManager.strum_count
+									max_lane = 0
+									for j in selected_notes:
+										var note = ChartManager.chart.get_notes_data()[j]
+										min_lane = min(min_lane, note[1])
+										max_lane = max(max_lane, note[1])
+									
+									min_lane = 0 + (start_lane - min_lane)
+									max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
+								else:
+									var index: int = find_note(lane, time)
+									selected_notes = [index]
+									selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
+									min_lane = 0
+									max_lane = ChartManager.strum_count - 1
 					elif (((grid_position.x - 1) >= -1 and (grid_position.x - 1) <= ChartManager.strum_count)
 					and current_focus_owner):
 						current_focus_viewport.gui_release_focus()
@@ -341,6 +377,7 @@ func _process(delta: float) -> void:
 								start_offset = grid_position_to_time(snapped_position) - song_position
 							else:
 								start_offset = grid_position_to_time(grid_position) - song_position
+							
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
 								var cursor_time = grid_position_to_time(snapped_position, true)
@@ -497,7 +534,8 @@ func _draw() -> void:
 					var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
 					length *= %Grid.grid_size.y * %Grid.zoom.y
 					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-					rect = Rect2(note.global_position - (%Grid.grid_size / 2), Vector2(%Grid.grid_size.x, length))
+					rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
+					Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
 					draw_rect(rect, selected_color)
 	
 	if hovered_note != -1 and ChartManager.chart:
@@ -537,7 +575,10 @@ func update_grid():
 		strum_label_instance.muted = ChartManager.strum_data[id]["muted"]
 		
 		%"Strum Labels".add_child(strum_label_instance)
-		strum_label_instance.custom_minimum_size.x = (ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]) * %Grid.grid_size.x * %Grid.zoom.x
+		strum_label_instance.custom_minimum_size.x = (
+			ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]
+			) * %Grid.grid_size.x * %Grid.zoom.x
+		%"Strum Labels".size.x = strum_label_instance.custom_minimum_size.x * ChartManager.strum_data.size()
 		strum_label_instance.size.y = 32
 		
 		if ChartManager.strum_data[id]["strums"][0] == 0:
@@ -556,6 +597,9 @@ func update_grid():
 
 
 func load_song(song: Song, difficulty: Variant = null):
+	if ChartManager.song != song:
+		song_position = 0.0
+	
 	ChartManager.song = song
 	if difficulty == null:
 		difficulty = ChartManager.song.difficulties.keys()[0]
@@ -566,7 +610,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
 	%Instrumental.stream = load(ChartManager.song.instrumental)
-	play_audios(0.0)
+	play_audios(song_position)
 	
 	%"Song Slider".max_value = %Instrumental.stream.get_length()
 	%"Song Slider".value = 0.0
@@ -624,7 +668,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_notes_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
 	
@@ -942,6 +986,10 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		else:
 			R = tempo_data.keys()[i + 1]
 		
+		if L >= %Instrumental.stream.get_length():
+			L = tempo_data.keys()[i - 1]
+			R = INF
+		
 		meter = ChartManager.chart.get_meter_at(L)
 		var tempo = tempo_data.get(L)
 		seconds_per_beat = 60.0 / tempo
@@ -1221,13 +1269,13 @@ func view_button_item_pressed(id):
 			%"Open Window".play()
 		
 		3:
-			%Grid.zoom = clamp(%Grid.zoom + Vector2.ONE * 0.2, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			%Grid.zoom = clamp(%Grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
 		
 		4:
-			%Grid.zoom = clamp(%Grid.zoom - Vector2.ONE * 0.2, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			%Grid.zoom = clamp(%Grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
@@ -1314,6 +1362,7 @@ func undo():
 			save()
 	
 	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
+	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 
 func redo():
@@ -1323,6 +1372,7 @@ func redo():
 		if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 			save()
 	
+	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
 	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 

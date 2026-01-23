@@ -34,7 +34,7 @@ func _process(delta):
 	else:
 		Engine.max_fps = 0
 	
-	if Input.is_action_just_pressed("fullscreen"):
+	if Input.is_action_just_pressed(&"fullscreen"):
 		fullscreen = !fullscreen
 		if fullscreen:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
@@ -42,7 +42,7 @@ func _process(delta):
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
 	if OS.is_debug_build():
-		if Input.is_action_just_pressed("reload"): 
+		if Input.is_action_just_pressed(&"reload"): 
 			get_tree().reload_current_scene()
 			get_tree().paused = false
 
