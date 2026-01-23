@@ -16,3 +16,11 @@ func _ready() -> void:
 	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
 	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
 	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
+
+
+func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
+	$Sprite2D.visible = true
+
+
+func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+	$Sprite2D.visible = false

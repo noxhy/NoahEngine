@@ -752,6 +752,7 @@ func load_section(time: float):
 		current_visible_notes_L = L
 		current_visible_notes_R = R
 #endregion
+	return
 #region Loading Events
 	L = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	R = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
@@ -957,21 +958,21 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			selected_note_nodes = [event_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
-			output = note_nodes.size() - 1
+			output = event_nodes.size() - 1
 	else:
 		if sorted:
 			var L: int = sort_index
 			
 			if note_nodes.is_empty():
-				note_nodes.append(event_instance)
+				event_nodes.append(event_instance)
 			elif L < 0:
-				note_nodes.insert(0, event_instance)
+				event_nodes.insert(0, event_instance)
 			elif L >= note_nodes.size():
-				note_nodes.append(event_instance)
+				event_nodes.append(event_instance)
 			else:
-				note_nodes.insert(L, event_instance)
+				event_nodes.insert(L, event_instance)
 		else:
-			note_nodes.append(event_instance)
+			event_nodes.append(event_instance)
 	
 	$"Notes Layer".add_child(event_instance)
 	event_instance.add_to_group(&"events")
@@ -1360,6 +1361,7 @@ func file_button_item_pressed(id):
 		3:
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			SettingsManager.flush()
 			%"File Button".get_popup().set_item_checked(
 				%"File Button".get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
 			%"Mouse Click".play()
@@ -1422,16 +1424,19 @@ func audio_button_item_pressed(id):
 		4:
 			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
 			min(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") + 0.05, 2))
+			SettingsManager.flush()
 			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 		
 		5:
 			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
 			max(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") - 0.05, 0.5))
+			SettingsManager.flush()
 			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 		
 		7:
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_beat",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+			SettingsManager.flush()
 			%"Mouse Click".play()
 			%"Audio Button".get_popup().set_item_checked(
 				%"Audio Button".get_popup().get_item_index(id),
@@ -1440,6 +1445,7 @@ func audio_button_item_pressed(id):
 		8:
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_step",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+			SettingsManager.flush()
 			%"Mouse Click".play()
 			%"Audio Button".get_popup().set_item_checked(
 				%"Audio Button".get_popup().get_item_index(id),
@@ -1530,6 +1536,7 @@ func test_button_item_pressed(id):
 		2:
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "start_at_current_position",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+			SettingsManager.flush()
 			%"Test Button".get_popup().set_item_checked(
 			%"Test Button".get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART,
 			"start_at_current_position"))
