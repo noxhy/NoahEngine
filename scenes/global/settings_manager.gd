@@ -58,7 +58,7 @@ static var _defaults: Dictionary = {
 	
 	SEC_DEBUG: {
 		"show_performance": true, ## Shows FPS, Memory, delta and shit,
-		"cap_fps": false, ## caps fps
+		"cap_fps": true, ## caps fps
 		"fps_cap": int(DisplayServer.screen_get_refresh_rate())
 	},
 	

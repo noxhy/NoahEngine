@@ -140,9 +140,9 @@ func _process(delta: float) -> void:
 			can_click = false
 			SoundManager.cancel.play()
 			
-			if Global.song_scene != null:
+			if GameManager.song_scene != null:
 				SoundManager.music.stop()
-				Global.change_scene_to(Global.song_scene)
+				Global.change_scene_to(GameManager.song_scene)
 			else:
 				Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
 		

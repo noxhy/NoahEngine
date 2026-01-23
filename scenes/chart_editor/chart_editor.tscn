@@ -465,13 +465,19 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Audio"
-item_count = 3
+item_count = 6
 popup/item_0/text = "Play/Pause"
 popup/item_0/id = 0
 popup/item_1/id = 1
 popup/item_1/separator = true
 popup/item_2/text = "Edit Audios"
 popup/item_2/id = 2
+popup/item_3/id = 3
+popup/item_3/separator = true
+popup/item_4/text = "Speed Audio Up"
+popup/item_4/id = 4
+popup/item_5/text = "Slow Audio Down"
+popup/item_5/id = 5
 metadata/_edit_use_anchors_ = true
 
 [node name="Audios Window" parent="UI/Upper UI/Audio Button" instance=ExtResource("22_xfd1e")]

@@ -21,5 +21,12 @@ var strum_data: Array = [
 		"muted": false,
 		"track": 1,
 		
-	}
+	},
+	#{
+		#"name": "Third",
+		#"strums": [8, 11],
+		#"muted": false,
+		#"track": 2,
+		#
+	#},
 ]

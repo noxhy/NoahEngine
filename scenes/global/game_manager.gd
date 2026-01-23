@@ -5,6 +5,8 @@ const GOOD_RATING_WINDOW = 0.09
 const BAD_RATING_WINDOW = 0.135
 const SHIT_RATING_WINDOW = 0.16
 
+var song_scene = "res://test/test_scene.tscn"
+
 # Constants are read only even if I set a new variable to the constant
 # so it's just a regular variable with constant notations
 # future note: ok so this apparently just also gets set whenever

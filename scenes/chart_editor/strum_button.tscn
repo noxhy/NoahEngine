@@ -26,7 +26,7 @@ text = "<"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Player"
-text_overrun_behavior = 1
+autowrap_mode = 1
 
 [node name="Move Lane Right" type="Button" parent="."]
 layout_mode = 2

@@ -36,7 +36,7 @@ func _input(event):
 
 func exit_scene():
 	Transitions.transition(&"fade")
-	Global.change_scene_to(Global.song_scene)
+	Global.change_scene_to(GameManager.song_scene)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == &"intro":

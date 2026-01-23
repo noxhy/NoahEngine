@@ -125,7 +125,7 @@ func _ready():
 	conductor.connect(&"new_step", self.new_step)
 	
 	pause_preload = load(pause_scene)
-	Global.song_scene = LoadingScreen.scene
+	GameManager.song_scene = LoadingScreen.scene
 	
 	chart = load(song_data.difficulties[GameManager.difficulty].chart)
 	assert(chart, 'Failed to load chart. is (%s) correct?' % (song_data.difficulties[GameManager.difficulty].chart))
@@ -179,7 +179,7 @@ func _process(delta):
 	if health <= 0:
 		GameManager.deaths += 1
 		DeathScreen.camera_zoom = camera.zoom
-		Global.song_scene = get_tree().current_scene.scene_file_path
+		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		get_tree().change_scene_to_file(death_scene)
 	
 	GameManager.seconds_per_beat = conductor.seconds_per_beat

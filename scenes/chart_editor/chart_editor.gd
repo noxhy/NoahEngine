@@ -150,6 +150,21 @@ func _ready() -> void:
 		%"Edit Button".get_popup().get_item_index(11), shortcut)
 	
 	%"Audio Button".get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_EQUAL
+	key_event.shift_pressed = true
+	shortcut.events = [key_event]
+	%"Audio Button".get_popup().set_item_shortcut(
+		%"Audio Button".get_popup().get_item_index(4), shortcut)
+	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_MINUS
+	key_event.shift_pressed = true
+	shortcut.events = [key_event]
+	%"Audio Button".get_popup().set_item_shortcut(
+		%"Audio Button".get_popup().get_item_index(5), shortcut)
 	
 	%"View Button".get_popup().connect(&"id_pressed", self.view_button_item_pressed)
 	
@@ -267,6 +282,9 @@ func _process(delta: float) -> void:
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
+	if song_speed != 1:
+		%"Current Time Label".text += str(" (", song_speed, "x)")
+	
 	if ChartManager.song:
 		%"Time Left Label".text = "-" + Global.float_to_time(%Instrumental.stream.get_length() - song_position)
 	else:
@@ -563,11 +581,13 @@ func update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
 	%Grid.rows = $Conductor.steps_per_measure
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
-	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * %Grid.grid_size.x * %Grid.zoom.x + 4
+	%"Strum Labels".size.x = 0
+	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (
+		%Grid.grid_size.x * %Grid.zoom.x) + (4 * ChartManager.strum_data.size())
 	
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
-
+	
 	for id in ChartManager.strum_data.size():
 		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
 		
@@ -578,7 +598,6 @@ func update_grid():
 		strum_label_instance.custom_minimum_size.x = (
 			ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]
 			) * %Grid.grid_size.x * %Grid.zoom.x
-		%"Strum Labels".size.x = strum_label_instance.custom_minimum_size.x * ChartManager.strum_data.size()
 		strum_label_instance.size.y = 32
 		
 		if ChartManager.strum_data[id]["strums"][0] == 0:
@@ -1259,6 +1278,16 @@ func audio_button_item_pressed(id):
 		
 		2:
 			$"UI/Upper UI/Audio Button/Audios Window".popup()
+		
+		4:
+			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
+			min(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") + 0.05, 2))
+			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+		
+		5:
+			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
+			max(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") - 0.05, 0.5))
+			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 		
 		_:
 			print("id: ", id)
