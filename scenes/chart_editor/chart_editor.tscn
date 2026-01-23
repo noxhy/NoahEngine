@@ -70,20 +70,17 @@ bus = &"Music"
 [node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
-volume_db = -80.0
 pitch_scale = 2.0
 bus = &"SFX"
 
 [node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
-volume_db = -80.0
 bus = &"SFX"
 
 [node name="Conductor Step" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
-volume_db = -80.0
 pitch_scale = 1.5
 bus = &"SFX"
 
@@ -465,7 +462,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Audio"
-item_count = 6
+item_count = 9
 popup/item_0/text = "Play/Pause"
 popup/item_0/id = 0
 popup/item_1/id = 1
@@ -478,6 +475,14 @@ popup/item_4/text = "Speed Audio Up"
 popup/item_4/id = 4
 popup/item_5/text = "Slow Audio Down"
 popup/item_5/id = 5
+popup/item_6/id = 6
+popup/item_6/separator = true
+popup/item_7/text = "Conductor Beat"
+popup/item_7/checkable = 1
+popup/item_7/id = 7
+popup/item_8/text = "Conductor Step"
+popup/item_8/checkable = 1
+popup/item_8/id = 8
 metadata/_edit_use_anchors_ = true
 
 [node name="Audios Window" parent="UI/Upper UI/Audio Button" instance=ExtResource("22_xfd1e")]

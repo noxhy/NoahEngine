@@ -150,6 +150,14 @@ func _ready() -> void:
 		%"Edit Button".get_popup().get_item_index(11), shortcut)
 	
 	%"Audio Button".get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
+	%"Audio Button".get_popup().set_item_checked(
+		%"Audio Button".get_popup().get_item_index(7),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+	%"Audio Button".get_popup().set_item_checked(
+		%"Audio Button".get_popup().get_item_index(8),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+	%"Audio Button".get_popup().set_hide_on_checkable_item_selection(false)
+	
 	shortcut = Shortcut.new()
 	key_event = InputEventKey.new()
 	key_event.keycode = KEY_EQUAL
@@ -167,6 +175,13 @@ func _ready() -> void:
 		%"Audio Button".get_popup().get_item_index(5), shortcut)
 	
 	%"View Button".get_popup().connect(&"id_pressed", self.view_button_item_pressed)
+	
+	shortcut = Shortcut.new()
+	key_event = InputEventKey.new()
+	key_event.keycode = KEY_TAB
+	shortcut.events = [key_event]
+	%"View Button".get_popup().set_item_shortcut(
+		%"View Button".get_popup().get_item_index(0), shortcut)
 	
 	shortcut = Shortcut.new()
 	key_event = InputEventKey.new()
@@ -1157,10 +1172,11 @@ func _on_instrumental_finished() -> void:
 	_on_play_button_toggled(false)
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
-	if measure_relative == 0:
-		%"Conductor Beat".play(0.55)
-	else:
-		%"Conductor Off Beat".play(0.55)
+	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"):
+		if measure_relative == 0:
+			%"Conductor Beat".play(0.55)
+		else:
+			%"Conductor Off Beat".play(0.55)
 	
 	if ChartManager.chart:
 		load_section(song_position)
@@ -1168,7 +1184,8 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	%Beat.text = str("Beat: ", current_beat + 1)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
-	%"Conductor Step".play(0.55)
+	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"):
+		%"Conductor Step".play(0.55)
 	%Step.text = str("Step: ", current_step + 1)
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1219,10 +1236,11 @@ func file_button_item_pressed(id):
 			%"Open Window".play()
 		
 		3:
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save", !SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save",
+			!SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
 			%"File Button".get_popup().set_item_checked(
 				%"File Button".get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
-			%"Note Place".play()
+			%"Mouse Click".play()
 		
 		6:
 			set_chart_from_chart(backup_chart)
@@ -1289,12 +1307,31 @@ func audio_button_item_pressed(id):
 			max(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") - 0.05, 0.5))
 			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 		
+		7:
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_beat",
+			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+			%"Mouse Click".play()
+			%"Audio Button".get_popup().set_item_checked(
+				%"Audio Button".get_popup().get_item_index(id),
+				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+		
+		8:
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_step",
+			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+			%"Mouse Click".play()
+			%"Audio Button".get_popup().set_item_checked(
+				%"Audio Button".get_popup().get_item_index(id),
+				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+		
 		_:
 			print("id: ", id)
 
 ## View button item pressed
 func view_button_item_pressed(id):
 	match id:
+		0:
+			get_tree().change_scene_to_file("res://scenes/chart_editor/event_editor/event_editor.tscn")
+		
 		1:
 			can_chart = false
 			%"Note Skin Window".popup()

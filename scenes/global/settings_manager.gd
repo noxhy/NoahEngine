@@ -65,6 +65,8 @@ static var _defaults: Dictionary = {
 	SEC_CHART: {
 		"auto_save": true,
 		"start_at_current_position": false,
+		"conductor_beat": false,
+		"conductor_step": false,
 	},
 	
 	SEC_KEY_BINDS: {
