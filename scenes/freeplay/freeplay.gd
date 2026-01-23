@@ -78,7 +78,7 @@ func _process(_delta):
 		elif Input.is_action_just_pressed(&"ui_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
-			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
+			Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
 		elif Input.is_action_just_pressed(&"character_select"):
 			can_click = false
 			dj.animation = "character_select"

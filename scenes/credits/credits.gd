@@ -105,7 +105,7 @@ func _input(event):
 		if event.is_action_pressed("ui_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
-			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
+			Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
 
 
 # Updates visually what happens when a new index is set for a selection

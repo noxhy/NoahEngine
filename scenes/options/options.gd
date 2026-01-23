@@ -144,7 +144,7 @@ func _process(delta: float) -> void:
 				SoundManager.music.stop()
 				Global.change_scene_to(Global.song_scene)
 			else:
-				Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
+				Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
 		
 		if Input.is_action_just_pressed(&"ui_up"):
 			update(selected - 1)

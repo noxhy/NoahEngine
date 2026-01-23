@@ -1207,7 +1207,7 @@ func file_button_item_pressed(id):
 		
 		6:
 			set_chart_from_chart(backup_chart)
-			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
+			Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
 			can_chart = false
 		
 		8:
