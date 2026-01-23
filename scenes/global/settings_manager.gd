@@ -31,7 +31,7 @@ func flush() -> void:
 	print('(SettingsManager): Saved preferences')
 
 static var _defaults: Dictionary = {
-	"gameplay": {
+	SEC_GAMEPLAY: {
 		"offset": 0.0, ## Puts a delay on the notes
 		"ghost_tapping": true, ## Allows tapping when no notes are active
 		"downscroll": false, ## Notes go down instead of up, downscroll ui function is called
@@ -40,7 +40,7 @@ static var _defaults: Dictionary = {
 		"scroll_speed_scale": 1.0
 	},
 	
-	"preferences": {
+	SEC_PREFERENCES: {
 		"combo_ui": false, ## Spawns the combo shit on the ui instead of world
 		"glow_notes": false, ## Glows notes when that are able to be pressed
 		"note_splashes": true,
@@ -49,25 +49,25 @@ static var _defaults: Dictionary = {
 		"fullscreen": false ##i dont like this here but where else
 	},
 	
-	"audio": {
+	SEC_AUDIO: {
 		"master_volume": 1, ## the global sound volume. Affects everything
 		"sfx_volume": 1, ## The sfx volume. Only Affects sfx
 		"music_volume": 1, ## The music volume. Only applied to music tracks
 		"is_muted": false
 	},
 	
-	"debug": {
+	SEC_DEBUG: {
 		"show_performance": true, ## Shows FPS, Memory, delta and shit,
 		"cap_fps": false, ## caps fps
 		"fps_cap": int(DisplayServer.screen_get_refresh_rate())
 	},
 	
-	"chart": {
+	SEC_CHART: {
 		"auto_save": true,
 		"start_at_current_position": false,
 	},
 	
-	"keybinds": {
+	SEC_KEY_BINDS: {
 		"note_left": [KEY_LEFT, KEY_A],
 		"note_down": [KEY_DOWN, KEY_S],
 		"note_up": [KEY_UP, KEY_W],

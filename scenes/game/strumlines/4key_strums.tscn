@@ -32,13 +32,3 @@ position = Vector2(192, 0)
 input = "note_right"
 strum_name = "right"
 can_splash = true
-
-[connection signal="note_hit" from="Down" to="." method="_on_note_hit"]
-[connection signal="note_holding" from="Down" to="." method="_on_note_holding"]
-[connection signal="note_miss" from="Down" to="." method="_on_note_miss"]
-[connection signal="note_hit" from="Up" to="." method="_on_note_hit"]
-[connection signal="note_holding" from="Up" to="." method="_on_note_holding"]
-[connection signal="note_miss" from="Up" to="." method="_on_note_miss"]
-[connection signal="note_hit" from="Right" to="." method="_on_note_hit"]
-[connection signal="note_holding" from="Right" to="." method="_on_note_holding"]
-[connection signal="note_miss" from="Right" to="." method="_on_note_miss"]

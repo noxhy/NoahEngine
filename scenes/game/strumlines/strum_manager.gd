@@ -34,8 +34,8 @@ func _ready():
 	
 	for strum in strums:
 		get_node(strum).connect(&"note_hit", self._on_note_hit)
-		get_node(strum).connect(&"note_holding", self._on_note_hit)
-		get_node(strum).connect(&"note_miss", self._on_note_hit)
+		get_node(strum).connect(&"note_holding", self._on_note_holding)
+		get_node(strum).connect(&"note_miss", self._on_note_miss)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
