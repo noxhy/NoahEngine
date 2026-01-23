@@ -91,15 +91,62 @@ func _ready() -> void:
 	## Initializing Popup Signals
 	%"File Button".get_popup().connect(&"id_pressed", self.file_button_item_pressed)
 	%"File Button".get_popup().set_item_checked(
-		%"File Button".get_popup().get_item_index(3), SettingsManager.get_value("chart", "auto_save"))
+		%"File Button".get_popup().get_item_index(3), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
 	%"File Button".get_popup().set_hide_on_checkable_item_selection(false)
+	
+	var shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"save")
+	
+	%"File Button".get_popup().set_item_shortcut(
+		%"File Button".get_popup().get_item_index(2), shortcut)
 	
 	%"Edit Button".get_popup().connect(&"id_pressed", self.edit_button_item_pressed)
 	%"Edit Button".get_popup().set_hide_on_checkable_item_selection(false)
-	%"Edit Button".get_popup().set_item_tooltip(
-		%"Edit Button".get_popup().get_item_index(0), "Ctrl+Z")
-	%"Edit Button".get_popup().set_item_tooltip(
-		%"Edit Button".get_popup().get_item_index(1), "Ctrl+Y")
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_undo")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(0), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_redo")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(1), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_cut")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(3), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_copy")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(4), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_paste")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(5), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_text_delete_word")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(6), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"flip_notes")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(8), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_text_select_all")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(10), shortcut)
+	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"deselect")
+	%"Edit Button".get_popup().set_item_shortcut(
+		%"Edit Button".get_popup().get_item_index(11), shortcut)
 	
 	%"Audio Button".get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
 	
@@ -107,18 +154,20 @@ func _ready() -> void:
 	
 	%"Test Button".get_popup().connect(&"id_pressed", self.test_button_item_pressed)
 	%"Test Button".get_popup().set_item_checked(
-		%"Test Button".get_popup().get_item_index(3), SettingsManager.get_value("chart", "start_at_current_position"))
+		%"Test Button".get_popup().get_item_index(3), SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
 	%"Test Button".get_popup().set_hide_on_checkable_item_selection(false)
 	
 	%"Window Button".get_popup().connect(&"id_pressed", self.window_button_item_pressed)
 	%"Window Button".get_popup().set_hide_on_checkable_item_selection(false)
+	
+	get_tree().get_root().files_dropped.connect(on_files_dropped)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if start_offset < 0:
 		start_offset = 0
 	
-	if ChartManager.song != null:
+	if ChartManager.song:
 		if %Instrumental.playing:
 			song_position = %Instrumental.get_playback_position() - start_offset
 			%"Song Slider".value = song_position
@@ -172,10 +221,6 @@ func _process(delta: float) -> void:
 					%"Chart Snap".value = chart_snap
 			
 			$Conductor.time = song_position
-		
-		if ChartManager.chart:
-			if Input.is_action_pressed("control") and Input.is_action_just_pressed("save"):
-				save()
 	
 	if ChartManager.chart:
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
@@ -185,11 +230,6 @@ func _process(delta: float) -> void:
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(song_position + start_offset) - ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
-		
-		if Input.is_action_pressed("control") and Input.is_action_just_pressed("undo"):
-			undo()
-		if Input.is_action_pressed("control") and Input.is_action_just_pressed("redo"):
-			redo()
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
 	if ChartManager.song:
@@ -197,7 +237,7 @@ func _process(delta: float) -> void:
 	else:
 		%"Time Left Label".text = "- ??:??"
 	
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed(&"ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
@@ -219,12 +259,9 @@ func _process(delta: float) -> void:
 						var time: float = grid_position_to_time(snapped_position, true)
 						
 						if !is_note_at(lane, time):
-							var action: String = "Add Note"
-							undo_redo.create_action(action)
-							undo_redo.add_do_method(self.place_note.bind(time, lane, 0, current_note_type, true))
-							undo_redo.add_do_reference(%"History Window".add_action(action))
-							undo_redo.add_undo_method(self.remove_note.bind(lane, time))
-							undo_redo.commit_action()
+							add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
+							self.remove_note.bind(lane, time))
+							
 							%"Note Place".play()
 							placing_note = true
 						else:
@@ -271,12 +308,8 @@ func _process(delta: float) -> void:
 								var length: float = note[2]
 								var note_type = note[3]
 								
-								var action: String = "Remove Note"
-								undo_redo.create_action(action)
-								undo_redo.add_do_method(self.remove_note.bind(i))
-								undo_redo.add_do_reference(%"History Window".add_action(action))
-								undo_redo.add_undo_method(self.place_note.bind(time, lane, length, note_type, true))
-								undo_redo.commit_action()
+								add_action("Removed Note", self.remove_note.bind(i),
+								self.place_note.bind(time, lane, length, note_type, true))
 								%"Note Remove".play()
 								
 								if selected_notes.has(i):
@@ -294,7 +327,7 @@ func _process(delta: float) -> void:
 								
 								hovered_note = -1
 								
-								if SettingsManager.get_value("chart", "auto_save"):
+								if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 									save()
 	
 	if Input.is_action_pressed(&"mouse_left"):
@@ -326,7 +359,7 @@ func _process(delta: float) -> void:
 										if (note_nodes[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
 										note_nodes[i - current_visible_notes_L].length = distance
 									
-									if SettingsManager.get_value("chart", "auto_save"): 
+									if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"): 
 										save()
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
@@ -351,7 +384,7 @@ func _process(delta: float) -> void:
 												time_to_y_position(node.time + time_distance) + %Grid.grid_size.y * %Grid.zoom.y / 2) + $"Grid Layer".offset
 											j += 1
 										
-										if SettingsManager.get_value("chart", "auto_save"):
+										if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 											save()
 										
 										moved_time_distance = time_distance
@@ -369,8 +402,10 @@ func _process(delta: float) -> void:
 				for i in selected_notes:
 					undo_redo.add_do_property(note_nodes[i - current_visible_notes_L],
 					"length", note_nodes[i - current_visible_notes_L].length)
+					undo_redo.add_do_method(self.change_length.bind(i, note_nodes[i - current_visible_notes_L].length))
 					undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L],
 					"length", 0.0)
+					undo_redo.add_undo_method(self.change_length.bind(i, 0))
 				
 				undo_redo.add_do_reference(%"History Window".add_action(action))
 				undo_redo.commit_action()
@@ -391,63 +426,29 @@ func _process(delta: float) -> void:
 			var lane_a: int = int(pos_1.x)
 			var lane_b: int = int(pos_2.x)
 			
+			if lane_b < lane_a:
+				var temp: int = lane_a
+				lane_a = lane_b
+				lane_b = temp
+			
 			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
 			
 			if (L == R + 1):
 				L -= 1
 			L = max(0, L)
-			selected_notes = range(L, R + 1)
-			selected_note_nodes = []
-			
-			var _i: int = 0
-			for i in range(selected_notes.size()):
-				var lane: int = int(ChartManager.chart.get_notes_data()[selected_notes[_i]][1])
-				if !(lane >= lane_a and lane <= lane_b):
-					selected_notes.remove_at(_i)
-					_i -= 1
-				
-				_i += 1
-			
-			for i in selected_notes:
-				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-			
-			if selected_notes.size() > 0:
-				%"Note Place".play()
+			add_action("Selected Area", self.select_area.bind(L, R, lane_a, lane_b), self.deselect_all)
 		
 		if moving_notes:
-			var notes: Array = []
-			for note in selected_note_nodes:
-				notes.append([note.time + moved_time_distance, note.lane + moved_lane_distance, note.length, note.note_type])
-				remove_note(note.lane, note.time)
-			
-			var temp = place_notes(notes)
-			selected_notes = temp
-			selected_note_nodes = []
-			for i in selected_notes:
-				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-			
-			moving_notes = false
-			%"Note Place".play()
+			add_action("Moved Note(s)", self.move_selection.bind(moved_time_distance, moved_lane_distance),
+			self.move_selection.bind(-moved_time_distance, -moved_lane_distance))
 	
 	if Input.is_action_just_released(&"control"):
 		bounding_box = false
 	
 	if Input.is_action_pressed(&"ui_cut"):
 		if can_chart:
-			if selected_notes.size() > 0:
-				var temp: Array = []
-				for i in selected_notes:
-					var note = ChartManager.chart.get_notes_data()[i]
-					temp.append([note[0], note[1], note[2], note[3]])
-				var action: String = "Remove Notes"
-				undo_redo.create_action(action)
-				undo_redo.add_do_method(self.remove_notes.bind(selected_notes))
-				undo_redo.add_do_reference(%"History Window".add_action(action))
-				undo_redo.add_undo_method(self.place_notes.bind(temp))
-				undo_redo.commit_action()
-				selected_notes = []
-				%"Note Remove".play()
+			cut()
 	
 	# Postponed
 	if Input.is_action_just_pressed(&"ui_copy"):
@@ -506,6 +507,18 @@ func _draw() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
 			draw_string(default_font, get_global_mouse_position(), str("Type: ", note_type),
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+
+
+func on_files_dropped(files: PackedStringArray):
+	print("Received files: ", files)
+	var file: String = files[0]
+	var local_file: String = ProjectSettings.localize_path(file)
+	print("File taken: ", local_file)
+	if ResourceLoader.exists(local_file) and ["res", "tres"].has(file.get_extension()):
+		if load(local_file) is Song:
+			load_song(load(local_file))
+		else:
+			printerr("(ChartEdtior) File is not a song is %s correct?" % local_file)
 
 
 func update_grid():
@@ -598,10 +611,10 @@ func load_chart(file: Chart, ghost: bool = false):
 	get_tree().call_group(&"history", &"queue_free")
 	var action: String = "Loaded Chart"
 	undo_redo.create_action(action)
-	undo_redo.add_do_property(self, "chart", file)
+	undo_redo.add_do_property(self, SettingsManager.SEC_CHART, file)
 	undo_redo.add_do_reference(%"History Window".add_action(action))
 	undo_redo.commit_action()
-
+	
 	%"Metadata Window".update_stats()
 	can_chart = true
 	load_section(song_position)
@@ -1097,55 +1110,65 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 
 ## File button item pressed
 func file_button_item_pressed(id):
-	var item_name: String = %"File Button".get_popup().get_item_text(id)
-	if item_name == "Create New Song":
-		can_chart = false
-		var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
+	match id:
+		0:
+			can_chart = false
+			var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
+			
+			add_child(new_file_popup_instance)
+			new_file_popup_instance.popup()
+			new_file_popup_instance.connect("file_created", self.new_file)
+			new_file_popup_instance.connect("close_requested", self.close_popup)
+			new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
+			%"Open Window".play()
 		
-		add_child(new_file_popup_instance)
-		new_file_popup_instance.popup()
-		new_file_popup_instance.connect("file_created", self.new_file)
-		new_file_popup_instance.connect("close_requested", self.close_popup)
-		new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
-		%"Open Window".play()
-	elif item_name == "Open Song":
-		can_chart = false
-		var open_file_popup_instance = OPEN_FILE_POPUP_PRELOAD.instantiate()
+		1:
+			can_chart = false
+			var open_file_popup_instance = OPEN_FILE_POPUP_PRELOAD.instantiate()
+			
+			add_child(open_file_popup_instance)
+			open_file_popup_instance.popup()
+			open_file_popup_instance.connect("file_selected", self.load_song_path)
+			open_file_popup_instance.connect("close_requested", self.close_popup)
+			open_file_popup_instance.connect("canceled", self.close_popup)
+			open_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
+			%"Open Window".play()
 		
-		add_child(open_file_popup_instance)
-		open_file_popup_instance.popup()
-		open_file_popup_instance.connect("file_selected", self.load_song_path)
-		open_file_popup_instance.connect("close_requested", self.close_popup)
-		open_file_popup_instance.connect("canceled", self.close_popup)
-		open_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
-		%"Open Window".play()
-	elif id == 2:
-		save()
-	elif id == 7:
-		can_chart = false
+		2:
+			if ChartManager.song and ChartManager.chart:
+				save()
 		
-		var convert_chart_popup_instance = CONVERT_CHART_POPUP_PRELOAD.instantiate()
+		7:
+			can_chart = false
+			
+			var convert_chart_popup_instance = CONVERT_CHART_POPUP_PRELOAD.instantiate()
+			
+			add_child(convert_chart_popup_instance)
+			convert_chart_popup_instance.popup()
+			# convert_chart_popup_instance.connect("file_created", self._on_save_folder_dialog_dir_selected)
+			convert_chart_popup_instance.connect("file_created", self.new_file)
+			convert_chart_popup_instance.connect("close_requested", self.close_popup)
+			convert_chart_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
+			%"Open Window".play()
 		
-		add_child(convert_chart_popup_instance)
-		convert_chart_popup_instance.popup()
-		# convert_chart_popup_instance.connect("file_created", self._on_save_folder_dialog_dir_selected)
-		convert_chart_popup_instance.connect("file_created", self.new_file)
-		convert_chart_popup_instance.connect("close_requested", self.close_popup)
-		convert_chart_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
-		%"Open Window".play()
-	elif id == 3:
-		SettingsManager.set_value("chart", "auto_save", !SettingsManager.get_value("chart", "auto_save"))
-		%"File Button".get_popup().set_item_checked(
-			%"File Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "auto_save"))
-		%"Note Place".play()
-	elif id == 6:
-		set_chart_from_chart(backup_chart)
-		Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
-		can_chart = false
-	elif id == 8:
-		can_chart = false
-		%"Export External Popup".popup()
-		%"Open Window".play()
+		3:
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save", !SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			%"File Button".get_popup().set_item_checked(
+				%"File Button".get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			%"Note Place".play()
+		
+		6:
+			set_chart_from_chart(backup_chart)
+			Global.change_scene_to("res://scenes/main menu/main_menu.tscn")
+			can_chart = false
+		
+		8:
+			can_chart = false
+			%"Export External Popup".popup()
+			%"Open Window".play()
+		
+		_:
+			print("id: ", id)
 
 ## Edit button item pressed
 func edit_button_item_pressed(id):
@@ -1157,19 +1180,7 @@ func edit_button_item_pressed(id):
 			redo()
 		
 		3:
-			if selected_notes.size() > 0:
-				var temp: Array = []
-				for i in selected_notes:
-					var note = ChartManager.chart.get_notes_data()[i]
-					temp.append([note[0], note[1], note[2], note[3]])
-				var action: String = "Remove Notes"
-				undo_redo.create_action(action)
-				undo_redo.add_do_method(self.remove_notes.bind(selected_notes))
-				undo_redo.add_do_reference(%"History Window".add_action(action))
-				undo_redo.add_undo_method(self.place_notes.bind(temp))
-				undo_redo.commit_action()
-				selected_notes = []
-				%"Note Remove".play()
+			cut()
 		
 		4:
 			copy()
@@ -1178,72 +1189,16 @@ func edit_button_item_pressed(id):
 			paste()
 		
 		6:
-			if ChartManager.chart.get_notes_data().size() > 1:
-				var i: int = 0
-				var deleted: bool = false
-				selected_notes = []
-				selected_note_nodes = []
-				for index in range(ChartManager.chart.get_notes_data().size() - 1):
-					var note_a = ChartManager.chart.get_notes_data()[index - i]
-					var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
-					
-					if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
-						deleted = true
-						remove_note(index - i)
-						i += 1
-					
-					if deleted:
-						%"Note Remove".play()
+			delete_stacked_notes()
 		
 		8:
-			if selected_notes.size() > 1:
-				var _min_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
-				var _max_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
-				var temp: Array = []
-				for i in selected_notes:
-					var note = ChartManager.chart.get_notes_data()[i]
-					_min_lane = min(_min_lane, note[1])
-					_max_lane = max(_max_lane, note[1])
-					temp.append(note)
-				
-				remove_notes(selected_notes)
-				
-				selected_notes = []
-				selected_note_nodes = []
-				var length: int = _max_lane - _min_lane
-				var j: int = 0
-				for note in temp:
-					var lane: int = -(note[1] - _min_lane)
-					lane += length
-					lane += _min_lane
-					temp[j][1] = lane
-					
-					place_note(note[0], lane, note[2], note[3], true, true)
-					j += 1
-				
-				# I need a cleaner and less intensive way of doing this.
-				for note in temp:
-					var i: int = find_note(note[1], note[0])
-					
-					if !selected_notes.has(i):
-						selected_notes.append(i)
-						selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-				
-				selected_notes.sort()
-				
-				%"Note Place".play()
+			do_flip()
 		
 		10:
-			selected_notes = range(current_visible_notes_L, current_visible_notes_R + 1)
-			selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
-			%"Note Place".play()
+			select_all()
 		
 		11:
-			if selected_notes.size() > 0:
-				%"Note Place".play()
-			
-			selected_notes = []
-			selected_note_nodes = []
+			deselect_all()
 		
 		_:
 			print("id: ", id)
@@ -1266,13 +1221,13 @@ func view_button_item_pressed(id):
 			%"Open Window".play()
 		
 		3:
-			%Grid.zoom = clamp(%Grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			%Grid.zoom = clamp(%Grid.zoom + Vector2.ONE * 0.2, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
 		
 		4:
-			%Grid.zoom = clamp(%Grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
+			%Grid.zoom = clamp(%Grid.zoom - Vector2.ONE * 0.2, Vector2.ONE * 0.8, Vector2.ONE * 1.2)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
@@ -1334,10 +1289,11 @@ func test_button_item_pressed(id):
 			self.process_mode = Node.PROCESS_MODE_DISABLED
 		
 		2:
-			SettingsManager.set_value("chart", "start_at_current_position",
-			!SettingsManager.get_value("chart", "start_at_current_position"))
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "start_at_current_position",
+			!SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
 			%"Test Button".get_popup().set_item_checked(
-			%"Test Button".get_popup().get_item_index(id), SettingsManager.get_value("chart", "start_at_current_position"))
+			%"Test Button".get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART,
+			"start_at_current_position"))
 			%"Mouse Click".play()
 		
 		_:
@@ -1354,24 +1310,44 @@ func undo():
 	if undo_redo.has_undo():
 		%Undo.play()
 		undo_redo.undo()
-		if SettingsManager.get_value("chart", "auto_save"):
+		if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 			save()
 	
-	%"Edit Button".get_popup().set_item_checked(0, !undo_redo.has_undo())
+	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
+
 
 func redo():
 	if undo_redo.has_redo():
 		%Redo.play()
 		undo_redo.redo()
-		if SettingsManager.get_value("chart", "auto_save"):
+		if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 			save()
 	
-	%"Edit Button".get_popup().set_item_checked(1, !undo_redo.has_redo())
+	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
+
 
 func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	ResourceSaver.save(ChartManager.chart, ChartManager.chart.resource_path)
+	%"Note Place".play()
 	backup_chart = ChartManager.chart
+
+
+func move_selection(time_distance: float, lane_distance: float):
+	var notes: Array = []
+	for note in selected_note_nodes:
+		notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
+		remove_note(note.lane, note.time)
+	
+	var temp = place_notes(notes)
+	selected_notes = temp
+	selected_note_nodes = []
+	for i in selected_notes:
+		selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+	
+	moving_notes = false
+	%"Note Place".play()
+
 
 func updated_strums():
 	can_chart = true
@@ -1415,7 +1391,7 @@ func _on_chart_snap_value_changed(value: float) -> void:
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var _difficulty = %"Difficulty Button".get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(_difficulty):
-		ChartManager.chart = load(ChartManager.song.difficulties.get(_difficulty).get("chart"))
+		ChartManager.chart = load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
 		ChartManager.difficulty = _difficulty
 		load_chart(ChartManager.chart)
 
@@ -1496,13 +1472,26 @@ func _on_note_skin_window_file_selected(path: String) -> void:
 	note_skin = skin
 	%"Open Window".play()
 
-func copy():
+func cut() -> void:
+	if selected_notes.size() > 0:
+		var temp: Array = []
+		for i in selected_notes:
+			var note = ChartManager.chart.get_notes_data()[i]
+			temp.append([note[0], note[1], note[2], note[3]])
+		
+		add_action("Cut Note(s)", self.remove_notes.bind(selected_notes), self.place_notes.bind(temp))
+		selected_notes = []
+		%"Note Remove".play()
+
+
+func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
 		clipboard.append(ChartManager.chart.get_notes_data()[note])
 	%"Note Place".play()
 
-func paste():
+
+func paste() -> void:
 	if clipboard.is_empty():
 		return
 	
@@ -1512,6 +1501,117 @@ func paste():
 	for i in selected_notes:
 		selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
 	%"Note Place".play()
+
+
+func delete_stacked_notes() -> void:
+	if ChartManager.chart.get_notes_data().size() > 1:
+		var i: int = 0
+		var deleted: bool = false
+		selected_notes = []
+		selected_note_nodes = []
+		for index in range(ChartManager.chart.get_notes_data().size() - 1):
+			var note_a = ChartManager.chart.get_notes_data()[index - i]
+			var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
+			
+			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
+				deleted = true
+				remove_note(index - i)
+				i += 1
+			
+			if deleted:
+				%"Note Remove".play()
+
+
+func do_flip():
+	add_action("Flipped Notes", self.flip, self.flip)
+
+func flip():
+	if selected_notes.size() > 1:
+		var _min_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
+		var _max_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
+		var temp: Array = []
+		for i in selected_notes:
+			var note = ChartManager.chart.get_notes_data()[i]
+			_min_lane = min(_min_lane, note[1])
+			_max_lane = max(_max_lane, note[1])
+			temp.append(note)
+		
+		remove_notes(selected_notes)
+		
+		selected_notes = []
+		selected_note_nodes = []
+		var length: int = _max_lane - _min_lane
+		var j: int = 0
+		for note in temp:
+			var lane: int = -(note[1] - _min_lane)
+			lane += length
+			lane += _min_lane
+			temp[j][1] = lane
+			
+			place_note(note[0], lane, note[2], note[3], true, true)
+			j += 1
+		
+		# I need a cleaner and less intensive way of doing this.
+		for note in temp:
+			var i: int = find_note(note[1], note[0])
+			
+			if !selected_notes.has(i):
+				selected_notes.append(i)
+				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+		
+		selected_notes.sort()
+		
+		%"Note Place".play()
+
+
+func change_length(i: int, length: float) -> void:
+	ChartManager.chart.chart_data["notes"][i][2] = length
+
+
+func select_area(L: int, R: int, lane_a: int, lane_b):
+	selected_notes = range(L, R + 1)
+	selected_note_nodes = []
+	
+	var _i: int = 0
+	for i in range(selected_notes.size()):
+		var lane: int = int(ChartManager.chart.get_notes_data()[selected_notes[_i]][1])
+		if !(lane >= lane_a and lane <= lane_b):
+			selected_notes.remove_at(_i)
+			_i -= 1
+		
+		_i += 1
+	
+	for i in selected_notes:
+		selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
+	
+	if selected_notes.size() > 0:
+		%"Note Place".play()
+
+
+func add_action(action: String, do_method: Callable, undo_method: Callable):
+	undo_redo.create_action(action)
+	undo_redo.add_do_method(do_method)
+	undo_redo.add_do_reference(%"History Window".add_action(action))
+	undo_redo.add_undo_method(undo_method)
+	undo_redo.commit_action()
+	
+	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
+	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
+
+
+func select_all():
+	selected_notes = range(current_visible_notes_L, current_visible_notes_R + 1)
+	selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
+	if selected_notes.size() > 0:
+		%"Note Place".play()
+
+
+func deselect_all():
+	if selected_notes.size() > 0:
+		%"Note Place".play()
+		
+		selected_notes = []
+		selected_note_nodes = []
 
 
 func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
