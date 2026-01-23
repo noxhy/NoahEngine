@@ -1,8 +1,11 @@
-[gd_scene load_steps=16 format=3 uid="uid://cq6xqods6w7lw"]
+[gd_scene load_steps=30 format=3 uid="uid://cq6xqods6w7lw"]
 
+[ext_resource type="Script" uid="uid://uso5pge8x5lf" path="res://scenes/chart_editor/event_editor/event_editor.gd" id="1_06aqy"]
 [ext_resource type="AudioStream" uid="uid://bodc4sfit172e" path="res://assets/sounds/chart_editor/sound-hit.wav" id="1_v4h67"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="1_xsrj7"]
 [ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://assets/sounds/chart_editor/noteLay.ogg" id="2_06aqy"]
+[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_mcaef"]
+[ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://assets/sounds/conductor/conductor sfx.mp3" id="3_srmuw"]
 [ext_resource type="AudioStream" uid="uid://s88wsjen8kj7" path="res://assets/sounds/chart_editor/keyboard1.ogg" id="3_xfimv"]
 [ext_resource type="AudioStream" uid="uid://cdoo62fj7frd" path="res://assets/sounds/chart_editor/keyboard2.ogg" id="4_lhryu"]
 [ext_resource type="AudioStream" uid="uid://dr4m1bpeomae5" path="res://assets/sounds/chart_editor/keyboard3.ogg" id="5_uq2vk"]
@@ -12,32 +15,68 @@
 [ext_resource type="AudioStream" uid="uid://bittkmfqaayks" path="res://assets/sounds/chart_editor/openWindow.ogg" id="9_v6dxm"]
 [ext_resource type="AudioStream" uid="uid://bdbqayhnogbk5" path="res://assets/sounds/chart_editor/exitWindow.ogg" id="10_vlodn"]
 [ext_resource type="AudioStream" uid="uid://bmj7ckgd3tlt1" path="res://assets/sounds/chart_editor/undo.ogg" id="11_h3cad"]
+[ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://scenes/chart_editor/grid.tscn" id="14_srmuw"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="15_ue8jl"]
+[ext_resource type="Texture2D" uid="uid://dpb5afc48uqvb" path="res://assets/sprites/menus/chart editor/restart_button.png" id="16_sb382"]
+[ext_resource type="Texture2D" uid="uid://c7ka0o15iv6a3" path="res://assets/sprites/menus/chart editor/rewind_button.png" id="17_xva00"]
+[ext_resource type="Texture2D" uid="uid://byl3boevtc02p" path="res://assets/sprites/menus/chart editor/play_button.png" id="18_5aq6y"]
+[ext_resource type="Texture2D" uid="uid://hf58qhc23n5c" path="res://assets/sprites/menus/chart editor/fast_forward_button.png" id="19_nfeyg"]
+[ext_resource type="Texture2D" uid="uid://dwtgyv6xf866j" path="res://assets/sprites/menus/chart editor/skip_button.png" id="20_xw1u0"]
+[ext_resource type="PackedScene" uid="uid://cdxtqaewsuba3" path="res://scenes/chart_editor/audios_window.tscn" id="21_qpylx"]
+[ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://scenes/chart_editor/history_window.tscn" id="22_boljn"]
+[ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://scenes/chart_editor/metadata_window.tscn" id="23_c4vbi"]
+[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://scenes/chart_editor/note_type_window.tscn" id="24_nje1h"]
 
-[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_qi84y"]
+[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_ue8jl"]
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_8dmf3"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_sb382"]
 streams_count = 3
 stream_0/stream = ExtResource("3_xfimv")
 stream_1/stream = ExtResource("4_lhryu")
 stream_2/stream = ExtResource("5_uq2vk")
 
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mcaef"]
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_xva00"]
 streams_count = 2
 stream_0/stream = ExtResource("7_h6ug2")
 stream_1/stream = ExtResource("8_4188h")
 
 [node name="Event Editor" type="Node2D"]
+script = ExtResource("1_06aqy")
+
+[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
+script = ExtResource("2_mcaef")
+stream_player = NodePath("")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(640, 360)
 
 [node name="Audio" type="Node" parent="."]
 
 [node name="Vocals" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
-stream = SubResource("AudioStreamPolyphonic_qi84y")
+stream = SubResource("AudioStreamPolyphonic_ue8jl")
 bus = &"Music"
 
 [node name="Instrumental" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
 bus = &"Music"
+
+[node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio"]
+unique_name_in_owner = true
+stream = ExtResource("3_srmuw")
+pitch_scale = 2.0
+bus = &"SFX"
+
+[node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio"]
+unique_name_in_owner = true
+stream = ExtResource("3_srmuw")
+bus = &"SFX"
+
+[node name="Conductor Step" type="AudioStreamPlayer" parent="Audio"]
+unique_name_in_owner = true
+stream = ExtResource("3_srmuw")
+pitch_scale = 1.5
+bus = &"SFX"
 
 [node name="Hit Sound" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
@@ -51,7 +90,7 @@ bus = &"SFX"
 
 [node name="Mouse Click" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_8dmf3")
+stream = SubResource("AudioStreamRandomizer_sb382")
 bus = &"SFX"
 
 [node name="Note Remove" type="AudioStreamPlayer" parent="Audio"]
@@ -61,7 +100,7 @@ bus = &"SFX"
 
 [node name="Note Stretch" type="AudioStreamPlayer" parent="Audio"]
 unique_name_in_owner = true
-stream = SubResource("AudioStreamRandomizer_mcaef")
+stream = SubResource("AudioStreamRandomizer_xva00")
 bus = &"SFX"
 
 [node name="Open Window" type="AudioStreamPlayer" parent="Audio"]
@@ -84,6 +123,437 @@ unique_name_in_owner = true
 stream = ExtResource("2_06aqy")
 bus = &"SFX"
 
+[node name="Grid Layer" type="CanvasLayer" parent="."]
+layer = -2
+offset = Vector2(640, 64)
+transform = Transform2D(1, 0, 0, 1, 640, 64)
+
+[node name="Parallax2D" type="Parallax2D" parent="Grid Layer"]
+repeat_times = 3
+follow_viewport = false
+
+[node name="Grid" parent="Grid Layer/Parallax2D" instance=ExtResource("14_srmuw")]
+unique_name_in_owner = true
+grid_size = Vector2(36, 36)
+columns = 10
+grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
+event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
+position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
+
+[node name="Waveform Layer" type="CanvasLayer" parent="."]
+layer = 2
+offset = Vector2(640, 64)
+transform = Transform2D(1, 0, 0, 1, 640, 64)
+follow_viewport_enabled = true
+
+[node name="Notes Layer" type="CanvasLayer" parent="."]
+layer = 2
+offset = Vector2(0, 360)
+transform = Transform2D(1, 0, 0, 1, 0, 360)
+follow_viewport_enabled = true
+
+[node name="UI Borders" type="CanvasLayer" parent="."]
+layer = 9
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+
+[node name="Upper Border" type="ColorRect" parent="UI Borders"]
+offset_left = -640.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = -328.0
+color = Color(0.14509805, 0.16862746, 0.20392157, 1)
+metadata/_edit_lock_ = true
+
+[node name="Lower Border" type="ColorRect" parent="UI Borders"]
+offset_left = -640.0
+offset_top = 312.0
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.14509805, 0.16862746, 0.20392157, 1)
+metadata/_edit_lock_ = true
+
+[node name="UI" type="CanvasLayer" parent="."]
+layer = 10
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+
+[node name="Song Slider" type="HSlider" parent="UI"]
+unique_name_in_owner = true
+offset_left = -640.0
+offset_top = 296.0
+offset_right = 640.0
+offset_bottom = 312.0
+focus_mode = 1
+theme = ExtResource("15_ue8jl")
+step = 0.001
+metadata/_edit_lock_ = true
+
+[node name="Lower UI" type="HBoxContainer" parent="UI"]
+clip_children = 1
+custom_minimum_size = Vector2(1280, 48)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = 312.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+theme = ExtResource("15_ue8jl")
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Current Time Label" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CURRENT TIME"
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer"]
+layout_mode = 2
+
+[node name="Beat" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "BEAT"
+vertical_alignment = 1
+
+[node name="Step" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "STEP"
+vertical_alignment = 1
+
+[node name="Debug" type="Label" parent="UI/Lower UI/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 6
+alignment = 1
+
+[node name="VSeparator4" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Skip to Beginning" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+icon = ExtResource("16_sb382")
+flat = true
+
+[node name="Skip Backward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+icon = ExtResource("17_xva00")
+flat = true
+
+[node name="Play Button" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+toggle_mode = true
+icon = ExtResource("18_5aq6y")
+flat = true
+
+[node name="Skip Forward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+icon = ExtResource("19_nfeyg")
+flat = true
+
+[node name="Skip to End" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+icon = ExtResource("20_xw1u0")
+flat = true
+
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI/Lower UI"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Difficulty Button" type="OptionButton" parent="UI/Lower UI/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+selected = 0
+allow_reselect = true
+item_count = 1
+popup/item_0/text = "difficulty"
+popup/item_0/id = 0
+
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "TEMPO"
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Chart Snap" type="SpinBox" parent="UI/Lower UI/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 4.0
+max_value = 192.0
+step = 4.0
+value = 16.0
+update_on_text_changed = true
+prefix = "1 /"
+
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Time Left Label" type="Label" parent="UI/Lower UI/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "TIME LEFT"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Upper UI" type="HBoxContainer" parent="UI"]
+clip_children = 1
+offset_left = -576.0
+offset_top = -360.0
+offset_right = 640.0
+offset_bottom = -327.0
+theme = ExtResource("15_ue8jl")
+
+[node name="File Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "File"
+item_count = 9
+popup/item_0/text = "Create New Song"
+popup/item_0/id = 0
+popup/item_1/text = "Open Song"
+popup/item_1/id = 1
+popup/item_2/text = "Convert Chart"
+popup/item_2/id = 7
+popup/item_3/id = 4
+popup/item_3/separator = true
+popup/item_4/text = "Save Song"
+popup/item_4/id = 2
+popup/item_5/text = "Save Chart As"
+popup/item_5/id = 8
+popup/item_6/text = "Autosave"
+popup/item_6/checkable = 1
+popup/item_6/checked = true
+popup/item_6/id = 3
+popup/item_7/id = 5
+popup/item_7/separator = true
+popup/item_8/text = "Exit"
+popup/item_8/id = 6
+metadata/_edit_use_anchors_ = true
+
+[node name="Export External Popup" type="FileDialog" parent="UI/Upper UI/File Button"]
+unique_name_in_owner = true
+initial_position = 4
+size = Vector2i(640, 480)
+display_mode = 1
+access = 2
+
+[node name="Edit Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Edit"
+item_count = 12
+popup/item_0/text = "Undo"
+popup/item_0/id = 0
+popup/item_1/text = "Redo"
+popup/item_1/id = 1
+popup/item_2/id = 2
+popup/item_2/separator = true
+popup/item_3/text = "Cut"
+popup/item_3/id = 3
+popup/item_4/text = "Copy"
+popup/item_4/id = 4
+popup/item_5/text = "Paste"
+popup/item_5/id = 5
+popup/item_6/text = "Delete Stacked Notes"
+popup/item_6/id = 6
+popup/item_7/id = 7
+popup/item_7/separator = true
+popup/item_8/text = "Flip Selected Notes"
+popup/item_8/id = 8
+popup/item_9/id = 9
+popup/item_9/separator = true
+popup/item_10/text = "Select All Visible Notes"
+popup/item_10/id = 10
+popup/item_11/text = "Deselect All"
+popup/item_11/id = 11
+metadata/_edit_use_anchors_ = true
+
+[node name="View Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "View"
+item_count = 5
+popup/item_0/text = "Switch Editors"
+popup/item_0/id = 0
+popup/item_1/text = "Change Note Skin"
+popup/item_1/id = 1
+popup/item_2/id = 2
+popup/item_2/separator = true
+popup/item_3/text = "Zoom In"
+popup/item_3/id = 3
+popup/item_4/text = "Zoom Out"
+popup/item_4/id = 4
+metadata/_edit_use_anchors_ = true
+
+[node name="Note Skin Window" type="FileDialog" parent="UI/Upper UI/View Button"]
+unique_name_in_owner = true
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+file_mode = 0
+root_subfolder = "res://assets/sprites/playstate/"
+filters = PackedStringArray("*.tres", "*.res")
+
+[node name="Audio Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Audio"
+item_count = 9
+popup/item_0/text = "Play/Pause"
+popup/item_0/id = 0
+popup/item_1/id = 1
+popup/item_1/separator = true
+popup/item_2/text = "Edit Audios"
+popup/item_2/id = 2
+popup/item_3/id = 3
+popup/item_3/separator = true
+popup/item_4/text = "Speed Audio Up"
+popup/item_4/id = 4
+popup/item_5/text = "Slow Audio Down"
+popup/item_5/id = 5
+popup/item_6/id = 6
+popup/item_6/separator = true
+popup/item_7/text = "Conductor Beat"
+popup/item_7/checkable = 1
+popup/item_7/id = 7
+popup/item_8/text = "Conductor Step"
+popup/item_8/checkable = 1
+popup/item_8/id = 8
+metadata/_edit_use_anchors_ = true
+
+[node name="Audios Window" parent="UI/Upper UI/Audio Button" instance=ExtResource("21_qpylx")]
+visible = false
+
+[node name="Test Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Test"
+item_count = 3
+popup/item_0/text = "Playtest Chart"
+popup/item_0/id = 0
+popup/item_1/text = "Playtest Chart (Minimal)"
+popup/item_1/id = 1
+popup/item_2/text = "Start at Current Position"
+popup/item_2/checkable = 1
+popup/item_2/id = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Window Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Window"
+item_count = 4
+popup/item_0/text = "History"
+popup/item_0/checkable = 1
+popup/item_0/id = 0
+popup/item_1/text = "Metadata"
+popup/item_1/checkable = 1
+popup/item_1/id = 1
+popup/item_2/text = "Notes"
+popup/item_2/checkable = 1
+popup/item_2/id = 2
+popup/item_3/text = "Events"
+popup/item_3/checkable = 1
+popup/item_3/id = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="History Window" parent="UI/Upper UI/Window Button" instance=ExtResource("22_boljn")]
+unique_name_in_owner = true
+initial_position = 4
+visible = false
+
+[node name="Metadata Window" parent="UI/Upper UI/Window Button" instance=ExtResource("23_c4vbi")]
+unique_name_in_owner = true
+initial_position = 4
+visible = false
+
+[node name="Note Type Window" parent="UI/Upper UI/Window Button" instance=ExtResource("24_nje1h")]
+unique_name_in_owner = true
+initial_position = 4
+visible = false
+
+[node name="Help Button" type="MenuButton" parent="UI/Upper UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Help"
+item_count = 1
+popup/item_0/id = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="Strum Labels" type="HFlowContainer" parent="UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(144, 32)
+offset_left = -144.0
+offset_top = -328.0
+offset_right = 144.0
+offset_bottom = -296.0
+
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -128
 offset = Vector2(640, 360)
@@ -93,3 +563,17 @@ transform = Transform2D(1, 0, 0, 1, 640, 360)
 modulate = Color(0.11372549, 0.13333334, 0.16078432, 1)
 texture = ExtResource("1_xsrj7")
 metadata/_edit_lock_ = true
+
+[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
+[connection signal="new_beats_per_measure" from="Conductor" to="." method="_on_conductor_new_beats_per_measure"]
+[connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]
+[connection signal="new_steps_per_measure" from="Conductor" to="." method="_on_conductor_new_steps_per_measure"]
+[connection signal="new_tempo" from="Conductor" to="." method="_on_conductor_new_tempo"]
+[connection signal="value_changed" from="UI/Song Slider" to="." method="_on_song_slider_value_changed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip to Beginning" to="." method="_on_skip_to_beginning_pressed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip Backward" to="." method="_on_skip_backward_pressed"]
+[connection signal="toggled" from="UI/Lower UI/HBoxContainer2/Play Button" to="." method="_on_play_button_toggled"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip Forward" to="." method="_on_skip_forward_pressed"]
+[connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip to End" to="." method="_on_skip_to_end_pressed"]
+[connection signal="item_selected" from="UI/Lower UI/HBoxContainer3/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
+[connection signal="value_changed" from="UI/Lower UI/HBoxContainer3/Chart Snap" to="." method="_on_chart_snap_value_changed"]

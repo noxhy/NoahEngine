@@ -3,6 +3,7 @@ class_name ChartEditor
 
 const LABEL_FONT: Font = preload("res://assets/fonts/bold_font.ttf")
 const NOTE_PRELOAD = preload("res://scenes/game/note/chart_note.tscn")
+const EVENT_PRELOAD = preload("res://scenes/chart_editor/event_editor/event.tscn")
 const STRUM_BUTTON_PRELOAD = preload("res://scenes/chart_editor/strum_button.tscn")
 
 const NEW_FILE_POPUP_PRELOAD = preload("res://scenes/chart_editor/new_file_popup.tscn")
@@ -56,15 +57,19 @@ var max_lane: int = 0
 var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
+var hovered_event: int = -1
 var current_focus_owner = null
 var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
-var min_visible_note_time: float
-var max_visible_note_time: float
+var current_note_type = 0
+
+var event_nodes: Array = []
+var current_visible_events_L: int = -1
+var current_visible_events_R: int = -1
+
 var default_font = ThemeDB.fallback_font
 var default_font_size = ThemeDB.fallback_font_size
-var current_note_type = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -578,6 +583,15 @@ func _draw() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
 			draw_string(default_font, get_global_mouse_position(), str("Type: ", note_type),
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+	
+	if hovered_event != -1 and ChartManager.chart:
+		var event = ChartManager.chart.get_events_data()[hovered_note][1]
+		var parameters = ChartManager.chart.get_events_data()[hovered_note][2]
+		var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
+		draw_string_outline(default_font, get_global_mouse_position(), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
+		draw_string(default_font, get_global_mouse_position(), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
 
 
 func on_files_dropped(files: PackedStringArray):
@@ -685,6 +699,9 @@ func load_chart(file: Chart, ghost: bool = false):
 	get_tree().call_group(&"notes", &"queue_free")
 	note_nodes = []
 	
+	get_tree().call_group(&"events", &"queue_free")
+	event_nodes = []
+	
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
 	var action: String = "Loaded Chart"
@@ -710,6 +727,7 @@ func load_section(time: float):
 		L = min(selected_notes[0], L)
 		R = max(R, selected_notes[selected_notes.size() - 1])
 	
+#region Loading Notes
 	if L > -1 and R > -1:
 		## Clearing any invisible notes
 		if current_visible_notes_L != L or current_visible_notes_R != R:
@@ -733,8 +751,35 @@ func load_section(time: float):
 		
 		current_visible_notes_L = L
 		current_visible_notes_R = R
-		min_visible_note_time = INF
-		max_visible_note_time = 0
+#endregion
+#region Loading Events
+	L = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
+	R = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
+	
+	if L > -1 and R > -1:
+		## Clearing any invisible notes
+		if current_visible_events_L != L or current_visible_events_R != R:
+			var i: int = 0
+			for _i in range(event_nodes.size()):
+				var event = event_nodes[i]
+				if (event.time < ChartManager.chart.get_events_data()[L][0]
+				or event.time > ChartManager.chart.get_events_data()[R][0]):
+					event.queue_free()
+					event_nodes.remove_at(i)
+					i -= 1
+				
+				i += 1
+		
+		for i in range(L, R + 1):
+			if i >= current_visible_events_L and i <= current_visible_events_R:
+				continue
+			
+			var event = ChartManager.chart.get_events_data()[i]
+			place_event(event[0], event[1], event[2], false, false, true, i - L)
+		
+		current_visible_notes_L = L
+		current_visible_notes_R = R
+#endregion
 
 func load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
@@ -809,7 +854,7 @@ func new_file(path: String, song: Song):
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
-func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false,moved: bool = false,
+func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false, moved: bool = false,
 sorted: bool = false, sort_index: int = -1) -> int:
 	var directions = ["left", "down", "up", "right"]
 	
@@ -821,8 +866,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.length = length
 	note_instance.lane = lane
 	note_instance.note_type = type
-	note_instance.position = Vector2(%Grid.get_real_position(Vector2(1.5 + lane, 0)).x, time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
-	note_instance.position += Vector2(640, 64)
+	note_instance.position = Vector2(%Grid.get_real_position(Vector2(1.5 + lane, 0)).x,
+	time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+	note_instance.position += $"Grid Layer".offset
 	note_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
@@ -874,6 +920,63 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.add_to_group(&"notes")
 	note_instance.area.connect(&"mouse_entered", self.update_note.bind(note_instance))
 	note_instance.area.connect(&"mouse_exited", self.update_note.bind(null))
+	return output
+
+## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
+func place_event(time: float, event: String, parameters: Array, placed: bool = false, moved: bool = false,
+sorted: bool = false, sort_index: int = -1) -> int:
+	var event_instance = EVENT_PRELOAD.instantiate()
+	
+	event_instance.time = time
+	event_instance.event = event
+	event_instance.parameters = parameters
+	event_instance.position = Vector2(%Grid.get_real_position(Vector2(-0.5 + %Grid.columns, 0)).x,
+	time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+	event_instance.position += $"Grid Layer".offset
+	event_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
+	
+	var output: int
+	
+	if placed:
+		var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time)
+		if L != -1:
+			ChartManager.chart.chart_data["events"].insert(L, [time, event, parameters])
+			event_nodes.insert(L - current_visible_notes_L, event_instance)
+			
+			if !moved:
+				selected_notes = [L]
+				selected_note_nodes = [event_instance]
+				min_lane = 0
+				max_lane = ChartManager.strum_count - 1
+			
+			output = L
+		else:
+			event_nodes.append(event_instance)
+			ChartManager.chart.chart_data["events"].append([time, event, parameters])
+			selected_notes = [ChartManager.chart.get_notes_data().size() - 1]
+			selected_note_nodes = [event_instance]
+			min_lane = 0
+			max_lane = ChartManager.strum_count - 1
+			output = note_nodes.size() - 1
+	else:
+		if sorted:
+			var L: int = sort_index
+			
+			if note_nodes.is_empty():
+				note_nodes.append(event_instance)
+			elif L < 0:
+				note_nodes.insert(0, event_instance)
+			elif L >= note_nodes.size():
+				note_nodes.append(event_instance)
+			else:
+				note_nodes.insert(L, event_instance)
+		else:
+			note_nodes.append(event_instance)
+	
+	$"Notes Layer".add_child(event_instance)
+	event_instance.add_to_group(&"events")
+	event_instance.area.connect(&"mouse_entered", self.update_event.bind(event_instance))
+	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
 	return output
 
 func sort_note(a, b):
@@ -940,6 +1043,25 @@ func find_note(lane: int, time: float) -> int:
 		var note: Array = ChartManager.chart.get_notes_data()[i]
 		if (note[1] == lane):
 			if is_equal_approx(note[0], time):
+				return i
+	
+	return -1
+
+func find_event(event: String, time: float) -> int:
+	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.1)
+	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.1)
+	
+	if (L == -1 or R == -1):
+		return -1
+	
+	# Just so I don't have to make a new return case because I'm lazy
+	if (L == R + 1):
+		L -= 1
+	
+	for i in range(L, R + 1):
+		var _event: Array = ChartManager.chart.get_events_data()[i]
+		if (_event[1] == event):
+			if is_equal_approx(_event[0], time):
 				return i
 	
 	return -1
@@ -1560,6 +1682,12 @@ func update_note(note):
 	else:
 		hovered_note = -1
 
+func update_event(event):
+	if event:
+		hovered_event = find_event(event.event, event.time)
+	else:
+		hovered_event = -1
+
 func _on_export_external_popup_file_selected(path: String) -> void:
 	ResourceSaver.save(ChartManager.chart, path)
 	%"Export External Popup".hide()
@@ -1643,6 +1771,7 @@ func delete_stacked_notes() -> void:
 
 func do_flip():
 	add_action("Flipped Notes", self.flip, self.flip)
+
 
 func flip():
 	if selected_notes.size() > 1:

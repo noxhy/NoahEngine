@@ -1,0 +1,18 @@
+extends Node2D
+
+@onready var area = $Area2D
+@onready var collision_shape = $Area2D/CollisionShape2D
+@onready var sprite: Sprite2D = $Sprite2D
+
+var time: float
+var event: String
+var parameters: Array
+var grid_size: Vector2 = Vector2(128, 128)
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	sprite.scale = grid_size / sprite.get_rect().size
+	collision_shape.shape = RectangleShape2D.new()
+	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
+	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
+	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
