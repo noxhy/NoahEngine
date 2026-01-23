@@ -1257,6 +1257,9 @@ func audio_button_item_pressed(id):
 		0:
 			_on_play_button_toggled(!%Instrumental.playing)
 		
+		2:
+			$"UI/Upper UI/Audio Button/Audios Window".popup()
+		
 		_:
 			print("id: ", id)
 
@@ -1682,3 +1685,17 @@ func set_note_type(note_type):
 func _on_note_type_window_close_requested() -> void:
 	%"Window Button".get_popup().set_item_checked(2, false)
 	%"Close Window".play()
+
+
+func _on_audios_window_close_requested() -> void:
+	can_chart = true
+	%"Close Window".play()
+
+
+func _on_audios_window_about_to_popup() -> void:
+	can_chart = false
+	%"Open Window".play()
+
+
+func _on_audios_window_updated() -> void:
+	%Instrumental.stream = load(ChartManager.song.instrumental)

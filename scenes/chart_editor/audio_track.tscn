@@ -1,0 +1,69 @@
+[gd_scene load_steps=2 format=3 uid="uid://ngxlibrfoqjc"]
+
+[ext_resource type="Script" uid="uid://5uyon5axot11" path="res://scenes/chart_editor/audio_track.gd" id="1_40s60"]
+
+[node name="Audio Track" type="PanelContainer" groups=["tracks"]]
+offset_right = 640.0
+offset_bottom = 128.0
+size_flags_vertical = 3
+script = ExtResource("1_40s60")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "1"
+alignment = 1
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+virtual_keyboard_enabled = false
+virtual_keyboard_show_on_focus = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="Vocals File Location" type="LineEdit" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "No file selected."
+editable = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Change Track File"
+
+[node name="Remove Track" type="Button" parent="HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Remove Track"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+unresizable = true
+always_on_top = true
+min_size = Vector2i(320, 320)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 0
+root_subfolder = "res://playable_songs/"
+filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Remove Track" to="." method="_on_remove_track_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

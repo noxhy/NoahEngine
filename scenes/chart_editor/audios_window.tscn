@@ -1,0 +1,79 @@
+[gd_scene load_steps=4 format=3 uid="uid://cdxtqaewsuba3"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_73vcf"]
+[ext_resource type="Script" uid="uid://cs4644jv1f2he" path="res://scenes/chart_editor/audios_window.gd" id="2_73vcf"]
+[ext_resource type="PackedScene" uid="uid://ngxlibrfoqjc" path="res://scenes/chart_editor/audio_track.tscn" id="3_uinwu"]
+
+[node name="Audios Window" type="Window"]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Audio Files"
+initial_position = 4
+size = Vector2i(640, 480)
+transparent = true
+popup_window = true
+theme = ExtResource("1_73vcf")
+script = ExtResource("2_73vcf")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Vocals"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Audios" type="VBoxContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Add Track" type="Button" parent="VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "Add Audio Track"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Instrumental"
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Instrumental" parent="VBoxContainer" instance=ExtResource("3_uinwu")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="Save Button" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Save Audio Tracks"
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer3/Add Track" to="." method="_on_add_track_pressed"]
+[connection signal="pressed" from="VBoxContainer/Save Button" to="." method="_on_save_button_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://c3lux2ajoe1g6"]
+[gd_scene load_steps=30 format=3 uid="uid://c3lux2ajoe1g6"]
 
 [ext_resource type="Script" uid="uid://ocjrud8madj7" path="res://scenes/chart_editor/chart_editor.gd" id="1_ugmsy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_dontb"]
@@ -23,6 +23,7 @@
 [ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://assets/sounds/chart_editor/noteLay.ogg" id="14_am3li"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://scenes/chart_editor/history_window.tscn" id="19_ufjr2"]
+[ext_resource type="PackedScene" uid="uid://cdxtqaewsuba3" path="res://scenes/chart_editor/audios_window.tscn" id="22_xfd1e"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://scenes/chart_editor/metadata_window.tscn" id="23_75w6f"]
 [ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://scenes/chart_editor/note_type_window.tscn" id="24_j0j2p"]
 
@@ -473,6 +474,9 @@ popup/item_2/text = "Edit Audios"
 popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
+[node name="Audios Window" parent="UI/Upper UI/Audio Button" instance=ExtResource("22_xfd1e")]
+visible = false
+
 [node name="Test Button" type="MenuButton" parent="UI/Upper UI"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
@@ -575,6 +579,9 @@ metadata/_edit_lock_ = true
 [connection signal="close_requested" from="UI/Upper UI/View Button/Note Skin Window" to="." method="close_popup"]
 [connection signal="file_selected" from="UI/Upper UI/View Button/Note Skin Window" to="." method="_on_note_skin_window_file_selected"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/View Button/Note Skin Window" to="." method="_on_gui_focus_changed"]
+[connection signal="about_to_popup" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_about_to_popup"]
+[connection signal="close_requested" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_close_requested"]
+[connection signal="updated" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_updated"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/History Window" to="." method="_on_gui_focus_changed"]
 [connection signal="add_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_add_time_change"]
