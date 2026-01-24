@@ -32,16 +32,12 @@ var noise_i: float = 0.0
 
 
 func _ready():
-	
-	# noise.noise_type = FastNoiseLite.TYPE_SIMPLEX_SMOOTH
 	noise.frequency = 0.163
 
 
 func _physics_process(delta):
 	if lerping:
 		zoom = Global.frame_independent_lerp(zoom, target_zoom, lerp_weight, delta)
-	
-	# Camera Shaking
 	
 	if shaking:
 		
@@ -55,7 +51,6 @@ func _physics_process(delta):
 
 
 func shake(amount: int, time: float):
-	
 	shake_time = time
 	shake_decay_rate = time
 	shake_strength = amount

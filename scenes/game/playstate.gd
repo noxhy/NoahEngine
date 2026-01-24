@@ -196,6 +196,7 @@ func _process(delta):
 		health = 0
 	
 	elif Input.is_action_just_pressed("chart_editor") and OS.is_debug_build():
+		ChartManager.event_editor = false
 		ChartManager.song = song_data
 		ChartManager.difficulty = GameManager.difficulty
 		Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")

@@ -73,6 +73,11 @@ var default_font_size = ThemeDB.fallback_font_size
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if name == "Chart Editor":
+		if ChartManager.event_editor:
+			get_tree().change_scene_to_file("res://scenes/chart_editor/event_editor/event_editor.tscn")
+			return
+	
 	get_viewport().gui_focus_changed.connect(_on_gui_focus_changed)
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
@@ -1452,6 +1457,7 @@ func audio_button_item_pressed(id):
 func view_button_item_pressed(id):
 	match id:
 		0:
+			ChartManager.event_editor = true
 			get_tree().change_scene_to_file("res://scenes/chart_editor/event_editor/event_editor.tscn")
 		
 		1:

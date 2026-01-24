@@ -300,6 +300,7 @@ func _draw() -> void:
 func view_button_item_pressed(id):
 	match id:
 		0:
+			ChartManager.event_editor = false
 			get_tree().change_scene_to_file("res://scenes/chart_editor/chart_editor.tscn")
 		
 		1:
@@ -668,7 +669,6 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 
 func move_selection(time_distance: float, lane_distance: float):
 	var events: Array = []
-	print(selected_note_nodes)
 	for event in selected_note_nodes:
 		events.append([event.time + time_distance, event.event, event.parameters])
 		remove_note(event.event, event.time)
