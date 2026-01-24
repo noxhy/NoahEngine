@@ -56,7 +56,7 @@ var seconds_per_step: float = 0.25
 
 var current_beat: int:
 	set(v):
-		measure_relative_beat = current_beat % beats_per_measure
+		measure_relative_beat = v % beats_per_measure
 		if current_beat != v:
 			emit_signal(&"new_beat", v, measure_relative_beat)
 		current_beat = v
@@ -65,7 +65,7 @@ var current_beat: int:
 
 var current_step: int:
 	set(v):
-		measure_relative_step = current_step % steps_per_measure
+		measure_relative_step = v % steps_per_measure
 		if current_step != v:
 			emit_signal(&"new_step", v, measure_relative_step)
 		current_step = v

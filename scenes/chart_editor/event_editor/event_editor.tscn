@@ -45,7 +45,7 @@ script = ExtResource("1_06aqy")
 
 [node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_mcaef")
-stream_player = NodePath("")
+stream_player = NodePath("../Audio/Instrumental")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(640, 360)
@@ -125,17 +125,18 @@ bus = &"SFX"
 
 [node name="Grid Layer" type="CanvasLayer" parent="."]
 layer = -2
-offset = Vector2(640, 64)
-transform = Transform2D(1, 0, 0, 1, 640, 64)
+offset = Vector2(128, 360)
+transform = Transform2D(1, 0, 0, 1, 128, 360)
 
 [node name="Parallax2D" type="Parallax2D" parent="Grid Layer"]
-repeat_times = 3
+repeat_times = 9
 follow_viewport = false
 
 [node name="Grid" parent="Grid Layer/Parallax2D" instance=ExtResource("14_srmuw")]
 unique_name_in_owner = true
-grid_size = Vector2(36, 36)
-columns = 10
+event_grid = true
+grid_size = Vector2(24, 24)
+rows = 2
 grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
 event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
@@ -148,8 +149,6 @@ follow_viewport_enabled = true
 
 [node name="Notes Layer" type="CanvasLayer" parent="."]
 layer = 2
-offset = Vector2(0, 360)
-transform = Transform2D(1, 0, 0, 1, 0, 360)
 follow_viewport_enabled = true
 
 [node name="UI Borders" type="CanvasLayer" parent="."]
@@ -546,13 +545,10 @@ item_count = 1
 popup/item_0/id = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="Strum Labels" type="HFlowContainer" parent="UI"]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 32)
-offset_left = -144.0
-offset_top = -328.0
-offset_right = 144.0
-offset_bottom = -296.0
+[node name="Event Tracks" type="VBoxContainer" parent="UI"]
+offset_left = -640.0
+offset_right = -512.0
+offset_bottom = 32.0
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -128
@@ -577,3 +573,4 @@ metadata/_edit_lock_ = true
 [connection signal="pressed" from="UI/Lower UI/HBoxContainer2/Skip to End" to="." method="_on_skip_to_end_pressed"]
 [connection signal="item_selected" from="UI/Lower UI/HBoxContainer3/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
 [connection signal="value_changed" from="UI/Lower UI/HBoxContainer3/Chart Snap" to="." method="_on_chart_snap_value_changed"]
+[connection signal="selected_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_selected_time_change"]

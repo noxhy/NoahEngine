@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3ndijkbdd260"
-path="res://.godot/imported/event.png-416f99fcae4043555c2b1121f5e9054b.ctex"
+uid="uid://b4ve504nau36k"
+path="res://.godot/imported/camera_position.png-bb82e30434b1da0cce25998de16732c6.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus/chart editor/event.png"
-dest_files=["res://.godot/imported/event.png-416f99fcae4043555c2b1121f5e9054b.ctex"]
+source_file="res://assets/sprites/menus/chart editor/events/camera_position.png"
+dest_files=["res://.godot/imported/camera_position.png-bb82e30434b1da0cce25998de16732c6.ctex"]
 
 [params]
 

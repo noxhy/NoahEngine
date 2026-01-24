@@ -11,6 +11,10 @@ var grid_size: Vector2 = Vector2(128, 128)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if ChartManager.event_data.has(event):
+		if ChartManager.event_data[event].has("texture"):
+			sprite.texture = load(ChartManager.event_data[event]["texture"])
+	
 	sprite.scale = grid_size / sprite.get_rect().size
 	collision_shape.shape = RectangleShape2D.new()
 	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size

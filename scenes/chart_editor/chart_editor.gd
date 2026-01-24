@@ -551,9 +551,10 @@ func _draw() -> void:
 		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
 		
 		## Song Start Offset Marker
-		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
-		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(1, 0)) + Vector2(0, 4))
+		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
+		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
+		
 		# The box at the start of the marker
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 4), \
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
@@ -585,8 +586,8 @@ func _draw() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
 	
 	if hovered_event != -1 and ChartManager.chart:
-		var event = ChartManager.chart.get_events_data()[hovered_note][1]
-		var parameters = ChartManager.chart.get_events_data()[hovered_note][2]
+		var event = ChartManager.chart.get_events_data()[hovered_event][1]
+		var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
 		var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
 		draw_string_outline(default_font, get_global_mouse_position(), text,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
@@ -696,6 +697,8 @@ func load_chart(file: Chart, ghost: bool = false):
 	selected_note_nodes = []
 	current_visible_notes_L = -1
 	current_visible_notes_R = -1
+	current_visible_events_L = -1
+	current_visible_events_R = -1
 	get_tree().call_group(&"notes", &"queue_free")
 	note_nodes = []
 	
@@ -1116,7 +1119,7 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
+		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * (meter[1] / meter[0]), 0)).x
 		
 		L = R
 		i += 1
@@ -1151,12 +1154,12 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		seconds_per_beat = 60.0 / tempo
 		yL = time_to_y_position(L)
 		yR = time_to_y_position(R)
-		yC = p.y * %Grid.grid_size.y * %Grid.zoom.y
+		yC = p.x * %Grid.grid_size.x * %Grid.zoom.x
 		if factor_in_snap:
 			yC *= meter[1] / chart_snap
 		
 		if (yC >= yL and yC < yR):
-			output += (yC - yL) / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
+			output += (yC - yL) / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
 			return output
 		else:
 			output += R - L

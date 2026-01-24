@@ -382,8 +382,9 @@ func score_note(hit_time: float):
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		"camera_position":
-			var camera_position = host.camera_positions[int(event_parameters[0])].global_position
-			if camera_position != null: camera.position = camera_position
+			var camera_position: Vector2 = host.camera_positions[int(event_parameters[0])].global_position
+			if camera_position != null:
+				camera.position = camera_position
 		"camera_bop":
 			var camera_bop = float(event_parameters[0])
 			var ui_bop = float(event_parameters[1])

@@ -30,3 +30,14 @@ var strum_data: Array = [
 		#
 	#},
 ]
+
+var event_data: Dictionary = {
+	"camera_position": {
+		"parameters": ["Position Index"],
+		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
+	},
+	"play_animation": {
+		"parameters": ["Character Index", "Animation ID", "(Optional) Duration"],
+		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
+	},
+}
