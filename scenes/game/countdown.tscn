@@ -155,10 +155,10 @@ tracks/3/path = NodePath("Countdown/Default Countdown:visible")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
+"values": [false, true]
 }
 tracks/4/type = "method"
 tracks/4/imported = false
@@ -466,11 +466,12 @@ libraries = {
 bus = &"SFX"
 
 [node name="Default Countdown" type="Node2D" parent="."]
+visible = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Default Countdown"]
 modulate = Color(1, 1, 1, 0)
 sprite_frames = SubResource("SpriteFrames_shvg5")
-animation = &"set"
+animation = &"go"
 
 [node name="Developer Countdown" type="Node2D" parent="."]
 visible = false
@@ -480,6 +481,7 @@ sprite_frames = SubResource("SpriteFrames_s6ets")
 animation = &"go"
 
 [node name="Pixel Countdown" type="Node2D" parent="."]
+visible = false
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Pixel Countdown"]
 modulate = Color(1, 1, 1, 0)

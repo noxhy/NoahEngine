@@ -1,5 +1,19 @@
 extends Node
 
+const EVENT_DATA: Dictionary = {
+	"camera_position": {
+		"parameters": ["Position Index"],
+		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
+	},
+	"play_animation": {
+		"parameters": ["Group Name", "Animation ID", "(Optional) Duration"],
+		"texture": "res://assets/sprites/menus/chart editor/events/play_animation.png",
+	},
+	"bop_rate": {
+		"parameters": ["Step Delay"]
+	}
+}
+
 var song: Song
 var chart: Chart
 var difficulty: String = ""
@@ -31,13 +45,4 @@ var strum_data: Array = [
 	#},
 ]
 
-var event_data: Dictionary = {
-	"camera_position": {
-		"parameters": ["Position Index"],
-		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
-	},
-	"play_animation": {
-		"parameters": ["Character Index", "Animation ID", "(Optional) Duration"],
-		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
-	},
-}
+var event_tracks: Array = []

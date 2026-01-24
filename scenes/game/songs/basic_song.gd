@@ -89,7 +89,7 @@ func get_direction(direction: int):
 func _on_new_event(time, event_name, event_parameters):
 	match event_name:
 		"play_animation":
-			get_node(str("%", event_parameters[0])).play_animation(event_parameters[1], event_parameters[2])
+			get_tree().call_group(event_parameters[0], &"play_animation", event_parameters[1], event_parameters[2])
 
 
 func _on_combo_break():

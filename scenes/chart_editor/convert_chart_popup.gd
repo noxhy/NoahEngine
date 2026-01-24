@@ -300,8 +300,8 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 					# Creates the event
 					## j[1] is the event name, j[2] is the event parameters
 					event_data.append([time / 1000.0, j[0], [j[1], j[2]]])
-				
-				event_data.sort_custom(self.sort_notes)
+			
+			event_data.sort_custom(self.sort_notes)
 		
 		ChartFormats.ANDROMEDA:
 			var section_time = 0.0

@@ -359,6 +359,8 @@ func _process(delta: float) -> void:
 									selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
 									min_lane = 0
 									max_lane = ChartManager.strum_count - 1
+								
+								%"Mouse Click".play()
 					elif (((grid_position.x - 1) >= -1 and (grid_position.x - 1) <= ChartManager.strum_count)
 					and current_focus_owner):
 						current_focus_viewport.gui_release_focus()
@@ -411,8 +413,8 @@ func _process(delta: float) -> void:
 					if can_chart and !current_focus_owner:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
-							if Input.is_action_pressed("shift"):
-								start_offset = grid_position_to_time(snapped_position) - song_position
+							if Input.is_action_pressed(&"shift"):
+								start_offset = grid_position_to_time(snapped_position, true) - song_position
 							else:
 								start_offset = grid_position_to_time(grid_position) - song_position
 							
@@ -501,11 +503,6 @@ func _process(delta: float) -> void:
 			var lane_a: int = int(pos_1.x)
 			var lane_b: int = int(pos_2.x)
 			
-			if lane_b < lane_a:
-				var temp: int = lane_a
-				lane_a = lane_b
-				lane_b = temp
-			
 			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
 			
@@ -548,7 +545,9 @@ func _draw() -> void:
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
-		var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
+		var snapped_position: Vector2i = Vector2i(
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			)
 		
 		## Song Start Offset Marker
 		rect = Rect2(grid_offset + %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
@@ -677,8 +676,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Metadata Window".update_stats()
 	
 	load_chart(ChartManager.chart)
-	update_grid()
-	load_waveforms()
+	#load_waveforms()
 	can_chart = true
 
 
@@ -716,6 +714,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	%"Metadata Window".update_stats()
 	can_chart = true
 	load_section(song_position)
+	update_grid()
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
@@ -790,6 +789,7 @@ func load_dividers():
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
+		rect.color = divider_color
 		rect.size = Vector2(%Grid.get_size().x, size)
 		rect.position = %Grid.position
 		rect.position.x -= %Grid.get_size().x / 2
@@ -803,6 +803,7 @@ func load_dividers():
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
+		rect.color = divider_color
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
 		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * i
@@ -816,6 +817,7 @@ func load_dividers():
 		var rect = ColorRect.new()
 		var size: float = 2
 		
+		rect.color = divider_color
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
 		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * (packet.get("strums")[1] + 2)
@@ -1001,7 +1003,7 @@ func place_notes(notes: Array) -> Array:
 	return indices
 
 ## Giving only 1 parameter removes the note at the given index
-func remove_note(lane: int, time: float = -1):
+func remove_note(lane, time: float = -1):
 	var i: int
 	if time != -1:
 		i = find_note(lane, time)
@@ -1119,14 +1121,14 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * (meter[1] / meter[0]), 0)).x
+		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
 		
 		L = R
 		i += 1
 	
 	return y_offset
 
-
+## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var i: int = 0
@@ -1154,12 +1156,12 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		seconds_per_beat = 60.0 / tempo
 		yL = time_to_y_position(L)
 		yR = time_to_y_position(R)
-		yC = p.x * %Grid.grid_size.x * %Grid.zoom.x
+		yC = p.y * %Grid.grid_size.y * %Grid.zoom.y
 		if factor_in_snap:
 			yC *= meter[1] / chart_snap
 		
 		if (yC >= yL and yC < yR):
-			output += (yC - yL) / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
+			output += (yC - yL) / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
 			return output
 		else:
 			output += R - L
@@ -1315,6 +1317,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
 	%Tempo.text = str("Tempo: ", _tempo)
+	update_grid()
 	load_dividers()
 
 ## File button item pressed
@@ -1735,6 +1738,8 @@ func cut() -> void:
 			var note = ChartManager.chart.get_notes_data()[i]
 			temp.append([note[0], note[1], note[2], note[3]])
 		
+		clipboard = temp
+		
 		add_action("Cut Note(s)", self.remove_notes.bind(selected_notes), self.place_notes.bind(temp))
 		selected_notes = []
 		%"Note Remove".play()
@@ -1825,7 +1830,7 @@ func change_length(i: int, length: float) -> void:
 	ChartManager.chart.chart_data["notes"][i][2] = length
 
 
-func select_area(L: int, R: int, lane_a: int, lane_b):
+func select_area(L: int, R: int, lane_a, lane_b = null):
 	selected_notes = range(L, R + 1)
 	selected_note_nodes = []
 	
@@ -1864,7 +1869,7 @@ func select_all():
 
 
 func deselect_all():
-	if selected_notes.size() > 0:
+	if !selected_notes.is_empty():
 		%"Note Place".play()
 		
 		selected_notes = []
@@ -1872,10 +1877,12 @@ func deselect_all():
 
 
 func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
+	update_grid()
 	load_dividers()
 
 
 func _on_conductor_new_steps_per_measure(_steps_per_measure: int) -> void:
+	update_grid()
 	load_dividers()
 
 

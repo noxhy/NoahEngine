@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://dguo6hi3l0pxv"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_mysbr"]
+[ext_resource type="Script" uid="uid://bjk501es4qmnv" path="res://scenes/chart_editor/event_editor/event_button.gd" id="2_tjtdw"]
+
+[node name="Event Button" type="HBoxContainer"]
+offset_right = 256.0
+offset_bottom = 43.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_mysbr")
+theme_override_constants/separation = 0
+script = ExtResource("2_tjtdw")
+
+[node name="Track Name" type="LineEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Track Name"
+editable = false
+context_menu_enabled = false
+emoji_menu_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
+
+[node name="Remove Track" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "🗑
+"
+
+[connection signal="pressed" from="Remove Track" to="." method="_on_remove_track_pressed"]

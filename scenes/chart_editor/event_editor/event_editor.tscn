@@ -42,6 +42,11 @@ stream_1/stream = ExtResource("8_4188h")
 
 [node name="Event Editor" type="Node2D"]
 script = ExtResource("1_06aqy")
+divider_color = Color(0.71484375, 0.71484375, 0.71484375, 1)
+current_time_color = Color(1, 0, 0, 0.8)
+muted_color = Color(0.16, 0.16, 0.16, 0.502)
+box_color = Color(0.151337, 0.445313, 0.17072, 0.287)
+selected_color = Color(0.404297, 0.75, 0.442108, 0.734)
 
 [node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_mcaef")
@@ -135,8 +140,7 @@ follow_viewport = false
 [node name="Grid" parent="Grid Layer/Parallax2D" instance=ExtResource("14_srmuw")]
 unique_name_in_owner = true
 event_grid = true
-grid_size = Vector2(24, 24)
-rows = 2
+grid_size = Vector2(32, 32)
 grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
 event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
@@ -409,15 +413,16 @@ popup/item_4/text = "Copy"
 popup/item_4/id = 4
 popup/item_5/text = "Paste"
 popup/item_5/id = 5
-popup/item_6/text = "Delete Stacked Notes"
+popup/item_6/text = "Delete Stacked Events"
 popup/item_6/id = 6
 popup/item_7/id = 7
 popup/item_7/separator = true
 popup/item_8/text = "Flip Selected Notes"
 popup/item_8/id = 8
+popup/item_8/disabled = true
 popup/item_9/id = 9
 popup/item_9/separator = true
-popup/item_10/text = "Select All Visible Notes"
+popup/item_10/text = "Select All Visible Events"
 popup/item_10/id = 10
 popup/item_11/text = "Deselect All"
 popup/item_11/id = 11
@@ -434,6 +439,7 @@ popup/item_0/text = "Switch Editors"
 popup/item_0/id = 0
 popup/item_1/text = "Change Note Skin"
 popup/item_1/id = 1
+popup/item_1/disabled = true
 popup/item_2/id = 2
 popup/item_2/separator = true
 popup/item_3/text = "Zoom In"
@@ -505,7 +511,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Window"
-item_count = 4
+item_count = 3
 popup/item_0/text = "History"
 popup/item_0/checkable = 1
 popup/item_0/id = 0
@@ -515,9 +521,7 @@ popup/item_1/id = 1
 popup/item_2/text = "Notes"
 popup/item_2/checkable = 1
 popup/item_2/id = 2
-popup/item_3/text = "Events"
-popup/item_3/checkable = 1
-popup/item_3/id = 3
+popup/item_2/disabled = true
 metadata/_edit_use_anchors_ = true
 
 [node name="History Window" parent="UI/Upper UI/Window Button" instance=ExtResource("22_boljn")]
@@ -546,9 +550,61 @@ popup/item_0/id = 0
 metadata/_edit_use_anchors_ = true
 
 [node name="Event Tracks" type="VBoxContainer" parent="UI"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
 offset_left = -640.0
 offset_right = -512.0
-offset_bottom = 32.0
+offset_bottom = 33.0
+theme = ExtResource("15_ue8jl")
+theme_override_constants/separation = 0
+
+[node name="Add Track" type="Button" parent="UI/Event Tracks"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "+"
+
+[node name="Event Creator" type="PopupPanel" parent="UI"]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Event Creator"
+initial_position = 1
+size = Vector2i(480, 240)
+unresizable = false
+borderless = false
+always_on_top = true
+theme = ExtResource("15_ue8jl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Event Creator"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 468.0
+offset_bottom = 228.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Event Creator/VBoxContainer"]
+layout_mode = 2
+
+[node name="Event Name" type="Label" parent="UI/Event Creator/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Event Name"
+
+[node name="HSeparator" type="HSeparator" parent="UI/Event Creator/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Event Parameters" type="VBoxContainer" parent="UI/Event Creator/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="UI/Event Creator/VBoxContainer"]
+layout_mode = 2
+
+[node name="Place Event" type="Button" parent="UI/Event Creator/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Place Event"
 
 [node name="Background" type="CanvasLayer" parent="."]
 layer = -128
@@ -574,3 +630,9 @@ metadata/_edit_lock_ = true
 [connection signal="item_selected" from="UI/Lower UI/HBoxContainer3/Difficulty Button" to="." method="_on_difficulty_button_item_selected"]
 [connection signal="value_changed" from="UI/Lower UI/HBoxContainer3/Chart Snap" to="." method="_on_chart_snap_value_changed"]
 [connection signal="selected_time_change" from="UI/Upper UI/Window Button/Metadata Window" to="." method="_on_metadata_window_selected_time_change"]
+[connection signal="ready" from="UI/Event Tracks" to="." method="_on_event_tracks_ready"]
+[connection signal="about_to_popup" from="UI/Event Creator" to="." method="_on_event_parameters_about_to_popup"]
+[connection signal="close_requested" from="UI/Event Creator" to="." method="close_popup"]
+[connection signal="gui_focus_changed" from="UI/Event Creator" to="." method="_on_gui_focus_changed"]
+[connection signal="popup_hide" from="UI/Event Creator" to="." method="close_popup"]
+[connection signal="pressed" from="UI/Event Creator/VBoxContainer/Place Event" to="." method="_on_place_event_pressed"]

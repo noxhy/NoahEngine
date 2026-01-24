@@ -47,7 +47,7 @@ text = "Change Track File"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-text = "Remove Track"
+text = "🗑"
 
 [node name="FileDialog" type="FileDialog" parent="."]
 unique_name_in_owner = true
