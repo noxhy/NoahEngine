@@ -589,6 +589,7 @@ metadata/_edit_lock_ = true
 [connection signal="gui_focus_changed" from="UI/Upper UI/View Button/Note Skin Window" to="." method="_on_gui_focus_changed"]
 [connection signal="about_to_popup" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_about_to_popup"]
 [connection signal="close_requested" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_close_requested"]
+[connection signal="gui_focus_changed" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_gui_focus_changed"]
 [connection signal="updated" from="UI/Upper UI/Audio Button/Audios Window" to="." method="_on_audios_window_updated"]
 [connection signal="close_requested" from="UI/Upper UI/Window Button/History Window" to="." method="_on_history_window_close_requested"]
 [connection signal="gui_focus_changed" from="UI/Upper UI/Window Button/History Window" to="." method="_on_gui_focus_changed"]

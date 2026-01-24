@@ -32,8 +32,8 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed(&"mouse_scroll_up"):
 				if !Input.is_action_pressed(&"control"):
 					if can_chart:
-						song_position -= $Conductor.seconds_per_beat
-						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset + ChartManager.chart.offset
+						song_position += $Conductor.seconds_per_beat
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
 						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
@@ -44,8 +44,8 @@ func _process(delta: float) -> void:
 			if Input.is_action_just_pressed(&"mouse_scroll_down"):
 				if !Input.is_action_pressed(&"control"):
 					if can_chart:
-						song_position += $Conductor.seconds_per_beat
-						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
+						song_position -= $Conductor.seconds_per_beat
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset + ChartManager.chart.offset
 						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
@@ -91,7 +91,7 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 				if can_chart:
-					if (((grid_position.y - 1) >= 0 and (grid_position.y - 1) <= %Grid.rows)
+					if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)
 					and !current_focus_owner):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
 						var time: float = grid_position_to_time(snapped_position, true)
@@ -222,22 +222,11 @@ func _process(delta: float) -> void:
 			add_action("Selected Area", self.select_area.bind(L, R, events), self.deselect_all)
 		
 		if moving_notes:
-			add_action("Moved Events(s)", self.move_selection.bind(moved_time_distance, moved_lane_distance),
-			self.move_selection.bind(-moved_time_distance, -moved_lane_distance))
+			add_action("Moved Events(s)", self.move_selection.bind(moved_time_distance, 0),
+			self.move_selection.bind(-moved_time_distance, 0))
 	
 	if Input.is_action_just_released(&"control"):
 		bounding_box = false
-	
-	if Input.is_action_pressed(&"ui_cut"):
-		if can_chart:
-			cut()
-	
-	# Postponed
-	if Input.is_action_just_pressed(&"ui_copy"):
-		copy()
-	
-	if Input.is_action_just_pressed(&"ui_paste"):
-		paste()
 	
 	queue_redraw()
 
@@ -271,7 +260,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		## Hover Box
-		if (grid_position.y >= 1 and grid_position.y <= %Grid.rows and !current_focus_owner):
+		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2($Conductor.steps_per_measure / chart_snap, 1))
 			draw_rect(rect, hover_color)
@@ -339,7 +328,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_events_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 3 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2.5 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
 	
@@ -503,11 +492,29 @@ func update_grid():
 		
 		track_instance.add_to_group(&"tracks")
 		track_instance.connect(&"removed", self.remove_track.bind(track_instance))
+	
+	await Engine.get_main_loop().process_frame
+	$"UI/Event Tracks".size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 2)
 
 
 func remove_track(node):
 	var event: String = node.event
 	node.queue_free()
+	
+	ChartManager.event_tracks.erase(event)
+	ChartManager.chart.chart_data["events"] = ChartManager.chart.chart_data["events"].filter(
+		func(_event): return _event[1] != event
+	)
+	
+	_on_event_tracks_ready()
+	get_tree().call_group(&"events", &"queue_free")
+	event_nodes = []
+	selected_notes = []
+	selected_note_nodes = []
+	current_visible_events_L = -1
+	current_visible_events_R = -1
+	load_section(song_position)
+	%"Mouse Click".play()
 
 
 func _on_event_tracks_ready() -> void:
@@ -598,8 +605,8 @@ func is_event_at(_name: String, time: float) -> bool:
 
 ## Returns the index of the given event in the events list.
 func find_event(_name: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.1)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.1)
+	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.00001)
+	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.00001)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -661,6 +668,7 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 
 func move_selection(time_distance: float, lane_distance: float):
 	var events: Array = []
+	print(selected_note_nodes)
 	for event in selected_note_nodes:
 		events.append([event.time + time_distance, event.event, event.parameters])
 		remove_note(event.event, event.time)
@@ -724,7 +732,7 @@ func paste() -> void:
 	selected_notes = temp
 	selected_note_nodes = []
 	for i in selected_notes:
-		selected_note_nodes.append(event_nodes[i - current_visible_notes_L])
+		selected_note_nodes.append(event_nodes[i - current_visible_events_L])
 	%"Note Place".play()
 
 
@@ -780,3 +788,48 @@ func _on_place_event_pressed() -> void:
 	self.remove_note.bind(current_event, current_event_time))
 	%"Note Place".play()
 	%"Event Creator".hide()
+
+
+func _on_add_track_pressed() -> void:
+	%"Add Track Window".popup()
+	%"Mouse Click".play()
+
+
+func _on_window_about_to_popup() -> void:
+	can_chart = false
+	%"Event Option".clear()
+	var events: Array = ChartManager.EVENT_DATA.keys()
+	events = events.filter(func(_name): return !ChartManager.event_tracks.has(_name))
+	
+	print(events)
+	
+	for event in events:
+		%"Event Option".add_item(event)
+
+
+func _on_add_event_track_pressed() -> void:
+	if %"Event Option".selected != -1:
+		var event: String = %"Event Option".get_item_text(%"Event Option".get_selected_id())
+		ChartManager.event_tracks.append(event)
+		
+		update_grid()
+		load_dividers()
+	
+	%"Add Track Window".hide()
+	close_popup()
+
+
+func _on_add_track_window_close_requested() -> void:
+	%"Add Track Window".hide()
+
+
+func _on_export_external_popup_canceled() -> void:
+	pass # Replace with function body.
+
+
+func _on_note_skin_window_canceled() -> void:
+	pass # Replace with function body.
+
+
+func _on_note_type_window_selected_note_type(type: Variant) -> void:
+	pass # Replace with function body.

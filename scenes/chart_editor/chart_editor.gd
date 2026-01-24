@@ -518,17 +518,6 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_released(&"control"):
 		bounding_box = false
 	
-	if Input.is_action_pressed(&"ui_cut"):
-		if can_chart:
-			cut()
-	
-	# Postponed
-	if Input.is_action_just_pressed(&"ui_copy"):
-		copy()
-	
-	if Input.is_action_just_pressed(&"ui_paste"):
-		paste()
-	
 	queue_redraw()
 
 
@@ -1034,8 +1023,8 @@ func remove_notes(notes: Array):
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - 0.1)
-	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + 0.1)
+	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - 0.00001)
+	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + 0.00001)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -1331,7 +1320,7 @@ func file_button_item_pressed(id):
 			new_file_popup_instance.popup()
 			new_file_popup_instance.connect("file_created", self.new_file)
 			new_file_popup_instance.connect("close_requested", self.close_popup)
-			new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
+			new_file_popup_instance.connect(&"guip_focus_changed", self._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		1:
@@ -1685,6 +1674,8 @@ func _on_metadata_window_add_time_change() -> void:
 	ChartManager.chart.chart_data["meters"][time] = [
 		$Conductor.beats_per_measure, $Conductor.steps_per_measure
 	]
+	
+	ChartManager.chart.chart_data["meters"] = ChartManager.chart.chart_data["meters"].sort()
 	
 	%"Metadata Window".update_stats()
 
