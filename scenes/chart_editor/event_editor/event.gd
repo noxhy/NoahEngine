@@ -1,4 +1,5 @@
 extends Node2D
+class_name ChartEvent
 
 @onready var area = $Area2D
 @onready var collision_shape = $Area2D/CollisionShape2D
@@ -15,11 +16,17 @@ func _ready() -> void:
 		if ChartManager.EVENT_DATA[event].has("texture"):
 			sprite.texture = load(ChartManager.EVENT_DATA[event]["texture"])
 	
-	sprite.scale = grid_size / sprite.get_rect().size
-	collision_shape.shape = RectangleShape2D.new()
-	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
-	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
-	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
+	update()
+
+func update():
+	if sprite:
+		sprite.scale = grid_size / sprite.get_rect().size
+	
+	if collision_shape:
+		collision_shape.shape = RectangleShape2D.new()
+		$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
+		collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
+		collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
 
 
 func _on_visible_on_screen_enabler_2d_screen_entered() -> void:

@@ -740,6 +740,7 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_notes_L and i <= current_visible_notes_R:
+				update_note_position(note_nodes[i - L])
 				continue
 			
 			var note = ChartManager.chart.get_notes_data()[i]
@@ -768,6 +769,7 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_events_L and i <= current_visible_events_R:
+				update_note_position(event_nodes[i - L])
 				continue
 			
 			var event = ChartManager.chart.get_events_data()[i]
@@ -865,15 +867,12 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.length = length
 	note_instance.lane = lane
 	note_instance.note_type = type
-	note_instance.position = Vector2(%Grid.get_real_position(Vector2(1.5 + lane, 0)).x,
-	time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
-	note_instance.position += $"Grid Layer".offset
-	note_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
 	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
 	note_instance.direction = directions[int(lane) % 4]
 	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[int(lane) % 4])
+	update_note_position(note_instance)
 	
 	note_instance.note_skin = note_skin
 	
@@ -929,10 +928,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.time = time
 	event_instance.event = event
 	event_instance.parameters = parameters
-	event_instance.position = Vector2(%Grid.get_real_position(Vector2(-0.5 + %Grid.columns, 0)).x,
-	time_to_y_position(time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
-	event_instance.position += $"Grid Layer".offset
-	event_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
+	update_note_position(event_instance)
 	
 	var output: int
 	
@@ -1121,6 +1117,22 @@ func time_to_y_position(time: float) -> float:
 		i += 1
 	
 	return y_offset
+
+func update_note_position(node: Node2D):
+	if node is ChartNote:
+		node.position = Vector2(%Grid.get_real_position(Vector2(1.5 + node.lane, 0)).x,
+		time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+		node.position += $"Grid Layer".offset
+		node.grid_size = (%Grid.grid_size * %Grid.zoom)
+		node.update()
+	elif node is ChartEvent:
+		node.position = Vector2(%Grid.get_real_position(Vector2(-0.5 + %Grid.columns, 0)).x,
+		time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
+		node.position += $"Grid Layer".offset
+		node.grid_size = (%Grid.grid_size * %Grid.zoom)
+		node.update()
+	else:
+		printerr(node.get_class(), " isn't a valid node.")
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:

@@ -23,17 +23,23 @@ func _ready():
 		$Note.texture_filter = TEXTURE_FILTER_NEAREST
 		tail.texture_filter = TEXTURE_FILTER_NEAREST
 	
+	update()
+
+func update():
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
 	#$Note.scale *= 0.9
 	%"Special Note Label".scale = grid_size / %"Special Note Label".size
-	tail.scale = $Note.scale
-	tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
-	collision_shape.shape = RectangleShape2D.new()
-	$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
-	collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
-	collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
-	%"Special Note Label".visible = (int(note_type) != 0 or str(note_type) != "0")
+	if tail:
+		tail.scale = $Note.scale
+		tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+	
+	if collision_shape:
+		collision_shape.shape = RectangleShape2D.new()
+		$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
+		collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
+		collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
+		%"Special Note Label".visible = (int(note_type) != 0 or str(note_type) != "0")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

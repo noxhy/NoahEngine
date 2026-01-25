@@ -353,6 +353,7 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_events_L and i <= current_visible_events_R:
+				update_note_position(event_nodes[i - L])
 				continue
 			
 			var event = ChartManager.chart.get_events_data()[i]
@@ -369,10 +370,6 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.time = time
 	event_instance.event = event
 	event_instance.parameters = parameters
-	event_instance.position = Vector2(time_to_y_position(time) + %Grid.grid_size.x * %Grid.zoom.x / 2,
-	%Grid.get_real_position(Vector2(0, 1.5 + ChartManager.event_tracks.find(event))).y)
-	event_instance.position += $"Grid Layer".offset
-	event_instance.grid_size = (%Grid.grid_size * %Grid.zoom)
 	
 	var output: int
 	
@@ -417,6 +414,17 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.area.connect(&"mouse_entered", self.update_event.bind(event_instance))
 	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
 	return output
+
+
+func update_note_position(node: Node2D):
+	if node is ChartEvent:
+		node.position = Vector2(time_to_y_position(node.time) + %Grid.grid_size.x * %Grid.zoom.x / 2,
+		%Grid.get_real_position(Vector2(0, 1.5 + ChartManager.event_tracks.find(node.event))).y)
+		node.position += $"Grid Layer".offset
+		node.grid_size = (%Grid.grid_size * %Grid.zoom)
+		node.update()
+	else:
+		printerr(node.get_class(), " isn't a valid node.")
 
 
 func load_dividers():
