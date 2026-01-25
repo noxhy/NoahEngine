@@ -370,6 +370,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.time = time
 	event_instance.event = event
 	event_instance.parameters = parameters
+	update_note_position(event_instance)
 	
 	var output: int
 	
