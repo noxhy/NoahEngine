@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=22 format=3 uid="uid://b7h7qi3th3rb8"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://b7h7qi3th3rb8"]
 
 [ext_resource type="Texture2D" uid="uid://tjd0n1boxvrd" path="res://assets/sprites/playstate/developer/rating/combo numbers.png" id="1_7vm63"]
 

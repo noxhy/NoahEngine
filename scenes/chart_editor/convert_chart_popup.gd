@@ -219,7 +219,6 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 			var current_bpm = json.get("bpm", json.song.bpm)
 			tempo_data[0.0] = current_bpm
 			var index = 0
-			var note_types = []
 			
 			chart.scroll_speed = json.get("speed", json.song.speed)
 			
@@ -265,9 +264,7 @@ func convert_chart(path: String, chart_type: int, difficulty: String = "") -> Ch
 					
 					# Deals with note types
 					if j.size() == 4:
-						if !note_types.has(j[3]):
-							note_types.append(j[3])
-						note.append(note_types.find(j[3]) + 1)
+						note.append(j[3])
 					else:
 						note.append(0)
 					

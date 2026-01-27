@@ -34,7 +34,7 @@ func _physics_process(delta):
 	
 	self.modulate.a -= delta * 1.8
 	
-	self.position += motion
+	self.position += motion * self.scale
 	motion.y -= delta * gravity
 	gravity += -50 * delta
 
