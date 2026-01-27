@@ -32,13 +32,15 @@ func update():
 	%"Special Note Label".scale = grid_size / %"Special Note Label".size
 	if tail:
 		tail.scale = $Note.scale
-		tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+		if tail.texture:
+			tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+	
+	$VisibleOnScreenEnabler2D.scale = grid_size / Vector2(640, 640)
 	
 	if collision_shape:
 		collision_shape.shape = RectangleShape2D.new()
-		$VisibleOnScreenEnabler2D.scale = grid_size / $VisibleOnScreenEnabler2D.rect.size
 		collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
-		collision_shape.shape.set_size($VisibleOnScreenEnabler2D.rect.size)
+		collision_shape.shape.set_size(Vector2($VisibleOnScreenEnabler2D.rect.size.x, $VisibleOnScreenEnabler2D.rect.size.x))
 		%"Special Note Label".visible = (int(note_type) != 0 or str(note_type) != "0")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -50,7 +52,7 @@ func _process(delta):
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length
-		$VisibleOnScreenEnabler2D.rect.size.y = length * scroll_speed * 640
+		$VisibleOnScreenEnabler2D.rect.size.y = (length + 1) * scroll_speed * 640
 	else:
 		tail.visible = false
 
