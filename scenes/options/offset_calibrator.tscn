@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cw85perbwjqqy"]
+[gd_scene format=3 uid="uid://cw85perbwjqqy"]
 
 [ext_resource type="Script" uid="uid://disrmsl28koee" path="res://scenes/options/offset_calibrator.gd" id="1_to22u"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="3_wcm4s"]
@@ -7,7 +7,7 @@
 [ext_resource type="AudioStream" uid="uid://baajtpwp5hvdp" path="res://assets/sounds/menu sounds/snare.mp3" id="5_picn5"]
 [ext_resource type="AudioStream" uid="uid://dyy2yik0yf60r" path="res://assets/sounds/menu sounds/menu cancel.ogg" id="6_q07ox"]
 [ext_resource type="PackedScene" uid="uid://by2sf7r6otryi" path="res://scenes/game/characters/speaker.tscn" id="6_rhpjf"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="8_48d4v"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/tertiary_font.ttf" id="8_48d4v"]
 [ext_resource type="Texture2D" uid="uid://djuslh4ulkynw" path="res://assets/sprites/menus/background/menuBGMagenta.png" id="9_0fft6"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_3110b"]

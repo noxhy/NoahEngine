@@ -17,10 +17,7 @@ const EVENT_DATA: Dictionary = {
 		"texture": "res://assets/sprites/menus/chart editor/events/camera_zoom.png",
 	},
 	"bop_rate": {
-		"parameters": ["Step Delay"]
-	},
-	"bop_delay": {
-		"parameters": ["Step Delay"],
+		"parameters": ["Step Rate"]
 	},
 	"camera_bop_strength": {
 		"parameters": ["Amount"],
@@ -29,14 +26,14 @@ const EVENT_DATA: Dictionary = {
 		"parameters": ["Amount"],
 	},
 	"lerping": {
-		"parameter": ["Toggled"],
+		"parameters": ["Toggled"],
 	},
 	"scroll_speed": {
-		"parameter": ["Amount", "Ease Duration"],
+		"parameters": ["Amount", "Ease Duration"],
 		"texture": "res://assets/sprites/menus/chart editor/events/scroll_speed.png",
 	},
 	"camera_shake": {
-		"parameter": ["Amount", "Duration"],
+		"parameters": ["Amount", "Duration"],
 	},
 }
 

@@ -1,6 +1,6 @@
 extends Node2D
 
-@onready var camera_positions = [%"Position 1", %"Position 2", %"Position 3"]
+@onready var camera_positions = []
 @onready var playstate_host: PlayState = $"PlayState Host"
 
 @onready var stage = %Stage
@@ -10,6 +10,7 @@ extends Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	assert(playstate_host, "Playstate host not found")
+	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	if player:
 		playstate_host.ui.set_player_icons(player.icons)
 		playstate_host.ui.set_player_color(player.color)
@@ -26,9 +27,10 @@ func _ready():
 		playstate_host.conductor.connect(&"new_beat", stage._on_conductor_new_beat)
 	
 	playstate_host.conductor.connect(&"new_beat", self._on_conductor_new_beat)
-	playstate_host.conductor.connect(&"combo_break", self._on_combo_break)
-	playstate_host.conductor.connect(&"create_note", self._on_create_note)
-	playstate_host.conductor.connect(&"new_event", self._on_new_event)
+	
+	playstate_host.connect(&"combo_break", self._on_combo_break)
+	playstate_host.connect(&"create_note", self._on_create_note)
+	playstate_host.connect(&"new_event", self._on_new_event)
 
 # Conductor Util
 

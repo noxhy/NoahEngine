@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="NoteSkin" load_steps=40 format=3 uid="uid://cj2hoqrld81vv"]
+[gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://cj2hoqrld81vv"]
 
 [ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://assets/sounds/menu sounds/hitsound.wav" id="1_7y8y0"]
 [ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://resources/note_skin.gd" id="1_ejrj1"]

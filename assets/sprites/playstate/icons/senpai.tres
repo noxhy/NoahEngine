@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://d3utv1veneoej"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://d3utv1veneoej"]
 
 [ext_resource type="Texture2D" uid="uid://ee2igx8pcqyw" path="res://assets/sprites/playstate/icons/icon-senpai.png" id="1_s5wb5"]
 

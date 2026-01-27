@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://8cxhkah8id6n"
-path="res://.godot/imported/bold_font.ttf-6cd6c7b49b8e6b92861e0a2b75ee54ad.fontdata"
+uid="uid://ede277aql5vu"
+path="res://.godot/imported/primary_font.ttf-303f632a094263efc1923155acfce4c2.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/bold_font.ttf"
-dest_files=["res://.godot/imported/bold_font.ttf-6cd6c7b49b8e6b92861e0a2b75ee54ad.fontdata"]
+source_file="res://assets/fonts/primary_font.ttf"
+dest_files=["res://.godot/imported/primary_font.ttf-303f632a094263efc1923155acfce4c2.fontdata"]
 
 [params]
 
@@ -30,12 +30,7 @@ Fallbacks=null
 fallbacks=[]
 Compress=null
 compress=true
-preload=[{
-"chars": [],
-"glyphs": [],
-"name": "New Configuration",
-"size": Vector2i(16, 0)
-}]
+preload=[]
 language_support={}
 script_support={}
 opentype_features={}

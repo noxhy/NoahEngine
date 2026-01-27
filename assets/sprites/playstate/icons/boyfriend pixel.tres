@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://co2q6ydrkmts7"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://co2q6ydrkmts7"]
 
 [ext_resource type="Texture2D" uid="uid://n255odod0s7i" path="res://assets/sprites/playstate/icons/icon-bf-pixel.png" id="1_je20v"]
 

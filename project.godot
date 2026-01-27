@@ -8,12 +8,20 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Noah Engine"
 run/main_scene="res://scenes/start_menu/start_menu.tscn"
-config/features=PackedStringArray("4.5", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.png"
+
+[audio]
+
+buses/default_bus_layout="uid://wp1fb3lbqup6"
 
 [autoload]
 
@@ -56,6 +64,7 @@ folder_colors={
 player="The characters that should play an animation when the player notes are played"
 enemy="The characters that should play an animation when the enemy notes are played"
 metronome="the characters that should play an animations every other beat (gf)"
+camera_positions="Camera positions for playstate"
 
 [input]
 

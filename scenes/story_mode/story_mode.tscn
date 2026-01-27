@@ -1,9 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://lh8hi5dk1sja"]
+[gd_scene format=3 uid="uid://lh8hi5dk1sja"]
 
 [ext_resource type="Script" uid="uid://xeoejs8fvqem" path="res://scenes/story_mode/story_mode.gd" id="1_obutf"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_4mkcq"]
 [ext_resource type="FontFile" uid="uid://coivso5sghc2p" path="res://assets/fonts/fnf_font.ttf" id="6_arlsh"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="7_5xrda"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/primary_font.ttf" id="7_5xrda"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/game/characters/boyfriend.tscn" id="8_npxap"]
 [ext_resource type="Shader" uid="uid://biwtmuarqekfa" path="res://assets/shaders/replace_color.gdshader" id="9_20mkd"]
 [ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://scenes/freeplay/freeplay_arrow.tscn" id="9_gdyqo"]
@@ -18,8 +18,8 @@
 [ext_resource type="PackedScene" uid="uid://cvw5oumi78kvr" path="res://scenes/game/characters/tankman.tscn" id="16_k4au0"]
 [ext_resource type="PackedScene" uid="uid://civkgglbefejt" path="res://scenes/game/characters/mom_dad_christmas.tscn" id="17_dlfty"]
 [ext_resource type="PackedScene" uid="uid://k3e5qpeoyea4" path="res://scenes/game/characters/darnell.tscn" id="17_wjhul"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="21_xb8ni"]
-[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/bold_italic_font.ttf" id="22_8sq52"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/tertiary_font.ttf" id="21_xb8ni"]
+[ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/secondary_font.ttf" id="22_8sq52"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jcj1m"]
 font = ExtResource("6_arlsh")

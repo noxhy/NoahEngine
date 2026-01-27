@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=8 format=3 uid="uid://ccp6adafb85jx"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://ccp6adafb85jx"]
 
 [ext_resource type="Texture2D" uid="uid://m5qgt88ksdlr" path="res://assets/sprites/playstate/developer/arrow/arrows.png" id="1_0fsvo"]
 [ext_resource type="Texture2D" uid="uid://ceji7odamm1lk" path="res://assets/sprites/playstate/developer/arrow/end.png" id="2_8dyne"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://c56g0k7u2k6wo"]
+[gd_scene format=3 uid="uid://c56g0k7u2k6wo"]
 
 [ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://scenes/game/chart_tester.gd" id="1_ep6vc"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_ajkug"]
@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="4_y3wph"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="5_g7go4"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://assets/sprites/menus/chart editor/menuDesat.png" id="11_6k7lv"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/default_font.ttf" id="12_chcqi"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://assets/fonts/primary_font.ttf" id="12_chcqi"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
 font = ExtResource("12_chcqi")

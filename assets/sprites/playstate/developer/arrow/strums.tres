@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=16 format=3 uid="uid://chk3joc6hfc23"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://chk3joc6hfc23"]
 
 [ext_resource type="Texture2D" uid="uid://dcb0ulmcydyry" path="res://assets/sprites/playstate/developer/arrow/slots.png" id="1_hqkfr"]
 [ext_resource type="Texture2D" uid="uid://b3flaeoyqavf0" path="res://assets/sprites/playstate/developer/arrow/slots_pressed.png" id="2_m77ap"]

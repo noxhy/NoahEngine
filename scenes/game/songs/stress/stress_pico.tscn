@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://c7jyvxqat3au2"]
+[gd_scene format=3 uid="uid://c7jyvxqat3au2"]
 
 [ext_resource type="Script" uid="uid://dn5hbtar7fexj" path="res://scenes/game/songs/darnell/darnell.gd" id="1_th3hl"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_hdeop"]
@@ -90,11 +90,11 @@ shader_parameter/brightness = -20.0
 shader_parameter/contrast = -25.0
 shader_parameter/alpha = 1.0
 
-[node name="Stress Pico" type="Node2D"]
+[node name="Stress Pico" type="Node2D" unique_id=2054062380]
 editor_description = "I know nene's speaker looks like shit I just didn't feel like porting the masks."
 script = ExtResource("1_th3hl")
 
-[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_hdeop")]
+[node name="PlayState Host" parent="." unique_id=1132674996 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_hdeop")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
@@ -104,81 +104,81 @@ combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_4bxi2")
 ui_skin = ExtResource("5_t15xn")
 
-[node name="Camera" parent="." instance=ExtResource("6_xwvyf")]
+[node name="Camera" parent="." unique_id=1972258712 instance=ExtResource("6_xwvyf")]
 position = Vector2(640, 360)
 position_smoothing_speed = 3.0
 target_zoom = Vector2(0.9, 0.9)
 
-[node name="Stage" parent="." instance=ExtResource("7_th3hl")]
+[node name="Stage" parent="." unique_id=1380889064 instance=ExtResource("7_th3hl")]
 unique_name_in_owner = true
 
-[node name="Music" type="Node" parent="."]
+[node name="Music" type="Node" parent="." unique_id=1201627107]
 
-[node name="Vocals" type="AudioStreamPlayer" parent="Music"]
+[node name="Vocals" type="AudioStreamPlayer" parent="Music" unique_id=1038264070]
 stream = SubResource("AudioStreamPolyphonic_oxpka")
 bus = &"Music"
 
-[node name="Instrumental" type="AudioStreamPlayer" parent="Music"]
+[node name="Instrumental" type="AudioStreamPlayer" parent="Music" unique_id=1480220117]
 bus = &"Music"
 
-[node name="Hit Sound" type="AudioStreamPlayer" parent="Music"]
+[node name="Hit Sound" type="AudioStreamPlayer" parent="Music" unique_id=668687589]
 bus = &"SFX"
 
-[node name="Miss Sound" type="AudioStreamPlayer" parent="Music"]
+[node name="Miss Sound" type="AudioStreamPlayer" parent="Music" unique_id=1762104389]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_1fe3a")
 bus = &"SFX"
 
-[node name="Anti-Spam Sound" type="AudioStreamPlayer" parent="Music"]
+[node name="Anti-Spam Sound" type="AudioStreamPlayer" parent="Music" unique_id=67838229]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_1fe3a")
 volume_db = -8.0
 bus = &"SFX"
 
-[node name="Conductor" type="Node" parent="."]
+[node name="Conductor" type="Node" parent="." unique_id=304755201]
 script = ExtResource("11_s6vog")
 stream_player = NodePath("../Music/Instrumental")
 
-[node name="World" type="CanvasLayer" parent="."]
+[node name="World" type="CanvasLayer" parent="." unique_id=1511090464]
 layer = 10
 follow_viewport_enabled = true
 
-[node name="Position 1" type="Marker2D" parent="World"]
+[node name="Position 1" type="Marker2D" parent="World" unique_id=1756230532 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(826.5, 354.5)
 gizmo_extents = 18.3
 
-[node name="Position 2" type="Marker2D" parent="World"]
+[node name="Position 2" type="Marker2D" parent="World" unique_id=1592606523 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(256, 336)
 gizmo_extents = 26.5
 
-[node name="Position 3" type="Marker2D" parent="World"]
+[node name="Position 3" type="Marker2D" parent="World" unique_id=1997711992 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(576, 208)
 gizmo_extents = 26.5
 
-[node name="Rating Marker" type="Marker2D" parent="World"]
+[node name="Rating Marker" type="Marker2D" parent="World" unique_id=2083421907]
 position = Vector2(710, 222)
 gizmo_extents = 30.0
 
-[node name="Combo Marker" type="Marker2D" parent="World"]
+[node name="Combo Marker" type="Marker2D" parent="World" unique_id=1293514615]
 position = Vector2(838, 270)
 gizmo_extents = 40.0
 
-[node name="Characters" type="CanvasLayer" parent="."]
+[node name="Characters" type="CanvasLayer" parent="." unique_id=1282712720]
 layer = -1
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
-[node name="Player" parent="Characters" groups=["player"] instance=ExtResource("12_5fyjp")]
+[node name="Player" parent="Characters" unique_id=365406272 groups=["player"] instance=ExtResource("12_5fyjp")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_kuluq")
 position = Vector2(392, 266)
 scale = Vector2(0.9, 0.9)
 
-[node name="Enemy" parent="Characters" groups=["enemy"] instance=ExtResource("14_ctps2")]
+[node name="Enemy" parent="Characters" unique_id=1619097661 groups=["enemy"] instance=ExtResource("14_ctps2")]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_th3hl")
 position = Vector2(-568, 264)
@@ -197,7 +197,7 @@ animation_names = Dictionary[StringName, StringName]({
 &"up": &"Tankman UP note 1"
 })
 
-[node name="Metronome" parent="Characters" node_paths=PackedStringArray("music_host") instance=ExtResource("15_th3hl")]
+[node name="Metronome" parent="Characters" unique_id=636097617 node_paths=PackedStringArray("music_host") instance=ExtResource("15_th3hl")]
 unique_name_in_owner = true
 z_index = -2
 material = SubResource("ShaderMaterial_0hbr4")
@@ -207,7 +207,7 @@ music_host = NodePath("../../Music/Instrumental")
 slope = 0.3
 update_rate = 0.04
 
-[node name="UI" parent="." instance=ExtResource("16_owg0q")]
+[node name="UI" parent="." unique_id=2089659649 instance=ExtResource("16_owg0q")]
 layer = 10
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]

@@ -1,7 +1,6 @@
 extends Node2D
 class_name ChartEditor
 
-const LABEL_FONT: Font = preload("res://assets/fonts/bold_font.ttf")
 const NOTE_PRELOAD = preload("res://scenes/game/note/chart_note.tscn")
 const EVENT_PRELOAD = preload("res://scenes/chart_editor/event_editor/event.tscn")
 const STRUM_BUTTON_PRELOAD = preload("res://scenes/chart_editor/strum_button.tscn")
@@ -408,8 +407,7 @@ func _process(delta: float) -> void:
 								
 								hovered_note = -1
 								
-								if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
-									save()
+								auto_save()
 	
 	if Input.is_action_pressed(&"mouse_left"):
 		if !Input.is_action_pressed(&"control"):
@@ -441,8 +439,7 @@ func _process(delta: float) -> void:
 										if (note_nodes[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
 										note_nodes[i - current_visible_notes_L].length = distance
 									
-									if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"): 
-										save()
+									auto_save()
 						
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if moving_notes:
@@ -466,9 +463,7 @@ func _process(delta: float) -> void:
 												time_to_y_position(node.time + time_distance) + %Grid.grid_size.y * %Grid.zoom.y / 2) + $"Grid Layer".offset
 											j += 1
 										
-										if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
-											save()
-										
+										auto_save()
 										moved_time_distance = time_distance
 										moved_lane_distance = lane_distance
 										# start_time += time_distance
@@ -879,10 +874,19 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
+		var L: int = ChartManager.chart.get_notes_data().bsearch_custom(time, self.bsearch_note, true)
+		#var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
 		if L != -1:
 			ChartManager.chart.chart_data["notes"].insert(L, [time, lane, length, type])
-			note_nodes.insert(L - current_visible_notes_L, note_instance)
+			
+			if note_nodes.is_empty():
+				note_nodes.append(note_instance)
+			elif (L - current_visible_notes_L) < 0:
+				note_nodes.insert(0, note_instance)
+			elif (L - current_visible_notes_L) >= note_nodes.size():
+				note_nodes.append(note_instance)
+			else:
+				note_nodes.insert(L, note_instance)
 			
 			if !moved:
 				selected_notes = [L]
@@ -1004,6 +1008,9 @@ func remove_note(lane, time: float = -1):
 		return
 	
 	if (i - current_visible_notes_L) < note_nodes.size() and (i - current_visible_notes_L) >= 0:
+		print("time: ", note_nodes[i - current_visible_notes_L].time,
+		" lane: ", note_nodes[i - current_visible_notes_L].lane,
+		" index: ", i - current_visible_notes_L)
 		note_nodes[i - current_visible_notes_L].queue_free()
 		note_nodes.remove_at(i - current_visible_notes_L)
 	
@@ -1021,6 +1028,9 @@ func remove_notes(notes: Array):
 		var _note = ChartManager.chart.get_notes_data()[note - i]
 		remove_note(_note[1], _note[0])
 		i += 1
+
+func bsearch_note(a, b):
+	return (a[0] < b)
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
@@ -1568,8 +1578,7 @@ func undo():
 	if undo_redo.has_undo():
 		%Undo.play()
 		undo_redo.undo()
-		if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
-			save()
+		auto_save()
 	
 	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
 	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
@@ -1579,17 +1588,20 @@ func redo():
 	if undo_redo.has_redo():
 		%Redo.play()
 		undo_redo.redo()
-		if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
-			save()
+		auto_save()
 	
 	%"Edit Button".get_popup().set_item_disabled(0, !undo_redo.has_undo())
 	%"Edit Button".get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 
+func auto_save():
+	if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
+		save()
+
+
 func save():
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	ResourceSaver.save(ChartManager.chart, ChartManager.chart.resource_path)
-	%"Note Place".play()
 	backup_chart = ChartManager.chart
 
 
@@ -1668,18 +1680,23 @@ func _on_metadata_window_updated_icon_texture(path: String) -> void:
 
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
+	auto_save()
 
 func _on_metadata_window_updated_song_name(text: String) -> void:
 	ChartManager.song.title = text
+	auto_save()
 
 func _on_metadata_window_updated_song_scene(path: String) -> void:
 	ChartManager.song.scene = path
+	auto_save()
 
 func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
 	ChartManager.song.tempo = tempo
+	auto_save()
 
 func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
 	ChartManager.chart.scroll_speed = speed
+	auto_save()
 
 func _on_metadata_window_selected_time_change(time: float) -> void:
 	song_position = time
@@ -1694,8 +1711,8 @@ func _on_metadata_window_add_time_change() -> void:
 	]
 	
 	ChartManager.chart.chart_data["meters"] = ChartManager.chart.chart_data["meters"].sort()
-	
 	%"Metadata Window".update_stats()
+	auto_save()
 
 func update_note(note):
 	if note:
@@ -1919,3 +1936,4 @@ func _on_audios_window_about_to_popup() -> void:
 
 func _on_audios_window_updated() -> void:
 	%Instrumental.stream = load(ChartManager.song.instrumental)
+	auto_save()

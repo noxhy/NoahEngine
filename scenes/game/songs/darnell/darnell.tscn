@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://c8853lemkr1jc"]
+[gd_scene format=3 uid="uid://c8853lemkr1jc"]
 
 [ext_resource type="Script" uid="uid://dn5hbtar7fexj" path="res://scenes/game/songs/darnell/darnell.gd" id="1_kfw18"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_dkpbc"]
@@ -11,10 +11,10 @@
 [ext_resource type="PackedScene" uid="uid://biw6xh624onjh" path="res://scenes/game/characters/nene.tscn" id="11_6d88t"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="12_a2iw0"]
 
-[node name="Darnell" type="Node2D"]
+[node name="Darnell" type="Node2D" unique_id=1675426916]
 script = ExtResource("1_kfw18")
 
-[node name="PlayState Host" parent="." node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_dkpbc")]
+[node name="PlayState Host" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_dkpbc")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
@@ -25,65 +25,65 @@ note_skin = ExtResource("4_fnsyj")
 ui_skin = ExtResource("5_gia47")
 combo_scale_multiplier = Vector2(1.2, 1.2)
 
-[node name="Camera" parent="." instance=ExtResource("6_r1tdt")]
+[node name="Camera" parent="." unique_id=913967516 instance=ExtResource("6_r1tdt")]
 position = Vector2(640, 360)
 zoom = Vector2(0.85, 0.85)
 position_smoothing_speed = 3.0
 target_zoom = Vector2(0.85, 0.85)
 
-[node name="Stage" parent="." instance=ExtResource("7_xhwu8")]
+[node name="Stage" parent="." unique_id=733837376 instance=ExtResource("7_xhwu8")]
 unique_name_in_owner = true
 
-[node name="World" type="CanvasLayer" parent="."]
+[node name="World" type="CanvasLayer" parent="." unique_id=485009208]
 layer = 10
 follow_viewport_enabled = true
 
-[node name="Position 1" type="Marker2D" parent="World"]
+[node name="Position 1" type="Marker2D" parent="World" unique_id=126733488 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(960, 320)
 gizmo_extents = 18.3
 
-[node name="Position 2" type="Marker2D" parent="World"]
+[node name="Position 2" type="Marker2D" parent="World" unique_id=1812413772 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(640, 296)
 gizmo_extents = 26.5
 
-[node name="Position 3" type="Marker2D" parent="World"]
+[node name="Position 3" type="Marker2D" parent="World" unique_id=890311916 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(832, 284)
 gizmo_extents = 26.5
 
-[node name="Rating Marker" type="Marker2D" parent="World"]
+[node name="Rating Marker" type="Marker2D" parent="World" unique_id=572996852]
 position = Vector2(1024, 192)
 gizmo_extents = 30.0
 
-[node name="Combo Marker" type="Marker2D" parent="World"]
+[node name="Combo Marker" type="Marker2D" parent="World" unique_id=807628402]
 position = Vector2(1152, 240)
 gizmo_extents = 40.0
 
-[node name="Characters" type="CanvasLayer" parent="."]
+[node name="Characters" type="CanvasLayer" parent="." unique_id=934768007]
 layer = -1
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
-[node name="Player" parent="Characters" groups=["player"] instance=ExtResource("9_vixx2")]
+[node name="Player" parent="Characters" unique_id=1267906772 groups=["player"] instance=ExtResource("9_vixx2")]
 unique_name_in_owner = true
 z_index = 1
 position = Vector2(640, 288)
 
-[node name="Enemy" parent="Characters" groups=["enemy"] instance=ExtResource("10_1osac")]
+[node name="Enemy" parent="Characters" unique_id=1117757074 groups=["enemy"] instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
 position = Vector2(-528, 240)
 
-[node name="Metronome" parent="Characters" instance=ExtResource("11_6d88t")]
+[node name="Metronome" parent="Characters" unique_id=1563362403 instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true
 z_index = -1
 position = Vector2(80, 179)
 slope = 0.3
 update_rate = 0.04
 
-[node name="UI" parent="." instance=ExtResource("12_a2iw0")]
+[node name="UI" parent="." unique_id=18156420 instance=ExtResource("12_a2iw0")]
 layer = 10
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]

@@ -26,7 +26,7 @@ signal note_miss(time: float, strum_name: StringName, length: float, note_type: 
 @export var can_splash: bool  = false
 @export var enemy_slot: bool = false
 ## Note types that autoplay wont press
-@export var ignored_NOTE_TYPES: Array = []
+@export var ignored_note_types: Array = []
 
 enum STATE {
 	IDLE,
@@ -77,7 +77,7 @@ func _process(delta):
 		
 		if auto_play:
 			if time_difference <= 0:
-				if !ignored_NOTE_TYPES.has(note.note_type):
+				if !ignored_note_types.has(note.note_type):
 					if note != previous_note:
 						emit_signal("note_hit", note.time, self.get_name(), note.note_type, 0)
 						previous_note = note
@@ -245,7 +245,7 @@ func set_skin(new_skin: NoteSkin):
 
 
 func set_ignored_NOTE_TYPES(types: Array):
-	ignored_NOTE_TYPES = types
+	ignored_note_types = types
 
 
 func create_note(time: float, length: float, note_type: Variant, _tempo: float):

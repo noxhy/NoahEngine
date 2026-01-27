@@ -1,8 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://cigsmwajnw2jq"]
+[gd_scene format=3 uid="uid://cigsmwajnw2jq"]
 
 [ext_resource type="Script" uid="uid://byu172po8rot7" path="res://scenes/game/basic_ui.gd" id="1_pm5h1"]
 [ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://scenes/game/strumlines/4key_strums.tscn" id="2_58g8k"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/bold_font.ttf" id="4_jqq0h"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://assets/fonts/tertiary_font.ttf" id="4_jqq0h"]
 [ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://assets/sprites/playstate/developer/healthBar.png" id="5_2fmdm"]
 [ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://assets/sprites/playstate/icons/icon-face.png" id="6_6rn83"]
 

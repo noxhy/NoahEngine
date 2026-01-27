@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=22 format=3 uid="uid://c68qv1j3qpshw"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c68qv1j3qpshw"]
 
 [ext_resource type="Texture2D" uid="uid://4xhqrwhupnue" path="res://assets/sprites/playstate/default/rating/comboFont.png" id="1_kryc3"]
 

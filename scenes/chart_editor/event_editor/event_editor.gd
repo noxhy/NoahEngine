@@ -375,10 +375,18 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time)
+		var L: int = ChartManager.chart.get_events_data().bsearch_custom(time, self.bsearch_note)
 		if L != -1:
 			ChartManager.chart.chart_data["events"].insert(L, [time, event, parameters])
-			event_nodes.insert(L - current_visible_events_L, event_instance)
+			
+			if event_nodes.is_empty():
+				event_nodes.append(event_instance)
+			elif (L - current_visible_events_L) < 0:
+				event_nodes.insert(0, event_instance)
+			elif (L - current_visible_events_L) >= event_nodes.size():
+				event_nodes.append(event_instance)
+			else:
+				event_nodes.insert((L - current_visible_events_L), event_instance)
 			
 			if !moved:
 				selected_notes = [L]

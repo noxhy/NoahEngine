@@ -1,18 +1,19 @@
-[gd_resource type="Resource" script_class="Album" load_steps=10 format=3 uid="uid://c0coafka6m5vs"]
+[gd_resource type="Resource" script_class="Album" format=3 uid="uid://c0coafka6m5vs"]
 
 [ext_resource type="Texture2D" uid="uid://cgytynqqgidyi" path="res://assets/sprites/menus/freeplay/album covers/volume1.png" id="1_nld3m"]
 [ext_resource type="Script" uid="uid://c85optaap1atb" path="res://resources/album.gd" id="2_de8bw"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="3_dndsk"]
-[ext_resource type="Resource" uid="uid://brqmb60ca111g" path="res://playable_songs/fresh/Fresh Erect.res" id="4_3l6lo"]
-[ext_resource type="Resource" uid="uid://dsdqkx3gel8yj" path="res://playable_songs/darnell/Darnell (Bf Mix).res" id="5_nld3m"]
+[ext_resource type="Resource" uid="uid://bsvebm2uvlrl2" path="res://playable_songs/fresh/Fresh Erect.res" id="4_3l6lo"]
+[ext_resource type="Resource" uid="uid://br5uepvx07m8r" path="res://playable_songs/darnell/Darnell (Bf Mix).res" id="5_nld3m"]
 [ext_resource type="Resource" uid="uid://dlr3l60wbh750" path="res://playable_songs/lit up/Lit Up (Bf Mix).tres" id="6_de8bw"]
-[ext_resource type="Resource" uid="uid://drcl3wnutydky" path="res://playable_songs/senpai/Senpai.res" id="7_dndsk"]
+[ext_resource type="Resource" uid="uid://dlvn0rhoguovl" path="res://playable_songs/senpai/Senpai.res" id="7_dndsk"]
 [ext_resource type="Resource" uid="uid://ehml1umodoyq" path="res://playable_songs/cocoa/Cocoa Erect.res" id="8_4t5a0"]
-[ext_resource type="Resource" uid="uid://cj626re7vl114" path="res://playable_songs/eggnog/Eggnog Erect.res" id="9_k2n3v"]
+[ext_resource type="Resource" uid="uid://b3o6xjxb7tx0g" path="res://playable_songs/eggnog/Eggnog Erect.res" id="9_k2n3v"]
+[ext_resource type="Resource" uid="uid://cvnbbfi6ch7e7" path="res://playable_songs/test/data/Test.res" id="10_nld3m"]
 
 [resource]
 script = ExtResource("2_de8bw")
 name = "Friday Night Funkin'"
 cover = ExtResource("1_nld3m")
 credits = "kawai sprite, Saruky, Saster and Kohta Takahashi"
-song_list = Array[ExtResource("3_dndsk")]([ExtResource("4_3l6lo"), ExtResource("5_nld3m"), ExtResource("6_de8bw"), ExtResource("7_dndsk"), ExtResource("8_4t5a0"), ExtResource("9_k2n3v")])
+song_list = Array[ExtResource("3_dndsk")]([ExtResource("4_3l6lo"), ExtResource("5_nld3m"), ExtResource("6_de8bw"), ExtResource("7_dndsk"), ExtResource("8_4t5a0"), ExtResource("9_k2n3v"), ExtResource("10_nld3m")])

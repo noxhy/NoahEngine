@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c3lux2ajoe1g6"]
+[gd_scene format=3 uid="uid://c3lux2ajoe1g6"]
 
 [ext_resource type="Script" uid="uid://ocjrud8madj7" path="res://scenes/chart_editor/chart_editor.gd" id="1_ugmsy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://scenes/conductor.gd" id="2_dontb"]
@@ -40,7 +40,7 @@ streams_count = 2
 stream_0/stream = ExtResource("8_s4ovn")
 stream_1/stream = ExtResource("9_v13a8")
 
-[node name="Chart Editor" type="Node2D"]
+[node name="Chart Editor" type="Node2D" unique_id=373963802]
 script = ExtResource("1_ugmsy")
 divider_color = Color(0.71484375, 0.71484375, 0.71484375, 1)
 current_time_color = Color(0.75668746, 0, 1, 0.8)
@@ -49,96 +49,96 @@ box_color = Color(0.151337, 0.445313, 0.17072, 0.287)
 selected_color = Color(0.404297, 0.75, 0.442108, 0.734)
 time_change_color = Color(0.5526029, 0.5802685, 0.9920456, 1)
 
-[node name="Conductor" type="Node" parent="." node_paths=PackedStringArray("stream_player")]
+[node name="Conductor" type="Node" parent="." unique_id=1602922239 node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_dontb")
 stream_player = NodePath("../Audio/Instrumental")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=5194862]
 position = Vector2(640, 360)
 
-[node name="Audio" type="Node" parent="."]
+[node name="Audio" type="Node" parent="." unique_id=2140903853]
 
-[node name="Vocals" type="AudioStreamPlayer" parent="Audio"]
+[node name="Vocals" type="AudioStreamPlayer" parent="Audio" unique_id=680314243]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamPolyphonic_50rmr")
 bus = &"Music"
 
-[node name="Instrumental" type="AudioStreamPlayer" parent="Audio"]
+[node name="Instrumental" type="AudioStreamPlayer" parent="Audio" unique_id=940753275]
 unique_name_in_owner = true
 bus = &"Music"
 
-[node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio"]
+[node name="Conductor Beat" type="AudioStreamPlayer" parent="Audio" unique_id=638251549]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
 pitch_scale = 2.0
 bus = &"SFX"
 
-[node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio"]
+[node name="Conductor Off Beat" type="AudioStreamPlayer" parent="Audio" unique_id=1394109437]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
 bus = &"SFX"
 
-[node name="Conductor Step" type="AudioStreamPlayer" parent="Audio"]
+[node name="Conductor Step" type="AudioStreamPlayer" parent="Audio" unique_id=7155414]
 unique_name_in_owner = true
 stream = ExtResource("3_myxvx")
 pitch_scale = 1.5
 bus = &"SFX"
 
-[node name="Hit Sound" type="AudioStreamPlayer" parent="Audio"]
+[node name="Hit Sound" type="AudioStreamPlayer" parent="Audio" unique_id=1219194298]
 unique_name_in_owner = true
 stream = ExtResource("4_1k01c")
 bus = &"SFX"
 
-[node name="Note Place" type="AudioStreamPlayer" parent="Audio"]
+[node name="Note Place" type="AudioStreamPlayer" parent="Audio" unique_id=1079773390]
 unique_name_in_owner = true
 stream = ExtResource("14_am3li")
 bus = &"SFX"
 
-[node name="Mouse Click" type="AudioStreamPlayer" parent="Audio"]
+[node name="Mouse Click" type="AudioStreamPlayer" parent="Audio" unique_id=1254258411]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_q5g7a")
 bus = &"SFX"
 
-[node name="Note Remove" type="AudioStreamPlayer" parent="Audio"]
+[node name="Note Remove" type="AudioStreamPlayer" parent="Audio" unique_id=1452383116]
 unique_name_in_owner = true
 stream = ExtResource("8_3odt1")
 bus = &"SFX"
 
-[node name="Note Stretch" type="AudioStreamPlayer" parent="Audio"]
+[node name="Note Stretch" type="AudioStreamPlayer" parent="Audio" unique_id=1699989984]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamRandomizer_cp6sg")
 bus = &"SFX"
 
-[node name="Open Window" type="AudioStreamPlayer" parent="Audio"]
+[node name="Open Window" type="AudioStreamPlayer" parent="Audio" unique_id=2017205801]
 unique_name_in_owner = true
 stream = ExtResource("11_iakv7")
 bus = &"SFX"
 
-[node name="Close Window" type="AudioStreamPlayer" parent="Audio"]
+[node name="Close Window" type="AudioStreamPlayer" parent="Audio" unique_id=2084436664]
 unique_name_in_owner = true
 stream = ExtResource("12_qymoy")
 bus = &"SFX"
 
-[node name="Undo" type="AudioStreamPlayer" parent="Audio"]
+[node name="Undo" type="AudioStreamPlayer" parent="Audio" unique_id=1963888495]
 unique_name_in_owner = true
 stream = ExtResource("13_am3li")
 bus = &"SFX"
 
-[node name="Redo" type="AudioStreamPlayer" parent="Audio"]
+[node name="Redo" type="AudioStreamPlayer" parent="Audio" unique_id=674140477]
 unique_name_in_owner = true
 stream = ExtResource("14_am3li")
 bus = &"SFX"
 
-[node name="Grid Layer" type="CanvasLayer" parent="."]
+[node name="Grid Layer" type="CanvasLayer" parent="." unique_id=1476007864]
 layer = -2
 offset = Vector2(640, 64)
 transform = Transform2D(1, 0, 0, 1, 640, 64)
 
-[node name="Parallax2D" type="Parallax2D" parent="Grid Layer"]
+[node name="Parallax2D" type="Parallax2D" parent="Grid Layer" unique_id=1878580833]
 repeat_times = 3
 follow_viewport = false
 
-[node name="Grid" parent="Grid Layer/Parallax2D" instance=ExtResource("2_i6pv1")]
+[node name="Grid" parent="Grid Layer/Parallax2D" unique_id=101824295 instance=ExtResource("2_i6pv1")]
 unique_name_in_owner = true
 grid_size = Vector2(36, 36)
 columns = 10
@@ -146,22 +146,22 @@ grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
 event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
 
-[node name="Waveform Layer" type="CanvasLayer" parent="."]
+[node name="Waveform Layer" type="CanvasLayer" parent="." unique_id=476894491]
 layer = 2
 offset = Vector2(640, 64)
 transform = Transform2D(1, 0, 0, 1, 640, 64)
 follow_viewport_enabled = true
 
-[node name="Notes Layer" type="CanvasLayer" parent="."]
+[node name="Notes Layer" type="CanvasLayer" parent="." unique_id=1790758764]
 layer = 2
 follow_viewport_enabled = true
 
-[node name="UI Borders" type="CanvasLayer" parent="."]
+[node name="UI Borders" type="CanvasLayer" parent="." unique_id=1532861694]
 layer = 9
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Upper Border" type="ColorRect" parent="UI Borders"]
+[node name="Upper Border" type="ColorRect" parent="UI Borders" unique_id=1209370372]
 offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
@@ -169,7 +169,7 @@ offset_bottom = -328.0
 color = Color(0.14509805, 0.16862746, 0.20392157, 1)
 metadata/_edit_lock_ = true
 
-[node name="Lower Border" type="ColorRect" parent="UI Borders"]
+[node name="Lower Border" type="ColorRect" parent="UI Borders" unique_id=234193942]
 offset_left = -640.0
 offset_top = 312.0
 offset_right = 640.0
@@ -177,12 +177,12 @@ offset_bottom = 360.0
 color = Color(0.14509805, 0.16862746, 0.20392157, 1)
 metadata/_edit_lock_ = true
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=876802818]
 layer = 10
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Song Slider" type="HSlider" parent="UI"]
+[node name="Song Slider" type="HSlider" parent="UI" unique_id=729164226]
 unique_name_in_owner = true
 offset_left = -640.0
 offset_top = 296.0
@@ -193,7 +193,7 @@ theme = ExtResource("17_75w6f")
 step = 0.001
 metadata/_edit_lock_ = true
 
-[node name="Lower UI" type="HBoxContainer" parent="UI"]
+[node name="Lower UI" type="HBoxContainer" parent="UI" unique_id=1508371283]
 clip_children = 1
 custom_minimum_size = Vector2(1280, 48)
 anchors_preset = 15
@@ -209,50 +209,50 @@ focus_mode = 1
 theme = ExtResource("17_75w6f")
 metadata/_edit_lock_ = true
 
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/Lower UI"]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/Lower UI" unique_id=102920913]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="Current Time Label" type="Label" parent="UI/Lower UI/HBoxContainer"]
+[node name="Current Time Label" type="Label" parent="UI/Lower UI/HBoxContainer" unique_id=1199977583]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "CURRENT TIME"
 vertical_alignment = 1
 
-[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer" unique_id=699161624]
 layout_mode = 2
 
-[node name="Beat" type="Label" parent="UI/Lower UI/HBoxContainer"]
+[node name="Beat" type="Label" parent="UI/Lower UI/HBoxContainer" unique_id=405498116]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 text = "BEAT"
 vertical_alignment = 1
 
-[node name="Step" type="Label" parent="UI/Lower UI/HBoxContainer"]
+[node name="Step" type="Label" parent="UI/Lower UI/HBoxContainer" unique_id=149207596]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 text = "STEP"
 vertical_alignment = 1
 
-[node name="Debug" type="Label" parent="UI/Lower UI/HBoxContainer"]
+[node name="Debug" type="Label" parent="UI/Lower UI/HBoxContainer" unique_id=1833968541]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 vertical_alignment = 1
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Lower UI"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/Lower UI" unique_id=433438847]
 layout_mode = 2
 size_flags_horizontal = 6
 alignment = 1
 
-[node name="VSeparator4" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
+[node name="VSeparator4" type="VSeparator" parent="UI/Lower UI/HBoxContainer2" unique_id=1922025118]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Skip to Beginning" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+[node name="Skip to Beginning" type="Button" parent="UI/Lower UI/HBoxContainer2" unique_id=1093477659]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -260,7 +260,7 @@ size_flags_vertical = 4
 icon = ExtResource("5_ruic6")
 flat = true
 
-[node name="Skip Backward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+[node name="Skip Backward" type="Button" parent="UI/Lower UI/HBoxContainer2" unique_id=1072205540]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -268,7 +268,7 @@ size_flags_vertical = 4
 icon = ExtResource("6_henw2")
 flat = true
 
-[node name="Play Button" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+[node name="Play Button" type="Button" parent="UI/Lower UI/HBoxContainer2" unique_id=35655268]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
@@ -277,7 +277,7 @@ toggle_mode = true
 icon = ExtResource("4_f11ek")
 flat = true
 
-[node name="Skip Forward" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+[node name="Skip Forward" type="Button" parent="UI/Lower UI/HBoxContainer2" unique_id=1555858480]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -285,7 +285,7 @@ size_flags_vertical = 4
 icon = ExtResource("6_u1nu8")
 flat = true
 
-[node name="Skip to End" type="Button" parent="UI/Lower UI/HBoxContainer2"]
+[node name="Skip to End" type="Button" parent="UI/Lower UI/HBoxContainer2" unique_id=824353322]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -293,15 +293,15 @@ size_flags_vertical = 4
 icon = ExtResource("9_jmk4o")
 flat = true
 
-[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer2"]
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer2" unique_id=1939757127]
 layout_mode = 2
 size_flags_horizontal = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="UI/Lower UI"]
+[node name="HBoxContainer3" type="HBoxContainer" parent="UI/Lower UI" unique_id=801598384]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Difficulty Button" type="OptionButton" parent="UI/Lower UI/HBoxContainer3"]
+[node name="Difficulty Button" type="OptionButton" parent="UI/Lower UI/HBoxContainer3" unique_id=1573553856]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -312,22 +312,22 @@ item_count = 1
 popup/item_0/text = "difficulty"
 popup/item_0/id = 0
 
-[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+[node name="VSeparator3" type="VSeparator" parent="UI/Lower UI/HBoxContainer3" unique_id=2092834541]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer3"]
+[node name="Tempo" type="Label" parent="UI/Lower UI/HBoxContainer3" unique_id=1839475905]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 text = "TEMPO"
 vertical_alignment = 1
 
-[node name="VSeparator2" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+[node name="VSeparator2" type="VSeparator" parent="UI/Lower UI/HBoxContainer3" unique_id=1377693055]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Chart Snap" type="SpinBox" parent="UI/Lower UI/HBoxContainer3"]
+[node name="Chart Snap" type="SpinBox" parent="UI/Lower UI/HBoxContainer3" unique_id=1812168816]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -339,11 +339,11 @@ value = 16.0
 update_on_text_changed = true
 prefix = "1 /"
 
-[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer3"]
+[node name="VSeparator" type="VSeparator" parent="UI/Lower UI/HBoxContainer3" unique_id=928327157]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Time Left Label" type="Label" parent="UI/Lower UI/HBoxContainer3"]
+[node name="Time Left Label" type="Label" parent="UI/Lower UI/HBoxContainer3" unique_id=413673932]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
@@ -351,7 +351,7 @@ text = "TIME LEFT"
 horizontal_alignment = 2
 vertical_alignment = 1
 
-[node name="Upper UI" type="HBoxContainer" parent="UI"]
+[node name="Upper UI" type="HBoxContainer" parent="UI" unique_id=993953312]
 clip_children = 1
 offset_left = -576.0
 offset_top = -360.0
@@ -359,7 +359,7 @@ offset_right = 640.0
 offset_bottom = -327.0
 theme = ExtResource("17_75w6f")
 
-[node name="File Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="File Button" type="MenuButton" parent="UI/Upper UI" unique_id=1607617354]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -388,14 +388,14 @@ popup/item_8/text = "Exit"
 popup/item_8/id = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="Export External Popup" type="FileDialog" parent="UI/Upper UI/File Button"]
+[node name="Export External Popup" type="FileDialog" parent="UI/Upper UI/File Button" unique_id=2015701004]
 unique_name_in_owner = true
 initial_position = 4
 size = Vector2i(640, 480)
 display_mode = 1
 access = 2
 
-[node name="Edit Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="Edit Button" type="MenuButton" parent="UI/Upper UI" unique_id=1048075191]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -428,7 +428,7 @@ popup/item_11/text = "Deselect All"
 popup/item_11/id = 11
 metadata/_edit_use_anchors_ = true
 
-[node name="View Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="View Button" type="MenuButton" parent="UI/Upper UI" unique_id=1698911827]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -447,7 +447,7 @@ popup/item_4/text = "Zoom Out"
 popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Note Skin Window" type="FileDialog" parent="UI/Upper UI/View Button"]
+[node name="Note Skin Window" type="FileDialog" parent="UI/Upper UI/View Button" unique_id=1407336519]
 unique_name_in_owner = true
 title = "Open a File"
 initial_position = 1
@@ -456,7 +456,7 @@ file_mode = 0
 root_subfolder = "res://assets/sprites/playstate/"
 filters = PackedStringArray("*.tres", "*.res")
 
-[node name="Audio Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="Audio Button" type="MenuButton" parent="UI/Upper UI" unique_id=1155838112]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -485,10 +485,10 @@ popup/item_8/checkable = 1
 popup/item_8/id = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="Audios Window" parent="UI/Upper UI/Audio Button" instance=ExtResource("22_xfd1e")]
+[node name="Audios Window" parent="UI/Upper UI/Audio Button" unique_id=2140720293 instance=ExtResource("22_xfd1e")]
 visible = false
 
-[node name="Test Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="Test Button" type="MenuButton" parent="UI/Upper UI" unique_id=897402310]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -504,7 +504,7 @@ popup/item_2/checkable = 1
 popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="Window Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="Window Button" type="MenuButton" parent="UI/Upper UI" unique_id=1150031793]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -522,22 +522,22 @@ popup/item_2/checkable = 1
 popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="History Window" parent="UI/Upper UI/Window Button" instance=ExtResource("19_ufjr2")]
+[node name="History Window" parent="UI/Upper UI/Window Button" unique_id=1536743931 instance=ExtResource("19_ufjr2")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Metadata Window" parent="UI/Upper UI/Window Button" instance=ExtResource("23_75w6f")]
+[node name="Metadata Window" parent="UI/Upper UI/Window Button" unique_id=751427235 instance=ExtResource("23_75w6f")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Note Type Window" parent="UI/Upper UI/Window Button" instance=ExtResource("24_j0j2p")]
+[node name="Note Type Window" parent="UI/Upper UI/Window Button" unique_id=237503304 instance=ExtResource("24_j0j2p")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Help Button" type="MenuButton" parent="UI/Upper UI"]
+[node name="Help Button" type="MenuButton" parent="UI/Upper UI" unique_id=1786101741]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -547,7 +547,7 @@ item_count = 1
 popup/item_0/id = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="Strum Labels" type="HFlowContainer" parent="UI"]
+[node name="Strum Labels" type="HFlowContainer" parent="UI" unique_id=1205544976]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(144, 32)
 offset_left = -144.0
@@ -555,12 +555,12 @@ offset_top = -328.0
 offset_right = 144.0
 offset_bottom = -296.0
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=1879271863]
 layer = -128
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="MenuDesat" type="Sprite2D" parent="Background"]
+[node name="MenuDesat" type="Sprite2D" parent="Background" unique_id=1878471884]
 modulate = Color(0.11372549, 0.13333334, 0.16078432, 1)
 texture = ExtResource("4_g6hlb")
 metadata/_edit_lock_ = true
