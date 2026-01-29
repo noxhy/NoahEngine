@@ -6,10 +6,10 @@
 [ext_resource type="Resource" uid="uid://bsvebm2uvlrl2" path="res://playable_songs/fresh/Fresh Erect.res" id="4_3l6lo"]
 [ext_resource type="Resource" uid="uid://br5uepvx07m8r" path="res://playable_songs/darnell/Darnell (Bf Mix).res" id="5_nld3m"]
 [ext_resource type="Resource" uid="uid://dlr3l60wbh750" path="res://playable_songs/lit up/Lit Up (Bf Mix).tres" id="6_de8bw"]
-[ext_resource type="Resource" uid="uid://dlvn0rhoguovl" path="res://playable_songs/senpai/Senpai.res" id="7_dndsk"]
+[ext_resource type="Resource" uid="uid://d1ousytoxb4we" path="res://playable_songs/senpai/Senpai.res" id="7_dndsk"]
 [ext_resource type="Resource" uid="uid://ehml1umodoyq" path="res://playable_songs/cocoa/Cocoa Erect.res" id="8_4t5a0"]
 [ext_resource type="Resource" uid="uid://b3o6xjxb7tx0g" path="res://playable_songs/eggnog/Eggnog Erect.res" id="9_k2n3v"]
-[ext_resource type="Resource" uid="uid://cvnbbfi6ch7e7" path="res://playable_songs/test/data/Test.res" id="10_nld3m"]
+[ext_resource type="Resource" uid="uid://c213ouuoby8sm" path="res://playable_songs/test/data/Test.res" id="10_nld3m"]
 
 [resource]
 script = ExtResource("2_de8bw")

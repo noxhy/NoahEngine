@@ -1,8 +1,16 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjfnhq523xvv0"]
+[gd_scene format=3 uid="uid://cjfnhq523xvv0"]
 
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="1_7sgay"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="1_7sgay"]
 [ext_resource type="Script" uid="uid://ia6uygduj021" path="res://scenes/results/boyfriend/good.gd" id="1_yap4e"]
 [ext_resource type="SpriteFrames" uid="uid://b1eo3bhytadbv" path="res://assets/sprites/menus/results/results-bf/resultsGOOD/girlfriend_good.res" id="2_yap4e"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="3_1cbne"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="4_dai0t"]
+
+[sub_resource type="Resource" id="Resource_bmvqc"]
+script = ExtResource("4_dai0t")
+folder_path = "res://assets/sprites/menus/results/results-bf/resultsGOOD/bf/"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
 [sub_resource type="Animation" id="Animation_sfthb"]
 length = 0.001
@@ -103,28 +111,28 @@ _data = {
 &"play": SubResource("Animation_6ogrh")
 }
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=1978643634]
 script = ExtResource("1_yap4e")
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=1912444737]
 position = Vector2(-264, -8)
 script = ExtResource("1_7sgay")
-atlas = "res://assets/sprites/menus/results/results-bf/resultsGOOD/bf"
-auto_start = true
+symbol = "Boyfriend Good Anim"
+autoplay = true
+loop = true
 loop_frame = 16
+atlases = Array[ExtResource("3_1cbne")]([SubResource("Resource_bmvqc")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1494131741]
 visible = false
 z_index = -1
 position = Vector2(-168, 96)
 sprite_frames = ExtResource("2_yap4e")
 animation = &"loop"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_fecrv")
-}
-autoplay = "play"
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=589351368]
+libraries/ = SubResource("AnimationLibrary_fecrv")
+autoplay = &"play"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -509,7 +509,7 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		show_combo(rating, combo)
 		update_ui_stats()
 
-func note_holding(time, lane, note_type, strum_manager):
+func note_holding(time, lane, length, note_type, strum_manager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	

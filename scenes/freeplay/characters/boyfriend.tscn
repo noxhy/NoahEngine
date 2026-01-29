@@ -1,8 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1s7cbxg2o4m0"]
+[gd_scene format=3 uid="uid://c1s7cbxg2o4m0"]
 
 [ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://scenes/freeplay/atlas_sprite.gd" id="1_uxy4b"]
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="2_re7fs"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="2_re7fs"]
 [ext_resource type="FontFile" uid="uid://c7hwqqieqbc47" path="res://assets/fonts/results_background.ttf" id="3_dcg1w"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="4_t2sh6"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="5_benro"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6h7lv"]
 font = ExtResource("3_dcg1w")
@@ -21,7 +23,13 @@ font = ExtResource("3_dcg1w")
 font_size = 48
 outline_size = 4
 
-[node name="Boyfriend DJ" type="Node2D"]
+[sub_resource type="Resource" id="Resource_1bo8h"]
+script = ExtResource("5_benro")
+folder_path = "res://assets/sprites/menus/freeplay/characters/boyfriend////"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
+
+[node name="Boyfriend DJ" type="Node2D" unique_id=1967729973]
 show_behind_parent = true
 script = ExtResource("1_uxy4b")
 animation_data = Dictionary[String, String]({
@@ -35,27 +43,27 @@ animation_data = Dictionary[String, String]({
 animation = "idle"
 metadata/_custom_type_script = "uid://cblocwqwyjjjy"
 
-[node name="ColorRect2" type="ColorRect" parent="."]
+[node name="ColorRect2" type="ColorRect" parent="." unique_id=1499559520]
 offset_left = -1656.0
 offset_top = -968.0
 offset_right = 1392.0
 offset_bottom = 368.0
 color = Color(1, 0.847059, 0.388235, 1)
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1664337761]
 offset_left = -850.0
 offset_top = -230.0
 offset_right = 846.0
 offset_bottom = -170.0
 color = Color(1, 0.85098, 0.0470588, 1)
 
-[node name="Parallax2D" type="Parallax2D" parent="."]
+[node name="Parallax2D" type="Parallax2D" parent="." unique_id=1773961046]
 scroll_offset = Vector2(-276, -56)
 repeat_size = Vector2(348, 120)
 autoscroll = Vector2(320, 0)
 repeat_times = 2
 
-[node name="Label" type="Label" parent="Parallax2D"]
+[node name="Label" type="Label" parent="Parallax2D" unique_id=1117364481]
 offset_left = 92.0
 offset_top = -304.0
 offset_right = 460.0
@@ -64,13 +72,13 @@ text = "BOYFRIEND
 "
 label_settings = SubResource("LabelSettings_6h7lv")
 
-[node name="Parallax2D2" type="Parallax2D" parent="."]
+[node name="Parallax2D2" type="Parallax2D" parent="." unique_id=1618698175]
 scroll_offset = Vector2(-684, -624)
 repeat_size = Vector2(724, 0)
 autoscroll = Vector2(-360, 0)
 repeat_times = 2
 
-[node name="Label" type="Label" parent="Parallax2D2"]
+[node name="Label" type="Label" parent="Parallax2D2" unique_id=209016201]
 offset_left = -52.0
 offset_top = 104.0
 offset_right = 672.0
@@ -79,13 +87,13 @@ text = "HOT BLOODED IN MORE WAYS THAN ONE
 "
 label_settings = SubResource("LabelSettings_dcg1w")
 
-[node name="Parallax2D3" type="Parallax2D" parent="."]
+[node name="Parallax2D3" type="Parallax2D" parent="." unique_id=495865614]
 scroll_offset = Vector2(-684, -624)
 repeat_size = Vector2(724, 0)
 autoscroll = Vector2(-360, 0)
 repeat_times = 2
 
-[node name="Label" type="Label" parent="Parallax2D3"]
+[node name="Label" type="Label" parent="Parallax2D3" unique_id=1580668679]
 offset_left = -52.0
 offset_top = 336.0
 offset_right = 672.0
@@ -94,13 +102,13 @@ text = "HOT BLOODED IN MORE WAYS THAN ONE
 "
 label_settings = SubResource("LabelSettings_dcg1w")
 
-[node name="Parallax2D4" type="Parallax2D" parent="."]
+[node name="Parallax2D4" type="Parallax2D" parent="." unique_id=1964061387]
 scroll_offset = Vector2(40, -584)
 repeat_size = Vector2(345, 0)
 autoscroll = Vector2(-160, 0)
 repeat_times = 2
 
-[node name="Label" type="Label" parent="Parallax2D4"]
+[node name="Label" type="Label" parent="Parallax2D4" unique_id=1018089161]
 offset_left = 161.0
 offset_top = 180.0
 offset_right = 486.0
@@ -108,10 +116,11 @@ offset_bottom = 229.0
 text = "PROTECT YO NUTS"
 label_settings = SubResource("LabelSettings_jjooh")
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=1851201380]
 position = Vector2(448, -312)
 script = ExtResource("2_re7fs")
-atlas = "res://assets/sprites/menus/freeplay/characters/boyfriend"
-playing = true
-auto_start = true
+symbol = "Boyfriend DJ"
+autoplay = true
+loop = true
+atlases = Array[ExtResource("4_t2sh6")]([SubResource("Resource_1bo8h")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"

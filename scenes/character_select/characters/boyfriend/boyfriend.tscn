@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://cdac0swu1gxwh"]
+[gd_scene format=3 uid="uid://cdac0swu1gxwh"]
 
 [ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://scenes/freeplay/atlas_sprite.gd" id="1_6frv2"]
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="2_lt8dr"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="2_lt8dr"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="3_rbs1r"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="4_vbqi4"]
 
-[node name="Boyfriend" type="Node2D"]
+[sub_resource type="Resource" id="Resource_0ye3j"]
+script = ExtResource("4_vbqi4")
+folder_path = "res://assets/sprites/menus/character_select/characters/boyfriend/bfChill//"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
+
+[node name="Boyfriend" type="Node2D" unique_id=182979904]
 script = ExtResource("1_6frv2")
 animation_data = Dictionary[String, String]({
 "cancel": "bf cs deselect",
@@ -14,12 +22,11 @@ animation_data = Dictionary[String, String]({
 })
 animation = "idle"
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=1457163944]
 position = Vector2(-304, -248)
 script = ExtResource("2_lt8dr")
-atlas = "res://assets/sprites/menus/character_select/characters/boyfriend/bfChill"
 symbol = "bf cs idle"
-loop_mode = "Play Once"
+atlases = Array[ExtResource("3_rbs1r")]([SubResource("Resource_0ye3j")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
 [connection signal="finished" from="AnimateSymbol" to="." method="done"]

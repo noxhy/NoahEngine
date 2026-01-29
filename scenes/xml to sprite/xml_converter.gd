@@ -2,7 +2,7 @@ extends Node
 
 #
 # I STOLE THIS CODE IDK WHO MADE IT (probably codist???)
-# It's modified to support the bullshit "rotated" tag on the xml.
+# It's modified to support the "rotated" tag on the xml.
 #
 
 # ASSUMPTIONS:

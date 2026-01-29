@@ -54,17 +54,22 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 
 
 func note_hit(time, lane, note_type, hit_time, strum_manager):
-	get_tree().call_group(
-		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		get_direction(lane % 4))
+	var group: StringName = get_group(strum_manager)
+	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
 	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
 
 
-func note_holding(time, lane, note_type, strum_manager):
-	get_tree().call_group(
-		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		get_direction(lane % 4))
-	playstate_host.note_holding(time, lane, note_type, strum_manager)
+func note_holding(time, lane, length, note_type, strum_manager):
+	var group: StringName = get_group(strum_manager)
+	
+	get_tree().call_group(group, &"set_holding", true)
+	
+	if length <= 0:
+		get_tree().call_group(group, &"set_holding", false)
+	
+	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
+	
+	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
 
 
 func note_miss(time, lane, length, note_type, hit_time, strum_manager):
@@ -82,6 +87,11 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 		&"miss_" + get_direction(lane % 4))
 	
 	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
+
+
+func get_group(strum_manager) -> StringName:
+	return &"enemy" if strum_manager.enemy_slot else &"player"
+
 
 func get_direction(direction: int):
 	var animations = ["left", "down", "up", "right"]

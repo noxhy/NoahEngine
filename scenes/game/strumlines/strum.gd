@@ -12,7 +12,7 @@ const NOTE_TYPES: Dictionary = {
 
 signal created_note(time: float, strum_name: StringName, length: float, note_type: Variant)
 signal note_hit(time: float, strum_name: StringName, note_type: Variant, hit_time: float)
-signal note_holding(time: float, strum_name: StringName, note_type: Variant)
+signal note_holding(time: float, strum_name: StringName, length: float, note_type: Variant)
 signal note_miss(time: float, strum_name: StringName, length: float, note_type: Variant, hit_time: float)
 
 @export var note_skin: NoteSkin

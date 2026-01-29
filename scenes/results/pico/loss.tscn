@@ -1,14 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://cbgr3nsw1eu3k"]
+[gd_scene format=3 uid="uid://cbgr3nsw1eu3k"]
 
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="1_c7weh"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="1_c7weh"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="2_myfh0"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="3_tecmp"]
 
-[node name="Shit" type="Node2D"]
+[sub_resource type="Resource" id="Resource_7kjmp"]
+script = ExtResource("3_tecmp")
+folder_path = "res://assets/sprites/menus/results/results-pico/resultsSHIT/"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
+[node name="Shit" type="Node2D" unique_id=1440374099]
+
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=769139414]
 position = Vector2(-96, 112)
 script = ExtResource("1_c7weh")
-atlas = "res://assets/sprites/menus/results/results-pico/resultsSHIT"
-playing = true
-auto_start = true
+symbol = "pico loss rank"
+autoplay = true
+loop = true
 loop_frame = 32
+atlases = Array[ExtResource("2_myfh0")]([SubResource("Resource_7kjmp")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"

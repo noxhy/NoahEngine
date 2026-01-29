@@ -5,9 +5,3 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		&"enemy" if strum_manager.enemy_slot else &"player", &"set_prefix",
 		&"mom_" if str(note_type) == "mom" else &"")
 	super(time, lane, note_type, hit_time, strum_manager)
-
-func note_holding(time, lane, note_type, strum_manager):
-	get_tree().call_group(
-		&"enemy" if strum_manager.enemy_slot else &"player", &"set_prefix",
-		&"mom_" if str(note_type) == "mom" else &"")
-	super(time, lane, note_type, strum_manager)

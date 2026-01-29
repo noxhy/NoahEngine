@@ -1,9 +1,17 @@
-[gd_scene load_steps=3 format=3 uid="uid://d03jjve4mhk7l"]
+[gd_scene format=3 uid="uid://d03jjve4mhk7l"]
 
 [ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://scenes/freeplay/atlas_sprite.gd" id="1_yvya1"]
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="2_paxb0"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="2_paxb0"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="3_2my7b"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="4_xe1tw"]
 
-[node name="Pico" type="Node2D"]
+[sub_resource type="Resource" id="Resource_3lnxm"]
+script = ExtResource("4_xe1tw")
+folder_path = "res://assets/sprites/menus/character_select/characters/pico/picoChill//"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
+
+[node name="Pico" type="Node2D" unique_id=1327554445]
 script = ExtResource("1_yvya1")
 animation_data = Dictionary[String, String]({
 "cancel": "pico cs deselect",
@@ -15,13 +23,13 @@ animation_data = Dictionary[String, String]({
 })
 animation = "idle"
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
-position = Vector2(-96, -368)
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=1130540754]
+position = Vector2(-97, -356)
 script = ExtResource("2_paxb0")
-atlas = "res://assets/sprites/menus/character_select/characters/pico/picoChill"
 symbol = "pico cs idle"
-loop_mode = "Play Once"
+frame = 14
+atlases = Array[ExtResource("3_2my7b")]([SubResource("Resource_3lnxm")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
-[connection signal="finished" from="AnimateSymbol" to="." method="_on_animated_sprite_2d_finished"]
-[connection signal="looped" from="AnimateSymbol" to="." method="_on_animated_sprite_2d_looped"]
+[connection signal="finished" from="AnimateSymbol" to="." method="done"]
+[connection signal="looped" from="AnimateSymbol" to="." method="loop"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bbyq5kxppcvc8"]
+[gd_scene format=3 uid="uid://bbyq5kxppcvc8"]
 
 [ext_resource type="Script" uid="uid://cvn8o3a2v55bt" path="res://scenes/game/strumlines/strum.gd" id="1_ixlu2"]
 [ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://assets/sprites/playstate/developer/developer_note_skin.tres" id="2_aqqtq"]
@@ -6,11 +6,11 @@
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="4_kjy2w"]
 [ext_resource type="SpriteFrames" uid="uid://bw8j67b3ju40g" path="res://assets/sprites/playstate/default/arrow/covers.res" id="5_f2el6"]
 
-[node name="Arrow Strum" type="Node2D"]
+[node name="Arrow Strum" type="Node2D" unique_id=1054225201]
 script = ExtResource("1_ixlu2")
 note_skin = ExtResource("2_aqqtq")
 
-[node name="OffsetSprite" type="AnimatedSprite2D" parent="."]
+[node name="OffsetSprite" type="AnimatedSprite2D" parent="." unique_id=1929831036]
 use_parent_material = true
 scale = Vector2(0.2, 0.2)
 sprite_frames = ExtResource("3_cik2r")
@@ -31,7 +31,7 @@ animation_names = Dictionary[StringName, StringName]({
 &"up press": &"up press"
 })
 
-[node name="Hold Cover" type="AnimatedSprite2D" parent="."]
+[node name="Hold Cover" type="AnimatedSprite2D" parent="." unique_id=225515688]
 visible = false
 z_index = 10
 position = Vector2(12, 21)

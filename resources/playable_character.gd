@@ -3,8 +3,6 @@ class_name PlayableCharacter
 @export_category("Songs")
 @export var album: Album
 @export_category("Menus")
-@export_category("Pause")
-@export var pause_song: AudioStream
 @export_subgroup("Freeplay")
 @export_file('*.tscn') var dj: String
 @export var background: Texture2D

@@ -54,7 +54,6 @@ var total: float = 0.0
 var can_press: bool = true
 
 func _ready() -> void:
-	
 	Global.set_window_title("Selecting a Character")
 	$Camera2D.offset.y = -150
 	
@@ -67,7 +66,6 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	
 	var input_vector = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
 	var time = $Audio/Music.get_playback_position()
@@ -75,9 +73,7 @@ func _process(delta: float) -> void:
 	time -= AudioServer.get_output_latency()
 	
 	if input_vector != Vector2.ZERO:
-		
 		if input_time == 0 || input_time >= $Conductor.seconds_per_beat / 4:
-			
 			select(Vector2i(input_vector.sign()) + selected)
 			if input_time >= (time_of_next_step - time):
 				input_time = 0
@@ -99,9 +95,7 @@ func _process(delta: float) -> void:
 
 
 func load_locks():
-	
 	for i in range(9):
-		
 		var pos = get_node(str("%Lock ", i + 1)).position
 		var lock_instance = LOCK_PRELOAD.instantiate()
 		
@@ -115,12 +109,13 @@ func load_locks():
 		if option_data[i].has("icons"):
 			lock_instance.icon = option_data[i]["icons"].get_frame_texture("default", 0)
 			lock_instance.state = 2
+		else:
+			lock_instance.scale *= 0.6
 		
 		if option_data[i].has("player"):
-			
 			var instance = option_data[i]["player"].instantiate()
 			
-			instance.position = Vector2(944, 600)
+			instance.position = Vector2(650, 360)
 			instance.visible = false
 			
 			$Background/Characters.add_child(instance)
@@ -128,10 +123,9 @@ func load_locks():
 			instance.add_to_group("player")
 		
 		if option_data[i].has("partner"):
-			
 			var instance = option_data[i]["partner"].instantiate()
 			
-			instance.position = Vector2(344, 592)
+			instance.position = Vector2(0, 0)
 			instance.animation = "idle"
 			instance.visible = false
 			
@@ -150,10 +144,12 @@ func _on_conductor_new_beat(current_beat: int, _measure_relative: int) -> void:
 	get_tree().call_group("player", "play", "idle")
 	if current_beat % 2 == 0:
 		get_tree().call_group("partner", "play", "idle")
+	
+	%Speakers.frame = 0
+	%Speakers.playing = true
 
 
 func _on_conductor_new_step(_current_step: int, _measure_relative: int) -> void:
-	
 	time_of_next_step = $Audio/Music.get_playback_position()
 	time_of_next_step -= AudioServer.get_time_since_last_mix()
 	time_of_next_step -= AudioServer.get_output_latency()
@@ -161,8 +157,8 @@ func _on_conductor_new_step(_current_step: int, _measure_relative: int) -> void:
 
 
 func select(pos: Vector2i = selected):
-	
-	if !can_press: return
+	if !can_press:
+		return
 	
 	pos.x = wrapi(pos.x, 0, 3)
 	pos.y = wrapi(pos.y, 0, 3)
@@ -178,14 +174,11 @@ func select(pos: Vector2i = selected):
 	$Audio/Select.play()
 	
 	for node in get_tree().get_nodes_in_group("current"):
-		
 		node.visible = false
 		node.remove_from_group("current")
 	
 	if option_data[index].has("character"):
-		
 		for node in get_tree().get_nodes_in_group(option_data[index]["character"]):
-			
 			node.visible = true
 			node.add_to_group("current")
 	
@@ -200,7 +193,6 @@ func select(pos: Vector2i = selected):
 
 
 func confirm(pos: Vector2i = selected):
-	
 	if !can_press: return
 	
 	pos.x = wrapi(pos.x, 0, 3)
@@ -211,7 +203,6 @@ func confirm(pos: Vector2i = selected):
 	var character = option_data[index].get("character")
 	
 	if character != null:
-		
 		can_press = false
 		GameManager.current_character = character
 		$Audio/Confirm.play()
@@ -235,7 +226,6 @@ func mozaic(amount: float):
 	%"Character Name".material.set_shader_parameter("amount", amount)
 
 func multi_input_xor(inputs: Array) -> bool:
-	
 	var result = false
 	for input_val in inputs:
 		result = result != input_val

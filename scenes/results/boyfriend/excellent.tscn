@@ -1,14 +1,23 @@
-[gd_scene load_steps=2 format=3 uid="uid://iltd02v0nkc6"]
+[gd_scene format=3 uid="uid://iltd02v0nkc6"]
 
-[ext_resource type="Script" uid="uid://dxb0ojnhycqox" path="res://addons/gdanimate/animate_symbol.gd" id="1_ei88f"]
+[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="1_ei88f"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="2_lrlhk"]
+[ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="3_hiomu"]
 
-[node name="Excellent" type="Node2D"]
+[sub_resource type="Resource" id="Resource_4nmvo"]
+script = ExtResource("3_hiomu")
+folder_path = "res://assets/sprites/menus/results/results-bf/resultsEXCELLENT/"
+format = "adobe"
+metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
-[node name="AnimateSymbol" type="Node2D" parent="."]
+[node name="Excellent" type="Node2D" unique_id=1658287938]
+
+[node name="AnimateSymbol" type="Node2D" parent="." unique_id=1951673133]
 position = Vector2(440, 16)
 script = ExtResource("1_ei88f")
-atlas = "res://assets/sprites/menus/results/results-bf/resultsEXCELLENT"
-playing = true
-auto_start = true
+symbol = "bf results excellent"
+autoplay = true
+loop = true
 loop_frame = 28
+atlases = Array[ExtResource("2_lrlhk")]([SubResource("Resource_4nmvo")])
 metadata/_custom_type_script = "uid://dxb0ojnhycqox"
