@@ -85,7 +85,7 @@ func bop_tween(object: Object, property: NodePath, original_val: Variant, final_
 	tween.tween_property(object, property, original_val, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
 
 func set_window_title(title: String):
-	DisplayServer.window_set_title("Friday Night Funkin' Noah Engine 2.4.3 | " + title)
+	DisplayServer.window_set_title("Friday Night Funkin' Noah Engine 2.4.4 | " + title)
 
 func format_number(num:float) -> String: 
 	var isNegative = num < 0.0
