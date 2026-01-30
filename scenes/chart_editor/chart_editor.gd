@@ -735,7 +735,8 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_notes_L and i <= current_visible_notes_R:
-				update_note_position(note_nodes[i - L])
+				if (i - L) >= 0 and (i - L) < note_nodes.size():
+					update_note_position(note_nodes[i - L])
 				continue
 			
 			var note = ChartManager.chart.get_notes_data()[i]
@@ -764,7 +765,8 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_events_L and i <= current_visible_events_R:
-				update_note_position(event_nodes[i - L])
+				if (i - L) >= 0 and (i - L) < event_nodes.size():
+					update_note_position(event_nodes[i - L])
 				continue
 			
 			var event = ChartManager.chart.get_events_data()[i]
@@ -880,12 +882,16 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
+				print("empty")
 			elif (L - current_visible_notes_L) < 0:
 				note_nodes.insert(0, note_instance)
+				print("less than 0, insert at: ", 0)
 			elif (L - current_visible_notes_L) >= note_nodes.size():
 				note_nodes.append(note_instance)
+				print("greater than size, add at end")
 			else:
-				note_nodes.insert(L, note_instance)
+				note_nodes.insert(L - current_visible_notes_L, note_instance)
+				print("inserted at: ", L - current_visible_notes_L)
 			
 			if !moved:
 				selected_notes = [L]
@@ -905,15 +911,18 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	else:
 		if sorted:
 			var L: int = sort_index
-			
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
+				print("empty")
 			elif L < 0:
 				note_nodes.insert(0, note_instance)
+				print("less than 0, insert at: ", 0)
 			elif L >= note_nodes.size():
 				note_nodes.append(note_instance)
+				print("greater than size, add at end")
 			else:
 				note_nodes.insert(L, note_instance)
+				print("inserted at: ", L)
 		else:
 			note_nodes.append(note_instance)
 	
@@ -1007,10 +1016,11 @@ func remove_note(lane, time: float = -1):
 		return
 	
 	if (i - current_visible_notes_L) < note_nodes.size() and (i - current_visible_notes_L) >= 0:
-		print("time: ", note_nodes[i - current_visible_notes_L].time,
-		" lane: ", note_nodes[i - current_visible_notes_L].lane,
+		var note = note_nodes[i - current_visible_notes_L]
+		print("time: ", note.time,
+		" lane: ", note.lane,
 		" index: ", i - current_visible_notes_L)
-		note_nodes[i - current_visible_notes_L].queue_free()
+		note.queue_free()
 		note_nodes.remove_at(i - current_visible_notes_L)
 	
 	#if selected_notes.size() > 0:
@@ -1706,7 +1716,7 @@ func _on_metadata_window_add_time_change() -> void:
 		$Conductor.beats_per_measure, $Conductor.steps_per_measure
 	]
 	
-	ChartManager.chart.chart_data["meters"] = ChartManager.chart.chart_data["meters"].sort()
+	ChartManager.chart.chart_data["meters"].sort()
 	%"Metadata Window".update_stats()
 	auto_save()
 

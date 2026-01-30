@@ -353,7 +353,8 @@ func load_section(time: float):
 		
 		for i in range(L, R + 1):
 			if i >= current_visible_events_L and i <= current_visible_events_R:
-				update_note_position(event_nodes[i - L])
+				if (i - L) >= 0 and (i - L) < event_nodes.size():
+					update_note_position(event_nodes[i - L])
 				continue
 			
 			var event = ChartManager.chart.get_events_data()[i]
