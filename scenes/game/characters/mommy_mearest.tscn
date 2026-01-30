@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://dmjvwrm6q7mid"]
+[gd_scene format=3 uid="uid://dmjvwrm6q7mid"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_yjg8a"]
 [ext_resource type="Texture2D" uid="uid://cqneanku0adg3" path="res://assets/sprites/playstate/icons/icon-mom.png" id="2_2e6or"]
@@ -31,7 +31,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Mommy Mearest" type="Node2D"]
+[node name="Mommy Mearest" type="Node2D" unique_id=1963772775]
 script = ExtResource("1_yjg8a")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"MOM DOWN POSE",
@@ -47,10 +47,16 @@ offsets = Dictionary[StringName, Vector2]({
 &"Mom Pose Left": Vector2(70, -318),
 &"Mom Up Pose": Vector2(-24, -373)
 })
+hold_frames = Dictionary[StringName, int]({
+&"MOM DOWN POSE": 4,
+&"Mom Left Pose": 4,
+&"Mom Pose Left": 4,
+&"Mom Up Pose": 4
+})
 icons = SubResource("SpriteFrames_m5pti")
 color = Color(0.788235, 0.337255, 0.576471, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2093429231]
 z_index = -1
 use_parent_material = true
 position = Vector2(24, -352)

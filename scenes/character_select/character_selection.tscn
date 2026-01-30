@@ -25,19 +25,19 @@
 
 [sub_resource type="Resource" id="Resource_4k7j0"]
 script = ExtResource("11_433y0")
-folder_path = "res://assets/sprites/menus/character_select/crowd//"
+folder_path = "res://assets/sprites/menus/character_select/crowd///"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
 [sub_resource type="Resource" id="Resource_db2f0"]
 script = ExtResource("11_433y0")
-folder_path = "res://assets/sprites/menus/character_select/charSelectStage//"
+folder_path = "res://assets/sprites/menus/character_select/charSelectStage///"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
 [sub_resource type="Resource" id="Resource_433y0"]
 script = ExtResource("11_433y0")
-folder_path = "res://assets/sprites/menus/character_select/charSelectSpeakers//"
+folder_path = "res://assets/sprites/menus/character_select/charSelectSpeakers///"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
@@ -46,7 +46,7 @@ blend_mode = 3
 
 [sub_resource type="Resource" id="Resource_sxj4d"]
 script = ExtResource("11_433y0")
-folder_path = "res://assets/sprites/menus/character_select/barThing//"
+folder_path = "res://assets/sprites/menus/character_select/barThing///"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
@@ -103,7 +103,7 @@ drag_top_margin = 0.02
 drag_right_margin = 0.02
 drag_bottom_margin = 0.02
 
-[node name="Conductor" type="Node" parent="." unique_id=854994965]
+[node name="Conductor" type="Node" parent="." unique_id=854994965 node_paths=PackedStringArray("stream_player")]
 script = ExtResource("1_xnc8d")
 stream_player = NodePath("../Audio/Music")
 tempo = 90.0
@@ -164,7 +164,6 @@ autoplay = true
 playing = true
 loop = true
 atlases = Array[ExtResource("10_db2f0")]([SubResource("Resource_4k7j0")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 metadata/_edit_lock_ = true
 
 [node name="Parallax2D4" type="Parallax2D" parent="Background" unique_id=797173654]
@@ -174,12 +173,11 @@ scroll_scale = Vector2(0.5, 0.5)
 position = Vector2(-680, 80)
 script = ExtResource("9_nit2l")
 symbol = "stage full"
-frame = 319
+frame = 118
 autoplay = true
 playing = true
 loop = true
 atlases = Array[ExtResource("10_db2f0")]([SubResource("Resource_db2f0")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 metadata/_edit_lock_ = true
 
 [node name="ForegroundBlur" type="Sprite2D" parent="Background/Parallax2D4" unique_id=1837565322]
@@ -207,7 +205,6 @@ script = ExtResource("9_nit2l")
 symbol = "Speakers ALL"
 frame = 14
 atlases = Array[ExtResource("10_db2f0")]([SubResource("Resource_433y0")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 metadata/_edit_lock_ = true
 
 [node name="Characters" type="Parallax2D" parent="Background" unique_id=265324438]
@@ -276,12 +273,11 @@ material = SubResource("CanvasItemMaterial_uas1p")
 position = Vector2(-688, -664.2)
 script = ExtResource("9_nit2l")
 symbol = "name bar animated"
-frame = 3
+frame = 1
 autoplay = true
 playing = true
 loop = true
 atlases = Array[ExtResource("10_db2f0")]([SubResource("Resource_sxj4d")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
 [node name="ChooseDipshit" type="Sprite2D" parent="UI" unique_id=267329348]
 z_index = -10

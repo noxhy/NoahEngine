@@ -874,8 +874,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = ChartManager.chart.get_notes_data().bsearch_custom(time, self.bsearch_note, true)
-		#var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
+		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
 		if L != -1:
 			ChartManager.chart.chart_data["notes"].insert(L, [time, lane, length, type])
 			
@@ -1028,9 +1027,6 @@ func remove_notes(notes: Array):
 		var _note = ChartManager.chart.get_notes_data()[note - i]
 		remove_note(_note[1], _note[0])
 		i += 1
-
-func bsearch_note(a, b):
-	return (a[0] < b)
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:

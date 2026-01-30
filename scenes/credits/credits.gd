@@ -48,7 +48,7 @@ func _ready():
 		menu_option_instance.option_name = i
 		menu_option_instance.position = Vector2(-1000, object_amount * 175)
 		menu_option_instance.modulate = Color(1, 1, 1, 1)
-		menu_option_instance.get_node("Label").label_settings.font = preload("res://assets/fonts/bold_italic_font.ttf")
+		menu_option_instance.get_node("Label").label_settings.font = preload("res://assets/fonts/secondary_font.ttf")
 		menu_option_instance.get_node("Label").label_settings.font_size = 56
 		
 		$UI.add_child(menu_option_instance)

@@ -11,33 +11,33 @@ font_size = 18
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Credits" type="Node2D"]
+[node name="Credits" type="Node2D" unique_id=1768181807]
 script = ExtResource("1_twwf5")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1082992595]
 position = Vector2(640, 360)
 
-[node name="Conductor" type="Node" parent="."]
+[node name="Conductor" type="Node" parent="." unique_id=769439466]
 script = ExtResource("2_7ianm")
 stream_player = NodePath("")
 tempo = 102.0
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1063620940]
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 follow_viewport_enabled = true
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=536424448]
 layer = -1
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Background" type="Sprite2D" parent="Background"]
+[node name="Background" type="Sprite2D" parent="Background" unique_id=308972181]
 z_index = -1
 texture = ExtResource("5_7foaj")
 metadata/_edit_lock_ = true
 
-[node name="ColorRect2" type="ColorRect" parent="Background"]
+[node name="ColorRect2" type="ColorRect" parent="Background" unique_id=1271989201]
 offset_left = -891.7222
 offset_top = -397.1165
 offset_right = -141.72223
@@ -46,14 +46,14 @@ rotation = -0.16231562
 color = Color(0, 0, 0, 0.505882)
 metadata/_edit_lock_ = true
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=651523038]
 offset_left = -640.0
 offset_top = 264.0
 offset_right = 640.0
 offset_bottom = 360.0
 color = Color(0, 0, 0, 0.74902)
 
-[node name="Label" type="Label" parent="Background/ColorRect"]
+[node name="Label" type="Label" parent="Background/ColorRect" unique_id=1627034125]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
