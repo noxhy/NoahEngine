@@ -96,7 +96,7 @@ func _process(delta):
 						
 						note.get_node("Note").visible = false
 						
-						emit_signal("note_holding", temp - note.length, self.get_name(), note.note_type)
+						emit_signal("note_holding", temp - note.length, self.get_name(), note.length, note.note_type)
 						state = STATE.GLOW
 					
 					else:
@@ -170,7 +170,7 @@ func _process(delta):
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
 							note.length /= GameManager.seconds_per_beat
 							note.get_node("Note").visible = false
-							emit_signal("note_holding", temp - note.length, self.get_name(), note.note_type)
+							emit_signal("note_holding", temp - note.length, self.get_name(), note.length, note.note_type)
 							
 							if !pressing:
 								hold_cover_sprite.play_animation("cover " + strum_name + " start")
@@ -180,7 +180,7 @@ func _process(delta):
 							
 							if note.length <= 0:
 								pressing = false
-								emit_signal("note_holding", temp - note.length, self.get_name(), note.note_type)
+								emit_signal("note_holding", temp - note.length, self.get_name(), note.length, note.note_type)
 							
 								if can_splash:
 									hold_cover_sprite.play_animation("cover " + strum_name + " end")
