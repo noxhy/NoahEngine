@@ -67,8 +67,6 @@ func note_holding(time, lane, length, note_type, strum_manager):
 	if length <= 0:
 		get_tree().call_group(group, &"set_holding", false)
 	
-	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
-	
 	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
 
 
