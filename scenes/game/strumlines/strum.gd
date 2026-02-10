@@ -244,7 +244,7 @@ func set_skin(new_skin: NoteSkin):
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
 
-func set_ignored_NOTE_TYPES(types: Array):
+func set_ignored_note_types(types: Array):
 	ignored_note_types = types
 
 
