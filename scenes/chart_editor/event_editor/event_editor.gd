@@ -363,68 +363,6 @@ func load_section(time: float):
 		current_visible_events_L = L
 		current_visible_events_R = R
 
-## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
-func place_event(time: float, event: String, parameters: Array, placed: bool = false, moved: bool = false,
-sorted: bool = false, sort_index: int = -1) -> int:
-	var event_instance = EVENT_PRELOAD.instantiate()
-	
-	event_instance.time = time
-	event_instance.event = event
-	event_instance.parameters = parameters
-	update_note_position(event_instance)
-	
-	var output: int
-	
-	if placed:
-		var L: int = ChartManager.chart.get_events_data().bsearch_custom(time, self.bsearch_note)
-		if L != -1:
-			ChartManager.chart.chart_data["events"].insert(L, [time, event, parameters])
-			
-			if event_nodes.is_empty():
-				event_nodes.append(event_instance)
-			elif (L - current_visible_events_L) < 0:
-				event_nodes.insert(0, event_instance)
-			elif (L - current_visible_events_L) >= event_nodes.size():
-				event_nodes.append(event_instance)
-			else:
-				event_nodes.insert((L - current_visible_events_L), event_instance)
-			
-			if !moved:
-				selected_notes = [L]
-				selected_note_nodes = [event_instance]
-				min_lane = 0
-				max_lane = ChartManager.strum_count - 1
-			
-			output = L
-		else:
-			event_nodes.append(event_instance)
-			ChartManager.chart.chart_data["events"].append([time, event, parameters])
-			selected_notes = [ChartManager.chart.get_events_data().size() - 1]
-			selected_note_nodes = [event_instance]
-			min_lane = 0
-			max_lane = ChartManager.strum_count - 1
-			output = event_nodes.size() - 1
-	else:
-		if sorted:
-			var L: int = sort_index
-			
-			if event_nodes.is_empty():
-				event_nodes.append(event_instance)
-			elif L < 0:
-				event_nodes.insert(0, event_instance)
-			elif L >= event_nodes.size():
-				event_nodes.append(event_instance)
-			else:
-				event_nodes.insert(L, event_instance)
-		else:
-			event_nodes.append(event_instance)
-	
-	$"Notes Layer".add_child(event_instance)
-	event_instance.add_to_group(&"events")
-	event_instance.area.connect(&"mouse_entered", self.update_event.bind(event_instance))
-	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
-	return output
-
 
 func update_note_position(node: Node2D):
 	if node is ChartEvent:
@@ -438,7 +376,7 @@ func update_note_position(node: Node2D):
 
 
 func load_dividers():
-	get_tree().call_group(&"dividers",  &"queue_free")
+	get_tree().call_group(&"dividers", &"queue_free")
 	for i in range($Conductor.beats_per_measure):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2

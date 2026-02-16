@@ -114,7 +114,7 @@ func hold_animation():
 		length = animation_player.sprite_frames.get_frame_count(real_animation)
 		hold_frame = hold_frames.get(real_animation, length - 1)
 		
-		if animation_player.frame == length - 1:
+		if animation_player.frame == length - 1 and animation_player.frame_progress == 1:
 			animation_player.frame = hold_frame
 		
 		animation_player.play()
@@ -123,7 +123,8 @@ func hold_animation():
 		length = animation_player.get_animation_length()
 		hold_frame = hold_frames.get(real_animation, length - 1)
 		
-		if animation_player.frame == length - 1 and animation_player.frame_progress == 1:
+		if (animation_player.frame == length - 1
+		and animation_player.frame_timer >= 1.0 / animation_player.fps):
 			animation_player.frame = hold_frame
 		
 		animation_player.playing = true

@@ -1,15 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://b28wu6vajuag3"]
+[gd_scene format=3 uid="uid://b28wu6vajuag3"]
 
 [ext_resource type="Script" uid="uid://bpjorjb1f0qkm" path="res://scenes/game/combo_number.gd" id="1_derg0"]
 [ext_resource type="SpriteFrames" uid="uid://b7h7qi3th3rb8" path="res://assets/sprites/playstate/developer/rating/combo_numbers.tres" id="1_wdlcl"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://assets/sprites/playstate/developer/developer_ui_skin.tres" id="2_kwa5s"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="2_oy3lu"]
 
-[node name="Combo Number" type="Node2D"]
+[node name="Combo Number" type="Node2D" unique_id=1106976307]
 script = ExtResource("1_derg0")
 ui_skin = ExtResource("2_kwa5s")
 
-[node name="OffsetSprite" type="AnimatedSprite2D" parent="."]
+[node name="OffsetSprite" type="AnimatedSprite2D" parent="." unique_id=1168402045]
 sprite_frames = ExtResource("1_wdlcl")
 animation = &"fc_9"
 script = ExtResource("2_oy3lu")
@@ -36,8 +36,7 @@ animation_names = Dictionary[StringName, StringName]({
 &"fc_9": &"fc_9"
 })
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
+[node name="Timer" type="Timer" parent="." unique_id=1195548067]
 one_shot = true
 autostart = true
 

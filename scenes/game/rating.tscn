@@ -1,15 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://0l7bo1bqcbcj"]
+[gd_scene format=3 uid="uid://0l7bo1bqcbcj"]
 
 [ext_resource type="Script" uid="uid://d0643fq2e3v8u" path="res://scenes/game/rating.gd" id="1_peefr"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://assets/sprites/playstate/developer/developer_ui_skin.tres" id="2_fpv3i"]
 [ext_resource type="SpriteFrames" uid="uid://c802qdqdog3ia" path="res://assets/sprites/playstate/developer/rating/ratings.tres" id="2_y4m87"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="7_7wrd8"]
 
-[node name="Rating" type="Node2D"]
+[node name="Rating" type="Node2D" unique_id=262781631]
 script = ExtResource("1_peefr")
 ui_skin = ExtResource("2_fpv3i")
 
-[node name="OffsetSprite" type="AnimatedSprite2D" parent="."]
+[node name="OffsetSprite" type="AnimatedSprite2D" parent="." unique_id=1012516052]
 sprite_frames = ExtResource("2_y4m87")
 animation = &"epic"
 script = ExtResource("7_7wrd8")
@@ -27,8 +27,7 @@ animation_names = Dictionary[StringName, StringName]({
 &"sick": &"sick"
 })
 
-[node name="Timer" type="Timer" parent="."]
-wait_time = 0.5
+[node name="Timer" type="Timer" parent="." unique_id=376009549]
 one_shot = true
 autostart = true
 

@@ -948,7 +948,15 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time)
 		if L != -1:
 			ChartManager.chart.chart_data["events"].insert(L, [time, event, parameters])
-			event_nodes.insert(L - current_visible_notes_L, event_instance)
+			
+			if event_nodes.is_empty():
+				event_nodes.append(event_instance)
+			elif (L - current_visible_events_L) < 0:
+				event_nodes.insert(0, event_instance)
+			elif (L - current_visible_events_L) >= event_nodes.size():
+				event_nodes.append(event_instance)
+			else:
+				event_nodes.insert((L - current_visible_events_L), event_instance)
 			
 			if !moved:
 				selected_notes = [L]
@@ -960,7 +968,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		else:
 			event_nodes.append(event_instance)
 			ChartManager.chart.chart_data["events"].append([time, event, parameters])
-			selected_notes = [ChartManager.chart.get_notes_data().size() - 1]
+			selected_notes = [ChartManager.chart.get_events_data().size() - 1]
 			selected_note_nodes = [event_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
@@ -969,11 +977,11 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		if sorted:
 			var L: int = sort_index
 			
-			if note_nodes.is_empty():
+			if event_nodes.is_empty():
 				event_nodes.append(event_instance)
 			elif L < 0:
 				event_nodes.insert(0, event_instance)
-			elif L >= note_nodes.size():
+			elif L >= event_nodes.size():
 				event_nodes.append(event_instance)
 			else:
 				event_nodes.insert(L, event_instance)
@@ -985,6 +993,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.area.connect(&"mouse_entered", self.update_event.bind(event_instance))
 	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
 	return output
+
 
 func sort_note(a, b):
 	return a.time < b.time

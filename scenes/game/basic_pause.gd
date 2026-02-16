@@ -109,20 +109,17 @@ func load_page(page: String):
 	get_tree().call_group(&"options", &"queue_free")
 	options = pages.get(page)
 	
-	var index: int = 0
 	for i in options.keys():
 		var menu_option_instance = MENU_OPTION_PRELOAD.instantiate()
 		
-		menu_option_instance.position.x = -640 + 45 + (25 * index) - 1000
-		menu_option_instance.position.y = index * 175
+		menu_option_instance.position.x = -640 + 45
+		menu_option_instance.position.y = 0
 		menu_option_instance.option_name = options.get(i).get("name")
 		menu_option_instance.icon = options.get(i).get("icon")
 		
 		$UI.add_child(menu_option_instance)
 		option_nodes.append(menu_option_instance)
 		menu_option_instance.add_to_group(&"options")
-		
-		index += 1
 
 
 func update(i: int):
@@ -136,7 +133,7 @@ func update(i: int):
 	for j in option_nodes:
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(-640 + 45 + (25 * index), index * 175) 
-		tween.tween_property(j, "position", node_position, 0.5)
+		tween.tween_property(j, "position", node_position, 0.25)
 		j.modulate = Color(0.5, 0.5, 0.5)
 		index += 1
 	

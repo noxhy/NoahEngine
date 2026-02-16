@@ -1,12 +1,11 @@
 extends Node2D
 
-
 @export var ui_skin: UISkin
+
 var digit: int
 var motion: Vector2
 var gravity = 0.0
 var fc = false
-
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -29,16 +28,17 @@ func _ready():
 	else:
 		$OffsetSprite.play_animation(str(digit))
 	
-	motion = Vector2(randf_range(-0.25, 0.25), -2)
+	motion = Vector2(randf_range(-0.1, 0.1), -2)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta):
-	self.modulate.a -= delta * 1.8
+	if $Timer.time_left <= 0.7:
+		self.modulate.a -= delta / 0.25
 	
 	self.position += motion * self.scale
 	motion.y -= delta * gravity
-	gravity += -50 * delta
+	gravity += -40 * delta
 
 
 func _on_timer_timeout():
