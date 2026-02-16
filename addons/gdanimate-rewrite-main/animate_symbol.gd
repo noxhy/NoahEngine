@@ -69,6 +69,7 @@ signal finished
 @export_tool_button("Reparse Current", "Reload") var atlas_reload: Callable = reparse_current
 
 var frame_timer: float = 0.0
+var frame_progress: float
 var internal_canvas_items: Array[RID] = []
 var last_atlases_size: int = 0
 var adobe_atlas_material: ShaderMaterial = null
@@ -139,7 +140,12 @@ func _process(delta: float) -> void:
 	
 	var fps: float = atlas.get_framerate()
 	frame_timer += delta * speed_scale
-	if frame_timer >= 1.0 / fps:
+	var frame_time: float = 1.0 / fps
+	if frame_time > 1:
+		frame_time = 1
+	
+	frame_progress = frame_timer / frame_time
+	if frame_timer >= frame_time:
 		frame += floori(frame_timer * fps)
 		frame_timer = wrapf(frame_timer, 0.0, 1.0 / fps)
 
