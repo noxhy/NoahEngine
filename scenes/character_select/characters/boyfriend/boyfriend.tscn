@@ -7,7 +7,7 @@
 
 [sub_resource type="Resource" id="Resource_0ye3j"]
 script = ExtResource("4_vbqi4")
-folder_path = "res://assets/sprites/menus/character_select/characters/boyfriend/bfChill//"
+folder_path = "res://assets/sprites/menus/character_select/characters/boyfriend/bfChill///"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
@@ -27,7 +27,6 @@ position = Vector2(-304, -248)
 script = ExtResource("2_lt8dr")
 symbol = "bf cs idle"
 atlases = Array[ExtResource("3_rbs1r")]([SubResource("Resource_0ye3j")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
 [connection signal="finished" from="AnimateSymbol" to="." method="done"]
 [connection signal="looped" from="AnimateSymbol" to="." method="loop"]
