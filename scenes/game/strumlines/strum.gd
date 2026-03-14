@@ -195,19 +195,20 @@ func _process(delta):
 	
 	elif Input.is_action_just_released(input):
 		if can_press:
-			state = STATE.IDLE
-			
-			if hold_cover_sprite.animation != "cover " + strum_name + " end":
-				hold_cover_sprite.visible = false
-			
 			if pressing:
+				pressing = false
+				reset_timer = GameManager.seconds_per_beat / 4
+				if hold_cover_sprite.animation != "cover " + strum_name + " end":
+						hold_cover_sprite.visible = false
 				if note_list.size() > 0:
 					var note = note_list[0]
 					# Checks if you were holding a note before releasing
-					if note.can_press:
-						if note.length > 0:
-							note.start_length = note.length
-	
+					if note.can_press and note.length > 0:
+						note.start_length = note.length
+						emit_signal("note_holding", 0.0, self.get_name(), 0.0, note.note_type)
+			else:
+				state = STATE.IDLE
+				
 	if (reset_timer > 0):
 		reset_timer -= delta
 		if reset_timer <= 0:
