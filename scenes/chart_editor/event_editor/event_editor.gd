@@ -124,6 +124,21 @@ func _process(delta: float) -> void:
 				bounding_box = true
 				start_box = get_global_mouse_position()
 	
+	if Input.is_action_just_pressed(&"mouse_middle"):
+		if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+			if can_chart:
+				if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)
+					and !current_focus_owner):
+						if hovered_event != -1:
+							var event: String = ChartManager.chart.chart_data["events"][hovered_event][1]
+							var time: float = ChartManager.chart.chart_data["events"][hovered_event][0]
+							
+							if (ChartManager.EVENT_DATA.has(event)
+							and ChartManager.EVENT_DATA.get(event).has("parameters")):
+									current_event = event
+									current_event_time = time
+									%"Event Creator".popup()
+	
 	if Input.is_action_pressed(&"mouse_right"):
 		if !Input.is_action_pressed(&"control"):
 				if screen_mouse_position.x > -512 and screen_mouse_position.x < 640 and !current_focus_owner:
@@ -740,11 +755,26 @@ func _on_place_event_pressed() -> void:
 	for node in %"Event Parameters".get_children():
 		parameters.append(node.text)
 	
-	add_action("Placed Event", self.place_event.bind(current_event_time, current_event, parameters, true),
-	self.remove_note.bind(current_event, current_event_time))
-	%"Note Place".play()
-	%"Event Creator".hide()
+	if hovered_event == -1:
+		add_action("Placed Event", self.place_event.bind(current_event_time, current_event, parameters, true),
+		self.remove_note.bind(current_event, current_event_time))
+		%"Note Place".play()
+		%"Event Creator".hide()
+	else:
+		var temp: Array = event_nodes[hovered_event - current_visible_events_L].parameters
+		undo_redo.add_do_property(event_nodes[hovered_event - current_visible_events_L],
+		"parameters", parameters)
+		undo_redo.add_do_method(self.change_parameters.bind(hovered_event, parameters))
+		undo_redo.add_undo_property(event_nodes[hovered_event - current_visible_events_L],
+		"parameters", temp)
+		undo_redo.add_undo_method(self.change_parameters.bind(hovered_event, temp))
+		undo_redo.add_do_reference(%"History Window".add_action("Edit Event"))
+		undo_redo.commit_action()
+		%"Note Place".play()
+		%"Event Creator".hide()
 
+func change_parameters(i: int, parameters: Array) -> void:
+	ChartManager.chart.chart_data["events"][i][2] = parameters
 
 func _on_add_track_pressed() -> void:
 	%"Add Track Window".popup()
