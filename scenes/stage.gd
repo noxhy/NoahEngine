@@ -3,6 +3,7 @@ extends Node2D
 class_name Stage
 
 func _on_conductor_new_beat(current_beat, measure_relative):
+	# Every other beat, call the slow and tween boppers.
 	if current_beat % 2 == 0:
 		for node in get_tree().get_nodes_in_group(&"slow_bop"):
 			if node is OffsetSprite:
@@ -24,6 +25,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 				node.play(node.animation)
 				node.set_frame_and_progress(0, 0)
 	
+	# Every beat call the fast bopper.
 	for node in get_tree().get_nodes_in_group(&"fast_bop"):
 		if node is OffsetSprite:
 			node.play_animation("idle")
