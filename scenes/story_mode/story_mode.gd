@@ -226,11 +226,11 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 			Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 		if (current_beat % 2):
-			get_tree().call_group("bop", "play_animation", "idle")
-			for node in get_tree().get_nodes_in_group("smooth_bop"):
+			get_tree().call_group(&"bop", "play_animation", "idle")
+			for node in get_tree().get_nodes_in_group(&"smooth_bop"):
 				if node.current_animation == "idle":
 					node.can_idle = true
-			get_tree().call_group("smooth_bop", "play_animation", "idle", $Conductor.seconds_per_beat * 2)
+			get_tree().call_group(&"smooth_bop", "play_animation", "idle", $Conductor.seconds_per_beat * 2)
 
 func update_week_score(score: int):
 	if score > -1:
