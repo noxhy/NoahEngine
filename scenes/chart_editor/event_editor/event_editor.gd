@@ -4,6 +4,7 @@ const TRACK_BUTTON = preload("res://scenes/chart_editor/event_editor/event_butto
 
 var current_event_time: float
 var current_event: String
+var editing: int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -101,6 +102,7 @@ func _process(delta: float) -> void:
 								if ChartManager.EVENT_DATA.has(event):
 									current_event = event
 									current_event_time = time
+									editing = -1
 									if ChartManager.EVENT_DATA.get(event).has("parameters"):
 										%"Event Creator".popup()
 									else:
@@ -137,6 +139,7 @@ func _process(delta: float) -> void:
 							and ChartManager.EVENT_DATA.get(event).has("parameters")):
 									current_event = event
 									current_event_time = time
+									editing = hovered_event
 									%"Event Creator".popup()
 	
 	if Input.is_action_pressed(&"mouse_right"):
@@ -755,20 +758,22 @@ func _on_place_event_pressed() -> void:
 	for node in %"Event Parameters".get_children():
 		parameters.append(node.text)
 	
-	if hovered_event == -1:
+	if editing == -1:
 		add_action("Placed Event", self.place_event.bind(current_event_time, current_event, parameters, true),
 		self.remove_note.bind(current_event, current_event_time))
 		%"Note Place".play()
 		%"Event Creator".hide()
 	else:
-		var temp: Array = event_nodes[hovered_event - current_visible_events_L].parameters
-		undo_redo.add_do_property(event_nodes[hovered_event - current_visible_events_L],
+		var action: String = "Edit Event"
+		undo_redo.create_action(action)
+		var temp: Array = event_nodes[editing - current_visible_events_L].parameters
+		undo_redo.add_do_property(event_nodes[editing - current_visible_events_L],
 		"parameters", parameters)
-		undo_redo.add_do_method(self.change_parameters.bind(hovered_event, parameters))
-		undo_redo.add_undo_property(event_nodes[hovered_event - current_visible_events_L],
+		undo_redo.add_do_method(self.change_parameters.bind(editing, parameters))
+		undo_redo.add_undo_property(event_nodes[editing - current_visible_events_L],
 		"parameters", temp)
-		undo_redo.add_undo_method(self.change_parameters.bind(hovered_event, temp))
-		undo_redo.add_do_reference(%"History Window".add_action("Edit Event"))
+		undo_redo.add_undo_method(self.change_parameters.bind(editing, temp))
+		undo_redo.add_do_reference(%"History Window".add_action(action))
 		undo_redo.commit_action()
 		%"Note Place".play()
 		%"Event Creator".hide()
