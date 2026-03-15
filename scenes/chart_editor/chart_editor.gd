@@ -158,6 +158,11 @@ func _ready() -> void:
 	%"Edit Button".get_popup().set_item_shortcut(
 		%"Edit Button".get_popup().get_item_index(11), shortcut)
 	
+	shortcut = Shortcut.new()
+	shortcut.events = InputMap.action_get_events(&"ui_accept")
+	%"Audio Button".get_popup().set_item_shortcut(
+		%"Audio Button".get_popup().get_item_index(0), shortcut)
+	
 	%"Audio Button".get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
 	%"Audio Button".get_popup().set_item_checked(
 		%"Audio Button".get_popup().get_item_index(7),
