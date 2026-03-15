@@ -4,8 +4,7 @@
 Friday Night Funkin' Engine made in Godot 4.
 This is version 2 of the engine with a complete overhaul of the code.
 
-## Credits
-
+# Credits
 - [Noah](https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA) - Main Developer
 - [Koi](https://twitter.com/toasted_milk_) - Miss sprite
 - KostyaGame - Dad losing icon
