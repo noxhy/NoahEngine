@@ -8,7 +8,9 @@ const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 ## animation - The animation name of the node that represents the week.
 ## node - The node that will be visible when hovering over the week.
 ## scene - The scene that you will be sent to when selecting the week.
-## name - The week name that displays
+## name - The week name that displays.
+## display_song_list - The song list that displays on the track list.
+## song_list - The list of song files.
 @onready var options: Dictionary = {
 	"tutorial": {
 		"animation": "tutorial",
