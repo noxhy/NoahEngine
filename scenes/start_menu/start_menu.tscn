@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b1kmgjxpce1de"]
+[gd_scene format=3 uid="uid://b1kmgjxpce1de"]
 
 [ext_resource type="Script" uid="uid://b274t7dbncdpl" path="res://scenes/start_menu/start_menu.gd" id="1_b8t6h"]
 [ext_resource type="PackedScene" uid="uid://2abrkhbxxlab" path="res://scenes/conductor.tscn" id="2_n68yt"]
@@ -318,29 +318,27 @@ _data = {
 &"start": SubResource("Animation_7hmm2")
 }
 
-[node name="Start Menu" type="Node2D"]
+[node name="Start Menu" type="Node2D" unique_id=750380794]
 script = ExtResource("1_b8t6h")
 intro_done = false
 
-[node name="Conductor" parent="." instance=ExtResource("2_n68yt")]
+[node name="Conductor" parent="." unique_id=100897348 instance=ExtResource("2_n68yt")]
 tempo = 102.0
 
-[node name="SFX" type="Node" parent="."]
+[node name="SFX" type="Node" parent="." unique_id=1932041152]
 
-[node name="Accept Sound" type="AudioStreamPlayer" parent="SFX"]
+[node name="Accept Sound" type="AudioStreamPlayer" parent="SFX" unique_id=1834338561]
 stream = ExtResource("4_kki2g")
 bus = &"SFX"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_7eaud")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1991742915]
+libraries/ = SubResource("AnimationLibrary_7eaud")
 
-[node name="Screen Flash" type="CanvasLayer" parent="."]
+[node name="Screen Flash" type="CanvasLayer" parent="." unique_id=1003559993]
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="ColorRect" type="ColorRect" parent="Screen Flash"]
+[node name="ColorRect" type="ColorRect" parent="Screen Flash" unique_id=306809227]
 offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
@@ -348,23 +346,23 @@ offset_bottom = 360.0
 color = Color(1, 1, 1, 0)
 metadata/_edit_lock_ = true
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1762434056]
 layer = 0
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Logo" type="Sprite2D" parent="UI"]
+[node name="Logo" type="Sprite2D" parent="UI" unique_id=1943148451]
 position = Vector2(-280, -112)
 scale = Vector2(0.9, 0.9)
 texture = ExtResource("5_7gvni")
 
-[node name="Metronome" parent="UI" instance=ExtResource("6_amf35")]
+[node name="Metronome" parent="UI" unique_id=575814392 instance=ExtResource("6_amf35")]
 unique_name_in_owner = true
 visible = false
 position = Vector2(256, 312)
 scale = Vector2(0.95, 0.95)
 
-[node name="Play Label" type="Label" parent="UI"]
+[node name="Play Label" type="Label" parent="UI" unique_id=716558971]
 anchors_preset = -1
 anchor_left = -0.4
 anchor_top = 0.256
@@ -383,7 +381,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Splash Messages" type="Label" parent="UI"]
+[node name="Splash Messages" type="Label" parent="UI" unique_id=552896511]
 anchors_preset = -1
 anchor_left = -0.25
 anchor_top = -0.411
@@ -407,12 +405,12 @@ THE SPLASH MESSAGES GO;
 I NEEDED TO REPLACE THIS CAUSE
 THE PREVIOUS ONES WERE REALLY BAD;"
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=1601723128]
 layer = -1
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=1739087126]
 offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0

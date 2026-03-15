@@ -575,6 +575,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	
 	return output
 
+
 func is_event_at(_name: String, time: float) -> bool:
 	return (find_event(_name, time) != -1)
 
@@ -641,6 +642,7 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 	if selected_notes.size() > 0:
 		%"Note Place".play()
 
+
 func move_selection(time_distance: float, lane_distance: float):
 	var events: Array = []
 	for event in selected_note_nodes:
@@ -670,6 +672,7 @@ func place_notes(events: Array) -> Array:
 	
 	indices.sort()
 	return indices
+
 
 func remove_notes(events: Array):
 	var i: int = 0
@@ -778,8 +781,10 @@ func _on_place_event_pressed() -> void:
 		%"Note Place".play()
 		%"Event Creator".hide()
 
+
 func change_parameters(i: int, parameters: Array) -> void:
 	ChartManager.chart.chart_data["events"][i][2] = parameters
+
 
 func _on_add_track_pressed() -> void:
 	%"Add Track Window".popup()
