@@ -86,8 +86,6 @@ color = Color(0.286275, 0.733333, 0.85098, 1)
 use_parent_material = true
 sprite_frames = ExtResource("3_lci0s")
 animation = &"BF idle dance"
-frame = 13
-frame_progress = 1.0
 offset = Vector2(-16, -160)
 metadata/_edit_lock_ = true
 
