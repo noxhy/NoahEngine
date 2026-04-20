@@ -32,7 +32,7 @@ var freeplay: bool = true
 var difficulty: String
 var play_mode = PLAY_MODE.FREEPLAY
 var current_song: Song
-var current_week: String
+var current_week: Week
 var week_songs: Array
 var current_week_song: int = 0
 var character: PlayableCharacter
@@ -89,7 +89,7 @@ func finished_song(score: int):
 			_:
 				highscore = SaveManager.set_song_stats(current_song.title, difficulty, score, get_grade(tallies))
 				if !GameManager.freeplay and current_week_song == week_songs.size():
-					highscore = SaveManager.set_week_stats(current_week, difficulty, week_score, grade)
+					highscore = SaveManager.set_week_stats(current_week.week_name, difficulty, week_score, grade)
 	else:
 		highscore = false
 

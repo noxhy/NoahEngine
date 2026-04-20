@@ -162,7 +162,7 @@ func select_option(i: int):
 			if GameManager.freeplay:
 				Global.change_scene_to("res://scenes/freeplay/freeplay.tscn", "down")
 			else:
-				Global.change_scene_to("res://scenes/story mode/story_mode.tscn", "down")
+				Global.change_scene_to("uid://lh8hi5dk1sja", "down")
 		
 		"chart_editor":
 			GameManager.reset_stats()
