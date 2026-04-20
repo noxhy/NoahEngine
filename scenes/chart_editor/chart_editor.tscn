@@ -257,6 +257,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
+focus_mode = 0
 icon = ExtResource("5_ruic6")
 flat = true
 
@@ -265,6 +266,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
+focus_mode = 0
 icon = ExtResource("6_henw2")
 flat = true
 
@@ -273,6 +275,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
+focus_mode = 0
 toggle_mode = true
 icon = ExtResource("4_f11ek")
 flat = true
@@ -282,6 +285,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
+focus_mode = 0
 icon = ExtResource("6_u1nu8")
 flat = true
 
@@ -290,6 +294,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
+focus_mode = 0
 icon = ExtResource("9_jmk4o")
 flat = true
 

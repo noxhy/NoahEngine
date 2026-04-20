@@ -59,6 +59,7 @@ var current_beat: int:
 		measure_relative_beat = v % beats_per_measure
 		if current_beat != v:
 			emit_signal(&"new_beat", v, measure_relative_beat)
+		
 		current_beat = v
 	get():
 		return current_beat
@@ -68,6 +69,7 @@ var current_step: int:
 		measure_relative_step = v % steps_per_measure
 		if current_step != v:
 			emit_signal(&"new_step", v, measure_relative_step)
+		
 		current_step = v
 	get():
 		return current_step
@@ -81,6 +83,7 @@ func _process(_delta):
 	if stream_player and stream_player.playing:
 		time = stream_player.get_playback_position()
 		time -= AudioServer.get_output_latency()
+		# time += AudioServer.get_time_since_last_mix()
 	
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)

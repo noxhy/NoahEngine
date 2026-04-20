@@ -4,6 +4,7 @@ const TRACK_BUTTON = preload("res://scenes/chart_editor/event_editor/event_butto
 
 var current_event_time: float
 var current_event: String
+var editing: int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -101,6 +102,7 @@ func _process(delta: float) -> void:
 								if ChartManager.EVENT_DATA.has(event):
 									current_event = event
 									current_event_time = time
+									editing = -1
 									if ChartManager.EVENT_DATA.get(event).has("parameters"):
 										%"Event Creator".popup()
 									else:
@@ -123,6 +125,22 @@ func _process(delta: float) -> void:
 			if can_chart:
 				bounding_box = true
 				start_box = get_global_mouse_position()
+	
+	if Input.is_action_just_pressed(&"mouse_middle"):
+		if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+			if can_chart:
+				if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)
+					and !current_focus_owner):
+						if hovered_event != -1:
+							var event: String = ChartManager.chart.chart_data["events"][hovered_event][1]
+							var time: float = ChartManager.chart.chart_data["events"][hovered_event][0]
+							
+							if (ChartManager.EVENT_DATA.has(event)
+							and ChartManager.EVENT_DATA.get(event).has("parameters")):
+									current_event = event
+									current_event_time = time
+									editing = hovered_event
+									%"Event Creator".popup()
 	
 	if Input.is_action_pressed(&"mouse_right"):
 		if !Input.is_action_pressed(&"control"):
@@ -557,6 +575,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	
 	return output
 
+
 func is_event_at(_name: String, time: float) -> bool:
 	return (find_event(_name, time) != -1)
 
@@ -623,6 +642,7 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 	if selected_notes.size() > 0:
 		%"Note Place".play()
 
+
 func move_selection(time_distance: float, lane_distance: float):
 	var events: Array = []
 	for event in selected_note_nodes:
@@ -652,6 +672,7 @@ func place_notes(events: Array) -> Array:
 	
 	indices.sort()
 	return indices
+
 
 func remove_notes(events: Array):
 	var i: int = 0
@@ -740,10 +761,29 @@ func _on_place_event_pressed() -> void:
 	for node in %"Event Parameters".get_children():
 		parameters.append(node.text)
 	
-	add_action("Placed Event", self.place_event.bind(current_event_time, current_event, parameters, true),
-	self.remove_note.bind(current_event, current_event_time))
-	%"Note Place".play()
-	%"Event Creator".hide()
+	if editing == -1:
+		add_action("Placed Event", self.place_event.bind(current_event_time, current_event, parameters, true),
+		self.remove_note.bind(current_event, current_event_time))
+		%"Note Place".play()
+		%"Event Creator".hide()
+	else:
+		var action: String = "Edit Event"
+		undo_redo.create_action(action)
+		var temp: Array = event_nodes[editing - current_visible_events_L].parameters
+		undo_redo.add_do_property(event_nodes[editing - current_visible_events_L],
+		"parameters", parameters)
+		undo_redo.add_do_method(self.change_parameters.bind(editing, parameters))
+		undo_redo.add_undo_property(event_nodes[editing - current_visible_events_L],
+		"parameters", temp)
+		undo_redo.add_undo_method(self.change_parameters.bind(editing, temp))
+		undo_redo.add_do_reference(%"History Window".add_action(action))
+		undo_redo.commit_action()
+		%"Note Place".play()
+		%"Event Creator".hide()
+
+
+func change_parameters(i: int, parameters: Array) -> void:
+	ChartManager.chart.chart_data["events"][i][2] = parameters
 
 
 func _on_add_track_pressed() -> void:
