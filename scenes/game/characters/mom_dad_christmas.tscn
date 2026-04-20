@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://civkgglbefejt"]
+[gd_scene format=3 uid="uid://civkgglbefejt"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_oe8gf"]
 [ext_resource type="Texture2D" uid="uid://jngqjlsc37d3" path="res://assets/sprites/playstate/icons/icon-parents.png" id="2_uoe7k"]
@@ -31,7 +31,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Christmas" type="Node2D"]
+[node name="Christmas" type="Node2D" unique_id=1409875995]
 script = ExtResource("1_oe8gf")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"Parent Down Note Dad",
@@ -59,10 +59,10 @@ offsets = Dictionary[StringName, Vector2]({
 icons = SubResource("SpriteFrames_2yo0j")
 color = Color(0.832031, 0.412766, 0.786174, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2036221768]
 use_parent_material = true
-position = Vector2(-80, -344)
 sprite_frames = ExtResource("3_o01a6")
 animation = &"Parent Christmas Idle"
+offset = Vector2(-80, -344)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

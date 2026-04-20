@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://c771gm7j20lte"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c771gm7j20lte"]
 
 [ext_resource type="Texture2D" uid="uid://c0gpbav26nulg" path="res://assets/sprites/objects/speaker-pixel.png" id="1_s16km"]
 

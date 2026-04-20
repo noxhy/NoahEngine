@@ -58,8 +58,8 @@ color = Color(0.686275, 0.478431, 0.823529, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1918743570]
 use_parent_material = true
-position = Vector2(48, -344)
 sprite_frames = ExtResource("2_ab8b8")
 animation = &"Dad idle dance"
+offset = Vector2(48, -344)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

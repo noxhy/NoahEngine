@@ -59,8 +59,8 @@ color = Color(0.788235, 0.337255, 0.576471, 1)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2093429231]
 z_index = -1
 use_parent_material = true
-position = Vector2(24, -352)
 sprite_frames = ExtResource("2_40xde")
 animation = &"Mom Idle"
+offset = Vector2(24, -352)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

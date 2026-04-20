@@ -79,7 +79,7 @@ func play_animation(animation_name: StringName = &"", time: float = -1.0):
 		
 		if offsets.has(real_animation_name):
 			if offsets.get(animation_player.animation) is PackedVector2Array: animation_player.position = offsets.get(animation_player.animation)[animation_player.frame - 1]
-			else: animation_player.position = offsets.get(real_animation_name)
+			else: animation_player.offset = offsets.get(real_animation_name)
 	else:
 		animation_player.set_frame_and_progress(0, 0)
 		printerr("Animation ", animation_name, " not found")
@@ -103,7 +103,7 @@ func get_current_frame_texture() -> Texture:
 
 func _on_animated_sprite_2d_animation_finished():
 	can_idle = true
-
+	
 
 func hold_animation():
 	var hold_frame: int = 0
