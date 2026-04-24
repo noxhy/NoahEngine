@@ -83,14 +83,13 @@ func update_week(i: int):
 	node.visible = true
 	Global.bop_tween(node, "scale", node.scale, node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
 	
-	var display_list:String = '';
+	var display_list:String = ''
 	for song in weeks[i].song_list:
-		if song.dont_display_until_played and !SaveManager.has_week_stats(weeks[i].week_name): display_list += '';
-		else: display_list += song.title + "\n";
-		
-		
-	$"UI/Week UI/SubViewport/Song List Label".text = display_list;
-	$"UI/Week Name".text = weeks[i].week_name;
+		if song.dont_display_until_played and !SaveManager.has_week_stats(weeks[i].week_name): display_list += ''
+		else: display_list += song.title + "\n"
+	
+	$"UI/Week UI/SubViewport/Song List Label".text = display_list
+	$"UI/Week Name".text = weeks[i].week_name
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
@@ -110,7 +109,7 @@ func update_difficulty(i: int, week: Week = weeks[selected_week]):
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
 	tween.tween_property(%"Difficulty Display", "scale", Vector2(1, 1), 0.2)
 	
-	var display_name = week.week_name;
+	var display_name = week.week_name
 	var _week_score = SaveManager.get_week_highscore(display_name, difficulties[i])
 	if _week_score == -1:
 		update_week_score(-1)
@@ -153,6 +152,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 				if node.current_animation == "idle":
 					node.can_idle = true
 			get_tree().call_group(&"smooth_bop", "play_animation", "idle", $Conductor.seconds_per_beat * 2)
+
 
 func update_week_score(score: int):
 	if score > -1:

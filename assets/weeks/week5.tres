@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Week" format=3 uid="uid://d2yoa6f24kw4g"]
 
-[ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_60ltl"]
+[ext_resource type="Script" path="res://resources/week.gd" id="1_60ltl"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_glyij"]
 [ext_resource type="Resource" uid="uid://ehml1umodoyq" path="res://playable_songs/cocoa/Cocoa Erect.res" id="3_glyij"]
 [ext_resource type="Resource" uid="uid://b3o6xjxb7tx0g" path="res://playable_songs/eggnog/Eggnog Erect.res" id="4_myjj5"]
@@ -11,4 +11,3 @@ week_name = "Red Snow"
 week_animation = "week5"
 node_path = "UI/Week Display/SubViewport/Week 5"
 song_list = Array[ExtResource("2_glyij")]([ExtResource("3_glyij"), ExtResource("4_myjj5")])
-metadata/_custom_type_script = "uid://goy42ocon1g1"

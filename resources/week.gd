@@ -9,4 +9,3 @@ class_name Week
 
 @export_subgroup("Song List")
 @export var song_list: Array[Song]
- 
