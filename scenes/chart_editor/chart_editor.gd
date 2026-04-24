@@ -302,12 +302,13 @@ func _process(delta: float) -> void:
 			$Conductor.time = song_position
 	
 	if ChartManager.chart:
-		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
-		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
+		var time: float = song_position + start_offset
+		$Conductor.tempo = ChartManager.chart.get_tempo_at(time)
+		var meter = ChartManager.chart.get_meter_at(time)
 		$Conductor.beats_per_measure = meter[0]
 		$Conductor.steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
-		$Conductor.offset = ChartManager.chart.get_tempo_time_at(song_position + start_offset) - ChartManager.chart.offset
+		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) - ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
@@ -325,7 +326,8 @@ func _process(delta: float) -> void:
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
-	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
+	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(
+		mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
@@ -1175,7 +1177,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var yR: float = 0.0
 	var yC: float = yL
 	var seconds_per_beat: float = 0.0
-	var output: float = ChartManager.chart.offset
+	var output: float = 0
 	
 	while yL <= yC:
 		if i + 1 >= tempo_data.keys().size():
