@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://cvw5oumi78kvr"]
+[gd_scene load_steps=7 format=3 uid="uid://cvw5oumi78kvr"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_jvrgr"]
 [ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://assets/sprites/playstate/icons/icon-tankman.png" id="2_y2cvw"]
@@ -31,7 +31,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Tankman" type="Node2D" unique_id=1829090604]
+[node name="Tankman" type="Node2D"]
 script = ExtResource("1_jvrgr")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"Tankman DOWN note 1",
@@ -62,13 +62,13 @@ offsets = Dictionary[StringName, Vector2]({
 icons = SubResource("SpriteFrames_5cccw")
 color = Color(0.0313726, 0.0313726, 0.0313726, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=834138409]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 z_index = -1
 use_parent_material = true
+position = Vector2(-8, -232)
 sprite_frames = ExtResource("3_kv1vj")
 animation = &"Tankman Idle Dance 1"
 frame = 13
 frame_progress = 1.0
-offset = Vector2(-8, -232)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bpv5demojrg67"]
+[gd_scene load_steps=8 format=3 uid="uid://bpv5demojrg67"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_krhuq"]
 [ext_resource type="Texture2D" uid="uid://cxu20hb7y7adt" path="res://assets/sprites/playstate/icons/girlfriend.png" id="2_hksi1"]
@@ -43,7 +43,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Girlfriend" type="Node2D" unique_id=1434631595 groups=["metronome"]]
+[node name="Girlfriend" type="Node2D" groups=["metronome"]]
 script = ExtResource("1_krhuq")
 animation_names = Dictionary[StringName, StringName]({
 &"cheer": &"GF Cheer",
@@ -68,12 +68,12 @@ offsets = Dictionary[StringName, Vector2]({
 icons = SubResource("SpriteFrames_v8umh")
 color = Color(0.619608, 0.0784314, 0.282353, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=685614276]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
+position = Vector2(0, -320)
 sprite_frames = ExtResource("3_0woem")
 animation = &"GF Dancing Beat"
 frame = 29
 frame_progress = 1.0
-offset = Vector2(0, -320)
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

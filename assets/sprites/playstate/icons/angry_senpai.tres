@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3 uid="uid://cuxtqiopvssp7"]
+[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://cuxtqiopvssp7"]
 
 [ext_resource type="Texture2D" uid="uid://bl71g0wqqeclc" path="res://assets/sprites/playstate/icons/icon-senpaiAngry.png" id="1_hfhvp"]
 

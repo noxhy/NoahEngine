@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://biw6xh624onjh"]
+[gd_scene load_steps=13 format=3 uid="uid://biw6xh624onjh"]
 
 [ext_resource type="Script" uid="uid://c6ny8maae4h3x" path="res://scenes/game/characters/nene.gd" id="1_4sh7w"]
 [ext_resource type="SpriteFrames" uid="uid://b4tvh3dq0qark" path="res://assets/sprites/characters/nene/nene.res" id="3_dojva"]
@@ -98,7 +98,7 @@ _data = {
 &"look_right": SubResource("Animation_kky0r")
 }
 
-[node name="Nene" type="Node2D" unique_id=453838244 node_paths=PackedStringArray("visualizer_nodes") groups=["metronome"]]
+[node name="Nene" type="Node2D" node_paths=PackedStringArray("visualizer_nodes") groups=["metronome"]]
 script = ExtResource("1_4sh7w")
 visualizer_nodes = [NodePath("Visualizer Nodes/Visualizer 1"), NodePath("Visualizer Nodes/Visualizer 2"), NodePath("Visualizer Nodes/Visualizer 3"), NodePath("Visualizer Nodes/Visualizer 4"), NodePath("Visualizer Nodes/Visualizer 5"), NodePath("Visualizer Nodes/Visualizer 6"), NodePath("Visualizer Nodes/Visualizer 7")]
 slope = 0.45
@@ -124,43 +124,43 @@ offsets = Dictionary[StringName, Vector2]({
 &"laughing nene instance 1": Vector2(-49, -387)
 })
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1378983721]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 use_parent_material = true
+position = Vector2(0, -311)
 sprite_frames = ExtResource("3_dojva")
 animation = &"Nene Abot Idle instance 1"
 autoplay = "Idle"
 frame = 29
 frame_progress = 1.0
-offset = Vector2(0, -311)
 metadata/_edit_lock_ = true
 
-[node name="Eye White" type="ColorRect" parent="." unique_id=958453247]
+[node name="Eye White" type="ColorRect" parent="."]
 z_index = -2
 offset_left = -367.0
 offset_top = -98.0
 offset_right = -252.0
 offset_bottom = -34.0
 
-[node name="Eyes" type="AnimatedSprite2D" parent="." unique_id=1468812569]
+[node name="Eyes" type="AnimatedSprite2D" parent="."]
 z_index = -1
 position = Vector2(-304, -68)
 sprite_frames = SubResource("SpriteFrames_spobw")
 animation = &"left"
 
-[node name="StereoBg" type="Sprite2D" parent="." unique_id=2013364691]
+[node name="StereoBg" type="Sprite2D" parent="."]
 z_index = -2
 position = Vector2(0, -166)
 texture = ExtResource("3_o2xqu")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer Nodes" type="Node2D" parent="." unique_id=744340229]
+[node name="Visualizer Nodes" type="Node2D" parent="."]
 unique_name_in_owner = true
 z_index = -1
 use_parent_material = true
 position = Vector2(8, 3)
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 1" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=1190132255]
+[node name="Visualizer 1" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(-168, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -168,7 +168,7 @@ animation = &"viz1"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 2" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=1716550271]
+[node name="Visualizer 2" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(-114, -159)
 sprite_frames = ExtResource("4_spo4n")
@@ -176,7 +176,7 @@ animation = &"viz2"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 3" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=1259337598]
+[node name="Visualizer 3" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(-64, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -184,7 +184,7 @@ animation = &"viz3"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 4" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=378571624]
+[node name="Visualizer 4" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(0, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -192,7 +192,7 @@ animation = &"viz4"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 5" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=1870455736]
+[node name="Visualizer 5" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(56, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -200,7 +200,7 @@ animation = &"viz5"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 6" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=823977829]
+[node name="Visualizer 6" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(112, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -208,7 +208,7 @@ animation = &"viz6"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="Visualizer 7" type="AnimatedSprite2D" parent="Visualizer Nodes" unique_id=1290076812]
+[node name="Visualizer 7" type="AnimatedSprite2D" parent="Visualizer Nodes"]
 unique_name_in_owner = true
 position = Vector2(163, -160)
 sprite_frames = ExtResource("4_spo4n")
@@ -216,8 +216,10 @@ animation = &"viz7"
 script = ExtResource("5_uhb7d")
 metadata/_edit_lock_ = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1471162069]
-libraries/ = SubResource("AnimationLibrary_kj0rl")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_kj0rl")
+}
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
 [connection signal="frame_changed" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_frame_changed"]

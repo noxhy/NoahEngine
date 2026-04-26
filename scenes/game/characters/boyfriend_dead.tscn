@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://de1orr6su5xmc"]
+[gd_scene load_steps=3 format=3 uid="uid://de1orr6su5xmc"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_rej3p"]
 [ext_resource type="SpriteFrames" uid="uid://dhrdam1m3brlg" path="res://assets/sprites/characters/boyfriend/boyfriend_dead.res" id="2_tjdis"]
 
-[node name="Boyfriend Dead" type="Node2D" unique_id=2010879602]
+[node name="Boyfriend Dead" type="Node2D"]
 script = ExtResource("1_rej3p")
 animation_names = Dictionary[StringName, StringName]({
 &"accept": &"BF Dead confirm",
@@ -16,9 +16,9 @@ offsets = Dictionary[StringName, Vector2]({
 &"BF dies": Vector2(-24, -152)
 })
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1729215382]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-24, -152)
 sprite_frames = ExtResource("2_tjdis")
 animation = &"BF Dead Loop"
 frame = 33
 frame_progress = 1.0
-offset = Vector2(-24, -152)
