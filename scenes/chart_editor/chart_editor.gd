@@ -248,7 +248,7 @@ func _process(delta: float) -> void:
 	
 	if ChartManager.song:
 		if %Instrumental.playing:
-			song_position = %Instrumental.get_playback_position() - start_offset
+			song_position = %Instrumental.get_playback_position() + start_offset
 			%"Song Slider".value = song_position
 			
 			GameManager.seconds_per_beat = $Conductor.seconds_per_beat
@@ -308,8 +308,8 @@ func _process(delta: float) -> void:
 		$Conductor.beats_per_measure = meter[0]
 		$Conductor.steps_per_measure = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
-		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) - ChartManager.chart.offset
-		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset)
+		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
+		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
 	if song_speed != 1:
@@ -1103,12 +1103,12 @@ func play_audios(time: float):
 	vocal_tracks = []
 	for stream in ChartManager.song.vocals:
 		vocal_tracks.append(playback.play_stream(load(stream),
-		time - ChartManager.chart.offset + start_offset, 0.0, song_speed))
+		time + start_offset, 0.0, song_speed))
 	
 	time = clamp(time, 0, %Instrumental.stream.get_length() - 0.1)
-	%Instrumental.play(time - ChartManager.chart.offset + start_offset)
+	%Instrumental.play(time + start_offset)
 	%Instrumental.pitch_scale = song_speed
-	song_position = time - ChartManager.chart.offset + start_offset
+	song_position = time + start_offset
 	
 	current_note = bsearch_left_range(ChartManager.chart.get_notes_data(), song_position)
 	

@@ -291,7 +291,7 @@ func play_song(time: float):
 	GameManager.offset = conductor.offset
 	
 	song_started = false
-	song_start_time = time - chart.offset
+	song_start_time = time + chart.offset
 	song_start_offset = song_start_time - (seconds_per_beat * 4)
 	GameManager.song_position = song_start_offset
 	
