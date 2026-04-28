@@ -42,7 +42,7 @@ func _ready() -> void:
 	if GameManager.freeplay:
 		%"Song Name".text = str(GameManager.current_song.title, " by ", GameManager.current_song.artist)
 	else:
-		%"Song Name".text = str(GameManager.current_week)
+		%"Song Name".text = str(GameManager.current_week.week_name)
 	grade = min(int(GameManager.grade * 100), 100)
 	%"Clear Percentage".text = str(grade, "%")
 	
@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 		if GameManager.freeplay:
 			Global.change_scene_to("res://scenes/freeplay/freeplay.tscn")
 		else:
-			Global.change_scene_to("res://scenes/story mode/story_mode.tscn")
+			Global.change_scene_to("uid://lh8hi5dk1sja")
 
 
 func update_display():

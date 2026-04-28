@@ -448,7 +448,10 @@ func song_finished():
 				Global.change_scene_to("res://scenes/results/results.tscn")
 	else:
 		GameManager.finished_song(score)
-		Global.change_scene_to(next_scene)
+		if (GameManager.week_songs.size() == GameManager.current_week_song):
+			Global.change_scene_to(next_scene)
+		else:
+			Global.change_scene_to(GameManager.current_week.song_list[GameManager.current_week_song].scene, "down")
 
 # Conductor Util
 func new_beat(current_beat, measure_relative):

@@ -4,88 +4,7 @@ class_name StoryMode
 const WEEK_ICON_NODE = preload("res://scenes/story_mode/week_icon.tscn")
 @export var can_click: bool = true
 
-## Nested dictionary where each key has keys:
-## animation - The animation name of the node that represents the week.
-## node - The node that will be visible when hovering over the week.
-## scene - The scene that you will be sent to when selecting the week.
-## name - The week name that displays.
-## display_song_list - The song list that displays on the track list.
-## song_list - The list of song files.
-@onready var options: Dictionary = {
-	"tutorial": {
-		"animation": "tutorial",
-		"node": $"UI/Week Display/SubViewport/Tutorial",
-		"scene": "res://test/test_scene.tscn",
-		"name": "Teaching Time",
-		"song_list": [],
-		"display_song_list": "Tutorial"
-	},
-	"week1": {
-		"animation": "week1",
-		"node": $"UI/Week Display/SubViewport/Week 1",
-		"scene": "res://scenes/game/songs/fresh/fresh.tscn",
-		"name": "Daddy Dearest",
-		"display_song_list": "Bopeeboo\nFresh\nDadbattle",
-		"song_list": [load("res://playable_songs/fresh/Fresh Erect.res")]
-	},
-	"week2": {
-		"animation": "week2",
-		"node": $"UI/Week Display/SubViewport/Week 2",
-		"scene": "res://test/test_scene.tscn",
-		"name": "Spooky Month",
-		"display_song_list": "Spokeez\nSouth\nMonster",
-		"song_list": []
-	},
-	"week3": {
-		"animation": "week3",
-		"node": $"UI/Week Display/SubViewport/Week 3",
-		"scene": "res://test/test_scene.tscn",
-		"name": "Pico",
-		"display_song_list": "Pico\nPhilly\nBlammed",
-		"song_list": []
-	},
-	"week4": {
-		"animation": "week4",
-		"node": $"UI/Week Display/SubViewport/Week 4",
-		"scene": "res://test/test_scene.tscn",
-		"name": "Mommy Must Murder",
-		"display_song_list": "Satin-Panties\nHigh\nMilf",
-		"song_list": []
-	},
-	"week5": {
-		"animation": "week5",
-		"node": $"UI/Week Display/SubViewport/Week 5",
-		"scene": "res://scenes/game/songs/eggnog/eggnog.tscn",
-		"name": "Red Snow",
-		"display_song_list": "Cocoa\nEggnog\nWinter Horroland",
-		"song_list": [load("res://playable_songs/cocoa/Cocoa Erect.res")]
-	},
-	"week6": {
-		"animation": "week6",
-		"node": $"UI/Week Display/SubViewport/Week 6",
-		"scene": "res://scenes/game/songs/senpai/senpai.tscn",
-		"name": "Hating Simulator Ft. Moawling",
-		"display_song_list": "Senpai\nRoses\nThorns",
-		"song_list": [load("res://playable_songs/senpai/Senpai.res")]
-	},
-	"week7": {
-		"animation": "week7",
-		"node": $"UI/Week Display/SubViewport/Week 7",
-		"scene": "res://test/test_scene.tscn",
-		"name": "Tankman",
-		"display_song_list": "Ugh\nGuns\nStress",
-		"song_list": []
-	},
-	"weekend1": {
-		"animation": "weekend1",
-		"node": $"UI/Week Display/SubViewport/Weekend 1",
-		"scene": "res://scenes/game/songs/darnell/darnell.tscn",
-		"name": "Due Debts",
-		"display_song_list": "Darnell\nLit Up\n2Hot\nBlazin\'",
-		"character": "pico",
-		"song_list": [load("res://playable_songs/darnell/Darnell.res")]
-	},
-}
+@export var weeks :Array[Week]
 
 var option_nodes = []
 static var selected_week: int = 0
@@ -99,14 +18,14 @@ func _ready():
 	# Initalization
 	var object_amount: int = 0
 	
-	for i in options:
+	for i in weeks:
 		
 		var week_icon_instance = WEEK_ICON_NODE.instantiate()
 		
 		week_icon_instance.position = Vector2(1280 / 2, 1000)
 		
 		$"UI/Week UI/SubViewport".add_child(week_icon_instance)
-		week_icon_instance.play_animation(options.get(options.keys()[object_amount]).animation)
+		week_icon_instance.play_animation(i.week_animation)
 		
 		object_amount += 1
 		option_nodes.append(week_icon_instance)
@@ -146,7 +65,6 @@ func _input(event):
 func update_week(i: int):
 	selected_week = wrapi(i, 0, option_nodes.size())
 	i = selected_week
-	var week: String = options.keys()[i]
 	var index = -selected_week
 	SoundManager.scroll.play()
 	
@@ -160,20 +78,25 @@ func update_week(i: int):
 		index += 1
 	
 	get_tree().call_group(&"weeks", "set_visible", false)
-	var node = options.get(week).get("node")
+	var node = get_node(weeks[i].node_path)
 	update_difficulty(selected_difficulty)
 	node.visible = true
 	Global.bop_tween(node, "scale", node.scale, node.scale * Vector2(1.05, 1.05), 0.2, Tween.TRANS_SINE)
 	
-	$"UI/Week UI/SubViewport/Song List Label".text = options.get(week).display_song_list
-	$"UI/Week Name".text = options.get(week).name
+	var display_list:String = ''
+	for song in weeks[i].song_list:
+		if song.dont_display_until_played and !SaveManager.has_week_stats(weeks[i].week_name): display_list += ''
+		else: display_list += song.title + "\n"
+	
+	$"UI/Week UI/SubViewport/Song List Label".text = display_list
+	$"UI/Week Name".text = weeks[i].week_name
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
-func update_difficulty(i: int, week: String = options.keys()[selected_week]):
+func update_difficulty(i: int, week: Week = weeks[selected_week]):
 	if !validate_week(week):
 		return
-	var difficulties = options.get(week).song_list[0].difficulties.keys()
+	var difficulties = week.song_list[0].difficulties.keys()
 	
 	selected_difficulty = wrapi(i, 0, difficulties.size())
 	i = selected_difficulty
@@ -186,7 +109,7 @@ func update_difficulty(i: int, week: String = options.keys()[selected_week]):
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
 	tween.tween_property(%"Difficulty Display", "scale", Vector2(1, 1), 0.2)
 	
-	var display_name = options.get(options.keys()[selected_week]).get("name", "")
+	var display_name = week.week_name
 	var _week_score = SaveManager.get_week_highscore(display_name, difficulties[i])
 	if _week_score == -1:
 		update_week_score(-1)
@@ -199,18 +122,16 @@ func update_difficulty(i: int, week: String = options.keys()[selected_week]):
 # Called when an option was selected_week
 func select_option(i: int):
 	if can_click:
-		var week = options.keys()[i]
+		var week = weeks[i]
 		if !validate_week(week):
 			SoundManager.cancel.play()
 			return
 		
 		can_click = false
 		SoundManager.accept.play()
-		GameManager.current_week = options.get(week).name
-		GameManager.week_songs = options.get(week).song_list
+		GameManager.current_week = week
+		GameManager.week_songs = week.song_list
 		GameManager.current_week_song = 0
-		GameManager.current_character = options.get(options.keys()[i]).get("character", "boyfriend")
-		var scene = options.get(options.keys()[i]).scene
 		GameManager.play_mode = GameManager.PLAY_MODE.STORY_MODE
 		GameManager.freeplay = false
 		SoundManager.music.stop()
@@ -218,7 +139,7 @@ func select_option(i: int):
 		
 		await get_tree().create_timer(0.5).timeout
 		
-		Global.change_scene_to(scene)
+		Global.change_scene_to(week.song_list[0].scene)
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
@@ -232,6 +153,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 					node.can_idle = true
 			get_tree().call_group(&"smooth_bop", "play_animation", "idle", $Conductor.seconds_per_beat * 2)
 
+
 func update_week_score(score: int):
 	if score > -1:
 		$"UI/Week Score".text = str("Level Score: ", score)
@@ -241,8 +163,8 @@ func update_week_score(score: int):
 
 
 ## Checks if every song in a week has all the same difficulties
-func validate_week(id: StringName) -> bool:
-	var song_list = options.get(id).song_list
+func validate_week(week: Week) -> bool:
+	var song_list = week.song_list
 	if song_list.size() == 0:
 		printerr("(Week Validation) Empty song list")
 		return false

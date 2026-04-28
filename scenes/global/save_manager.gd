@@ -80,6 +80,9 @@ func get_grade(song: String, difficulty: String) -> float:
 func get_week_highscore(week: String, difficulty: String) -> int:
 	var highscore = instance.week_stats.get(week, {}).get(difficulty, {}).get("highscore", -1)
 	return highscore
+	
+func has_week_stats(week: String) -> bool:
+	return instance.week_stats.has(week);
 
 ## Gets the grade of the difficulty of the week
 func get_week_grade(week: String, difficulty: String) -> float:
