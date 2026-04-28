@@ -263,7 +263,7 @@ func _process(delta):
 
 ##  Gets the tempo at a certain time in seconds
 func get_tempo_at(time: float) -> float:
-	
+	time = max(time, 0)
 	var tempo_dict = chart.get_tempos_data()
 	var keys = tempo_dict.keys()
 	

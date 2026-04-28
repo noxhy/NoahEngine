@@ -424,9 +424,9 @@ func _process(delta: float) -> void:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
 							if Input.is_action_pressed(&"shift"):
-								start_offset = grid_position_to_time(snapped_position, true) - song_position
+								start_offset = grid_position_to_time(snapped_position, true) + ChartManager.chart.offset - song_position
 							else:
-								start_offset = grid_position_to_time(grid_position) - song_position
+								start_offset = grid_position_to_time(grid_position) + ChartManager.chart.offset - song_position
 							
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
