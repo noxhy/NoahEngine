@@ -342,6 +342,9 @@ func _process(delta: float) -> void:
 					and !current_focus_owner):
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
+						print("grid time: ", time)
+						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+						print("real time: ", time)
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_note_at(lane, time):
@@ -1178,7 +1181,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var yR: float = 0.0
 	var yC: float = yL
 	var seconds_per_beat: float = 0.0
-	var output: float = ChartManager.chart.offset
+	var output: float = 0
 	
 	while yL <= yC:
 		if i + 1 >= tempo_data.keys().size():
@@ -1208,7 +1211,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 		L = R
 		i += 1
 	
-	return output
+	return output + ChartManager.chart.offset
 
 ## Binary searches for both notes and events
 func bsearch_left_range(value_set: Array, left_range: float) -> int:
