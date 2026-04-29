@@ -247,8 +247,6 @@ func _process(delta: float) -> void:
 		start_offset = 0
 	
 	if ChartManager.song:
-		%Debug.text = str("Pos: ", Global.float_to_time(song_position), " Offset: ", Global.float_to_time(start_offset))
-		
 		if %Instrumental.playing:
 			song_position = %Instrumental.get_playback_position() - start_offset
 			%"Song Slider".value = song_position
