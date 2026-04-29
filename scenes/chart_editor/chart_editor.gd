@@ -342,9 +342,7 @@ func _process(delta: float) -> void:
 					and !current_focus_owner):
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
-						print("grid time: ", time, " pos: ", snapped_position)
 						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-						print("real time: ", time)
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_note_at(lane, time):
@@ -392,6 +390,7 @@ func _process(delta: float) -> void:
 						if !Input.is_action_pressed("control"):
 							var lane: int = snapped_position.x - 1
 							var time: float = grid_position_to_time(snapped_position, true)
+							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 							
 							if hovered_note != -1:
 								var i: int = hovered_note
@@ -435,6 +434,8 @@ func _process(delta: float) -> void:
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
 								var cursor_time = grid_position_to_time(snapped_position, true)
+								cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+								
 								for i in selected_notes:
 									var note: Array = ChartManager.chart.get_notes_data()[i]
 									

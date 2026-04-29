@@ -57,13 +57,14 @@ func _process(delta: float) -> void:
 			$Conductor.time = song_position
 	
 	if ChartManager.chart:
+		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
 		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
 		$Conductor.beats_per_measure = meter[0]
 		$Conductor.steps_per_measure = meter[1]
 		$Camera2D.position.x = 640 + time_to_y_position(song_position)
-		$Conductor.offset = ChartManager.chart.get_tempo_time_at(song_position + start_offset) - ChartManager.chart.offset
-		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset)
+		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
+		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
 	if song_speed != 1:
@@ -77,7 +78,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
-	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
+	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(
@@ -96,6 +97,7 @@ func _process(delta: float) -> void:
 					and !current_focus_owner):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
 						var time: float = grid_position_to_time(snapped_position, true)
+						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_event_at(event, time):
@@ -148,6 +150,7 @@ func _process(delta: float) -> void:
 					if can_chart:
 						if !Input.is_action_pressed(&"control"):
 							var time: float = grid_position_to_time(snapped_position, true)
+							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 							
 							if hovered_event != -1:
 								var i: int = hovered_event
@@ -192,6 +195,7 @@ func _process(delta: float) -> void:
 						if ((grid_position.y - 1) > 0 and (grid_position.y - 1) < %Grid.rows):
 							if moving_notes:
 								var cursor_time = grid_position_to_time(snapped_position, true)
+								cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 								
 								var time_distance = cursor_time - start_time
 								changed_length = true
@@ -259,7 +263,7 @@ func _draw() -> void:
 	
 	if ChartManager.chart:
 		## The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset
+		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(
@@ -534,46 +538,17 @@ func time_to_y_position(time: float) -> float:
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
-	var i: int = 0
-	var meter: Array = []
-	var L: float = tempo_data.keys()[0]
-	var R: float = 0.0
-	var yL: float = time_to_y_position(L)
-	var yR: float = 0.0
-	var yC: float = yL
-	var seconds_per_beat: float = 0.0
-	var output: float = ChartManager.chart.offset
+	var time: float = song_position + start_offset
+	var meter: Array = ChartManager.chart.get_meter_at(time)
+	var L: float = ChartManager.chart.get_tempo_time_at(time)
+	var yR: float = p.x * %Grid.grid_size.x * %Grid.zoom.x
+	if factor_in_snap:
+		yR *= meter[1] / chart_snap
 	
-	while yL <= yC:
-		if i + 1 >= tempo_data.keys().size():
-			R = %Instrumental.stream.get_length()
-		else:
-			R = tempo_data.keys()[i + 1]
-		
-		if L >= %Instrumental.stream.get_length():
-			L = tempo_data.keys()[i - 1]
-			R = INF
-		
-		meter = ChartManager.chart.get_meter_at(L)
-		var tempo = tempo_data.get(L)
-		seconds_per_beat = 60.0 / tempo
-		yL = time_to_y_position(L)
-		yR = time_to_y_position(R)
-		yC = p.x * %Grid.grid_size.x * %Grid.zoom.x
-		if factor_in_snap:
-			yC *= meter[1] / chart_snap
-		
-		if (yC >= yL and yC < yR):
-			output += (yC - yL) / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
-			return output
-		else:
-			output += R - L
-		
-		L = R
-		i += 1
+	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
+	var output: float = yR / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
 	
-	return output
+	return output + ChartManager.chart.offset
 
 
 func is_event_at(_name: String, time: float) -> bool:
