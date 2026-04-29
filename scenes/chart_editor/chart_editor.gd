@@ -247,8 +247,10 @@ func _process(delta: float) -> void:
 		start_offset = 0
 	
 	if ChartManager.song:
+		%Debug.text = str("Pos: ", Global.float_to_time(song_position), " Offset: ", Global.float_to_time(start_offset))
+		
 		if %Instrumental.playing:
-			song_position = %Instrumental.get_playback_position() + start_offset
+			song_position = %Instrumental.get_playback_position() - start_offset
 			%"Song Slider".value = song_position
 			
 			GameManager.seconds_per_beat = $Conductor.seconds_per_beat
@@ -312,6 +314,7 @@ func _process(delta: float) -> void:
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
 	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
+	
 	if song_speed != 1:
 		%"Current Time Label".text += str(" (", song_speed, "x)")
 	
@@ -323,7 +326,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
-	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# - $"Grid Layer/Parallax2D".scroll_offset
+	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(
@@ -424,9 +427,9 @@ func _process(delta: float) -> void:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
 							if Input.is_action_pressed(&"shift"):
-								start_offset = grid_position_to_time(snapped_position, true) + ChartManager.chart.offset - song_position
+								start_offset = grid_position_to_time(snapped_position, true) - song_position
 							else:
-								start_offset = grid_position_to_time(grid_position) + ChartManager.chart.offset - song_position
+								start_offset = grid_position_to_time(grid_position) - song_position
 							
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
@@ -538,7 +541,7 @@ func _draw() -> void:
 	
 	if ChartManager.chart:
 		## The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset# + $"Grid Layer/Parallax2D".scroll_offset
+		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(
@@ -1119,7 +1122,7 @@ func play_audios(time: float):
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
-	var _offset: float = -ChartManager.chart.offset
+	var _offset: float = 0# -ChartManager.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
@@ -1177,7 +1180,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var yR: float = 0.0
 	var yC: float = yL
 	var seconds_per_beat: float = 0.0
-	var output: float = 0
+	var output: float = ChartManager.chart.offset
 	
 	while yL <= yC:
 		if i + 1 >= tempo_data.keys().size():
@@ -1280,8 +1283,7 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	
 	if toggled_on:
 		%"Play Button".icon = load("res://assets/sprites/menus/chart editor/pause_button.png")
-		if song_position != %Instrumental.get_playback_position():
-			play_audios(song_position)
+		play_audios(song_position)
 	
 	else: %"Play Button".icon = load("res://assets/sprites/menus/chart editor/play_button.png")
 
