@@ -342,7 +342,7 @@ func _process(delta: float) -> void:
 					and !current_focus_owner):
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
-						print("grid time: ", time)
+						print("grid time: ", time, " pos: ", snapped_position)
 						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 						print("real time: ", time)
 						
@@ -1172,44 +1172,15 @@ func update_note_position(node: Node2D):
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
-	var i: int = 0
-	var meter: Array = []
-	var L: float = tempo_data.keys()[0]
-	var R: float = 0.0
-	var yL: float = time_to_y_position(L)
-	var yR: float = 0.0
-	var yC: float = yL
-	var seconds_per_beat: float = 0.0
-	var output: float = 0
+	var time: float = song_position + start_offset
+	var meter: Array = ChartManager.chart.get_meter_at(time)
+	var L: float = ChartManager.chart.get_tempo_time_at(time)
+	var yR: float = p.y * %Grid.grid_size.y * %Grid.zoom.y
+	if factor_in_snap:
+		yR *= meter[1] / chart_snap
 	
-	while yL <= yC:
-		if i + 1 >= tempo_data.keys().size():
-			R = %Instrumental.stream.get_length()
-		else:
-			R = tempo_data.keys()[i + 1]
-		
-		if L >= %Instrumental.stream.get_length():
-			L = tempo_data.keys()[i - 1]
-			R = INF
-		
-		meter = ChartManager.chart.get_meter_at(L)
-		var tempo = tempo_data.get(L)
-		seconds_per_beat = 60.0 / tempo
-		yL = time_to_y_position(L)
-		yR = time_to_y_position(R)
-		yC = p.y * %Grid.grid_size.y * %Grid.zoom.y
-		if factor_in_snap:
-			yC *= meter[1] / chart_snap
-		
-		if (yC >= yL and yC < yR):
-			output += (yC - yL) / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
-			return output
-		else:
-			output += R - L
-		
-		L = R
-		i += 1
+	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
+	var output: float = yR / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
 	
 	return output + ChartManager.chart.offset
 
