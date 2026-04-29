@@ -1183,7 +1183,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
 	var output: float = yR / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
 	
-	return output + ChartManager.chart.offset
+	return output
 
 ## Binary searches for both notes and events
 func bsearch_left_range(value_set: Array, left_range: float) -> int:

@@ -548,7 +548,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
 	var output: float = yR / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
 	
-	return output + ChartManager.chart.offset
+	return output
 
 
 func is_event_at(_name: String, time: float) -> bool:
