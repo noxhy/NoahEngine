@@ -83,8 +83,8 @@ color = Color(0.286275, 0.733333, 0.85098, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1502638124]
 use_parent_material = true
+position = Vector2(-16, -160)
 sprite_frames = ExtResource("3_cqa6h")
-animation = &"BF NOTE DOWN"
-offset = Vector2(-16, -160)
+animation = &"BF idle dance"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

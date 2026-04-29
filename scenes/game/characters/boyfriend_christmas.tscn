@@ -84,11 +84,11 @@ color = Color(0.286275, 0.733333, 0.85098, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=119440814]
 use_parent_material = true
+position = Vector2(-16, -160)
 sprite_frames = ExtResource("3_lci0s")
 animation = &"BF idle dance"
 frame = 13
 frame_progress = 1.0
-offset = Vector2(-16, -160)
 metadata/_edit_lock_ = true
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
