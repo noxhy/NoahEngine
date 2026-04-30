@@ -343,6 +343,7 @@ func _process(delta: float) -> void:
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_note_at(lane, time):
@@ -427,9 +428,13 @@ func _process(delta: float) -> void:
 						## Song Position Slider
 						if grid_position.x < 1 and grid_position.x >= 0:
 							if Input.is_action_pressed(&"shift"):
-								start_offset = grid_position_to_time(snapped_position, true) - song_position
+								var time: float = grid_position_to_time(snapped_position, true)
+								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+								start_offset = time - song_position
 							else:
-								start_offset = grid_position_to_time(grid_position) - song_position
+								var time: float = grid_position_to_time(grid_position)
+								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+								start_offset = time - song_position
 							
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if placing_note:
@@ -456,6 +461,7 @@ func _process(delta: float) -> void:
 						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
 							if moving_notes:
 								var cursor_time = grid_position_to_time(snapped_position, true)
+								cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 								var cursor_lane = snapped_position.x - 1
 								
 								var lane_distance = cursor_lane - start_lane
@@ -886,7 +892,6 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.note_skin = note_skin
 	
 	var output: int
-	
 	if placed:
 		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
 		if L != -1:
@@ -897,7 +902,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 				print("empty")
 			elif (L - current_visible_notes_L) < 0:
 				note_nodes.insert(0, note_instance)
-				print("less than 0, insert at: ", 0)
+				print("less than 0, insert at: 0")
 			elif (L - current_visible_notes_L) >= note_nodes.size():
 				note_nodes.append(note_instance)
 				print("greater than size, add at end")
@@ -1195,16 +1200,18 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	
 	var low: int = 0
 	var high: int = length - 1
+	var found: int = -1
 	
 	while (low <= high):
-		var mid: int = low + ((high - low) / 2)
+		var mid: int = (low + high) / 2
 		
 		if (value_set[mid][0] >= left_range):
+			found = mid
 			high = mid - 1
 		else:
 			low = mid + 1
 	
-	return high + 1
+	return found
 
 
 func bsearch_right_range(value_set: Array, right_range: float) -> int:
@@ -1216,15 +1223,18 @@ func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	
 	var low: int = 0
 	var high: int = length - 1
+	var found: int = -1
 	
 	while (low <= high):
-		@warning_ignore("integer_division")
-		var mid: int = low + ((high - low) / 2)
+		var mid: int = (low + high) / 2
 		
-		if value_set[mid][0] > right_range: high = mid - 1
-		else: low = mid + 1
+		if value_set[mid][0] > right_range:
+			high = mid - 1
+		else:
+			low = mid + 1
+			found = mid
 	
-	return low - 1
+	return found
 
 ## Binary searches for note nodes
 func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
@@ -1236,16 +1246,18 @@ func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
 	
 	var low: int = 0
 	var high: int = length - 1
+	var found: int = -1
 	
 	while (low <= high):
-		var mid: int = low + ((high - low) / 2)
+		var mid: int = (low + high) / 2
 		
 		if (value_set[mid].time >= left_range):
+			found = mid
 			high = mid - 1
 		else:
 			low = mid + 1
 	
-	return high + 1
+	return found
 
 func is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)

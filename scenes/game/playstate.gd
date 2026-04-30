@@ -336,10 +336,12 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var high: int = length - 1
 	
 	while (low <= high):
-		var mid: int = low + int((high - low) / 2)
+		var mid: int = (low + high) / 2
 		
-		if (value_set[mid][0] >= left_range): high = mid - 1
-		else: low = mid + 1
+		if (value_set[mid][0] >= left_range):
+			high = mid - 1
+		else:
+			low = mid + 1
 	
 	return high + 1
 

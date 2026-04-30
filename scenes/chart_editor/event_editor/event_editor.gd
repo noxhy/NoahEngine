@@ -723,6 +723,9 @@ func _on_event_parameters_about_to_popup() -> void:
 	
 	if hovered_event != -1:
 		parameters = ChartManager.chart.chart_data["events"][hovered_event][2]
+		%"Place Event".text = "Edit Event"
+	else:
+		%"Place Event".text = "Place Event"
 	
 	var parameter_names: Array = ChartManager.EVENT_DATA[current_event]["parameters"]
 	
