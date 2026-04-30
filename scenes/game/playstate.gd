@@ -213,8 +213,8 @@ func _process(delta):
 				AudioServer.get_time_since_last_mix() - \
 				AudioServer.get_output_latency()
 		
-		conductor.offset = chart.offset
-		conductor.offset += chart.get_tempo_time_at(GameManager.song_position)
+		conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
+		conductor.offset += chart.offset
 		
 		# Idk how exactly this works I stole this code from sqirradotdev
 		position_delta = abs(position_lerp - GameManager.song_position)
@@ -263,7 +263,7 @@ func _process(delta):
 
 ##  Gets the tempo at a certain time in seconds
 func get_tempo_at(time: float) -> float:
-	
+	time = max(time, 0)
 	var tempo_dict = chart.get_tempos_data()
 	var keys = tempo_dict.keys()
 	
@@ -291,7 +291,7 @@ func play_song(time: float):
 	GameManager.offset = conductor.offset
 	
 	song_started = false
-	song_start_time = time - chart.offset
+	song_start_time = time + chart.offset
 	song_start_offset = song_start_time - (seconds_per_beat * 4)
 	GameManager.song_position = song_start_offset
 	
@@ -336,10 +336,12 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var high: int = length - 1
 	
 	while (low <= high):
-		var mid: int = low + int((high - low) / 2)
+		var mid: int = (low + high) / 2
 		
-		if (value_set[mid][0] >= left_range): high = mid - 1
-		else: low = mid + 1
+		if (value_set[mid][0] >= left_range):
+			high = mid - 1
+		else:
+			low = mid + 1
 	
 	return high + 1
 

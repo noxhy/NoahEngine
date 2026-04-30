@@ -10,7 +10,7 @@ signal new_beats_per_measure(_beats_per_measure: int)
 signal new_steps_per_measure(_steps_per_measure: int)
 
 ## The time where the conductor will [b]start[/b].
-@export_range(-1000, 1000, 1) var offset = 0
+var offset: float = 0
 ## Node Path to an [AudioStreamPlayer] that the Conductor will conduct.
 ## [br]If there is no [AudioStreamPlayer], or if it isn't playing, you can set [param time] manually.
 @export var stream_player: AudioStreamPlayer
@@ -89,10 +89,10 @@ func _process(_delta):
 	current_step = get_step_at(time)
 
 func get_beat_at(_time: float) -> int:
-	return int((_time - self.offset) / seconds_per_beat)
+	return int((_time - offset) / seconds_per_beat)
 
 func get_step_at(_time: float) -> int:
-	return int((_time - self.offset) / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
+	return int((_time - offset) / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
 
 func get_measure_at(_time: float) -> int:
-	return int((_time - self.offset) / (seconds_per_beat * beats_per_measure))
+	return int((_time - offset) / (seconds_per_beat * beats_per_measure))

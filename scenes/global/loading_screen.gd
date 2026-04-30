@@ -15,7 +15,6 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	
 	scene_load_status = ResourceLoader.load_threaded_get_status(scene, progress)
 	progress_bar.value = progress[0] * 100.0
 	
@@ -27,7 +26,6 @@ func _process(_delta):
 
 
 func _input(event):
-	
 	# Funny Bop
 	if event.is_pressed():
 		var tween = create_tween()
