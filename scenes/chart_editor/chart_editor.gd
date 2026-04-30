@@ -400,7 +400,7 @@ func _process(delta: float) -> void:
 								var note_type = note[3]
 								
 								add_action("Removed Note", self.remove_note.bind(i),
-								self.place_note.bind(time, lane, length, note_type, true))
+								self.place_note.bind(note[0], lane, length, note_type, true))
 								%"Note Remove".play()
 								
 								if selected_notes.has(i):
@@ -733,8 +733,8 @@ func load_section(time: float):
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
 	
 	if selected_notes.size() > 0:
-		L = min(selected_notes[0], L)
-		R = max(R, selected_notes[selected_notes.size() - 1])
+		L = min(selected_notes.front(), L)
+		R = max(R, selected_notes.back())
 	
 #region Loading Notes
 	if L > -1 and R > -1:
@@ -920,14 +920,22 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		else:
 			note_nodes.append(note_instance)
 			ChartManager.chart.chart_data["notes"].append([time, lane, length, type])
-			selected_notes = [ChartManager.chart.get_notes_data().size() - 1]
+			L = ChartManager.chart.get_notes_data().size() - 1
+			selected_notes = [L]
 			selected_note_nodes = [note_instance]
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
 			output = note_nodes.size() - 1
+		
+		# Preventing fake notes
+		
+		current_visible_notes_L = max(min(L, current_visible_events_L), 0)
+		current_visible_notes_R = max(current_visible_notes_R,
+		ChartManager.chart.get_notes_data().size() - 1)
 	else:
 		if sorted:
 			var L: int = sort_index
+			print("sorted")
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
 				print("empty")
@@ -983,6 +991,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			
 			output = L
 		else:
+			if current_visible_notes_L == -1:
+				current_visible_notes_L = 0
+			
 			event_nodes.append(event_instance)
 			ChartManager.chart.chart_data["events"].append([time, event, parameters])
 			selected_notes = [ChartManager.chart.get_events_data().size() - 1]
@@ -1195,8 +1206,6 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var length: int = value_set.size()
 	if (length == 0):
 		return -1
-	if (value_set[length - 1][0] < left_range):
-		return -1
 	
 	var low: int = 0
 	var high: int = length - 1
@@ -1217,8 +1226,6 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	var length: int = value_set.size()
 	if (length == 0):
-		return -1
-	if (value_set[0][0] > right_range):
 		return -1
 	
 	var low: int = 0
