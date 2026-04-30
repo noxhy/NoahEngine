@@ -928,8 +928,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			output = note_nodes.size() - 1
 		
 		# Preventing fake notes
-		
-		current_visible_notes_L = max(min(L, current_visible_events_L), 0)
+		current_visible_notes_L = max(min(L, current_visible_notes_L), 0)
 		current_visible_notes_R = max(current_visible_notes_R,
 		ChartManager.chart.get_notes_data().size() - 1)
 	else:
@@ -1001,6 +1000,12 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			min_lane = 0
 			max_lane = ChartManager.strum_count - 1
 			output = event_nodes.size() - 1
+		
+		# Preventing fake events
+		current_visible_events_L = max(min(L, current_visible_events_L), 0)
+		current_visible_events_R = max(current_visible_events_R,
+		ChartManager.chart.get_events_data().size() - 1)
+		
 	else:
 		if sorted:
 			var L: int = sort_index
