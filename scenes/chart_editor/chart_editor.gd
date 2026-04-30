@@ -279,8 +279,8 @@ func _process(delta: float) -> void:
 				if !Input.is_action_pressed(&"control"):
 					if can_chart:
 						song_position -= $Conductor.seconds_per_beat
-						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset + ChartManager.chart.offset
-						song_position = clamp(song_position, start_offset - ChartManager.chart.offset, %Instrumental.stream.get_length())
+						song_position = snapped(song_position - $Conductor.offset, $Conductor.seconds_per_beat) + $Conductor.offset
+						song_position = clamp(song_position, start_offset, %Instrumental.stream.get_length())
 						%"Song Slider".value = song_position
 				else:
 					current_snap += 1
@@ -343,7 +343,6 @@ func _process(delta: float) -> void:
 						var lane: int = snapped_position.x - 1
 						var time: float = grid_position_to_time(snapped_position, true)
 						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_note_at(lane, time):
@@ -390,8 +389,6 @@ func _process(delta: float) -> void:
 					if can_chart:
 						if !Input.is_action_pressed("control"):
 							var lane: int = snapped_position.x - 1
-							var time: float = grid_position_to_time(snapped_position, true)
-							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 							
 							if hovered_note != -1:
 								var i: int = hovered_note
@@ -430,10 +427,12 @@ func _process(delta: float) -> void:
 							if Input.is_action_pressed(&"shift"):
 								var time: float = grid_position_to_time(snapped_position, true)
 								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+								time += ChartManager.chart.offset
 								start_offset = time - song_position
 							else:
 								var time: float = grid_position_to_time(grid_position)
 								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+								time += ChartManager.chart.offset
 								start_offset = time - song_position
 							
 						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
@@ -736,6 +735,9 @@ func load_section(time: float):
 		L = min(selected_notes.front(), L)
 		R = max(R, selected_notes.back())
 	
+	print("data range: ", L, "-", R)
+	print("visible range: ", current_visible_notes_L, "-", current_visible_notes_R)
+	
 #region Loading Notes
 	if L > -1 and R > -1:
 		## Clearing any invisible notes
@@ -929,8 +931,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		
 		# Preventing fake notes
 		current_visible_notes_L = max(min(L, current_visible_notes_L), 0)
-		current_visible_notes_R = max(current_visible_notes_R,
-		ChartManager.chart.get_notes_data().size() - 1)
+		current_visible_notes_R += 1
 	else:
 		if sorted:
 			var L: int = sort_index
@@ -1003,8 +1004,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		
 		# Preventing fake events
 		current_visible_events_L = max(min(L, current_visible_events_L), 0)
-		current_visible_events_R = max(current_visible_events_R,
-		ChartManager.chart.get_events_data().size() - 1)
+		current_visible_events_R += 1
 		
 	else:
 		if sorted:
@@ -1058,12 +1058,9 @@ func remove_note(lane, time: float = -1):
 		return
 	
 	if (i - current_visible_notes_L) < note_nodes.size() and (i - current_visible_notes_L) >= 0:
-		var note = note_nodes[i - current_visible_notes_L]
-		print("time: ", note.time,
-		" lane: ", note.lane,
-		" index: ", i - current_visible_notes_L)
-		note.queue_free()
+		note_nodes[i - current_visible_notes_L].queue_free()
 		note_nodes.remove_at(i - current_visible_notes_L)
+		current_visible_notes_R -= 1
 	
 	#if selected_notes.size() > 0:
 		#for j in range(selected_notes.size()):

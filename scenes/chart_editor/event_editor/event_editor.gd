@@ -149,9 +149,6 @@ func _process(delta: float) -> void:
 				if screen_mouse_position.x > -512 and screen_mouse_position.x < 640 and !current_focus_owner:
 					if can_chart:
 						if !Input.is_action_pressed(&"control"):
-							var time: float = grid_position_to_time(snapped_position, true)
-							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-							
 							if hovered_event != -1:
 								var i: int = hovered_event
 								var event = ChartManager.chart.chart_data.events[i]
@@ -159,7 +156,7 @@ func _process(delta: float) -> void:
 								var parameters = event[2]
 								
 								add_action("Removed Event", self.remove_note.bind(i),
-								self.place_event.bind(time, event_name, parameters, true))
+								self.place_event.bind(event[0], event_name, parameters, true))
 								%"Note Remove".play()
 								
 								if selected_notes.has(i):
@@ -588,6 +585,7 @@ func remove_note(_name, time: float = -1):
 	if (i - current_visible_events_L) < event_nodes.size() and (i - current_visible_events_L) >= 0:
 		event_nodes[i - current_visible_events_L].queue_free()
 		event_nodes.remove_at(i - current_visible_events_L)
+		current_visible_events_R -= 1
 	
 	#if selected_notes.size() > 0:
 		#for j in range(selected_notes.size()):

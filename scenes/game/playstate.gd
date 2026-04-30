@@ -213,8 +213,8 @@ func _process(delta):
 				AudioServer.get_time_since_last_mix() - \
 				AudioServer.get_output_latency()
 		
-		conductor.offset = chart.offset
-		conductor.offset += chart.get_tempo_time_at(GameManager.song_position)
+		conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
+		conductor.offset += chart.offset
 		
 		# Idk how exactly this works I stole this code from sqirradotdev
 		position_delta = abs(position_lerp - GameManager.song_position)
