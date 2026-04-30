@@ -719,14 +719,23 @@ func _on_event_parameters_about_to_popup() -> void:
 	for node in %"Event Parameters".get_children():
 		node.queue_free()
 	
-	var parameters: Array = ChartManager.EVENT_DATA[current_event]["parameters"]
+	var parameters: Array = []
 	
-	for parameter in parameters:
+	if hovered_event != -1:
+		parameters = ChartManager.chart.chart_data["events"][hovered_event][2]
+	
+	var parameter_names: Array = ChartManager.EVENT_DATA[current_event]["parameters"]
+	
+	var i: int = 0
+	for _name in parameter_names:
 		var line_edit: LineEdit = LineEdit.new()
 		
-		line_edit.placeholder_text = parameter
+		line_edit.placeholder_text = _name
+		if (i < parameters.size()):
+			line_edit.text = parameters[i]
 		
 		%"Event Parameters".add_child(line_edit)
+		i += 1
 	
 	%"Open Window".play()
 
