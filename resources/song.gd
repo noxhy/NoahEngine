@@ -25,3 +25,6 @@ class_name Song
 @export var artist: String
 @export var icons: SpriteFrames = load("res://assets/sprites/playstate/icons/face.tres")
 @export var locked: bool = false
+
+@export_subgroup("Story Mode Stuff")
+@export var dont_display_until_played:bool = false
