@@ -31,7 +31,7 @@ signal setup_finished()
 ## The UI node that requires a list: [code]strums[/code].
 @export var ui: CanvasLayer
 ## Camera with built-in functions.
-@export var camera: PlayStateCamera
+@export var camera: CameraController
 
 @export_group("Positions")
 ## Where the "Sick!" or "Good!" sprites will spawn
@@ -99,7 +99,7 @@ func _ready():
 		self.song_data = GameManager.week_songs[GameManager.current_week_song]
 	assert(host, 'A Host was not assigned.')
 	assert(ui, 'A UI was not assigned.')
-	assert(camera, 'A PlayState Camera was not assigned.')
+	assert(camera, 'A Camera Controller was not assigned.')
 	# This delay is so variables initialize
 	await host.ready
 	
@@ -178,7 +178,7 @@ func _process(delta):
 	
 	if health <= 0:
 		GameManager.deaths += 1
-		DeathScreen.camera_zoom = camera.zoom
+		DeathScreen.camera_zoom = camera.getZoom()
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		get_tree().change_scene_to_file(death_scene)
 	
@@ -371,14 +371,19 @@ func score_note(hit_time: float):
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		"camera_position":
-			var camera_position: Vector2 = host.camera_positions[int(event_parameters[0])].global_position
-			if camera_position != null:
-				camera.position = camera_position
+			var marker = host.camera_positions[int(event_parameters[0])]
+			if not marker:
+				return
+			
+			var position = marker.global_position
+			camera.setPosition(position)
+			
 		"camera_bop":
 			var camera_bop = float(event_parameters[0])
 			var ui_bop = float(event_parameters[1])
 			
-			camera.zoom += Vector2(camera_bop, camera_bop) * camera.zoom
+			camera.setZoom(camera.getZoom() + camera_bop * camera.getZoom())
+			
 			ui.scale += Vector2(ui_bop, ui_bop)
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
@@ -447,7 +452,7 @@ func new_beat(current_beat, measure_relative):
 
 func new_step(current_step, measure_relative):
 	if current_step % bop_rate == 0:
-		camera.zoom += camera_bop_strength * camera.zoom
+		camera.setZoom(camera.getZoom() + camera_bop_strength * camera.getZoom())
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 			ui.scale += ui_bop_strength
 
