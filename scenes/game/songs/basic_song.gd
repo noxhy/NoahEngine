@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 @onready var camera_positions = []
 @onready var playstate_host: PlayState = $"PlayState Host"

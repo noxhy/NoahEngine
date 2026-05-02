@@ -27,7 +27,7 @@ signal setup_finished()
 
 @export_group("Nodes")
 ## The host song script. Usually the parent of this node.
-@export var host: Node2D
+@export var host: Node
 ## The UI node that requires a list: [code]strums[/code].
 @export var ui: CanvasLayer
 ## Camera with built-in functions.
