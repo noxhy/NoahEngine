@@ -4,9 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_16ha0"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="3_wo673"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="4_x8oul"]
-[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="6_kppj5"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/game/characters/boyfriend.tscn" id="7_wsbru"]
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://scenes/game/characters/boyfriend pixel.tscn" id="8_cda0r"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="10_82qc2"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="10_owhbd"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="11_vka10"]
 
@@ -17,17 +17,16 @@ script = ExtResource("1_2dtky")
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
-camera = NodePath("../Camera")
+camera = NodePath("../CameraController")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("3_wo673")
 ui_skin = ExtResource("4_x8oul")
 combo_scale_multiplier = Vector2(0.8, 0.8)
 
-[node name="Camera" parent="." unique_id=464522697 instance=ExtResource("6_kppj5")]
+[node name="Camera" type="Camera2D" parent="." unique_id=1969881465]
 position = Vector2(640, 432)
 position_smoothing_speed = 3.0
-target_zoom = Vector2(1.1, 1.1)
 
 [node name="World" type="CanvasLayer" parent="." unique_id=1602914511]
 layer = 10
@@ -96,3 +95,8 @@ animation_names = Dictionary[StringName, StringName]({
 
 [node name="UI" parent="." unique_id=497178549 instance=ExtResource("11_vka10")]
 layer = 10
+
+[node name="CameraController" type="Node" parent="." unique_id=1309664363 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("10_82qc2")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"

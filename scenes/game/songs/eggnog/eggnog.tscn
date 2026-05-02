@@ -5,8 +5,8 @@
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="4_aqdoj"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="5_f88c2"]
 [ext_resource type="PackedScene" uid="uid://ofcr80jgray3" path="res://scenes/game/stages/mall/stage.tscn" id="6_8k6f7"]
-[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="7_l0m3a"]
 [ext_resource type="PackedScene" uid="uid://cs1tqndyp3ow6" path="res://scenes/game/characters/boyfriend_christmas.tscn" id="12_8k6f7"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="12_y3svp"]
 [ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://assets/shaders/adjust_hsv.gdshader" id="13_vkil6"]
 [ext_resource type="PackedScene" uid="uid://civkgglbefejt" path="res://scenes/game/characters/mom_dad_christmas.tscn" id="14_5qnon"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="15_pd6oi"]
@@ -40,7 +40,7 @@ script = ExtResource("1_8k6f7")
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
-camera = NodePath("../Camera")
+camera = NodePath("../CameraController")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_aqdoj")
@@ -50,8 +50,9 @@ death_scene = "uid://bd083xcqslcsd"
 [node name="Stage" parent="." unique_id=1670436415 instance=ExtResource("6_8k6f7")]
 unique_name_in_owner = true
 
-[node name="Camera" parent="." unique_id=1257641879 instance=ExtResource("7_l0m3a")]
+[node name="Camera" type="Camera2D" parent="." unique_id=176604532]
 position = Vector2(640, 360)
+position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
 [node name="Player" parent="." unique_id=1254698147 groups=["player"] instance=ExtResource("12_8k6f7")]
@@ -102,6 +103,11 @@ position = Vector2(880, 368)
 gizmo_extents = 20.0
 
 [node name="UI" parent="." unique_id=637352536 instance=ExtResource("16_2vulp")]
+
+[node name="CameraController" type="Node" parent="." unique_id=691825874 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("12_y3svp")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]

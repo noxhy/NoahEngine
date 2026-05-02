@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_hdeop"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="4_4bxi2"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="5_t15xn"]
-[ext_resource type="PackedScene" uid="uid://s0oblvodh51d" path="res://scenes/game/playstate_camera.tscn" id="6_xwvyf"]
 [ext_resource type="PackedScene" uid="uid://cmiw0sq3dx0ge" path="res://scenes/game/stages/battlefield/stage.tscn" id="7_th3hl"]
 [ext_resource type="AudioStream" uid="uid://bmggbtser1g3u" path="res://assets/sounds/game sounds/miss sounds/miss 1.ogg" id="8_m85lx"]
 [ext_resource type="AudioStream" uid="uid://cfnrxgladhi2w" path="res://assets/sounds/game sounds/miss sounds/miss 2.ogg" id="9_l37ub"]
@@ -15,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://cvw5oumi78kvr" path="res://scenes/game/characters/tankman.tscn" id="14_ctps2"]
 [ext_resource type="PackedScene" uid="uid://biw6xh624onjh" path="res://scenes/game/characters/nene.tscn" id="15_th3hl"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="16_owg0q"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="16_v2n7e"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_oxpka"]
 
@@ -98,16 +98,16 @@ script = ExtResource("1_th3hl")
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
-camera = NodePath("../Camera")
+camera = NodePath("../CameraController")
 rating_position = NodePath("../World/Rating Marker")
 combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_4bxi2")
 ui_skin = ExtResource("5_t15xn")
 
-[node name="Camera" parent="." unique_id=1972258712 instance=ExtResource("6_xwvyf")]
+[node name="Camera" type="Camera2D" parent="." unique_id=531963275]
 position = Vector2(640, 360)
+position_smoothing_enabled = true
 position_smoothing_speed = 3.0
-target_zoom = Vector2(0.9, 0.9)
 
 [node name="Stage" parent="." unique_id=1380889064 instance=ExtResource("7_th3hl")]
 unique_name_in_owner = true
@@ -209,6 +209,11 @@ update_rate = 0.04
 
 [node name="UI" parent="." unique_id=2089659649 instance=ExtResource("16_owg0q")]
 layer = 10
+
+[node name="CameraController" type="Node" parent="." unique_id=135944367 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("16_v2n7e")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
 
 [connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
 [connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
