@@ -24,7 +24,7 @@ func _ready():
 	tween.tween_property(%Player, "scale.x", player_scale.x, 2)
 	tween.tween_property(%Player, "scale.y", player_scale.y, 2)
 	
-	#tween.tween_property($Camera2D, "zoom", camera_zoom, 2)
+	tween.tween_property($CameraController, "zoom", camera_zoom, 2)
 	
 	$Conductor.tempo = $Audio/Music.stream.get_bpm()
 

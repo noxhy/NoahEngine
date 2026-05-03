@@ -178,7 +178,7 @@ func _process(delta):
 	
 	if health <= 0:
 		GameManager.deaths += 1
-		DeathScreen.camera_zoom = camera.getZoom()
+		DeathScreen.camera_zoom = camera.zoom
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		get_tree().change_scene_to_file(death_scene)
 	
@@ -376,13 +376,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				return
 			
 			var position = marker.global_position
-			camera.setPosition(position)
+			camera.position = position
 			
 		"camera_bop":
 			var camera_bop = float(event_parameters[0])
 			var ui_bop = float(event_parameters[1])
 			
-			camera.setZoom(camera.getZoom() + camera_bop * camera.getZoom())
+			camera.zoom += camera_bop * camera.zoom
 			
 			ui.scale += Vector2(ui_bop, ui_bop)
 		"camera_zoom":
@@ -453,7 +453,8 @@ func new_beat(current_beat, measure_relative):
 func new_step(current_step, measure_relative):
 	if current_step % bop_rate == 0:
 		var strength = camera_bop_strength if camera.get_direct() is Camera2D else camera_bop_strength.x
-		camera.setZoom(camera.getZoom() + strength * camera.getZoom())
+		camera.zoom +=strength * camera.zoom
+		
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 			ui.scale += ui_bop_strength
 

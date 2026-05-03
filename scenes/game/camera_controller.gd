@@ -33,6 +33,18 @@ var default_offset:Vector2
 
 var noise_i: float = 0.0
 
+var position:Variant:
+	set(value):
+		set_position(value)
+	get:
+		return get_position()
+
+var zoom:Variant :
+	set(value):
+		set_zoom(value)
+	get:
+		return get_zoom()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	 
@@ -49,11 +61,9 @@ func get_direct():
 		return parent_2D
 	elif parent_3D:
 		return parent_3D
-		
 	return null
 
-# todo later maybe use setters and getters ?
-func setZoom(value:Variant):
+func set_zoom(value:Variant):
 	if value == null: return
 	
 	if parent_2D:
@@ -62,29 +72,40 @@ func setZoom(value:Variant):
 		elif value is float:
 			parent_2D.zoom = Vector2(value, value)
 	elif parent_3D:
+		if value is Vector2:
+			parent_3D.fov = value.x
 		if value is float:
 			parent_3D.fov = value
 			
 			
 
-func getZoom() -> Variant:
+func get_zoom() -> Variant:
 	if parent_2D: return parent_2D.zoom
 	
 	return parent_3D.fov
 
 
-func setPosition(vec:Variant):
-	if vec == null: return
+func get_position() ->Variant:
+	if parent_2D: return parent_2D.position
+	
+	return parent_3D.position
+	
+
+func set_position(value:Variant):
+	if value == null: return
 	
 	if parent_2D:
-		if vec is Vector3:
-			parent_2D.position = vec3_to_vec2(vec)
-		elif vec is Vector2:
-			parent_2D.position = vec
+		if value is Vector3:
+			parent_2D.position = vec3_to_vec2(value)
+		elif value is Vector2:
+			parent_2D.position = value
 		
 	elif parent_3D:
-		if vec is Vector3:
-			parent_3D.position = vec
+		if value is Vector2:
+			parent_3D.position.x = value.x
+			parent_3D.position.y = value.y
+		if value is Vector3:
+			parent_3D.position = value
 
 func _physics_process(delta):
 	if parent_2D: update_2D(delta)
