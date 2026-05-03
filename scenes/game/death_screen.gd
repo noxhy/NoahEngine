@@ -15,14 +15,14 @@ func _ready():
 	if %Player is Node2D:
 		player_position = Vector2(player_position.x,player_position.y)
 	
-	%Player.position = player_position 
-	$CameraController.setPosition(%Player.global_position)
+	%Player.position = player_position
+	$CameraController.set_position(%Player.global_position)
 	
 	var tween = create_tween()
 	tween.set_parallel(true)
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property(%Player, "scale.x", player_scale.x, 2)
-	tween.tween_property(%Player, "scale.y", player_scale.y, 2)
+	tween.tween_property(%Player, "scale:x", player_scale.x, 2)
+	tween.tween_property(%Player, "scale:y", player_scale.y, 2)
 	
 	tween.tween_property($CameraController, "zoom", camera_zoom, 2)
 	

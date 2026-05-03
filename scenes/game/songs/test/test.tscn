@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://scenes/game/playstate.tscn" id="2_16ha0"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://assets/sprites/playstate/default/default_note_skin.tres" id="3_wo673"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="4_x8oul"]
-[ext_resource type="PackedScene" path="res://scenes/game/playstate_camera.tscn" id="6_kppj5"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/game/characters/boyfriend.tscn" id="7_wsbru"]
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://scenes/game/characters/boyfriend pixel.tscn" id="8_cda0r"]
 [ext_resource type="Script" path="res://scenes/game/camera_controller.gd" id="10_82qc2"]

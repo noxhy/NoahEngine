@@ -6,7 +6,7 @@
 [ext_resource type="AudioStream" uid="uid://cqoad5jx15ele" path="res://assets/songs/menu songs/game over/gameOver.ogg" id="3_3040t"]
 [ext_resource type="AudioStream" uid="uid://dbdx3d7yv6085" path="res://assets/sounds/menu sounds/game over end.ogg" id="5_23pry"]
 [ext_resource type="PackedScene" uid="uid://de1orr6su5xmc" path="res://scenes/game/characters/boyfriend_dead.tscn" id="6_0wmjs"]
-[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="7_553pn"]
+[ext_resource type="Script" path="res://scenes/game/camera_controller.gd" id="7_553pn"]
 
 [sub_resource type="Animation" id="Animation_shx3s"]
 length = 0.001

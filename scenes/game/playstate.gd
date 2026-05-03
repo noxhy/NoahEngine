@@ -66,9 +66,6 @@ var current_event: int = -1
 
 var chart: Chart
 
-var accuracy: float
-var timings_sum: float
-var entries: float = 0
 var misses: int = 0
 var score: int = 0
 var health: float = 50.0
@@ -159,12 +156,11 @@ func _ready():
 
 
 func _process(delta):
-	accuracy = (timings_sum / entries) if entries != 0.0 else 0.0
 	self_delta = delta
 	
 	health = clamp(health, 0.0, 100.0)
 	ui.target_health = health
-	update_ui_stats()
+	GameManager.score = score
 	
 	if health <= 0:
 		GameManager.deaths += 1
@@ -466,32 +462,24 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		match rating:
 			"sick":
 				health += 1
-				timings_sum += 0.9825
 				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
-			"good":
-				timings_sum += 0.65
 			"bad":
 				health -= 0.35
-				timings_sum += 0.25
 				combo = -1
 				emit_signal("combo_break")
 			"shit":
 				health -= 0.35
-				timings_sum += -1
 				combo = -1
 				emit_signal("combo_break")
 			_:
 				note_miss(time, lane, 0, note_type, hit_time, strum_manager)
 		
-		entries += 1
 		combo += 1
 		if combo > GameManager.tallies["max_combo"]:
 			GameManager.tallies["max_combo"] = combo
 		
-		accuracy = (timings_sum / entries)
 		if GameManager.tallies.sick == GameManager.tallies.total_notes:
 			rating = "fc_" + rating
-		update_ui_stats()
 
 func note_holding(time, lane, length, note_type, strum_manager):
 	var playback = vocals.get_stream_playback()
@@ -500,11 +488,6 @@ func note_holding(time, lane, length, note_type, strum_manager):
 	if !strum_manager.enemy_slot:
 		health += abs(time) * 4
 		score += int(abs(time) * HOLD_SCORE)
-		
-		timings_sum += time
-		entries += time
-		
-		accuracy = (timings_sum / entries)
 
 func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 	var playback = vocals.get_stream_playback()
@@ -522,13 +505,5 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			 
 			GameManager.tallies["miss"] = misses
 			GameManager.tallies["total_notes"] += 1
-			entries += 1 + length
-			accuracy = (timings_sum / entries)
 			
 			emit_signal("combo_break")
-
-func update_ui_stats():
-	ui.accuracy = accuracy
-	ui.misses = misses
-	ui.target_health = health
-	ui.score = score

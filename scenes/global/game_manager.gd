@@ -46,6 +46,7 @@ var week_tallies: Dictionary = DEFAULT_TALLIES.duplicate()
 var tallies: Dictionary = DEFAULT_TALLIES.duplicate()
 var grade: float
 var highscore: bool = false
+var score: int = 0
 
 var accuracy: float = 0.0
 var deaths: int = 0
@@ -62,9 +63,10 @@ func started_song(song: Song):
 	accuracy = 0.0
 	current_song = song
 	character = Preload.character_data[current_character]
+	score = 0
 
-func finished_song(score: int):
-	week_score += score
+func finished_song(_score: int):
+	week_score += _score
 	week_deaths += deaths
 	total_accuracy += accuracy
 	songs_played += 1
@@ -88,7 +90,7 @@ func finished_song(score: int):
 				highscore = false
 			
 			_:
-				highscore = SaveManager.set_song_stats(current_song.title, difficulty, score, get_grade(tallies))
+				highscore = SaveManager.set_song_stats(current_song.title, difficulty, _score, get_grade(tallies))
 				if !GameManager.freeplay and current_week_song == week_songs.size():
 					highscore = SaveManager.set_week_stats(current_week.week_name, difficulty, week_score, grade)
 	else:

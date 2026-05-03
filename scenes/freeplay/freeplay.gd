@@ -231,7 +231,7 @@ func play_song(song: Song, difficulty: String):
 	GameManager.play_mode = GameManager.PLAY_MODE.FREEPLAY
 	GameManager.difficulty = difficulty
 	GameManager.freeplay = true
-	Global.change_scene_to(scene)
+	Global.change_scene_to(scene, "fade")
 
 
 @warning_ignore("shadowed_variable")
@@ -239,7 +239,7 @@ func play_song(song: Song, difficulty: String):
 func chart_song(song: Song, difficulty: String):
 	ChartManager.song = song
 	ChartManager.difficulty = difficulty
-	Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+	Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn", "fade")
 
 
 @warning_ignore("unused_parameter")

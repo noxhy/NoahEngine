@@ -13,11 +13,6 @@ extends CanvasLayer
 
 @export var target_health = 50.0
 
-var accuracy: float = 0.0
-var misses: int = 0
-var rank: String = "?"
-var score: int = 0
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
@@ -25,15 +20,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	# Just in case anyone wants to display this information
-	# $Performance.text = "Accuracy: " + str(snappedf(accuracy * 100, 0.01)) + "%"
-	# $Performance.text += " • " + "Rank: " + rank
-	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
 		$"Health Bar/Performance".text = "Botplay"
 	else:
-		$"Health Bar/Performance".text = "Score: " + Global.format_number(score)
-		$"Health Bar/Performance".text += " • " + "Misses: " + str(misses)
+		$"Health Bar/Performance".text = "Score: " + Global.format_number(GameManager.score)
+		$"Health Bar/Performance".text += " • " + "Misses: " + str(GameManager.tallies.get("misses", 0))
 	
 	update_health_bar(lerp($"Health Bar".value, target_health, 0.115))
 
