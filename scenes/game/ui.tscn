@@ -95,21 +95,23 @@ outline_size = 11
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[node name="UI" type="CanvasLayer" unique_id=359206]
+[node name="UI" type="CanvasLayer"]
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 script = ExtResource("1_pm5h1")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1029277594]
-libraries/ = SubResource("AnimationLibrary_eqvj4")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_eqvj4")
+}
 
-[node name="Player Strum" parent="." unique_id=1539647269 instance=ExtResource("2_58g8k")]
+[node name="Player Strum" parent="." instance=ExtResource("2_58g8k")]
 position = Vector2(288, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
 can_splash = true
 
-[node name="Enemy Strum" parent="." unique_id=2070035072 instance=ExtResource("2_58g8k")]
+[node name="Enemy Strum" parent="." instance=ExtResource("2_58g8k")]
 position = Vector2(-352, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
@@ -118,7 +120,7 @@ can_press = false
 auto_play = true
 enemy_slot = true
 
-[node name="Health Bar" type="TextureProgressBar" parent="." unique_id=2016330840]
+[node name="Health Bar" type="TextureProgressBar" parent="."]
 z_index = -2
 anchors_preset = -1
 anchor_left = -0.23400001
@@ -139,11 +141,11 @@ tint_under = Color(0.168627, 0.121569, 0.2, 1)
 tint_progress = Color(0.168627, 0.121569, 0.2, 1)
 metadata/_edit_lock_ = true
 
-[node name="Icon Manager" type="Node2D" parent="Health Bar" unique_id=1193764486]
+[node name="Icon Manager" type="Node2D" parent="Health Bar"]
 position = Vector2(300, 10)
 metadata/_edit_lock_ = true
 
-[node name="Player" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1355437051]
+[node name="Player" type="AnimatedSprite2D" parent="Health Bar/Icon Manager"]
 position = Vector2(-8, -75)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_3m780")
@@ -151,14 +153,14 @@ offset = Vector2(75, 75)
 flip_h = true
 metadata/_edit_lock_ = true
 
-[node name="Enemy" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1286006923]
+[node name="Enemy" type="AnimatedSprite2D" parent="Health Bar/Icon Manager"]
 position = Vector2(8, -75)
 scale = Vector2(0.8, 0.8)
 sprite_frames = SubResource("SpriteFrames_utqgv")
 offset = Vector2(-75, 75)
 metadata/_edit_lock_ = true
 
-[node name="Performance" type="Label" parent="Health Bar" unique_id=644853046]
+[node name="Performance" type="Label" parent="Health Bar"]
 z_index = 1
 custom_minimum_size = Vector2(512, 26)
 layout_mode = 1

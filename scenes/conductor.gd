@@ -54,21 +54,25 @@ var seconds_per_step: float = 0.25
 # Stored Statistics:
 # These variables only exist for the purpose of grabbing info
 
-var current_beat: int = -1:
+var current_beat: int:
 	set(v):
 		measure_relative_beat = v % beats_per_measure
 		if current_beat != v:
 			emit_signal(&"new_beat", v, measure_relative_beat)
 		
 		current_beat = v
+	get():
+		return current_beat
 
-var current_step: int = -1:
+var current_step: int:
 	set(v):
 		measure_relative_step = v % steps_per_measure
 		if current_step != v:
 			emit_signal(&"new_step", v, measure_relative_step)
 		
 		current_step = v
+	get():
+		return current_step
 
 var measure_relative_beat: int = 0
 var measure_relative_step: int = 0

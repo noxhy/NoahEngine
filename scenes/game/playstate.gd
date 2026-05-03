@@ -205,8 +205,6 @@ func _process(delta):
 	if !song_started:
 		song_start_offset += delta
 		GameManager.song_position = song_start_offset
-		# I am subtracting a beat so the current beat clamps at -1
-		conductor.time = GameManager.song_position
 		
 		if song_start_offset >= max(chart.offset, song_start_time):
 			play_audios(song_start_time)
