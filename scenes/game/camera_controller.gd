@@ -14,12 +14,17 @@ class_name CameraController
 
 @export var lerping = true
 
+@export var position_smoothing:bool = true
+@export var position_smoothing_speed:float = 3.0
+
 @export_subgroup("Shaking")
 
 @export var shake_time: float = 0.0
 @export var shaking: bool = false
 
 var default_offset:Vector2
+var _position_2d:Vector2 = Vector2.ZERO
+var _position_3d:Vector3 = Vector3.ZERO
 
 # How quickly to move through the noise
 @export var shake_speed: float = 30.0
@@ -52,9 +57,12 @@ func _ready() -> void:
 		assert(false,"Camera controller is missing a camera parent")
 	
 	if parent_2D:
+		parent_2D.position_smoothing_enabled = false
 		default_offset = parent_2D.offset
+		_position_2d = parent_2D.position
 	elif parent_3D:
 		default_offset = Vector2(parent_3D.h_offset,parent_3D.v_offset)
+		_position_3d = parent_3D.position
 
 func get_direct():
 	if parent_2D: 
@@ -84,37 +92,49 @@ func get_zoom() -> Variant:
 	
 	return parent_3D.fov
 
-
-func get_position() ->Variant:
-	if parent_2D: return parent_2D.position
-	
-	return parent_3D.position
-	
-
 func set_position(value:Variant):
 	if value == null: return
 	
 	if parent_2D:
 		if value is Vector3:
-			parent_2D.position = vec3_to_vec2(value)
-		elif value is Vector2:
+			value = vec3_to_vec2(value)
+		
+		if position_smoothing:
+			_position_2d = value
+		else:
 			parent_2D.position = value
 		
 	elif parent_3D:
 		if value is Vector2:
+			if position_smoothing:
+				_position_3d.x = value.x
+				_position_3d.y = value.y
+				return
+				
 			parent_3D.position.x = value.x
 			parent_3D.position.y = value.y
 		if value is Vector3:
+			if position_smoothing:
+				_position_3d = value
+				return
+				
 			parent_3D.position = value
 
-func _physics_process(delta):
+func get_position() -> Variant:
+	if parent_2D: return parent_2D.position
+	
+	return parent_3D.position
+
+func _process(delta):
 	if parent_2D: update_2D(delta)
 	if parent_3D: update_3D(delta)
-
 
 func update_2D(delta):
 	if lerping:
 		parent_2D.zoom = Global.frame_independent_lerp(parent_2D.zoom, target_zoom, lerp_weight, delta)
+	
+	if position_smoothing:
+		parent_2D.position = lerp_position(parent_2D.position, _position_2d, delta)
 	
 	if shaking:
 		
@@ -127,11 +147,12 @@ func update_2D(delta):
 		if shake_time <= 0: end_shake()
 		
 
-
-
 func update_3D(delta):
 	if lerping:
 		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x * 75, lerp_weight, delta)
+	
+	if position_smoothing:
+		parent_3D.position = lerp_position(parent_3D.position, _position_3d, delta)
 	
 	if shaking:
 		
@@ -164,7 +185,6 @@ func end_shake():
 		tween.tween_property(self, "h_offset", default_offset.x, 0.1)
 		tween.tween_property(self, "v_offset", default_offset.y, 0.1)
 		
-	
 
 func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 	noise_i += delta * speed
@@ -177,3 +197,7 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 
 func vec3_to_vec2(vec3:Vector3) -> Vector2:
 	return Vector2(vec3.x,vec3.y)
+
+func lerp_position(cur:Variant, intended:Variant, delta:float):
+	var c = position_smoothing_speed * delta
+	return ((intended - cur) * c) + cur
