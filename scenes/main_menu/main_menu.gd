@@ -68,6 +68,11 @@ func _input(event):
 			can_press = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("res://scenes/start_menu/start_menu.tscn")
+			
+		elif event.is_action_pressed(&"chart_editor"):
+			can_press = false
+			SoundManager.music.stop()
+			Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
 
 
 # Updates visually what happens when a new index is set for a selection

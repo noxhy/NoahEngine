@@ -1122,6 +1122,8 @@ func play_audios(time: float):
 	%Vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
 	%Vocals.play()
+	if not ChartManager.song:
+		return
 	%Vocals.stream.polyphony = ChartManager.song.vocals.size()
 	
 	var playback = %Vocals.get_stream_playback()
