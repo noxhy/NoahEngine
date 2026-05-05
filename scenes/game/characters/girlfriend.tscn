@@ -46,6 +46,7 @@ animations = [{
 [node name="Girlfriend" type="Node2D" unique_id=1420434075 groups=["metronome"]]
 script = ExtResource("1_krhuq")
 idle_animations = Array[StringName]([&"danceLeft", &"danceRight"])
+dance_beats = 1
 animation_names = Dictionary[StringName, StringName]({
 &"cheer": &"GF Cheer",
 &"cry": &"gf sad",

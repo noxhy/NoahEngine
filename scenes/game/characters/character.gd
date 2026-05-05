@@ -10,11 +10,11 @@ class_name Character
 @export_group('Gameplay')
 ##The idle animations. Whenever the character "dance's" they will cycle through this list.
 @export var idle_animations: Array[StringName] = [&"idle"]
-@export var sing_duration:float = 6.0
 @export var animation_prefix: StringName = &""
+@export var sing_duration:float = 6.0
+@export_range(1, 999) var dance_beats:int = 2 ## how many beats until the char should "dance"
 
 @export_group("Animation")
-
 @export var animation_names: Dictionary[StringName, StringName] = {}
 @export var offsets: Dictionary[StringName, Vector2] = {}
 @export var hold_frames: Dictionary[StringName, int] = {}
@@ -22,7 +22,7 @@ class_name Character
 
 @export_group("UI")
 @export var icons: SpriteFrames = load("res://assets/sprites/playstate/icons/face.tres")
-@export var color: Color = Color(0.168627, 0.121569, 0.203922)
+@export var color: Color = Color(0.168627, 0.121569, 0.203922) ##healthbar color
 #endregion
 
 #region internal refs
@@ -66,7 +66,6 @@ func play_animation(anim_to_play:StringName = &'', restart:bool = true, time_sca
 	if is_singing(): # well they arent yet but they r going to so.
 		sing_timer = 0
 	
-	
 	if animation_player is AnimateSymbol:
 		
 		animation_player.symbol = raw_anim_name
@@ -105,6 +104,10 @@ func dance(restart:bool = false, time_scale:float = 1.0) -> void:
 	
 	current_idle_tick = wrapi(current_idle_tick + 1, 0, idle_animations.size())
 
+func on_beat_hit(current_beat:int, measure_relative:int): ##basic song hooks this to the conductor
+	if dance_beats > 0 and not is_singing() and measure_relative % dance_beats == 0:
+		dance()
+
 func _process(delta: float) -> void:
 	
 	if in_playstate:
@@ -127,7 +130,6 @@ func is_singing() -> bool:
 	or current_animation.ends_with('down') \
 	or current_animation.ends_with('up') \
 	or current_animation.ends_with('right')
-
 
 func is_pressing_notes() -> bool:
 	if not is_player: return false

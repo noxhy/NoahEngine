@@ -40,6 +40,8 @@ func _ready():
 	get_tree().set_group(&"enemy", &"in_playstate", true)
 	get_tree().set_group(&"metronome", &"in_playstate", true)
 	
+	
+	
 	if stage:
 		playstate_host.conductor.connect(&"new_beat", stage._on_conductor_new_beat)
 	
@@ -49,19 +51,28 @@ func _ready():
 	playstate_host.connect(&"combo_break", self._on_combo_break)
 	playstate_host.connect(&"create_note", self._on_create_note)
 	playstate_host.connect(&"new_event", self._on_new_event)
+	
+	for char in get_tree().get_nodes_in_group(&"player"):
+		playstate_host.conductor.connect(&"new_beat", char.on_beat_hit)
+		
+	for char in get_tree().get_nodes_in_group(&"enemy"):
+		playstate_host.conductor.connect(&"new_beat", char.on_beat_hit)
+		
+	for char in get_tree().get_nodes_in_group(&"metronome"):
+		playstate_host.conductor.connect(&"new_beat", char.on_beat_hit)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat, measure_relative):
-	if measure_relative % 2 == 0:
-		for player in get_tree().get_nodes_in_group(&"player"):
-			if not player.is_singing():
-				player.dance()
-		for player in get_tree().get_nodes_in_group(&"enemy"):
-			if not player.is_singing():
-				player.dance()
-		
-
-	get_tree().call_group(&"metronome", &"dance")
+	#if measure_relative % 2 == 0:
+		#for player in get_tree().get_nodes_in_group(&"player"):
+			#if not player.is_singing():
+				#player.dance()
+		#for player in get_tree().get_nodes_in_group(&"enemy"):
+			#if not player.is_singing():
+				#player.dance()
+		#
+#
+	#get_tree().call_group(&"metronome", &"dance")
 	
 	playstate_host.ui.icon_bop(playstate_host.conductor.seconds_per_beat * 0.5 *
 	(1 / playstate_host.instrumental.pitch_scale))
