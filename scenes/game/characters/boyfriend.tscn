@@ -86,5 +86,7 @@ use_parent_material = true
 position = Vector2(-16, -160)
 sprite_frames = ExtResource("3_cqa6h")
 animation = &"BF idle dance"
+frame = 13
+frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

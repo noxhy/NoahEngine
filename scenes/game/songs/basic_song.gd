@@ -45,12 +45,13 @@ func _ready():
 # Conductor Util
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if measure_relative % 2 == 0:
-		get_tree().call_group(&"player", &"play_animation", &"idle")
-		get_tree().call_group(&"enemy", &"play_animation", &"idle")
 		for node in get_tree().get_nodes_in_group(&"metronome"):
 			if (node.current_animation == node.idle_animation):
+				node.holding = false
 				node.can_idle = true
 		
+		get_tree().call_group(&"player", &"play_animation", &"idle")
+		get_tree().call_group(&"enemy", &"play_animation", &"idle")
 		get_tree().call_group(&"metronome", &"play_animation", &"idle", GameManager.seconds_per_beat * 2)
 	
 	playstate_host.ui.icon_bop(playstate_host.conductor.seconds_per_beat * 0.5 *
@@ -117,7 +118,7 @@ func get_group(strum_manager) -> StringName:
 
 
 func get_direction(direction: int):
-	var animations = ["left", "down", "up", "right"]
+	var animations: Array[String] = ["left", "down", "up", "right"]
 	return animations[direction]
 
 
