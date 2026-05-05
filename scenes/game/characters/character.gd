@@ -117,7 +117,6 @@ func _process(delta: float) -> void:
 	sing_time -= delta
 	if sing_time <= 0 and !can_idle:
 		can_idle = true
-		print(self.name, " can idle")
 
 func get_real_animation(animation_name: StringName = &""):
 	return animation_names.get(animation_name, &"")
