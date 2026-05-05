@@ -36,13 +36,11 @@ shader_parameter/brightness = -30.0
 [node name="Fresh" type="Node2D" unique_id=1049894585]
 script = ExtResource("1_xeyw4")
 
-[node name="PlayState Host" parent="." unique_id=586722021 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_y6xle")]
+[node name="PlayState Host" parent="." unique_id=586722021 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_y6xle")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../CameraController")
-rating_position = NodePath("../World/Rating Marker")
-combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_8nme4")
 ui_skin = ExtResource("5_uia00")
 combo_scale_multiplier = Vector2(0.8, 0.8)

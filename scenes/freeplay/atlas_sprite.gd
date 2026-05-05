@@ -34,7 +34,9 @@ func pause():
 	animated_symbol.playing = false
 
 func done():
-	self.finished.emit()
+	pass
+	#self.finished.emit()
 
 func loop():
-	self.looped.emit()
+	pass
+	#self.looped.emit()
