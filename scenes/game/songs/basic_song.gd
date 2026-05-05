@@ -77,6 +77,7 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	var group: StringName = get_group(strum_manager)
 	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
+	get_tree().call_group(group, &"set_sing_timer", GameManager.seconds_per_step * Character.SING_DURATION)
 	
 	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
 	
@@ -86,11 +87,7 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 
 func note_holding(time, lane, length, note_type, strum_manager):
 	var group: StringName = get_group(strum_manager)
-	
-	get_tree().call_group(group, &"set_holding", true)
-	
-	if length <= 0:
-		get_tree().call_group(group, &"set_holding", false)
+	get_tree().call_group(group, &"set_sing_timer", GameManager.seconds_per_step * Character.SING_DURATION)
 	
 	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
 

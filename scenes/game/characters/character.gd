@@ -2,6 +2,8 @@
 extends Node
 class_name Character
 
+const SING_DURATION: int = 6
+
 @export_group("Animation Offset")
 @export var idle_animation: StringName = "idle"
 @export var animation_names: Dictionary[StringName, StringName] = {}
@@ -62,6 +64,7 @@ func play_animation(animation_name: StringName = &"", time: float = -1.0):
 		animation_player.symbol = real_animation_name
 		animation_player.frame = 0
 		animation_player.playing = true
+		holding = false
 		set_sing_timer(animation_player.get_animation_length() / animation_player.current_fps)
 		return
 	
@@ -76,6 +79,7 @@ func play_animation(animation_name: StringName = &"", time: float = -1.0):
 		
 		var animatiom_speed: float = animation_player.sprite_frames.get_animation_speed(real_animation_name)
 		var frame_count: int = animation_player.sprite_frames.get_frame_count(real_animation_name)
+		holding = false
 		
 		if (time >= 0):
 			# Calculates the speed it would need to go at the time requested
@@ -109,7 +113,6 @@ func _process(delta: float) -> void:
 		hold_animation()
 	
 	sing_time -= delta
-	
 	if sing_time <= 0 and !can_idle:
 		can_idle = true
 		print(self.name, " can idle")
