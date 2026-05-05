@@ -97,35 +97,36 @@ func dance(restart:bool = false, time_scale:float = 1.0) -> void:
 	
 	current_idle_tick = wrapi(current_idle_tick + 1,0,idle_animations.size())
 
-func is_singing() -> bool:
-	return current_animation.ends_with('left') \
-	or current_animation.ends_with('down') \
-	or current_animation.ends_with('up') \
-	or current_animation.ends_with('right')
-
 func _process(delta: float) -> void:
 	
 	if in_playstate:
-		process_playstate_behavior(delta)
+		playstate_process(delta)
 
-func process_playstate_behavior(delta:float) -> void:
+func playstate_process(delta:float) -> void:
 	if holding:
 		hold_animation()
 		
 	if is_singing() and not holding:
 		sing_timer += delta
 		
-	if sing_timer >= GameManager.seconds_per_step * sing_duration and released_input():
+	if sing_timer >= GameManager.seconds_per_step * sing_duration and not is_pressing_notes():
 		dance()
 		sing_timer = 0
 
-func released_input() -> bool:
-	if not is_player: return true
+func is_singing() -> bool:
+	return current_animation.ends_with('left') \
+	or current_animation.ends_with('down') \
+	or current_animation.ends_with('up') \
+	or current_animation.ends_with('right')
 	
-	return not Input.is_action_pressed(&'note_left') \
-	 and not Input.is_action_pressed(&'note_down') \
-	 and not Input.is_action_pressed(&'note_up') \
-	 and not Input.is_action_pressed(&'note_right')
+
+func is_pressing_notes() -> bool:
+	if not is_player: return false
+	
+	return Input.is_action_pressed(&'note_left') \
+	 and Input.is_action_pressed(&'note_down') \
+	 and Input.is_action_pressed(&'note_up') \
+	 and Input.is_action_pressed(&'note_right')
 	
 
 func get_real_animation(animation_name: StringName = &""):
