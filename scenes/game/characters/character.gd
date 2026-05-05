@@ -73,7 +73,7 @@ func play_animation(anim_to_play:StringName = &'', restart:bool = true, time_sca
 		#add the offsets
 		animation_player.offset = offsets.get(raw_anim_name, animation_player.offset)
 		
-	elif animation_player is AnimatedSprite2D or animation_player is AnimatedSprite3D:
+	else:
 		
 		animation_player.play(raw_anim_name, time_scale)
 		
@@ -98,10 +98,10 @@ func dance(restart:bool = false, time_scale:float = 1.0) -> void:
 	current_idle_tick = wrapi(current_idle_tick + 1,0,idle_animations.size())
 
 func is_singing() -> bool:
-	return current_animation.begins_with('left') \
-	or current_animation.begins_with('down') \
-	or current_animation.begins_with('up') \
-	or current_animation.begins_with('right')
+	return current_animation.ends_with('left') \
+	or current_animation.ends_with('down') \
+	or current_animation.ends_with('up') \
+	or current_animation.ends_with('right')
 
 func _process(delta: float) -> void:
 	
