@@ -97,6 +97,7 @@ func note_holding(time, lane, length, note_type, strum_manager):
 	var group: StringName = get_group(strum_manager)
 	
 	get_tree().set_group(group, &"holding", true)
+	get_tree().set_group(group, &"sing_timer", 0)
 	
 	if length <= 0:
 		get_tree().set_group(group, &"holding", false)
