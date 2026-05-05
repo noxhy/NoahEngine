@@ -126,6 +126,9 @@ func _on_new_event(time, event_name, event_parameters):
 		"play_animation":
 			get_tree().call_group(event_parameters[0], &"play_animation",
 			event_parameters[1], event_parameters[2])
+		"set_prefix":
+			get_tree().set_group(event_parameters[0], "animation_prefix",
+			event_parameters[1])
 
 
 func _on_combo_break():
