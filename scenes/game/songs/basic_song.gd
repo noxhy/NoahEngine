@@ -41,18 +41,18 @@ func _ready():
 	playstate_host.connect(&"combo_break", self._on_combo_break)
 	playstate_host.connect(&"create_note", self._on_create_note)
 	playstate_host.connect(&"new_event", self._on_new_event)
+	
+	for node in get_tree().get_nodes_in_group(&"player"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+	
+	for node in get_tree().get_nodes_in_group(&"enemy"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+	
+	for node in get_tree().get_nodes_in_group(&"metronome"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat, measure_relative):
-	if measure_relative % 2 == 0:
-		for node in get_tree().get_nodes_in_group(&"metronome"):
-			if (node.current_animation == node.idle_animation):
-				node.can_idle = true
-		
-		get_tree().call_group(&"player", &"play_animation", &"idle")
-		get_tree().call_group(&"enemy", &"play_animation", &"idle")
-		get_tree().call_group(&"metronome", &"play_animation", &"idle", GameManager.seconds_per_beat * 2)
-	
 	playstate_host.ui.icon_bop(playstate_host.conductor.seconds_per_beat * 0.5 *
 	(1 / playstate_host.instrumental.pitch_scale))
 
@@ -75,7 +75,8 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	var group: StringName = get_group(strum_manager)
-	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
+	get_tree().call_group(group, &"play_animation", get_direction(lane % 4),
+	Character.AnimContext.SING, true)
 	get_tree().call_group(group, &"set_sing_timer")
 	
 	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
@@ -102,12 +103,13 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			SoundManager.anti_spam.play()
 		else:
 			SoundManager.miss.play()
-			get_tree().call_group(&"metronome", &"play_animation", &"cry")
+			get_tree().call_group(&"metronome", &"play_animation", &"cry",
+			Character.AnimContext.SPECIAL, true)
 			show_combo("miss", 0)
 	
 	get_tree().call_group(
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		&"miss_" + get_direction(lane % 4))
+		&"miss_" + get_direction(lane % 4), Character.AnimContext.SING, true)
 	
 	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
 

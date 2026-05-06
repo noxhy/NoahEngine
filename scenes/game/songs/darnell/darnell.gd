@@ -6,7 +6,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		
 		for node in get_tree().get_nodes_in_group(&"metronome"):
 			if (node.current_animation == node.idle_animation):
-				node.can_idle = true
+				node.can_dance = true
 		
 		get_tree().call_group(&"metronome", &"play_animation", &"idle", GameManager.seconds_per_beat * 2)
 	
