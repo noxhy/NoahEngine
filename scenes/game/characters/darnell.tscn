@@ -61,7 +61,7 @@ use_parent_material = true
 position = Vector2(93, -155)
 sprite_frames = ExtResource("3_521o1")
 animation = &"Idle"
-frame = 27
+frame = 13
 frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
