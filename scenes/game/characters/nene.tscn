@@ -128,7 +128,7 @@ offsets = Dictionary[StringName, Vector2]({
 use_parent_material = true
 position = Vector2(0, -311)
 sprite_frames = ExtResource("3_dojva")
-animation = &"Nene Abot Idle instance 1"
+animation = &"idle_right"
 autoplay = "Idle"
 metadata/_edit_lock_ = true
 
