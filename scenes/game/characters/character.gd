@@ -32,11 +32,24 @@ var in_playstate:bool = false ## If true, tries to handle auto dancing behavior
 var is_player:bool = false ## Whether to check if ur holding any inputs before returning to idle
 #endregion
 
+
+
 var current_animation: StringName = idle_animations[0]
 
 var current_idle_tick:int = 0
 
 var can_dance:bool = true
+
+var anim_context:AnimContext = AnimContext.NONE
+
+#UNIMPLEMENTED
+enum AnimContext {
+	SING,
+	DANCE,
+	LOCKED,
+	SPECIAL,
+	NONE
+}
 
 func _ready():
 	if not animation_player:
@@ -53,7 +66,7 @@ func _ready():
 		animation_player.play()
 
 func play_animation(anim_to_play:StringName = &'', restart:bool = true, time_scale:float = 1.0) -> void:
-	if process_mode == Node.PROCESS_MODE_DISABLED or not animation_player: return
+	if process_mode == Node.PROCESS_MODE_DISABLED or anim_context == AnimContext.LOCKED and not animation_player: return
 	
 	anim_to_play = StringName(animation_prefix + anim_to_play)
 	current_animation = anim_to_play
@@ -97,8 +110,9 @@ func play_animation(anim_to_play:StringName = &'', restart:bool = true, time_sca
 
 
 func dance(restart:bool = false, time_scale:float = 1.0) -> void:
-	if not can_dance: return
+	if not can_dance or anim_context == AnimContext.LOCKED: return
 	
+	anim_context = AnimContext.DANCE
 	var dance_to_play = idle_animations[current_idle_tick]
 	play_animation(dance_to_play, restart, time_scale)
 	
