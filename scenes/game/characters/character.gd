@@ -82,6 +82,7 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	
 	if animation_name.is_empty():
 		printerr("(Character[", self.name, "]) ", animation_name, " does not exist")
+		return
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and context != AnimContext.DANCE:
 		return
@@ -100,35 +101,33 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		set_sing_timer(animation_player.get_animation_length() / animation_player.current_fps)
 		return
 	
-	if animation_names.has(anim_id):
-		var animatiom_speed: float = animation_player.sprite_frames.get_animation_speed(animation_name)
-		var frame_count: int = animation_player.sprite_frames.get_frame_count(animation_name)
-		holding = false
-		
-		if (time >= 0):
-			# Calculates the speed it would need to go at the time requested
-			animation_player.play(animation_name, frame_count / (animatiom_speed * time))
-			set_sing_timer(time)
-		else:
-			animation_player.play(animation_name, 1)
-			set_sing_timer(frame_count / animatiom_speed)
-		
-		if restart:
-			animation_player.set_frame_and_progress(0, 0)
-		
-		if offsets.has(animation_name):
-			var offsets_to_use = offsets.get(animation_name)
-			if offsets.get(animation_player.animation) is PackedVector2Array:
-				offsets_to_use = offsets.get(animation_player.animation)[animation_player.frame - 1]
-				
-			if animation_player is AnimatedSprite3D:
-				animation_player.offset.x = offsets_to_use.x
-				animation_player.offset.y = -offsets_to_use.y
-			else:
-				animation_player.position.x = offsets_to_use.x
-				animation_player.position.y = offsets_to_use.y
+	
+	var animatiom_speed: float = animation_player.sprite_frames.get_animation_speed(animation_name)
+	var frame_count: int = animation_player.sprite_frames.get_frame_count(animation_name)
+	holding = false
+	
+	if (time >= 0):
+		# Calculates the speed it would need to go at the time requested
+		animation_player.play(animation_name, frame_count / (animatiom_speed * time))
+		set_sing_timer(time)
 	else:
-		printerr("Animation ", animation_name, " not found")
+		animation_player.play(animation_name, 1)
+		set_sing_timer(frame_count / animatiom_speed)
+	
+	if restart:
+		animation_player.set_frame_and_progress(0, 0)
+	
+	if offsets.has(animation_name):
+		var offsets_to_use = offsets.get(animation_name)
+		if offsets.get(animation_player.animation) is PackedVector2Array:
+			offsets_to_use = offsets.get(animation_player.animation)[animation_player.frame - 1]
+			
+		if animation_player is AnimatedSprite3D:
+			animation_player.offset.x = offsets_to_use.x
+			animation_player.offset.y = -offsets_to_use.y
+		else:
+			animation_player.position.x = offsets_to_use.x
+			animation_player.position.y = offsets_to_use.y
 
 
 func _process(delta: float) -> void:
