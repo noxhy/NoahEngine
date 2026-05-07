@@ -14,13 +14,11 @@
 [node name="Darnell" type="Node2D" unique_id=1675426916]
 script = ExtResource("1_kfw18")
 
-[node name="PlayState Host" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_dkpbc")]
+[node name="PlayState Host" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_dkpbc")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../CameraController")
-rating_position = NodePath("../World/Rating Marker")
-combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_fnsyj")
 ui_skin = ExtResource("5_gia47")
 combo_scale_multiplier = Vector2(1.2, 1.2)

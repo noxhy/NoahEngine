@@ -45,7 +45,7 @@ func _process(_delta):
 func _on_conductor_new_beat(current_beat, measure_relative):
 	# Metronome Bop Animation
 	if(measure_relative % 2 == 0):
-		%Metronome.can_idle = true
+		%Metronome.can_dance = true
 		%Metronome.play_animation("idle", $Conductor.seconds_per_beat * 2)
 	
 	var tween = create_tween()

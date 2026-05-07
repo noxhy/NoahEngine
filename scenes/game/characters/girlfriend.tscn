@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpv5demojrg67"]
+[gd_scene format=3 uid="uid://bpv5demojrg67"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://scenes/game/characters/character.gd" id="1_krhuq"]
 [ext_resource type="Texture2D" uid="uid://cxu20hb7y7adt" path="res://assets/sprites/playstate/icons/girlfriend.png" id="2_hksi1"]
@@ -43,13 +43,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Girlfriend" type="Node2D" groups=["metronome"]]
+[node name="Girlfriend" type="Node2D" unique_id=1857178016 groups=["metronome"]]
 script = ExtResource("1_krhuq")
 animation_names = Dictionary[StringName, StringName]({
 &"cheer": &"GF Cheer",
+&"cheer_200": &"GF Cheer",
 &"cry": &"gf sad",
 &"down": &"GF Down Note",
 &"idle": &"GF Dancing Beat",
+&"idle_left": &"idle_left",
+&"idle_right": &"idle_right",
 &"left": &"GF left note",
 &"right": &"GF Right Note",
 &"shake": &"GF FEAR ",
@@ -65,15 +68,18 @@ offsets = Dictionary[StringName, Vector2]({
 &"GF left note": Vector2(0, -316),
 &"gf sad": Vector2(0, -315)
 })
+hold_frames = Dictionary[StringName, int]({
+&"gf sad": 2
+})
+dance_animations = Array[StringName]([&"idle_left", &"idle_right"])
+dance_rate = 1
 icons = SubResource("SpriteFrames_v8umh")
 color = Color(0.619608, 0.0784314, 0.282353, 1)
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1799574229]
 use_parent_material = true
 position = Vector2(0, -320)
 sprite_frames = ExtResource("3_0woem")
-animation = &"GF Dancing Beat"
-frame = 29
-frame_progress = 1.0
+animation = &"idle_right"
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

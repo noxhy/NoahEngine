@@ -41,18 +41,18 @@ func _ready():
 	playstate_host.connect(&"combo_break", self._on_combo_break)
 	playstate_host.connect(&"create_note", self._on_create_note)
 	playstate_host.connect(&"new_event", self._on_new_event)
+	
+	for node in get_tree().get_nodes_in_group(&"player"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+	
+	for node in get_tree().get_nodes_in_group(&"enemy"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+	
+	for node in get_tree().get_nodes_in_group(&"metronome"):
+		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat, measure_relative):
-	if measure_relative % 2 == 0:
-		get_tree().call_group(&"player", &"play_animation", &"idle")
-		get_tree().call_group(&"enemy", &"play_animation", &"idle")
-		for node in get_tree().get_nodes_in_group(&"metronome"):
-			if (node.current_animation == node.idle_animation):
-				node.can_idle = true
-		
-		get_tree().call_group(&"metronome", &"play_animation", &"idle", GameManager.seconds_per_beat * 2)
-	
 	playstate_host.ui.icon_bop(playstate_host.conductor.seconds_per_beat * 0.5 *
 	(1 / playstate_host.instrumental.pitch_scale))
 
@@ -75,21 +75,24 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 
 func note_hit(time, lane, note_type, hit_time, strum_manager):
 	var group: StringName = get_group(strum_manager)
-	get_tree().call_group(group, &"play_animation", get_direction(lane % 4))
+	get_tree().call_group(group, &"play_animation", get_direction(lane % 4),
+	Character.AnimContext.SING, true)
+	get_tree().call_group(group, &"set_sing_timer")
 	
 	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
 	
 	if group == &"player":
 		show_combo(PlayState.get_rating(hit_time), playstate_host.combo)
+		
+		if (playstate_host.combo % 200 == 0):
+			get_tree().call_group(&"metronome", &"play_animation", &"cheer_200")
+		elif (playstate_host.combo % 50 == 0):
+			get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 
 
 func note_holding(time, lane, length, note_type, strum_manager):
 	var group: StringName = get_group(strum_manager)
-	
-	get_tree().call_group(group, &"set_holding", true)
-	
-	if length <= 0:
-		get_tree().call_group(group, &"set_holding", false)
+	get_tree().call_group(group, &"set_sing_timer")
 	
 	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
 
@@ -100,14 +103,13 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			SoundManager.anti_spam.play()
 		else:
 			SoundManager.miss.play()
-			get_tree().call_group(
-			&"enemy" if strum_manager.enemy_slot else &"player", &"metronome",
-			&"cry")
+			get_tree().call_group(&"metronome", &"play_animation", &"cry",
+			Character.AnimContext.SPECIAL, true)
 			show_combo("miss", 0)
 	
 	get_tree().call_group(
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		&"miss_" + get_direction(lane % 4))
+		&"miss_" + get_direction(lane % 4), Character.AnimContext.SING, true)
 	
 	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
 
@@ -117,7 +119,7 @@ func get_group(strum_manager) -> StringName:
 
 
 func get_direction(direction: int):
-	var animations = ["left", "down", "up", "right"]
+	var animations: Array[String] = ["left", "down", "up", "right"]
 	return animations[direction]
 
 
@@ -126,6 +128,9 @@ func _on_new_event(time, event_name, event_parameters):
 		"play_animation":
 			get_tree().call_group(event_parameters[0], &"play_animation",
 			event_parameters[1], event_parameters[2])
+		"set_prefix":
+			get_tree().set_group(event_parameters[0], "animation_prefix",
+			event_parameters[1])
 
 
 func _on_combo_break():
@@ -133,6 +138,10 @@ func _on_combo_break():
 
 
 func show_combo(rating: String, _combo: int):
+	if rating != "miss":
+		if GameManager.tallies.sick == GameManager.tallies.total_notes:
+			rating = "fc_" + rating
+	
 	var rating_instance = rating_node.instantiate()
 	
 	rating_instance.ui_skin = playstate_host.ui_skin

@@ -100,7 +100,7 @@ func _process(delta):
 						state = STATE.GLOW
 					
 					else:
-						reset_timer = GameManager.seconds_per_beat / 4
+						reset_timer = GameManager.seconds_per_step
 						state = STATE.GLOW
 						
 						if can_splash:
@@ -197,7 +197,7 @@ func _process(delta):
 		if can_press:
 			if pressing:
 				pressing = false
-				reset_timer = GameManager.seconds_per_beat / 4
+				reset_timer = GameManager.seconds_per_step
 				if hold_cover_sprite.animation != "cover " + strum_name + " end":
 						hold_cover_sprite.visible = false
 				if note_list.size() > 0:

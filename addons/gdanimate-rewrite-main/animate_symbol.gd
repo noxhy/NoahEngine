@@ -73,7 +73,7 @@ var frame_progress: float
 var internal_canvas_items: Array[RID] = []
 var last_atlases_size: int = 0
 var adobe_atlas_material: ShaderMaterial = null
-
+var current_fps: float
 
 func _enter_tree() -> void:
 	if autoplay and not Engine.is_editor_hint():
@@ -139,6 +139,7 @@ func _process(delta: float) -> void:
 		return
 	
 	var fps: float = atlas.get_framerate()
+	current_fps = fps
 	frame_timer += delta * speed_scale
 	var frame_time: float = 1.0 / fps
 	if frame_time > 1:

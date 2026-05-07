@@ -480,9 +480,7 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		combo += 1
 		if combo > GameManager.tallies["max_combo"]:
 			GameManager.tallies["max_combo"] = combo
-		
-		if GameManager.tallies.sick == GameManager.tallies.total_notes:
-			rating = "fc_" + rating
+
 
 func note_holding(time, lane, length, note_type, strum_manager):
 	var playback = vocals.get_stream_playback()

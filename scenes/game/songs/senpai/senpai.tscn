@@ -14,13 +14,11 @@
 [node name="Senpai" type="Node2D" unique_id=739542381]
 script = ExtResource("1_kkhjq")
 
-[node name="PlayState Host" parent="." unique_id=102571385 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_hvfki")]
+[node name="PlayState Host" parent="." unique_id=102571385 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_hvfki")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../CameraController")
-rating_position = NodePath("../World/Rating Marker")
-combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_gvt2o")
 ui_skin = ExtResource("5_0s4pd")
 
