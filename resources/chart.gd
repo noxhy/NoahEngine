@@ -66,6 +66,10 @@ enum ChartType {
 
 static func load(path:String) -> Chart:
 	
+	if path.begins_with('uid'):
+		path = ResourceUID.uid_to_path(path)
+	
+	
 	if path.get_extension() == 'res' or path.get_extension() == 'tres': ##probably a chart already
 		return load(path)
 	elif path.get_extension() == 'json':
