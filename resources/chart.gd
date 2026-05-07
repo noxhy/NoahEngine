@@ -66,7 +66,7 @@ enum ChartType {
 
 static func load(path:String) -> Chart:
 	
-	if path.get_extension() == 'res': ##probably a chart already
+	if path.get_extension() == 'res' or path.get_extension() == 'tres': ##probably a chart already
 		return load(path)
 	elif path.get_extension() == 'json':
 		
