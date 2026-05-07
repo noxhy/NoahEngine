@@ -1,5 +1,5 @@
 extends Window
-
+class_name ChartConverter
 # Event names for easy conversion to nexus engine
 const EVENT_NAMES = {
 	
