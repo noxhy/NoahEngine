@@ -1,2 +1,4 @@
 # Godot 4+ specific ignores
 .godot/
+addons/AudioVorbisExtender/AudioStreamEXT.windows.template_debug.x86_64.dll
+addons/AudioVorbisExtender/AudioStreamEXT.windows.template_release.x86_64.dll
