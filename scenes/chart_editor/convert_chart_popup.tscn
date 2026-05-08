@@ -25,7 +25,7 @@ size = Vector2i(640, 480)
 unresizable = true
 always_on_top = true
 min_size = Vector2i(320, 320)
-ok_button_text = "Select Current Folder"
+ok_button_text = "Select Given Files"
 dialog_hide_on_ok = true
 file_mode = 1
 root_subfolder = "res://playable_songs/"
@@ -148,6 +148,7 @@ text = "Select File"
 
 [node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=34144751]
 unique_name_in_owner = true
+oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
 size = Vector2i(640, 480)
