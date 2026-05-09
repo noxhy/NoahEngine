@@ -3,12 +3,15 @@ extends Node2D
 @export var option_name: String = "Menu Option"
 @export var icon: Texture
 
+@onready var label = $Alphabet
+@onready var sprite = $Sprite2D
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$Label.text = option_name
+	label.text = option_name
 	if icon != null:
-		$Sprite2D.texture = icon
+		sprite.texture = icon
 		
 		await Engine.get_main_loop().process_frame
 		
-		$Sprite2D.position.x = $Label.size.x + $Sprite2D.texture.get_width() * 0.5 + 15
+		sprite.position.x = label.get_string_size(option_name).x + sprite.texture.get_width() * 0.5 + 15

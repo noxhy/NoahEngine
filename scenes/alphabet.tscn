@@ -7,4 +7,5 @@ script = ExtResource("1_e37qy")
 text = "THE QUICK BROWN FOX
 JUMPED OVER THE LAZY
 DOG."
-horizontal_alignment = 2
+horizontal_alignment = 1
+vertical_alignment = 1

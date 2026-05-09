@@ -1,5 +1,6 @@
 @tool
 extends Node2D
+class_name Alphabet
 
 @export_group("Text Settings")
 @export_multiline() var text:String = "":
