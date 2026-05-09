@@ -125,6 +125,16 @@ func get_string_size(_text: String) -> Vector2:
 			_max = len(line)
 			max_i = i
 		
+		var glyph_name: StringName = get_glyph_name(line[0])
+		var glyph_texture: Texture2D = get_glyph_texture(glyph_name)
+		var glyph_offset: Vector2 = glyph_offsets.get(glyph_name, Vector2(0.0, 0.0))
+		
+		if glyph_texture:
+			height += glyph_texture.get_height()
+		
+		if i < lines.size() - 1:
+			height += default_bottom_padding
+		
 		i += 1
 	
 	var line: String = lines[max_i]
@@ -136,6 +146,7 @@ func get_string_size(_text: String) -> Vector2:
 	for c in line:
 		var glyph_name: StringName = get_glyph_name(c)
 		var glyph_texture: Texture2D = get_glyph_texture(glyph_name)
+		var glyph_offset: Vector2 = glyph_offsets.get(glyph_name, Vector2(0.0, 0.0))
 		
 		if glyph_texture:
 			width += glyph_texture.get_width()# + glyph_offset.x
@@ -174,14 +185,14 @@ func update_text(new_text):
 		
 		VerticalAlignment.VERTICAL_ALIGNMENT_CENTER:
 			next_y = -get_string_size(new_text).y / 2
-			print(next_y)
 		
 		VerticalAlignment.VERTICAL_ALIGNMENT_BOTTOM:
 			next_y = -get_string_size(new_text).y
-			print(next_y)
 		
 		_:
-			next_y = get_glyph_texture(get_glyph_name(new_text[0])).get_height()
+			next_y = 0
+	
+	next_y += get_glyph_texture(get_glyph_name(new_text[0])).get_height()
 	
 	var j: int = 0
 	for line in lines:
@@ -213,8 +224,10 @@ func update_text(new_text):
 				glyph.position.y -= glyph_texture.get_height()
 				glyph.position.y += next_y
 		
-		next_x -= get_string_size(line).x
-		next_y += get_string_size(line).y
+		var line_size: Vector2 = get_string_size(line)
+		next_x -= line_size.x
+		next_y += line_size.y
+		
 		if j < lines.size() - 1:
 			next_y += default_bottom_padding
 		
