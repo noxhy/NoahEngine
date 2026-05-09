@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bxku4s7mjscoc"]
+
+[ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://scenes/alphabet.gd" id="1_e37qy"]
+
+[node name="Alphabet" type="Node2D" unique_id=195551509]
+script = ExtResource("1_e37qy")
