@@ -7,7 +7,7 @@ const MENU_OPTION_NODE = preload("res://scenes/menu_option.tscn")
 # [<credit name> , <credit icon (recommended size: 150x150)>]
 @onready var options: Dictionary = {
 	
-	"Nexus Engine": [
+	"Noah Engine": [
 		["Noah", load("res://assets/sprites/menus/credits/icons/noah.png")],
 		["data5", load("res://assets/sprites/menus/credits/icons/data5.png")],
 		["Koi", load("res://assets/sprites/menus/credits/icons/icon-koi.png")],
