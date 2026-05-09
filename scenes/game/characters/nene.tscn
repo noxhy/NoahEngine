@@ -131,7 +131,7 @@ hold_frames = Dictionary[StringName, int]({
 &"laughing nene instance 1": 6
 })
 dance_animations = Array[StringName]([&"idle_left", &"idle_right"])
-dance_rate = 1
+dance_rate = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=750018879]
 use_parent_material = true
