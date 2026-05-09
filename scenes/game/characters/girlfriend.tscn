@@ -72,7 +72,7 @@ hold_frames = Dictionary[StringName, int]({
 &"gf sad": 2
 })
 dance_animations = Array[StringName]([&"idle_left", &"idle_right"])
-dance_rate = 1
+dance_rate = 4
 icons = SubResource("SpriteFrames_v8umh")
 color = Color(0.619608, 0.0784314, 0.282353, 1)
 

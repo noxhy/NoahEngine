@@ -43,13 +43,13 @@ func _ready():
 	playstate_host.connect(&"new_event", self._on_new_event)
 	
 	for node in get_tree().get_nodes_in_group(&"player"):
-		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+		playstate_host.conductor.connect(&"new_step", node.on_step_hit)
 	
 	for node in get_tree().get_nodes_in_group(&"enemy"):
-		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+		playstate_host.conductor.connect(&"new_step", node.on_step_hit)
 	
 	for node in get_tree().get_nodes_in_group(&"metronome"):
-		playstate_host.conductor.connect(&"new_beat", node.on_beat_hit)
+		playstate_host.conductor.connect(&"new_step", node.on_step_hit)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat, measure_relative):

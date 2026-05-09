@@ -14,7 +14,7 @@ offsets = Dictionary[StringName, Vector2]({
 &"GF IDLE": Vector2(2.08189e-12, -52)
 })
 dance_animations = Array[StringName]([&"idle_left", &"idle_right"])
-dance_rate = 1
+dance_rate = 4
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1654351218]
 texture_filter = 3

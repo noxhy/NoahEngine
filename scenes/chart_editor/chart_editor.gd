@@ -328,7 +328,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(
-		mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)))
+		mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)).floor())
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
@@ -517,8 +517,8 @@ func _process(delta: float) -> void:
 			
 			var time_a: float = grid_position_to_time(pos_1, true)
 			var time_b: float = grid_position_to_time(pos_2, true)
-			var lane_a: int = int(pos_1.x)
-			var lane_b: int = int(pos_2.x)
+			var lane_a: int = floor(pos_1.x)
+			var lane_b: int = floor(pos_2.x)
 			
 			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
@@ -550,9 +550,9 @@ func _draw() -> void:
 		## The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
-		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
+		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position).floor())
 		var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap).floor())
 			)
 		
 		## Song Start Offset Marker
@@ -660,7 +660,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	if difficulty == null:
 		difficulty = ChartManager.song.difficulties.keys()[0]
 	var difficulty_data: Dictionary = song.difficulties.get(difficulty)
-	ChartManager.chart = load(difficulty_data.chart)
+	ChartManager.chart = Chart.load(difficulty_data.chart)
 	scene = difficulty_data.get("scene", song.scene)
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
@@ -736,9 +736,6 @@ func load_section(time: float):
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
 		R = max(R, selected_notes.back())
-	
-	print("data range: ", L, "-", R)
-	print("visible range: ", current_visible_notes_L, "-", current_visible_notes_R)
 	
 #region Loading Notes
 	if L > -1 and R > -1:
@@ -876,11 +873,11 @@ func new_file(path: String, song: Song):
 ## Reset the select notes and note nodes list before calling moved
 func place_note(time: float, lane: int, length: float, type: Variant, placed: bool = false, moved: bool = false,
 sorted: bool = false, sort_index: int = -1) -> int:
-	var directions = ["left", "down", "up", "right"]
+	var directions: Array = ["left", "down", "up", "right"]
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter = ChartManager.chart.get_meter_at(time)
+	var meter: Array = ChartManager.chart.get_meter_at(time)
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -889,8 +886,8 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
 	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
-	note_instance.direction = directions[int(lane) % 4]
-	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[int(lane) % 4])
+	note_instance.direction = directions[lane % 4]
+	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[lane % 4])
 	update_note_position(note_instance)
 	
 	note_instance.note_skin = note_skin
@@ -903,16 +900,12 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
-				print("empty")
 			elif (L - current_visible_notes_L) < 0:
 				note_nodes.insert(0, note_instance)
-				print("less than 0, insert at: 0")
 			elif (L - current_visible_notes_L) >= note_nodes.size():
 				note_nodes.append(note_instance)
-				print("greater than size, add at end")
 			else:
 				note_nodes.insert(L - current_visible_notes_L, note_instance)
-				print("inserted at: ", L - current_visible_notes_L)
 			
 			if !moved:
 				selected_notes = [L]
@@ -937,19 +930,14 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	else:
 		if sorted:
 			var L: int = sort_index
-			print("sorted")
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
-				print("empty")
 			elif L < 0:
 				note_nodes.insert(0, note_instance)
-				print("less than 0, insert at: ", 0)
 			elif L >= note_nodes.size():
 				note_nodes.append(note_instance)
-				print("greater than size, add at end")
 			else:
 				note_nodes.insert(L, note_instance)
-				print("inserted at: ", L)
 		else:
 			note_nodes.append(note_instance)
 	
@@ -1650,6 +1638,19 @@ func auto_save():
 
 
 func save():
+	# Checks if it's a json
+	if (ChartManager.chart.resource_path.is_empty()):
+		var path: String = ChartManager.song.difficulties.get(ChartManager.difficulty).get("chart")
+		
+		if (path.get_extension() == "json"):
+			ChartManager.chart.resource_path = str(
+				path.get_base_dir(), "/", ChartManager.song.title, "-", ChartManager.difficulty, ".res"
+				)
+			
+			ChartManager.song.difficulties[ChartManager.difficulty]["chart"] = ChartManager.chart.resource_path
+			
+			print("Chart is json, converting to resource at: ", ChartManager.chart.resource_path)
+	
 	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
 	ResourceSaver.save(ChartManager.chart, ChartManager.chart.resource_path)
 	backup_chart = ChartManager.chart

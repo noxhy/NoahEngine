@@ -25,8 +25,8 @@ enum AnimContext {
 @export_group("Gameplay")
 ## The idle animations. Whenever the character "dance's" they will cycle through this list.
 @export var dance_animations: Array[StringName] = [&"idle"]
-## How often [b](in beats)[/b] the dance will be played.
-@export_range(1, 1, 1, "suffix:beats", "or_greater") var dance_rate: int = 2
+## How often [b](in steps)[/b] the dance will be played.
+@export_range(1, 1, 1, "suffix:steps", "or_greater") var dance_rate: int = 8
 @export var animation_prefix: StringName = &""
 ## How many steps an animation can play before being able to revert to idle.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6
@@ -201,7 +201,6 @@ func set_sing_timer(time: float = -1):
 	sing_time = time
 	can_dance = false
 
-
-func on_beat_hit(current_beat: int, measure_relative: int): ##basic song hooks this to the conductor
+func on_step_hit(current_step: int, measure_relative: int):  ##basic song hooks this to the conductor
 	if dance_rate > 0 and measure_relative % dance_rate == 0:
 		dance()
