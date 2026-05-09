@@ -1,7 +1,5 @@
 extends Node2D
 
-@export var debug_visible = true
-
 var loading_screen = load("res://scenes/global/loading_screen.tscn")
 var fullscreen: bool = false
 
@@ -37,16 +35,16 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	# Peformance Test
-	$"UI/Performance Label".visible = SettingsManager.get_value("debug", "show_performance")
-	if SettingsManager.get_value("debug", "show_performance"):
+	$"UI/Performance Label".visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance")
+	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
 		var performance_string: String = "FPS: " + str(Engine.get_frames_per_second())
 		performance_string += "\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
 		
 		$"UI/Performance Label".text = performance_string
 	
-	if SettingsManager.get_value('debug', "cap_fps"):
-		Engine.max_fps = SettingsManager.get_value('debug', "fps_cap")
+	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "cap_fps"):
+		Engine.max_fps = SettingsManager.get_value(SettingsManager.SEC_DEBUG, "fps_cap")
 	else:
 		Engine.max_fps = 0
 	
@@ -77,21 +75,21 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = "down", screen: bool = true): 
+func change_scene_to(path: String, transition: Variant = "down", show_loading_screen: bool = true): 
 	transitioning = true
 	
-	if transition != null: 
+	if transition: 
 		Transitions.transition(transition)
 		await Transitions.waiting
 	
 	get_tree().paused = false
 	LoadingScreen.scene = path
 	
-	if screen: 
+	if show_loading_screen: 
 		get_tree().change_scene_to_packed(loading_screen)
 	else: 
 		get_tree().change_scene_to_file(path)
-		if transition != null: 
+		if transition: 
 			Transitions.resume()
 #endregion
 
