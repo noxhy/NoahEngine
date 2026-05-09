@@ -133,7 +133,7 @@ func get_string_size(_text: String) -> Vector2:
 		var glyph_offset: Vector2 = glyph_offsets.get(glyph_name, Vector2(0.0, 0.0))
 		
 		if glyph_texture:
-			height += glyph_texture.get_height()
+			height += glyph_texture.get_height() + glyph_offset.y
 		
 		if i < lines.size() - 1:
 			height += default_bottom_padding
@@ -141,9 +141,6 @@ func get_string_size(_text: String) -> Vector2:
 		i += 1
 	
 	var line: String = lines[max_i]
-	
-	_max = 0
-	max_i = -1
 	var width: float = 0
 	i = 0
 	for c in line:
@@ -152,7 +149,7 @@ func get_string_size(_text: String) -> Vector2:
 		var glyph_offset: Vector2 = glyph_offsets.get(glyph_name, Vector2(0.0, 0.0))
 		
 		if glyph_texture:
-			width += glyph_texture.get_width()# + glyph_offset.x
+			width += glyph_texture.get_width() + glyph_offset.x
 		
 		if i < len(line) - 1:
 			width += glyph_gaps.get(c, default_gylph_gap)
