@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bpfewkvnsj6h5"
-path="res://.godot/imported/camera.png-1e3acf8f2d7be8463e908e1fdde50307.ctex"
+uid="uid://kdr1a765du27"
+path="res://.godot/imported/Camera.svg-ad79adad3f85668956797368fd092436.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/nodes/camera.png"
-dest_files=["res://.godot/imported/camera.png-1e3acf8f2d7be8463e908e1fdde50307.ctex"]
+source_file="res://assets/sprites/nodes/Camera.svg"
+dest_files=["res://.godot/imported/Camera.svg-ad79adad3f85668956797368fd092436.ctex"]
 
 [params]
 
@@ -38,3 +39,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=false

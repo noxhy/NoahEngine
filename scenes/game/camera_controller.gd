@@ -1,4 +1,4 @@
-@icon("uid://bpfewkvnsj6h5")
+@icon("uid://kdr1a765du27")
 extends Node
 class_name CameraController
 
