@@ -1,4 +1,4 @@
-@icon ("res://assets/sprites/nodes/ui skin.png")
+@icon ("uid://obbw51pf8bd0")
 
 extends Resource
 class_name UISkin

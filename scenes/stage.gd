@@ -1,4 +1,4 @@
-@icon("res://assets/sprites/nodes/stage.png")
+@icon("uid://dqfu1k7ka1prj")
 extends Node
 class_name Stage
 

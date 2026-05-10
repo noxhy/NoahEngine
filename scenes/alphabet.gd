@@ -1,5 +1,5 @@
 @tool
-@icon("res://assets/sprites/nodes/alphabet.png")
+@icon("uid://cla6ukobfemg2")
 extends Node2D
 class_name Alphabet
 

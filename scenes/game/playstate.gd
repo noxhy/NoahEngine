@@ -1,4 +1,4 @@
-@icon("res://assets/sprites/nodes/playstate.png")
+@icon("uid://cn3dcg1gr2oo4")
 extends Node
 class_name PlayState
 

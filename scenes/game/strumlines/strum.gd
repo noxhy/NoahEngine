@@ -1,4 +1,4 @@
-@icon("res://tools/node_sprites/strum arrows.png")
+@icon("uid://bl12tb0xiej71")
 
 extends Node2D
 class_name Strum

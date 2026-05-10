@@ -1,4 +1,4 @@
-@icon("res://assets/sprites/nodes/note.png")
+@icon("uid://c1o5a7jg5bf85")
 @abstract
 class_name Note extends Node2D
 
