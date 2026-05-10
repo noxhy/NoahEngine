@@ -114,10 +114,11 @@ func load_page(page: String):
 		
 		menu_option_instance.position.x = -640 + 45
 		menu_option_instance.position.y = 0
-		menu_option_instance.option_name = options.get(i).get("name")
+		menu_option_instance.option_name = options.get(i).get("name").to_upper()
 		menu_option_instance.icon = options.get(i).get("icon")
 		
 		$UI.add_child(menu_option_instance)
+		menu_option_instance.label.forced_anim_suffix = &" bold"
 		option_nodes.append(menu_option_instance)
 		menu_option_instance.add_to_group(&"options")
 

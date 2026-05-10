@@ -118,10 +118,11 @@ func _ready():
 		var page = pages.keys()[i]
 		var menu_option_instance = MENU_OPTION_PRELOAD.instantiate()
 		
-		menu_option_instance.option_name = page
+		menu_option_instance.option_name = page.to_upper()
 		menu_option_instance.icon = null
 		
 		$UI/SubViewportContainer/SubViewport.add_child(menu_option_instance)
+		menu_option_instance.label.forced_anim_suffix = &" bold"
 		menu_option_instance.add_to_group(&"pages")
 	update(selected)
 	

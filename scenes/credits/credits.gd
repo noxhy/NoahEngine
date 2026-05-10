@@ -10,8 +10,7 @@ const MENU_OPTION_NODE = preload("res://scenes/menu_option.tscn")
 	"Noah Engine": [
 		["Noah", load("res://assets/sprites/menus/credits/icons/noah.png")],
 		["data5", load("res://assets/sprites/menus/credits/icons/data5.png")],
-		["Koi", load("res://assets/sprites/menus/credits/icons/icon-koi.png")],
-		["KostyaGame", load("res://assets/sprites/menus/credits/icons/empty.png")]
+		["Koi", load("res://assets/sprites/menus/credits/icons/icon-koi.png")]
 	],
 	
 	"Friday Night Funkin\'": [
@@ -29,7 +28,6 @@ const MENU_OPTION_NODE = preload("res://scenes/menu_option.tscn")
 	"Noah": ["Made the engine.", "link", "https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA"],
 	"Koi": ["Miss sprite", "link", "https://twitter.com/toasted_milk_"],
 	"The Funkin\' Crew": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
-	"KostyaGame": ["Dad losing icon", null],
 	"data5": ["Helped with stuff.", "link", "https://x.com/_data5?s=20"]
 }
 
@@ -45,14 +43,13 @@ func _ready():
 	for i in options:
 		var menu_option_instance = MENU_OPTION_NODE.instantiate()
 		
-		menu_option_instance.option_name = i
+		menu_option_instance.option_name = i.to_upper()
 		menu_option_instance.position = Vector2(-1000, object_amount * 175)
 		menu_option_instance.modulate = Color(1, 1, 1, 1)
-		menu_option_instance.get_node("Label").label_settings.font = preload("res://assets/fonts/secondary_font.ttf")
-		menu_option_instance.get_node("Label").label_settings.font_size = 56
 		
 		$UI.add_child(menu_option_instance)
 		
+		menu_option_instance.label.forced_anim_suffix = &" bold"
 		option_nodes.append(menu_option_instance)
 		object_amount += 1
 		
@@ -62,8 +59,6 @@ func _ready():
 			menu_option_instance.option_name = j[0]
 			if j[1] != null: menu_option_instance.icon = j[1]
 			menu_option_instance.position = Vector2(-1000, object_amount * 175)
-			menu_option_instance.get_node("Label").label_settings.font_size = 36
-			menu_option_instance.get_node("Label").uppercase = false
 			menu_option_instance.modulate = Color(0.5, 0.5, 0.5, 0.5)
 			
 			$UI.add_child(menu_option_instance)
@@ -121,8 +116,7 @@ func update(i: int):
 		tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 		var node_position = Vector2(-565 + (25 * index), index * 175)
 		tween.tween_property(j, "position", node_position, 0.5)
-		if credit_indexes.has(option_nodes.find(j)):
-			j.modulate = Color(0.5, 0.5, 0.5)
+		j.modulate = Color(1.0, 1.0, 1.0, 0.7)
 		
 		index += 1
 	

@@ -1,4 +1,5 @@
-extends Label
+@tool
+extends Alphabet
 
 ## Separate by [code];[\code]. Stores every random splash message.
 @export_multiline var splash_messages = ""

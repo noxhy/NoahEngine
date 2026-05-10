@@ -122,32 +122,26 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed(input):
 		if can_press:
-			if note_list.size() > 0:
+			if !note_list.is_empty():
 				var note = note_list[0]
-	
 				if note.can_press:
 					if note.length <= 0:
 						state = STATE.GLOW
-	
+						
 						note_list.erase(note)
 						note.queue_free()
 						pressing = false
-	
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						emit_signal("note_hit", note.time, self.get_name(), note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
-	
 					else:
 						hold_cover_sprite.play_animation("cover " + strum_name)
-	
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						emit_signal("note_hit", note.time, self.get_name(), note.note_type, time_difference)
-	
 						if !pressing:
 							hold_cover_sprite.play_animation("cover " + strum_name + " start")
 							hold_cover_sprite.visible = true
-	
+						
 						pressing = true
-	
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 						emit_signal("note_miss", 0, self.get_name(), 0, -1, 0)
@@ -155,7 +149,7 @@ func _process(delta):
 				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 					emit_signal("note_miss", 0, self.get_name(), 0, -1, 0)
 	
-	elif Input.is_action_pressed(input):
+	if Input.is_action_pressed(input):
 		if can_press:
 			if pressing:
 				if note_list.size() > 0:
@@ -189,11 +183,10 @@ func _process(delta):
 								
 								note_list.erase(note)
 								note.queue_free()
-			
 			elif state != STATE.GLOW:
 				state = STATE.PRESSED
 	
-	elif Input.is_action_just_released(input):
+	if Input.is_action_just_released(input):
 		if can_press:
 			if pressing:
 				pressing = false
@@ -208,7 +201,7 @@ func _process(delta):
 						emit_signal("note_holding", 0.0, self.get_name(), 0.0, note.note_type)
 			else:
 				state = STATE.IDLE
-				
+	
 	if (reset_timer > 0):
 		reset_timer -= delta
 		if reset_timer <= 0:

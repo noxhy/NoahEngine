@@ -111,7 +111,7 @@ tracks/0/keys = {
 "args": ["MADE IN GODOT"],
 "method": &"show_splash"
 }, {
-"args": ["MADE IN GODOT\\nFUCK HAXEFLIXEL"],
+"args": ["MADE IN GODOT\\nNOT HAXEFLIXEL"],
 "method": &"show_splash"
 }, {
 "args": [],
@@ -381,29 +381,21 @@ horizontal_alignment = 1
 vertical_alignment = 1
 uppercase = true
 
-[node name="Splash Messages" type="Label" parent="UI" unique_id=552896511]
-anchors_preset = -1
-anchor_left = -0.25
-anchor_top = -0.411
-anchor_right = 0.25
-anchor_bottom = 0.411
-offset_left = -128.0
-offset_top = 95.92
-offset_right = 128.0
-offset_bottom = -15.92
-theme_override_fonts/font = ExtResource("6_88h0l")
-theme_override_font_sizes/font_size = 64
-text = "SPLASH
-MESSAGES
-APPEAR HERE"
-horizontal_alignment = 1
+[node name="Splash Messages" type="Node2D" parent="UI" unique_id=2129744039]
+position = Vector2(0, -150)
 script = ExtResource("8_oue0e")
 splash_messages = "I DONT KNOW
 WHAT TO PUT HERE;
 THIS IS WHERE
 THE SPLASH MESSAGES GO;
-I NEEDED TO REPLACE THIS CAUSE
-THE PREVIOUS ONES WERE REALLY BAD;"
+I NEEDED TO REPLACE THIS
+CAUSE THE PREVIOUS ONES
+WERE REALLY BAD;"
+text = "SPLASH
+MESSAGES
+APPEAR HERE"
+horizontal_alignment = 1
+forced_anim_suffix = &" bold"
 
 [node name="Background" type="CanvasLayer" parent="." unique_id=1601723128]
 layer = -1

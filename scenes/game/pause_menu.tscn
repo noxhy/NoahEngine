@@ -84,28 +84,26 @@ shader_parameter/blur_amount = 1.2
 shader_parameter/mix_amount = 0.336
 shader_parameter/color_over = Color(0, 0, 0, 1)
 
-[node name="Pause Menu" type="Node2D"]
+[node name="Pause Menu" type="Node2D" unique_id=1934046313]
 process_mode = 2
 script = ExtResource("1_kynsm")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_lkqyl")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1371080715]
+libraries/ = SubResource("AnimationLibrary_lkqyl")
 
-[node name="Audio" type="Node" parent="."]
+[node name="Audio" type="Node" parent="." unique_id=928257346]
 
-[node name="Music" type="AudioStreamPlayer" parent="Audio"]
+[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=1369104135]
 stream = ExtResource("2_kxcr8")
 autoplay = true
 bus = &"Music"
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=1607654350]
 layer = 127
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Song Name" type="Label" parent="UI"]
+[node name="Song Name" type="Label" parent="UI" unique_id=1168789736]
 unique_name_in_owner = true
 z_index = 1
 custom_minimum_size = Vector2(432, 0)
@@ -125,7 +123,7 @@ text = "SONG NAME"
 label_settings = SubResource("LabelSettings_0uk4b")
 horizontal_alignment = 2
 
-[node name="Other Info" type="Label" parent="UI"]
+[node name="Other Info" type="Label" parent="UI" unique_id=783180668]
 unique_name_in_owner = true
 z_index = 1
 offset_left = 1280.0
@@ -138,7 +136,7 @@ horizontal_alignment = 2
 vertical_alignment = 1
 uppercase = true
 
-[node name="ColorRect" type="ColorRect" parent="UI"]
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=735001670]
 material = SubResource("ShaderMaterial_q4ixn")
 offset_left = -640.0
 offset_top = -360.0
