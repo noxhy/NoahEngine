@@ -4,6 +4,7 @@
 
 [node name="Alphabet" type="Node2D" unique_id=195551509]
 script = ExtResource("1_e37qy")
+text = "aE-D"
 glyph_offsets = Dictionary[String, Vector2]({
 "\"": Vector2(-2, -23),
 "'": Vector2(0, -28),
