@@ -8,7 +8,7 @@ extends Character
 @export var accel = 5
 @export var slope = 0.3
 
-@export var update_rate = 0.25
+@export var update_rate = 1 / 24.0
 
 var minFrequency = 20.0
 var maxFrequency = 20000.0
