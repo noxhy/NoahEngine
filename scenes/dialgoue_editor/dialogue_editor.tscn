@@ -20,15 +20,15 @@ outline_color = Color(0, 0, 0, 1)
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Dialogue Editor" type="Node2D"]
+[node name="Dialogue Editor" type="Node2D" unique_id=964042043]
 script = ExtResource("1_qnh8h")
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=280463000]
 layer = 0
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Dialogue Navigator" type="ColorRect" parent="UI"]
+[node name="Dialogue Navigator" type="ColorRect" parent="UI" unique_id=1782731968]
 show_behind_parent = true
 custom_minimum_size = Vector2(128, 360)
 offset_left = 512.0
@@ -41,7 +41,7 @@ theme = ExtResource("3_5f2t6")
 color = Color(0.14733289, 0.1680183, 0.20285092, 1)
 metadata/_edit_lock_ = true
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/Dialogue Navigator"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/Dialogue Navigator" unique_id=82469259]
 custom_minimum_size = Vector2(128, 0)
 layout_mode = 1
 anchors_preset = 15
@@ -52,10 +52,10 @@ grow_vertical = 2
 theme = ExtResource("4_w8ow7")
 metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Dialogue Navigator/ScrollContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Dialogue Navigator/ScrollContainer" unique_id=327448060]
 layout_mode = 2
 
-[node name="Dialogue Reader" type="Panel" parent="UI"]
+[node name="Dialogue Reader" type="Panel" parent="UI" unique_id=1452201315]
 anchors_preset = -1
 anchor_left = -0.3
 anchor_top = -0.322
@@ -66,7 +66,7 @@ offset_bottom = 0.32
 theme = ExtResource("3_5f2t6")
 metadata/_edit_lock_ = true
 
-[node name="Dialogue" type="Label" parent="UI/Dialogue Reader"]
+[node name="Dialogue" type="Label" parent="UI/Dialogue Reader" unique_id=824763517]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -82,7 +82,7 @@ text = "* You feel like you're gonna get your skull S M A S H E D"
 label_settings = SubResource("LabelSettings_bq5l8")
 autowrap_mode = 1
 
-[node name="Character" type="Label" parent="UI/Dialogue Reader"]
+[node name="Character" type="Label" parent="UI/Dialogue Reader" unique_id=337612801]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -100,7 +100,7 @@ label_settings = SubResource("LabelSettings_xw73d")
 vertical_alignment = 2
 autowrap_mode = 1
 
-[node name="Reader Label" type="Label" parent="UI/Dialogue Reader"]
+[node name="Reader Label" type="Label" parent="UI/Dialogue Reader" unique_id=1432388003]
 layout_mode = 0
 offset_top = -64.0
 offset_right = 768.0
@@ -111,7 +111,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 metadata/_edit_lock_ = true
 
-[node name="Speed Slider" type="HSlider" parent="UI/Dialogue Reader"]
+[node name="Speed Slider" type="HSlider" parent="UI/Dialogue Reader" unique_id=158282288]
 custom_minimum_size = Vector2(256, 32)
 layout_mode = 0
 offset_left = 256.0
@@ -123,7 +123,7 @@ max_value = 0.5
 step = 0.05
 value = 0.05
 
-[node name="Label" type="Label" parent="UI/Dialogue Reader/Speed Slider"]
+[node name="Label" type="Label" parent="UI/Dialogue Reader/Speed Slider" unique_id=203041285]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -141,7 +141,7 @@ label_settings = SubResource("LabelSettings_nggub")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Add Line" type="Button" parent="UI"]
+[node name="Add Line" type="Button" parent="UI" unique_id=787257180]
 anchors_preset = -1
 anchor_left = 0.403
 anchor_top = 0.056
@@ -154,7 +154,7 @@ theme = ExtResource("4_w8ow7")
 theme_override_colors/font_color = Color(0.490196, 0.603922, 1, 1)
 text = "+"
 
-[node name="Remove Line" type="Button" parent="UI"]
+[node name="Remove Line" type="Button" parent="UI" unique_id=970729298]
 anchors_preset = -1
 anchor_left = 0.456
 anchor_top = 0.056
@@ -167,7 +167,7 @@ theme = ExtResource("4_w8ow7")
 theme_override_colors/font_color = Color(1, 0.294118, 0.509804, 1)
 text = "-"
 
-[node name="Save Button" type="Button" parent="UI"]
+[node name="Save Button" type="Button" parent="UI" unique_id=1942070164]
 offset_left = 512.0
 offset_top = 104.0
 offset_right = 640.0
@@ -176,7 +176,7 @@ theme = ExtResource("3_5f2t6")
 text = "Save Dialogue"
 metadata/_edit_lock_ = true
 
-[node name="ColorRect" type="ColorRect" parent="UI"]
+[node name="ColorRect" type="ColorRect" parent="UI" unique_id=258781399]
 offset_left = -640.0
 offset_top = 296.0
 offset_right = 640.0
@@ -184,7 +184,7 @@ offset_bottom = 360.0
 color = Color(0.0352941, 0.0352941, 0.0352941, 0.733333)
 metadata/_edit_lock_ = true
 
-[node name="Label" type="Label" parent="UI/ColorRect"]
+[node name="Label" type="Label" parent="UI/ColorRect" unique_id=857860177]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -195,7 +195,7 @@ offset_right = -8.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Input" type="LineEdit" parent="UI"]
+[node name="Input" type="LineEdit" parent="UI" unique_id=922516926]
 unique_name_in_owner = true
 anchors_preset = -1
 anchor_left = -0.25
@@ -207,7 +207,7 @@ offset_bottom = 0.279984
 theme = ExtResource("4_w8ow7")
 placeholder_text = "Text Input"
 
-[node name="Paste Display" type="Button" parent="UI/Input"]
+[node name="Paste Display" type="Button" parent="UI/Input" unique_id=1443453547]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.4
@@ -218,19 +218,19 @@ offset_top = 0.0119972
 offset_bottom = 0.0119934
 text = "Paste Current"
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UI"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI" unique_id=207538084]
 visible = false
 offset_left = -640.0
 offset_top = -232.0
 offset_right = -448.0
 offset_bottom = 152.0
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=391416421]
 layer = -10
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Background" type="Sprite2D" parent="Background"]
+[node name="Background" type="Sprite2D" parent="Background" unique_id=1912185921]
 modulate = Color(0.11372549, 0.13333334, 0.16078432, 1)
 texture = ExtResource("1_2uxlt")
 metadata/_edit_lock_ = true

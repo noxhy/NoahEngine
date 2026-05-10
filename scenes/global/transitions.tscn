@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://ilhf3k3in4ph"]
+[gd_scene format=3 uid="uid://ilhf3k3in4ph"]
 
 [ext_resource type="Script" uid="uid://imjuinehs3it" path="res://scenes/global/transitions.gd" id="1_si25f"]
 
@@ -148,16 +148,16 @@ _data = {
 &"fade": SubResource("Animation_ymoni")
 }
 
-[node name="Transitions" type="Node2D"]
+[node name="Transitions" type="Node2D" unique_id=2038254812]
 process_mode = 3
 script = ExtResource("1_si25f")
 
-[node name="Transitions" type="CanvasLayer" parent="."]
+[node name="Transitions" type="CanvasLayer" parent="." unique_id=118750203]
 layer = 128
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="ColorRect" type="ColorRect" parent="Transitions"]
+[node name="ColorRect" type="ColorRect" parent="Transitions" unique_id=166573558]
 visible = false
 offset_left = -672.0
 offset_top = -384.0
@@ -165,10 +165,10 @@ offset_right = 688.0
 offset_bottom = 400.0
 color = Color(0, 0, 0, 0)
 
-[node name="Fake Gradient" type="Node2D" parent="Transitions"]
+[node name="Fake Gradient" type="Node2D" parent="Transitions" unique_id=981071606]
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="Transitions/Fake Gradient"]
+[node name="ColorRect" type="ColorRect" parent="Transitions/Fake Gradient" unique_id=841616934]
 offset_left = -672.0
 offset_top = -552.0
 offset_right = 688.0
@@ -176,7 +176,7 @@ offset_bottom = 544.0
 color = Color(0, 0, 0, 1)
 metadata/_edit_lock_ = true
 
-[node name="Line2D" type="Line2D" parent="Transitions/Fake Gradient"]
+[node name="Line2D" type="Line2D" parent="Transitions/Fake Gradient" unique_id=207017211]
 position = Vector2(-1536, -1072)
 scale = Vector2(2.38824, 1)
 points = PackedVector2Array(640, -64, 640, 520)
@@ -184,7 +184,7 @@ width = 680.0
 gradient = SubResource("Gradient_tdgh5")
 metadata/_edit_lock_ = true
 
-[node name="Line2D2" type="Line2D" parent="Transitions/Fake Gradient"]
+[node name="Line2D2" type="Line2D" parent="Transitions/Fake Gradient" unique_id=1334364637]
 position = Vector2(1504, 1056)
 scale = Vector2(-2.388, -1)
 points = PackedVector2Array(640, -64, 640, 520)
@@ -192,13 +192,11 @@ width = 680.0
 gradient = SubResource("Gradient_tdgh5")
 metadata/_edit_lock_ = true
 
-[node name="Stickers" type="Node2D" parent="Transitions"]
+[node name="Stickers" type="Node2D" parent="Transitions" unique_id=1022152907]
 unique_name_in_owner = true
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1578301965]
 root_node = NodePath("../Transitions")
-libraries = {
-&"": SubResource("AnimationLibrary_pcf60")
-}
+libraries/ = SubResource("AnimationLibrary_pcf60")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

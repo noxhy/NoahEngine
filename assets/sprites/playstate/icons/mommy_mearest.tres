@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://bktt2xmwe8vrb"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://bktt2xmwe8vrb"]
 
 [ext_resource type="Texture2D" uid="uid://cqneanku0adg3" path="res://assets/sprites/playstate/icons/icon-mom.png" id="1_kqyfb"]
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://daky0nn8plbe4"]
+[gd_scene format=3 uid="uid://daky0nn8plbe4"]
 
 [ext_resource type="AudioStream" uid="uid://dy5bmpjexk1x6" path="res://assets/sounds/game sounds/countdown/default/countdown 3.ogg" id="1_u456w"]
 [ext_resource type="AudioStream" uid="uid://cbiytxsc7mt4r" path="res://assets/sounds/game sounds/countdown/default/countdown 2.ogg" id="2_xmcdi"]
@@ -457,33 +457,31 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Countdown" type="AnimationPlayer"]
-libraries = {
-&"": SubResource("AnimationLibrary_ix61x")
-}
+[node name="Countdown" type="AnimationPlayer" unique_id=762950967]
+libraries/ = SubResource("AnimationLibrary_ix61x")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=551374118]
 bus = &"SFX"
 
-[node name="Default Countdown" type="Node2D" parent="."]
+[node name="Default Countdown" type="Node2D" parent="." unique_id=1315869270]
 visible = false
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Default Countdown"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Default Countdown" unique_id=219588670]
 modulate = Color(1, 1, 1, 0)
 sprite_frames = SubResource("SpriteFrames_shvg5")
 animation = &"go"
 
-[node name="Developer Countdown" type="Node2D" parent="."]
+[node name="Developer Countdown" type="Node2D" parent="." unique_id=1779083396]
 visible = false
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Developer Countdown"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Developer Countdown" unique_id=2139579236]
 sprite_frames = SubResource("SpriteFrames_s6ets")
 animation = &"go"
 
-[node name="Pixel Countdown" type="Node2D" parent="."]
+[node name="Pixel Countdown" type="Node2D" parent="." unique_id=1315031479]
 visible = false
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Pixel Countdown"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Pixel Countdown" unique_id=1725588631]
 modulate = Color(1, 1, 1, 0)
 texture_filter = 1
 scale = Vector2(12, 12)

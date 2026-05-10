@@ -94,13 +94,11 @@ shader_parameter/alpha = 1.0
 editor_description = "I know nene's speaker looks like shit I just didn't feel like porting the masks."
 script = ExtResource("1_th3hl")
 
-[node name="PlayState Host" parent="." unique_id=1132674996 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_hdeop")]
+[node name="PlayState Host" parent="." unique_id=1132674996 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_hdeop")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../CameraController")
-rating_position = NodePath("../World/Rating Marker")
-combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_4bxi2")
 ui_skin = ExtResource("5_t15xn")
 

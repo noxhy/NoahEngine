@@ -1,13 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://c23s1pbajtga2"]
+[gd_scene format=3 uid="uid://c23s1pbajtga2"]
 
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://scenes/offset_sprite.gd" id="1_ugy7i"]
 [ext_resource type="Script" uid="uid://c0va4fda67atq" path="res://scenes/game/note/note_splash.gd" id="1_y21l8"]
 
-[node name="Note Splash" type="Node2D"]
+[node name="Note Splash" type="Node2D" unique_id=304342136]
 z_index = 2
 script = ExtResource("1_y21l8")
 
-[node name="OffsetSprite" type="AnimatedSprite2D" parent="."]
+[node name="OffsetSprite" type="AnimatedSprite2D" parent="." unique_id=1605387135]
 script = ExtResource("1_ugy7i")
 animation_names = Dictionary[StringName, StringName]({
 &"down splash": &"note splash blue 1",

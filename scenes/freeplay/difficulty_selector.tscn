@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cnu4wa5x8qwp5"]
+[gd_scene format=3 uid="uid://cnu4wa5x8qwp5"]
 
 [ext_resource type="Script" uid="uid://ce03uftq0kk3j" path="res://scenes/freeplay/difficulty_selector.gd" id="1_1tipg"]
 [ext_resource type="AudioStream" uid="uid://svn606p6k0w0" path="res://assets/sounds/menu sounds/menu scroll.ogg" id="2_lmn2j"]
@@ -115,32 +115,30 @@ _data = {
 &"start": SubResource("Animation_eenre")
 }
 
-[node name="Difficulty Selector" type="CanvasLayer"]
+[node name="Difficulty Selector" type="CanvasLayer" unique_id=751790309]
 layer = 2
 offset = Vector2(200, 125)
 transform = Transform2D(1, 0, 0, 1, 200, 125)
 script = ExtResource("1_1tipg")
 
-[node name="Audio" type="Node" parent="."]
+[node name="Audio" type="Node" parent="." unique_id=1183901262]
 
-[node name="Scroll" type="AudioStreamPlayer" parent="Audio"]
+[node name="Scroll" type="AudioStreamPlayer" parent="Audio" unique_id=700304833]
 unique_name_in_owner = true
 stream = ExtResource("2_lmn2j")
 bus = &"SFX"
 
-[node name="Difficulty Display" parent="." instance=ExtResource("3_nyydv")]
+[node name="Difficulty Display" parent="." unique_id=1564451872 instance=ExtResource("3_nyydv")]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_mgni6")
-}
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=71712989]
+libraries/ = SubResource("AnimationLibrary_mgni6")
 
-[node name="Left Arrow" parent="." instance=ExtResource("3_8hml4")]
+[node name="Left Arrow" parent="." unique_id=917054931 instance=ExtResource("3_8hml4")]
 z_index = 1
 position = Vector2(-136, 0)
 input = "ui_left"
 
-[node name="Right Arrow" parent="." instance=ExtResource("3_8hml4")]
+[node name="Right Arrow" parent="." unique_id=2051307047 instance=ExtResource("3_8hml4")]
 z_index = 1
 position = Vector2(128, 0)
 scale = Vector2(-1, 1)

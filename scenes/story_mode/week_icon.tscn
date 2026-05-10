@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://chyboxuo8e5ms"]
+[gd_scene format=3 uid="uid://chyboxuo8e5ms"]
 
 [ext_resource type="Texture2D" uid="uid://da30yywlv4yfy" path="res://assets/sprites/menus/story mode/week icons/tutorial.png" id="1_phwv5"]
 [ext_resource type="Texture2D" uid="uid://bkm6ivu2g70v7" path="res://assets/sprites/menus/story mode/week icons/week1.png" id="2_n5nxg"]
@@ -86,7 +86,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Week Icon" type="AnimatedSprite2D"]
+[node name="Week Icon" type="AnimatedSprite2D" unique_id=141175714]
 sprite_frames = SubResource("SpriteFrames_6d3aw")
 animation = &"weekend1"
 script = ExtResource("9_xp24p")

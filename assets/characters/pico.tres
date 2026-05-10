@@ -2,13 +2,11 @@
 
 [ext_resource type="Resource" uid="uid://b30g8jurwop0d" path="res://assets/albums/pico_songs.tres" id="1_hf6k2"]
 [ext_resource type="Texture2D" uid="uid://cemqnoop727he" path="res://assets/sprites/menus/freeplay/characters/pico/freeplayBGweek1-pico.png" id="2_hf6k2"]
-[ext_resource type="AudioStream" uid="uid://d2rjiccf1wlul" path="res://assets/songs/pause_menu/breakfast-pico.ogg" id="3_rd8vi"]
 [ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="11_r1hcg"]
 
 [resource]
 script = ExtResource("11_r1hcg")
 album = ExtResource("1_hf6k2")
-pause_song = ExtResource("3_rd8vi")
 dj = "uid://bnx6yfjfa6wcj"
 background = ExtResource("2_hf6k2")
 result_songs = Dictionary[String, String]({

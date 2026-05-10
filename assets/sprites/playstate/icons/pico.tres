@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://wehhhpa8h24j"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://wehhhpa8h24j"]
 
 [ext_resource type="Texture2D" uid="uid://bvk0rw5rde8dm" path="res://assets/sprites/playstate/icons/icon-pico.png" id="1_xj1qj"]
 

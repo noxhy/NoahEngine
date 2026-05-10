@@ -6,13 +6,13 @@
 
 [sub_resource type="Resource" id="Resource_brfvb"]
 script = ExtResource("3_ncu8k")
-folder_path = "res://assets/sprites/menus/results/results-bf/resultsGREAT/bf/"
+folder_path = "res://assets/sprites/menus/results/results-bf/resultsGREAT/bf//"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
 [sub_resource type="Resource" id="Resource_82r40"]
 script = ExtResource("3_ncu8k")
-folder_path = "res://assets/sprites/menus/results/results-bf/resultsGREAT/gf/"
+folder_path = "res://assets/sprites/menus/results/results-bf/resultsGREAT/gf//"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
@@ -25,7 +25,6 @@ autoplay = true
 loop = true
 loop_frame = 13
 atlases = Array[ExtResource("2_82r40")]([SubResource("Resource_brfvb")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
 
 [node name="AnimateSymbol2" type="Node2D" parent="." unique_id=665770352]
 position = Vector2(-120, -64)
@@ -35,4 +34,3 @@ autoplay = true
 loop = true
 loop_frame = 8
 atlases = Array[ExtResource("2_82r40")]([SubResource("Resource_82r40")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"

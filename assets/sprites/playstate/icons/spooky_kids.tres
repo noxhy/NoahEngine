@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=4 format=3 uid="uid://bb3qik1pfqgux"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://bb3qik1pfqgux"]
 
 [ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://assets/sprites/playstate/icons/icon-spooky.png" id="1_10dw0"]
 

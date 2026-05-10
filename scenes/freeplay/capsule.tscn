@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://qbce8ppotno0"]
+[gd_scene format=3 uid="uid://qbce8ppotno0"]
 
 [ext_resource type="Script" uid="uid://4ir31o2pro22" path="res://scenes/freeplay/capsule.gd" id="1_1nmrk"]
 [ext_resource type="SpriteFrames" uid="uid://4clsim45we1u" path="res://assets/sprites/menus/freeplay/capsule.res" id="1_vbem7"]
@@ -14,14 +14,14 @@ font_size = 48
 outline_size = 4
 outline_color = Color(0.0392157, 0.470588, 0.576471, 1)
 
-[node name="Capsule" type="Node2D"]
+[node name="Capsule" type="Node2D" unique_id=1554360605]
 script = ExtResource("1_1nmrk")
 
-[node name="Icon" type="Sprite2D" parent="."]
+[node name="Icon" type="Sprite2D" parent="." unique_id=1458683992]
 z_index = 1
 texture = ExtResource("1_wa1ty")
 
-[node name="Capsule" type="AnimatedSprite2D" parent="."]
+[node name="Capsule" type="AnimatedSprite2D" parent="." unique_id=1043630913]
 z_index = -1
 position = Vector2(-48, -64)
 sprite_frames = ExtResource("1_vbem7")
@@ -38,14 +38,14 @@ offsets = Dictionary[StringName, Vector2]({
 })
 metadata/_custom_type_script = "uid://d17yv6wfgl74w"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=677847642]
 custom_minimum_size = Vector2(368, 56)
 offset_left = 72.0
 offset_top = -32.0
 offset_right = 444.0
 offset_bottom = 24.0
 
-[node name="Scroll" type="ScrollContainer" parent="HBoxContainer"]
+[node name="Scroll" type="ScrollContainer" parent="HBoxContainer" unique_id=195077260]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
@@ -53,7 +53,7 @@ size_flags_horizontal = 3
 horizontal_scroll_mode = 3
 vertical_scroll_mode = 0
 
-[node name="Label" type="Label" parent="HBoxContainer/Scroll"]
+[node name="Label" type="Label" parent="HBoxContainer/Scroll" unique_id=133098176]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
@@ -62,13 +62,13 @@ text = "Test"
 label_settings = SubResource("LabelSettings_lcnhi")
 vertical_alignment = 1
 
-[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=662342811]
 layout_mode = 2
 size_flags_horizontal = 3
 expand_mode = 4
 stretch_mode = 6
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=912016190]
 visible = false
 sprite_frames = ExtResource("6_lcnhi")
 script = ExtResource("2_v1ul3")

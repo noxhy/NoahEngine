@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=12 format=3 uid="uid://c802qdqdog3ia"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://c802qdqdog3ia"]
 
 [ext_resource type="Texture2D" uid="uid://8er74y6a0ta6" path="res://assets/sprites/playstate/developer/rating/bad.png" id="1_klvsa"]
 [ext_resource type="Texture2D" uid="uid://b8csmyptm0a8s" path="res://assets/sprites/playstate/developer/rating/epic.png" id="2_7bqa8"]

@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://u5viblx7nuut"]
+[gd_resource type="SpriteFrames" format=3 uid="uid://u5viblx7nuut"]
 
 [ext_resource type="Texture2D" uid="uid://cxu20hb7y7adt" path="res://assets/sprites/playstate/icons/girlfriend.png" id="1_q0d2h"]
 

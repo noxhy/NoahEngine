@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://yyfqg2jvwcmt"]
+[gd_scene format=3 uid="uid://yyfqg2jvwcmt"]
 
 [ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://scenes/game/note/chart_note.gd" id="1_ud7f5"]
 [ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://assets/sprites/playstate/developer/arrow/notes.tres" id="2_jcxlk"]
@@ -13,11 +13,11 @@ font_color = Color(1, 1, 0, 1)
 outline_size = 64
 outline_color = Color(0, 0, 0, 1)
 
-[node name="Note" type="Node2D" groups=["note"]]
+[node name="Note" type="Node2D" unique_id=626587340 groups=["note"]]
 use_parent_material = true
 script = ExtResource("1_ud7f5")
 
-[node name="Note" type="AnimatedSprite2D" parent="."]
+[node name="Note" type="AnimatedSprite2D" parent="." unique_id=1501669476]
 z_index = 1
 use_parent_material = true
 scale = Vector2(1.065, 1.065)
@@ -39,20 +39,20 @@ animation_names = Dictionary[StringName, StringName]({
 &"up tail": &"up tail"
 })
 
-[node name="Tail" type="TextureRect" parent="."]
+[node name="Tail" type="TextureRect" parent="." unique_id=968104361]
 rotation = 1.5707964
 stretch_mode = 1
 
-[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="."]
+[node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="." unique_id=1755355994]
 rect = Rect2(-320, -320, 640, 640)
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=25021479]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=505669977]
 scale = Vector2(0.99999964, 0.99999964)
 shape = SubResource("RectangleShape2D_ud7f5")
 
-[node name="Special Note Label" type="Label" parent="."]
+[node name="Special Note Label" type="Label" parent="." unique_id=404905068]
 unique_name_in_owner = true
 visible = false
 z_index = 1

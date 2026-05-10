@@ -18,12 +18,10 @@ outline_color = Color(0, 0, 0, 1)
 script = ExtResource("1_ep6vc")
 metadata/_edit_vertical_guides_ = []
 
-[node name="PlayState Host" parent="." unique_id=1464953201 node_paths=PackedStringArray("host", "ui", "camera", "rating_position", "combo_position") instance=ExtResource("2_ajkug")]
+[node name="PlayState Host" parent="." unique_id=1464953201 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_ajkug")]
 host = NodePath("..")
 ui = NodePath("../UI")
 camera = NodePath("../CameraController")
-rating_position = NodePath("../World/Rating Marker")
-combo_position = NodePath("../World/Combo Marker")
 note_skin = ExtResource("4_laa4w")
 ui_skin = ExtResource("2_srd2m")
 next_scene = "res://scenes/chart editor/chart_editor.tscn"

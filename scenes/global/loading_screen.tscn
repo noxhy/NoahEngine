@@ -1,32 +1,32 @@
-[gd_scene load_steps=3 format=3 uid="uid://ld5hyjhtx8wg"]
+[gd_scene format=3 uid="uid://ld5hyjhtx8wg"]
 
 [ext_resource type="Texture2D" uid="uid://bxxfj1ftr2ib" path="res://assets/sprites/menus/loading_screen.png" id="1_2a8i5"]
 [ext_resource type="Script" uid="uid://cbjq3veqm6jql" path="res://scenes/global/loading_screen.gd" id="1_ojpmn"]
 
-[node name="Loading Screen" type="Node2D"]
+[node name="Loading Screen" type="Node2D" unique_id=2045935946]
 process_mode = 3
 script = ExtResource("1_ojpmn")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1765672859]
 offset = Vector2(640, 360)
 
-[node name="Background" type="CanvasLayer" parent="."]
+[node name="Background" type="CanvasLayer" parent="." unique_id=422845927]
 layer = 0
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="ColorRect" type="ColorRect" parent="Background"]
+[node name="ColorRect" type="ColorRect" parent="Background" unique_id=1098838123]
 offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
 offset_bottom = 360.0
 color = Color(0.7921569, 1, 0.3019608, 1)
 
-[node name="LoadingScreen" type="Sprite2D" parent="Background"]
+[node name="LoadingScreen" type="Sprite2D" parent="Background" unique_id=380961951]
 texture = ExtResource("1_2a8i5")
 metadata/_edit_lock_ = true
 
-[node name="ProgressBar" type="ProgressBar" parent="Background"]
+[node name="ProgressBar" type="ProgressBar" parent="Background" unique_id=392658439]
 offset_left = -640.0
 offset_top = 328.0
 offset_right = 640.0

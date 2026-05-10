@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bflvolhan5xvh"]
+[gd_scene format=3 uid="uid://bflvolhan5xvh"]
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_n6ac0"]
 [ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://assets/sprites/playstate/icons/icon-face.png" id="2_4ci21"]
@@ -8,7 +8,7 @@
 atlas = ExtResource("2_4ci21")
 region = Rect2(0, 0, 150, 150)
 
-[node name="Metadata Window" type="Window"]
+[node name="Metadata Window" type="Window" unique_id=1340846673]
 transparent_bg = true
 oversampling_override = 1.0
 title = "Song Metadata"
@@ -19,7 +19,7 @@ popup_window = true
 theme = ExtResource("1_n6ac0")
 script = ExtResource("2_bkkpl")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2058411482]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -27,63 +27,63 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1706111635]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Song Name" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Song Name" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=2062633903]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Name"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=53172043]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Title:"
 
-[node name="Song Name" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Name"]
+[node name="Song Name" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=1651112645]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Song Artist" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Song Artist" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1940201400]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Artist"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=1851621022]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Artist:"
 
-[node name="Song Artist" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Artist"]
+[node name="Song Artist" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=584101658]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Icons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Icons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=248525620]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Icons"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Icons" unique_id=1040357070]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Icon Texture:"
 
-[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/Icons"]
+[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/Icons" unique_id=74823753]
 unique_name_in_owner = true
 layout_mode = 2
 texture = SubResource("AtlasTexture_4ci21")
 expand_mode = 3
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Icons"]
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Icons" unique_id=1852332401]
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 
-[node name="Icon Button" type="Button" parent="HBoxContainer/VBoxContainer/Icons"]
+[node name="Icon Button" type="Button" parent="HBoxContainer/VBoxContainer/Icons" unique_id=156520241]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File"
 
-[node name="Icon FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Icons/Icon Button"]
+[node name="Icon FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Icons/Icon Button" unique_id=1902699967]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a File"
@@ -93,29 +93,29 @@ file_mode = 0
 root_subfolder = "res://assets/sprites/playstate/icons/"
 filters = PackedStringArray("*.tres")
 
-[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/VBoxContainer"]
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1866714952]
 layout_mode = 2
 
-[node name="Song Scene" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Song Scene" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1461313318]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Scene"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=484953711]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Song Scene:"
 
-[node name="Song Scene" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Scene"]
+[node name="Song Scene" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1114754875]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 
-[node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene"]
+[node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1557321340]
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Select Scene"
 
-[node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button"]
+[node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" unique_id=308569808]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a File"
@@ -125,34 +125,34 @@ file_mode = 0
 root_subfolder = "res://scenes/game/songs/"
 filters = PackedStringArray("*.tscn")
 
-[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer"]
+[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1200860892]
 layout_mode = 2
 
-[node name="Hbox" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="Hbox" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=92420423]
 layout_mode = 2
 
-[node name="Difficulty Label" type="Label" parent="HBoxContainer/VBoxContainer/Hbox"]
+[node name="Difficulty Label" type="Label" parent="HBoxContainer/VBoxContainer/Hbox" unique_id=1090648567]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Difficulty:"
 
-[node name="Difficulty" type="LineEdit" parent="HBoxContainer/VBoxContainer/Hbox"]
+[node name="Difficulty" type="LineEdit" parent="HBoxContainer/VBoxContainer/Hbox" unique_id=1597913839]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=439859820]
 layout_mode = 2
 
-[node name="Scroll Speed Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Scroll Speed Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1778790191]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Scroll Speed: 1.0x"
 
-[node name="Scroll Speed" type="HSlider" parent="HBoxContainer/VBoxContainer/HBoxContainer2"]
+[node name="Scroll Speed" type="HSlider" parent="HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1331755680]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -165,15 +165,15 @@ tick_count = 5
 ticks_on_borders = true
 ticks_position = 3
 
-[node name="VSeparator" type="VSeparator" parent="HBoxContainer"]
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=868912484]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=1464290115]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Time Changes" type="OptionButton" parent="HBoxContainer/VBoxContainer2"]
+[node name="Time Changes" type="OptionButton" parent="HBoxContainer/VBoxContainer2" unique_id=1386784694]
 unique_name_in_owner = true
 layout_mode = 2
 selected = 0
@@ -182,18 +182,18 @@ item_count = 1
 popup/item_0/text = "00:00.00 - BPM: 60.0 in TS: 4/4"
 popup/item_0/id = 0
 
-[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2"]
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2" unique_id=1471525188]
 layout_mode = 2
 
-[node name="Tempo Change" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="Tempo Change" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1989832697]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Tempo Change"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Tempo Change" unique_id=1989583853]
 layout_mode = 2
 size_flags_horizontal = 0
 text = "Tempo:"
 
-[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Tempo Change"]
+[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Tempo Change" unique_id=147331811]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -203,14 +203,14 @@ step = 0.001
 value = 60.0
 suffix = "BPM"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1023467581]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1374173854]
 layout_mode = 2
 text = "Time Signature:"
 
-[node name="Numerator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Numerator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1224926063]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
@@ -219,7 +219,7 @@ value = 1.0
 rounded = true
 prefix = "N:"
 
-[node name="Denominator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer"]
+[node name="Denominator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=479747261]
 unique_name_in_owner = true
 layout_mode = 2
 min_value = 2.0
@@ -228,12 +228,12 @@ value = 2.0
 rounded = true
 prefix = "D:"
 
-[node name="Add Time Change" type="Button" parent="HBoxContainer/VBoxContainer2"]
+[node name="Add Time Change" type="Button" parent="HBoxContainer/VBoxContainer2" unique_id=1370153651]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Add Time Change"
 
-[node name="Remove Time Change" type="Button" parent="HBoxContainer/VBoxContainer2"]
+[node name="Remove Time Change" type="Button" parent="HBoxContainer/VBoxContainer2" unique_id=1219877881]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Remove Current Time Change"

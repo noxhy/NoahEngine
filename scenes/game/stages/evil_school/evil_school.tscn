@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dm1wcp8xtvqv5"]
+[gd_scene format=3 uid="uid://dm1wcp8xtvqv5"]
 
 [ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://scenes/stage.gd" id="1_nay4l"]
 [ext_resource type="SpriteFrames" uid="uid://csqo7uj2jh4ct" path="res://assets/sprites/stages/evil_school/animatedEvilSchool.res" id="2_8obdx"]
@@ -23,14 +23,14 @@ volumetric_fog_anisotropy = -0.9
 adjustment_enabled = true
 adjustment_color_correction = SubResource("GradientTexture1D_ii72u")
 
-[node name="Stage" type="Node2D"]
+[node name="Stage" type="Node2D" unique_id=227623060]
 texture_filter = 1
 script = ExtResource("1_nay4l")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1690170058]
 environment = SubResource("Environment_6cbx4")
 
-[node name="School2" type="AnimatedSprite2D" parent="." groups=["autoplay"]]
+[node name="School2" type="AnimatedSprite2D" parent="." unique_id=1212764068 groups=["autoplay"]]
 z_index = -10
 texture_filter = 1
 position = Vector2(-896, -1224)

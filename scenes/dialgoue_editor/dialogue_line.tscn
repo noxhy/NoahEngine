@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cj4cuq6neq1lf"]
+[gd_scene format=3 uid="uid://cj4cuq6neq1lf"]
 
 [ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://assets/themes/options.tres" id="1_0ca1f"]
 [ext_resource type="Script" uid="uid://c25af0kpj2b5m" path="res://scenes/dialgoue_editor/dialogue_line.gd" id="2_dfr6i"]
@@ -10,7 +10,7 @@ content_margin_left = 8.0
 resource_local_to_scene = true
 font_size = 12
 
-[node name="Dialogue Line" type="Button"]
+[node name="Dialogue Line" type="Button" unique_id=555977446]
 custom_minimum_size = Vector2(112, 32)
 anchors_preset = -1
 anchor_right = 0.1
@@ -21,7 +21,7 @@ script = ExtResource("2_dfr6i")
 line_type = 1
 line = "func ape_shit 1,2,holy fuck im cumming lois"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="." unique_id=1256549763]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -6,7 +6,7 @@
 
 [sub_resource type="Resource" id="Resource_4nmvo"]
 script = ExtResource("3_hiomu")
-folder_path = "res://assets/sprites/menus/results/results-bf/resultsEXCELLENT/"
+folder_path = "res://assets/sprites/menus/results/results-bf/resultsEXCELLENT//"
 format = "adobe"
 metadata/_custom_type_script = "uid://dkyyuwqo0dy7q"
 
@@ -20,4 +20,3 @@ autoplay = true
 loop = true
 loop_frame = 28
 atlases = Array[ExtResource("2_lrlhk")]([SubResource("Resource_4nmvo")])
-metadata/_custom_type_script = "uid://dxb0ojnhycqox"
