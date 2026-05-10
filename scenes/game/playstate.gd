@@ -188,7 +188,7 @@ func _process(delta):
 		ChartManager.event_editor = false
 		ChartManager.song = song_data
 		ChartManager.difficulty = GameManager.difficulty
-		Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+		Global.change_scene_to("uid://c3lux2ajoe1g6")
 	
 	if !song_started:
 		song_start_offset += delta
@@ -422,14 +422,14 @@ func song_finished():
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
-				Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+				Global.change_scene_to("uid://c3lux2ajoe1g6")
 			
 			GameManager.PLAY_MODE.PRACTICE:
-				Global.change_scene_to("res://scenes/results/results.tscn")
+				Global.change_scene_to("uid://cmwlnqqj5h0xy")
 			
 			_:
 				GameManager.finished_song(score)
-				Global.change_scene_to("res://scenes/results/results.tscn")
+				Global.change_scene_to("uid://cmwlnqqj5h0xy")
 	else:
 		GameManager.finished_song(score)
 		if (GameManager.week_songs.size() == GameManager.current_week_song):

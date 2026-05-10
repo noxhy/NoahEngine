@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://55odtbd2v2ql"]
 
 [ext_resource type="Script" uid="uid://cqm4c08o6008r" path="res://scenes/menu_option.gd" id="1_tf7lj"]
-[ext_resource type="Script" path="res://scenes/alphabet.gd" id="2_qtyc2"]
+[ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://scenes/alphabet.gd" id="2_qtyc2"]
 
 [node name="Menu Option" type="Node2D" unique_id=602985720]
 script = ExtResource("1_tf7lj")

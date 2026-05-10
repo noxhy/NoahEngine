@@ -1,0 +1,216 @@
+[gd_scene format=3 uid="uid://c6cl2ayvb4ms3"]
+
+[ext_resource type="Script" uid="uid://drlrm6yoeyvls" path="res://scenes/editors/chart_editor/convert_chart_popup.gd" id="1_byst7"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_p6cg2"]
+
+[node name="Convert File Popup" type="Window" unique_id=787528886]
+transparent_bg = true
+msaa_2d = 1
+oversampling_override = 1.0
+title = "Convert Chart Files"
+initial_position = 1
+size = Vector2i(640, 446)
+exclusive = true
+unresizable = true
+min_size = Vector2i(480, 0)
+theme = ExtResource("1_p6cg2")
+script = ExtResource("1_byst7")
+
+[node name="SaveFolderDialog" type="FileDialog" parent="." unique_id=987853376]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open File(s)"
+initial_position = 1
+size = Vector2i(640, 480)
+unresizable = true
+always_on_top = true
+min_size = Vector2i(320, 320)
+ok_button_text = "Select Given Files"
+dialog_hide_on_ok = true
+file_mode = 1
+root_subfolder = "res://playable_songs/"
+filters = PackedStringArray("*.json")
+
+[node name="FlowContainer" type="FlowContainer" parent="." unique_id=190444970]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 6
+size_flags_vertical = 3
+metadata/_edit_lock_ = true
+
+[node name="Convert Chart" type="VBoxContainer" parent="FlowContainer" unique_id=1948307872]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="FlowContainer/Convert Chart" unique_id=1584094098]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Chart Format"
+
+[node name="HSeparator" type="HSeparator" parent="FlowContainer/Convert Chart" unique_id=418278026]
+layout_mode = 2
+
+[node name="Format Options" type="OptionButton" parent="FlowContainer/Convert Chart" unique_id=722646045]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+item_count = 5
+popup/item_0/text = "Auto detect"
+popup/item_0/id = 999
+popup/item_1/text = "V-Slice / Base Game"
+popup/item_1/id = 0
+popup/item_2/text = "Psych"
+popup/item_2/id = 1
+popup/item_3/text = " Psych V1"
+popup/item_3/id = 2
+popup/item_4/text = "Codename Engine"
+popup/item_4/id = 3
+
+[node name="HSeparator2" type="HSeparator" parent="FlowContainer/Convert Chart" unique_id=1755797729]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="FlowContainer/Convert Chart" unique_id=1642344066]
+layout_mode = 2
+text = "Song Metadata"
+
+[node name="Song Title" type="LineEdit" parent="FlowContainer/Convert Chart" unique_id=563915368]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Song Name"
+
+[node name="Song Credits" type="LineEdit" parent="FlowContainer/Convert Chart" unique_id=1396814370]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Song Artist"
+
+[node name="Audio Files" type="VBoxContainer" parent="FlowContainer" unique_id=2125503342]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="FlowContainer/Audio Files" unique_id=853874267]
+layout_mode = 2
+text = "Audio Files"
+
+[node name="HSeparator" type="HSeparator" parent="FlowContainer/Audio Files" unique_id=1965721548]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FlowContainer/Audio Files" unique_id=1586749361]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Vocals File Location" type="LineEdit" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=841138295]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Vocals File Location(s)"
+editable = false
+
+[node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=391732128]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Select File"
+
+[node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=250682584]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open File(s)"
+initial_position = 1
+size = Vector2i(640, 480)
+unresizable = true
+always_on_top = true
+min_size = Vector2i(320, 320)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 1
+root_subfolder = "res://playable_songs/"
+filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="FlowContainer/Audio Files" unique_id=254292305]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Inst File Location" type="LineEdit" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=2041909628]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Instrumental File Location"
+editable = false
+
+[node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=1298346667]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Select File"
+
+[node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=34144751]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+unresizable = true
+always_on_top = true
+min_size = Vector2i(320, 320)
+ok_button_text = "Open"
+dialog_hide_on_ok = true
+file_mode = 0
+root_subfolder = "res://playable_songs/"
+filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FlowContainer" unique_id=1442898004]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="FlowContainer/VBoxContainer" unique_id=793706066]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Charts to Convert"
+
+[node name="HSeparator" type="HSeparator" parent="FlowContainer/VBoxContainer" unique_id=2001403783]
+layout_mode = 2
+
+[node name="Export Location" type="HBoxContainer" parent="FlowContainer/VBoxContainer" unique_id=501268590]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Export File Location" type="LineEdit" parent="FlowContainer/VBoxContainer/Export Location" unique_id=853207150]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "res://assets/songs/playable songs/"
+placeholder_text = "Export Location"
+editable = false
+
+[node name="Button" type="Button" parent="FlowContainer/VBoxContainer/Export Location" unique_id=2028338597]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Select File"
+
+[node name="HSeparator2" type="HSeparator" parent="FlowContainer/VBoxContainer" unique_id=1010212391]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FlowContainer/VBoxContainer" unique_id=829472417]
+layout_mode = 2
+alignment = 1
+
+[node name="Create Button" type="Button" parent="FlowContainer/VBoxContainer/HBoxContainer" unique_id=201412011]
+layout_mode = 2
+text = "Create New Song"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="dir_selected" from="SaveFolderDialog" to="." method="_on_save_folder_dialog_dir_selected"]
+[connection signal="files_selected" from="SaveFolderDialog" to="." method="_on_save_folder_dialog_files_selected"]
+[connection signal="gui_focus_changed" from="SaveFolderDialog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="pressed" from="FlowContainer/Audio Files/HBoxContainer/Button" to="." method="_on_vocals_button_pressed"]
+[connection signal="files_selected" from="FlowContainer/Audio Files/HBoxContainer/Vocals File Dialog" to="." method="_on_vocals_file_dialog_files_selected"]
+[connection signal="gui_focus_changed" from="FlowContainer/Audio Files/HBoxContainer/Vocals File Dialog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="pressed" from="FlowContainer/Audio Files/HBoxContainer3/Button" to="." method="_on_inst_button_pressed"]
+[connection signal="file_selected" from="FlowContainer/Audio Files/HBoxContainer3/Inst File Dialog" to="." method="_on_inst_file_dialog_file_selected"]
+[connection signal="gui_focus_changed" from="FlowContainer/Audio Files/HBoxContainer3/Inst File Dialog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="pressed" from="FlowContainer/VBoxContainer/Export Location/Button" to="." method="_on_export_file_button_pressed"]
+[connection signal="pressed" from="FlowContainer/VBoxContainer/HBoxContainer/Create Button" to="." method="_on_create_button_pressed"]
