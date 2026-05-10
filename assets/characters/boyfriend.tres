@@ -10,12 +10,12 @@ album = ExtResource("1_ue4wv")
 dj = "uid://c1s7cbxg2o4m0"
 background = ExtResource("2_iol30")
 result_songs = Dictionary[String, String]({
-"excellent": "res://assets/songs/menu songs/results/boyfriend/resultsEXCELLENT.ogg",
-"gold": "res://assets/songs/menu songs/results/boyfriend/resultsPERFECT.ogg",
-"good": "res://assets/songs/menu songs/results/boyfriend/resultsNORMAL.ogg",
-"great": "res://assets/songs/menu songs/results/boyfriend/resultsNORMAL.ogg",
-"loss": "res://assets/songs/menu songs/results/boyfriend/resultsSHIT.ogg",
-"perfect": "res://assets/songs/menu songs/results/boyfriend/resultsPERFECT.ogg"
+"excellent": "uid://brvwivjswbekg",
+"gold": "uid://ce35a74i5sv80",
+"good": "uid://dxg0jrm60tjm",
+"great": "uid://dxg0jrm60tjm",
+"loss": "uid://dla8l3ws7tid8",
+"perfect": "uid://ce35a74i5sv80"
 })
 normal_intro = "uid://cfndri37mey1i"
 loss_intro = "uid://dp3j2qhpuv6xd"
