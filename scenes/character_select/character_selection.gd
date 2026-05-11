@@ -68,10 +68,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	var input_vector = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	
-	var time = $Audio/Music.get_playback_position()
-	# time -= AudioServer.get_time_since_last_mix()
-	time -= AudioServer.get_output_latency()
-	
 	if input_vector != Vector2.ZERO:
 		if input_time == 0 or input_time >= $Conductor.seconds_per_step:
 			select(Vector2i(input_vector.sign()) + selected)
