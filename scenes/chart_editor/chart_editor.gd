@@ -1420,6 +1420,10 @@ func file_button_item_pressed(id):
 			
 			export_window.popup_centered()
 			
+			if ChartManager.song and !ChartManager.song.events.is_empty():
+				if ResourceLoader.exists(ChartManager.song.events):
+					export_window.current_path = ResourceUID.uid_to_path(ChartManager.song.events)
+			
 			var on_save = func(path:String):
 				var event = ChartEvents.new()
 				event.data = ChartManager.chart.get_events_data()
@@ -1445,6 +1449,9 @@ func file_button_item_pressed(id):
 			$"UI/Upper UI".add_child(export_window)
 			
 			export_window.popup_centered()
+			if ChartManager.song and !ChartManager.song.events.is_empty():
+				if ResourceLoader.exists(ChartManager.song.events):
+					export_window.current_path = ResourceUID.uid_to_path(ChartManager.song.events)
 			
 			var on_open = func(path:String):
 				if path.is_empty() and not ResourceLoader.exists(path): 
