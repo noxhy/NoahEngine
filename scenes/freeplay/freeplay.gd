@@ -58,7 +58,7 @@ func _ready():
 	var keycode = SettingsManager.get_keybind("character_select")
 	
 	$Above/ColorRect/RichTextLabel.text = str(
-		"[font_size=32][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]",
+		"[font_size=32][font=\"uid://c7hwqqieqbc47\"][font bt=-16.0][pulse freq=0.8 color=#ffffff40 ease=-2.0]",
 		"Press [", Global.get_keycode_string(keycode).to_upper(), "] to change character",
 		"[/pulse][/font]"
 	)
@@ -79,14 +79,14 @@ func _process(_delta):
 		elif Input.is_action_just_pressed(&"ui_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
-			Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
+			Global.change_scene_to("uid://rc52vcn2m7ob")
 		elif Input.is_action_just_pressed(&"character_select"):
 			can_click = false
 			dj.play("character_select")
 			dj.animated_symbol.loop = false
 			
 			SoundManager.accept.play()
-			Global.change_scene_to("res://scenes/character_select/character_selection.tscn")
+			Global.change_scene_to("uid://cffkc1rbk4pcv")
 
 
 # Updates visually what happens when a new index is set for a selection
@@ -163,7 +163,7 @@ func update(i: int):
 			j.state = "idle"
 		
 		if options[index].locked:
-			j.icon = load("res://assets/sprites/menus/freeplay/lock_small.png")
+			j.icon = load("uid://0v2cxshetbif")
 		
 		index += 1
 	
@@ -242,7 +242,7 @@ func play_song(song: Song, difficulty: String):
 func chart_song(song: Song, difficulty: String):
 	ChartManager.song = song
 	ChartManager.difficulty = difficulty
-	Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn", "fade")
+	Global.change_scene_to("uid://c3lux2ajoe1g6", "fade")
 
 
 @warning_ignore("unused_parameter")

@@ -194,7 +194,7 @@ func pressed_button(id: StringName):
 	match id:
 		
 		&"offset":
-			Global.change_scene_to("res://scenes/options/offset_calibrator.tscn")
+			Global.change_scene_to("uid://cw85perbwjqqy")
 			SoundManager.accept.play()
 			SoundManager.music.stop()
 		

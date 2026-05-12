@@ -321,7 +321,7 @@ func view_button_item_pressed(id):
 	match id:
 		0:
 			ChartManager.event_editor = false
-			get_tree().change_scene_to_file("res://scenes/chart_editor/chart_editor.tscn")
+			get_tree().change_scene_to_file("uid://c3lux2ajoe1g6")
 		
 		1:
 			can_chart = false

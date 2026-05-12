@@ -15,7 +15,7 @@ signal new_event(time: float, event_name: String, event_parameters: Array)
 signal combo_break()
 signal setup_finished()
 
-@onready var countdown_node = load("res://scenes/game/countdown.tscn")
+@onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
 @onready var instrumental: AudioStreamPlayer
@@ -41,11 +41,11 @@ signal setup_finished()
 
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
-@export_file('*.tscn') var death_scene = "res://scenes/game/death_screen.tscn"
+@export_file('*.tscn') var death_scene = "uid://bd083xcqslcsd"
 ## What scene will instantiate when pausing,
-@export_file('*.tscn') var pause_scene = "res://scenes/game/pause_menu.tscn"
+@export_file('*.tscn') var pause_scene = "uid://djhqiluiy02ao"
 ## The scene that will be switched to when the song ends.
-@export_file('*.tscn') var next_scene = "res://scenes/results/results.tscn"
+@export_file('*.tscn') var next_scene = "uid://cmwlnqqj5h0xy"
 
 var song_started: bool = false
 var song_start_offset: float = -4.0
@@ -188,7 +188,7 @@ func _process(delta):
 		ChartManager.event_editor = false
 		ChartManager.song = song_data
 		ChartManager.difficulty = GameManager.difficulty
-		Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+		Global.change_scene_to("uid://c3lux2ajoe1g6")
 	
 	if !song_started:
 		song_start_offset += delta
@@ -422,14 +422,14 @@ func song_finished():
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
-				Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+				Global.change_scene_to("uid://c3lux2ajoe1g6")
 			
 			GameManager.PLAY_MODE.PRACTICE:
-				Global.change_scene_to("res://scenes/results/results.tscn")
+				Global.change_scene_to("uid://cmwlnqqj5h0xy")
 			
 			_:
 				GameManager.finished_song(score)
-				Global.change_scene_to("res://scenes/results/results.tscn")
+				Global.change_scene_to("uid://cmwlnqqj5h0xy")
 	else:
 		GameManager.finished_song(score)
 		if (GameManager.week_songs.size() == GameManager.current_week_song):

@@ -3,18 +3,18 @@ extends Node
 const EVENT_DATA: Dictionary = {
 	"camera_position": {
 		"parameters": ["Position Index"],
-		"texture": "res://assets/sprites/menus/chart editor/events/camera_position.png",
+		"texture": "uid://b4ve504nau36k",
 	},
 	"play_animation": {
 		"parameters": ["Group Name", "Animation ID", "(Optional) Duration"],
-		"texture": "res://assets/sprites/menus/chart editor/events/play_animation.png",
+		"texture": "uid://d0bn2mll0jrpd",
 	},
 	"camera_bop": {
 		"parameters": ["Camera Bop Amount", "UI Bop Amount"],
 	},
 	"camera_zoom": {
 		"parameters": ["Zoom", "Duration", "Easing Type"],
-		"texture": "res://assets/sprites/menus/chart editor/events/camera_zoom.png",
+		"texture": "uid://bs2p6h6sokqf0",
 	},
 	"bop_rate": {
 		"parameters": ["Step Rate"]
@@ -30,7 +30,7 @@ const EVENT_DATA: Dictionary = {
 	},
 	"scroll_speed": {
 		"parameters": ["Amount", "Ease Duration"],
-		"texture": "res://assets/sprites/menus/chart editor/events/scroll_speed.png",
+		"texture": "uid://cdyobnrt3rnml",
 	},
 	"camera_shake": {
 		"parameters": ["Amount", "Duration"],

@@ -11,8 +11,8 @@ var camera_positions: Array = []
 @onready var rating_marker = $"World/Rating Marker"
 @onready var combo_marker = $"World/Combo Marker"
 
-@onready var rating_node = load("res://scenes/game/rating.tscn")
-@onready var combo_numbers_manager_node = load("res://scenes/game/combo_numbers_manager.tscn")
+@onready var rating_node = load("uid://0l7bo1bqcbcj")
+@onready var combo_numbers_manager_node = load("uid://bvreww5500i5g")
 
 # How often the camera bops. Based off the step rate in the conductor.
 var bop_rate: int = 16

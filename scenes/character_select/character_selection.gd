@@ -5,14 +5,14 @@ const LOCK_PRELOAD = preload("uid://48by53kv8bjm")
 var option_data: Dictionary = {
 	0: {
 		"character": "boyfriend",
-		"icons": load("res://assets/sprites/playstate/icons/boyfriend.tres"),
+		"icons": load("uid://bh20gxcnqe45g"),
 		"color": Color(0.192, 0.69, 0.82),
 		"player": load("uid://cdac0swu1gxwh"),
 		"partner": load("uid://dui2egg07r76u")
 	},
 	1: {
 		"character": "pico",
-		"icons": load("res://assets/sprites/playstate/icons/pico.tres"),
+		"icons": load("uid://wehhhpa8h24j"),
 		"color": Color(0.141, 0.851, 0.91),
 		"player": load("uid://bnx6yfjfa6wcj"),
 		"partner": load("uid://1ds41w4uwiao")
@@ -212,7 +212,7 @@ func confirm(pos: Vector2i = selected):
 		tween.tween_property($Camera2D, "offset", $Camera2D.offset - Vector2(0, 150), 0.5).set_delay(0.5)
 		
 		get_tree().call_group("current", "play", "confirm")
-		Global.change_scene_to("res://scenes/freeplay/freeplay.tscn")
+		Global.change_scene_to("uid://gbra80y44814")
 	else:
 		
 		$Audio/Locked.play()

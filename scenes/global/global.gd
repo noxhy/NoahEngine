@@ -1,6 +1,6 @@
 extends Node2D
 
-var loading_screen = load("res://scenes/global/loading_screen.tscn")
+var loading_screen = load("uid://ld5hyjhtx8wg")
 var fullscreen: bool = false
 
 var transitioning: bool = false

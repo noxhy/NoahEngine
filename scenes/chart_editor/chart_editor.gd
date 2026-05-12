@@ -11,7 +11,7 @@ const CONVERT_CHART_POPUP_PRELOAD = preload("uid://c6cl2ayvb4ms3")
 
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
-static var note_skin: NoteSkin = load("res://assets/sprites/playstate/developer/developer_note_skin.tres")
+static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm")
 static var song_position: float = 0.0
 
 @export_group("Colors")
@@ -74,7 +74,7 @@ var default_font_size = ThemeDB.fallback_font_size
 func _ready() -> void:
 	if name == "Chart Editor":
 		if ChartManager.event_editor:
-			get_tree().change_scene_to_file("res://scenes/chart_editor/event_editor/event_editor.tscn")
+			get_tree().change_scene_to_file("uid://cq6xqods6w7lw")
 			return
 	
 	get_viewport().gui_focus_changed.connect(_on_gui_focus_changed)
@@ -1268,10 +1268,10 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	%Instrumental.stream_paused = !toggled_on
 	
 	if toggled_on:
-		%"Play Button".icon = load("res://assets/sprites/menus/chart editor/pause_button.png")
+		%"Play Button".icon = load("uid://c1mgxe0dqdbgh")
 		play_audios(song_position)
 	
-	else: %"Play Button".icon = load("res://assets/sprites/menus/chart editor/play_button.png")
+	else: %"Play Button".icon = load("uid://byl3boevtc02p")
 
 func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
@@ -1399,7 +1399,7 @@ func file_button_item_pressed(id):
 		
 		6:
 			set_chart_from_chart(backup_chart)
-			Global.change_scene_to("res://scenes/main_menu/main_menu.tscn")
+			Global.change_scene_to("uid://rc52vcn2m7ob")
 			can_chart = false
 		
 		8:
@@ -1490,7 +1490,7 @@ func view_button_item_pressed(id):
 	match id:
 		0:
 			ChartManager.event_editor = true
-			get_tree().change_scene_to_file("res://scenes/chart_editor/event_editor/event_editor.tscn")
+			get_tree().change_scene_to_file("uid://cq6xqods6w7lw")
 		
 		1:
 			can_chart = false
@@ -1562,7 +1562,7 @@ func test_button_item_pressed(id):
 			GameManager.difficulty = ChartManager.difficulty
 			GameManager.freeplay = true
 			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
-			Global.change_scene_to("res://scenes/game/chart_tester.tscn")
+			Global.change_scene_to("uid://c56g0k7u2k6wo")
 			self.process_mode = Node.PROCESS_MODE_DISABLED
 		
 		2:

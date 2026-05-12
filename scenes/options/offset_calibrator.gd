@@ -58,7 +58,7 @@ func _draw():
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		$"Audio/Menu Cancel".play()
-		Global.change_scene_to("res://scenes/options/options.tscn", "down")
+		Global.change_scene_to("uid://stil5xd6xto6", "down")
 	elif event.is_action_pressed("ui_accept"):
 		$"Audio/Hit Sound".play()
 		var song_position: float = $Audio/Base.get_playback_position()

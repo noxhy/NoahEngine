@@ -33,7 +33,7 @@ enum AnimContext {
 
 @export_group("UI")
 ## Icons that are displayed in the ui. Can include [code]default[/code], [code]winning[/code] or [code]losing[/code].
-@export var icons: SpriteFrames = load("res://assets/sprites/playstate/icons/face.tres")
+@export var icons: SpriteFrames = load("uid://dt82dx1mf15r")
 @export var color: Color = Color(0.168627, 0.121569, 0.203922)
 
 ##The actual sprite node that will be used to play the anims. If not assigned, it will fallback to

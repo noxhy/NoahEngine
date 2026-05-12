@@ -9,20 +9,20 @@ class_name MainMenu
 @onready var options: Dictionary = {
 	"story_mode": {
 		"node": $"UI/Button Manager/Story Mode",
-		"scene": "res://scenes/story_mode/story_mode.tscn"
+		"scene": "uid://lh8hi5dk1sja"
 	},
 	"freeplay": {
 		"node": $"UI/Button Manager/Freeplay",
-		"scene": "res://scenes/freeplay/freeplay.tscn",
+		"scene": "uid://gbra80y44814",
 		"stop_music": true,
 	},
 	"credits": {
 		"node": $"UI/Button Manager/Credits",
-		"scene": "res://scenes/credits/credits.tscn"
+		"scene": "uid://clbeef0fp6xbw"
 	},
 	"options": {
 		"node": $"UI/Button Manager/Options",
-		"scene": "res://scenes/options/options.tscn"
+		"scene": "uid://stil5xd6xto6"
 	}
 	
 }
@@ -67,12 +67,12 @@ func _input(event):
 		elif event.is_action_pressed("ui_cancel"):
 			can_press = false
 			SoundManager.cancel.play()
-			Global.change_scene_to("res://scenes/start_menu/start_menu.tscn")
+			Global.change_scene_to("uid://b1kmgjxpce1de")
 			
 		elif event.is_action_pressed(&"chart_editor"):
 			can_press = false
 			SoundManager.music.stop()
-			Global.change_scene_to("res://scenes/chart_editor/chart_editor.tscn")
+			Global.change_scene_to("uid://c3lux2ajoe1g6")
 
 
 # Updates visually what happens when a new index is set for a selection

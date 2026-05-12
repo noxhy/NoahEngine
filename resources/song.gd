@@ -23,7 +23,7 @@ class_name Song
 
 @export var title: String
 @export var artist: String
-@export var icons: SpriteFrames = load("res://assets/sprites/playstate/icons/face.tres")
+@export var icons: SpriteFrames = load("uid://dt82dx1mf15r")
 @export var locked: bool = false
 
 @export_subgroup("Story Mode Stuff")

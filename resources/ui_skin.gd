@@ -23,4 +23,4 @@ class_name UISkin
 @export_subgroup("Scenes")
 
 @export var countdown_animation = "developer_countdown"
-@export var pause_scene = "res://scenes/game/pause_menu.tscn"
+@export var pause_scene = "uid://djhqiluiy02ao"

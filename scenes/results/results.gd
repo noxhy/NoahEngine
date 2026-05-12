@@ -65,7 +65,7 @@ func _process(delta: float) -> void:
 		
 		GameManager.reset_stats()
 		if GameManager.freeplay:
-			Global.change_scene_to("res://scenes/freeplay/freeplay.tscn")
+			Global.change_scene_to("uid://gbra80y44814")
 		else:
 			Global.change_scene_to("uid://lh8hi5dk1sja")
 
@@ -73,7 +73,7 @@ func _process(delta: float) -> void:
 func update_display():
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".size = Vector2(0, 0)
 	$"Scrolling Text/ParallaxLayer/RichTextLabel".text = str(
-		"[font_size=72][font=\"res://assets/fonts/results_background.ttf\"]",
+		"[font_size=72][font=\"uid://c7hwqqieqbc47\"]",
 		scrolling_text,
 		"[/font]"
 	)
@@ -81,7 +81,7 @@ func update_display():
 	
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".size = Vector2(48, 0)
 	$"Vertical Scrolling/ParallaxLayer3/RichTextLabel".text = str(
-		"[font_size=72][font=\"res://assets/fonts/results_background.ttf\"][font bt=-16.0][pulse freq=1.5 color=#ffffff90 ease=-2.0]",
+		"[font_size=72][font=\"uid://c7hwqqieqbc47\"][font bt=-16.0][pulse freq=1.5 color=#ffffff90 ease=-2.0]",
 		"[outline_size=8][outline_color=ffffff]",
 		scrolling_text
 	)
