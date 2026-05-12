@@ -22,11 +22,11 @@ func _on_about_to_popup() -> void:
 		create_track_node(i)
 		i += 1
 	
-	%Instrumental.update()
+	%"Instrumental Track".update()
 
 
 func _on_save_button_pressed() -> void:
-	ChartManager.song.instrumental = %Instrumental.selected_audio
+	ChartManager.song.instrumental = %"Instrumental Track".selected_audio
 	
 	ChartManager.song.vocals = []
 	for node in %Audios.get_children():

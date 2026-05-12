@@ -18,6 +18,7 @@ func _ready():
 		
 		$HBoxContainer.add_child(keybind_button_instance)
 		keybind_button_instance.connect("mouse_entered", self.select_button.bind(keybind_button_instance.index))
+		#keybind_button_instance.connect("pressed")
 		# keybind_button_instance.connect("mouse_exited", get_tree().call_group.bind("buttons", "normal"))
 		buttons.append(keybind_button_instance)
 
