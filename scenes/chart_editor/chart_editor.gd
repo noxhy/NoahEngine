@@ -67,8 +67,8 @@ var event_nodes: Array = []
 var current_visible_events_L: int = -1
 var current_visible_events_R: int = -1
 
-var default_font = ThemeDB.fallback_font
-var default_font_size = ThemeDB.fallback_font_size
+var default_font: Font = ThemeDB.fallback_font
+var default_font_size: int = ThemeDB.fallback_font_size
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -575,7 +575,7 @@ func _draw() -> void:
 		draw_rect(rect, box_color)
 	
 	if ChartManager.chart:
-		## The offset the grid has from the normal canvas layer
+		# The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position).floor())
@@ -583,7 +583,7 @@ func _draw() -> void:
 			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap).floor())
 			)
 		
-		## Song Start Offset Marker
+		# Song Start Offset Marker
 		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(%Grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
 		%Grid.get_real_position(Vector2(%Grid.columns, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 4))
@@ -595,7 +595,7 @@ func _draw() -> void:
 		%Grid.get_real_position(Vector2(1, 0)) - %Grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
 		
-		## Hover Box
+		# Hover Box
 		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, $Conductor.steps_per_measure / chart_snap))
