@@ -3,7 +3,6 @@
 extends Resource
 class_name Song
 
-
 @export_subgroup("Song Data")
 
 ## Strong the vocal tracks on a path makes use less memory to load in runtime
@@ -18,6 +17,10 @@ class_name Song
 ## Set in each difficult a file path for the "chart" key.
 ## If you want to override the scene for a diffculty, add a key "scene" with a path to said scene.
 @export var difficulties: Dictionary[String, Dictionary]
+
+## Optional filepath to a an Events Resource.
+## These events will be loaded regardless of difficulty
+@export_file('*.tres','*.res') var events:String
 
 @export_subgroup("Display Stuff")
 

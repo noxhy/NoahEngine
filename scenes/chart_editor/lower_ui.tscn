@@ -1,0 +1,171 @@
+[gd_scene format=3 uid="uid://bx3kdd0dt1kkw"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://assets/themes/chart_editor.res" id="1_ylsds"]
+[ext_resource type="Texture2D" uid="uid://dpb5afc48uqvb" path="res://assets/sprites/menus/chart editor/restart_button.png" id="2_yqqn8"]
+[ext_resource type="Texture2D" uid="uid://c7ka0o15iv6a3" path="res://assets/sprites/menus/chart editor/rewind_button.png" id="3_mcg17"]
+[ext_resource type="Texture2D" uid="uid://byl3boevtc02p" path="res://assets/sprites/menus/chart editor/play_button.png" id="4_i5g03"]
+[ext_resource type="Texture2D" uid="uid://hf58qhc23n5c" path="res://assets/sprites/menus/chart editor/fast_forward_button.png" id="5_8je4r"]
+[ext_resource type="Texture2D" uid="uid://dwtgyv6xf866j" path="res://assets/sprites/menus/chart editor/skip_button.png" id="6_hdy24"]
+
+[node name="Lower UI" type="HBoxContainer" unique_id=1056915829]
+clip_children = 1
+custom_minimum_size = Vector2(1280, 48)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -640.0
+offset_top = 312.0
+offset_right = -640.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+theme = ExtResource("1_ylsds")
+metadata/_edit_lock_ = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=531319254]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Current Time Label" type="Label" parent="HBoxContainer" unique_id=402981625]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "CURRENT TIME"
+vertical_alignment = 1
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1160474810]
+layout_mode = 2
+
+[node name="Beat" type="Label" parent="HBoxContainer" unique_id=602479764]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "BEAT"
+vertical_alignment = 1
+
+[node name="Step" type="Label" parent="HBoxContainer" unique_id=1763471797]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "STEP"
+vertical_alignment = 1
+
+[node name="Debug" type="Label" parent="HBoxContainer" unique_id=1397328240]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+vertical_alignment = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1810110037]
+layout_mode = 2
+size_flags_horizontal = 6
+alignment = 1
+
+[node name="VSeparator4" type="VSeparator" parent="HBoxContainer2" unique_id=46891413]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Skip to Beginning" type="Button" parent="HBoxContainer2" unique_id=1564061140]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+focus_mode = 0
+icon = ExtResource("2_yqqn8")
+flat = true
+
+[node name="Skip Backward" type="Button" parent="HBoxContainer2" unique_id=457072584]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 4
+focus_mode = 0
+icon = ExtResource("3_mcg17")
+flat = true
+
+[node name="Play Button" type="Button" parent="HBoxContainer2" unique_id=1060814314]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+focus_mode = 0
+toggle_mode = true
+icon = ExtResource("4_i5g03")
+flat = true
+
+[node name="Skip Forward" type="Button" parent="HBoxContainer2" unique_id=461682808]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+focus_mode = 0
+icon = ExtResource("5_8je4r")
+flat = true
+
+[node name="Skip to End" type="Button" parent="HBoxContainer2" unique_id=1168969896]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 4
+focus_mode = 0
+icon = ExtResource("6_hdy24")
+flat = true
+
+[node name="VSeparator3" type="VSeparator" parent="HBoxContainer2" unique_id=1120154517]
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="." unique_id=1386921721]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Difficulty Button" type="OptionButton" parent="HBoxContainer3" unique_id=1072897757]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+selected = 0
+allow_reselect = true
+item_count = 1
+popup/item_0/text = "difficulty"
+popup/item_0/id = 0
+
+[node name="VSeparator3" type="VSeparator" parent="HBoxContainer3" unique_id=1012635697]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Tempo" type="Label" parent="HBoxContainer3" unique_id=1508383069]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+text = "TEMPO"
+vertical_alignment = 1
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer3" unique_id=431522723]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Chart Snap" type="SpinBox" parent="HBoxContainer3" unique_id=1011476200]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+min_value = 4.0
+max_value = 192.0
+step = 4.0
+value = 16.0
+update_on_text_changed = true
+prefix = "1 /"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer3" unique_id=1898549450]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Time Left Label" type="Label" parent="HBoxContainer3" unique_id=604218503]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 10
+text = "TIME LEFT"
+horizontal_alignment = 2
+vertical_alignment = 1

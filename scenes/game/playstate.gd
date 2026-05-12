@@ -118,6 +118,13 @@ func _ready():
 	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
 	assert(chart, 'Failed to load chart. is (%s) correct?' % (song_data.difficulties[GameManager.difficulty].chart))
 	
+	if not song_data.events.is_empty() and ResourceLoader.exists(song_data.events):
+		var ext_events = load(song_data.events)
+		if ext_events is ChartEvents:
+			chart.merge_events_into_this(load(song_data.events))
+		else:
+			ext_events.free()
+	
 	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 	
 	ui.set_credits(song_data.title, song_data.artist)

@@ -9,6 +9,7 @@ var editing: int = -1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super()
+	%"Upper UI".get_node("%View Button").get_popup().set_item_disabled(1, true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -66,14 +67,14 @@ func _process(delta: float) -> void:
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
-	%"Current Time Label".text = Global.float_to_time(song_position + start_offset)
+	%"Lower UI".get_node("%Current Time Label").text = Global.float_to_time(song_position + start_offset)
 	if song_speed != 1:
-		%"Current Time Label".text += str(" (", song_speed, "x)")
+		%"Lower UI".get_node("%Current Time Label").text += str(" (", song_speed, "x)")
 	
 	if ChartManager.song:
-		%"Time Left Label".text = "-" + Global.float_to_time(%Instrumental.stream.get_length() - song_position)
+		%"Lower UI".get_node("%Time Left Label").text = "-" + Global.float_to_time(%Instrumental.stream.get_length() - song_position)
 	else:
-		%"Time Left Label".text = "- ??:??"
+		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
 	
 	if Input.is_action_just_pressed(&"ui_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
@@ -349,7 +350,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_events_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2.5 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 3 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
 	

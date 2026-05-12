@@ -37,6 +37,28 @@ func get_events_data() -> Array: return chart_data.get("events")
 func get_tempos_data() -> Dictionary: return chart_data.get("tempos")
 func get_meters_data() -> Dictionary: return chart_data.get("meters")
 
+func merge_events_into_this(events:ChartEvents):
+	var chart_events = get_events_data()
+	
+	chart_events.append_array(events.data)
+	
+	var ret_events = [] 
+	var push = func(ev:Variant): #clear out dupes
+		
+		for event in ret_events:
+			if is_equal_approx(event[0], ev[0]) \
+			and event[1] == ev[1] \
+			and event[2] == ev[2]: \
+			return
+		
+		ret_events.append(ev)
+	
+	for event in chart_events: push.call(event)
+	
+	ret_events.sort_custom(sort_notes)
+	
+	chart_data.set('events', ret_events)
+
 
 func get_tempo_at(time: float) -> float:
 	time = max(0, time)
