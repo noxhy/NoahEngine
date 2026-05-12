@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Song" format=3 uid="uid://dlr3l60wbh750"]
 
 [ext_resource type="SpriteFrames" uid="uid://digynxqrdoj3g" path="res://assets/sprites/playstate/icons/darnell.tres" id="1_5hr86"]
-[ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_j6ya2"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="2_j6ya2"]
 
 [resource]
 script = ExtResource("2_j6ya2")

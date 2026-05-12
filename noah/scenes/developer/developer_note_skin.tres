@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://buly8rgmgrrnm"]
+
+[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://assets/sounds/menu sounds/hitsound.wav" id="1_f86v8"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://noah/scenes/developer/arrow/notes.tres" id="1_ovb1l"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="2_g6s64"]
+[ext_resource type="SpriteFrames" uid="uid://chk3joc6hfc23" path="res://noah/scenes/developer/arrow/strums.tres" id="3_7te8r"]
+
+[resource]
+script = ExtResource("2_g6s64")
+strums_texture = ExtResource("3_7te8r")
+notes_texture = ExtResource("1_ovb1l")
+notes_scale = 0.2
+sustain_width = 600
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"end",
+&"down press": &"down press",
+&"down tail": &"tail",
+&"left": &"left",
+&"left end": &"end",
+&"left press": &"left press",
+&"left tail": &"tail",
+&"right": &"right",
+&"right end": &"end",
+&"right press": &"right press",
+&"right tail": &"tail",
+&"up": &"up",
+&"up end": &"end",
+&"up press": &"up press",
+&"up tail": &"tail"
+})
+hit_sound = ExtResource("1_f86v8")

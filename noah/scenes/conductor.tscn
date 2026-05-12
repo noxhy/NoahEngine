@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://2abrkhbxxlab"]
+
+[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/scenes/conductor.gd" id="1_jtx3j"]
+
+[node name="Conductor" type="Node" unique_id=1153878141]
+script = ExtResource("1_jtx3j")

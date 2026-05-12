@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://ce3dgr61438sa"]
+
+[ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://noah/scenes/strumlines/strum_manager.gd" id="1_7u4ah"]
+[ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://noah/scenes/developer/developer_note_skin.tres" id="2_bdnme"]
+[ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://noah/scenes/strumlines/strum.tscn" id="3_aabop"]
+
+[node name="Strum Handeler" type="Node2D" unique_id=1619773465 groups=["strums"]]
+script = ExtResource("1_7u4ah")
+note_skin = ExtResource("2_bdnme")
+strums = PackedStringArray("Left", "Down", "Up", "Right")
+
+[node name="Left" parent="." unique_id=102609042 instance=ExtResource("3_aabop")]
+position = Vector2(-192, 0)
+input = "note_left"
+strum_name = "left"
+can_splash = true
+
+[node name="Down" parent="." unique_id=900293091 instance=ExtResource("3_aabop")]
+position = Vector2(-64, 0)
+input = "note_down"
+strum_name = "down"
+can_splash = true
+
+[node name="Up" parent="." unique_id=2131350656 instance=ExtResource("3_aabop")]
+position = Vector2(64, 0)
+input = "note_up"
+strum_name = "up"
+can_splash = true
+
+[node name="Right" parent="." unique_id=675437901 instance=ExtResource("3_aabop")]
+position = Vector2(192, 0)
+input = "note_right"
+strum_name = "right"
+can_splash = true

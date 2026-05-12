@@ -2,7 +2,7 @@
 
 [ext_resource type="Resource" uid="uid://b30g8jurwop0d" path="res://assets/albums/pico_songs.tres" id="1_hf6k2"]
 [ext_resource type="Texture2D" uid="uid://cemqnoop727he" path="res://assets/sprites/menus/freeplay/characters/pico/freeplayBGweek1-pico.png" id="2_hf6k2"]
-[ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="11_r1hcg"]
+[ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://noah/resources/playable_character.gd" id="11_r1hcg"]
 
 [resource]
 script = ExtResource("11_r1hcg")

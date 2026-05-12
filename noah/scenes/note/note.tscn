@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://krhxbwnjnr7r"]
+
+[ext_resource type="Script" uid="uid://unxl5ry1ynol" path="res://noah/scenes/note/basic_note.gd" id="1_2my17"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://noah/scenes/developer/arrow/notes.tres" id="2_r4bqa"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/scenes/offset_sprite.gd" id="4_kfabs"]
+
+[node name="Note" type="Node2D" unique_id=1794701138 groups=["note"]]
+use_parent_material = true
+scale = Vector2(0.2, 0.2)
+script = ExtResource("1_2my17")
+
+[node name="Note" type="AnimatedSprite2D" parent="." unique_id=1237220574]
+z_index = 1
+use_parent_material = true
+scale = Vector2(1.065, 1.065)
+sprite_frames = ExtResource("2_r4bqa")
+animation = &"left"
+script = ExtResource("4_kfabs")
+animation_names = Dictionary[StringName, StringName]({
+&"down": &"down",
+&"down end": &"down end",
+&"down tail": &"down tail",
+&"left": &"left",
+&"left end": &"left end",
+&"left tail": &"left tail",
+&"right": &"right",
+&"right end": &"right end",
+&"right tail": &"right tail",
+&"up": &"up",
+&"up end": &"up end",
+&"up tail": &"up tail"
+})
+
+[node name="Tail" type="TextureRect" parent="." unique_id=1151387659]
+modulate = Color(1, 1, 1, 0.588)
+rotation = 1.5707964
+stretch_mode = 1
+
+[node name="End" type="TextureRect" parent="Tail" unique_id=1193064645]
+texture_repeat = 2
+layout_mode = 0
+stretch_mode = 2

@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://cj2hoqrld81vv"]
 
 [ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://assets/sounds/menu sounds/hitsound.wav" id="1_7y8y0"]
-[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://resources/note_skin.gd" id="1_ejrj1"]
 [ext_resource type="SpriteFrames" uid="uid://clalimjd3yte3" path="res://assets/sprites/playstate/default/arrow/notes.tres" id="1_lvg3v"]
 [ext_resource type="SpriteFrames" uid="uid://bw8j67b3ju40g" path="res://assets/sprites/playstate/default/arrow/covers.res" id="2_hgpr1"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="4_wsgle"]
 [ext_resource type="Texture2D" uid="uid://c45dknw5a4jo2" path="res://assets/sprites/playstate/default/arrow/splashes/noteSplashes.png" id="5_wsgle"]
 [ext_resource type="SpriteFrames" uid="uid://dq738acxbgia0" path="res://assets/sprites/playstate/default/arrow/strums.res" id="6_wsgle"]
 
@@ -335,7 +335,7 @@ animations = [{
 }]
 
 [resource]
-script = ExtResource("1_ejrj1")
+script = ExtResource("4_wsgle")
 strums_texture = ExtResource("6_wsgle")
 notes_texture = ExtResource("1_lvg3v")
 splashes_texture = SubResource("SpriteFrames_b6ghg")

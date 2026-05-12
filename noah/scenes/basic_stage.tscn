@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dte5u3i8b5oue"]
+
+[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/scenes/basic_stage.gd" id="1_sauev"]
+
+[node name="Stage" type="Node2D" unique_id=1237215257]
+script = ExtResource("1_sauev")

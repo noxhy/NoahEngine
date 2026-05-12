@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://d21xu253y4rnv"]
+
+[ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://funkin/scenes/alphabet.gd" id="1_e37qy"]
+
+[node name="Alphabet" type="Node2D" unique_id=195551509]
+script = ExtResource("1_e37qy")
+glyph_offsets = Dictionary[String, Vector2]({
+"\"": Vector2(-2, -23),
+"'": Vector2(0, -28),
+"+": Vector2(0, -8),
+"-": Vector2(0, -20),
+"=": Vector2(0, -12),
+"g": Vector2(0, 15),
+"j": Vector2(0, 15),
+"p": Vector2(0, 15),
+"q": Vector2(0, 15),
+"y": Vector2(0, 15),
+"~": Vector2(0, -18)
+})
+glyph_name_overrides = Dictionary[String, StringName]({
+"!": &"exclamation point",
+"\"": &"end parentheses",
+"#": &"hashtag ",
+"$": &"dollarsign",
+"&": &"amp",
+"'": &"apostraphie",
+"*": &"multiply x",
+",": &"comma",
+".": &"period",
+"/": &"forward slash",
+"?": &"question mark",
+"“": &"start parentheses",
+"”": &"end parentheses",
+"←": &"left arrow",
+"↑": &"up arrow",
+"→": &"right arrow",
+"↓": &"down arrow",
+"♡": &"heart",
+"♥": &"heart",
+"😠": &"angry faic"
+})

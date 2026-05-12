@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Week" format=3 uid="uid://diniy0qu228rp"]
 
-[ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_bhmme"]
-[ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_qdr1t"]
+[ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://noah/resources/week.gd" id="1_bhmme"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="2_qdr1t"]
 [ext_resource type="Resource" uid="uid://d1ousytoxb4we" path="res://playable_songs/senpai/Senpai.res" id="3_bhmme"]
 
 [resource]

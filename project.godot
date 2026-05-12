@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Noah Engine"
-run/main_scene="res://scenes/menus/start_menu/start_menu.tscn"
+run/main_scene="res://funkin/scenes/menus/start_menu/start_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.png"
 
@@ -21,14 +21,14 @@ buses/default_bus_layout="uid://wp1fb3lbqup6"
 
 [autoload]
 
-Global="*res://scenes/global/global.tscn"
+Global="*res://noah/scenes/global.tscn"
 Transitions="*res://scenes/global/transitions.tscn"
-GameManager="*res://scenes/global/game_manager.gd"
-SettingsManager="*res://scenes/global/settings_manager.gd"
-ChartManager="*res://scenes/global/chart_manager.gd"
+GameManager="*res://noah/scenes/managers/game_manager.gd"
+SettingsManager="*res://noah/scenes/managers/settings_manager.gd"
+ChartManager="*res://noah/scenes/managers/chart_manager.gd"
 Preload="*res://preload.gd"
-SoundManager="*res://scenes/global/sound_manager.tscn"
-SaveManager="*res://scenes/global/save_manager.gd"
+SoundManager="*res://noah/scenes/managers/sound_manager.tscn"
+SaveManager="*res://noah/scenes/managers/save_manager.gd"
 
 [debug]
 
@@ -50,8 +50,8 @@ enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg")
 
 folder_colors={
 "res://assets/": "orange",
+"res://noah/resources/": "green",
 "res://playable_songs/": "purple",
-"res://resources/": "green",
 "res://scenes/": "blue"
 }
 

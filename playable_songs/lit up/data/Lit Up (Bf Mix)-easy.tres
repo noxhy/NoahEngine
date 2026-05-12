@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Chart" format=3 uid="uid://itklct2ad03x"]
 
-[ext_resource type="Script" uid="uid://bvrhk01mogilj" path="res://resources/chart.gd" id="1_ig0rs"]
+[ext_resource type="Script" uid="uid://bvrhk01mogilj" path="res://noah/resources/chart.gd" id="1_ig0rs"]
 
 [resource]
 script = ExtResource("1_ig0rs")
