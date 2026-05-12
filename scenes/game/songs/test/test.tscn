@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://scenes/game/characters/boyfriend pixel.tscn" id="8_cda0r"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="10_82qc2"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="10_owhbd"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="11_vka10"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/basic_ui.tscn" id="11_vka10"]
 
 [node name="Test" type="Node2D" unique_id=138125275]
 script = ExtResource("1_2dtky")

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://scenes/game/characters/boyfriend.tscn" id="12_m4war"]
 [ext_resource type="PackedScene" uid="uid://k3e5qpeoyea4" path="res://scenes/game/characters/darnell.tscn" id="13_h84qt"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://scenes/game/characters/girlfriend.tscn" id="14_1x41t"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="15_dj0ml"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/basic_ui.tscn" id="15_dj0ml"]
 [ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://assets/shaders/adjust_hsv.gdshader" id="17_goysl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kuluq"]

@@ -13,7 +13,7 @@
 [ext_resource type="Shader" uid="uid://boq6lqipwmoli" path="res://assets/shaders/rimlight.gdshader" id="13_th3hl"]
 [ext_resource type="PackedScene" uid="uid://cvw5oumi78kvr" path="res://scenes/game/characters/tankman.tscn" id="14_ctps2"]
 [ext_resource type="PackedScene" uid="uid://biw6xh624onjh" path="res://scenes/game/characters/nene.tscn" id="15_th3hl"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="16_owg0q"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/basic_ui.tscn" id="16_owg0q"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="16_v2n7e"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_oxpka"]

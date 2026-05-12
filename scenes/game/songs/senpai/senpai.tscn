@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://c641vxfiu033w" path="res://scenes/game/characters/senpai.tscn" id="10_2o85c"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://scenes/game/camera_controller.gd" id="11_gd42n"]
 [ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://scenes/game/characters/girlfriend pixel.tscn" id="11_norpj"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/ui.tscn" id="12_q80n4"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://scenes/game/basic_ui.tscn" id="12_q80n4"]
 
 [node name="Senpai" type="Node2D" unique_id=739542381]
 script = ExtResource("1_kkhjq")
