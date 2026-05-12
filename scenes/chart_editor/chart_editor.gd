@@ -1548,7 +1548,7 @@ func audio_button_item_pressed(id):
 			_on_play_button_toggled(!%Instrumental.playing)
 		
 		2:
-			$"UI/Upper UI/Audio Button/Audios Window".popup()
+			%"Upper UI".get_node("%Audios Window").popup()
 		
 		4:
 			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",

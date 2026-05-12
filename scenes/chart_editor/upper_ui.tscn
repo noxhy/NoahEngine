@@ -147,6 +147,7 @@ popup/item_8/id = 8
 metadata/_edit_use_anchors_ = true
 
 [node name="Audios Window" parent="Audio Button" unique_id=740299600 instance=ExtResource("2_esjoi")]
+unique_name_in_owner = true
 visible = false
 
 [node name="Test Button" type="MenuButton" parent="." unique_id=64458848]
