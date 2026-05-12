@@ -839,9 +839,9 @@ func load_dividers():
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for i in [1]:
+	for i in [0, 1, %Grid.columns]:
 		var rect = ColorRect.new()
-		var size: float = 4 if i == 0 else 2
+		var size: float = 2
 		
 		rect.color = divider_color
 		rect.size = Vector2(size, %Grid.get_size().y)
