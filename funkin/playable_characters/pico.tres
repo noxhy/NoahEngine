@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlayableCharacter" format=3 uid="uid://dxqhmrv2rrdkc"]
 
-[ext_resource type="Resource" uid="uid://b30g8jurwop0d" path="res://funkin/albums/pico_songs.tres" id="1_hf6k2"]
+[ext_resource type="Resource" uid="uid://b30g8jurwop0d" path="res://funkin/assets/albums/pico_songs.tres" id="1_hf6k2"]
 [ext_resource type="Texture2D" uid="uid://cemqnoop727he" path="res://funkin/assets/images/menus/freeplay/characters/pico/freeplayBGweek1-pico.png" id="2_hf6k2"]
 [ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="11_r1hcg"]
 
