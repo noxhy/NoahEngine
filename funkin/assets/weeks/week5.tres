@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_60ltl"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_glyij"]
-[ext_resource type="Resource" path="res://playable_songs/cocoa/Cocoa Erect.res" id="3_glyij"]
 [ext_resource type="Resource" uid="uid://b3o6xjxb7tx0g" path="res://playable_songs/eggnog/Eggnog Erect.res" id="4_myjj5"]
 
 [resource]
@@ -10,4 +9,4 @@ script = ExtResource("1_60ltl")
 week_name = "Red Snow"
 week_animation = "week5"
 node_path = "UI/Week Display/SubViewport/Week 5"
-song_list = Array[ExtResource("2_glyij")]([ExtResource("3_glyij"), ExtResource("4_myjj5")])
+song_list = Array[ExtResource("2_glyij")]([ExtResource("4_myjj5")])
