@@ -41,6 +41,13 @@ enum AnimContext {
 @export var dance_animations: Array[StringName] = [&"idle"]:
 	set(v):
 		dance_animations = v
+		if animation_player:
+			if animation_player is AnimatedSprite2D:
+				if dance_animations.size() > 0:
+					animation_player.autoplay = dance_animations[0]
+				else:
+					animation_player.autoplay = null
+		
 		update_ghost()
 ## How often [b](in steps)[/b] the dance will be played.
 @export_range(1, 1, 1, "suffix:steps", "or_greater") var dance_rate: int = 8
@@ -62,20 +69,19 @@ enum AnimContext {
 ##[AnimatedSprite2D] or [AnimateSymbol]
 @export var animation_player: Node = null:
 	set(v):
-		if !v:
-			v = $AnimatedSprite2D
-			if !v:
-				v = $AnimateSymbol
-		
+		animation_player = verify_animation_player(v)
 		update_configuration_warnings()
 		
-		animation_player = v
 		update_ghost()
 
 @export_group("Tools")
 
-@export_tool_button("Reset Position", "UndoRedo") var reset_button: Callable = self.reset_position
 @export_tool_button("Save Offset", "Save") var save_button: Callable = self.save_offset
+@export_tool_button("Reset Position", "UndoRedo") var reset_button: Callable = self.reset_position
+@export_enum("Back", "Front") var ghost_ordering: int = 0:
+	set(v):
+		ghost_ordering = v
+		update_ghost()
 
 var current_dance: int = 0
 ## The current animation ID.
@@ -90,6 +96,8 @@ var sing_time: float = 0
 var ghost_sprite = null
 
 func _ready():
+	animation_player = verify_animation_player(animation_player)
+	
 	if not animation_player:
 		printerr("Character animation player was not set and could not be found.")
 		return
@@ -251,10 +259,11 @@ func update_ghost():
 	if !Engine.is_editor_hint():
 		return
 	
+	if ghost_sprite:
+		self.remove_child(ghost_sprite)
+		ghost_sprite.queue_free()
+	
 	if animation_player:
-		if ghost_sprite:
-			ghost_sprite.queue_free()
-		
 		if animation_player is AnimatedSprite2D:
 			ghost_sprite = Sprite2D.new()
 			
@@ -267,7 +276,13 @@ func update_ghost():
 					ghost_sprite.offset = offsets.get(get_animation_name(dance_animations[0]), Vector2.ZERO)
 			
 			ghost_sprite.modulate = Color(1.825, 1.825, 1.825, 0.5)
-			ghost_sprite.z_index = animation_player.z_index - 1
+			ghost_sprite.z_index = animation_player.z_index
+			match ghost_ordering:
+				0:
+					ghost_sprite.z_index -= 1
+				
+				1:
+					ghost_sprite.z_index += 1
 			
 			self.add_child(ghost_sprite)
 
@@ -300,3 +315,11 @@ func save_offset():
 			undo_redo.add_do_property(self, &"offsets", temp)
 			undo_redo.add_undo_property(self, &"offsets", self.offsets)
 			undo_redo.commit_action()
+
+func verify_animation_player(node: Node):
+	if !node:
+		node = $AnimatedSprite2D
+		if !node:
+			node = $AnimateSymbol
+	
+	return node
