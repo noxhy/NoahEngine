@@ -14,7 +14,7 @@ var option_data: Dictionary = {
 		"character": "pico",
 		"icons": load("uid://wehhhpa8h24j"),
 		"color": Color(0.141, 0.851, 0.91),
-		"player": load("uid://bnx6yfjfa6wcj"),
+		"player": load("uid://d03jjve4mhk7l"),
 		"partner": load("uid://1ds41w4uwiao")
 	},
 	2: {
