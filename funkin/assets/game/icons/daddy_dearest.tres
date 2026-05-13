@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dfkjqte638jkv"]
+
+[ext_resource type="Texture2D" uid="uid://dxgde6xj50ans" path="res://funkin/assets/game/icons/dad.png" id="1_ga15r"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6nar"]
+atlas = ExtResource("1_ga15r")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tqrnd"]
+atlas = ExtResource("1_ga15r")
+region = Rect2(150, 0, 150, 150)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6nar")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tqrnd")
+}],
+"loop": true,
+"name": &"losing",
+"speed": 5.0
+}]

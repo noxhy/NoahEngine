@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://daqubxavwk7jv"]
+
+[ext_resource type="SpriteFrames" uid="uid://bbwe77anwnrpv" path="res://funkin/assets/images/menus/main menu/menu_story_mode.res" id="1_8sw2w"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="2_1n74k"]
+
+[node name="OffsetSprite" type="AnimatedSprite2D" unique_id=1252136533]
+sprite_frames = ExtResource("1_8sw2w")
+animation = &"story_mode basic"
+script = ExtResource("2_1n74k")
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"story_mode basic",
+&"selected": &"story_mode white"
+})

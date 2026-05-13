@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://40bxl3qwj0fv"]
+
+[ext_resource type="SpriteFrames" uid="uid://c2ef5yqq08tfh" path="res://funkin/assets/images/menus/main menu/menu_credits.res" id="1_85wfu"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="2_40krp"]
+
+[node name="Credits" type="AnimatedSprite2D" unique_id=1030149648]
+sprite_frames = ExtResource("1_85wfu")
+animation = &"credits idle"
+script = ExtResource("2_40krp")
+animation_names = Dictionary[StringName, StringName]({
+&"idle": &"credits idle",
+&"selected": &"credits white"
+})

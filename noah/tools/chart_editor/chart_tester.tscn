@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://c56g0k7u2k6wo"]
+
+[ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://noah/tools/chart_editor/chart_tester.gd" id="1_ep6vc"]
+[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_ajkug"]
+[ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="2_srd2m"]
+[ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://noah/assets/game/developer/developer_note_skin.tres" id="4_laa4w"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="5_g7go4"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="9_gdhuo"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="12_chcqi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
+font = ExtResource("12_chcqi")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[node name="Chart Tester" type="Node2D" unique_id=732337204]
+script = ExtResource("1_ep6vc")
+metadata/_edit_vertical_guides_ = []
+
+[node name="PlayState Host" parent="." unique_id=1464953201 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_ajkug")]
+host = NodePath("..")
+ui = NodePath("../UI")
+camera = NodePath("../CameraController")
+note_skin = ExtResource("4_laa4w")
+ui_skin = ExtResource("2_srd2m")
+next_scene = "res://scenes/chart editor/chart_editor.tscn"
+
+[node name="Camera" type="Camera2D" parent="." unique_id=126874252]
+position = Vector2(640, 360)
+position_smoothing_enabled = true
+position_smoothing_speed = 3.0
+
+[node name="World" type="CanvasLayer" parent="." unique_id=1302506100]
+layer = -1
+follow_viewport_enabled = true
+
+[node name="Position 1" type="Marker2D" parent="World" unique_id=1566283027 groups=["camera_positions"]]
+unique_name_in_owner = true
+position = Vector2(640.3, 360)
+gizmo_extents = 18.3
+
+[node name="Position 2" type="Marker2D" parent="World" unique_id=1214951205 groups=["camera_positions"]]
+unique_name_in_owner = true
+position = Vector2(640.3, 360)
+gizmo_extents = 18.3
+
+[node name="Position 3" type="Marker2D" parent="World" unique_id=660687284 groups=["camera_positions"]]
+unique_name_in_owner = true
+position = Vector2(640.3, 360)
+gizmo_extents = 18.3
+
+[node name="Rating Marker" type="Marker2D" parent="World" unique_id=450647462]
+position = Vector2(896.3, 256)
+gizmo_extents = 20.0
+
+[node name="Combo Marker" type="Marker2D" parent="World" unique_id=451084317]
+position = Vector2(992.3, 296)
+gizmo_extents = 20.0
+
+[node name="UI" parent="." unique_id=174843182 instance=ExtResource("5_g7go4")]
+
+[node name="Chart Stats" type="Label" parent="UI" unique_id=2008266331]
+offset_left = -128.0
+offset_top = -104.0
+offset_right = 128.0
+offset_bottom = 152.0
+label_settings = SubResource("LabelSettings_xphcd")
+autowrap_mode = 3
+
+[node name="CameraController" type="Node" parent="." unique_id=890983513 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("9_gdhuo")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
+
+[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
+[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
+[connection signal="setup_finished" from="PlayState Host" to="." method="_on_play_state_host_setup_finished"]

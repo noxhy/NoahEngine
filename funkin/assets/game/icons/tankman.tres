@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://c4d42u4d21spo"]
+
+[ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://funkin/assets/game/icons/icon-tankman.png" id="1_u2wbn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_65wdv"]
+atlas = ExtResource("1_u2wbn")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exbtv"]
+atlas = ExtResource("1_u2wbn")
+region = Rect2(150, 0, 150, 150)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_65wdv")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exbtv")
+}],
+"loop": true,
+"name": &"losing",
+"speed": 5.0
+}]

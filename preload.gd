@@ -1,6 +1,6 @@
 extends Node
 
 var character_data: Dictionary = {
-	"boyfriend": preload("res://assets/characters/boyfriend.tres"),
-	"pico": preload("res://assets/characters/pico.tres")
+	"boyfriend": preload("uid://c73l5wk1k58mp"),
+	"pico": preload("uid://dxqhmrv2rrdkc")
 }

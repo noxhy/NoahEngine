@@ -1,4 +1,4 @@
-@icon("res://assets/sprites/nodes/chart_file.png")
+@icon("uid://c2la537hogg50")
 
 class_name ChartEvents extends Resource
 
