@@ -1,6 +1,6 @@
 extends Node2D
 
-const MENU_OPTION_NODE = preload("uid://55odtbd2v2ql")
+var MENU_OPTION_NODE = load("uid://55odtbd2v2ql")
 @export var can_click: bool = true
 
 # To add a new credit, add an array with this format:
@@ -122,9 +122,9 @@ func update(i: int):
 	
 	if option_stats.has(option_nodes[i].option_name):
 		var stats = option_stats.get(option_nodes[i].option_name)
-		$Background/ColorRect/Label.text = stats[0]
+		$Desc/ColorRect/Label.text = stats[0]
 	else:
-		$Background/ColorRect/Label.text = option_nodes[i].option_name
+		$Desc/ColorRect/Label.text = option_nodes[i].option_name
 	
 	option_nodes[i].modulate = Color(1, 1, 1)
 
