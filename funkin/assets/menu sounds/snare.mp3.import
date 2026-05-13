@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://baajtpwp5hvdp"
+path="res://.godot/imported/snare.mp3-bdb51a1b6c3d540ff1d7f2af44a4d343.mp3str"
+
+[deps]
+
+source_file="res://funkin/assets/menu sounds/snare.mp3"
+dest_files=["res://.godot/imported/snare.mp3-bdb51a1b6c3d540ff1d7f2af44a4d343.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

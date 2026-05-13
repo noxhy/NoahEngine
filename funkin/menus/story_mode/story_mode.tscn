@@ -13,7 +13,7 @@
 [ext_resource type="Resource" uid="uid://vtl33x8ww4wi" path="res://funkin/assets/weeks/week4.tres" id="7_n3oos"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://funkin/scenes/characters/boyfriend.tscn" id="8_npxap"]
 [ext_resource type="Resource" uid="uid://d2yoa6f24kw4g" path="res://funkin/assets/weeks/week5.tres" id="8_q2n1o"]
-[ext_resource type="Shader" uid="uid://biwtmuarqekfa" path="res://assets/shaders/replace_color.gdshader" id="9_20mkd"]
+[ext_resource type="Shader" uid="uid://biwtmuarqekfa" path="res://funkin/assets/shaders/replace_color.gdshader" id="9_20mkd"]
 [ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://funkin/menus/freeplay/freeplay_arrow.tscn" id="9_gdyqo"]
 [ext_resource type="Resource" uid="uid://diniy0qu228rp" path="res://funkin/assets/weeks/week6.tres" id="9_juwvh"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/scenes/characters/girlfriend.tscn" id="9_qcirc"]

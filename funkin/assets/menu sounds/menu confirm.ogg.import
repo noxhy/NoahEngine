@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://guk2nlj2xwt7"
+path="res://.godot/imported/menu confirm.ogg-b38bb4a6219e4c9071e49d22052dc599.oggvorbisstr"
+
+[deps]
+
+source_file="res://funkin/assets/menu sounds/menu confirm.ogg"
+dest_files=["res://.godot/imported/menu confirm.ogg-b38bb4a6219e4c9071e49d22052dc599.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

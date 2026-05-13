@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://o04ewby7jkf1"]
 
 [ext_resource type="Script" uid="uid://df3mvgqvkhgri" path="res://funkin/scenes/stages/philly/philly.gd" id="1_osrb8"]
-[ext_resource type="Shader" uid="uid://cn1tl4764rmon" path="res://assets/shaders/raindrops.gdshader" id="2_0df5w"]
+[ext_resource type="Shader" uid="uid://cn1tl4764rmon" path="res://funkin/assets/shaders/raindrops.gdshader" id="2_0df5w"]
 [ext_resource type="Texture2D" uid="uid://qh7u8c8w87q0" path="res://funkin/assets/images/stages/philly_streets/phillyForeground.png" id="2_ivyoc"]
-[ext_resource type="Shader" uid="uid://dw0lfwemfmrel" path="res://assets/shaders/rain.gdshader" id="2_xd4wj"]
+[ext_resource type="Shader" uid="uid://dw0lfwemfmrel" path="res://funkin/assets/shaders/rain.gdshader" id="2_xd4wj"]
 [ext_resource type="SpriteFrames" uid="uid://de6iwhwjvpwoi" path="res://funkin/assets/images/stages/philly_streets/traffic_lights.res" id="3_4rwr1"]
 [ext_resource type="Texture2D" uid="uid://cdclp4qq6210j" path="res://funkin/assets/images/stages/philly_streets/SpraycanPile.png" id="3_iqa2f"]
 [ext_resource type="Texture2D" uid="uid://c3tul66ee8e36" path="res://funkin/assets/images/stages/philly_streets/phillyConstruction.png" id="3_uikep"]

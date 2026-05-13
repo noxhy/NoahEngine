@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://48by53kv8bjm"]
 
 [ext_resource type="Script" uid="uid://chart0kfyasrs" path="res://funkin/menus/character_select/lock.gd" id="1_748hf"]
-[ext_resource type="Shader" uid="uid://c83hbfkcyxfxp" path="res://assets/shaders/lock.gdshader" id="1_f5u7k"]
+[ext_resource type="Shader" uid="uid://c83hbfkcyxfxp" path="res://funkin/assets/shaders/lock.gdshader" id="1_f5u7k"]
 [ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="2_748hf"]
 [ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="4_u1fif"]
 [ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="5_dgmxv"]

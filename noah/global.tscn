@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cjdqxjkevt2iw" path="res://noah/global.gd" id="1_swfdr"]
 [ext_resource type="FontFile" uid="uid://c1yqml3y7c8j2" path="res://assets/fonts/secondary_font.ttf" id="2_77tff"]
-[ext_resource type="AudioStream" uid="uid://svn606p6k0w0" path="res://assets/sounds/menu sounds/menu scroll.ogg" id="3_q1yt6"]
+[ext_resource type="AudioStream" uid="uid://svn606p6k0w0" path="res://funkin/assets/menu sounds/menu scroll.ogg" id="3_q1yt6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bm3mx"]
 bg_color = Color(0.6, 0.6, 0.6, 0)

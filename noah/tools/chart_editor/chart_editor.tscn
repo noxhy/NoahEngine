@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://ocjrud8madj7" path="res://noah/tools/chart_editor/chart_editor.gd" id="1_ugmsy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_dontb"]
 [ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://noah/tools/chart_editor/grid.tscn" id="2_i6pv1"]
-[ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://assets/sounds/conductor/conductor sfx.mp3" id="3_myxvx"]
+[ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://funkin/assets/conductor/conductor sfx.mp3" id="3_myxvx"]
 [ext_resource type="AudioStream" uid="uid://bodc4sfit172e" path="res://funkin/assets/sounds/chart_editor/sound-hit.wav" id="4_1k01c"]
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://funkin/assets/images/menus/chart editor/menuDesat.png" id="4_g6hlb"]
 [ext_resource type="AudioStream" uid="uid://s88wsjen8kj7" path="res://funkin/assets/sounds/chart_editor/keyboard1.ogg" id="5_ewdb4"]

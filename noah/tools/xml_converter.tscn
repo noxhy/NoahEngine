@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://lyuw3kua1kwc"]
 
 [ext_resource type="Script" uid="uid://cdjdqjrjntu1f" path="res://noah/tools/xml_converter.gd" id="1_ieiou"]
-[ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://assets/sounds/menu sounds/menu confirm.ogg" id="2_jxfro"]
+[ext_resource type="AudioStream" uid="uid://guk2nlj2xwt7" path="res://funkin/assets/menu sounds/menu confirm.ogg" id="2_jxfro"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="3_dn752"]
 [ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://funkin/assets/images/menus/background/menuDesat.png" id="4_o3a0u"]
 

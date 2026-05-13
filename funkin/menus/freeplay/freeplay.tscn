@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b6vcw0ly2036" path="res://funkin/menus/freeplay/freeplay.gd" id="1_8wllq"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="1_d85pb"]
-[ext_resource type="AudioStream" uid="uid://du4qr2rxqjkw" path="res://assets/songs/gettin' freaky.ogg" id="2_w52tp"]
+[ext_resource type="AudioStream" uid="uid://du4qr2rxqjkw" path="res://funkin/assets/songs/gettin' freaky.ogg" id="2_w52tp"]
 [ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://funkin/assets/images/menus/background/menuDesat.png" id="5_xlpwk"]
 [ext_resource type="Texture2D" uid="uid://5b2u1q1kihtj" path="res://funkin/assets/images/menus/freeplay/clearBox.png" id="7_jukaj"]
 [ext_resource type="PackedScene" uid="uid://cnu4wa5x8qwp5" path="res://funkin/menus/freeplay/difficulty_selector.tscn" id="7_klryl"]

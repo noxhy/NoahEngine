@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://q0a40tn5u1c8"]
 
 [ext_resource type="Script" uid="uid://bf0yovnh0ds6q" path="res://funkin/scenes/stages/philly/philly_foggy.gd" id="1_bid2y"]
-[ext_resource type="Shader" uid="uid://cn1tl4764rmon" path="res://assets/shaders/raindrops.gdshader" id="2_cbdcp"]
-[ext_resource type="Shader" uid="uid://dw0lfwemfmrel" path="res://assets/shaders/rain.gdshader" id="3_kp02p"]
+[ext_resource type="Shader" uid="uid://cn1tl4764rmon" path="res://funkin/assets/shaders/raindrops.gdshader" id="2_cbdcp"]
+[ext_resource type="Shader" uid="uid://dw0lfwemfmrel" path="res://funkin/assets/shaders/rain.gdshader" id="3_kp02p"]
 [ext_resource type="SpriteFrames" uid="uid://ctmm7ghyh3fc5" path="res://funkin/assets/images/stages/philly_fog/paper.res" id="4_qjvst"]
 [ext_resource type="Texture2D" uid="uid://c2wb3d8olk51s" path="res://funkin/assets/images/stages/philly_fog/mistMid.png" id="5_2aa8y"]
 [ext_resource type="Texture2D" uid="uid://ypujlj07sg6a" path="res://funkin/assets/images/stages/philly_fog/phillyForeground.png" id="5_snyiq"]

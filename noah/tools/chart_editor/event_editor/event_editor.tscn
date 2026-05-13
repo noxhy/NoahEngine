@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://crpue80aij4bq" path="res://funkin/assets/images/menus/chart editor/menuDesat.png" id="1_xsrj7"]
 [ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://funkin/assets/sounds/chart_editor/noteLay.ogg" id="2_06aqy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_mcaef"]
-[ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://assets/sounds/conductor/conductor sfx.mp3" id="3_srmuw"]
+[ext_resource type="AudioStream" uid="uid://bhbl74dwlqyhk" path="res://funkin/assets/conductor/conductor sfx.mp3" id="3_srmuw"]
 [ext_resource type="AudioStream" uid="uid://s88wsjen8kj7" path="res://funkin/assets/sounds/chart_editor/keyboard1.ogg" id="3_xfimv"]
 [ext_resource type="AudioStream" uid="uid://cdoo62fj7frd" path="res://funkin/assets/sounds/chart_editor/keyboard2.ogg" id="4_lhryu"]
 [ext_resource type="AudioStream" uid="uid://dr4m1bpeomae5" path="res://funkin/assets/sounds/chart_editor/keyboard3.ogg" id="5_uq2vk"]

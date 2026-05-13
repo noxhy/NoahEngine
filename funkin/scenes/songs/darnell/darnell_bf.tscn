@@ -6,7 +6,7 @@
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://assets/sprites/playstate/default/default_ui_skin.tres" id="4_amk0d"]
 [ext_resource type="PackedScene" uid="uid://q0a40tn5u1c8" path="res://funkin/scenes/stages/philly/philly_foggy.tscn" id="5_emhdn"]
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://funkin/scenes/characters/boyfriend.tscn" id="6_hnjl3"]
-[ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://assets/shaders/adjust_hsv.gdshader" id="7_un0qr"]
+[ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://funkin/assets/shaders/adjust_hsv.gdshader" id="7_un0qr"]
 [ext_resource type="PackedScene" uid="uid://k3e5qpeoyea4" path="res://funkin/scenes/characters/darnell.tscn" id="8_h2v7o"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/scenes/characters/girlfriend.tscn" id="9_hxfci"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/nodes/basic_ui.tscn" id="10_d87sq"]

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://dmw77m5oxkyig"]
 
 [ext_resource type="SpriteFrames" uid="uid://ceg7w3ebtiywi" path="res://assets/sprites/playstate/pixel/arrow/notes.tres" id="1_ky7o3"]
-[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://assets/sounds/menu sounds/hitsound.wav" id="1_piid7"]
+[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://funkin/assets/menu sounds/hitsound.wav" id="1_piid7"]
 [ext_resource type="SpriteFrames" uid="uid://cogig0ulrnksv" path="res://assets/sprites/playstate/pixel/hold_covers/sustain_cover.res" id="2_g1mvk"]
 [ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://resources/note_skin.gd" id="2_v4kjh"]
 [ext_resource type="SpriteFrames" uid="uid://bf1aiuwvslsn2" path="res://assets/sprites/playstate/pixel/arrow/strums.tres" id="3_6f2u5"]

@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bd083xcqslcsd"]
 
 [ext_resource type="Script" uid="uid://brbf61eud6vql" path="res://scenes/game/death_screen.gd" id="1_3knol"]
-[ext_resource type="AudioStream" uid="uid://c7jqa5mdxivnd" path="res://assets/sounds/menu sounds/lose sfx.ogg" id="1_l87ty"]
+[ext_resource type="AudioStream" uid="uid://c7jqa5mdxivnd" path="res://funkin/assets/menu sounds/lose sfx.ogg" id="1_l87ty"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_24go6"]
-[ext_resource type="AudioStream" uid="uid://cqoad5jx15ele" path="res://assets/songs/game over/gameOver.ogg" id="3_3040t"]
-[ext_resource type="AudioStream" uid="uid://dbdx3d7yv6085" path="res://assets/sounds/menu sounds/game over end.ogg" id="5_23pry"]
+[ext_resource type="AudioStream" uid="uid://cqoad5jx15ele" path="res://funkin/assets/songs/game over/gameOver.ogg" id="3_3040t"]
+[ext_resource type="AudioStream" uid="uid://dbdx3d7yv6085" path="res://funkin/assets/menu sounds/game over end.ogg" id="5_23pry"]
 [ext_resource type="PackedScene" uid="uid://de1orr6su5xmc" path="res://funkin/scenes/characters/boyfriend_dead.tscn" id="6_0wmjs"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/camera_controller.gd" id="7_553pn"]
 
