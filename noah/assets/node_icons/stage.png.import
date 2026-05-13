@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bl12tb0xiej71"
-path="res://.godot/imported/strum arrows.png-0eb03dfad31c50a18f706af279cd964d.ctex"
+uid="uid://dqfu1k7ka1prj"
+path="res://.godot/imported/stage.png-96d7e1ecd69659aa566c88c9c8ba2738.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/strum arrows.png"
-dest_files=["res://.godot/imported/strum arrows.png-0eb03dfad31c50a18f706af279cd964d.ctex"]
+source_file="res://noah/assets/node_icons/stage.png"
+dest_files=["res://.godot/imported/stage.png-96d7e1ecd69659aa566c88c9c8ba2738.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ij1ectsa31bd"
-path="res://.godot/imported/conductor.png-f2400a68f34bc3d6032c118bf3d5b48b.ctex"
+uid="uid://bggbycx6telfb"
+path="res://.godot/imported/album.png-e5f9037c7fad4e43ed2d0236a63e7580.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/conductor.png"
-dest_files=["res://.godot/imported/conductor.png-f2400a68f34bc3d6032c118bf3d5b48b.ctex"]
+source_file="res://noah/assets/node_icons/album.png"
+dest_files=["res://.godot/imported/album.png-e5f9037c7fad4e43ed2d0236a63e7580.ctex"]
 
 [params]
 

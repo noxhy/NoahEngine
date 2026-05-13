@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5rxblw3n5d5"
-path="res://.godot/imported/song.png-64ebb51c211b23f5f4c63f169e135345.ctex"
+uid="uid://bwp1pd1s3xmka"
+path="res://.godot/imported/dialogue.png-aef5bb3d760c79fb4f2f3e86c8bb02d1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/song.png"
-dest_files=["res://.godot/imported/song.png-64ebb51c211b23f5f4c63f169e135345.ctex"]
+source_file="res://noah/assets/node_icons/dialogue.png"
+dest_files=["res://.godot/imported/dialogue.png-aef5bb3d760c79fb4f2f3e86c8bb02d1.ctex"]
 
 [params]
 

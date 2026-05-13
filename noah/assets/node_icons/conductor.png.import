@@ -2,17 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kdr1a765du27"
-path="res://.godot/imported/Camera.svg-8fd6ade493c408df0f46e6afd2e88041.ctex"
+uid="uid://ij1ectsa31bd"
+path="res://.godot/imported/conductor.png-ed7231c99564bdbe9be815cfde88c30b.ctex"
 metadata={
-"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/Camera.svg"
-dest_files=["res://.godot/imported/Camera.svg-8fd6ade493c408df0f46e6afd2e88041.ctex"]
+source_file="res://noah/assets/node_icons/conductor.png"
+dest_files=["res://.godot/imported/conductor.png-ed7231c99564bdbe9be815cfde88c30b.ctex"]
 
 [params]
 
@@ -39,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=true
-editor/convert_colors_with_editor_theme=false

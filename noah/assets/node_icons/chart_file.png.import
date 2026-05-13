@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ca6uggp4ff1q2"
-path="res://.godot/imported/character.png-62cd8a0e3e1e81abcdcda35e1183eec7.ctex"
+uid="uid://c2la537hogg50"
+path="res://.godot/imported/chart_file.png-309d71dc4ba0d256ee687fd9b8732767.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/character.png"
-dest_files=["res://.godot/imported/character.png-62cd8a0e3e1e81abcdcda35e1183eec7.ctex"]
+source_file="res://noah/assets/node_icons/chart_file.png"
+dest_files=["res://.godot/imported/chart_file.png-309d71dc4ba0d256ee687fd9b8732767.ctex"]
 
 [params]
 

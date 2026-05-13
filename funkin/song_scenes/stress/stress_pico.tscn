@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c7jyvxqat3au2"]
 
-[ext_resource type="Script" uid="uid://dn5hbtar7fexj" path="res://funkin/song scenes/darnell/darnell.gd" id="1_th3hl"]
+[ext_resource type="Script" uid="uid://dn5hbtar7fexj" path="res://funkin/song_scenes/darnell/darnell.gd" id="1_th3hl"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_hdeop"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/images/ui/default/default_note_skin.tres" id="4_4bxi2"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/images/ui/default/default_ui_skin.tres" id="5_t15xn"]

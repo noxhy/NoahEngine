@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://gbb2tpx7317c"
-path="res://.godot/imported/gdanimate.png-552b8bbc28cbe113e63d8761eca1321f.ctex"
+path="res://.godot/imported/gdanimate.png-0601e8782b04aa4dd7e22fa548ae148d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/gdanimate.png"
-dest_files=["res://.godot/imported/gdanimate.png-552b8bbc28cbe113e63d8761eca1321f.ctex"]
+source_file="res://noah/assets/node_icons/gdanimate.png"
+dest_files=["res://.godot/imported/gdanimate.png-0601e8782b04aa4dd7e22fa548ae148d.ctex"]
 
 [params]
 

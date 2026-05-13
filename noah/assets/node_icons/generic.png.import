@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b1yfbu2p6scl0"
-path="res://.godot/imported/generic.png-4f60149529cb5d75928cdbe77c02227e.ctex"
+path="res://.godot/imported/generic.png-16dc466a68d01b7f20b5dc2b6f8d3b14.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://noah/assets/node icons/generic.png"
-dest_files=["res://.godot/imported/generic.png-4f60149529cb5d75928cdbe77c02227e.ctex"]
+source_file="res://noah/assets/node_icons/generic.png"
+dest_files=["res://.godot/imported/generic.png-16dc466a68d01b7f20b5dc2b6f8d3b14.ctex"]
 
 [params]
 
