@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dghi5ce8cupic"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_8s5sa"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_8s5sa"]
 [ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://funkin/assets/images/ui/icons/spirit.tres" id="2_s66hv"]
 [ext_resource type="SpriteFrames" uid="uid://c62bnqtxmntid" path="res://funkin/assets/characters/spirit/spirit.res" id="3_1ui7q"]
 

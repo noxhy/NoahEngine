@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ilhf3k3in4ph"]
 
-[ext_resource type="Script" uid="uid://imjuinehs3it" path="res://noah/transitions.gd" id="1_si25f"]
+[ext_resource type="Script" uid="uid://imjuinehs3it" path="res://noah/global/transitions.gd" id="1_si25f"]
 
 [sub_resource type="Gradient" id="Gradient_tdgh5"]
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1)

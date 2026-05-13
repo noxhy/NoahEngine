@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://biy78xe1wlp27"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_oe8gf"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_oe8gf"]
 
 [node name="Character" type="Node2D" unique_id=1315187757]
 script = ExtResource("1_oe8gf")

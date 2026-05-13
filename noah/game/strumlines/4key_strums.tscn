@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://ce3dgr61438sa"]
 
-[ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://noah/nodes/strumlines/strum_manager.gd" id="1_7u4ah"]
+[ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://noah/game/strumlines/strum_manager.gd" id="1_7u4ah"]
 [ext_resource type="Resource" uid="uid://buly8rgmgrrnm" path="res://noah/assets/ui/developer/developer_note_skin.tres" id="2_bdnme"]
-[ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://noah/nodes/strumlines/strum.tscn" id="3_aabop"]
+[ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://noah/game/strumlines/strum.tscn" id="3_aabop"]
 
 [node name="Strum Handeler" type="Node2D" unique_id=1619773465 groups=["strums"]]
 script = ExtResource("1_7u4ah")

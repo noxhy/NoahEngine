@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://civkgglbefejt"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_oe8gf"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_oe8gf"]
 [ext_resource type="Texture2D" uid="uid://jngqjlsc37d3" path="res://funkin/assets/images/ui/icons/icon-parents.png" id="2_uoe7k"]
 [ext_resource type="SpriteFrames" uid="uid://b08lgx2g80kyp" path="res://funkin/assets/characters/mom dad christmas/mom_dad_christmas.res" id="3_o01a6"]
 

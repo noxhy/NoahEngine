@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dgaywwoiwkbeu"]
 
-[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/nodes/basic_song.gd" id="1_kkhjq"]
-[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/playstate.tscn" id="2_hvfki"]
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_kkhjq"]
+[ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_hvfki"]
 [ext_resource type="Resource" uid="uid://dmw77m5oxkyig" path="res://funkin/assets/images/ui/pixel/pixel_note_skin.tres" id="4_gvt2o"]
 [ext_resource type="Resource" uid="uid://dsqgb7q6eq1mf" path="res://funkin/assets/images/ui/pixel/pixel_ui_skin.tres" id="5_0s4pd"]
 [ext_resource type="PackedScene" uid="uid://cd3leoxyqnk4m" path="res://funkin/assets/stages/weeb_school/weeb_school.tscn" id="7_mjcyn"]
 [ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://funkin/assets/characters/boyfriend pixel/boyfriend pixel.tscn" id="9_cvimb"]
 [ext_resource type="PackedScene" uid="uid://c641vxfiu033w" path="res://funkin/assets/characters/senpai/senpai.tscn" id="10_2o85c"]
-[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/camera_controller.gd" id="11_gd42n"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="11_gd42n"]
 [ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://funkin/assets/characters/girlfriend pixel/girlfriend pixel.tscn" id="11_norpj"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/nodes/basic_ui.tscn" id="12_q80n4"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="12_q80n4"]
 
 [node name="Senpai" type="Node2D" unique_id=739542381]
 script = ExtResource("1_kkhjq")

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bpv5demojrg67"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_krhuq"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_krhuq"]
 [ext_resource type="Texture2D" uid="uid://cxu20hb7y7adt" path="res://funkin/assets/images/ui/icons/girlfriend.png" id="2_hksi1"]
 [ext_resource type="SpriteFrames" uid="uid://ca4xphjrx5apl" path="res://funkin/assets/characters/girlfriend/girlfriend.res" id="3_0woem"]
 

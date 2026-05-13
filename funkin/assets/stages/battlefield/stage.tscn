@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cmiw0sq3dx0ge"]
 
-[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/stage.gd" id="1_5fq04"]
+[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_5fq04"]
 [ext_resource type="Texture2D" uid="uid://bkmkqx77pa4fg" path="res://funkin/assets/stages/battlefield/bg.png" id="2_xjsv1"]
 [ext_resource type="SpriteFrames" uid="uid://c7g8hweyo4u3" path="res://funkin/assets/stages/battlefield/sniper.res" id="3_ar6cq"]
 [ext_resource type="SpriteFrames" uid="uid://cmt42n5860jk0" path="res://funkin/assets/stages/battlefield/guy.res" id="4_v424k"]

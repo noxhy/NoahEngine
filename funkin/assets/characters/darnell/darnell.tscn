@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://k3e5qpeoyea4"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_h007o"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_h007o"]
 [ext_resource type="Texture2D" uid="uid://cav5txrpdqv2k" path="res://funkin/assets/images/ui/icons/icon-darnell.png" id="2_r6nb0"]
 [ext_resource type="SpriteFrames" uid="uid://ew4ceqmop5o5" path="res://funkin/assets/characters/darnell/darnell.res" id="3_521o1"]
 

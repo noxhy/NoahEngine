@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cd3leoxyqnk4m"]
 
-[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/stage.gd" id="1_5a47v"]
+[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_5a47v"]
 [ext_resource type="Texture2D" uid="uid://dej37slirtnpw" path="res://funkin/assets/stages/weeb_school/weebStreet.png" id="2_awjbp"]
 [ext_resource type="Texture2D" uid="uid://ujnjqntvrmf8" path="res://funkin/assets/stages/weeb_school/weebSchool.png" id="3_v5aas"]
 [ext_resource type="Texture2D" uid="uid://d0dc2dvbd0mms" path="res://funkin/assets/stages/weeb_school/weebSky.png" id="4_aghp0"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://yyfqg2jvwcmt"]
 
-[ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://noah/nodes/note/chart_note.gd" id="1_ud7f5"]
+[ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://noah/game/note/chart_note.gd" id="1_ud7f5"]
 [ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://noah/assets/ui/developer/arrow/notes.tres" id="2_jcxlk"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="3_gsgsu"]
 

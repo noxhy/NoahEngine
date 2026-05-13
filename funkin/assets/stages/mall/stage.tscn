@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ofcr80jgray3"]
 
-[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/stage.gd" id="1_8gejj"]
+[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_8gejj"]
 [ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://funkin/assets/shaders/adjust_hsv.gdshader" id="2_l4rv2"]
 [ext_resource type="SpriteFrames" uid="uid://bloyytxjba2pp" path="res://funkin/assets/stages/mall/santa.res" id="2_uhonm"]
 [ext_resource type="SpriteFrames" uid="uid://bhckl31rft307" path="res://funkin/assets/stages/mall/bottom_boppers.res" id="3_imb35"]

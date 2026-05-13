@@ -22,7 +22,7 @@ buses/default_bus_layout="uid://wp1fb3lbqup6"
 [autoload]
 
 Global="*res://noah/global.tscn"
-Transitions="*res://noah/transitions.tscn"
+Transitions="*res://noah/global/transitions.tscn"
 GameManager="*res://noah/managers/game_manager.gd"
 SettingsManager="*res://noah/managers/settings_manager.gd"
 ChartManager="*res://noah/managers/chart_manager.gd"

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cymgv4pu0e1rh"]
 
-[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/stage.gd" id="1_iml2w"]
+[ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_iml2w"]
 [ext_resource type="Texture2D" uid="uid://h6h76orxl7xp" path="res://funkin/assets/stages/stage/lights.png" id="2_amnec"]
 [ext_resource type="Texture2D" uid="uid://bj82xcj3ff6ll" path="res://funkin/assets/stages/stage/bg.png" id="2_rgkbg"]
 [ext_resource type="Texture2D" uid="uid://b3ovsxv0ai7mf" path="res://funkin/assets/stages/stage/server.png" id="3_cjt0b"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://de1orr6su5xmc"]
 
-[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/character.gd" id="1_rej3p"]
+[ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_rej3p"]
 [ext_resource type="SpriteFrames" uid="uid://dhrdam1m3brlg" path="res://funkin/assets/characters/boyfriend/boyfriend_dead.res" id="2_tjdis"]
 
 [node name="Boyfriend Dead" type="Node2D" unique_id=89405734]
