@@ -43,7 +43,7 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Boyfriend" type="Node2D" unique_id=2117704961]
+[node name="Boyfriend" type="Node2D" unique_id=2117704961 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_mx020")
 animation_names = Dictionary[StringName, StringName]({
 &"attack": &"boyfriend attack",
@@ -80,6 +80,7 @@ offsets = Dictionary[StringName, Vector2]({
 })
 icons = SubResource("SpriteFrames_u3ypl")
 color = Color(0.286275, 0.733333, 0.85098, 1)
+animation_player = NodePath("AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1502638124]
 use_parent_material = true
