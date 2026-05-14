@@ -1,6 +1,6 @@
 extends Node2D
 
-const COMBO_NUMBER_PRELOAD = preload("uid://b28wu6vajuag3")
+var COMBO_NUMBER_PRELOAD = load("uid://b28wu6vajuag3")
 
 @export var ui_skin: UISkin
 @export var combo = 0

@@ -1,6 +1,6 @@
 extends Node2D
 
-const LOCK_PRELOAD = preload("uid://48by53kv8bjm")
+var LOCK_PRELOAD = load("uid://48by53kv8bjm")
 
 var option_data: Dictionary = {
 	0: {

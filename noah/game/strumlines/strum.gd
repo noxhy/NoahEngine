@@ -4,8 +4,8 @@ extends Node2D
 class_name Strum
 
 const PIXELS_PER_SECOND = 450
-const NOTE_PRELOAD = preload("uid://krhxbwnjnr7r")
-const SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
+var NOTE_PRELOAD = load("uid://krhxbwnjnr7r")
+var SPLASH_PRELOAD = load("uid://c23s1pbajtga2")
 const NOTE_TYPES: Dictionary = {
 	"mom": "",
 }

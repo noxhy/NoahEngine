@@ -1,13 +1,13 @@
 extends Node2D
 class_name ChartEditor
 
-const NOTE_PRELOAD = preload("uid://yyfqg2jvwcmt")
-const EVENT_PRELOAD = preload("uid://n6k15grja0uh")
-const STRUM_BUTTON_PRELOAD = preload("uid://ddohksqocyhnx")
+var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
+var EVENT_PRELOAD = load("uid://n6k15grja0uh")
+var STRUM_BUTTON_PRELOAD = load("uid://ddohksqocyhnx")
 
-const NEW_FILE_POPUP_PRELOAD = preload("uid://d05iuopxfqlhj")
-const OPEN_FILE_POPUP_PRELOAD = preload("uid://388mdmn1mwun")
-const CONVERT_CHART_POPUP_PRELOAD = preload("uid://c6cl2ayvb4ms3")
+var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
+var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
+var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 

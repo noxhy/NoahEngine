@@ -1,6 +1,6 @@
 extends Node2D
 
-const DIGIT_PRELOAD = preload("uid://jen63sgjafxu")
+var DIGIT_PRELOAD = load("uid://jen63sgjafxu")
 
 signal finished
 

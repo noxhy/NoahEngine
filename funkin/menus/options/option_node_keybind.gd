@@ -1,7 +1,7 @@
 extends OptionNode
 class_name KeyBindOptionNode
 
-const KEYBIND_BUTTON_PRELOAD = preload("uid://darhx23v4e15y")
+var KEYBIND_BUTTON_PRELOAD = load("uid://darhx23v4e15y")
 
 var selected: int = 0
 var object_amount: int = 0

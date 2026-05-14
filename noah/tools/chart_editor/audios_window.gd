@@ -1,6 +1,6 @@
 extends Window
 
-const AUDIO_TRACK_PRELOAD = preload("uid://ngxlibrfoqjc")
+var AUDIO_TRACK_PRELOAD = load("uid://ngxlibrfoqjc")
 
 signal updated
 

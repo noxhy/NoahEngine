@@ -1,6 +1,6 @@
 extends Window
 
-const HISTORY_BUTTON_PRELOAD = preload("uid://cu3admb08u8lx")
+var HISTORY_BUTTON_PRELOAD = load("uid://cu3admb08u8lx")
 
 signal selected(index: int)
 

@@ -1,7 +1,7 @@
 extends Node2D
 class_name Freeplay
 
-const MENU_OPTION_NODE = preload("uid://qbce8ppotno0")
+var MENU_OPTION_NODE = load("uid://qbce8ppotno0")
 
 @export var can_click: bool = true
 @export var difficulties: PackedStringArray

@@ -1,10 +1,10 @@
 extends Node2D
 
-const BOOL_PRELOAD = preload("uid://uj644hsg8thl")
-const NUMBER_PRELOAD = preload("uid://77c763qfjduu")
-const KEYBIND_PRELOAD = preload("uid://cx81a4x2e26yh")
-const LABEL_PRELOAD = preload("uid://7leho7yp6nrt")
-const BUTTON_PRELOAD = preload("uid://oi2cyiu5cgsq")
+var BOOL_PRELOAD = load("uid://uj644hsg8thl")
+var NUMBER_PRELOAD = load("uid://77c763qfjduu")
+var KEYBIND_PRELOAD = load("uid://cx81a4x2e26yh")
+var LABEL_PRELOAD = load("uid://7leho7yp6nrt")
+var BUTTON_PRELOAD = load("uid://oi2cyiu5cgsq")
 
 const HOLD_THRESHOLD = 0.5
 const HOLD_RATE = 50

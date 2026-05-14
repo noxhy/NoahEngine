@@ -1,8 +1,6 @@
 extends Node2D
 
-
-const DIALOGUE_LINE_PRELOAD = preload("uid://cj4cuq6neq1lf")
-
+var DIALOGUE_LINE_PRELOAD = load("uid://cj4cuq6neq1lf")
 
 @export var dialogue: Dialogue = Dialogue.new()
 
