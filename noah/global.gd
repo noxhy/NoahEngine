@@ -60,6 +60,13 @@ func _process(delta):
 			get_tree().reload_current_scene()
 			get_tree().paused = false
 
+func __get_editor_undo_redo() -> Object:
+	var ei: Object = Engine.get_singleton(&"EditorInterface")
+	if not ei:
+		return null
+	var undo_redo: Object = ei.get_editor_undo_redo()
+	return undo_redo
+
 #region Auto Pause
 var manual_pause: bool = false
 func _notification(what: int) -> void:
