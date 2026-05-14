@@ -68,7 +68,9 @@ enum AnimContext {
 		update_ghost()
 
 @export_group("Tools")
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Save Offset", "Save") var _save_button: Callable = self._save_offset
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Reset Position", "UndoRedo") var _reset_button: Callable = self._reset_position
 @export_enum("Back", "Front") var _ghost_ordering: int = 0:
 	set(v):
@@ -162,7 +164,7 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		animation_player.set_frame_and_progress(0, 0)
 	
 	if offsets.has(animation_name):
-		var offsets_to_use = offsets.get(animation_name)
+		var offsets_to_use = offsets[animation_name]
 		
 		if animation_player is AnimatedSprite3D:
 			animation_player.offset.x = offsets_to_use.x
@@ -182,8 +184,6 @@ func _process(delta: float) -> void:
 		sing_time -= delta
 		if sing_time <= 0 and !can_dance:
 			can_dance = true
-
-
 
 ## Gets the [SpriteFrames] animation name of the given [param anim_id] in [member animation_names].
 func get_animation_name(anim_id: StringName = &""):
