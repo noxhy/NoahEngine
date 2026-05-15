@@ -369,6 +369,9 @@ func score_note(hit_time: float):
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		"camera_position":
+			if host.camera_positions.size() == 0:
+				printerr('(PlayState): no camera_positions exist')
+				return
 			var marker = host.camera_positions[int(event_parameters[0])]
 			if not marker:
 				return
