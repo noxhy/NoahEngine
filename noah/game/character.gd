@@ -18,6 +18,15 @@ enum AnimContext {
 	NONE
 }
 
+##The actual sprite node that will be used to play the anims. If not assigned, it will fallback to
+##[AnimatedSprite2D] or [AnimateSymbol]
+@export var animation_player: Node = null:
+	set(v):
+		animation_player = verify_animation_player(v)
+		update_configuration_warnings()
+		
+		update_ghost()
+
 @export_group("Animation Data")
 ## Dictionary of given animation id's and their [SpriteFrames] animation.
 ## [br][br][b]Example:[/b] [code]{"idle": "BF idle dance"}[/code]
@@ -53,19 +62,14 @@ enum AnimContext {
 ## How many steps an animation can play before being able to revert to idle.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6
 
+
+
 @export_group("UI")
 ## Icons that are displayed in the ui. Can include [code]default[/code], [code]winning[/code] or [code]losing[/code].
 @export var icons: SpriteFrames = load("uid://dt82dx1mf15r")
 @export var color: Color = Color(0.168627, 0.121569, 0.203922)
 
-##The actual sprite node that will be used to play the anims. If not assigned, it will fallback to
-##[AnimatedSprite2D] or [AnimateSymbol]
-@export var animation_player: Node = null:
-	set(v):
-		animation_player = verify_animation_player(v)
-		update_configuration_warnings()
-		
-		update_ghost()
+
 
 @export_group("Tools")
 @warning_ignore("unused_private_class_variable")
