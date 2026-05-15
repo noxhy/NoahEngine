@@ -1,7 +1,7 @@
 extends Node
 class_name BasicSong
 
-@onready var playstate_host: PlayState = $"PlayState Host"
+@onready var playstate_host: PlayState = $"PlayState"
 
 var camera_positions: Array = []
 
@@ -20,6 +20,8 @@ var bop_rate: int = 16
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if not playstate_host:
+		playstate_host = $"PlayState Host"
 	assert(playstate_host, "Playstate host not found")
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	if player:
