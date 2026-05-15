@@ -24,7 +24,7 @@ func _process(delta):
 		$"Health Bar/Performance".text = "Botplay"
 	else:
 		$"Health Bar/Performance".text = "Score: " + Global.format_number(GameManager.score)
-		$"Health Bar/Performance".text += " • " + "Misses: " + str(GameManager.tallies.get("misses", 0))
+		$"Health Bar/Performance".text += " • " + "Misses: " + str(GameManager.tallies.get("miss", 0))
 	
 	
 	update_health_bar(Global.frame_independent_lerp($"Health Bar".value, target_health, 25, delta))
