@@ -268,6 +268,21 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 		var time = i[0]
 		# Event name conversion
 		for j in i[1]:
+			if j[0] == 'Play Animation':
+				j[0] = 'play_animation'
+				
+				var anim = j[1]
+				var char:String = j[2].to_lower()
+				match char:
+					'bf', 'boyfriend':
+						char = 'player'
+					'gf', 'girlfriend':
+						char = 'metronome'
+					_:
+						char = 'enemy'
+				
+				j[1] = char
+				j[2] = anim
 			if EVENT_NAMES.has(j[0]):
 				j[0] = EVENT_NAMES.get(j[0])
 			
