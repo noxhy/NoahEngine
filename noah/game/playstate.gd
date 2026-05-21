@@ -125,7 +125,7 @@ func _ready():
 	if not song_data.events.is_empty() and ResourceLoader.exists(song_data.events):
 		var ext_events = load(song_data.events)
 		if ext_events is ChartEvents:
-			chart.merge_events_into_this(load(song_data.events))
+			chart.merge_events_into_this(ext_events)
 		else:
 			ext_events.free()
 	
