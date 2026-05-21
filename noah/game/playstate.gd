@@ -12,7 +12,6 @@ const HOLD_HEALTH: float = 6
 
 signal create_note(time: float, lane: int, note_length: float, note_type: Variant, tempo: float)
 signal new_event(time: float, event_name: String, event_parameters: Array)
-signal combo_break()
 signal setup_finished()
 
 @onready var countdown_node = load("uid://daky0nn8plbe4")
@@ -161,7 +160,8 @@ func _ready():
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		get_tree().call_group(&"strums", "set_scroll", -1)
 	
-	emit_signal("setup_finished")
+	
+	Signals.play_setup_finished.emit()
 
 
 func _process(delta):
@@ -241,7 +241,7 @@ func _process(delta):
 				var length: float = note[2]
 				var type = note[3]
 				
-				emit_signal("create_note", time, lane, length, type, chart.get_tempo_at(time))
+				create_note.emit(time, lane, length, type, chart.get_tempo_at(time))
 				current_note += 1
 	
 	if instrumental.playing:
@@ -260,7 +260,7 @@ func _process(delta):
 
 
 func play_song(time: float):
-	await Signals.play_host_initiated
+	await Signals.play_song_ready_to_start
 	
 	song_starting = true
 	
@@ -270,9 +270,6 @@ func play_song(time: float):
 	GameManager.conductor.seconds_per_beat = 60.0 / GameManager.conductor.tempo
 	
 	GameManager.conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
-	
-	#GameManager.seconds_per_beat = GameManager.conductor.seconds_per_beat
-	#GameManager.offset = conductor.offset
 	
 	song_started = false
 	song_start_time = time + chart.offset
@@ -482,11 +479,11 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 			"bad":
 				health -= 0.35
 				combo = -1
-				emit_signal("combo_break")
+				Signals.play_combo_break.emit()
 			"shit":
 				health -= 0.35
 				combo = -1
-				emit_signal("combo_break")
+				Signals.play_combo_break.emit()
 			_:
 				note_miss(time, lane, 0, note_type, hit_time, strum_manager)
 		
@@ -520,4 +517,4 @@ func note_miss(time, lane, length, note_type, hit_time, strum_manager):
 			GameManager.tallies["miss"] = misses
 			GameManager.tallies["total_notes"] += 1
 			
-			emit_signal("combo_break")
+			Signals.play_combo_break.emit()

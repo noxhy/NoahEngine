@@ -34,18 +34,20 @@ func _ready():
 		playstate_host.ui.set_enemy_icons(enemy.icons)
 		playstate_host.ui.set_enemy_color(enemy.color)
 	
-	await playstate_host.setup_finished
+	await Signals.play_setup_finished
 	
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
 	
-	playstate_host.connect(&"combo_break", self._on_combo_break)
+	Signals.play_combo_break.connect(_on_combo_break)
+	
 	playstate_host.connect(&"create_note", self._on_create_note)
 	playstate_host.connect(&"new_event", self._on_new_event)
+
 	
 	await Engine.get_main_loop().process_frame
 	
-	Signals.play_host_initiated.emit()
+	Signals.play_song_ready_to_start.emit()
 
 
 # Conductor Util
