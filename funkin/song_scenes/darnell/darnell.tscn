@@ -70,9 +70,10 @@ unique_name_in_owner = true
 z_index = 1
 position = Vector2(640, 288)
 
-[node name="Enemy" parent="Characters" unique_id=1117757074 groups=["enemy"] instance=ExtResource("10_1osac")]
+[node name="Enemy" parent="Characters" unique_id=1117757074 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
 position = Vector2(-528, 240)
+animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Metronome" parent="Characters" unique_id=1563362403 instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true
@@ -87,9 +88,4 @@ layer = 10
 [node name="CameraController" type="Node" parent="." unique_id=336274463 node_paths=PackedStringArray("parent_2D")]
 script = ExtResource("11_1yy12")
 parent_2D = NodePath("../Camera")
-target_zoom = Vector2(0.85, 0.85)
 metadata/_custom_type_script = "uid://b4lmffueni5k"
-
-[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
-[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
-[connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]

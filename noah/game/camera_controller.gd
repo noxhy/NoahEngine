@@ -12,7 +12,7 @@ class_name CameraController
 #can we change these var names some time
 @export_category('Zoom Settings')
 ## The intended camera zoom. The camera will automatically attempt to lerp to this zoom.
-@export_custom(PROPERTY_HINT_LINK, 'x') var target_zoom: Vector2 = Vector2(1, 1)
+var target_zoom: Vector2 = Vector2(1, 1)
 ## The rate the camera's current [code]zoom[/code] will lerp to [code]target_zoom[/code]
 @export_range(1, 64) var lerp_weight: float = 5
 
@@ -74,9 +74,11 @@ func _ready() -> void:
 		default_offset = parent_2D.offset
 		parent_2D.position_smoothing_enabled = position_smoothing
 		parent_2D.position_smoothing_speed = position_smoothing_speed
+		target_zoom = parent_2D.zoom
 	elif parent_3D:
 		default_offset = Vector2(parent_3D.h_offset,parent_3D.v_offset)
 		_position_3d = parent_3D.position
+		target_zoom = Vector2(parent_3D.fov, parent_3D.fov)
 
 func get_direct() -> Variant:
 	if parent_2D: 
