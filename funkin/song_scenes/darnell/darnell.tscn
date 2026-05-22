@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c8853lemkr1jc"]
 
-[ext_resource type="Script" uid="uid://dn5hbtar7fexj" path="res://funkin/song_scenes/darnell/darnell.gd" id="1_kfw18"]
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_mmofa"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_dkpbc"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/game/default/default_note_skin.tres" id="4_fnsyj"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/game/default/default_ui_skin.tres" id="5_gia47"]
@@ -12,7 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="12_a2iw0"]
 
 [node name="Darnell" type="Node2D" unique_id=1675426916]
-script = ExtResource("1_kfw18")
+script = ExtResource("1_mmofa")
 
 [node name="PlayState Host" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_dkpbc")]
 process_mode = 1

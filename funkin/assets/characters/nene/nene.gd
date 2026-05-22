@@ -18,10 +18,21 @@ var maxFrequency = 20000.0
 
 var update_timer: float
 
+@onready var anim_player:AnimationPlayer = $AnimationPlayer
+
 func _ready():
 	super()
 	update_timer = update_rate
+	
+	Signals.play_new_event.connect(on_event)
 
+func on_event(time, event_name, event_parameters):
+	match event_name:
+		"camera_position":
+			if int(event_parameters[0]) == 0:
+				anim_player.play("look_right")
+			else:
+				anim_player.play("look_left")
 
 func _process(delta):
 	super(delta)
