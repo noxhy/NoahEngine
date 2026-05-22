@@ -754,6 +754,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	can_chart = true
 	load_section(song_position)
 	update_grid()
+	load_dividers()
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
