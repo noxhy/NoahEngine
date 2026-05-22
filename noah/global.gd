@@ -76,8 +76,9 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = "down", show_loading_screen: bool = true): 
+func change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true): 
 	transitioning = true
+	
 	
 	if transition: 
 		Transitions.transition(transition)
