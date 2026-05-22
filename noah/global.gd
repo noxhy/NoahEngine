@@ -138,7 +138,7 @@ func format_number(num:float) -> String:
 	return string
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
-func float_to_time(time: float) -> String:
+func format_time(time: float) -> String:
 	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
 	var seconds: int = floor(fmod(time, 60.0))
 	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
@@ -328,3 +328,14 @@ func string_to_ease(tween: String) -> Array:
 		_:
 			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion
+
+func string_to_time(formatted_time: String) -> float:
+	if formatted_time.ends_with("b"):
+		return int(formatted_time.trim_suffix("b")) * GameManager.conductor.seconds_per_beat
+	elif formatted_time.ends_with("s"):
+		print(int(formatted_time.trim_suffix("s")) * GameManager.conductor.seconds_per_step)
+		return int(formatted_time.trim_suffix("s")) * GameManager.conductor.seconds_per_step
+	elif formatted_time.is_empty():
+		return 0
+	
+	return float(formatted_time)

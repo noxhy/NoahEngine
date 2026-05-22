@@ -385,7 +385,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 		if event == "FocusCamera":
 			parameters = [str(i.v.char)]
 		elif event == "ZoomCamera":
-			parameters = [str(i.v.zoom), str(i.v.duration * (seconds_per_beat / 16.0)), i.get("ease", "CLASSIC")]
+			parameters = [str(i.v.zoom), str(i.v.duration, 's'), i.v.get("ease", "CLASSIC")]
 		elif event == "SetCameraBop":
 			parameters = [str(i.v.rate * 4)]
 		

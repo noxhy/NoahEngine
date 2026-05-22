@@ -367,24 +367,25 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			if host.camera_positions.size() == 0:
 				printerr('(PlayState): no camera_positions exist')
 				return
-			var marker = host.camera_positions[int(event_parameters[0])]
-			if not marker:
+			var index: int = int(event_parameters[0])
+			var marker = host.camera_positions[index]
+			if !marker:
+				printerr("(PlayState): Marker does not exist at index: ", index)
 				return
 			
 			var position = marker.global_position
 			camera.position = position
-			
+		
 		"camera_bop":
 			var camera_bop = float(event_parameters[0])
 			var ui_bop = float(event_parameters[1])
 			
 			camera.zoom += camera_bop * camera.zoom
-			
-			ui.scale += Vector2(ui_bop, ui_bop)
+			ui.scale += Vector2.ONE * ui_bop
+		
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
-			@warning_ignore("incompatible_ternary")
-			var zoom_time = 0 if event_parameters[1] == "" else float(event_parameters[1])
+			var zoom_time = Global.string_to_time(event_parameters[1])
 			var ease_string = event_parameters.get(2)
 			var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
 			if ease_string != null:

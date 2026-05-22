@@ -11,7 +11,6 @@ func _ready():
 
 # Creates a new file that will send out a signal to the chart editor
 func new_file(files: Array[String]):
-	
 	# Creates the file base properties
 	var song_file = Song.new()
 	
@@ -74,11 +73,10 @@ func new_file(files: Array[String]):
 	for file in charts:
 		
 		match chart_format:
-			
 			Chart.ChartFormat.VSLICE:
-				var meta_file = file.replace('chart', 'metadata')
+				var meta_file = file.replace('chart-', 'metadata-')
 				
-				assert(FileAccess.file_exists(meta_file), 'failed to find vslice chart metadata.json')
+				assert(FileAccess.file_exists(meta_file), str('Failed to find metadata at: ', meta_file))
 				
 				var raw_meta = FileAccess.open(meta_file, FileAccess.READ)
 				var meta_json = JSON.parse_string(raw_meta.get_as_text())
