@@ -735,7 +735,7 @@ func _on_event_parameters_about_to_popup() -> void:
 		
 		line_edit.placeholder_text = _name
 		if (i < parameters.size()):
-			line_edit.text = parameters[i]
+			line_edit.text = str(parameters[i])
 		
 		%"Event Parameters".add_child(line_edit)
 		i += 1
@@ -763,10 +763,12 @@ func _on_place_event_pressed() -> void:
 		undo_redo.add_undo_property(event_nodes[editing - current_visible_events_L],
 		"parameters", temp)
 		undo_redo.add_undo_method(self.change_parameters.bind(editing, temp))
-		undo_redo.add_do_reference(%"History Window".add_action(action))
+		undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
 		undo_redo.commit_action()
 		%"Note Place".play()
 		%"Event Creator".hide()
+	
+	auto_save()
 
 
 func change_parameters(i: int, parameters: Array) -> void:
