@@ -6,23 +6,23 @@ signal note_hit(time: float, lane: int, note_type: Variant, hit_time: float, man
 signal note_holding(time: float, lane: int, length: float, note_type: Variant, manager: Node2D)
 signal note_miss(time: float, lane: int, length: float, note_type: Variant, hit_time: float, manager: Node2D)
 
-@export var note_skin = NoteSkin.new()
+@export var note_skin: NoteSkin = NoteSkin.new()
 ## List of NodePaths of the strumlines.
 @export var strums: Array[Strum] = []
 ## Vocal track ID.
 @export var id: int = 0
 
 ## If [code]true[/code], the strumlines will read the player's input.
-@export var can_press = true
+@export var can_press: bool = true
 ## If [code]true[/code], the strumlines will hit notes automatically. Typically used for botplay
 ## or the enemy strumlines.
-@export var auto_play = false
+@export var auto_play: bool = false
 ## If [code]true[/code], the strumlines will create a note splash effect when hitting or holding a
 ## note. Typically used for the player strumlines.
-@export var can_splash = false
+@export var can_splash: bool = false
 ## If [code]true[/code], the strumlines will count as a enemy strumline. Enemy strumlines do not
 ## affect player stats.
-@export var enemy_slot = false
+@export var enemy_slot: bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -119,13 +119,13 @@ func press_strum(lane: int):
 	strums[lane].press_strum()
 
 
-func _on_note_hit(time, strum, note_type, hit_time):
-	emit_signal("note_hit", time, strums.find(strum), note_type, hit_time, self)
+func _on_note_hit(time, strum_name, note_type, hit_time):
+	emit_signal(&"note_hit", time, strums.find(strum_name), note_type, hit_time, self)
 
 
-func _on_note_holding(time, strum, length, note_type):
-	emit_signal("note_holding", time, strums.find(strum), length, note_type, self)
+func _on_note_holding(time, strum_name, length, note_type):
+	emit_signal(&"note_holding", time, strums.find(strum_name), length, note_type, self)
 
 
-func _on_note_miss(time, strum, length, note_type, hit_time):
-	emit_signal("note_miss", time, strums.find(strum), length, note_type, hit_time, self)
+func _on_note_miss(time, strum_name, length, note_type, hit_time):
+	emit_signal(&"note_miss", time, strums.find(strum_name), length, note_type, hit_time, self)

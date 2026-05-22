@@ -135,8 +135,10 @@ static func load(path:String) -> Chart:
 						return convert_psych(json, events)
 						
 					ChartFormat.VSLICE:
-						
-						var meta_path = path.replace('chart', 'metadata')
+						var dir = file.get_base_dir()
+				
+						var meta_path = file.substr(dir.length())
+						meta_path = dir + meta_path.replace('chart', 'metadata')
 						
 						assert(FileAccess.file_exists(meta_path), 'failed to find vslice chart metadata.json')
 						

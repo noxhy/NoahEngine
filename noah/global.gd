@@ -1,23 +1,23 @@
 extends Node2D
 
-var loading_screen = load("uid://ld5hyjhtx8wg")
-var fullscreen: bool = false
+var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
+var fullscreen: bool = false
 var transitioning: bool = false
 
-func _correctWindowSize():
+@onready var performance_label: Label = $"UI/Performance Label"
+
+func _correctWindowSize() -> void:
 	
 	if not OS.get_name().to_lower().contains('windows'): 
 		return
 	
 	var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0
-	
 	var new_size = get_window().size * dpi
 	
 	DisplayServer.window_set_size(new_size)
 	
 	var w_pos = DisplayServer.screen_get_position(DisplayServer.window_get_current_screen())
-	
 	var w_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
 	
 	get_window().position.x = w_pos.x + (w_size.x - new_size.x) / 2
@@ -31,20 +31,19 @@ func _ready():
 	# Input.set_use_accumulated_input(false)
 	_correctWindowSize()
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta: float) -> void:
 	# Peformance Test
-	$"UI/Performance Label".visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance")
+	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
 	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
 		var performance_string: String = "FPS: " + str(int(Engine.get_frames_per_second()))
 		performance_string += "\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
 		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
 		
-		$"UI/Performance Label".text = performance_string
+		performance_label.text = performance_string
 	
-	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "cap_fps"):
-		Engine.max_fps = SettingsManager.get_value(SettingsManager.SEC_DEBUG, "fps_cap")
+	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"cap_fps"):
+		Engine.max_fps = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"fps_cap")
 	else:
 		Engine.max_fps = 0
 	
@@ -155,7 +154,7 @@ func get_keycode_string(keycodes: Array):
 # referenced via https://youtu.be/LSNQuFEDOyQ
 ## A frame independent lerp. Primary purpose is for the camera
 ## your decay should be around 1 - 25
-func frame_independent_lerp(a, b, decay: float, delta: float): 
+func frame_independent_lerp(a, b, decay: float, delta: float) -> Variant: 
 	return b + (a - b) * exp(-decay * delta)
 
 #region Volume Visual
