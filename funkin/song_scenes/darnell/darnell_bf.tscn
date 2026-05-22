@@ -110,7 +110,3 @@ layer = 10
 script = ExtResource("11_xxo2x")
 parent_2D = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
-
-[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
-[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
-[connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]

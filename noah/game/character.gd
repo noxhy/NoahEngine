@@ -113,6 +113,9 @@ func _ready():
 		animation_player.connect(&"animation_finished", self._on_animation_finished)
 		animation_player.connect(&"animation_changed", self.update_ghost)
 	
+	if not Engine.is_editor_hint():
+		Signals.play_conductor_step_hit.connect(on_step_hit)
+	
 	dance()
 
 

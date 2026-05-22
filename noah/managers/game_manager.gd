@@ -7,6 +7,8 @@ const SHIT_RATING_WINDOW = 0.16
 
 var song_scene = "res://test/test_scene.tscn"
 
+var conductor:Conductor
+
 # Constants are read only even if I set a new variable to the constant
 # so it's just a regular variable with constant notations
 # future note: ok so this apparently just also gets set whenever
@@ -51,11 +53,34 @@ var score: int = 0
 var accuracy: float = 0.0
 var deaths: int = 0
 var song_position: float
-var seconds_per_beat: float
-var seconds_per_step: float
-var offset: float
+var seconds_per_beat: float :
+	get():
+		return conductor.seconds_per_beat
+var seconds_per_step: float :
+	get():
+		return conductor.seconds_per_step
+var offset: float :
+	get():
+		return conductor.offset
 
+func reset_conductor():
+	if conductor:
+		remove_child(conductor)
+		conductor.free()
+	conductor = Conductor.new()
+	add_child(conductor)
+	conductor.new_beat.connect(_beat_change)
+	conductor.new_step.connect(_step_change)
+
+func _step_change(step: int, measure: int):
+	Signals.play_conductor_step_hit.emit(step, measure)
+
+func _beat_change(beat: int, measure: int):
+	Signals.play_conductor_beat_hit.emit(beat, measure)
+	
 func _ready() -> void:
+	reset_conductor()
+
 	reset_stats()
 
 func started_song(song: Song):

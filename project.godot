@@ -29,6 +29,7 @@ ChartManager="*res://noah/managers/chart_manager.gd"
 Preload="*res://preload.gd"
 SoundManager="*res://noah/managers/sound_manager.tscn"
 SaveManager="*res://noah/managers/save_manager.gd"
+Signals="*uid://bobitcmf733ru"
 
 [debug]
 
