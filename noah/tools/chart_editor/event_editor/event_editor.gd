@@ -458,7 +458,7 @@ func update_grid():
 	
 	$"UI/Event Tracks".position.y = -%Grid.get_size().y / 2 - 4
 	$"UI/Event Tracks".size.y = 0
-	$"UI/Event Tracks".custom_minimum_size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 2)
+	#$"UI/Event Tracks".custom_minimum_size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 1)
 	
 	get_tree().call_group(&"tracks",  &"queue_free")
 	for track in ChartManager.event_tracks:
@@ -472,7 +472,7 @@ func update_grid():
 		track_instance.connect(&"removed", self.remove_track.bind(track_instance))
 	
 	await Engine.get_main_loop().process_frame
-	$"UI/Event Tracks".size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 2)
+	$"UI/Event Tracks".size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 1)
 
 
 func remove_track(node):
