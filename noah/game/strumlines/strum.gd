@@ -55,7 +55,7 @@ var reset_timer: float = 0.0
 func _ready():
 	sprite.play_animation(strum_name)
 	hold_cover_sprite.visible = false
-	Signals.connect(&"play_unpaused", self._on_unpaused)
+	Signals.connect(&"play_unpaused", self.release_note)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -186,22 +186,7 @@ func _process(delta):
 				state = STATE.PRESSED
 	
 	if Input.is_action_just_released(input):
-		if can_press:
-			if pressing:
-				pressing = false
-				reset_timer = GameManager.seconds_per_step
-				if hold_cover_sprite.animation != "cover " + strum_name + " end":
-					hold_cover_sprite.visible = false
-				
-				if !note_list.is_empty():
-					var note = note_list[0]
-					# Checks if you were holding a note before releasing
-					if note.can_press and note.length > 0:
-						note.holding = false
-						note.start_length = note.length
-						emit_signal(&"note_holding", 0.0, self, 0.0, note.note_type)
-			else:
-				state = STATE.IDLE
+		release_note()
 	
 	if reset_timer > 0:
 		reset_timer -= delta
@@ -294,11 +279,20 @@ func create_splash(animation_name: String = strum_name + " splash"):
 			splash_instance.get_node("OffsetSprite").play_animation(animation_name)
 
 
-func _on_unpaused():
-	if pressing:
-		if !note_list.is_empty():
-			note_list[0].holding = false
-		
-		pressing = false
-		hold_cover_sprite.visible = false
-		state = STATE.IDLE
+func release_note():
+	if can_press:
+		if pressing:
+			pressing = false
+			reset_timer = GameManager.seconds_per_step
+			if hold_cover_sprite.animation != "cover " + strum_name + " end":
+				hold_cover_sprite.visible = false
+			
+			if !note_list.is_empty():
+				var note = note_list[0]
+				# Checks if you were holding a note before releasing
+				if note.can_press and note.length > 0:
+					note.holding = false
+					note.start_length = note.length
+					emit_signal(&"note_holding", 0.0, self, 0.0, note.note_type)
+		else:
+			state = STATE.IDLE
