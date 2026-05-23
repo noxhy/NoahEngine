@@ -47,6 +47,7 @@ var tempo: float = 60.0
 var seconds_per_beat: float = 60.0 / tempo
 
 var reset_timer: float = 0.0
+var coyote_timer: float = 0.0
 
 @onready var sprite: Node = $OffsetSprite
 @onready var hold_cover_sprite: Node = $"Hold Cover"
@@ -55,16 +56,14 @@ var reset_timer: float = 0.0
 func _ready():
 	sprite.play_animation(strum_name)
 	hold_cover_sprite.visible = false
+	Signals.connect(&"play_unpaused", self.release_note)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	## Note movement
-	
 	for note in note_list:
-		var time_difference = (note.time - offset) - GameManager.song_position
+		var time_difference: float = (note.time - offset) - GameManager.song_position
 		
-		# time_difference = snapped(time_difference, seconds_per_beat / 4)
 		note.scroll_speed = scroll_speed
 		note.scroll = scroll
 		
@@ -84,12 +83,10 @@ func _process(delta):
 						previous_note = note
 					
 					if note.length > 0:
-						hold_cover_sprite.play_animation("cover " + strum_name)
-						note.position.y = 0
+						note.holding = true
 						var temp = note.length
 						note.length = time_difference + (note.start_length * GameManager.seconds_per_beat)
 						note.length /= GameManager.seconds_per_beat
-						
 						
 						if note.note.visible:
 							hold_cover_sprite.play_animation("cover " + strum_name + " start")
@@ -99,7 +96,6 @@ func _process(delta):
 						
 						emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
 						state = STATE.GLOW
-					
 					else:
 						reset_timer = GameManager.seconds_per_step
 						state = STATE.GLOW
@@ -113,15 +109,19 @@ func _process(delta):
 						note.queue_free()
 					continue
 		
-		if (time_difference + (note.start_length * GameManager.seconds_per_beat - offset - delta)) <= -GameManager.SHIT_RATING_WINDOW:
-				note_list.erase(note)
-				note.queue_free()
-				
-				emit_signal(&"note_miss", note.time - time_difference, self,
-				note.length, note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
+		var relative_time: float = time_difference + (note.start_length * GameManager.seconds_per_beat - offset)
+		var hit_window: float = GameManager.SHIT_RATING_WINDOW
+		if ignored_note_types.has(note.note_type):
+			# This is for stuff like mine's so they have a smaller hit qindow
+			hit_window = GameManager.GOOD_RATING_WINDOW
+		
+		if relative_time <= -hit_window and coyote_timer <= 0:
+			note_list.erase(note)
+			note.queue_free()
+			
+			emit_signal(&"note_miss", time_difference, self, note.length, note.note_type, relative_time)
 	
 	# Inputs
-	
 	if Input.is_action_just_pressed(input):
 		if can_press:
 			if !note_list.is_empty():
@@ -129,21 +129,27 @@ func _process(delta):
 				if note.can_press:
 					if note.length <= 0:
 						state = STATE.GLOW
+						coyote_timer = 0
 						
 						note_list.erase(note)
 						note.queue_free()
 						pressing = false
-						var time_difference = (note.time - offset) - (GameManager.song_position)
+						var time_difference: float = (note.time - offset) - (GameManager.song_position)
 						emit_signal(&"note_hit", note.time, self, note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
 					else:
-						hold_cover_sprite.play_animation("cover " + strum_name)
 						var time_difference = (note.time - offset) - (GameManager.song_position)
-						emit_signal(&"note_hit", note.time, self, note.note_type, time_difference)
+						if note != previous_note:
+							emit_signal(&"note_hit", note.time, self, note.note_type, time_difference)
+						
+						coyote_timer = 0
+						
 						if !pressing:
 							hold_cover_sprite.play_animation("cover " + strum_name + " start")
 							hold_cover_sprite.visible = true
 						
 						pressing = true
+						note.holding = true
+						previous_note = note
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 						emit_signal(&"note_miss", 0, self, 0, -1, 0)
@@ -158,10 +164,8 @@ func _process(delta):
 					var note = note_list[0]
 					
 					if note.can_press:
-						if note.length != 0:
+						if note.length > 0:
 							state = STATE.GLOW
-						
-						
 							note.position.y = 0
 							var temp = note.length
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
@@ -177,39 +181,31 @@ func _process(delta):
 							
 							if note.length <= 0:
 								pressing = false
-								emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
-							
 								if can_splash:
 									hold_cover_sprite.play_animation("cover " + strum_name + " end")
 								else:
 									hold_cover_sprite.visible = false
 								
-								note_list.erase(note)
+								note_list.remove_at(0)
 								note.queue_free()
 			elif state != STATE.GLOW:
 				state = STATE.PRESSED
 	
 	if Input.is_action_just_released(input):
-		if can_press:
-			if pressing:
-				pressing = false
-				reset_timer = GameManager.seconds_per_step
-				if hold_cover_sprite.animation != "cover " + strum_name + " end":
-						hold_cover_sprite.visible = false
-				if !note_list.is_empty():
-					var note = note_list[0]
-					# Checks if you were holding a note before releasing
-					if note.can_press and note.length > 0:
-						note.start_length = note.length
-						emit_signal(&"note_holding", 0.0, self, 0.0, note.note_type)
-			else:
-				state = STATE.IDLE
+		release_note()
 	
 	if reset_timer > 0:
 		reset_timer -= delta
 		if reset_timer <= 0:
 			reset_timer = 0
 			state = STATE.IDLE
+	
+	if coyote_timer > 0:
+		coyote_timer -= delta
+		if coyote_timer <= 0:
+			if !note_list.is_empty():
+				note_list[0].time -= note_list[0].length * GameManager.seconds_per_beat
+				note_list[0].time -= GameManager.BAD_RATING_WINDOW
 	
 	if state == STATE.IDLE:
 		sprite.play_animation(strum_name)
@@ -219,7 +215,6 @@ func _process(delta):
 		sprite.play_animation(strum_name + " glow", false)
 
 # Util
-
 func set_skin(new_skin: NoteSkin):
 	note_skin = new_skin
 	
@@ -239,10 +234,6 @@ func set_skin(new_skin: NoteSkin):
 	if note_skin.pixel_texture:
 		sprite.texture_filter = TEXTURE_FILTER_NEAREST
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
-
-
-func set_ignored_note_types(types: Array):
-	ignored_note_types = types
 
 
 func create_note(time: float, length: float, note_type: Variant, _tempo: float):
@@ -281,10 +272,11 @@ func _on_offset_sprite_animation_finished():
 
 
 func _on_hold_cover_animation_finished():
-	if hold_cover_sprite.animation == "cover " + strum_name + " start":
+	if hold_cover_sprite.animation == hold_cover_sprite.animation_names.get("cover " + strum_name + " start"):
 		hold_cover_sprite.play_animation("cover " + strum_name)
-
-	if hold_cover_sprite.animation == "cover " + strum_name + " end": hold_cover_sprite.visible = false
+	
+	if hold_cover_sprite.animation == hold_cover_sprite.animation_names.get("cover " + strum_name + " end"):
+		hold_cover_sprite.visible = false
 
 
 func create_splash(animation_name: String = strum_name + " splash"):
@@ -297,3 +289,23 @@ func create_splash(animation_name: String = strum_name + " splash"):
 			
 			add_child(splash_instance)
 			splash_instance.get_node("OffsetSprite").play_animation(animation_name)
+
+
+func release_note():
+	if can_press:
+		if pressing:
+			pressing = false
+			reset_timer = GameManager.seconds_per_step
+			if hold_cover_sprite.animation != "cover " + strum_name + " end":
+				hold_cover_sprite.visible = false
+			
+			if !note_list.is_empty():
+				var note = note_list[0]
+				# Checks if you were holding a note before releasing
+				if note.can_press and note.length > 0:
+					note.holding = false
+					coyote_timer = GameManager.HOLD_NOTE_LENIENCY
+					note.time = GameManager.song_position
+					note.start_length = note.length
+		else:
+			state = STATE.IDLE

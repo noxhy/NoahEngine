@@ -6,6 +6,7 @@ const BAD_RATING_WINDOW: float = 0.135
 const SHIT_RATING_WINDOW: float = 0.16
 const GOOD_COMBO_FREQUENCY: int = 50
 const GREAT_COMBO_FREQUENCY: int = 200
+const HOLD_NOTE_LENIENCY: float = 1 / 3.0
 
 var song_scene = "res://test/test_scene.tscn"
 

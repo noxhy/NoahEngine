@@ -173,8 +173,8 @@ func _process(delta):
 		get_tree().change_scene_to_file(death_scene)
 	
 	# Why is this a thing I have to do
-	if get_tree() != null:
-		get_tree().call_group(&"note", &"update_y")
+	if get_tree():
+		get_tree().call_group(&"note", &"update")
 	
 	if Input.is_action_just_pressed(&"ui_cancel") or Input.is_action_just_pressed(&"ui_accept"):
 		Global.manual_pause = true
@@ -344,6 +344,7 @@ static func get_rating(time: float) -> String:
 func pause():
 	var pause_scene_instance = pause_preload.instantiate()
 	
+	Signals.emit_signal(&"play_paused")
 	pause_scene_instance.song_title = song_data.title
 	pause_scene_instance.credits = song_data.artist
 	if GameManager.freeplay:

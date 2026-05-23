@@ -9,7 +9,6 @@ script = ExtResource("1_tf7lj")
 
 [node name="Alphabet" type="Node2D" parent="." unique_id=451886843]
 script = ExtResource("2_qtyc2")
-text = "*123321)(23141'\";\""
 vertical_alignment = 1
 sprite_frames = ExtResource("3_8ad4t")
 

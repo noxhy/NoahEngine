@@ -144,6 +144,7 @@ func select_option(i: int):
 	match option:
 		"resume":
 			get_tree().paused = false
+			Signals.emit_signal(&"play_unpaused")
 			queue_free()
 		
 		"options":
