@@ -59,12 +59,9 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	## Note movement
-	
 	for note in note_list:
 		var time_difference = (note.time - offset) - GameManager.song_position
 		
-		# time_difference = snapped(time_difference, seconds_per_beat / 4)
 		note.scroll_speed = scroll_speed
 		note.scroll = scroll
 		
@@ -85,7 +82,7 @@ func _process(delta):
 					
 					if note.length > 0:
 						hold_cover_sprite.play_animation("cover " + strum_name)
-						note.position.y = 0
+						note.holding = true
 						var temp = note.length
 						note.length = time_difference + (note.start_length * GameManager.seconds_per_beat)
 						note.length /= GameManager.seconds_per_beat
@@ -99,7 +96,6 @@ func _process(delta):
 						
 						emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
 						state = STATE.GLOW
-					
 					else:
 						reset_timer = GameManager.seconds_per_step
 						state = STATE.GLOW
@@ -144,6 +140,7 @@ func _process(delta):
 							hold_cover_sprite.visible = true
 						
 						pressing = true
+						note.holding = true
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 						emit_signal(&"note_miss", 0, self, 0, -1, 0)
@@ -160,8 +157,6 @@ func _process(delta):
 					if note.can_press:
 						if note.length != 0:
 							state = STATE.GLOW
-						
-						
 							note.position.y = 0
 							var temp = note.length
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
@@ -195,11 +190,13 @@ func _process(delta):
 				pressing = false
 				reset_timer = GameManager.seconds_per_step
 				if hold_cover_sprite.animation != "cover " + strum_name + " end":
-						hold_cover_sprite.visible = false
+					hold_cover_sprite.visible = false
+				
 				if !note_list.is_empty():
 					var note = note_list[0]
 					# Checks if you were holding a note before releasing
 					if note.can_press and note.length > 0:
+						note.holding = false
 						note.start_length = note.length
 						emit_signal(&"note_holding", 0.0, self, 0.0, note.note_type)
 			else:
@@ -241,10 +238,6 @@ func set_skin(new_skin: NoteSkin):
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
 
-func set_ignored_note_types(types: Array):
-	ignored_note_types = types
-
-
 func create_note(time: float, length: float, note_type: Variant, _tempo: float):
 	self.tempo = tempo
 	
@@ -283,8 +276,9 @@ func _on_offset_sprite_animation_finished():
 func _on_hold_cover_animation_finished():
 	if hold_cover_sprite.animation == "cover " + strum_name + " start":
 		hold_cover_sprite.play_animation("cover " + strum_name)
-
-	if hold_cover_sprite.animation == "cover " + strum_name + " end": hold_cover_sprite.visible = false
+	
+	if hold_cover_sprite.animation == "cover " + strum_name + " end":
+		hold_cover_sprite.visible = false
 
 
 func create_splash(animation_name: String = strum_name + " splash"):

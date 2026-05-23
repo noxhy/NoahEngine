@@ -8,12 +8,10 @@ class_name BasicNote
 @onready var end = null
 
 var start_length: float = 0.0
-
 var can_press: bool = false
-
 var time_difference: float = INF
-
 var on_screen: bool = false
+var holding: bool = false
 
 # Applying Note Skin
 func _ready(): 
@@ -25,11 +23,11 @@ func _ready():
 	
 	note.play_animation(animation)
 	
-	var tail_animation = note.get_real_animation(StringName(animation + " tail"))
+	var tail_animation = note.get_real_animation(animation + " tail")
 	if tail_animation and tail:
 		tail.texture = note_skin.notes_texture.get_frame_texture(tail_animation, 0)
 	
-	var end_animation = note.get_real_animation(StringName(animation + " end"))
+	var end_animation = note.get_real_animation(animation + " end")
 	if end_animation and end:
 		end.texture = note_skin.notes_texture.get_frame_texture(end_animation, 0)
 		end.size = end.texture.get_size()
@@ -50,7 +48,6 @@ func _ready():
 	if end:
 		end.scale.x = note_skin.notes_scale
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	time_difference = time - GameManager.song_position
@@ -65,7 +62,10 @@ func _process(delta):
 		tail.visible = false
 
 
-func update_y():
-	position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
-	var grid_scaler = PIXELS_PER_SECOND * GameManager.seconds_per_beat
-	grid_size.y = grid_scaler
+func update():
+	if !holding:
+		position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
+		var grid_scaler = PIXELS_PER_SECOND * GameManager.seconds_per_beat
+		grid_size.y = grid_scaler
+	else:
+		position.y = 0

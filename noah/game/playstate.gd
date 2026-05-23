@@ -174,7 +174,7 @@ func _process(delta):
 	
 	# Why is this a thing I have to do
 	if get_tree() != null:
-		get_tree().call_group(&"note", &"update_y")
+		get_tree().call_group(&"note", &"update")
 	
 	if Input.is_action_just_pressed(&"ui_cancel") or Input.is_action_just_pressed(&"ui_accept"):
 		Global.manual_pause = true
