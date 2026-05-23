@@ -62,7 +62,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for note in note_list:
-		var time_difference = (note.time - offset) - GameManager.song_position
+		var time_difference: float = (note.time - offset) - GameManager.song_position
 		
 		note.scroll_speed = scroll_speed
 		note.scroll = scroll
@@ -111,16 +111,16 @@ func _process(delta):
 					continue
 		
 		var relative_time: float = time_difference + (note.start_length * GameManager.seconds_per_beat - offset)
-		if relative_time <= -GameManager.SHIT_RATING_WINDOW and coyote_timer <= 0:
+		var hit_window: float = GameManager.SHIT_RATING_WINDOW
+		if ignored_note_types.has(note.note_type):
+			# This is for stuff like mine's so they have a smaller hit qindow
+			hit_window = GameManager.GOOD_RATING_WINDOW
+		
+		if relative_time <= -hit_window and coyote_timer <= 0:
 			note_list.erase(note)
 			note.queue_free()
 			
-			emit_signal(&"note_miss", note.time - time_difference, self, note.length, note.note_type, relative_time)
-	
-	if coyote_timer > 0:
-		coyote_timer -= delta
-		if coyote_timer <= 0:
-			note_list[0].time -= note_list[0].length * GameManager.seconds_per_beat + GameManager.BAD_RATING_WINDOW
+			emit_signal(&"note_miss", time_difference, self, note.length, note.note_type, relative_time)
 	
 	# Inputs
 	if Input.is_action_just_pressed(input):
@@ -134,13 +134,14 @@ func _process(delta):
 						note_list.erase(note)
 						note.queue_free()
 						pressing = false
-						var time_difference = (note.time - offset) - (GameManager.song_position)
+						var time_difference: float = (note.time - offset) - (GameManager.song_position)
 						emit_signal(&"note_hit", note.time, self, note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
 					else:
 						hold_cover_sprite.play_animation("cover " + strum_name)
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						if note != previous_note:
 							emit_signal(&"note_hit", note.time, self, note.note_type, time_difference)
+						coyote_timer = 0
 						
 						if !pressing:
 							hold_cover_sprite.play_animation("cover " + strum_name + " start")
@@ -163,7 +164,7 @@ func _process(delta):
 					var note = note_list[0]
 					
 					if note.can_press:
-						if note.length != 0:
+						if note.length > 0:
 							state = STATE.GLOW
 							note.position.y = 0
 							var temp = note.length
@@ -171,6 +172,7 @@ func _process(delta):
 							note.length /= GameManager.seconds_per_beat
 							note.note.visible = false
 							emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
+							print(note.time)
 							
 							if !pressing:
 								hold_cover_sprite.play_animation("cover " + strum_name + " start")
@@ -180,14 +182,12 @@ func _process(delta):
 							
 							if note.length <= 0:
 								pressing = false
-								emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
-							
 								if can_splash:
 									hold_cover_sprite.play_animation("cover " + strum_name + " end")
 								else:
 									hold_cover_sprite.visible = false
 								
-								note_list.erase(note)
+								note_list.remove_at(0)
 								note.queue_free()
 			elif state != STATE.GLOW:
 				state = STATE.PRESSED
@@ -200,6 +200,13 @@ func _process(delta):
 		if reset_timer <= 0:
 			reset_timer = 0
 			state = STATE.IDLE
+	
+	if coyote_timer > 0:
+		coyote_timer -= delta
+		if coyote_timer <= 0:
+			if !note_list.is_empty():
+				note_list[0].time -= note_list[0].length * GameManager.seconds_per_beat
+				note_list[0].time -= GameManager.BAD_RATING_WINDOW
 	
 	if state == STATE.IDLE:
 		sprite.play_animation(strum_name)
@@ -300,8 +307,7 @@ func release_note():
 				if note.can_press and note.length > 0:
 					note.holding = false
 					coyote_timer = GameManager.HOLD_NOTE_LENIENCY
+					#note.time = GameManager.song_position
 					note.start_length = note.length
-					note.time = GameManager.song_position
-					emit_signal(&"note_holding", 0.0, self, 0.0, note.note_type)
 		else:
 			state = STATE.IDLE
