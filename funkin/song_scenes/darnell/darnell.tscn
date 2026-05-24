@@ -14,7 +14,7 @@
 [node name="Darnell" type="Node2D" unique_id=1675426916]
 script = ExtResource("1_mmofa")
 
-[node name="PlayState Host" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_dkpbc")]
+[node name="PlayState" parent="." unique_id=334125364 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_dkpbc")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
@@ -32,53 +32,45 @@ position_smoothing_speed = 3.0
 [node name="Stage" parent="." unique_id=733837376 instance=ExtResource("7_xhwu8")]
 unique_name_in_owner = true
 
-[node name="World" type="CanvasLayer" parent="." unique_id=485009208]
-layer = 10
-follow_viewport_enabled = true
-
-[node name="Position 1" type="Marker2D" parent="World" unique_id=126733488 groups=["camera_positions"]]
+[node name="Position 1" type="Marker2D" parent="." unique_id=126733488 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(960, 320)
 gizmo_extents = 18.3
 
-[node name="Position 2" type="Marker2D" parent="World" unique_id=1812413772 groups=["camera_positions"]]
+[node name="Position 2" type="Marker2D" parent="." unique_id=1812413772 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(640, 296)
 gizmo_extents = 26.5
 
-[node name="Position 3" type="Marker2D" parent="World" unique_id=890311916 groups=["camera_positions"]]
+[node name="Position 3" type="Marker2D" parent="." unique_id=890311916 groups=["camera_positions"]]
 unique_name_in_owner = true
 position = Vector2(832, 284)
 gizmo_extents = 26.5
 
-[node name="Rating Marker" type="Marker2D" parent="World" unique_id=572996852]
+[node name="Rating Marker" type="Marker2D" parent="." unique_id=572996852]
+unique_name_in_owner = true
 position = Vector2(1024, 192)
 gizmo_extents = 30.0
 
-[node name="Combo Marker" type="Marker2D" parent="World" unique_id=807628402]
+[node name="Combo Marker" type="Marker2D" parent="." unique_id=807628402]
+unique_name_in_owner = true
 position = Vector2(1152, 240)
 gizmo_extents = 40.0
 
-[node name="Characters" type="CanvasLayer" parent="." unique_id=934768007]
-layer = -1
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="Player" parent="Characters" unique_id=1267906772 groups=["player"] instance=ExtResource("9_vixx2")]
+[node name="Player" parent="." unique_id=1267906772 groups=["player"] instance=ExtResource("9_vixx2")]
 unique_name_in_owner = true
 z_index = 1
-position = Vector2(640, 288)
+position = Vector2(1280, 648)
 
-[node name="Enemy" parent="Characters" unique_id=1117757074 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("10_1osac")]
+[node name="Enemy" parent="." unique_id=1117757074 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
-position = Vector2(-528, 240)
+position = Vector2(112, 600)
 animation_player = NodePath("AnimatedSprite2D")
 
-[node name="Metronome" parent="Characters" unique_id=1563362403 instance=ExtResource("11_6d88t")]
+[node name="Metronome" parent="." unique_id=1563362403 instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true
 z_index = -1
-position = Vector2(80, 179)
+position = Vector2(720, 539)
 slope = 0.3
 update_rate = 0.04
 

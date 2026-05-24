@@ -30,7 +30,6 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		if !red_light:
 			
 			if car_list.size() < 2:
-				
 				print("car spawned")
 				var car_instance = CAR_PRELOAD.instantiate()
 				

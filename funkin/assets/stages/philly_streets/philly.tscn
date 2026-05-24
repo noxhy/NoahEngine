@@ -65,34 +65,25 @@ offset_right = 1288.0
 offset_bottom = 632.0
 color = Color(1, 1, 1, 0)
 
-[node name="Rain" type="CanvasLayer" parent="." unique_id=773850896]
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-
-[node name="ColorRect" type="ColorRect" parent="Rain" unique_id=1543514331]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1543514331]
+z_index = 10
 material = SubResource("ShaderMaterial_5os6c")
-offset_left = -1280.0
-offset_top = -728.0
-offset_right = 1288.0
-offset_bottom = 632.0
+offset_left = -640.0
+offset_top = -376.0
+offset_right = 1928.0
+offset_bottom = 984.0
 color = Color(1, 1, 1, 0)
 
-[node name="Foreground" type="CanvasLayer" parent="." unique_id=2133210433]
-layer = 0
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
+[node name="Foreground" type="Parallax2D" parent="." unique_id=1787477020]
+scroll_offset = Vector2(640, 360)
 
 [node name="SpraycanPile" type="Sprite2D" parent="Foreground" unique_id=1912360990]
 position = Vector2(-328, 256)
 texture = ExtResource("3_iqa2f")
 
-[node name="Background" type="CanvasLayer" parent="." unique_id=2079252342]
-layer = -2
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
+[node name="Background" type="Parallax2D" parent="." unique_id=930778861]
+z_index = -40
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillyForeground" type="Sprite2D" parent="Background" unique_id=1046057906]
 position = Vector2(0, 24)
@@ -113,57 +104,42 @@ range_layer_min = -100
 range_layer_max = -1
 texture = ExtResource("4_hfori")
 
-[node name="Cars Layer" type="CanvasLayer" parent="." unique_id=609075256 groups=["parallax"]]
+[node name="Cars Layer" type="Parallax2D" parent="." unique_id=1196469519 groups=["parallax"]]
 unique_name_in_owner = true
-layer = -3
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.95
+z_index = -50
+scroll_scale = Vector2(0.95, 0.95)
+scroll_offset = Vector2(640, 360)
 
 [node name="Car" parent="Cars Layer" unique_id=75048757 instance=ExtResource("7_e0uik")]
 position = Vector2(833.684, 120)
 direction = -1
 
-[node name="Background2" type="CanvasLayer" parent="." unique_id=1599540762 groups=["parallax"]]
-layer = -4
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.95
+[node name="Background2" type="Parallax2D" parent="." unique_id=787433750 groups=["parallax"]]
+z_index = -60
+scroll_scale = Vector2(0.95, 0.95)
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillyConstruction" type="Sprite2D" parent="Background2" unique_id=553287111]
 position = Vector2(1002.11, -216.842)
 texture = ExtResource("3_uikep")
 
-[node name="Background3" type="CanvasLayer" parent="." unique_id=56356693 groups=["parallax"]]
-layer = -5
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.925
-
-[node name="PhillyForegroundCity" type="Sprite2D" parent="Background3" unique_id=1495210627]
+[node name="PhillyForegroundCity" type="Sprite2D" parent="Background2" unique_id=1495210627]
 position = Vector2(380.541, -161.081)
 texture = ExtResource("4_33605")
 
-[node name="Background4" type="CanvasLayer" parent="." unique_id=314356846 groups=["parallax"]]
-layer = -6
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.9
+[node name="Background4" type="Parallax2D" parent="." unique_id=1480132004 groups=["parallax"]]
+z_index = -70
+scroll_scale = Vector2(0.9, 0.9)
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillyHighway" type="Sprite2D" parent="Background4" unique_id=1585070145]
 position = Vector2(-408.889, -368.889)
 texture = ExtResource("5_42vn4")
 
-[node name="Background5" type="CanvasLayer" parent="." unique_id=409207435 groups=["parallax"]]
-layer = -7
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.95
+[node name="Background5" type="Parallax2D" parent="." unique_id=1783302807 groups=["parallax"]]
+z_index = -80
+scroll_scale = Vector2(0.95, 0.95)
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillyHighwayLights" type="Sprite2D" parent="Background5" unique_id=926459200]
 position = Vector2(-581.053, -503.158)
@@ -177,12 +153,10 @@ range_layer_min = -100
 range_layer_max = 1
 texture = ExtResource("7_aje2x")
 
-[node name="Background6" type="CanvasLayer" parent="." unique_id=75049641 groups=["parallax"]]
-layer = -8
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.9
+[node name="Background6" type="Parallax2D" parent="." unique_id=1728775999 groups=["parallax"]]
+z_index = -90
+scroll_scale = Vector2(0.9, 0.9)
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillySkyline" type="Sprite2D" parent="Background6" unique_id=1188053490]
 position = Vector2(124.444, -262.222)
@@ -195,12 +169,10 @@ range_layer_min = -100
 range_layer_max = -3
 texture = ExtResource("9_8888w")
 
-[node name="Background7" type="CanvasLayer" parent="." unique_id=182851225 groups=["parallax"]]
-layer = -9
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-follow_viewport_enabled = true
-follow_viewport_scale = 0.9
+[node name="Background7" type="Parallax2D" parent="." unique_id=1845445811 groups=["parallax"]]
+z_index = -100
+scroll_scale = Vector2(0.9, 0.9)
+scroll_offset = Vector2(640, 360)
 
 [node name="PhillySkybox" type="Sprite2D" parent="Background7" unique_id=371321373]
 position = Vector2(-26.6667, -377.778)
