@@ -31,8 +31,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Christmas" type="Node2D" unique_id=2029742824]
+[node name="Christmas" type="Node2D" unique_id=2029742824 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_oe8gf")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"Parent Down Note Dad",
 &"idle": &"Parent Christmas Idle",
@@ -75,7 +76,5 @@ use_parent_material = true
 position = Vector2(-80, -344)
 sprite_frames = ExtResource("3_o01a6")
 animation = &"Parent Christmas Idle"
-frame = 13
-frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

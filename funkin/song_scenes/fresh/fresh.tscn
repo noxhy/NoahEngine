@@ -59,12 +59,11 @@ z_index = 100
 material = SubResource("ShaderMaterial_ygtui")
 position = Vector2(1024, 872)
 
-[node name="Enemy" parent="." unique_id=598341333 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("10_f8uei")]
+[node name="Enemy" parent="." unique_id=598341333 groups=["enemy"] instance=ExtResource("10_f8uei")]
 unique_name_in_owner = true
 z_index = 100
 material = SubResource("ShaderMaterial_orev5")
 position = Vector2(16, 858)
-animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=2059975944]
 position = Vector2(576, 448)

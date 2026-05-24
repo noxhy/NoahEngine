@@ -62,10 +62,9 @@ unique_name_in_owner = true
 z_index = 1
 position = Vector2(1280, 648)
 
-[node name="Enemy" parent="." unique_id=1117757074 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("10_1osac")]
+[node name="Enemy" parent="." unique_id=1117757074 groups=["enemy"] instance=ExtResource("10_1osac")]
 unique_name_in_owner = true
 position = Vector2(112, 600)
-animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Metronome" parent="." unique_id=1563362403 instance=ExtResource("11_6d88t")]
 unique_name_in_owner = true

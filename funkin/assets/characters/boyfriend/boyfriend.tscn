@@ -45,6 +45,7 @@ animations = [{
 
 [node name="Boyfriend" type="Node2D" unique_id=2117704961 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_mx020")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"attack": &"boyfriend attack",
 &"cheer": &"BF HEY!!",
@@ -78,7 +79,6 @@ offsets = Dictionary[StringName, Vector2]({
 &"boyfriend attack": Vector2(-165, -290),
 &"boyfriend dodge": Vector2(-34, -148)
 })
-animation_player = NodePath("AnimatedSprite2D")
 icons = SubResource("SpriteFrames_u3ypl")
 color = Color(0.286275, 0.733333, 0.85098, 1)
 
@@ -87,5 +87,4 @@ use_parent_material = true
 position = Vector2(-16, -160)
 sprite_frames = ExtResource("3_cqa6h")
 animation = &"BF idle dance"
-frame = 13
-frame_progress = 1.0
+frame_progress = 0.536712

@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://funkin/menus/freeplay/freeplay_arrow.tscn" id="9_gdyqo"]
 [ext_resource type="Resource" uid="uid://diniy0qu228rp" path="res://funkin/assets/weeks/week6.tres" id="9_juwvh"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/assets/characters/girlfriend/girlfriend.tscn" id="9_qcirc"]
-[ext_resource type="PackedScene" path="res://funkin/difficulty_display.tscn" id="10_fvhjj"]
+[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://funkin/difficulty_display.tscn" id="10_fvhjj"]
 [ext_resource type="Resource" uid="uid://cri5rrqbbi5cv" path="res://funkin/assets/weeks/week7.tres" id="10_l4fpr"]
 [ext_resource type="PackedScene" uid="uid://dwn3bvltjsem4" path="res://funkin/assets/characters/daddy dearest/daddy_dearest.tscn" id="10_p6gkq"]
 [ext_resource type="PackedScene" uid="uid://dddh323rffgon" path="res://funkin/assets/characters/spooky kids/spooky_kids.tscn" id="11_2m25c"]
@@ -166,11 +166,10 @@ material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(192, 124)
 scale = Vector2(0.7, 0.7)
 
-[node name="Daddy Dearest" parent="UI/Week Display/SubViewport/Week 1" unique_id=502082827 node_paths=PackedStringArray("animation_player") groups=["bop"] instance=ExtResource("10_p6gkq")]
+[node name="Daddy Dearest" parent="UI/Week Display/SubViewport/Week 1" unique_id=502082827 groups=["bop"] instance=ExtResource("10_p6gkq")]
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(0.4, 0.4)
-animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Week 2" type="Node2D" parent="UI/Week Display/SubViewport" unique_id=1257585259 groups=["weeks"]]
 visible = false
@@ -209,11 +208,10 @@ material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(192, 124)
 scale = Vector2(0.7, 0.7)
 
-[node name="Mommy Mearest" parent="UI/Week Display/SubViewport/Week 4" unique_id=1286679044 node_paths=PackedStringArray("animation_player") groups=["bop"] instance=ExtResource("13_ofi8l")]
+[node name="Mommy Mearest" parent="UI/Week Display/SubViewport/Week 4" unique_id=1286679044 groups=["bop"] instance=ExtResource("13_ofi8l")]
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 134)
 scale = Vector2(0.374, 0.374)
-animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Week 5" type="Node2D" parent="UI/Week Display/SubViewport" unique_id=1667310798 groups=["weeks"]]
 visible = false
@@ -224,11 +222,10 @@ material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(192, 124)
 scale = Vector2(0.7, 0.7)
 
-[node name="Character" parent="UI/Week Display/SubViewport/Week 5" unique_id=930684868 node_paths=PackedStringArray("animation_player") groups=["bop"] instance=ExtResource("17_dlfty")]
+[node name="Character" parent="UI/Week Display/SubViewport/Week 5" unique_id=930684868 groups=["bop"] instance=ExtResource("17_dlfty")]
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 132)
 scale = Vector2(0.395, 0.395)
-animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"Parent Down Note Dad",
 &"idle": &"Parent Christmas Idle",
@@ -245,12 +242,10 @@ animation_names = Dictionary[StringName, StringName]({
 visible = false
 position = Vector2(640, 164)
 
-[node name="Boyfriend Pixel" parent="UI/Week Display/SubViewport/Week 6" unique_id=937448975 node_paths=PackedStringArray("animation_player") groups=["bop", "player"] instance=ExtResource("14_6o7s3")]
+[node name="Boyfriend Pixel" parent="UI/Week Display/SubViewport/Week 6" unique_id=937448975 groups=["bop", "player"] instance=ExtResource("14_6o7s3")]
 material = SubResource("ShaderMaterial_20mkd")
 position = Vector2(192, 124)
 scale = Vector2(5, 5)
-animation_player = NodePath("AnimatedSprite2D")
-sing_duration = 8.0
 
 [node name="Senpai" parent="UI/Week Display/SubViewport/Week 6" unique_id=349121839 groups=["bop"] instance=ExtResource("15_tem1l")]
 material = SubResource("ShaderMaterial_20mkd")
@@ -280,11 +275,10 @@ material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(192, 124)
 scale = Vector2(0.7, 0.7)
 
-[node name="Darnell" parent="UI/Week Display/SubViewport/Weekend 1" unique_id=179765052 node_paths=PackedStringArray("animation_player") groups=["bop"] instance=ExtResource("17_wjhul")]
+[node name="Darnell" parent="UI/Week Display/SubViewport/Weekend 1" unique_id=179765052 groups=["bop"] instance=ExtResource("17_wjhul")]
 material = SubResource("ShaderMaterial_ub4sb")
 position = Vector2(-192, 124)
 scale = Vector2(0.7, 0.7)
-animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Week Name" type="Label" parent="UI" unique_id=31442242]
 offset_left = 16.0

@@ -4,8 +4,9 @@
 [ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://funkin/assets/characters/spirit/spirit.tres" id="2_s66hv"]
 [ext_resource type="SpriteFrames" uid="uid://c62bnqtxmntid" path="res://funkin/assets/characters/spirit/spirit.res" id="3_1ui7q"]
 
-[node name="Spirit" type="Node2D" unique_id=473816674]
+[node name="Spirit" type="Node2D" unique_id=473816674 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_8s5sa")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"pixel_down",
 &"idle": &"df_idle",

@@ -31,8 +31,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Darnell" type="Node2D" unique_id=239958260]
+[node name="Darnell" type="Node2D" unique_id=239958260 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_h007o")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"attack": &"Kick Up",
 &"attack_prepare": &"Knee Forward",
@@ -61,7 +62,5 @@ use_parent_material = true
 position = Vector2(93, -155)
 sprite_frames = ExtResource("3_521o1")
 animation = &"Idle"
-frame = 13
-frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

@@ -4,8 +4,9 @@
 [ext_resource type="SpriteFrames" uid="uid://cuxtqiopvssp7" path="res://funkin/assets/characters/senpai/angry_senpai.tres" id="2_usrxy"]
 [ext_resource type="SpriteFrames" uid="uid://d3eo6fcoflew3" path="res://funkin/assets/characters/senpai/senpai.res" id="3_neexf"]
 
-[node name="Senpai" type="Node2D" unique_id=658534504]
+[node name="Senpai" type="Node2D" unique_id=658534504 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_e2dgr")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"Angry Senpai DOWN NOTE instance 1",
 &"idle": &"Angry Senpai Idle instance 1",

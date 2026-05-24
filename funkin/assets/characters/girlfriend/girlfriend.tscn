@@ -84,5 +84,3 @@ use_parent_material = true
 position = Vector2(0, -320)
 sprite_frames = ExtResource("3_mjknh")
 animation = &"idle_left"
-frame = 14
-frame_progress = 1.0

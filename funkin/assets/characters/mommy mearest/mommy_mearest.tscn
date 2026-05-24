@@ -31,8 +31,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Mommy Mearest" type="Node2D" unique_id=1963772775]
+[node name="Mommy Mearest" type="Node2D" unique_id=1963772775 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_yjg8a")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"MOM DOWN POSE",
 &"idle": &"Mom Idle",
