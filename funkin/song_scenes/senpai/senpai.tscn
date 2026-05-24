@@ -28,16 +28,19 @@ position = Vector2(139.7, 520.7)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
+[node name="CameraController" type="Node" parent="." unique_id=498229867 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("11_gd42n")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
+
 [node name="Stage" parent="." unique_id=900796771 instance=ExtResource("7_mjcyn")]
 unique_name_in_owner = true
 
-[node name="Player" parent="." unique_id=1935859516 node_paths=PackedStringArray("animation_player") groups=["player"] instance=ExtResource("9_cvimb")]
+[node name="Player" parent="." unique_id=1935859516 groups=["player"] instance=ExtResource("9_cvimb")]
 unique_name_in_owner = true
 z_index = 300
 position = Vector2(480, 880.00006)
 scale = Vector2(6, 6)
-animation_player = NodePath("AnimatedSprite2D")
-sing_duration = 8.0
 
 [node name="Enemy" parent="." unique_id=182391035 groups=["enemy"] instance=ExtResource("10_2o85c")]
 unique_name_in_owner = true
@@ -82,8 +85,3 @@ gizmo_extents = 20.0
 
 [node name="UI" parent="." unique_id=1358688643 instance=ExtResource("12_q80n4")]
 layer = 10
-
-[node name="CameraController" type="Node" parent="." unique_id=498229867 node_paths=PackedStringArray("parent_2D")]
-script = ExtResource("11_gd42n")
-parent_2D = NodePath("../Camera")
-metadata/_custom_type_script = "uid://b4lmffueni5k"

@@ -4,8 +4,9 @@
 [ext_resource type="SpriteFrames" uid="uid://co2q6ydrkmts7" path="res://funkin/assets/characters/boyfriend pixel/boyfriend pixel.tres" id="2_m6lar"]
 [ext_resource type="SpriteFrames" uid="uid://5dsbn21thfnn" path="res://funkin/assets/characters/boyfriend pixel/boyfriend_pixel.res" id="2_rn51i"]
 
-[node name="Boyfriend Pixel" type="Node2D" unique_id=395434773]
+[node name="Boyfriend Pixel" type="Node2D" unique_id=395434773 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_gqt7p")
+animation_player = NodePath("AnimatedSprite2D")
 animation_names = Dictionary[StringName, StringName]({
 &"down": &"BF DOWN NOTE instance 1",
 &"idle": &"BF IDLE instance 1",
@@ -17,7 +18,7 @@ animation_names = Dictionary[StringName, StringName]({
 &"right": &"BF RIGHT NOTE instance 1",
 &"up": &"BF UP NOTE instance 1"
 })
-sing_duration = 8
+sing_duration = 8.0
 icons = ExtResource("2_m6lar")
 color = Color(0.501961, 0.729412, 0.811765, 1)
 
@@ -27,5 +28,7 @@ use_parent_material = true
 position = Vector2(0, -28)
 sprite_frames = ExtResource("2_rn51i")
 animation = &"BF IDLE instance 1"
+frame = 13
+frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

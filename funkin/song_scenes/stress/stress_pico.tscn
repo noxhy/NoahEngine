@@ -5,7 +5,6 @@
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/game/default/default_note_skin.tres" id="4_4bxi2"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/game/default/default_ui_skin.tres" id="5_t15xn"]
 [ext_resource type="PackedScene" uid="uid://cmiw0sq3dx0ge" path="res://funkin/assets/stages/battlefield/stage.tscn" id="7_th3hl"]
-[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="11_s6vog"]
 [ext_resource type="PackedScene" uid="uid://bs78qo116i5i8" path="res://funkin/assets/characters/pico/pico.tscn" id="12_5fyjp"]
 [ext_resource type="Shader" uid="uid://boq6lqipwmoli" path="res://funkin/assets/shaders/rimlight.gdshader" id="13_th3hl"]
 [ext_resource type="PackedScene" uid="uid://cvw5oumi78kvr" path="res://funkin/assets/characters/tankman/tankman.tscn" id="14_ctps2"]
@@ -96,12 +95,13 @@ position = Vector2(640, 360)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
+[node name="CameraController" type="Node" parent="." unique_id=135944367 node_paths=PackedStringArray("parent_2D")]
+script = ExtResource("16_v2n7e")
+parent_2D = NodePath("../Camera")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
+
 [node name="Stage" parent="." unique_id=1380889064 instance=ExtResource("7_th3hl")]
 unique_name_in_owner = true
-
-[node name="Conductor" type="Node" parent="." unique_id=304755201]
-script = ExtResource("11_s6vog")
-stream_player = NodePath("")
 
 [node name="Position 1" type="Marker2D" parent="." unique_id=1756230532 groups=["camera_positions"]]
 unique_name_in_owner = true
@@ -154,23 +154,14 @@ animation_names = Dictionary[StringName, StringName]({
 &"up": &"Tankman UP note 1"
 })
 
-[node name="Metronome" parent="." unique_id=636097617 node_paths=PackedStringArray("music_host") instance=ExtResource("15_th3hl")]
+[node name="Metronome" parent="." unique_id=636097617 instance=ExtResource("15_th3hl")]
 unique_name_in_owner = true
 z_index = -2
 material = SubResource("ShaderMaterial_0hbr4")
 position = Vector2(552, 592)
 scale = Vector2(0.9, 0.9)
-music_host = NodePath("")
 slope = 0.3
 update_rate = 0.04
 
 [node name="UI" parent="." unique_id=2089659649 instance=ExtResource("16_owg0q")]
 layer = 10
-
-[node name="CameraController" type="Node" parent="." unique_id=135944367 node_paths=PackedStringArray("parent_2D")]
-script = ExtResource("16_v2n7e")
-parent_2D = NodePath("../Camera")
-metadata/_custom_type_script = "uid://b4lmffueni5k"
-
-[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
-[connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]

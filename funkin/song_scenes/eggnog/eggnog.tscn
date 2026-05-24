@@ -43,7 +43,6 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("4_aqdoj")
 ui_skin = ExtResource("5_f88c2")
-death_scene = "uid://bd083xcqslcsd"
 
 [node name="Stage" parent="." unique_id=1670436415 instance=ExtResource("6_8k6f7")]
 unique_name_in_owner = true
@@ -53,19 +52,21 @@ position = Vector2(640, 360)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
-[node name="Player" parent="." unique_id=1254698147 groups=["player"] instance=ExtResource("12_8k6f7")]
+[node name="Player" parent="." unique_id=1254698147 node_paths=PackedStringArray("animation_player") groups=["player"] instance=ExtResource("12_8k6f7")]
 unique_name_in_owner = true
 z_index = 300
 material = SubResource("ShaderMaterial_8k6f7")
 position = Vector2(936, 662.4)
 scale = Vector2(0.8, 0.8)
+animation_player = NodePath("AnimatedSprite2D")
 
-[node name="Enemy" parent="." unique_id=288167687 groups=["enemy"] instance=ExtResource("14_5qnon")]
+[node name="Enemy" parent="." unique_id=288167687 node_paths=PackedStringArray("animation_player") groups=["enemy"] instance=ExtResource("14_5qnon")]
 unique_name_in_owner = true
 z_index = 100
 material = SubResource("ShaderMaterial_2etw8")
 position = Vector2(136, 662.4)
 scale = Vector2(0.8, 0.8)
+animation_player = NodePath("AnimatedSprite2D")
 
 [node name="Metronome" parent="." unique_id=1354144179 instance=ExtResource("15_pd6oi")]
 unique_name_in_owner = true
@@ -106,7 +107,3 @@ gizmo_extents = 20.0
 script = ExtResource("12_y3svp")
 parent_2D = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
-
-[connection signal="combo_break" from="PlayState Host" to="." method="_on_combo_break"]
-[connection signal="create_note" from="PlayState Host" to="." method="_on_create_note"]
-[connection signal="new_event" from="PlayState Host" to="." method="_on_new_event"]

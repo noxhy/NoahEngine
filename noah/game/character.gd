@@ -263,6 +263,10 @@ func _editor_process(delta: float) -> void:
 	if not is_player_added and _ghost_sprite:
 		_cleanup_ghost()
 
+func _is_character_root():
+	var tree = get_tree()
+	return tree and tree.edited_scene_root == self
+
 func _cleanup_ghost():
 	if _ghost_sprite:
 		remove_child(_ghost_sprite)
@@ -279,11 +283,11 @@ func _get_configuration_warnings() -> PackedStringArray:
 ## [b]Tool Script[/b] - Used for offsetring.
 ## [br][br]Updates the position and texture of the ghost sprite. 
 func update_ghost():
-	if !Engine.is_editor_hint():
+	if !Engine.is_editor_hint() or not _is_character_root():
 		return
 	
 	_cleanup_ghost()
-
+	
 	if animation_player:
 		if animation_player is AnimatedSprite2D:
 			_ghost_sprite = Sprite2D.new()
