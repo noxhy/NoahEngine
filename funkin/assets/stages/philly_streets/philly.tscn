@@ -17,23 +17,6 @@
 [ext_resource type="Texture2D" uid="uid://c8mta45ho35bj" path="res://funkin/assets/stages/philly_streets/phillySmog.png" id="9_8888w"]
 [ext_resource type="Texture2D" uid="uid://bgqiys4216y2h" path="res://funkin/assets/stages/philly_streets/phillySkybox.png" id="10_2fyi0"]
 
-[sub_resource type="Gradient" id="Gradient_0qh3h"]
-colors = PackedColorArray(0, 0, 0, 1, 0.941406, 0.941406, 0.941406, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_f5xmg"]
-gradient = SubResource("Gradient_0qh3h")
-
-[sub_resource type="Environment" id="Environment_bd4bl"]
-background_mode = 3
-glow_levels/1 = 1.0
-glow_levels/2 = 1.0
-glow_intensity = 0.64
-glow_strength = 0.58
-glow_bloom = 0.03
-glow_hdr_threshold = 1.5
-adjustment_enabled = true
-adjustment_color_correction = SubResource("GradientTexture1D_f5xmg")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_bg07j"]
 shader = ExtResource("2_0df5w")
 shader_parameter/frequency = 2.6
@@ -68,9 +51,6 @@ shader_parameter/warp_sensitivity = 0.257
 
 [node name="Stage" type="Node2D" unique_id=283171423]
 script = ExtResource("1_osrb8")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=672188204]
-environment = SubResource("Environment_bd4bl")
 
 [node name="Rain Drops" type="CanvasLayer" parent="." unique_id=1697660884]
 layer = 4
