@@ -36,7 +36,7 @@ shader_parameter/brightness = 0.0
 [node name="Eggnog" type="Node2D" unique_id=1636775927]
 script = ExtResource("1_8k6f7")
 
-[node name="PlayState Host" parent="." unique_id=1039606796 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_vb00p")]
+[node name="PlayState" parent="." unique_id=1039606796 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_vb00p")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")

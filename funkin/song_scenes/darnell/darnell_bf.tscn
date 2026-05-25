@@ -94,10 +94,12 @@ position = Vector2(192, -76)
 gizmo_extents = 26.5
 
 [node name="Rating Marker" type="Marker2D" parent="." unique_id=948302342]
+unique_name_in_owner = true
 position = Vector2(384, -168)
 gizmo_extents = 30.0
 
 [node name="Combo Marker" type="Marker2D" parent="." unique_id=1519120555]
+unique_name_in_owner = true
 position = Vector2(512, -120)
 gizmo_extents = 40.0
 

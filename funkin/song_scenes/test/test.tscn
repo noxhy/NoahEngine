@@ -13,7 +13,7 @@
 [node name="Test" type="Node2D" unique_id=138125275]
 script = ExtResource("1_h1wkf")
 
-[node name="PlayState Host" parent="." unique_id=1668852 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_ab4ue")]
+[node name="PlayState" parent="." unique_id=1668852 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_ab4ue")]
 process_mode = 1
 host = NodePath("..")
 ui = NodePath("../UI")
