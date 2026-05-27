@@ -213,7 +213,6 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 	chart.scroll_speed = data.get('speed')
 	
 	tempo_data[0.0] = current_bpm
-	var index = 0
 	
 	for i in data.get("notes"):
 		# Too lazy to make sure for BPM changes so
@@ -260,7 +259,6 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 		
 		note_data.sort_custom(sort_notes)
 		
-		index += 1
 		section_time += seconds_per_measure
 	
 	if data.has('events'):

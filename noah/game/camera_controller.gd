@@ -205,12 +205,12 @@ func lerp_position(cur:Variant, intended:Variant, delta:float):
 
 
 var _zoom_tween:Tween = null
-func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
+func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
 	
 	if _zoom_tween:
 		_zoom_tween.kill()
 		
-	_zoom_tween = create_tween().set_parallel().set_trans(trans).set_ease(ease)
+	_zoom_tween = create_tween().set_parallel().set_trans(trans).set_ease(ease_type)
 	
 	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, speed)
 	_zoom_tween.tween_property(self, 'zoom', new_zoom, speed)
