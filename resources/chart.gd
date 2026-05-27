@@ -150,7 +150,7 @@ static func load(path:String) -> Chart:
 						
 						assert(FileAccess.file_exists(meta_path), 'failed to find cne chart meta.json')
 						
-						var events = []
+						var events: Array = []
 						var events_file = FileAccess.open(path.get_base_dir() + '/events.json', FileAccess.READ)
 						
 						if events_file:
@@ -160,7 +160,7 @@ static func load(path:String) -> Chart:
 									if events_json.has('events'):
 										events = events_json.get('events')
 						
-						var meta_file = FileAccess.open(meta_path, FileAccess.READ)
+						var meta_file: FileAccess = FileAccess.open(meta_path, FileAccess.READ)
 						var meta_json = JSON.parse_string(meta_file.get_as_text())
 						if meta_json:
 							return convert_cne(json, meta_json, events)
