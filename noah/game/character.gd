@@ -69,9 +69,7 @@ enum AnimContext {
 @export var icons: SpriteFrames = load("uid://dt82dx1mf15r")
 @export var color: Color = Color(0.168627, 0.121569, 0.203922)
 
-
-
-@export_group("Tools")
+@export_category("Tools")
 @warning_ignore("unused_private_class_variable")
 @export_tool_button("Save Offset", "Save") var _save_button: Callable = self._save_offset
 @warning_ignore("unused_private_class_variable")

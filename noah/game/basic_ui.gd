@@ -45,13 +45,13 @@ func icon_bop(time: float):
 
 func update_performance_text():
 	
-	var str:String = 'Botplay'
+	var perf_str: String = 'Botplay'
 	
 	if not SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, &"botplay"):
-		str = "Score: " + Global.format_number(GameManager.score) \
+		perf_str = "Score: " + Global.format_number(GameManager.score) \
 		+ " • " + "Misses: " + str(GameManager.tallies.get("miss", 0))
 	
-	performance_text.text = str
+	performance_text.text = perf_str
 
 func update_health_bar(health: float):
 	health_bar.value = health
