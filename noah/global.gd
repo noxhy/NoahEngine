@@ -8,7 +8,6 @@ var transitioning: bool = false
 @onready var performance_label: Label = $"UI/Performance Label"
 
 func _correctWindowSize() -> void:
-	
 	if not OS.get_name().to_lower().contains('windows'): 
 		return
 	
@@ -103,7 +102,8 @@ func bop_tween(object: Object, property: NodePath, original_val: Variant, final_
 	tween.tween_property(object, property, original_val, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
 
 func set_window_title(title: String):
-	DisplayServer.window_set_title("Friday Night Funkin' Noah Engine 3.0 | " + title)
+	DisplayServer.window_set_title(str("Friday Night Funkin' Noah Engine ",
+	ProjectSettings.get_setting("application/config/version"), " | ", title))
 
 func format_number(num:float) -> String: 
 	var isNegative = num < 0.0
