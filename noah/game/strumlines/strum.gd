@@ -8,6 +8,8 @@ var NOTE_PRELOAD = preload("uid://krhxbwnjnr7r")
 var SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
 const NOTE_TYPES: Dictionary = {
 	"mom": "",
+	"no_animation": "",
+	"alt_prefix": ""
 }
 
 signal created_note(time: float, strum: Strum, length: float, note_type: Variant)

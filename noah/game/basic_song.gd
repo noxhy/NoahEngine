@@ -70,10 +70,18 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 
 
 func note_hit(time: float, lane: int, note_type: Variant, hit_time: float, strum_manager: Variant):
-	var group: StringName = get_group(strum_manager)
-	get_tree().call_group(group, &"play_animation", get_direction(lane % 4),
-	Character.AnimContext.SING, true)
-	get_tree().call_group(group, &"set_sing_timer")
+	var group: StringName = get_group_from_manager(strum_manager)
+	
+	
+	
+	var anim_to_play = get_direction(lane % 4)
+	if str(note_type) == &"alt_prefix":
+		anim_to_play = &"alt_" + anim_to_play
+	
+	if str(note_type) != &"no_animation":
+		get_tree().call_group(group, &"play_animation", anim_to_play,
+		Character.AnimContext.SING, true)
+		get_tree().call_group(group, &"set_sing_timer")
 	
 	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
 	
@@ -89,7 +97,7 @@ func note_hit(time: float, lane: int, note_type: Variant, hit_time: float, strum
 
 
 func note_holding(time: float, lane: int, length: float, note_type: Variant, strum_manager: Variant):
-	var group: StringName = get_group(strum_manager)
+	var group: StringName = get_group_from_manager(strum_manager)
 	get_tree().call_group(group, &"set_sing_timer")
 	
 	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
@@ -116,7 +124,7 @@ func note_miss(time: float, lane: int, length: float, note_type: Variant, hit_ti
 	Signals.play_note_miss.emit(time, lane, length, note_type, hit_time, strum_manager)
 
 
-func get_group(strum_manager: Variant) -> StringName:
+func get_group_from_manager(strum_manager: Variant) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
 
 
