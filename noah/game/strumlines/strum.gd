@@ -14,7 +14,7 @@ const NOTE_TYPES: Dictionary = {
 
 signal created_note(time: float, strum: Strum, length: float, note_type: String)
 signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
-signal note_holding(time: float, strum: Strum, length: float, note_type: String)
+signal note_holding(note: Note, hold_difference: float, strum: Strum)
 signal note_miss(note: Note, strum: Strum)
 
 @export var note_skin: NoteSkin
@@ -96,7 +96,7 @@ func _process(delta):
 						
 						note.note.visible = false
 						
-						emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
+						emit_signal(&"note_holding", note, temp - note.length, self)
 						state = STATE.GLOW
 					else:
 						reset_timer = GameManager.seconds_per_step
@@ -122,7 +122,6 @@ func _process(delta):
 			emit_signal(&"note_miss", note, self)
 			note.queue_free()
 			
-	
 	# Inputs
 	if Input.is_action_just_pressed(input):
 		if can_press:
@@ -154,12 +153,11 @@ func _process(delta):
 						previous_note = note
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
-						#emit_signal(&"note_miss", 0, self, 0, "spam", 0)
 						emit_signal(&"note_miss", null, self)
 			else:
 				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
 					emit_signal(&"note_miss", null, self)
-	
+		
 	if Input.is_action_pressed(input):
 		if can_press:
 			if pressing:
@@ -174,7 +172,8 @@ func _process(delta):
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
 							note.length /= GameManager.seconds_per_beat
 							note.note.visible = false
-							emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
+							emit_signal(&"note_holding", note, temp - note.length, self)
+							
 							
 							if !pressing:
 								hold_cover_sprite.play_animation("cover " + strum_name + " start")

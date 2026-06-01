@@ -3,7 +3,7 @@ extends Node2D
 class_name StrumManager
 
 signal note_hit(note: Note, lane: int, hit_time_difference: float, manager: StrumManager)
-signal note_holding(time: float, lane: int, length: float, note_type: String, manager: StrumManager)
+signal note_holding(note: Note, lane: int, hold_difference: float, manager: StrumManager)
 signal note_miss(note: Note, lane: int, manager: StrumManager)
 
 @export var note_skin: NoteSkin = NoteSkin.new()
@@ -123,8 +123,8 @@ func _on_note_hit(note: Note, hit_time: float, strum: Strum):
 	emit_signal(&"note_hit", note, strums.find(strum), hit_time, self)
 
 
-func _on_note_holding(time, strum_name, length, note_type):
-	emit_signal(&"note_holding", time, strums.find(strum_name), length, note_type, self)
+func _on_note_holding(note: Note, hold_difference: float, strum: Strum):
+	emit_signal(&"note_holding", note, strums.find(strum), hold_difference, self)
 
 
 func _on_note_miss(note:Note, strum: Strum):

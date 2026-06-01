@@ -493,13 +493,13 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 			GameManager.tallies["max_combo"] = combo
 
 
-func note_holding(time, lane, length, note_type, strum_manager):
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		health += abs(time) * 4
-		score += floor(abs(time) * HOLD_SCORE)
+		health += abs(hold_difference) * 4
+		score += floor(abs(hold_difference) * HOLD_SCORE)
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
