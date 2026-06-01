@@ -69,19 +69,16 @@ func _on_create_note(time, lane, note_length, note_type, tempo):
 		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
-func note_hit(time: float, lane: int, note_type: String, hit_time: float, strum_manager: Variant):
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
-	var anim_to_play = get_direction(lane % 4)
+	var anim_to_play = note.anim_prefix +  get_direction(lane % 4)
 	
-	if note_type == "alt_prefix":
-		anim_to_play = &"alt_" + anim_to_play
-	
-	if note_type != "no_animation":
+	if not note.no_animation:
 		get_tree().call_group(group, &"play_animation", anim_to_play,
 		Character.AnimContext.SING, true)
 		get_tree().call_group(group, &"set_sing_timer")
 	
-	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
+	playstate_host.note_hit(note, lane, hit_time, strum_manager)
 	
 	if group == &"player":
 		show_combo(PlayState.get_rating(hit_time), playstate_host.combo)
@@ -91,8 +88,7 @@ func note_hit(time: float, lane: int, note_type: String, hit_time: float, strum_
 		elif (playstate_host.combo % 50 == 0):
 			get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 	
-	Signals.play_note_hit.emit(time, lane, note_type, hit_time, strum_manager)
-
+	Signals.play_note_hit.emit(note, lane, strum_manager)
 
 func note_holding(time: float, lane: int, length: float, note_type: String, strum_manager: Variant):
 	var group: StringName = get_group_from_manager(strum_manager)
@@ -122,9 +118,8 @@ func note_miss(time: float, lane: int, length: float, note_type: String, hit_tim
 	Signals.play_note_miss.emit(time, lane, length, note_type, hit_time, strum_manager)
 
 
-func get_group_from_manager(strum_manager: Variant) -> StringName:
+func get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
-
 
 func get_direction(direction: int) -> StringName:
 	return [&"left", &"down", &"up", &"right"][direction]

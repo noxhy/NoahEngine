@@ -2,12 +2,12 @@
 extends Node2D
 class_name StrumManager
 
-signal note_hit(time: float, lane: int, note_type: String, hit_time: float, manager: Node2D)
-signal note_holding(time: float, lane: int, length: float, note_type: String, manager: Node2D)
-signal note_miss(time: float, lane: int, length: float, note_type: String, hit_time: float, manager: Node2D)
+signal note_hit(note: Note, lane: int, hit_time_difference: float, manager: StrumManager)
+signal note_holding(time: float, lane: int, length: float, note_type: String, manager: StrumManager)
+signal note_miss(note: Note, hit_time_difference: float, manager: StrumManager)
 
 @export var note_skin: NoteSkin = NoteSkin.new()
-## List of NodePaths of the strumlines.
+## List of Nodes of the strumlines.
 @export var strums: Array[Strum] = []
 ## Vocal track ID.
 @export var id: int = 0
@@ -119,13 +119,13 @@ func press_strum(lane: int):
 	strums[lane].press_strum()
 
 
-func _on_note_hit(time, strum_name, note_type, hit_time):
-	emit_signal(&"note_hit", time, strums.find(strum_name), note_type, hit_time, self)
+func _on_note_hit(note: Note, hit_time: float, strum: Strum):
+	emit_signal(&"note_hit", note, strums.find(strum), hit_time, self)
 
 
 func _on_note_holding(time, strum_name, length, note_type):
 	emit_signal(&"note_holding", time, strums.find(strum_name), length, note_type, self)
 
 
-func _on_note_miss(time, strum_name, length, note_type, hit_time):
-	emit_signal(&"note_miss", time, strums.find(strum_name), length, note_type, hit_time, self)
+func _on_note_miss(note:Note, hit_time: float, strum: Strum):
+	emit_signal(&"note_miss", note, strums.find(strum), hit_time, self)

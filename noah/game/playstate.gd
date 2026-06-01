@@ -455,7 +455,7 @@ func new_step(current_step, measure_relative):
 	pass
 
 # Strum Util
-func note_hit(time, lane, note_type, hit_time, strum_manager):
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
@@ -473,20 +473,20 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		
 		match rating:
 			"sick":
-				health += 1
+				health += 1 * note.health_mult
 				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
 			"good":
-				health += 0.5
+				health += 0.5 * note.health_mult
 			"bad":
-				health -= 0.35
+				health -= 0.35 * note.health_mult
 				combo = -1
 				Signals.play_combo_break.emit()
 			"shit":
-				health -= 0.35
+				health -= 0.35 * note.health_mult
 				combo = -1
 				Signals.play_combo_break.emit()
 			_:
-				note_miss(time, lane, 0, note_type, hit_time, strum_manager)
+				note_miss(note.time, lane, 0, note.note_type, hit_time, strum_manager)
 		
 		combo += 1
 		if combo > GameManager.tallies["max_combo"]:

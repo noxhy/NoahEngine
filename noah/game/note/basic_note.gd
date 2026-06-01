@@ -47,6 +47,8 @@ func _ready():
 	
 	if end:
 		end.scale.x = note_skin.notes_scale
+	
+	load_basic_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

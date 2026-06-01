@@ -13,7 +13,7 @@ const NOTE_TYPES: Dictionary = {
 }
 
 signal created_note(time: float, strum: Strum, length: float, note_type: String)
-signal note_hit(time: float, strum: Strum, note_type: String, hit_time: float)
+signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
 signal note_holding(time: float, strum: Strum, length: float, note_type: String)
 signal note_miss(time: float, strum: Strum, length: float, note_type: String, hit_time: float)
 
@@ -81,7 +81,7 @@ func _process(delta):
 			if time_difference <= 0:
 				if !ignored_note_types.has(note.note_type):
 					if note != previous_note:
-						emit_signal(&"note_hit", note.time, self, note.note_type, 0)
+						emit_signal(&"note_hit", note, 0, self)
 						previous_note = note
 					
 					if note.length > 0:
@@ -137,11 +137,11 @@ func _process(delta):
 						note.queue_free()
 						pressing = false
 						var time_difference: float = (note.time - offset) - (GameManager.song_position)
-						emit_signal(&"note_hit", note.time, self, note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
+						emit_signal(&"note_hit", note, time_difference, self)
 					else:
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						if note != previous_note:
-							emit_signal(&"note_hit", note.time, self, note.note_type, time_difference)
+							emit_signal(&"note_hit", note, time_difference, self)
 						
 						coyote_timer = 0
 						
