@@ -456,7 +456,7 @@ func new_step(current_step, measure_relative):
 
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
-	var playback = vocals.get_stream_playback()
+	var playback:AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
@@ -486,7 +486,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 				combo = -1
 				Signals.play_combo_break.emit()
 			_:
-				note_miss(note.time, lane, 0, note.note_type, hit_time, strum_manager)
+				note_miss(note, lane, strum_manager)
 		
 		combo += 1
 		if combo > GameManager.tallies["max_combo"]:
@@ -502,17 +502,17 @@ func note_holding(time, lane, length, note_type, strum_manager):
 		score += floor(abs(time) * HOLD_SCORE)
 
 
-func note_miss(time, lane, length, note_type, hit_time, strum_manager):
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	var playback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
 	
 	if !strum_manager.enemy_slot:
-		if note_type == "spam":
+		if not note:
 			score -= 10
 			health -= 1
 		else:
 			score -= 100
-			health -= clamp(4 + combo / 20.0 + (length * HOLD_HEALTH), 0, 20)
+			health -= clamp(4 + combo / 20.0 + (note.length * HOLD_HEALTH), 0, 20)
 			combo = 0
 			misses += 1
 			 

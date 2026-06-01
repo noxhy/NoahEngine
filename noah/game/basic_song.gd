@@ -99,9 +99,9 @@ func note_holding(time: float, lane: int, length: float, note_type: String, stru
 	Signals.play_note_holding.emit(time, lane, length, note_type, strum_manager)
 
 
-func note_miss(time: float, lane: int, length: float, note_type: String, hit_time: float, strum_manager: Variant):
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if !strum_manager.enemy_slot:
-		if note_type == "spam":
+		if not note:
 			SoundManager.anti_spam.play()
 		else:
 			SoundManager.miss.play()
@@ -113,9 +113,9 @@ func note_miss(time: float, lane: int, length: float, note_type: String, hit_tim
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
 		&"miss_" + get_direction(lane % 4), Character.AnimContext.SING, true)
 	
-	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
+	playstate_host.note_miss(note, lane, strum_manager)
 	
-	Signals.play_note_miss.emit(time, lane, length, note_type, hit_time, strum_manager)
+	Signals.play_note_miss.emit(note, lane, strum_manager)
 
 
 func get_group_from_manager(strum_manager: StrumManager) -> StringName:

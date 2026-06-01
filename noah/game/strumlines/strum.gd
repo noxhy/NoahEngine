@@ -15,7 +15,7 @@ const NOTE_TYPES: Dictionary = {
 signal created_note(time: float, strum: Strum, length: float, note_type: String)
 signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
 signal note_holding(time: float, strum: Strum, length: float, note_type: String)
-signal note_miss(time: float, strum: Strum, length: float, note_type: String, hit_time: float)
+signal note_miss(note: Note, strum: Strum)
 
 @export var note_skin: NoteSkin
 ## Name of the input in the [code]InputMap[/code]
@@ -119,9 +119,9 @@ func _process(delta):
 		
 		if relative_time <= -hit_window and coyote_timer <= 0:
 			note_list.erase(note)
+			emit_signal(&"note_miss", note, self)
 			note.queue_free()
 			
-			emit_signal(&"note_miss", time_difference, self, note.length, note.note_type, relative_time)
 	
 	# Inputs
 	if Input.is_action_just_pressed(input):
@@ -154,10 +154,11 @@ func _process(delta):
 						previous_note = note
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
-						emit_signal(&"note_miss", 0, self, 0, "spam", 0)
+						#emit_signal(&"note_miss", 0, self, 0, "spam", 0)
+						emit_signal(&"note_miss", null, self)
 			else:
 				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
-					emit_signal(&"note_miss", 0, self, 0, "spam", 0)
+					emit_signal(&"note_miss", null, self)
 	
 	if Input.is_action_pressed(input):
 		if can_press:
