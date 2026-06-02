@@ -18,7 +18,7 @@ func _ready():
 	$AnimationPlayer.play("start")
 	Global.set_window_title("Start Screen")
 	
-	var keycode = SettingsManager.get_keybind("ui_accept")
+	var keycode = SettingsManager.get_keybind("menu_accept")
 	$"UI/Play Label".text = "Press " + Global.get_keycode_string(keycode) + " to Play"
 	
 	$Conductor.stream_player = SoundManager.music
@@ -34,7 +34,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	# Pressing enter
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("menu_accept"):
 		if intro_done:
 			$AnimationPlayer.play("press_enter")
 			can_click = false

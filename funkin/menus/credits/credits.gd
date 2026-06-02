@@ -88,16 +88,16 @@ func _input(event):
 	
 	if can_click:
 		
-		if event.is_action_pressed("ui_up"):
+		if event.is_action_pressed("menu_up"):
 			update(selected - 1)
 		
-		if event.is_action_pressed("ui_down"):
+		if event.is_action_pressed("menu_down"):
 			update(selected + 1)
 		
-		if event.is_action_pressed("ui_accept"):
+		if event.is_action_pressed("menu_accept"):
 			select(selected)
 		
-		if event.is_action_pressed("ui_cancel"):
+		if event.is_action_pressed("menu_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("uid://rc52vcn2m7ob")

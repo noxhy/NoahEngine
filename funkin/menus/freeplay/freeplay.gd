@@ -68,15 +68,15 @@ func _process(_delta):
 	
 	if can_click:
 		
-		if Input.is_action_just_pressed(&"ui_up") or Input.is_action_just_pressed(&"mouse_scroll_up"):
+		if Input.is_action_just_pressed(&"menu_up") or Input.is_action_just_pressed(&"mouse_scroll_up"):
 			update(selected_song - 1)
-		elif Input.is_action_just_pressed(&"ui_down") or Input.is_action_just_pressed(&"mouse_scroll_down"):
+		elif Input.is_action_just_pressed(&"menu_down") or Input.is_action_just_pressed(&"mouse_scroll_down"):
 			update(selected_song + 1)
-		elif Input.is_action_just_pressed(&"ui_accept"):
+		elif Input.is_action_just_pressed(&"menu_accept"):
 			select(selected_song)
 		elif Input.is_action_just_pressed(&'chart_editor') and OS.is_debug_build():
 			select(selected_song, true)
-		elif Input.is_action_just_pressed(&"ui_cancel"):
+		elif Input.is_action_just_pressed(&"menu_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("uid://rc52vcn2m7ob")

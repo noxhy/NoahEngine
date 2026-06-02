@@ -173,7 +173,7 @@ func _process(delta):
 	if get_tree():
 		get_tree().call_group(&"note", &"update")
 	
-	if Input.is_action_just_pressed(&"ui_cancel") or Input.is_action_just_pressed(&"ui_accept"):
+	if Input.is_action_just_pressed(&"menu_cancel") or Input.is_action_just_pressed(&"menu_accept"):
 		Global.manual_pause = true
 		pause()
 	

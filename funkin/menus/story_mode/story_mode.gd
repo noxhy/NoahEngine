@@ -47,17 +47,17 @@ func _ready():
 # Input Manager
 func _input(event):
 	if can_click:
-		if event.is_action_pressed("ui_up"):
+		if event.is_action_pressed("menu_up"):
 			update_week(selected_week - 1)
-		elif event.is_action_pressed("ui_down"):
+		elif event.is_action_pressed("menu_down"):
 			update_week(selected_week + 1)
-		elif event.is_action_pressed("ui_left"):
+		elif event.is_action_pressed("menu_left"):
 			update_difficulty(selected_difficulty - 1)
-		elif event.is_action_pressed("ui_right"):
+		elif event.is_action_pressed("menu_right"):
 			update_difficulty(selected_difficulty + 1)
-		elif event.is_action_pressed("ui_accept"):
+		elif event.is_action_pressed("menu_accept"):
 			select_option(selected_week)
-		elif event.is_action_pressed("ui_cancel"):
+		elif event.is_action_pressed("menu_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("uid://rc52vcn2m7ob")

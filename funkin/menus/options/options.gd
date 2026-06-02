@@ -20,12 +20,12 @@ var pages: Dictionary = {
 			[&"option", {"id": "volume_down"}],
 			[&"option", {"id": "mute"}],
 			[&"label", "UI".to_upper()],
-			[&"option", {"id": "ui_left"}],
-			[&"option", {"id": "ui_down"}],
-			[&"option", {"id": "ui_up"}],
-			[&"option", {"id": "ui_right"}],
-			[&"option", {"id": "ui_accept"}],
-			[&"option", {"id": "ui_cancel"}],
+			[&"option", {"id": "menu_left"}],
+			[&"option", {"id": "menu_down"}],
+			[&"option", {"id": "menu_up"}],
+			[&"option", {"id": "menu_right"}],
+			[&"option", {"id": "menu_accept"}],
+			[&"option", {"id": "menu_cancel"}],
 			[&"label", "Miscellaneous".to_upper()],
 			[&"option", {"id": "character_select"}]
 		]
@@ -137,7 +137,7 @@ func _ready():
 
 func _process(delta: float) -> void:
 	if can_click:
-		if Input.is_action_just_pressed(&"ui_cancel"):
+		if Input.is_action_just_pressed(&"menu_cancel"):
 			can_click = false
 			SoundManager.cancel.play()
 			
@@ -147,13 +147,13 @@ func _process(delta: float) -> void:
 			else:
 				Global.change_scene_to("uid://rc52vcn2m7ob")
 		
-		if Input.is_action_just_pressed(&"ui_up"):
+		if Input.is_action_just_pressed(&"menu_up"):
 			update(selected - 1)
 		
-		if Input.is_action_just_pressed(&"ui_down"):
+		if Input.is_action_just_pressed(&"menu_down"):
 			update(selected + 1)
 		
-		if Input.is_action_just_pressed(&"ui_accept"):
+		if Input.is_action_just_pressed(&"menu_accept"):
 			select(selected)
 
 func _exit_tree() -> void:

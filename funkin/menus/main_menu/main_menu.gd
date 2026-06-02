@@ -58,13 +58,13 @@ func _ready():
 # Input Manager
 func _input(event):
 	if can_press:
-		if event.is_action_pressed("ui_up"):
+		if event.is_action_pressed("menu_up"):
 			update(selected - 1)
-		elif event.is_action_pressed("ui_down"):
+		elif event.is_action_pressed("menu_down"):
 			update(selected + 1)
-		elif event.is_action_pressed("ui_accept"):
+		elif event.is_action_pressed("menu_accept"):
 			select(selected)
-		elif event.is_action_pressed("ui_cancel"):
+		elif event.is_action_pressed("menu_cancel"):
 			can_press = false
 			SoundManager.cancel.play()
 			Global.change_scene_to("uid://b1kmgjxpce1de")

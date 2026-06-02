@@ -84,14 +84,14 @@ static var _defaults: Dictionary = {
 		
 		"fullscreen": [KEY_F11],
 		
-		"ui_cancel": [KEY_ESCAPE],
-		"ui_accept": [KEY_ENTER, KEY_KP_ENTER],
+		"menu_cancel": [KEY_ESCAPE],
+		"menu_accept": [KEY_ENTER, KEY_KP_ENTER],
 		"character_select": [KEY_TAB],
 		
-		"ui_left": [KEY_LEFT, KEY_A],
-		"ui_down": [KEY_DOWN, KEY_S],
-		"ui_up": [KEY_UP, KEY_W],
-		"ui_right": [KEY_RIGHT, KEY_D],
+		"menu_left": [KEY_LEFT, KEY_A],
+		"menu_down": [KEY_DOWN, KEY_S],
+		"menu_up": [KEY_UP, KEY_W],
+		"menu_right": [KEY_RIGHT, KEY_D],
 		"mute": [KEY_0]
 	},
 	

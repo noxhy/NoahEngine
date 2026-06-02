@@ -17,43 +17,43 @@ var elapsed: float
 
 func _process(delta: float) -> void:
 	if get_viewport().gui_get_focus_owner():
-		if Input.is_action_just_pressed(&"ui_cancel") or Input.is_action_just_pressed(&'mouse_right'):
+		if Input.is_action_just_pressed(&"menu_cancel") or Input.is_action_just_pressed(&'mouse_right'):
 			get_viewport().gui_release_focus()
 	
-	if Input.is_action_just_pressed(&"ui_cancel"):
+	if Input.is_action_just_pressed(&"menu_cancel"):
 		SoundManager.cancel.play()
 		get_tree().paused = false
 		self.queue_free()
 	
-	if Input.is_action_just_pressed(&"ui_up"):
+	if Input.is_action_just_pressed(&"menu_up"):
 		if get_selected_node() is KeyBindOptionNode:
 			old_selected = get_selected_node().selected
 		update(selected - 1)
 		if get_selected_node() is KeyBindOptionNode:
 			get_selected_node().select_button(old_selected)
 	
-	if Input.is_action_just_pressed(&"ui_down"):
+	if Input.is_action_just_pressed(&"menu_down"):
 		if get_selected_node() is KeyBindOptionNode:
 			old_selected = get_selected_node().selected
 		update(selected + 1)
 		if get_selected_node() is KeyBindOptionNode:
 			get_selected_node().select_button(old_selected)
 	
-	if (Input.is_action_just_pressed(&"ui_accept")
-	or Input.is_action_just_pressed(&"ui_left")
-	or Input.is_action_just_pressed(&"ui_right")):
+	if (Input.is_action_just_pressed(&"menu_accept")
+	or Input.is_action_just_pressed(&"menu_left")
+	or Input.is_action_just_pressed(&"menu_right")):
 		if get_selected_node() is BoolOptionNode:
 			var button: Button = get_selected_node().get_node("%Button")
 			button.button_pressed = !button.button_pressed
 	
-	if Input.is_action_just_pressed(&"ui_accept"):
+	if Input.is_action_just_pressed(&"menu_accept"):
 		if get_selected_node() is KeyBindOptionNode:
 			get_selected_node().buttons[get_selected_node().selected]._on_toggled(true)
 			get_selected_node().buttons[get_selected_node().selected].button_pressed = true
 		elif get_selected_node() is ButtonOptionNode:
 			get_selected_node().button.emit_signal(&"pressed")
 	
-	if Input.is_action_just_pressed(&"ui_left"):
+	if Input.is_action_just_pressed(&"menu_left"):
 		if get_selected_node() is NumberOptionNode:
 			var spin_box: SpinBox = get_selected_node().spin_box
 			spin_box.value -= spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
@@ -62,7 +62,7 @@ func _process(delta: float) -> void:
 			get_selected_node().select_button(get_selected_node().selected)
 			# get_tree().call_group("buttons", "normal")
 	
-	if Input.is_action_just_pressed(&"ui_right"):
+	if Input.is_action_just_pressed(&"menu_right"):
 		if get_selected_node() is NumberOptionNode:
 			var spin_box: SpinBox = get_selected_node().spin_box
 			spin_box.value += spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
@@ -70,14 +70,14 @@ func _process(delta: float) -> void:
 			get_selected_node().selected = get_selected_node().selected + 1
 			get_selected_node().select_button(get_selected_node().selected)
 	
-	if Input.is_action_pressed(&"ui_left") or Input.is_action_pressed(&"ui_right"):
+	if Input.is_action_pressed(&"menu_left") or Input.is_action_pressed(&"menu_right"):
 		elapsed += delta
 		if elapsed >= HOLD_THRESHOLD:
 			if get_selected_node() is NumberOptionNode:
 				var spin_box: SpinBox = get_selected_node().spin_box
-				spin_box.value += spin_box.step * -1 if Input.is_action_pressed(&"ui_left") else spin_box.step
+				spin_box.value += spin_box.step * -1 if Input.is_action_pressed(&"menu_left") else spin_box.step
 	
-	if Input.is_action_just_released(&"ui_left") or Input.is_action_just_released(&"ui_right"):
+	if Input.is_action_just_released(&"menu_left") or Input.is_action_just_released(&"menu_right"):
 		elapsed = 0
 	
 	if Input.is_action_just_pressed(&"mouse_scroll_up"):
