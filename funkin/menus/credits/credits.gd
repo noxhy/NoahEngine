@@ -25,10 +25,10 @@ var MENU_OPTION_NODE = load("uid://55odtbd2v2ql")
 # Actions:
 # link - Parameters: String = <link>
 @onready var option_stats: Dictionary = {
-	"Noah": ["Made the engine.", "link", "https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA"],
+	"Noah": ["not much.", "link", "https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA"],
 	"Koi": ["Miss sprite", "link", "https://twitter.com/toasted_milk_"],
 	"The Funkin\' Crew": ["Friday Night Funkin\' Game", "link", "https://www.newgrounds.com/portal/view/770371"],
-	"data5": ["Helped with stuff.", "link", "https://x.com/_data5?s=20"]
+	"data5": ["made everything", "link", "https://x.com/_data5?s=20"]
 }
 
 var option_nodes = []
