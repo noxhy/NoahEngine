@@ -464,6 +464,10 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
 			SoundManager.hit.play()
 		
+		if note.bad_hit:
+			host.note_miss(note, lane, strum_manager)
+			return
+		
 		var rating: String = get_rating(abs(hit_time))
 		var strum_node = strum_manager.get_strumline(lane)
 		
@@ -471,6 +475,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		GameManager.tallies["total_notes"] += 1
 		if note.scoreable:
 			score_note(hit_time)
+		
 		
 		match rating:
 			"sick":
