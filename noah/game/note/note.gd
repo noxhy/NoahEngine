@@ -24,7 +24,6 @@ var note_type: String
 var no_animation: bool = false
 var damage_mult: float = 1.0
 var health_mult: float = 1.0
-var extra:Dictionary[String, Variant] = {}
 var anim_prefix: String = ''
 var scoreable: bool = true
 

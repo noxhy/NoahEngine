@@ -469,7 +469,8 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		
 		GameManager.tallies[rating] += 1
 		GameManager.tallies["total_notes"] += 1
-		score_note(hit_time)
+		if note.scoreable:
+			score_note(hit_time)
 		
 		match rating:
 			"sick":

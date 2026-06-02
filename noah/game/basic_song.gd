@@ -62,7 +62,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 			playstate_host.ui.scale += playstate_host.ui_bop_strength
 
 
-func _on_create_note(time, lane, note_length, note_type, tempo):
+func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if (lane > 3):
 		playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
 	else:
@@ -97,7 +97,7 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 	
 	playstate_host.note_holding(note, lane, hold_difference, strum_manager)
 	
-	#Signals.play_note_holding.emit(time, lane, length, note_type, strum_manager)
+	Signals.play_note_holding.emit(note, lane, hold_difference, strum_manager)
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
@@ -142,7 +142,6 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 
 func _on_combo_break():
 	pass
-
 
 func show_combo(rating: String, _combo: int):
 	if rating != "miss":

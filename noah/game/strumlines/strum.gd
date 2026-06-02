@@ -12,7 +12,6 @@ const NOTE_TYPES: Dictionary = {
 	"alt_prefix": ""
 }
 
-signal created_note(time: float, strum: Strum, length: float, note_type: String)
 signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
 signal note_holding(note: Note, hold_difference: float, strum: Strum)
 signal note_miss(note: Note, strum: Strum)
@@ -259,7 +258,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	add_child(note_instance)
 	note_list.append(note_instance)
 	
-	emit_signal(&"created_note", time, self, length, note_type)
+	Signals.play_note_created.emit(note_instance, self)
 
 # Visuals
 func _on_offset_sprite_animation_finished():
