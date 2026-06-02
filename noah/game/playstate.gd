@@ -510,7 +510,7 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if !strum_manager.enemy_slot:
 		if not note:
 			score -= 10
-			health -= 1 * note.damage_mult
+			health -= 1
 		else:
 			score -= 100
 			health -= clamp(4 + combo / 20.0 + (note.length * HOLD_HEALTH), 0, 20) * note.damage_mult
