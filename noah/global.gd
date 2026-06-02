@@ -1,33 +1,18 @@
-extends Node2D
+extends Node
+
+@onready var performance_label: Label = $"Performance Label"
 
 var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
 var fullscreen: bool = false
 var transitioning: bool = false
 
-@onready var performance_label: Label = $"UI/Performance Label"
 
-func _correctWindowSize() -> void:
-	if not OS.get_name().to_lower().contains('windows'): 
-		return
-	
-	var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0
-	var new_size = get_window().size * dpi
-	
-	DisplayServer.window_set_size(new_size)
-	
-	var w_pos = DisplayServer.screen_get_position(DisplayServer.window_get_current_screen())
-	var w_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
-	
-	get_window().position.x = w_pos.x + (w_size.x - new_size.x) / 2
-	get_window().position.y = w_pos.y + (w_size.y - new_size.y) / 2
 
 func _ready():
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
-	# Input responsiveness
-	# Input.set_use_accumulated_input(false)
 	_correctWindowSize()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -35,9 +20,9 @@ func _process(delta: float) -> void:
 	# Peformance Test
 	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
 	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
-		var performance_string: String = "FPS: " + str(int(Engine.get_frames_per_second()))
-		performance_string += "\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)))
-		performance_string += "\nDelta: " + str(snappedf(delta, 0.001))
+		var performance_string: String = "FPS: " + str(int(Engine.get_frames_per_second())) + \
+			"\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))) + \
+			"\nDelta: " + str(snappedf(delta, 0.001))
 		
 		performance_label.text = performance_string
 	
@@ -162,23 +147,23 @@ func frame_independent_lerp(a, b, decay: float, delta: float) -> Variant:
 func show_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"UI/Voume Node", "position", Vector2(0, -360), 0.5)
-	$"UI/Voume Node/Volume Sound".play()
+	tween.tween_property($"Voume Node", "position", Vector2(0, -360), 0.5)
+	$"Voume Node/Volume Sound".play()
 	
 	var master_volume = SettingsManager.get_value(SettingsManager.SEC_AUDIO, "master_volume")
 	
 	if AudioServer.is_bus_mute(0):
-		$"UI/Voume Node/ColorRect/Label".text = "Muted"
+		$"Voume Node/ColorRect/Label".text = "Muted"
 	else:
-		$"UI/Voume Node/ColorRect/Label".text = "Master Volume: " + str(roundi(master_volume * 100)) + "%"
+		$"Voume Node/ColorRect/Label".text = "Master Volume: " + str(roundi(master_volume * 100)) + "%"
 	
-	$"UI/Voume Node/Hide Timer".start()
+	$"Voume Node/Hide Timer".start()
 
 
 func hide_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"UI/Voume Node", "position", Vector2(0, -392), 0.5)
+	tween.tween_property($"Voume Node", "position", Vector2(0, -392), 0.5)
 
 
 func _on_hide_timer_timeout():
@@ -338,3 +323,18 @@ func string_to_time(formatted_time: String) -> float:
 		return 0
 	
 	return float(formatted_time)
+
+func _correctWindowSize() -> void:
+	if not OS.get_name().to_lower().contains('windows'): 
+		return
+	
+	var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0
+	var new_size = get_window().size * dpi
+	
+	DisplayServer.window_set_size(new_size)
+	
+	var w_pos = DisplayServer.screen_get_position(DisplayServer.window_get_current_screen())
+	var w_size = DisplayServer.screen_get_size(DisplayServer.window_get_current_screen())
+	
+	get_window().position.x = w_pos.x + (w_size.x - new_size.x) / 2
+	get_window().position.y = w_pos.y + (w_size.y - new_size.y) / 2

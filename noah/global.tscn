@@ -15,17 +15,15 @@ expand_margin_bottom = 4.0
 font = ExtResource("2_77tff")
 font_size = 18
 
-[node name="Global" type="Node2D" unique_id=2045798347]
+[node name="Global" type="CanvasLayer" unique_id=1630799042]
 process_mode = 3
+layer = 1024
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
 script = ExtResource("1_swfdr")
 metadata/_edit_horizontal_guides_ = [-296.0]
 
-[node name="UI" type="CanvasLayer" parent="." unique_id=243989671]
-layer = 200
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-
-[node name="Performance Label" type="Label" parent="UI" unique_id=791429693]
+[node name="Performance Label" type="Label" parent="." unique_id=791429693]
 custom_minimum_size = Vector2(1, 1)
 anchors_preset = -1
 anchor_left = -0.49400002
@@ -43,10 +41,10 @@ theme_override_font_sizes/font_size = 12
 theme_override_styles/normal = SubResource("StyleBoxFlat_bm3mx")
 text = "PERFORMANCE"
 
-[node name="Voume Node" type="Node2D" parent="UI" unique_id=202234116]
+[node name="Voume Node" type="Node2D" parent="." unique_id=202234116]
 position = Vector2(0, -392)
 
-[node name="ColorRect" type="ColorRect" parent="UI/Voume Node" unique_id=345405679]
+[node name="ColorRect" type="ColorRect" parent="Voume Node" unique_id=345405679]
 z_index = -1
 offset_left = -128.0
 offset_right = 128.0
@@ -54,7 +52,7 @@ offset_bottom = 32.0
 mouse_filter = 2
 color = Color(0, 0, 0, 0.25)
 
-[node name="Label" type="Label" parent="UI/Voume Node/ColorRect" unique_id=1593060809]
+[node name="Label" type="Label" parent="Voume Node/ColorRect" unique_id=1593060809]
 process_mode = 3
 layout_mode = 1
 anchors_preset = 15
@@ -67,13 +65,13 @@ label_settings = SubResource("LabelSettings_harfc")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Hide Timer" type="Timer" parent="UI/Voume Node" unique_id=1935239393]
+[node name="Hide Timer" type="Timer" parent="Voume Node" unique_id=1935239393]
 wait_time = 1.5
 one_shot = true
 
-[node name="Volume Sound" type="AudioStreamPlayer" parent="UI/Voume Node" unique_id=375469145]
+[node name="Volume Sound" type="AudioStreamPlayer" parent="Voume Node" unique_id=375469145]
 stream = ExtResource("3_q1yt6")
 pitch_scale = 3.0
 bus = &"SFX"
 
-[connection signal="timeout" from="UI/Voume Node/Hide Timer" to="." method="_on_hide_timer_timeout"]
+[connection signal="timeout" from="Voume Node/Hide Timer" to="." method="_on_hide_timer_timeout"]
