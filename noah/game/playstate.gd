@@ -31,15 +31,14 @@ const HOLD_HEALTH: float = 6
 
 @export_group("Values")
 ## Scales the Rating and Combo sprites.
-@export_custom(PROPERTY_HINT_LINK, "x") var combo_scale_multiplier = Vector2(1, 1)
+@export_custom(PROPERTY_HINT_LINK, "x") var combo_scale_multiplier: Vector2 = Vector2(1, 1)
 
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
-@export_file('*.tscn') var death_scene = "uid://bd083xcqslcsd"
-## What scene will instantiate when pausing,
-@export_file('*.tscn') var pause_scene = "uid://djhqiluiy02ao"
+@export_file('*.tscn') var death_scene: String = "uid://bd083xcqslcsd"
+var pause_scene: String
 ## The scene that will be switched to when the song ends.
-@export_file('*.tscn') var next_scene = "uid://cmwlnqqj5h0xy"
+@export_file('*.tscn') var next_scene: String = "uid://cmwlnqqj5h0xy"
 
 var song_starting:bool = false
 var song_started: bool = false
@@ -66,11 +65,10 @@ var score: int = 0
 var health: float = 50.0
 var combo: int = 0
 
-var camera_bop_strength = Vector2(0.05, 0.05)
-var ui_bop_strength = Vector2(0.025, 0.025)
+var camera_bop_strength: Vector2 = Vector2(0.05, 0.05)
+var ui_bop_strength: Vector2 = Vector2(0.025, 0.025)
 
-var pause_preload: Variant
-var self_delta: float = 0.0
+var pause_preload: PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -160,7 +158,6 @@ func _ready():
 
 
 func _process(delta):
-	self_delta = delta
 	
 	health = clamp(health, 0.0, 100.0)
 	ui.target_health = health

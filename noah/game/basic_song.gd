@@ -43,8 +43,6 @@ func _ready():
 	Signals.play_create_note.connect(_on_create_note)
 	Signals.play_new_event.connect(_on_new_event)
 	
-	await Engine.get_main_loop().process_frame
-	
 	Signals.play_song_ready_to_start.emit()
 
 # Conductor Util
