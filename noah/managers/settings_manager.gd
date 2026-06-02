@@ -84,7 +84,7 @@ static var _defaults: Dictionary = {
 		
 		"fullscreen": [KEY_F11],
 		
-		"menu_cancel": [KEY_ESCAPE],
+		"menu_cancel": [KEY_ESCAPE, KEY_BACKSPACE],
 		"menu_accept": [KEY_ENTER, KEY_KP_ENTER],
 		"character_select": [KEY_TAB],
 		
