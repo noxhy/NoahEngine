@@ -2,8 +2,6 @@
 @abstract
 class_name Note extends Node2D
 
-const PIXELS_PER_SECOND = 450
-
 var length: float = 0.0
 
 var time: float = 0.0

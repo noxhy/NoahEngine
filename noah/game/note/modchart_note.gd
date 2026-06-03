@@ -47,19 +47,3 @@ func _process(delta):
 			tail.points = [Vector2.ZERO, Vector2(0, line_length)]
 	else: 
 		tail.visible = false
-
-
-func update_y():
-	position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
-	var grid_scaler = PIXELS_PER_SECOND * GameManager.seconds_per_beat
-	grid_size.y = grid_scaler
-
-#func _on_visible_on_screen_notifier_2d_screen_entered() -> void: 
-	#on_screen = true
-	#$Note.visible = on_screen
-	#tail.visible = on_screen
-#
-#func _on_visible_on_screen_notifier_2d_screen_exited() -> void: 
-	#on_screen = false
-	#$Note.visible = on_screen
-	#tail.visible = on_screen
