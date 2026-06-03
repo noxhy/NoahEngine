@@ -160,8 +160,7 @@ func update_3D(delta):
 		parent_3D.position = lerp_position(parent_3D.position, _position_3d, delta)
 	
 	if shaking:
-		
-		shake_strength = lerpf(shake_strength, 0.0, shake_decay_rate * delta)
+		shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
 		
 		var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
 		parent_3D.h_offset = shake_offset.x
@@ -198,6 +197,7 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 		noise.get_noise_2d(1, noise_i) * strength,
 		noise.get_noise_2d(100, noise_i) * strength
 	)
+
 
 func lerp_position(cur:Variant, intended:Variant, delta:float):
 	var c = position_smoothing_speed * delta

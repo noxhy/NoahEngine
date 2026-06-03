@@ -432,6 +432,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 
+
 func song_finished():
 	if GameManager.freeplay:
 		match GameManager.play_mode:
