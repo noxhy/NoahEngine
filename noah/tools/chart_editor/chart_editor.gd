@@ -1791,7 +1791,7 @@ func _on_chart_snap_value_changed(value: float) -> void:
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var _difficulty = %"Lower UI".get_node("%Difficulty Button").get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(_difficulty):
-		ChartManager.chart = load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
+		ChartManager.chart = Chart.load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
 		ChartManager.difficulty = _difficulty
 		load_chart(ChartManager.chart)
 

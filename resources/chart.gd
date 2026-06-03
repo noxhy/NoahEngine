@@ -317,6 +317,8 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') -> Chart:
 	if diff.is_empty():
 		diff = GameManager.difficulty
+	if diff.is_empty():
+		diff = 'normal'
 	
 	var chart = Chart.new()
 	
