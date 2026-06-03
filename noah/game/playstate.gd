@@ -459,7 +459,7 @@ func new_step(current_step, measure_relative):
 
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
-	var playback:AudioStreamPlayback = vocals.get_stream_playback()
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
@@ -479,55 +479,68 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		if note.scoreable:
 			score_note(hit_time)
 		
-		
 		match rating:
 			"sick":
 				health += 1 * note.health_mult
 				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+				if note.scoreable:
+					add_combo()
 			"good":
 				health += 0.5 * note.health_mult
+				if note.scoreable:
+					add_combo()
 			"bad":
 				health -= 0.35 * note.health_mult
-				combo = -1
-				Signals.play_combo_break.emit()
+				if note.scoreable:
+					reset_combo()
 			"shit":
 				health -= 0.35 * note.health_mult
-				combo = -1
-				Signals.play_combo_break.emit()
+				if note.scoreable:
+					reset_combo()
 			_:
 				note_miss(note, lane, strum_manager)
-		
-		combo += 1
-		if combo > GameManager.tallies["max_combo"]:
-			GameManager.tallies["max_combo"] = combo
 
 
 func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
-	var playback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
+	if vocal_tracks.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
 		health += abs(hold_difference) * HOLD_HEALTH
-		score += floor(abs(hold_difference) * HOLD_SCORE)
+		
+		if note.scoreable:
+			score += floor(abs(hold_difference) * HOLD_SCORE)
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
-	var playback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
+	if vocal_tracks.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
 	
 	if !strum_manager.enemy_slot:
 		# Ghost tapping
 		if not note:
 			score -= 10
 			health -= 1
-		else:
+		elif note.scoreable:
 			score -= 100
-			health -= min(MISS_BASE_HEALTH_PENALTY + combo / COMBO_SLOPE + (note.length * HOLD_HEALTH),
+			health -= min(MISS_BASE_HEALTH_PENALTY + (combo / COMBO_SLOPE) + (note.length * HOLD_HEALTH),
 			MISS_MAX_HEALTH_PENALTY) * note.damage_mult
-			combo = 0
+			reset_combo()
 			misses += 1
 			 
 			GameManager.tallies["miss"] = misses
 			GameManager.tallies["total_notes"] += 1
 			
 			Signals.play_combo_break.emit()
+
+
+func add_combo():
+	combo += 1
+	if combo > GameManager.tallies["max_combo"]:
+		GameManager.tallies["max_combo"] = combo
+
+
+func reset_combo():
+	combo = 0
