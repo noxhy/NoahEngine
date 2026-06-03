@@ -60,26 +60,24 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 			playstate_host.ui.scale += playstate_host.ui_bop_strength
 
 
-func _on_create_note(time, lane, note_length, note_type, tempo):
+func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if (lane > 3):
 		playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
 	else:
 		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
-func note_hit(time: float, lane: int, note_type: String, hit_time: float, strum_manager: Variant):
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
-	var anim_to_play = get_direction(lane % 4)
+	var anim_to_play: String = note.anim_prefix +  get_direction(lane % 4)
 	
-	if note_type == "alt_prefix":
-		anim_to_play = &"alt_" + anim_to_play
-	
-	if note_type != "no_animation":
+	if not note.no_animation:
 		get_tree().call_group(group, &"play_animation", anim_to_play,
-		Character.AnimContext.SING, true)
+			Character.AnimContext.SING, true)
+		
 		get_tree().call_group(group, &"set_sing_timer")
 	
-	playstate_host.note_hit(time, lane, note_type, hit_time, strum_manager)
+	playstate_host.note_hit(note, lane, hit_time, strum_manager)
 	
 	if group == &"player":
 		show_combo(PlayState.get_rating(hit_time), playstate_host.combo)
@@ -89,21 +87,20 @@ func note_hit(time: float, lane: int, note_type: String, hit_time: float, strum_
 		elif (playstate_host.combo % 50 == 0):
 			get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 	
-	Signals.play_note_hit.emit(time, lane, note_type, hit_time, strum_manager)
+	Signals.play_note_hit.emit(note, lane, strum_manager)
 
-
-func note_holding(time: float, lane: int, length: float, note_type: String, strum_manager: Variant):
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
 	get_tree().call_group(group, &"set_sing_timer")
 	
-	playstate_host.note_holding(time, lane, length, note_type, strum_manager)
+	playstate_host.note_holding(note, lane, hold_difference, strum_manager)
 	
-	Signals.play_note_holding.emit(time, lane, length, note_type, strum_manager)
+	Signals.play_note_holding.emit(note, lane, hold_difference, strum_manager)
 
 
-func note_miss(time: float, lane: int, length: float, note_type: String, hit_time: float, strum_manager: Variant):
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if !strum_manager.enemy_slot:
-		if note_type == "spam":
+		if not note:
 			SoundManager.anti_spam.play()
 		else:
 			SoundManager.miss.play()
@@ -115,14 +112,13 @@ func note_miss(time: float, lane: int, length: float, note_type: String, hit_tim
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
 		&"miss_" + get_direction(lane % 4), Character.AnimContext.SING, true)
 	
-	playstate_host.note_miss(time, lane, length, note_type, hit_time, strum_manager)
+	playstate_host.note_miss(note, lane, strum_manager)
 	
-	Signals.play_note_miss.emit(time, lane, length, note_type, hit_time, strum_manager)
+	Signals.play_note_miss.emit(note, lane, strum_manager)
 
 
-func get_group_from_manager(strum_manager: Variant) -> StringName:
+func get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
-
 
 func get_direction(direction: int) -> StringName:
 	return [&"left", &"down", &"up", &"right"][direction]
@@ -144,7 +140,6 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 
 func _on_combo_break():
 	pass
-
 
 func show_combo(rating: String, _combo: int):
 	if rating != "miss":

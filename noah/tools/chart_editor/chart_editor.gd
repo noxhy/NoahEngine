@@ -616,7 +616,7 @@ func _draw() -> void:
 	
 	if hovered_note != -1 and ChartManager.chart:
 		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
-		if int(note_type) != 0 or str(note_type) != "0":
+		if note_type != "":
 			draw_string_outline(default_font, get_global_mouse_position(), str("Type: ", note_type),
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
 			draw_string(default_font, get_global_mouse_position(), str("Type: ", note_type),

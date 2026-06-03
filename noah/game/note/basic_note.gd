@@ -3,6 +3,8 @@ extends Note
 ## for modcharts.
 class_name BasicNote
 
+const PIXELS_PER_SECOND = 450
+
 @onready var note = $Note
 @onready var tail = $Tail
 @onready var end = null
@@ -12,6 +14,14 @@ var can_press: bool = false
 var time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
+
+#
+var no_animation: bool = false
+var damage_mult: float = 1.0
+var health_mult: float = 1.0
+var anim_prefix: String = ''
+var scoreable: bool = true
+var bad_hit: bool = false
 
 # Applying Note Skin
 func _ready(): 
@@ -47,6 +57,8 @@ func _ready():
 	
 	if end:
 		end.scale.x = note_skin.notes_scale
+	
+	load_basic_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -69,3 +81,11 @@ func update():
 		grid_size.y = grid_scaler
 	else:
 		position.y = 0
+
+
+func load_basic_type():
+	match note_type:
+		"no_animation":
+			no_animation = true
+		"alt_prefix":
+			anim_prefix = 'alt_'

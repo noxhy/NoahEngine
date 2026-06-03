@@ -9,6 +9,9 @@ const MIN_SCORE: int = 9
 const MAX_SCORE: int = 500
 const HOLD_SCORE: float = 250
 const HOLD_HEALTH: float = 6
+const COMBO_SLOPE: float = 20.0
+const MISS_BASE_HEALTH_PENALTY: float = 4
+const MISS_MAX_HEALTH_PENALTY: float = 20.0
 
 @onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
@@ -452,8 +455,8 @@ func new_step(current_step, measure_relative):
 	pass
 
 # Strum Util
-func note_hit(time, lane, note_type, hit_time, strum_manager):
-	var playback = vocals.get_stream_playback()
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
@@ -461,59 +464,80 @@ func note_hit(time, lane, note_type, hit_time, strum_manager):
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
 			SoundManager.hit.play()
 		
+		if note.bad_hit:
+			host.note_miss(note, lane, strum_manager)
+			return
+		
 		var rating: String = get_rating(abs(hit_time))
 		var strum_node = strum_manager.get_strumline(lane)
 		
 		GameManager.tallies[rating] += 1
 		GameManager.tallies["total_notes"] += 1
-		score_note(hit_time)
+		if note.scoreable:
+			score_note(hit_time)
 		
 		match rating:
 			"sick":
-				health += 1
+				health += 1 * note.health_mult
 				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+				if note.scoreable:
+					add_combo()
 			"good":
-				health += 0.5
+				health += 0.5 * note.health_mult
+				if note.scoreable:
+					add_combo()
 			"bad":
-				health -= 0.35
-				combo = -1
-				Signals.play_combo_break.emit()
+				health -= 0.35 * note.health_mult
+				if note.scoreable:
+					reset_combo()
 			"shit":
-				health -= 0.35
-				combo = -1
-				Signals.play_combo_break.emit()
+				health -= 0.35 * note.health_mult
+				if note.scoreable:
+					reset_combo()
 			_:
-				note_miss(time, lane, 0, note_type, hit_time, strum_manager)
+				note_miss(note, lane, strum_manager)
+
+
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
+	if vocal_tracks.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
+	
+	if !strum_manager.enemy_slot:
+		health += abs(hold_difference) * HOLD_HEALTH
 		
-		combo += 1
-		if combo > GameManager.tallies["max_combo"]:
-			GameManager.tallies["max_combo"] = combo
+		if note.scoreable:
+			score += floor(abs(hold_difference) * HOLD_SCORE)
 
 
-func note_holding(time, lane, length, note_type, strum_manager):
-	var playback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
+	var playback: AudioStreamPlayback = vocals.get_stream_playback()
+	if vocal_tracks.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
 	
 	if !strum_manager.enemy_slot:
-		health += abs(time) * 4
-		score += floor(abs(time) * HOLD_SCORE)
-
-
-func note_miss(time, lane, length, note_type, hit_time, strum_manager):
-	var playback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
-	
-	if !strum_manager.enemy_slot:
-		if note_type == "spam":
+		# Ghost tapping
+		if not note:
 			score -= 10
 			health -= 1
-		else:
+		elif note.scoreable:
 			score -= 100
-			health -= clamp(4 + combo / 20.0 + (length * HOLD_HEALTH), 0, 20)
-			combo = 0
+			health -= min(MISS_BASE_HEALTH_PENALTY + (combo / COMBO_SLOPE) + (note.length * HOLD_HEALTH),
+			MISS_MAX_HEALTH_PENALTY) * note.damage_mult
+			reset_combo()
 			misses += 1
 			 
 			GameManager.tallies["miss"] = misses
 			GameManager.tallies["total_notes"] += 1
 			
 			Signals.play_combo_break.emit()
+
+
+func add_combo():
+	combo += 1
+	if combo > GameManager.tallies["max_combo"]:
+		GameManager.tallies["max_combo"] = combo
+
+
+func reset_combo():
+	combo = 0

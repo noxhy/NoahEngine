@@ -12,10 +12,9 @@ const NOTE_TYPES: Dictionary = {
 	"alt_prefix": ""
 }
 
-signal created_note(time: float, strum: Strum, length: float, note_type: String)
-signal note_hit(time: float, strum: Strum, note_type: String, hit_time: float)
-signal note_holding(time: float, strum: Strum, length: float, note_type: String)
-signal note_miss(time: float, strum: Strum, length: float, note_type: String, hit_time: float)
+signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
+signal note_holding(note: Note, hold_difference: float, strum: Strum)
+signal note_miss(note: Note, strum: Strum)
 
 @export var note_skin: NoteSkin
 ## Name of the input in the [code]InputMap[/code]
@@ -81,7 +80,7 @@ func _process(delta):
 			if time_difference <= 0:
 				if !ignored_note_types.has(note.note_type):
 					if note != previous_note:
-						emit_signal(&"note_hit", note.time, self, note.note_type, 0)
+						emit_signal(&"note_hit", note, 0, self)
 						previous_note = note
 					
 					if note.length > 0:
@@ -96,7 +95,7 @@ func _process(delta):
 						
 						note.note.visible = false
 						
-						emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
+						emit_signal(&"note_holding", note, temp - note.length, self)
 						state = STATE.GLOW
 					else:
 						reset_timer = GameManager.seconds_per_step
@@ -119,10 +118,9 @@ func _process(delta):
 		
 		if relative_time <= -hit_window and coyote_timer <= 0:
 			note_list.erase(note)
+			emit_signal(&"note_miss", note, self)
 			note.queue_free()
 			
-			emit_signal(&"note_miss", time_difference, self, note.length, note.note_type, relative_time)
-	
 	# Inputs
 	if Input.is_action_just_pressed(input):
 		if can_press:
@@ -137,11 +135,11 @@ func _process(delta):
 						note.queue_free()
 						pressing = false
 						var time_difference: float = (note.time - offset) - (GameManager.song_position)
-						emit_signal(&"note_hit", note.time, self, note.note_type, time_difference + (note.length * GameManager.seconds_per_beat))
+						emit_signal(&"note_hit", note, time_difference, self)
 					else:
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						if note != previous_note:
-							emit_signal(&"note_hit", note.time, self, note.note_type, time_difference)
+							emit_signal(&"note_hit", note, time_difference, self)
 						
 						coyote_timer = 0
 						
@@ -154,11 +152,11 @@ func _process(delta):
 						previous_note = note
 				else:
 					if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
-						emit_signal(&"note_miss", 0, self, 0, "spam", 0)
+						emit_signal(&"note_miss", null, self)
 			else:
 				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
-					emit_signal(&"note_miss", 0, self, 0, "spam", 0)
-	
+					emit_signal(&"note_miss", null, self)
+		
 	if Input.is_action_pressed(input):
 		if can_press:
 			if pressing:
@@ -173,7 +171,8 @@ func _process(delta):
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
 							note.length /= GameManager.seconds_per_beat
 							note.note.visible = false
-							emit_signal(&"note_holding", temp - note.length, self, note.length, note.note_type)
+							emit_signal(&"note_holding", note, temp - note.length, self)
+							
 							
 							if !pressing:
 								hold_cover_sprite.play_animation("cover " + strum_name + " start")
@@ -259,7 +258,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	add_child(note_instance)
 	note_list.append(note_instance)
 	
-	emit_signal(&"created_note", time, self, length, note_type)
+	Signals.play_note_created.emit(note_instance, self)
 
 # Visuals
 func _on_offset_sprite_animation_finished():

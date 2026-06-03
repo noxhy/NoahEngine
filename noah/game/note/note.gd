@@ -2,13 +2,12 @@
 @abstract
 class_name Note extends Node2D
 
-const PIXELS_PER_SECOND = 450
-
 var length: float = 0.0
-var note_type: String
+
 var time: float = 0.0
 var note_skin: NoteSkin
 var lane: int = 0
+var note_type: String
 
 var scroll_speed: float
 var grid_size: Vector2 = Vector2(128, 128)
