@@ -389,6 +389,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"psych_camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 			camera.target_zoom = new_zoom
+		
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 			var zoom_time = Global.string_to_time(event_parameters[1])
@@ -424,9 +425,10 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 						)
 		
 		"camera_shake":
-			camera.shake(int(event_parameters[0]), float(event_parameters[1]))
+			camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]))
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
+
 
 func song_finished():
 	if GameManager.freeplay:

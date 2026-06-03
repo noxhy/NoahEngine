@@ -24,7 +24,6 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 					node.speed_scale = frame_count / (animatiom_speed * time)
 			
 			elif node is AnimatedSprite2D:
-				
 				node.play(node.animation)
 				node.set_frame_and_progress(0, 0)
 	

@@ -15,7 +15,6 @@ var time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
 
-#
 var no_animation: bool = false
 var damage_mult: float = 1.0
 var health_mult: float = 1.0
@@ -65,7 +64,7 @@ func _process(delta):
 	time_difference = time - GameManager.song_position
 	
 	if length > 0:
-		var line_length = length * scroll_speed * grid_size.y
+		var line_length: float = length * scroll_speed * grid_size.y
 		tail.visible = true
 		tail.scale.x = scroll
 		tail.size.x = line_length

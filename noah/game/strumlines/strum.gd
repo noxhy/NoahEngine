@@ -4,13 +4,15 @@ extends Node2D
 class_name Strum
 
 const PIXELS_PER_SECOND = 450
-var NOTE_PRELOAD = preload("uid://krhxbwnjnr7r")
-var SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
+## The note type and the corresponding animation prefix.
 const NOTE_TYPES: Dictionary = {
 	"mom": "",
 	"no_animation": "",
 	"alt_prefix": ""
 }
+
+var NOTE_PRELOAD = preload("uid://krhxbwnjnr7r")
+var SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
 
 signal note_hit(note: Note, hit_time_difference: float, strum: Strum)
 signal note_holding(note: Note, hold_difference: float, strum: Strum)
