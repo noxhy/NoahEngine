@@ -4,6 +4,7 @@ extends Node2D
 class_name Strum
 
 const PIXELS_PER_SECOND = 450
+## The note type and the corresponding animation prefix.
 const NOTE_TYPES: Dictionary = {
 	"mom": "",
 	"no_animation": "",
