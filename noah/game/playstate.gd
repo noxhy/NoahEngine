@@ -9,6 +9,9 @@ const MIN_SCORE: int = 9
 const MAX_SCORE: int = 500
 const HOLD_SCORE: float = 250
 const HOLD_HEALTH: float = 6
+const COMBO_SLOPE: float = 20.0
+const MISS_BASE_HEALTH_PENALTY: float = 4
+const MISS_MAX_HEALTH_PENALTY: float = 20.0
 
 @onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
@@ -504,7 +507,7 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		health += abs(hold_difference) * 4
+		health += abs(hold_difference) * HOLD_HEALTH
 		score += floor(abs(hold_difference) * HOLD_SCORE)
 
 
@@ -513,12 +516,14 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if vocal_tracks.size() > strum_manager.id: playback.set_stream_volume(vocal_tracks[strum_manager.id], -80.0)
 	
 	if !strum_manager.enemy_slot:
+		# Ghost tapping
 		if not note:
 			score -= 10
 			health -= 1
 		else:
 			score -= 100
-			health -= clamp(4 + combo / 20.0 + (note.length * HOLD_HEALTH), 0, 20) * note.damage_mult
+			health -= min(MISS_BASE_HEALTH_PENALTY + combo / COMBO_SLOPE + (note.length * HOLD_HEALTH),
+			MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			combo = 0
 			misses += 1
 			 
