@@ -41,7 +41,7 @@ func update():
 		collision_shape.shape = RectangleShape2D.new()
 		collision_shape.scale = $VisibleOnScreenEnabler2D.scale * 0.9
 		collision_shape.shape.set_size(Vector2($VisibleOnScreenEnabler2D.rect.size.x, $VisibleOnScreenEnabler2D.rect.size.x))
-		%"Special Note Label".visible = (int(note_type) != 0 or str(note_type) != "0")
+		%"Special Note Label".visible = note_type != ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

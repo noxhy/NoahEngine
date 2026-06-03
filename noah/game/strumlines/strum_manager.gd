@@ -105,8 +105,6 @@ func create_splash(lane: int, animation_name: String):
 	strums[lane].create_splash(animation_name) 
 
 # Visual Util
-
-
 func glow_strum(lane: int):
 	strums[lane].glow_strum()
 

@@ -13,6 +13,14 @@ var time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
 
+#
+var no_animation: bool = false
+var damage_mult: float = 1.0
+var health_mult: float = 1.0
+var anim_prefix: String = ''
+var scoreable: bool = true
+var bad_hit: bool = false
+
 # Applying Note Skin
 func _ready(): 
 	end = $Tail/End
@@ -71,3 +79,11 @@ func update():
 		grid_size.y = grid_scaler
 	else:
 		position.y = 0
+
+
+func load_basic_type():
+	match note_type:
+		"no_animation":
+			no_animation = true
+		"alt_prefix":
+			anim_prefix = 'alt_'
