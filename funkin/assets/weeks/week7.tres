@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_dvp3v"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_3qac7"]
-[ext_resource type="Resource" uid="uid://ostpkumdpkcl" path="res://playable_songs/stress/Stress (Pico Mix).res" id="3_3qac7"]
+[ext_resource type="Resource" uid="uid://maupukibn4jr" path="res://playable_songs/stress/Stress (Pico Mix).res" id="3_3qac7"]
 
 [resource]
 script = ExtResource("1_dvp3v")

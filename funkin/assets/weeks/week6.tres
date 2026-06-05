@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_bhmme"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_qdr1t"]
-[ext_resource type="Resource" uid="uid://kgx2u2roadi0" path="res://playable_songs/senpai/Senpai.res" id="3_bhmme"]
+[ext_resource type="Resource" uid="uid://ia6rqsb2mp1v" path="res://playable_songs/senpai/Senpai.res" id="3_bhmme"]
 
 [resource]
 script = ExtResource("1_bhmme")

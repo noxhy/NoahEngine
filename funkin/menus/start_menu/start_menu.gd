@@ -67,4 +67,4 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 func _on_animation_player_animation_finished(anim_name):
 	
 	if anim_name == "press_enter":
-		Global.change_scene_to("uid://rc52vcn2m7ob")
+		Global.change_scene_to(Constants.main_menu_scene)

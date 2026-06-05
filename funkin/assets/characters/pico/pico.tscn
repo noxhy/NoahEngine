@@ -65,5 +65,6 @@ use_parent_material = true
 position = Vector2(16, -176)
 sprite_frames = ExtResource("2_35c1i")
 animation = &"Pico Idle Dance"
+frame_progress = 0.474544
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
