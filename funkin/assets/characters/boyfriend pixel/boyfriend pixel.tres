@@ -1,13 +1,9 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://co2q6ydrkmts7"]
 
-[ext_resource type="Texture2D" uid="uid://n255odod0s7i" path="res://funkin/assets/characters/boyfriend pixel/icon-bf-pixel.png" id="1_mn282"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_je20v"]
-atlas = ExtResource("1_mn282")
 region = Rect2(0, 0, 144, 144)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fef3n"]
-atlas = ExtResource("1_mn282")
 region = Rect2(144, 0, 144, 144)
 
 [resource]

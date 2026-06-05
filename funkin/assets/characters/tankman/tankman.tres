@@ -1,13 +1,9 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://c4d42u4d21spo"]
 
-[ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://funkin/assets/characters/tankman/icon-tankman.png" id="1_u2wbn"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_65wdv"]
-atlas = ExtResource("1_u2wbn")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_exbtv"]
-atlas = ExtResource("1_u2wbn")
 region = Rect2(150, 0, 150, 150)
 
 [resource]

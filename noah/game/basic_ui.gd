@@ -7,7 +7,7 @@ extends CanvasLayer
 @onready var rating_marker = $"Rating Marker"
 @onready var combo_marker = $"Combo Marker"
 
-@export var target_scale = Vector2(1, 1)
+@export_custom(PROPERTY_HINT_LINK, 'x') var target_scale:Vector2 = Vector2(1, 1)
 @export_range(1, 25) var lerp_weight: float = 5.0
 @export var lerping = true
 

@@ -1,13 +1,9 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://d4dmedoamnwxr"]
 
-[ext_resource type="Texture2D" uid="uid://jngqjlsc37d3" path="res://funkin/assets/characters/mom dad christmas/icon-parents.png" id="1_defg4"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_stvv1"]
-atlas = ExtResource("1_defg4")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ypmht"]
-atlas = ExtResource("1_defg4")
 region = Rect2(150, 0, 150, 150)
 
 [resource]

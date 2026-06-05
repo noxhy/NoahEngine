@@ -1,13 +1,9 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://d3utv1veneoej"]
 
-[ext_resource type="Texture2D" uid="uid://ee2igx8pcqyw" path="res://funkin/assets/characters/senpai/icon-senpai.png" id="1_57j3t"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_841fo"]
-atlas = ExtResource("1_57j3t")
 region = Rect2(0, 0, 144, 144)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i7qm8"]
-atlas = ExtResource("1_57j3t")
 region = Rect2(144, 0, 144, 144)
 
 [resource]

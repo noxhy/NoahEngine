@@ -67,9 +67,10 @@ func _on_create_note(time: float, lane: int, note_length: float, note_type: Stri
 		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
-func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
+func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
 	var anim_to_play: String = note.anim_prefix +  get_direction(lane % 4)
+	
 	
 	if not note.no_animation:
 		get_tree().call_group(group, &"play_animation", anim_to_play,

@@ -1,13 +1,9 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://digynxqrdoj3g"]
 
-[ext_resource type="Texture2D" uid="uid://cav5txrpdqv2k" path="res://funkin/assets/characters/darnell/icon-darnell.png" id="1_0ieac"]
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_3rjf7"]
-atlas = ExtResource("1_0ieac")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4aen7"]
-atlas = ExtResource("1_0ieac")
 region = Rect2(150, 0, 150, 150)
 
 [resource]
