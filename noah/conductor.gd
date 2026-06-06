@@ -29,24 +29,30 @@ var offset: float = 0
 ## Key:
 ## 4/16 = (♬♬ ♬♬ ♬♬ ♬♬) - Default
 ## 4/12 = (♪♪♪ ♪♪♪ ♪♪♪ ♪♪♪) - Triplets
-# The amount of beats in a measure (Default: 4)
+## The amount of beats in a measure
 var beats_per_measure: int = 4:
 	set(v):
+		var emit: bool = false
 		if beats_per_measure != v:
-			emit_signal(&"new_beats_per_measure", v)
+			emit = true
 		
 		beats_per_measure = v
+		if emit:
+			emit_signal(&"new_beats_per_measure", v)
 	get():
 		return beats_per_measure
 
 # The amount of notes in a measure (Default: 16)
 var steps_per_measure: int = 4 * beats_per_measure:
 	set(v):
+		var emit: bool = false
 		if steps_per_measure != v:
-			emit_signal(&"new_steps_per_measure", v)
-		
+			emit = true
 		steps_per_measure = v
 		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
+		
+		if emit:
+			emit_signal(&"new_steps_per_measure", v)
 	get():
 		return steps_per_measure
 
