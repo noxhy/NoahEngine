@@ -376,8 +376,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				printerr("(PlayState): Marker does not exist at index: ", index)
 				return
 			
-			var position = marker.global_position
-			camera.position = position
+			camera.go_to_marker(marker)
 		
 		"camera_bop":
 			var camera_bop = float(event_parameters[0])
@@ -410,7 +409,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"lerping":
 			var lerping = true if event_parameters[0] == "true" else false
 			ui.lerping = lerping
-			camera.lerping = lerping
+			camera.zoom_smoothing = lerping
 		
 		"scroll_speed":
 			var tween_time = Global.string_to_time(event_parameters[1])

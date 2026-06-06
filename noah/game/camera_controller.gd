@@ -10,27 +10,43 @@ class_name CameraController
 @export var parent_3D: Camera3D
 
 #can we change these var names some time
-@export_category('Zoom Settings')
+@export_category('Camera Config')
 ## The intended camera zoom. The camera will automatically attempt to lerp to this zoom.
 var target_zoom: Vector2 = Vector2(1, 1)
-## The rate the camera's current [code]zoom[/code] will lerp to [code]target_zoom[/code]
-@export_range(1, 64) var lerp_weight: float = 5
 
+@export_group("Zoom Smoothing")
 ## If true the camera will attempt to lerp to [code]target_zoom[/code].
-@export var lerping = true
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var zoom_smoothing: bool = true
+
+## The rate the camera's current [code]zoom[/code] will lerp to [code]target_zoom[/code]
+@export_custom(PROPERTY_HINT_RANGE, '1,64,suffix:weight') var zoom_smoothing_speed: float = 5
+
+@export_group("Position Smoothing")
 ## If true, the camera's view smoothly moves towards its target position at [code]position_smoothing_speed[/code].
-@export var position_smoothing:bool = true : 
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var position_smoothing: bool = true : 
 	set(v):
 		if parent_2D:
 			parent_2D.position_smoothing_enabled = v
-		
 		position_smoothing = v
+
 ## Speed in pixels per second of the camera's smoothing effect when [code]position_smoothing_enabled[/code] is true.
-@export var position_smoothing_speed:float = 3.0 : 
+@export_custom(PROPERTY_HINT_NONE, 'suffix:px/s') var position_smoothing_speed: float = 3.0 : 
 	set(v):
 		if parent_2D:
 			parent_2D.position_smoothing_speed = v
 		position_smoothing_speed = v
+@export_group("Rotation Smoothing")
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var rotation_smoothing: bool = true : 
+	set(v):
+		if parent_2D:
+			parent_2D.rotation_smoothing_enabled = v
+		rotation_smoothing = v
+
+@export var rotation_smoothing_speed: float = 5.0 : 
+	set(v):
+		if parent_2D:
+			parent_2D.rotation_smoothing_speed = v
+		rotation_smoothing_speed = v
 
 @export_group("Shake Settings")
 
@@ -53,18 +69,11 @@ var rand = RandomNumberGenerator.new()
 var noise_i: float = 0.0
 
 var _position_3d: Vector3 = Vector3.ZERO # needed for parity with camera 2d
+var _rotation_3d: Vector3 = Vector3.ZERO # needed for parity with camera 2d
 
-var position:Variant:
-	set(value):
-		set_position(value)
-	get:
-		return get_position()
-
-var zoom:Variant :
-	set(value):
-		set_zoom(value)
-	get:
-		return get_zoom()
+var rotation: Variant : set = set_rotation, get = get_rotation
+var position: Variant : set = set_position, get = get_position
+var zoom: Variant : set = set_zoom, get = get_zoom
 
 func _ready() -> void:
 	if not parent_2D and not parent_3D:
@@ -74,9 +83,12 @@ func _ready() -> void:
 		default_offset = parent_2D.offset
 		parent_2D.position_smoothing_enabled = position_smoothing
 		parent_2D.position_smoothing_speed = position_smoothing_speed
+		parent_2D.rotation_smoothing_enabled = rotation_smoothing
+		parent_2D.rotation_smoothing_speed = rotation_smoothing_speed
+		
 		target_zoom = parent_2D.zoom
 	elif parent_3D:
-		default_offset = Vector2(parent_3D.h_offset,parent_3D.v_offset)
+		default_offset = Vector2(parent_3D.h_offset, parent_3D.v_offset)
 		_position_3d = parent_3D.position
 		target_zoom = Vector2(parent_3D.fov, parent_3D.fov)
 
@@ -87,7 +99,7 @@ func get_direct() -> Variant:
 		return parent_3D
 	return null
 
-func set_zoom(value:Variant):
+func set_zoom(value: Variant):
 	if value == null: return
 	
 	if parent_2D:
@@ -106,7 +118,7 @@ func get_zoom() -> Variant:
 	elif parent_3D: return parent_3D.fov
 	return Vector2.ZERO
 
-func set_position(value:Variant):
+func set_position(value: Variant) -> void:
 	if value == null: return
 	
 	if parent_2D:
@@ -134,13 +146,41 @@ func get_position() -> Variant:
 	elif parent_3D: return parent_3D.position
 	return Vector2.ZERO
 
-func _process(delta):
-	if parent_2D: update_2D(delta)
-	if parent_3D: update_3D(delta)
+func set_rotation(value: Variant) -> void:
+	if value == null: return
+	
+	if parent_2D:
+		if value is Vector3:
+			value = Vector2(value.x, value.y)
+		parent_2D.rotation = value
+	
+	elif parent_3D:
+		if value is Vector2:
+			if position_smoothing:
+				_rotation_3d.x = value.x
+				_rotation_3d.y = value.y
+				return
+			
+			parent_3D.rotation.x = value.x
+			parent_3D.rotation.y = value.y
+		if value is Vector3:
+			if rotation_smoothing:
+				_rotation_3d = value
+				return
+			parent_3D.rotation = value
 
-func update_2D(delta):
-	if lerping:
-		parent_2D.zoom = Global.frame_independent_lerp(parent_2D.zoom, target_zoom, lerp_weight, delta)
+func get_rotation() -> Variant:
+	if parent_2D: return parent_2D.rotation
+	elif parent_3D: return parent_3D.rotation
+	return Vector2.ZERO
+
+func _process(delta):
+	if parent_2D: update_2d(delta)
+	if parent_3D: update_3d(delta)
+
+func update_2d(delta: float):
+	if zoom_smoothing:
+		parent_2D.zoom = Global.frame_independent_lerp(parent_2D.zoom, target_zoom, zoom_smoothing_speed, delta)
 	
 	if shaking:
 		
@@ -152,12 +192,18 @@ func update_2D(delta):
 		shake_time -= delta
 		if shake_time <= 0: end_shake()
 
-func update_3D(delta):
-	if lerping:
-		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x * 75, lerp_weight, delta)
+func update_3d(delta: float):
+	if zoom_smoothing:
+		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x * 75, zoom_smoothing_speed, delta)
 	
 	if position_smoothing:
 		parent_3D.position = lerp_position(parent_3D.position, _position_3d, delta)
+	
+	if rotation_smoothing:
+		var rot_rate = delta * rotation_smoothing_speed
+		parent_3D.rotation.x = lerp_angle(parent_3D.rotation.x, _rotation_3d.x, rot_rate)
+		parent_3D.rotation.y = lerp_angle(parent_3D.rotation.y, _rotation_3d.y, rot_rate)
+		parent_3D.rotation.z = lerp_angle(parent_3D.rotation.z, _rotation_3d.z, rot_rate)
 	
 	if shaking:
 		shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
@@ -199,10 +245,10 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 	)
 
 
-func lerp_position(cur:Variant, intended:Variant, delta:float):
-	var c = position_smoothing_speed * delta
-	return ((intended - cur) * c) + cur
 
+func go_to_marker(marker: Variant) -> void:
+	position = marker.global_position
+	rotation = marker.global_rotation
 
 var _zoom_tween:Tween = null
 func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
@@ -214,3 +260,7 @@ func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tw
 	
 	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, speed)
 	_zoom_tween.tween_property(self, 'zoom', new_zoom, speed)
+
+func lerp_position(cur: Variant, intended: Variant, delta: float):
+	var c = position_smoothing_speed * delta
+	return ((intended - cur) * c) + cur
