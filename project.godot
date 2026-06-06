@@ -31,6 +31,7 @@ Preload="*res://funkin/preload.gd"
 SoundManager="*res://noah/managers/sound_manager.tscn"
 SaveManager="*res://noah/managers/save_manager.gd"
 Signals="*res://noah/signals.gd"
+Constants="*uid://dctyx01j6jvbu"
 
 [debug]
 

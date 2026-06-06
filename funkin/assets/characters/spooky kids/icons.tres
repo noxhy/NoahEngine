@@ -1,13 +1,13 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://bb3qik1pfqgux"]
 
-[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://funkin/assets/characters/spooky kids/icon-spooky.png" id="1_10dw0"]
+[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://funkin/assets/characters/spooky kids/icon-spooky.png" id="1_pegcm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mo0po"]
-atlas = ExtResource("1_10dw0")
+atlas = ExtResource("1_pegcm")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_sdf1k"]
-atlas = ExtResource("1_10dw0")
+atlas = ExtResource("1_pegcm")
 region = Rect2(150, 0, 150, 150)
 
 [resource]

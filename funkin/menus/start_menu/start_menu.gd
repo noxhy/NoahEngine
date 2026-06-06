@@ -1,9 +1,5 @@
 extends Node2D
 
-# To make smooth tweens
-# Ease in by < time * 0.0625 >
-# Ease out by <time>
-
 @export var intro_done: bool = true
 var can_click = true
 var flashing_colors = PackedColorArray([
@@ -65,6 +61,5 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 
 
 func _on_animation_player_animation_finished(anim_name):
-	
 	if anim_name == "press_enter":
-		Global.change_scene_to(Constants.main_menu_scene)
+		Global.change_scene_to(Constants.MAIN_MENU_SCENE)

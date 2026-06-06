@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://egkjtep186jj"
-path="res://.godot/imported/mom_dad_christmas_assets.png-7340f795d515ac08d02dd33206daac43.ctex"
+path="res://.godot/imported/mom_dad_christmas_assets.png-e47f848c50dc3c3ac482d0aca384f0a3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://funkin/assets/characters/mom dad christmas/mom_dad_christmas_assets.png"
-dest_files=["res://.godot/imported/mom_dad_christmas_assets.png-7340f795d515ac08d02dd33206daac43.ctex"]
+source_file="res://funkin/assets/characters/parents/mom_dad_christmas_assets.png"
+dest_files=["res://.godot/imported/mom_dad_christmas_assets.png-e47f848c50dc3c3ac482d0aca384f0a3.ctex"]
 
 [params]
 

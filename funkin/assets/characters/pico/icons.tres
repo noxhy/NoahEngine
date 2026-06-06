@@ -1,13 +1,13 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://wehhhpa8h24j"]
 
-[ext_resource type="Texture2D" uid="uid://bvk0rw5rde8dm" path="res://funkin/assets/characters/pico/icon-pico.png" id="1_xj1qj"]
+[ext_resource type="Texture2D" uid="uid://bvk0rw5rde8dm" path="res://funkin/assets/characters/pico/icon-pico.png" id="1_71goj"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7vcws"]
-atlas = ExtResource("1_xj1qj")
+atlas = ExtResource("1_71goj")
 region = Rect2(0, 0, 150, 150)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mvphi"]
-atlas = ExtResource("1_xj1qj")
+atlas = ExtResource("1_71goj")
 region = Rect2(150, 0, 150, 150)
 
 [resource]

@@ -1,4 +1,3 @@
 extends Resource
-class_name Constants
 
-const main_menu_scene: String = "uid://rc52vcn2m7ob"
+const MAIN_MENU_SCENE: String = "uid://rc52vcn2m7ob"
