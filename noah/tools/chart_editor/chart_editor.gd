@@ -73,7 +73,7 @@ var default_font_size: int = ThemeDB.fallback_font_size
 func _ready() -> void:
 	if name == "Chart Editor":
 		if ChartManager.event_editor:
-			get_tree().change_scene_to_file("uid://cq6xqods6w7lw")
+			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 			return
 	
 	get_window().content_scale_size = Vector2(1280, 720)
@@ -1592,7 +1592,7 @@ func view_button_item_pressed(id):
 	match id:
 		0:
 			ChartManager.event_editor = true
-			get_tree().change_scene_to_file("uid://cq6xqods6w7lw")
+			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 		
 		1:
 			can_chart = false

@@ -1,6 +1,6 @@
 extends Node2D
 
-var OPTION_MENU_PRELOAD = load("uid://bp581x6mu5f1w")
+var OPTION_MENU_PRELOAD = load(Constants.OPTIONS_SUBMENU_SCENE)
 var MENU_OPTION_PRELOAD = load("uid://55odtbd2v2ql")
 
 @export var can_click = true

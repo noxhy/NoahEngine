@@ -41,7 +41,7 @@ const MISS_MAX_HEALTH_PENALTY: float = 20.0
 @export_file('*.tscn') var death_scene: String = "uid://bd083xcqslcsd"
 var pause_scene: String
 ## The scene that will be switched to when the song ends.
-@export_file('*.tscn') var next_scene: String = "uid://cmwlnqqj5h0xy"
+@export_file('*.tscn') var next_scene: String = Constants.RESULTS_MENU_SCENE
 
 var song_starting:bool = false
 var song_started: bool = false
@@ -187,7 +187,7 @@ func _process(delta):
 		ChartManager.event_editor = false
 		ChartManager.song = song_data
 		ChartManager.difficulty = GameManager.difficulty
-		Global.change_scene_to("uid://c3lux2ajoe1g6")
+		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 	
 	if !song_started and song_starting:
 		song_start_offset += delta
@@ -434,14 +434,14 @@ func song_finished():
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
-				Global.change_scene_to("uid://c3lux2ajoe1g6")
+				Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 			
 			GameManager.PLAY_MODE.PRACTICE:
-				Global.change_scene_to("uid://cmwlnqqj5h0xy")
+				Global.change_scene_to(Constants.RESULTS_MENU_SCENE)
 			
 			_:
 				GameManager.finished_song(score)
-				Global.change_scene_to("uid://cmwlnqqj5h0xy")
+				Global.change_scene_to(Constants.RESULTS_MENU_SCENE)
 	else:
 		GameManager.finished_song(score)
 		if (GameManager.week_songs.size() == GameManager.current_week_song):

@@ -65,9 +65,9 @@ func _process(delta: float) -> void:
 		
 		GameManager.reset_stats()
 		if GameManager.freeplay:
-			Global.change_scene_to("uid://gbra80y44814")
+			Global.change_scene_to(Constants.FREEPLAY_MENU_SCENE)
 		else:
-			Global.change_scene_to("uid://lh8hi5dk1sja")
+			Global.change_scene_to(Constants.STORY_MODE_MENU_SCENE)
 
 
 func update_display():

@@ -86,7 +86,7 @@ func _process(_delta):
 			dj.animated_symbol.loop = false
 			
 			SoundManager.accept.play()
-			Global.change_scene_to("uid://cffkc1rbk4pcv")
+			Global.change_scene_to(Constants.CHARACTER_SELECT_MENU_SCENE)
 
 
 # Updates visually what happens when a new index is set for a selection
@@ -242,7 +242,7 @@ func play_song(song: Song, difficulty: String):
 func chart_song(song: Song, difficulty: String):
 	ChartManager.song = song
 	ChartManager.difficulty = difficulty
-	Global.change_scene_to("uid://c3lux2ajoe1g6", "fade")
+	Global.change_scene_to(Constants.CHART_EDITOR_SCENE, "fade")
 
 
 @warning_ignore("unused_parameter")

@@ -149,7 +149,7 @@ func select_option(i: int):
 		
 		"options":
 			self.process_mode = Node.PROCESS_MODE_DISABLED
-			Global.change_scene_to("uid://stil5xd6xto6")
+			Global.change_scene_to(Constants.OPTIONS_MENU_SCENE)
 		
 		"restart":
 			get_tree().paused = false
@@ -160,14 +160,14 @@ func select_option(i: int):
 			self.process_mode = Node.PROCESS_MODE_DISABLED
 			
 			if GameManager.freeplay:
-				Global.change_scene_to("uid://gbra80y44814")
+				Global.change_scene_to(Constants.FREEPLAY_MENU_SCENE)
 			else:
-				Global.change_scene_to("uid://lh8hi5dk1sja")
+				Global.change_scene_to(Constants.STORY_MODE_MENU_SCENE)
 		
 		"chart_editor":
 			GameManager.reset_stats()
 			self.process_mode = Node.PROCESS_MODE_DISABLED
-			Global.change_scene_to("uid://c3lux2ajoe1g6")
+			Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 		
 		"change_difficulty":
 			load_page("difficulties")

@@ -212,7 +212,7 @@ func confirm(pos: Vector2i = selected):
 		tween.tween_property($Camera2D, "offset", $Camera2D.offset - Vector2(0, 150), 0.5).set_delay(0.5)
 		
 		get_tree().call_group("current", "play", "confirm")
-		Global.change_scene_to("uid://gbra80y44814")
+		Global.change_scene_to(Constants.FREEPLAY_MENU_SCENE)
 	else:
 		
 		$Audio/Locked.play()
