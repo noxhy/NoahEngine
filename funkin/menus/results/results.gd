@@ -7,6 +7,7 @@ var current_delta: float
 var idx: int = 0
 var grade: int
 var _grade: int = 0
+var can_press: bool = true
 
 func _ready() -> void:
 	Global.set_window_title("Results Screen")
@@ -57,17 +58,20 @@ func _process(delta: float) -> void:
 		%Difficulty.animation, %Difficulty.frame
 	)
 	
-	if Input.is_action_just_pressed("menu_accept"):
-		GameManager.reset_stats()
-		var tween = create_tween()
-		tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
-		tween.tween_property($Audio/Music, "pitch_scale", 0.0, 0.5)
-		
-		GameManager.reset_stats()
-		if GameManager.freeplay:
-			Global.change_scene_to(Constants.FREEPLAY_MENU_SCENE)
-		else:
-			Global.change_scene_to(Constants.STORY_MODE_MENU_SCENE)
+	if can_press:
+		if Input.is_action_just_pressed(&"menu_accept") or Input.is_action_just_pressed(&"menu_cancel"):
+			GameManager.reset_stats()
+			var tween = create_tween()
+			tween.set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+			tween.tween_property($Audio/Music, "pitch_scale", 0.0, 0.5)
+			
+			GameManager.reset_stats()
+			if GameManager.freeplay:
+				Global.change_scene_to(Constants.FREEPLAY_MENU_SCENE)
+			else:
+				Global.change_scene_to(Constants.STORY_MODE_MENU_SCENE)
+			
+			can_press = false
 
 
 func update_display():
