@@ -1,4 +1,4 @@
-extends Resource
+extends Node
 
 const START_MENU_SCENE: String = "uid://b1kmgjxpce1de"
 const MAIN_MENU_SCENE: String = "uid://rc52vcn2m7ob"

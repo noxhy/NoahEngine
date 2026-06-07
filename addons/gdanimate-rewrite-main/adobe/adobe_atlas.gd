@@ -114,11 +114,13 @@ func draw_on(canvas_item: RID, draw_info: AnimateDrawInfo) -> void:
 	backbuffer_cache.clear()
 
 	var stage_item: RID = RenderingServer.canvas_item_create()
-	draw_info.items.push_back(stage_item)
 	RenderingServer.canvas_item_set_transform(stage_item, transform)
 	RenderingServer.canvas_item_set_parent(stage_item, canvas_item)
 	RenderingServer.canvas_item_set_draw_behind_parent(stage_item, true)
 	RenderingServer.canvas_item_set_use_parent_material(stage_item, true)
+	RenderingServer.canvas_item_set_light_mask(stage_item, draw_info.light_mask)
+	RenderingServer.canvas_item_set_visibility_layer(stage_item, draw_info.visibility_layer)
+	draw_info.items.push_back(stage_item)
 
 	draw_symbol(symbols[key],
 		stage_item,
@@ -132,6 +134,8 @@ func draw_on(canvas_item: RID, draw_info: AnimateDrawInfo) -> void:
 		Rect2(),
 		draw_info.screen_transform * transform,
 		draw_info.additive_material,
+		draw_info.light_mask,
+		draw_info.visibility_layer,
 	)
 
 
@@ -184,7 +188,9 @@ func draw_symbol(target: AdobeSymbol, parent: RID,
 				color_matrix: AdobeColorMatrix = null,
 				screen_rect: Rect2 = Rect2(),
 				screen_transform: Transform2D = Transform2D.IDENTITY,
-				additive_material: Material = null,) -> Rect2:
+				additive_material: Material = null,
+				light_mask: int = 1,
+				visibility_layer: int = 1,) -> Rect2:
 	if frame > target.length - 1:
 		frame = target.length - 1
 
@@ -199,6 +205,9 @@ func draw_symbol(target: AdobeSymbol, parent: RID,
 			items.push_back(layer_rid)
 
 			RenderingServer.canvas_item_set_use_parent_material(layer_rid, true)
+			RenderingServer.canvas_item_set_light_mask(layer_rid, light_mask)
+			RenderingServer.canvas_item_set_visibility_layer(layer_rid, visibility_layer)
+
 			rids.set(layer.name, layer_rid)
 
 			if layer.clipping:
@@ -257,6 +266,8 @@ func draw_symbol(target: AdobeSymbol, parent: RID,
 						screen_rect,
 						screen_transform,
 						additive_material,
+						light_mask,
+						visibility_layer,
 					)
 
 					if blend_mode != AdobeSymbolInstance.AdobeBlendMode.NORMAL:

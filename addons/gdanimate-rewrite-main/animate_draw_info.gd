@@ -9,6 +9,8 @@ class_name AnimateDrawInfo
 @export var material: Material = null
 @export var additive_material: Material = null
 @export var screen_transform: Transform2D = Transform2D.IDENTITY
+@export var light_mask: int = 1
+@export var visibility_layer: int = 1
 
 var items: Array[RID]
 

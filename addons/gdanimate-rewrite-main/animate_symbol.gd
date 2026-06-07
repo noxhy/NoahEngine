@@ -3,8 +3,6 @@
 extends Node2D
 class_name AnimateSymbol
 
-signal animation_finished
-signal animation_looped
 
 @export_placeholder("Name or Prefix") var symbol: String = "":
 	set(value):
@@ -82,7 +80,6 @@ signal animation_looped
 @export_tool_button("Make AnimationLibrary", "AnimationLibrary") var atlas_make_player: Callable = make_player_from_current
 
 var frame_timer: float = 0.0
-var frame_progress: float
 var internal_canvas_items: Array[RID] = []
 var last_atlases_size: int = 0
 var adobe_atlas_material: ShaderMaterial = null
@@ -90,6 +87,8 @@ var adobe_additive_material: ShaderMaterial = null
 var last_screen_transform: Transform2D = Transform2D()
 var internal_setting_frame: bool = false
 var frame_dirty: bool = false
+var last_light_mask: int = 0
+var last_visibilty_layer: int = 0
 
 
 func _enter_tree() -> void:
@@ -159,46 +158,48 @@ func _process(delta: float) -> void:
 	if atlases.is_empty():
 		frame = 0
 		return
-	
+
 	var atlas: AnimateAtlas = get_atlas()
 	if not is_instance_valid(atlas):
 		return
-	
+
+	if last_light_mask != light_mask:
+		last_light_mask = light_mask
+		queue_redraw()
+	if last_visibilty_layer != visibility_layer:
+		last_visibilty_layer = visibility_layer
+		queue_redraw()
+
 	if atlas.wants_redraw():
 		queue_redraw()
 	elif last_screen_transform != get_backbuffer_transform() and not frame_dirty:
 		last_screen_transform = get_backbuffer_transform()
-	
+
 		if atlas is AdobeAtlas:
 			atlas.use_backbuffer_cache = true
-	
+
 		queue_redraw()
-	
+
 	if atlas.wants_reload_list():
 		notify_property_list_changed()
-	
+
 	if not playing:
 		return
-	
+
 	internal_setting_frame = true
-	
+
 	var fps: float = atlas.get_framerate()
 	frame_timer += delta * speed_scale
-	var frame_time: float = 1.0 / fps
-	
-	frame_progress = frame_timer / frame_time
-	if frame_timer >= frame_time:
+	if frame_timer >= 1.0 / fps:
 		var amount: int = floori(frame_timer * fps)
 		if frame == get_animation_length() - 1 and (not loop) and amount > 0:
 			internal_setting_frame = false
 			playing = false
-			emit_signal(&"animation_finished")
-			frame_timer = frame_time
 			return
-		
+
 		frame += amount
 		frame_timer = wrapf(frame_timer, 0.0, 1.0 / fps)
-	
+
 	internal_setting_frame = false
 
 
@@ -216,6 +217,8 @@ func _draw() -> void:
 	)
 
 	draw_info.screen_transform = get_backbuffer_transform()
+	draw_info.light_mask = light_mask
+	draw_info.visibility_layer = visibility_layer
 
 	if atlas is AdobeAtlas and frame_dirty:
 		atlas.use_backbuffer_cache = false
@@ -291,13 +294,12 @@ func get_animation_length(use_custom: bool = false, custom: String = "") -> int:
 func validate_frame(value: int, length: int = -1) -> int:
 	if length == -1:
 		length = get_animation_length()
-	
+
 	if value < 0:
 		value = 0
 	if value > length - 1:
 		if loop:
 			value = wrapi(value, 0, length)
-			emit_signal(&"animation_looped")
 		else:
 			value = clampi(value, 0, length - 1)
 	if length == 0:
