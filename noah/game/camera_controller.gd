@@ -194,7 +194,7 @@ func update_2d(delta: float):
 
 func update_3d(delta: float):
 	if zoom_smoothing:
-		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x * 75, zoom_smoothing_speed, delta)
+		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x, zoom_smoothing_speed, delta)
 	
 	if position_smoothing:
 		parent_3D.position = lerp_position(parent_3D.position, _position_3d, delta)
