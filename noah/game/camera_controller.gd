@@ -15,33 +15,35 @@ class_name CameraController
 var target_zoom: Vector2 = Vector2(1, 1)
 
 @export_group("Zoom Smoothing")
-## If true the camera will attempt to lerp to [code]target_zoom[/code].
+## If [code]true[/code], the camera's zoom smoothly zoom towards its target position at [member zoom_smoothing_speed].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var zoom_smoothing: bool = true
-
-## The rate the camera's current [code]zoom[/code] will lerp to [code]target_zoom[/code]
+## The asymptotic speed of the camera's zoom smoothing effect when [member zoom_smoothing] is true.
 @export_custom(PROPERTY_HINT_RANGE, '1,64,suffix:weight') var zoom_smoothing_speed: float = 5
 
+
 @export_group("Position Smoothing")
-## If true, the camera's view smoothly moves towards its target position at [code]position_smoothing_speed[/code].
+## If [code]true[/code], the camera's view smoothly moves towards its target position at [member position_smoothing_speed].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var position_smoothing: bool = true : 
 	set(v):
 		if parent_2D:
 			parent_2D.position_smoothing_enabled = v
 		position_smoothing = v
-
-## Speed in pixels per second of the camera's smoothing effect when [code]position_smoothing_enabled[/code] is true.
+## Speed in pixels per second of the camera's smoothing effect when [member position_smoothing_enabled] is true.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:px/s') var position_smoothing_speed: float = 3.0 : 
 	set(v):
 		if parent_2D:
 			parent_2D.position_smoothing_speed = v
 		position_smoothing_speed = v
+
+
 @export_group("Rotation Smoothing")
+## If [code]true[/code], the camera's view smoothly rotates, via asymptotic smoothing, to align with its target rotation at [member rotation_smoothing_speed].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var rotation_smoothing: bool = true : 
 	set(v):
 		if parent_2D:
 			parent_2D.rotation_smoothing_enabled = v
 		rotation_smoothing = v
-
+## The angular, asymptotic speed of the camera's rotation smoothing effect when [member rotation_smoothing_enabled] is true.
 @export var rotation_smoothing_speed: float = 5.0 : 
 	set(v):
 		if parent_2D:
