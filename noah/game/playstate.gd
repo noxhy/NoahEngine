@@ -382,7 +382,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			var camera_bop = float(event_parameters[0])
 			var ui_bop = float(event_parameters[1])
 			
-			camera.zoom += camera_bop * camera.zoom
+			camera.bump(camera_bop)
 			ui.scale += Vector2.ONE * ui_bop
 		
 		"psych_camera_zoom":
@@ -407,7 +407,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			ui_bop_strength = Vector2.ONE * float(event_parameters[1])
 		
 		"lerping":
-			var lerping = true if event_parameters[0] == "true" else false
+			var lerping = event_parameters[0] == "true"
 			ui.lerping = lerping
 			camera.zoom_smoothing = lerping
 		
