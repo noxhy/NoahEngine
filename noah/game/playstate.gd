@@ -64,7 +64,7 @@ var current_event: int = -1
 var chart: Chart
 
 var misses: int = 0
-var score: int = 0
+var score: float = 0
 var health: float = 50.0
 var combo: int = 0
 
@@ -164,7 +164,7 @@ func _process(delta):
 	
 	health = clamp(health, 0.0, 100.0)
 	ui.target_health = health
-	GameManager.score = score
+	GameManager.score = int(score)
 	
 	if health <= 0:
 		GameManager.deaths += 1
@@ -439,10 +439,10 @@ func song_finished():
 				Global.change_scene_to(Constants.RESULTS_MENU_SCENE)
 			
 			_:
-				GameManager.finished_song(score)
+				GameManager.finished_song(int(score))
 				Global.change_scene_to(Constants.RESULTS_MENU_SCENE)
 	else:
-		GameManager.finished_song(score)
+		GameManager.finished_song(int(score))
 		if (GameManager.week_songs.size() == GameManager.current_week_song):
 			Global.change_scene_to(next_scene)
 		else:
@@ -508,7 +508,7 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 		health += abs(hold_difference) * HOLD_HEALTH
 		
 		if note.scoreable:
-			score += floor(abs(hold_difference) * HOLD_SCORE)
+			score += abs(hold_difference) * HOLD_SCORE
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
