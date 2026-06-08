@@ -262,6 +262,9 @@ func _editor_process(delta: float) -> void:
 		_cleanup_ghost()
 
 func _is_character_root():
+	if not is_inside_tree():
+		return false
+		
 	var tree = get_tree()
 	return tree and tree.edited_scene_root == self
 
