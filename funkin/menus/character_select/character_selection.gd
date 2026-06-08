@@ -66,7 +66,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	var input_vector = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	var input_vector = Input.get_vector("menu_left", "menu_right", "menu_up", "menu_down")
 	
 	if input_vector != Vector2.ZERO:
 		if input_time == 0 or input_time >= $Conductor.seconds_per_step:
@@ -77,13 +77,13 @@ func _process(delta: float) -> void:
 		input_time += delta
 	
 	if (multi_input_xor(
-		[Input.is_action_just_released("ui_left"), Input.is_action_just_released("ui_right"),
-		Input.is_action_just_released("ui_down"), Input.is_action_just_released("ui_up")
+		[Input.is_action_just_released("menu_left"), Input.is_action_just_released("menu_right"),
+		Input.is_action_just_released("menu_down"), Input.is_action_just_released("menu_up")
 		]
 	)):
 		input_time = 0
 	
-	if Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("menu_accept"):
 		confirm(selected)
 	
 	%"Character Name".position.y = -616.2 + (sin(total) * 10)

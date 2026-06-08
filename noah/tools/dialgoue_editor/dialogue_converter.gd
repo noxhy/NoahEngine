@@ -19,7 +19,7 @@ func _ready():
 
 func _input(event):
 	
-	if event.is_action_pressed("ui_accept"):
+	if event.is_action_pressed("menu_accept"):
 		
 		can_convert = false
 		

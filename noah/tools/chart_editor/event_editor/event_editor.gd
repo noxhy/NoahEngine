@@ -76,7 +76,7 @@ func _process(delta: float) -> void:
 	else:
 		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
 	
-	if Input.is_action_just_pressed(&"ui_accept"):
+	if Input.is_action_just_pressed(&"menu_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset

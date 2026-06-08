@@ -162,7 +162,7 @@ func _ready() -> void:
 		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(11), shortcut)
 	
 	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_accept")
+	shortcut.events = InputMap.action_get_events(&"menu_accept")
 	%"Upper UI".get_node("%Audio Button").get_popup().set_item_shortcut(
 		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(0), shortcut)
 	
@@ -351,7 +351,7 @@ func _process(delta: float) -> void:
 	else:
 		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
 	
-	if Input.is_action_just_pressed(&"ui_accept"):
+	if Input.is_action_just_pressed(&"menu_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset

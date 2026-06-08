@@ -24,7 +24,7 @@ func _ready():
 func _process(delta):
 	$"UI/Offset Label".text = "Offset: " + str(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset") * 1000) + " ms"
 	
-	var keycode = SettingsManager.get_keybind("ui_accept")
+	var keycode = SettingsManager.get_keybind("menu_accept")
 	$UI/Instructions.text = "Press " + Global.get_keycode_string(keycode) + " to calibrate your offset"
 	$UI/Instructions.text += "\n(This may not be entirely accurate)"
 	

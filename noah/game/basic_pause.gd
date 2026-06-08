@@ -94,11 +94,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("menu_up"):
 		update(selected - 1)
-	if Input.is_action_just_pressed("ui_down"):
+	if Input.is_action_just_pressed("menu_down"):
 		update(selected + 1)
-	if Input.is_action_just_pressed("ui_cancel") or Input.is_action_just_pressed("ui_accept"):
+	if Input.is_action_just_pressed("menu_cancel") or Input.is_action_just_pressed("menu_accept"):
 		select_option(selected)
 
 

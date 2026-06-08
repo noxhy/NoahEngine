@@ -35,12 +35,12 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 
 func _input(event):
 	if can_press:
-		if event.is_action_pressed(&"ui_accept"):
+		if event.is_action_pressed(&"menu_accept"):
 			can_press = false
 			%Player.play_animation(&"accept")
 			$AnimationPlayer.play(&"end")
 		
-		if event.is_action_pressed(&"ui_cancel"):
+		if event.is_action_pressed(&"menu_cancel"):
 			can_press = false
 			
 			GameManager.reset_stats()
