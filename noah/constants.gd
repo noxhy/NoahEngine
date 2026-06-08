@@ -1,5 +1,7 @@
 extends Node
 
+
+#scene ids
 const START_MENU_SCENE: String = "uid://b1kmgjxpce1de"
 const MAIN_MENU_SCENE: String = "uid://rc52vcn2m7ob"
 const STORY_MODE_MENU_SCENE: String = "uid://lh8hi5dk1sja"
@@ -12,3 +14,19 @@ const RESULTS_MENU_SCENE: String = "uid://cmwlnqqj5h0xy"
 
 const CHART_EDITOR_SCENE: String = "uid://c3lux2ajoe1g6"
 const EVENT_EDITOR_SCENE: String = "uid://cq6xqods6w7lw"
+
+
+#playstate constants
+const SCORING_SLOPE: float = 0.08
+const SCORING_OFFSET: float = 0.05499
+const COMBO_SLOPE: float = 20.0
+
+const HOLD_SCORE_GAIN_PER_SECOND: float = 250
+const MIN_SCORE_GAIN: int = 9
+const MAX_SCORE_GAIN: int = 500
+
+const HOLD_HEALTH_GAIN_PER_SECOND: float = 6
+const HEALTH_GAIN: float = 1
+
+const MISS_BASE_HEALTH_PENALTY: float = 4
+const MISS_MAX_HEALTH_PENALTY: float = 20.0

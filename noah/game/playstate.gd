@@ -3,15 +3,6 @@ extends Node
 class_name PlayState
 
 const COMPENSATION: float = 1.0 / 30.0
-const SCORING_SLOPE: float = 0.08
-const SCORING_OFFSET: float = 0.05499
-const MIN_SCORE: int = 9
-const MAX_SCORE: int = 500
-const HOLD_SCORE: float = 250
-const HOLD_HEALTH: float = 6
-const COMBO_SLOPE: float = 20.0
-const MISS_BASE_HEALTH_PENALTY: float = 4
-const MISS_MAX_HEALTH_PENALTY: float = 20.0
 
 @onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
@@ -358,9 +349,9 @@ func pause():
 
 
 func score_note(hit_time: float):
-	var factor: float = 1.0 - (1.0 / (1.0 + exp(-SCORING_SLOPE * ((abs(hit_time) - SCORING_OFFSET) * 1000))))
-	var add: int = int(MAX_SCORE * factor + MIN_SCORE)
-	add = clamp(add, MIN_SCORE, MAX_SCORE)
+	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
+	var add: int = int(Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN)
+	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	score += add
 
 
@@ -407,6 +398,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			ui_bop_strength = Vector2.ONE * float(event_parameters[1])
 		
 		"lerping":
+			
 			var lerping = event_parameters[0] == "true"
 			ui.lerping = lerping
 			camera.zoom_smoothing = lerping
@@ -505,10 +497,10 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		health += abs(hold_difference) * HOLD_HEALTH
+		health += abs(hold_difference) * Constants.HOLD_HEALTH_GAIN_PER_SECOND
 		
 		if note.scoreable:
-			score += abs(hold_difference) * HOLD_SCORE
+			score += abs(hold_difference) * Constants.HOLD_SCORE_GAIN_PER_SECOND
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
@@ -523,8 +515,8 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 			health -= 1
 		elif note.scoreable:
 			score -= 100
-			health -= min(MISS_BASE_HEALTH_PENALTY + (combo / COMBO_SLOPE) + (note.length * HOLD_HEALTH),
-			MISS_MAX_HEALTH_PENALTY) * note.damage_mult
+			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
+			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			reset_combo()
 			misses += 1
 			 
