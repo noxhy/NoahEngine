@@ -86,9 +86,14 @@ func bop_tween(object: Object, property: NodePath, original_val: Variant, final_
 	tween.tween_property(object, property, final_val, duration * 0.0625).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(object, property, original_val, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
 
-func set_window_title(title: String):
-	DisplayServer.window_set_title(str("Friday Night Funkin' Noah Engine ",
-	ProjectSettings.get_setting("application/config/version"), " | ", title))
+func set_window_title(title: String = ''):
+	var app_title: String = ProjectSettings.get_setting("application/config/name") + \
+		' ' + ProjectSettings.get_setting("application/config/version")
+	
+	if not title.is_empty():
+		app_title += ' | ' + title
+	
+	DisplayServer.window_set_title(app_title)
 
 func format_number(num:float) -> String: 
 	var isNegative = num < 0.0

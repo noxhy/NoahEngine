@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Noah Engine"
+config/name="Friday Night Funkin' Noah Engine"
 config/version="3.1"
 run/main_scene="res://funkin/menus/start_menu/start_menu.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
