@@ -14,6 +14,7 @@ var max_range: float = 1
 var max_length: float = 850
 
 @onready var stream_player = $Audio/Base
+@onready var conductor = $Conductor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -26,8 +27,8 @@ func _ready():
 	$UI/Instructions.text = str("Press ", Global.get_keycode_string(keycode), " to calibrate your offset")
 	$UI/Instructions.text += "\n(This may not be entirely accurate)"
 	
-	$Conductor.tempo = stream_player.stream.get_bpm()
-	max_range = $Conductor.seconds_per_beat
+	conductor.tempo = stream_player.stream.get_bpm()
+	max_range = conductor.seconds_per_beat
 	
 	stream_player.play()
 	$Audio/Drums.play()
@@ -115,9 +116,9 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 
 func get_length_in_beats() -> int:
 	var length: float = stream_player.stream.get_length()
-	return int(length / $Conductor.seconds_per_beat)
+	return int(length / conductor.seconds_per_beat)
 
 
 func update_next_hit():
-	var next_beat: int = wrapi($Conductor.current_beat + 1, 0, get_length_in_beats() + 1)
-	next_hit = next_beat * $Conductor.seconds_per_beat
+	var next_beat: int = wrapi(conductor.current_beat + 1, 0, get_length_in_beats() + 1)
+	next_hit = next_beat * conductor.seconds_per_beat
