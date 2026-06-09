@@ -56,10 +56,10 @@ func _draw():
 
 # Input Manager
 func _input(event):
-	if event.is_action_pressed("menu_cancel"):
+	if event.is_action_pressed(&"menu_cancel"):
 		$"Audio/Menu Cancel".play()
 		Global.change_scene_to(Constants.OPTIONS_MENU_SCENE, "down")
-	elif event.is_action_pressed("menu_accept"):
+	elif event.is_action_pressed(&"menu_accept"):
 		$"Audio/Hit Sound".play()
 		var song_position: float = $Audio/Base.get_playback_position()
 		var distance: float = song_position - current_timing
@@ -80,7 +80,7 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 	$UI/Speaker.frame = 0
 	$UI/Speaker.play_animation(&"bump")
 	
-	timing = (current_beat + 2) * $Conductor.seconds_per_beat
+	timing = (current_beat + 1) * $Conductor.seconds_per_beat
 	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)

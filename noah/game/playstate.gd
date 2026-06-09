@@ -51,6 +51,7 @@ var scroll_speed: float = 1.0
 var current_note: int = -1
 # The index of the latest loaded event
 var current_event: int = -1
+var output_latency: float = AudioServer.get_output_latency()
 
 var chart: Chart
 
@@ -152,7 +153,6 @@ func _ready():
 
 
 func _process(delta):
-	
 	health = clamp(health, 0.0, 100.0)
 	ui.target_health = health
 	GameManager.score = int(score)
@@ -190,8 +190,7 @@ func _process(delta):
 			song_starting = false
 	else:
 		GameManager.song_position = instrumental.get_playback_position() + \
-				AudioServer.get_time_since_last_mix() - \
-				AudioServer.get_output_latency()
+				AudioServer.get_time_since_last_mix() - output_latency
 		
 		GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
 		GameManager.conductor.offset += chart.offset
