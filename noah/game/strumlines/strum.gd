@@ -65,7 +65,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	for note in note_list:
-		var time_difference: float = (note.time - offset) - GameManager.song_position
+		var time_difference: float = note.time_difference
 		
 		note.scroll_speed = scroll_speed
 		note.scroll = scroll
@@ -79,7 +79,7 @@ func _process(delta):
 						note.modulate = Color(1.5, 1.5, 1.5)
 		
 		if auto_play:
-			if time_difference <= 0:
+			if time_difference <= delta:
 				if !ignored_note_types.has(note.note_type):
 					if note != previous_note:
 						emit_signal(&"note_hit", note, 0, self)
@@ -244,7 +244,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	note_instance.time = time
+	note_instance.time = time - offset
 	note_instance.length = length
 	note_instance.start_length = length
 	note_instance.note_type = note_type

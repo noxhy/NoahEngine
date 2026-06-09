@@ -146,6 +146,9 @@ func _ready():
 	get_tree().call_group(&"strums", "connect", "note_holding", host.note_holding)
 	get_tree().call_group(&"strums", "connect", "note_miss", host.note_miss)
 	get_tree().call_group(&"strums", "set_skin", note_skin)
+	get_tree().call_group(&"strums", "set_offset",
+	SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset"))
+	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		get_tree().call_group(&"strums", "set_scroll", -1)
 	
