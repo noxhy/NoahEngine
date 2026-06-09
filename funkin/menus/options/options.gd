@@ -103,7 +103,8 @@ var pages: Dictionary = {
 			"min": 30,
 			"max": 3000,
 			"snap": 1,
-			"unit": "FPS"}]
+			"unit": "FPS"}],
+			[&"button", {"text": "Clear Save".to_upper(), "id": &"clear_save"}]
 		]
 	}
 }

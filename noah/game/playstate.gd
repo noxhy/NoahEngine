@@ -152,10 +152,9 @@ func _ready():
 
 
 func _process(delta):
-	
 	health = clamp(health, 0.0, 100.0)
 	ui.target_health = health
-	GameManager.score = int(score)
+	GameManager.score = floor(score)
 	
 	if health <= 0:
 		GameManager.deaths += 1

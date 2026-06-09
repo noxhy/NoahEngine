@@ -1,6 +1,6 @@
 extends Node
 
-const LOAD_PATH = "user://save.tres"
+const LOAD_PATH = "user://save.res"
 var instance: Save
 
 # Called when the node enters the scene tree for the first time.
@@ -26,13 +26,13 @@ func _load():
 		flush()
 		printerr("(SaveManager): Save File could not be loaded. Creating a new Save File.")
 	else:
-		print("(Save Manager): Loaded song scores and values")
+		print("(SaveManager): Loaded song scores and values")
 
 ## Sets the results data of a song for a certain difficulty
 ## Returns true if the new score is a highscore.
 func set_song_stats(song: Song, difficulty: String, score: int, grade: float) -> bool:
 	var is_highscore: bool = false
-	var song_stats = instance.song_stats.get(hash(song), {})
+	var song_stats = instance.song_stats.get(hash(song.resource_path), {})
 	if !song_stats.has(difficulty):
 		song_stats[difficulty] = {}
 	# So you don't have to worry about checking it yourself
@@ -46,7 +46,7 @@ func set_song_stats(song: Song, difficulty: String, score: int, grade: float) ->
 	if (_grade < grade):
 		song_stats[difficulty]["grade"] = grade
 	
-	instance.song_stats[song] = song_stats
+	instance.song_stats[hash(song.resource_path)] = song_stats
 	flush()
 	return is_highscore
 
@@ -69,30 +69,30 @@ func set_week_stats(week: Week, difficulty: String, score: int, grade: float) ->
 	if (_grade < grade):
 		week_stats[difficulty]["grade"] = grade
 	
-	instance.week_stats[week] = week_stats
+	instance.week_stats[hash(week.resource_path)] = week_stats
 	flush()
 	return is_highscore
 
 
 ## Gets the highscore of the difficulty of the song
 func get_highscore(song: Song, difficulty: String) -> int:
-	var highscore = instance.song_stats.get(hash(song), {}).get(difficulty, {}).get("highscore", -1)
+	var highscore = instance.song_stats.get(hash(song.resource_path), {}).get(difficulty, {}).get("highscore", -1)
 	return highscore
 
 ## Gets the grade of the difficulty of the song
 func get_grade(song: Song, difficulty: String) -> float:
-	var grade = instance.song_stats.get(hash(song), {}).get(difficulty, {}).get("grade", -1)
+	var grade = instance.song_stats.get(hash(song.resource_path), {}).get(difficulty, {}).get("grade", -1)
 	return grade
 
 ## Gets the highscore of the difficulty of the week
 func get_week_highscore(week: Week, difficulty: String) -> int:
-	var highscore = instance.week_stats.get(hash(week), {}).get(difficulty, {}).get("highscore", -1)
+	var highscore = instance.week_stats.get(hash(week.resource_path), {}).get(difficulty, {}).get("highscore", -1)
 	return highscore
 
 func has_week_stats(week: Week) -> bool:
-	return instance.week_stats.has(hash(week));
+	return instance.week_stats.has(hash(week.resource_path));
 
 ## Gets the grade of the difficulty of the week
 func get_week_grade(week: Week, difficulty: String) -> float:
-	var grade = instance.week_stats.get(hash(week), {}).get(difficulty, {}).get("grade", -1)
+	var grade = instance.week_stats.get(hash(week.resource_path), {}).get(difficulty, {}).get("grade", -1)
 	return grade
