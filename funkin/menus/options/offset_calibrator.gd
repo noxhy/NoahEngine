@@ -93,7 +93,6 @@ func _input(event):
 			
 			previous_offsets[index % entries_required] = distance
 			can_hit = false
-			update_next_hit()
 			
 			index += 1
 			if index >= entries_required:
