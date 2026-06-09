@@ -133,7 +133,7 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	var animation_name: StringName = get_animation_name(anim_id)
 	
 	if animation_name.is_empty():
-		printerr("(Character[", self.name, "]) ",'does not have "', animation_name, '" animation')
+		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
 		return
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and !holding:
