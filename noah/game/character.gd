@@ -206,6 +206,9 @@ func hold_animation():
 	var animation_name: StringName = get_animation_name(current_animation)
 	var length: int
 	
+	if animation_name.is_empty():
+		return
+	
 	if animation_player is AnimateSymbol:
 		if animation_player.looped:
 			return
