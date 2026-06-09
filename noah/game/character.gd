@@ -156,7 +156,7 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		var raw_atlas = animation_player.get_atlas()
 		if not raw_atlas:
 			return
-			
+		
 		set_sing_timer(animation_player.get_animation_length() / raw_atlas.get_framerate())
 		return
 	
