@@ -108,7 +108,7 @@ func load_page():
 		menu_option_instance.index = index
 		
 		$UI.add_child(menu_option_instance)
-		var rank = GameManager.get_rank(SaveManager.get_grade(song_file.title, difficulty))
+		var rank = GameManager.get_rank(SaveManager.get_grade(song_file, difficulty))
 		menu_option_instance.display_rank(rank)
 		menu_option_instance.add_to_group("instances")
 		index += 1
@@ -170,13 +170,13 @@ func update(i: int):
 	if !song_file.locked: 
 		tween.tween_property($Audio/Music, "volume_db", 0.0, 1)
 	
-	var grade = SaveManager.get_grade(song_file.title, difficulty)
+	var grade = SaveManager.get_grade(song_file, difficulty)
 	if grade == -1: grade = 0
 	tween.tween_method(
 		self.update_grade, current_grade, grade * 100, 0.3
 		).set_trans(Tween.TRANS_QUART)
 	
-	var highscore = SaveManager.get_highscore(song_file.title, difficulty)
+	var highscore = SaveManager.get_highscore(song_file, difficulty)
 	highscore = max(0, highscore)
 	$"UI/Score Display".number = highscore
 

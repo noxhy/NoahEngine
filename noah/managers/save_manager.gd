@@ -8,10 +8,12 @@ func _ready() -> void:
 	instance = Save.new()
 	_load()
 
+## Flushes the save in storage.
 func flush():
 	ResourceSaver.save(instance, LOAD_PATH)
 	print("(SaveManager): Saved song scores and tokens")
 
+## Loads the save from storage.
 func _load():
 	if !FileAccess.file_exists(LOAD_PATH):
 		printerr("(SaveManager): Save File does not exist. Creating a new Save File.")
@@ -28,9 +30,9 @@ func _load():
 
 ## Sets the results data of a song for a certain difficulty
 ## Returns true if the new score is a highscore.
-func set_song_stats(song: String, difficulty: String, score: int, grade: float) -> bool:
+func set_song_stats(song: Song, difficulty: String, score: int, grade: float) -> bool:
 	var is_highscore: bool = false
-	var song_stats = instance.song_stats.get(song, {})
+	var song_stats = instance.song_stats.get(hash(song), {})
 	if !song_stats.has(difficulty):
 		song_stats[difficulty] = {}
 	# So you don't have to worry about checking it yourself
@@ -51,19 +53,19 @@ func set_song_stats(song: String, difficulty: String, score: int, grade: float) 
 
 ## Sets the results data of a week for a certain difficulty
 ## Returns true if the new score is a highscore.
-func set_week_stats(week: String, difficulty: String, score: int, grade: float) -> bool:
+func set_week_stats(week: Week, difficulty: String, score: int, grade: float) -> bool:
 	var is_highscore: bool = false
 	var week_stats = instance.week_stats.get(week, {})
 	if !week_stats.has(difficulty):
 		week_stats[difficulty] = {}
 	# So you don't have to worry about checking it yourself
-	var highscore: int = get_highscore(week, difficulty)
+	var highscore: int = get_week_highscore(week, difficulty)
 	if (highscore < score):
 		week_stats[difficulty]["highscore"] = score
 		is_highscore = true
 	
 	# So you don't have to worry about checking it yourself
-	var _grade: float = get_grade(week, difficulty)
+	var _grade: float = get_week_grade(week, difficulty)
 	if (_grade < grade):
 		week_stats[difficulty]["grade"] = grade
 	
@@ -73,24 +75,24 @@ func set_week_stats(week: String, difficulty: String, score: int, grade: float) 
 
 
 ## Gets the highscore of the difficulty of the song
-func get_highscore(song: String, difficulty: String) -> int:
-	var highscore = instance.song_stats.get(song, {}).get(difficulty, {}).get("highscore", -1)
+func get_highscore(song: Song, difficulty: String) -> int:
+	var highscore = instance.song_stats.get(hash(song), {}).get(difficulty, {}).get("highscore", -1)
 	return highscore
 
 ## Gets the grade of the difficulty of the song
-func get_grade(song: String, difficulty: String) -> float:
-	var grade = instance.song_stats.get(song, {}).get(difficulty, {}).get("grade", -1)
+func get_grade(song: Song, difficulty: String) -> float:
+	var grade = instance.song_stats.get(hash(song), {}).get(difficulty, {}).get("grade", -1)
 	return grade
 
 ## Gets the highscore of the difficulty of the week
-func get_week_highscore(week: String, difficulty: String) -> int:
-	var highscore = instance.week_stats.get(week, {}).get(difficulty, {}).get("highscore", -1)
+func get_week_highscore(week: Week, difficulty: String) -> int:
+	var highscore = instance.week_stats.get(hash(week), {}).get(difficulty, {}).get("highscore", -1)
 	return highscore
-	
-func has_week_stats(week: String) -> bool:
-	return instance.week_stats.has(week);
+
+func has_week_stats(week: Week) -> bool:
+	return instance.week_stats.has(hash(week));
 
 ## Gets the grade of the difficulty of the week
-func get_week_grade(week: String, difficulty: String) -> float:
-	var grade = instance.week_stats.get(week, {}).get(difficulty, {}).get("grade", -1)
+func get_week_grade(week: Week, difficulty: String) -> float:
+	var grade = instance.week_stats.get(hash(week), {}).get(difficulty, {}).get("grade", -1)
 	return grade
