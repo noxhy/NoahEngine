@@ -105,11 +105,13 @@ func _ready():
 	
 	if animation_player is AnimateSymbol:
 		animation_player.connect(&"finished", self._on_animation_finished)
-		animation_player.connect(&"animation_changed", self._on_animation_changed)
+		if Engine.is_editor_hint():
+			animation_player.connect(&"animation_changed", self.update_ghost)
 	else:
 		animation_player.play()
 		animation_player.connect(&"animation_finished", self._on_animation_finished)
-		animation_player.connect(&"animation_changed", self.update_ghost)
+		if Engine.is_editor_hint():
+			animation_player.connect(&"animation_changed", self.update_ghost)
 	
 	if not Engine.is_editor_hint():
 		Signals.play_conductor_step_hit.connect(on_step_hit)
@@ -150,7 +152,12 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		
 		animation_player.playing = true
 		holding = false
-		set_sing_timer(animation_player.get_animation_length() / animation_player.current_fps)
+		
+		var raw_atlas = animation_player.get_atlas()
+		if not raw_atlas:
+			return
+			
+		set_sing_timer(animation_player.get_animation_length() / raw_atlas.get_framerate())
 		return
 	
 	var animation_speed: float = animation_player.sprite_frames.get_animation_speed(animation_name)
