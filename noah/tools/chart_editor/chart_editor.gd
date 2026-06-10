@@ -262,6 +262,7 @@ func _ready() -> void:
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_icon_texture", self._on_metadata_window_updated_icon_texture)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_scroll_speed", self._on_metadata_window_updated_scroll_speed)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_artist", self._on_metadata_window_updated_song_artist)
+	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_charter", self._on_metadata_window_updated_song_charter)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_name", self._on_metadata_window_updated_song_name)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_scene", self._on_metadata_window_updated_song_scene)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_starting_tempo", self._on_metadata_window_updated_starting_tempo)
@@ -1812,6 +1813,10 @@ func _on_metadata_window_updated_icon_texture(path: String) -> void:
 
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
+	auto_save()
+
+func _on_metadata_window_updated_song_charter(text: String) -> void:
+	ChartManager.song.charter = text
 	auto_save()
 
 func _on_metadata_window_updated_song_name(text: String) -> void:

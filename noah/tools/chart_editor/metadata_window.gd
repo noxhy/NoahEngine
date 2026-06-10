@@ -2,6 +2,7 @@ extends Window
 
 signal updated_song_name(text: String)
 signal updated_song_artist(text: String)
+signal updated_song_charter(text: String)
 signal updated_icon_texture(path: String)
 signal updated_starting_tempo(tempo: float)
 signal updated_song_scene(path: String)
@@ -145,3 +146,7 @@ func _on_denominator_value_changed(value: float) -> void:
 	
 	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+
+func _on_song_charter_text_changed(new_text: String) -> void:
+	updated_song_charter.emit(new_text)
