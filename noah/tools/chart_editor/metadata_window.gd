@@ -97,7 +97,7 @@ func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	%Numerator.value = meter[0]
-	%Denominator.value = meter[1] / meter[0]
+	%Denominator.value = meter[0]
 	if emit:
 		emit_signal(&"selected_time_change", time)
 
