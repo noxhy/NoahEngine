@@ -133,12 +133,12 @@ func _on_numerator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.chart_data["meters"][time] = [int(value), int(%Denominator.value) * int(value)]
+	ChartManager.chart.chart_data["meters"][time] = [int(value), int(%Denominator.value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func _on_denominator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(%Numerator.value) * int(value)]
+	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
