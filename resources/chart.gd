@@ -345,9 +345,10 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	# Adding tempo data
 	for i in meta.get('timeChanges'):
 		if i.t < 0:
-			i.t = 0.0
-		tempo_data[i.t / 1000.0] = i.bpm
-		meter_data[i.t / 1000.0] = [i.n, i.d]
+			i.t = 0
+		
+		tempo_data[i.t / 1000] = i.bpm
+		meter_data[i.t / 1000] = [i.n, i.d]
 	
 	for i in data.get('notes').get(diff):
 		var time = i.t / 1000.0
