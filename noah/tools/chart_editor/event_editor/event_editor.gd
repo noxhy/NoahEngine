@@ -61,8 +61,8 @@ func _process(delta: float) -> void:
 		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
 		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
-		$Conductor.beats_per_measure = meter[0]
-		$Conductor.steps_per_measure = meter[1]
+		$Conductor.numerator = meter[0]
+		$Conductor.denominator = meter[1]
 		$Camera2D.position.x = 640 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
@@ -290,12 +290,12 @@ func _draw() -> void:
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-					var length: float = ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
-					length *= %Grid.grid_size.x * %Grid.zoom.x
-					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-					rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
-					Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
-					draw_rect(rect, selected_color)
+				var length: float = note.length + 1
+				length *= %Grid.grid_size.x * %Grid.zoom.x
+				length *= $Conductor.numerator
+				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
+				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
+				draw_rect(rect, selected_color)
 	
 	if hovered_event != -1 and ChartManager.chart:
 		var event: String = ChartManager.chart.get_events_data()[hovered_event][1]
@@ -350,7 +350,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_events_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 3 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.numerator * 2 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
 	
@@ -398,7 +398,7 @@ func update_note_position(node: Node2D):
 
 func load_dividers():
 	get_tree().call_group(&"dividers", &"queue_free")
-	for i in range($Conductor.beats_per_measure):
+	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
@@ -406,7 +406,7 @@ func load_dividers():
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
 		rect.position.y -= %Grid.get_size().y / 2
-		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * $Conductor.numerator * i
 		rect.position.x -= rect.size.x / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)

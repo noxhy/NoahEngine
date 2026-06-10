@@ -29,7 +29,7 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 	"notes": [],
 	"events": [],
 	"tempos": {0.0: 60},
-	"meters": {0.0: [4, 16]},
+	"meters": {0.0: [4, 4]},
 }
 
 func get_notes_data() -> Array: return chart_data.get("notes")

@@ -335,8 +335,8 @@ func _process(delta: float) -> void:
 		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(time)
 		var meter = ChartManager.chart.get_meter_at(time)
-		$Conductor.beats_per_measure = meter[0]
-		$Conductor.steps_per_measure = meter[1]
+		$Conductor.numerator = meter[0]
+		$Conductor.denominator = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
@@ -607,12 +607,12 @@ func _draw() -> void:
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-					var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
-					length *= %Grid.grid_size.y * %Grid.zoom.y
-					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-					rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
-					Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
-					draw_rect(rect, selected_color)
+				var length: float = note.length + 1
+				length *= %Grid.grid_size.y * %Grid.zoom.y
+				length *= $Conductor.numerator
+				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
+				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
+				draw_rect(rect, selected_color)
 	
 	if hovered_note != -1 and ChartManager.chart:
 		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
@@ -704,8 +704,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Song Slider".value = 0.0
 	$Conductor.tempo = ChartManager.chart.get_tempo_at(0.0)
 	var meter = ChartManager.chart.get_meter_at(0.0)
-	$Conductor.beats_per_measure = meter[0]
-	$Conductor.steps_per_measure = meter[1]
+	$Conductor.numerator = meter[0]
+	$Conductor.denominator = meter[1]
 	$Conductor.offset = ChartManager.chart.offset
 	
 	%"Lower UI".get_node("%Difficulty Button").get_popup().clear()
@@ -764,7 +764,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_notes_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.numerator * 2 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
 	
@@ -832,7 +832,7 @@ func load_section(time: float):
 
 func load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
-	for i in range($Conductor.beats_per_measure):
+	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
@@ -840,7 +840,7 @@ func load_dividers():
 		rect.size = Vector2(%Grid.get_size().x, size)
 		rect.position = %Grid.position
 		rect.position.x -= %Grid.get_size().x / 2
-		rect.position.y += (%Grid.grid_size.y * %Grid.zoom.y) * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.y += (%Grid.grid_size.y * %Grid.zoom.y) * $Conductor.numerator * i
 		rect.position.y -= rect.size.y / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
@@ -1835,7 +1835,7 @@ func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
 	ChartManager.chart.chart_data["tempos"][time] = $Conductor.tempo
 	ChartManager.chart.chart_data["meters"][time] = [
-		$Conductor.beats_per_measure, $Conductor.steps_per_measure
+		$Conductor.numerator, $Conductor.denominator
 	]
 	
 	ChartManager.chart.chart_data["tempos"].sort()
@@ -2031,12 +2031,12 @@ func deselect_all():
 		selected_note_nodes = []
 
 
-func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
+func _on_conductor_new_numerator(_numerator: int) -> void:
 	update_grid()
 	load_dividers()
 
 
-func _on_conductor_new_steps_per_measure(_steps_per_measure: int) -> void:
+func _on_conductor_new_denominator(_denominator: int) -> void:
 	update_grid()
 	load_dividers()
 
