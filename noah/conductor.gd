@@ -19,52 +19,47 @@ var offset: float = 0
 	set(v):
 		if tempo != v:
 			emit_signal(&"new_tempo", v)
+		
 		tempo = v
-		seconds_per_beat = 60.0 / tempo
-		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
+		seconds_per_beat = get_seconds_per_beat()
+		seconds_per_step = get_seconds_per_step()
 	get():
 		return tempo
 
-## Time Singatures
-## Key:
-## 4/16 = (♬♬ ♬♬ ♬♬ ♬♬) - Default
-## 4/12 = (♪♪♪ ♪♪♪ ♪♪♪ ♪♪♪) - Triplets
-## The amount of beats in a measure
-var beats_per_measure: int = 4:
+
+@export var numerator: int = 4:
 	set(v):
 		var emit: bool = false
-		if beats_per_measure != v:
+		if numerator != v:
 			emit = true
 		
-		beats_per_measure = v
+		numerator = v
+		seconds_per_beat = get_seconds_per_beat()
+		seconds_per_step = get_seconds_per_step()
 		if emit:
 			emit_signal(&"new_beats_per_measure", v)
-	get():
-		return beats_per_measure
 
-# The amount of notes in a measure (Default: 16)
-var steps_per_measure: int = 4 * beats_per_measure:
+
+var denominator: int = 4:
 	set(v):
 		var emit: bool = false
-		if steps_per_measure != v:
+		if denominator != v:
 			emit = true
-		steps_per_measure = v
-		seconds_per_step = seconds_per_beat / (steps_per_measure / beats_per_measure)
+		denominator = v
 		
+		seconds_per_beat = get_seconds_per_beat()
+		seconds_per_step = get_seconds_per_step()
 		if emit:
 			emit_signal(&"new_steps_per_measure", v)
-	get():
-		return steps_per_measure
 
 var seconds_per_beat: float = 1.0
 var seconds_per_step: float = 0.25
 
 # Stored Statistics:
 # These variables only exist for the purpose of grabbing info
-
 var current_beat: int = -1:
 	set(v):
-		measure_relative_beat = v % beats_per_measure
+		measure_relative_beat = v % numerator
 		if current_beat != v:
 			emit_signal(&"new_beat", v, measure_relative_beat)
 		
@@ -72,7 +67,7 @@ var current_beat: int = -1:
 
 var current_step: int = -1:
 	set(v):
-		measure_relative_step = v % steps_per_measure
+		measure_relative_step = v % (numerator * denominator)
 		if current_step != v:
 			emit_signal(&"new_step", v, measure_relative_step)
 		
@@ -92,11 +87,21 @@ func _process(_delta):
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)
 
+
 func get_beat_at(_time: float) -> int:
 	return floor((_time - offset) / seconds_per_beat)
 
+
 func get_step_at(_time: float) -> int:
-	return floor((_time - offset) / (seconds_per_beat / (steps_per_measure / beats_per_measure)))
+	return floor((_time - offset) / seconds_per_step)
+
 
 func get_measure_at(_time: float) -> int:
-	return floor((_time - offset) / (seconds_per_beat * beats_per_measure))
+	return floor((_time - offset) / (seconds_per_beat * numerator))
+
+
+func get_seconds_per_beat() -> float:
+	return (60.0 / tempo) * (4.0 / denominator)
+
+func get_seconds_per_step() -> float:
+	return seconds_per_beat / numerator
