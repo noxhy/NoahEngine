@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			)
 	
 	$"Grid Layer/Parallax2D".repeat_size.x = %Grid.get_size().x
@@ -265,7 +265,7 @@ func _draw() -> void:
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			)
 		
 		## Song Start Offset Marker
@@ -282,15 +282,15 @@ func _draw() -> void:
 		
 		## Hover Box
 		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner):
-			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1)) + grid_offset, \
-			%Grid.grid_size * %Grid.zoom * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)) + grid_offset, \
+			%Grid.grid_size * %Grid.zoom * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			draw_rect(rect, hover_color)
 		
-		## Note Highlighting
+		## Event Highlighting
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-				var length: float = note.length + 1
+				var length: float = 1.0 / $Conductor.numerator
 				length *= %Grid.grid_size.x * %Grid.zoom.x
 				length *= $Conductor.numerator
 				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
@@ -453,7 +453,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	_on_event_tracks_ready()
 
 func update_grid():
-	%Grid.columns = $Conductor.steps_per_measure
+	%Grid.columns = pow($Conductor.numerator, 2)
 	%Grid.rows = 1 + ChartManager.event_tracks.size()
 	
 	$"UI/Event Tracks".position.y = -%Grid.get_size().y / 2 - 4
@@ -528,7 +528,7 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * (meter[1] / meter[0]), 0)).x
+		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * meter[0], 0)).x
 		
 		L = R
 		i += 1

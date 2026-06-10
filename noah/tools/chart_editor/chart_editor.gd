@@ -607,7 +607,7 @@ func _draw() -> void:
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-				var length: float = note.length + 1
+				var length: float = note.length + 1.0 / $Conductor.numerator
 				length *= %Grid.grid_size.y * %Grid.zoom.y
 				length *= $Conductor.numerator
 				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
