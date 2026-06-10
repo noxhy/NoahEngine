@@ -296,6 +296,8 @@ func play_audios(time: float):
 		0.0, song_speed))
 	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
+	if not song_started:
+		Signals.play_song_start.emit()
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
@@ -385,12 +387,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 			var zoom_time = Global.string_to_time(event_parameters[1])
-			var ease_string = event_parameters.get(2)
 			var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
-			if ease_string != null:
+			
+			var ease_string = event_parameters.get(2)
+			if ease_string:
 				_ease = Global.string_to_ease(ease_string)
 			
-			camera.tween_zoom(new_zoom, zoom_time * song_speed, _ease[0], _ease[1])
+			camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease[0], _ease[1])
 		
 		"bop_rate":
 			host.bop_rate = int(event_parameters[0])
