@@ -358,7 +358,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(
-		mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)).floor())
+		mouse_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap)).floor())
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
@@ -582,7 +582,7 @@ func _draw() -> void:
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position).floor())
 		var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap))
 			)
 		
 		# Song Start Offset Marker
@@ -599,8 +599,8 @@ func _draw() -> void:
 		
 		# Hover Box
 		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
-			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)) + grid_offset, \
-			%Grid.grid_size * %Grid.zoom * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap)) + grid_offset, \
+			%Grid.grid_size * %Grid.zoom * Vector2(1, pow($Conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
@@ -646,7 +646,7 @@ func on_files_dropped(files: PackedStringArray):
 
 func update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
-	%Grid.rows = $Conductor.steps_per_measure
+	%Grid.rows = pow($Conductor.numerator, 2)
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
 	%"Strum Labels".size.x = 0
 	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (
@@ -716,8 +716,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Upper UI".get_node("%Metadata Window").update_stats()
 	
 	load_chart(ChartManager.chart)
-	chart_snap = $Conductor.steps_per_measure
-	current_snap = SNAPS.bsearch($Conductor.steps_per_measure)
+	chart_snap = pow($Conductor.numerator, 2)
+	current_snap = SNAPS.bsearch(pow($Conductor.numerator, 2))
 	#load_waveforms()
 	can_chart = true
 
@@ -920,7 +920,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.note_type = type
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
+	note_instance.scroll_speed = meter[0]
 	note_instance.direction = directions[lane % 4]
 	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[lane % 4])
 	update_note_position(note_instance)
@@ -1190,7 +1190,7 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
+		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * meter[0])).y
 		
 		L = R
 		i += 1
