@@ -546,10 +546,12 @@ func _process(delta: float) -> void:
 			var pos_1: Vector2 = %Grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
 			var pos_2: Vector2 = %Grid.get_grid_position(rect.end - grid_offset) - Vector2(1, 0.5)
 			
-			var time_a: float = grid_position_to_time(pos_1, true)
-			var time_b: float = grid_position_to_time(pos_2, true)
+			var time_a: float = grid_position_to_time(pos_1, true) + $Conductor.offset
+			var time_b: float = grid_position_to_time(pos_2, true) + $Conductor.offset
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
+			
+			print(time_a, " - ", time_b)
 			
 			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
