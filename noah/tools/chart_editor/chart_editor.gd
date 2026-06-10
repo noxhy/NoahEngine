@@ -257,6 +257,7 @@ func _ready() -> void:
 	%"Upper UI".get_node("%History Window").connect(&"close_requested", self._on_history_window_close_requested)
 	
 	%"Upper UI".get_node("%Metadata Window").connect(&"add_time_change", self._on_metadata_window_add_time_change)
+	%"Upper UI".get_node("%Metadata Window").connect(&"remove_time_change", self._on_metadata_window_remove_time_change)
 	%"Upper UI".get_node("%Metadata Window").connect(&"selected_time_change", self._on_metadata_window_selected_time_change)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_icon_texture", self._on_metadata_window_updated_icon_texture)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_scroll_speed", self._on_metadata_window_updated_scroll_speed)
@@ -1805,6 +1806,7 @@ func _on_metadata_window_close_requested() -> void:
 
 func _on_metadata_window_updated_icon_texture(path: String) -> void:
 	ChartManager.song.icons = load(path)
+	auto_save()
 
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
@@ -1841,6 +1843,9 @@ func _on_metadata_window_add_time_change() -> void:
 	ChartManager.chart.chart_data["tempos"].sort()
 	ChartManager.chart.chart_data["meters"].sort()
 	%"Upper UI".get_node("%Metadata Window").update_stats()
+	auto_save()
+
+func _on_metadata_window_remove_time_change() -> void:
 	auto_save()
 
 func update_note(note):

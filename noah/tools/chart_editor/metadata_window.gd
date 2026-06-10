@@ -8,6 +8,7 @@ signal updated_song_scene(path: String)
 signal updated_scroll_speed(speed: float)
 signal selected_time_change(time: float)
 signal add_time_change
+signal remove_time_change
 
 var scroll_speed: float
 var has_updated_scroll_speed: bool = false
@@ -113,6 +114,8 @@ func _on_remove_time_change_pressed() -> void:
 	%"Time Changes".remove_item(current_time_change)
 	%"Time Changes".select(current_time_change - 1)
 	_on_time_changes_item_selected(current_time_change - 1)
+	
+	emit_signal(&"remove_time_change")
 
 func _on_tempo_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
