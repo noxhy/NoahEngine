@@ -133,7 +133,7 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		&"play_animation":
 			var duration: float = -1
-			if !event_parameters[2].is_empty():
+			if event_parameters.get(2):
 				duration = Global.string_to_time(event_parameters[2])
 			
 			get_tree().call_group(event_parameters[0], &"play_animation",
