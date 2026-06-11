@@ -417,7 +417,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				for lane in strum.strums.size() - 1:
 					var tween = create_tween()
 					tween.tween_method(
-						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed, tween_time * song_speed
+						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed, tween_time / song_speed
 						)
 		
 		"camera_shake":
