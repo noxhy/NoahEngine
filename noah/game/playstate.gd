@@ -374,8 +374,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			camera.go_to_marker(marker)
 		
 		"camera_bop":
-			var camera_bop = float(event_parameters[0])
-			var ui_bop = float(event_parameters[1])
+			var camera_bop: float = 0.015
+			if not event_parameters[0].is_empty():
+				camera_bop = float(event_parameters[0])
+				
+			var ui_bop: float = 0.03
+			if not event_parameters[1].is_empty():
+				camera_bop = float(event_parameters[1])
 			
 			camera.bump(camera_bop)
 			ui.scale += Vector2.ONE * ui_bop

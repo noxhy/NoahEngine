@@ -249,7 +249,12 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 func bump(strength: Variant):
 	if parent_3D:
 		strength *= -1
-	zoom += strength
+		zoom += strength
+	if parent_2D:
+		if strength is float:
+			zoom += Vector2(strength, strength)
+		else:
+			zoom += strength
 
 func go_to_marker(marker: Variant) -> void:
 	position = marker.global_position
