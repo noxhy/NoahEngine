@@ -91,7 +91,7 @@ follow_viewport_enabled = true
 [node name="UI" parent="." unique_id=497178549 instance=ExtResource("8_ci40r")]
 layer = 10
 
-[node name="CameraController" type="Node" parent="." unique_id=1309664363 node_paths=PackedStringArray("parent_2D")]
+[node name="CameraController" type="Node" parent="." unique_id=1309664363 node_paths=PackedStringArray("parent_2d")]
 script = ExtResource("9_2lxig")
-parent_2D = NodePath("../Camera")
+parent_2d = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"

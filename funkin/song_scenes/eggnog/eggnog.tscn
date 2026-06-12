@@ -100,7 +100,7 @@ gizmo_extents = 20.0
 
 [node name="UI" parent="." unique_id=637352536 instance=ExtResource("16_2vulp")]
 
-[node name="CameraController" type="Node" parent="." unique_id=691825874 node_paths=PackedStringArray("parent_2D")]
+[node name="CameraController" type="Node" parent="." unique_id=691825874 node_paths=PackedStringArray("parent_2d")]
 script = ExtResource("12_y3svp")
-parent_2D = NodePath("../Camera")
+parent_2d = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"

@@ -95,9 +95,9 @@ position = Vector2(640, 360)
 position_smoothing_enabled = true
 position_smoothing_speed = 3.0
 
-[node name="CameraController" type="Node" parent="." unique_id=135944367 node_paths=PackedStringArray("parent_2D")]
+[node name="CameraController" type="Node" parent="." unique_id=135944367 node_paths=PackedStringArray("parent_2d")]
 script = ExtResource("16_v2n7e")
-parent_2D = NodePath("../Camera")
+parent_2d = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
 
 [node name="Stage" parent="." unique_id=1380889064 instance=ExtResource("7_th3hl")]

@@ -4,10 +4,10 @@ class_name CameraController
 
 
 ## A camera2D node that this will control.
-@export var parent_2D: Camera2D
+@export var parent_2d: Camera2D
 
 ## A camera3D node that this will control.
-@export var parent_3D: Camera3D
+@export var parent_3d: Camera3D
 
 #can we change these var names some time
 @export_category('Camera Config')
@@ -25,14 +25,14 @@ var target_zoom: Vector2 = Vector2(1, 1)
 ## If [code]true[/code], the camera's view smoothly moves towards its target position at [member position_smoothing_speed].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var position_smoothing: bool = true : 
 	set(v):
-		if parent_2D:
-			parent_2D.position_smoothing_enabled = v
+		if parent_2d:
+			parent_2d.position_smoothing_enabled = v
 		position_smoothing = v
 ## Speed in pixels per second of the camera's smoothing effect when [member position_smoothing_enabled] is true.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:px/s') var position_smoothing_speed: float = 3.0 : 
 	set(v):
-		if parent_2D:
-			parent_2D.position_smoothing_speed = v
+		if parent_2d:
+			parent_2d.position_smoothing_speed = v
 		position_smoothing_speed = v
 
 
@@ -40,14 +40,14 @@ var target_zoom: Vector2 = Vector2(1, 1)
 ## If [code]true[/code], the camera's view smoothly rotates, via asymptotic smoothing, to align with its target rotation at [member rotation_smoothing_speed].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var rotation_smoothing: bool = true : 
 	set(v):
-		if parent_2D:
-			parent_2D.rotation_smoothing_enabled = v
+		if parent_2d:
+			parent_2d.rotation_smoothing_enabled = v
 		rotation_smoothing = v
 ## The angular, asymptotic speed of the camera's rotation smoothing effect when [member rotation_smoothing_enabled] is true.
 @export var rotation_smoothing_speed: float = 5.0 : 
 	set(v):
-		if parent_2D:
-			parent_2D.rotation_smoothing_speed = v
+		if parent_2d:
+			parent_2d.rotation_smoothing_speed = v
 		rotation_smoothing_speed = v
 
 @export_group("Shake Settings")
@@ -78,141 +78,141 @@ var position: Variant : set = set_position, get = get_position
 var zoom: Variant : set = set_zoom, get = get_zoom
 
 func _ready() -> void:
-	if not parent_2D and not parent_3D:
+	if not parent_2d and not parent_3d:
 		printerr('(Camera Controller): No parent was assigned.')
 	
-	if parent_2D:
-		default_offset = parent_2D.offset
-		parent_2D.position_smoothing_enabled = position_smoothing
-		parent_2D.position_smoothing_speed = position_smoothing_speed
-		parent_2D.rotation_smoothing_enabled = rotation_smoothing
-		parent_2D.rotation_smoothing_speed = rotation_smoothing_speed
+	if parent_2d:
+		default_offset = parent_2d.offset
+		parent_2d.position_smoothing_enabled = position_smoothing
+		parent_2d.position_smoothing_speed = position_smoothing_speed
+		parent_2d.rotation_smoothing_enabled = rotation_smoothing
+		parent_2d.rotation_smoothing_speed = rotation_smoothing_speed
 		
-		target_zoom = parent_2D.zoom
-	elif parent_3D:
-		default_offset = Vector2(parent_3D.h_offset, parent_3D.v_offset)
-		_position_3d = parent_3D.position
-		target_zoom = Vector2(parent_3D.fov, parent_3D.fov)
+		target_zoom = parent_2d.zoom
+	elif parent_3d:
+		default_offset = Vector2(parent_3d.h_offset, parent_3d.v_offset)
+		_position_3d = parent_3d.position
+		target_zoom = Vector2(parent_3d.fov, parent_3d.fov)
 
 func get_direct() -> Variant:
-	if parent_2D: 
-		return parent_2D
-	elif parent_3D:
-		return parent_3D
+	if parent_2d: 
+		return parent_2d
+	elif parent_3d:
+		return parent_3d
 	return null
 
 func set_zoom(value: Variant):
 	if value == null: return
 	
-	if parent_2D:
+	if parent_2d:
 		if value is Vector2:
-			parent_2D.zoom = value
+			parent_2d.zoom = value
 		elif value is float:
-			parent_2D.zoom = Vector2(value, value)
-	elif parent_3D:
+			parent_2d.zoom = Vector2(value, value)
+	elif parent_3d:
 		if value is Vector2:
-			parent_3D.fov = value.x
+			parent_3d.fov = value.x
 		if value is float:
-			parent_3D.fov = value
+			parent_3d.fov = value
 
 func get_zoom() -> Variant:
-	if parent_2D: return parent_2D.zoom
-	elif parent_3D: return parent_3D.fov
+	if parent_2d: return parent_2d.zoom
+	elif parent_3d: return parent_3d.fov
 	return Vector2.ZERO
 
 func set_position(value: Variant) -> void:
 	if value == null: return
 	
-	if parent_2D:
+	if parent_2d:
 		if value is Vector3:
 			value = Vector2(value.x, value.y)
-		parent_2D.position = value
+		parent_2d.position = value
 	
-	elif parent_3D:
+	elif parent_3d:
 		if value is Vector2:
 			if position_smoothing:
 				_position_3d.x = value.x
 				_position_3d.y = value.y
 				return
 			
-			parent_3D.position.x = value.x
-			parent_3D.position.y = value.y
+			parent_3d.position.x = value.x
+			parent_3d.position.y = value.y
 		if value is Vector3:
 			if position_smoothing:
 				_position_3d = value
 				return
-			parent_3D.position = value
+			parent_3d.position = value
 
 func get_position() -> Variant:
-	if parent_2D: return parent_2D.position
-	elif parent_3D: return parent_3D.position
+	if parent_2d: return parent_2d.position
+	elif parent_3d: return parent_3d.position
 	return Vector2.ZERO
 
 func set_rotation(value: Variant) -> void:
 	if value == null: return
 	
-	if parent_2D:
+	if parent_2d:
 		if value is Vector3:
 			value = Vector2(value.x, value.y)
-		parent_2D.rotation = value
+		parent_2d.rotation = value
 	
-	elif parent_3D:
+	elif parent_3d:
 		if value is Vector2:
 			if position_smoothing:
 				_rotation_3d.x = value.x
 				_rotation_3d.y = value.y
 				return
 			
-			parent_3D.rotation.x = value.x
-			parent_3D.rotation.y = value.y
+			parent_3d.rotation.x = value.x
+			parent_3d.rotation.y = value.y
 		if value is Vector3:
 			if rotation_smoothing:
 				_rotation_3d = value
 				return
-			parent_3D.rotation = value
+			parent_3d.rotation = value
 
 func get_rotation() -> Variant:
-	if parent_2D: return parent_2D.rotation
-	elif parent_3D: return parent_3D.rotation
+	if parent_2d: return parent_2d.rotation
+	elif parent_3d: return parent_3d.rotation
 	return Vector2.ZERO
 
 func _process(delta):
-	if parent_2D: update_2d(delta)
-	if parent_3D: update_3d(delta)
+	if parent_2d: update_2d(delta)
+	if parent_3d: update_3d(delta)
 
 func update_2d(delta: float):
 	if zoom_smoothing:
-		parent_2D.zoom = Global.frame_independent_lerp(parent_2D.zoom, target_zoom, zoom_smoothing_speed, delta)
+		parent_2d.zoom = Global.frame_independent_lerp(parent_2d.zoom, target_zoom, zoom_smoothing_speed, delta)
 	
 	if shaking:
 		
 		shake_strength = lerpf(shake_strength, 0.0, shake_decay_rate * delta)
 		
 		var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
-		parent_2D.offset = shake_offset
+		parent_2d.offset = shake_offset
 		
 		shake_time -= delta
 		if shake_time <= 0: end_shake()
 
 func update_3d(delta: float):
 	if zoom_smoothing:
-		parent_3D.fov = Global.frame_independent_lerp(parent_3D.fov, target_zoom.x, zoom_smoothing_speed, delta)
+		parent_3d.fov = Global.frame_independent_lerp(parent_3d.fov, target_zoom.x, zoom_smoothing_speed, delta)
 	
 	if position_smoothing:
-		parent_3D.position = lerp_position(parent_3D.position, _position_3d, delta)
+		parent_3d.position = lerp_position(parent_3d.position, _position_3d, delta)
 	
 	if rotation_smoothing:
 		var rot_rate = delta * rotation_smoothing_speed
-		parent_3D.rotation.x = lerp_angle(parent_3D.rotation.x, _rotation_3d.x, rot_rate)
-		parent_3D.rotation.y = lerp_angle(parent_3D.rotation.y, _rotation_3d.y, rot_rate)
-		parent_3D.rotation.z = lerp_angle(parent_3D.rotation.z, _rotation_3d.z, rot_rate)
+		parent_3d.rotation.x = lerp_angle(parent_3d.rotation.x, _rotation_3d.x, rot_rate)
+		parent_3d.rotation.y = lerp_angle(parent_3d.rotation.y, _rotation_3d.y, rot_rate)
+		parent_3d.rotation.z = lerp_angle(parent_3d.rotation.z, _rotation_3d.z, rot_rate)
 	
 	if shaking:
 		shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
 		
 		var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
-		parent_3D.h_offset = shake_offset.x
-		parent_3D.v_offset = shake_offset.y
+		parent_3d.h_offset = shake_offset.x
+		parent_3d.v_offset = shake_offset.y
 		
 		shake_time -= delta
 		if shake_time <= 0: end_shake()
@@ -226,12 +226,15 @@ func shake(amount: int, time: float):
 func end_shake():
 	shaking = false
 	
+	if not parent_2d and not parent_3d:
+		return
+	
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_IN_OUT)
 	
-	if parent_2D:
+	if parent_2d:
 		tween.tween_property(self, "offset", default_offset, 0.1)
-	elif parent_3D:
+	elif parent_3d:
 		tween.set_parallel()
 		tween.tween_property(self, "h_offset", default_offset.x, 0.1)
 		tween.tween_property(self, "v_offset", default_offset.y, 0.1)
@@ -247,10 +250,10 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 	)
 
 func bump(strength: Variant):
-	if parent_3D:
+	if parent_3d:
 		strength *= -1
 		zoom += strength
-	if parent_2D:
+	if parent_2d:
 		if strength is float:
 			zoom += Vector2(strength, strength)
 		else:
