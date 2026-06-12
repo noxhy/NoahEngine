@@ -76,7 +76,7 @@ update_rate = 0.04
 [node name="UI" parent="." unique_id=18156420 instance=ExtResource("12_a2iw0")]
 layer = 10
 
-[node name="CameraController" type="Node" parent="." unique_id=336274463 node_paths=PackedStringArray("parent_2D")]
+[node name="CameraController" type="Node" parent="." unique_id=336274463 node_paths=PackedStringArray("parent_2d")]
 script = ExtResource("11_1yy12")
-parent_2D = NodePath("../Camera")
+parent_2d = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"

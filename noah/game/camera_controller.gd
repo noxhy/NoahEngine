@@ -101,7 +101,7 @@ func get_direct() -> Variant:
 		return parent_3d
 	return null
 
-func set_zoom(value: Variant):
+func set_zoom(value: Variant) -> void:
 	if value == null: return
 	
 	if parent_2d:
@@ -176,25 +176,19 @@ func get_rotation() -> Variant:
 	elif parent_3d: return parent_3d.rotation
 	return Vector2.ZERO
 
-func _process(delta):
-	if parent_2d: update_2d(delta)
-	if parent_3d: update_3d(delta)
+func _process(delta) -> void:
+	if parent_2d: 
+		update_2d(delta)
+	if parent_3d: 
+		update_3d(delta)
+	if shaking:
+		update_shake(delta)
 
-func update_2d(delta: float):
+func update_2d(delta: float) -> void:
 	if zoom_smoothing:
 		parent_2d.zoom = Global.frame_independent_lerp(parent_2d.zoom, target_zoom, zoom_smoothing_speed, delta)
-	
-	if shaking:
-		
-		shake_strength = lerpf(shake_strength, 0.0, shake_decay_rate * delta)
-		
-		var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
-		parent_2d.offset = shake_offset
-		
-		shake_time -= delta
-		if shake_time <= 0: end_shake()
 
-func update_3d(delta: float):
+func update_3d(delta: float) -> void:
 	if zoom_smoothing:
 		parent_3d.fov = Global.frame_independent_lerp(parent_3d.fov, target_zoom.x, zoom_smoothing_speed, delta)
 	
@@ -206,24 +200,28 @@ func update_3d(delta: float):
 		parent_3d.rotation.x = lerp_angle(parent_3d.rotation.x, _rotation_3d.x, rot_rate)
 		parent_3d.rotation.y = lerp_angle(parent_3d.rotation.y, _rotation_3d.y, rot_rate)
 		parent_3d.rotation.z = lerp_angle(parent_3d.rotation.z, _rotation_3d.z, rot_rate)
+
+func update_shake(delta: float) -> void:
+	shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
 	
-	if shaking:
-		shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
-		
-		var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
+	var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
+	if parent_2d:
+		parent_2d.offset = shake_offset
+	elif parent_3d:
 		parent_3d.h_offset = shake_offset.x
 		parent_3d.v_offset = shake_offset.y
-		
-		shake_time -= delta
-		if shake_time <= 0: end_shake()
+	
+	shake_time -= delta
+	if shake_time <= 0: end_shake()
+	
 
-func shake(amount: int, time: float):
+func shake(amount: int, time: float) -> void:
 	shake_time = time
 	shake_decay_rate = time
 	shake_strength = amount
 	shaking = true
 
-func end_shake():
+func end_shake() -> void:
 	shaking = false
 	
 	if not parent_2d and not parent_3d:
@@ -249,7 +247,7 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 		noise.get_noise_2d(100, noise_i) * strength
 	)
 
-func bump(strength: Variant):
+func bump(strength: Variant) -> void:
 	if parent_3d:
 		strength *= -1
 		zoom += strength
@@ -274,6 +272,6 @@ func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tw
 	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, speed)
 	_zoom_tween.tween_property(self, 'zoom', new_zoom, speed)
 
-func lerp_position(cur: Variant, intended: Variant, delta: float):
+func lerp_position(cur: Variant, intended: Variant, delta: float) -> Variant:
 	var c = position_smoothing_speed * delta
 	return ((intended - cur) * c) + cur

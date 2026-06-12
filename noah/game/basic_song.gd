@@ -53,7 +53,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if current_step % bop_rate == 0:
-		if playstate_host.camera.parent_3D:
+		if playstate_host.camera.parent_3d:
 			var bump: float = playstate_host.camera_bop_strength.x  * playstate_host.camera.zoom
 			playstate_host.camera.bump(bump)
 		else:
