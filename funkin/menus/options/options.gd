@@ -145,7 +145,7 @@ func _process(delta: float) -> void:
 				SoundManager.music.stop()
 				Global.change_scene_to(GameManager.song_scene)
 			else:
-				Global.change_scene_to("uid://rc52vcn2m7ob")
+				Global.change_scene_to(Constants.MAIN_MENU_SCENE)
 		
 		if Input.is_action_just_pressed(&"menu_up"):
 			update(selected - 1)
