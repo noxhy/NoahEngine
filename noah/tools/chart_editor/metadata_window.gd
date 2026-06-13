@@ -2,12 +2,14 @@ extends Window
 
 signal updated_song_name(text: String)
 signal updated_song_artist(text: String)
+signal updated_song_charter(text: String)
 signal updated_icon_texture(path: String)
 signal updated_starting_tempo(tempo: float)
 signal updated_song_scene(path: String)
 signal updated_scroll_speed(speed: float)
 signal selected_time_change(time: float)
 signal add_time_change
+signal remove_time_change
 
 var scroll_speed: float
 var has_updated_scroll_speed: bool = false
@@ -97,7 +99,7 @@ func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	%Numerator.value = meter[0]
-	%Denominator.value = meter[1] / meter[0]
+	%Denominator.value = meter[0]
 	if emit:
 		emit_signal(&"selected_time_change", time)
 
@@ -113,6 +115,8 @@ func _on_remove_time_change_pressed() -> void:
 	%"Time Changes".remove_item(current_time_change)
 	%"Time Changes".select(current_time_change - 1)
 	_on_time_changes_item_selected(current_time_change - 1)
+	
+	emit_signal(&"remove_time_change")
 
 func _on_tempo_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
@@ -127,18 +131,22 @@ func format_time_change(index: int) -> String:
 	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
 	var time: float = tempo_data.keys()[index]
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
-	return str(Global.format_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1] / meter[0])
+	return str(Global.format_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1])
 
 func _on_numerator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.chart_data["meters"][time] = [int(value), int(%Denominator.value) * int(value)]
+	ChartManager.chart.chart_data["meters"][time] = [int(value), int(%Denominator.value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func _on_denominator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(%Numerator.value) * int(value)]
+	ChartManager.chart.chart_data["meters"][time] = [int(%Numerator.value), int(value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+
+func _on_song_charter_text_changed(new_text: String) -> void:
+	updated_song_charter.emit(new_text)

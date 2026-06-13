@@ -212,8 +212,8 @@ func _process(delta):
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
 	var meter: Array = chart.get_meter_at(GameManager.song_position)
-	GameManager.conductor.beats_per_measure = meter[0]
-	GameManager.conductor.steps_per_measure = meter[1]
+	GameManager.conductor.numerator = meter[0]
+	GameManager.conductor.denominator = meter[1]
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster

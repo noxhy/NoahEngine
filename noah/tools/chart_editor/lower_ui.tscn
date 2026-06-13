@@ -151,10 +151,10 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-min_value = 4.0
+min_value = 1.0
 max_value = 192.0
-step = 4.0
 value = 16.0
+rounded = true
 update_on_text_changed = true
 prefix = "1 /"
 
