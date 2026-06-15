@@ -65,6 +65,7 @@ offset_bottom = 152.0
 label_settings = SubResource("LabelSettings_xphcd")
 autowrap_mode = 3
 
-[node name="CameraController" type="Node" parent="." unique_id=890983513]
+[node name="CameraController" type="Node" parent="." unique_id=890983513 node_paths=PackedStringArray("parent_2D")]
 script = ExtResource("9_gdhuo")
+parent_2D = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
