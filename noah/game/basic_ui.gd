@@ -41,4 +41,5 @@ func update_enemy(enemy: Character):
 	pass
 
 func downscroll_ui():
-	pass
+	for strum_line in strums:
+		strum_line.position.y *= -1

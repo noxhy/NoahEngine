@@ -3,8 +3,6 @@ extends BasicSong
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
-	playstate_host.ui.player_icon.visible = false
-	playstate_host.ui.enemy_icon.visible = false
 	
 	Signals.connect("play_setup_finished", self._on_setup_finished)
 
