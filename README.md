@@ -1,4 +1,4 @@
-# Before Submitting an issue, be sure that it's not a Godot 4 issue.
+# Before submitting an issue, be sure it's not a Godot 4 issue.
 
 # NoahEngine
 Friday Night Funkin' Engine made in Godot 4.
