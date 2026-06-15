@@ -68,6 +68,7 @@ func _ready():
 	
 	%"Song Name".text = GameManager.current_song.title
 	display_credits()
+	current_credit += 1
 	%"Other Info".text = str(GameManager.deaths, " Deaths")
 	
 	var mode_display: String = ""
