@@ -257,10 +257,12 @@ func _ready() -> void:
 	%"Upper UI".get_node("%History Window").connect(&"close_requested", self._on_history_window_close_requested)
 	
 	%"Upper UI".get_node("%Metadata Window").connect(&"add_time_change", self._on_metadata_window_add_time_change)
+	%"Upper UI".get_node("%Metadata Window").connect(&"remove_time_change", self._on_metadata_window_remove_time_change)
 	%"Upper UI".get_node("%Metadata Window").connect(&"selected_time_change", self._on_metadata_window_selected_time_change)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_icon_texture", self._on_metadata_window_updated_icon_texture)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_scroll_speed", self._on_metadata_window_updated_scroll_speed)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_artist", self._on_metadata_window_updated_song_artist)
+	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_charter", self._on_metadata_window_updated_song_charter)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_name", self._on_metadata_window_updated_song_name)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_scene", self._on_metadata_window_updated_song_scene)
 	%"Upper UI".get_node("%Metadata Window").connect(&"updated_starting_tempo", self._on_metadata_window_updated_starting_tempo)
@@ -335,8 +337,8 @@ func _process(delta: float) -> void:
 		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(time)
 		var meter = ChartManager.chart.get_meter_at(time)
-		$Conductor.beats_per_measure = meter[0]
-		$Conductor.steps_per_measure = meter[1]
+		$Conductor.numerator = meter[0]
+		$Conductor.denominator = meter[1]
 		$Camera2D.position.y = 360 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
@@ -358,7 +360,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(%Grid.get_grid_position(
-		mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)).floor())
+		mouse_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap)).floor())
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
@@ -545,10 +547,12 @@ func _process(delta: float) -> void:
 			var pos_1: Vector2 = %Grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
 			var pos_2: Vector2 = %Grid.get_grid_position(rect.end - grid_offset) - Vector2(1, 0.5)
 			
-			var time_a: float = grid_position_to_time(pos_1, true)
-			var time_b: float = grid_position_to_time(pos_2, true)
+			var time_a: float = grid_position_to_time(pos_1, true) + $Conductor.offset
+			var time_b: float = grid_position_to_time(pos_2, true) + $Conductor.offset
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
+			
+			print(time_a, " - ", time_b)
 			
 			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
 			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
@@ -582,7 +586,7 @@ func _draw() -> void:
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position).floor())
 		var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap))
 			)
 		
 		# Song Start Offset Marker
@@ -599,20 +603,20 @@ func _draw() -> void:
 		
 		# Hover Box
 		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
-			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, $Conductor.steps_per_measure / chart_snap)) + grid_offset, \
-			%Grid.grid_size * %Grid.zoom * Vector2(1, $Conductor.steps_per_measure / chart_snap))
+			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow($Conductor.numerator, 2) / chart_snap)) + grid_offset, \
+			%Grid.grid_size * %Grid.zoom * Vector2(1, pow($Conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-					var length: float = note.length + ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
-					length *= %Grid.grid_size.y * %Grid.zoom.y
-					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-					rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
-					Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
-					draw_rect(rect, selected_color)
+				var length: float = note.length + 1.0 / $Conductor.numerator
+				length *= %Grid.grid_size.y * %Grid.zoom.y
+				length *= $Conductor.numerator
+				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
+				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
+				draw_rect(rect, selected_color)
 	
 	if hovered_note != -1 and ChartManager.chart:
 		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
@@ -646,7 +650,7 @@ func on_files_dropped(files: PackedStringArray):
 
 func update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
-	%Grid.rows = $Conductor.steps_per_measure
+	%Grid.rows = pow($Conductor.numerator, 2)
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
 	%"Strum Labels".size.x = 0
 	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (
@@ -704,8 +708,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Song Slider".value = 0.0
 	$Conductor.tempo = ChartManager.chart.get_tempo_at(0.0)
 	var meter = ChartManager.chart.get_meter_at(0.0)
-	$Conductor.beats_per_measure = meter[0]
-	$Conductor.steps_per_measure = meter[1]
+	$Conductor.numerator = meter[0]
+	$Conductor.denominator = meter[1]
 	$Conductor.offset = ChartManager.chart.offset
 	
 	%"Lower UI".get_node("%Difficulty Button").get_popup().clear()
@@ -716,8 +720,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	%"Upper UI".get_node("%Metadata Window").update_stats()
 	
 	load_chart(ChartManager.chart)
-	chart_snap = $Conductor.steps_per_measure
-	current_snap = SNAPS.bsearch($Conductor.steps_per_measure)
+	chart_snap = pow($Conductor.numerator, 2)
+	current_snap = SNAPS.bsearch(pow($Conductor.numerator, 2))
 	#load_waveforms()
 	can_chart = true
 
@@ -764,7 +768,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_notes_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 2 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.numerator * 2 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
 	
@@ -832,7 +836,7 @@ func load_section(time: float):
 
 func load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
-	for i in range($Conductor.beats_per_measure):
+	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
@@ -840,7 +844,7 @@ func load_dividers():
 		rect.size = Vector2(%Grid.get_size().x, size)
 		rect.position = %Grid.position
 		rect.position.x -= %Grid.get_size().x / 2
-		rect.position.y += (%Grid.grid_size.y * %Grid.zoom.y) * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.y += (%Grid.grid_size.y * %Grid.zoom.y) * $Conductor.numerator * i
 		rect.position.y -= rect.size.y / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
@@ -920,7 +924,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.note_type = type
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	note_instance.scroll_speed = (meter[1] * 1.0 / meter[0])
+	note_instance.scroll_speed = meter[0]
 	note_instance.direction = directions[lane % 4]
 	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[lane % 4])
 	update_note_position(note_instance)
@@ -1190,7 +1194,7 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * (meter[1] / meter[0]))).y
+		y_offset += %Grid.get_real_position(Vector2(0, (R - L) / (60.0 / tempo) * meter[0])).y
 		
 		L = R
 		i += 1
@@ -1220,10 +1224,10 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var L: float = ChartManager.chart.get_tempo_time_at(time)
 	var yR: float = p.y * %Grid.grid_size.y * %Grid.zoom.y
 	if factor_in_snap:
-		yR *= meter[1] / chart_snap
+		yR *= pow(meter[0], 2) / chart_snap
 	
 	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
-	var output: float = yR / (%Grid.grid_size.y * %Grid.zoom.y * (meter[1] / meter[0])) * seconds_per_beat
+	var output: float = yR / (%Grid.grid_size.y * %Grid.zoom.y * meter[0]) * seconds_per_beat
 	
 	return output
 
@@ -1805,9 +1809,14 @@ func _on_metadata_window_close_requested() -> void:
 
 func _on_metadata_window_updated_icon_texture(path: String) -> void:
 	ChartManager.song.icons = load(path)
+	auto_save()
 
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
+	auto_save()
+
+func _on_metadata_window_updated_song_charter(text: String) -> void:
+	ChartManager.song.charter = text
 	auto_save()
 
 func _on_metadata_window_updated_song_name(text: String) -> void:
@@ -1835,12 +1844,15 @@ func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
 	ChartManager.chart.chart_data["tempos"][time] = $Conductor.tempo
 	ChartManager.chart.chart_data["meters"][time] = [
-		$Conductor.beats_per_measure, $Conductor.steps_per_measure
+		$Conductor.numerator, $Conductor.denominator
 	]
 	
 	ChartManager.chart.chart_data["tempos"].sort()
 	ChartManager.chart.chart_data["meters"].sort()
 	%"Upper UI".get_node("%Metadata Window").update_stats()
+	auto_save()
+
+func _on_metadata_window_remove_time_change() -> void:
 	auto_save()
 
 func update_note(note):
@@ -2031,12 +2043,12 @@ func deselect_all():
 		selected_note_nodes = []
 
 
-func _on_conductor_new_beats_per_measure(_beats_per_measure: int) -> void:
+func _on_conductor_new_numerator(_numerator: int) -> void:
 	update_grid()
 	load_dividers()
 
 
-func _on_conductor_new_steps_per_measure(_steps_per_measure: int) -> void:
+func _on_conductor_new_denominator(_denominator: int) -> void:
 	update_grid()
 	load_dividers()
 

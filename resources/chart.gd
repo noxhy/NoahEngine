@@ -29,7 +29,7 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 	"notes": [],
 	"events": [],
 	"tempos": {0.0: 60},
-	"meters": {0.0: [4, 16]},
+	"meters": {0.0: [4, 4]},
 }
 
 func get_notes_data() -> Array: return chart_data.get("notes")
@@ -199,7 +199,7 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 	var note_data = []
 	var event_data = []
 	var tempo_data = {}
-	var meter_data = {0.0: [4, 16]}
+	var meter_data = {0.0: [4, 4]}
 	var section_time = 0.0
 	
 	if not v1:
@@ -213,17 +213,19 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 	
 	for i in data.get("notes"):
 		# Too lazy to make sure for BPM changes so
-		var seconds_per_beat = 60.0 / current_bpm
-		var seconds_per_measure = seconds_per_beat * i.get("sectionBeats", 4)
+		var seconds_per_beat: float = 60.0 / current_bpm
+		var section_beats: int = i.get("sectionBeats", 4)
+		var seconds_per_measure: float = seconds_per_beat * section_beats
 		
 		# Checks if the tempo changes, then adds it to the tempos dictionary
 		if i.has("changeBPM"):
 			if i.changeBPM:
 				tempo_data[section_time] = i.bpm
+				meter_data[section_time] = [section_beats, 4]
 				current_bpm = i.bpm
 		
 		# Camera movement conversion
-		var camera_position = 0 if i.mustHitSection else 1
+		var camera_position: int = 0 if i.mustHitSection else 1
 		if i.get("gfSection", false):
 			camera_position = 2
 		
@@ -325,7 +327,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	var note_data = []
 	var event_data = []
 	var tempo_data = {}
-	var meter_data = {0.0: [4, 16]}
+	var meter_data = {0.0: [4, 4]}
 	
 	# Get tempo at certain time
 	var get_temp_at_struct = func(time:float,tempo_dict:Dictionary) -> float:
@@ -343,9 +345,10 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	# Adding tempo data
 	for i in meta.get('timeChanges'):
 		if i.t < 0:
-			i.t = 0.0
-		tempo_data[i.t / 1000.0] = i.bpm
-		meter_data[i.t / 1000.0] = [i.n, i.n * i.d]
+			i.t = 0
+		
+		tempo_data[i.t / 1000] = i.bpm
+		meter_data[i.t / 1000] = [i.n, i.d]
 	
 	for i in data.get('notes').get(diff):
 		var time = i.t / 1000.0
@@ -410,7 +413,7 @@ static func convert_cne(data:Dictionary, meta:Dictionary, events:Array = []) -> 
 	var note_data = []
 	var event_data = []
 	var tempo_data = {}
-	var meter_data = {0.0: [4, 16]}
+	var meter_data = {0.0: [4, 4]}
 	
 	# Get tempo at certain time
 	var get_temp_at_struct = func(time:float,tempo_dict:Dictionary) -> float:

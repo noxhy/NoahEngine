@@ -211,9 +211,9 @@ texture = ExtResource("19_2ab3f")
 metadata/_edit_lock_ = true
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
-[connection signal="new_beats_per_measure" from="Conductor" to="." method="_on_conductor_new_beats_per_measure"]
+[connection signal="new_denominator" from="Conductor" to="." method="_on_conductor_new_denominator"]
+[connection signal="new_numerator" from="Conductor" to="." method="_on_conductor_new_numerator"]
 [connection signal="new_step" from="Conductor" to="." method="_on_conductor_new_step"]
-[connection signal="new_steps_per_measure" from="Conductor" to="." method="_on_conductor_new_steps_per_measure"]
 [connection signal="new_tempo" from="Conductor" to="." method="_on_conductor_new_tempo"]
 [connection signal="finished" from="Audio/Instrumental" to="." method="_on_instrumental_finished"]
 [connection signal="value_changed" from="UI/Song Slider" to="." method="_on_song_slider_value_changed"]

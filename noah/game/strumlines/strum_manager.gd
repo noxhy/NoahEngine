@@ -71,6 +71,11 @@ func set_auto_play(toggle: bool):
 		strum.auto_play = toggle
 
 
+func set_offset(offset: float):
+	for strum in strums:
+		strum.offset = offset
+
+
 func set_can_splash(toggle: bool):
 	for strum in strums:
 		strum.can_splash = toggle

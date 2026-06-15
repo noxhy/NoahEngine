@@ -53,7 +53,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if current_step % bop_rate == 0:
-		if playstate_host.camera.parent_3D:
+		if playstate_host.camera.parent_3d:
 			var bump: float = playstate_host.camera_bop_strength.x  * playstate_host.camera.zoom
 			playstate_host.camera.bump(bump)
 		else:
@@ -87,10 +87,11 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 	if group == &"player":
 		show_combo(PlayState.get_rating(hit_time), playstate_host.combo)
 		
-		if (playstate_host.combo % 200 == 0):
-			get_tree().call_group(&"metronome", &"play_animation", &"cheer_200")
-		elif (playstate_host.combo % 50 == 0):
-			get_tree().call_group(&"metronome", &"play_animation", &"cheer")
+		if playstate_host.combo > 0:
+			if (playstate_host.combo % 200 == 0):
+				get_tree().call_group(&"metronome", &"play_animation", &"cheer_200")
+			elif (playstate_host.combo % 50 == 0):
+				get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 	
 	Signals.play_note_hit.emit(note, lane, strum_manager)
 
@@ -133,7 +134,7 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		&"play_animation":
 			var duration: float = -1
-			if !event_parameters[2].is_empty():
+			if event_parameters.get(2):
 				duration = Global.string_to_time(event_parameters[2])
 			
 			get_tree().call_group(event_parameters[0], &"play_animation",

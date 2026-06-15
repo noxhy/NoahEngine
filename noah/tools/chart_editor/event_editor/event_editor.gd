@@ -61,8 +61,8 @@ func _process(delta: float) -> void:
 		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
 		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
-		$Conductor.beats_per_measure = meter[0]
-		$Conductor.steps_per_measure = meter[1]
+		$Conductor.numerator = meter[0]
+		$Conductor.denominator = meter[1]
 		$Camera2D.position.x = 640 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			)
 	
 	$"Grid Layer/Parallax2D".repeat_size.x = %Grid.get_size().x
@@ -265,7 +265,7 @@ func _draw() -> void:
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(%Grid.get_grid_position(mouse_position))
 		var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			)
 		
 		## Song Start Offset Marker
@@ -282,20 +282,20 @@ func _draw() -> void:
 		
 		## Hover Box
 		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner):
-			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2($Conductor.steps_per_measure / chart_snap, 1)) + grid_offset, \
-			%Grid.grid_size * %Grid.zoom * Vector2($Conductor.steps_per_measure / chart_snap, 1))
+			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)) + grid_offset, \
+			%Grid.grid_size * %Grid.zoom * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			draw_rect(rect, hover_color)
 		
-		## Note Highlighting
+		## Event Highlighting
 		for i in selected_notes.size():
 			var note = selected_note_nodes[i]
 			if note:
-					var length: float = ($Conductor.beats_per_measure * 1.0 / $Conductor.steps_per_measure)
-					length *= %Grid.grid_size.x * %Grid.zoom.x
-					length *= ($Conductor.steps_per_measure * 1.0 / $Conductor.beats_per_measure)
-					rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
-					Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
-					draw_rect(rect, selected_color)
+				var length: float = 1.0 / $Conductor.numerator
+				length *= %Grid.grid_size.x * %Grid.zoom.x
+				length *= $Conductor.numerator
+				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
+				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
+				draw_rect(rect, selected_color)
 	
 	if hovered_event != -1 and ChartManager.chart:
 		var event: String = ChartManager.chart.get_events_data()[hovered_event][1]
@@ -350,7 +350,7 @@ func load_section(time: float):
 	if ChartManager.chart.get_events_data().is_empty():
 		return
 	
-	var _range: float = $Conductor.seconds_per_beat * $Conductor.beats_per_measure * 3 / %Grid.zoom.y
+	var _range: float = $Conductor.seconds_per_beat * $Conductor.numerator * 2 / %Grid.zoom.y
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
 	
@@ -398,7 +398,7 @@ func update_note_position(node: Node2D):
 
 func load_dividers():
 	get_tree().call_group(&"dividers", &"queue_free")
-	for i in range($Conductor.beats_per_measure):
+	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
 		
@@ -406,7 +406,7 @@ func load_dividers():
 		rect.size = Vector2(size, %Grid.get_size().y)
 		rect.position = %Grid.position
 		rect.position.y -= %Grid.get_size().y / 2
-		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * $Conductor.steps_per_measure / $Conductor.beats_per_measure * i
+		rect.position.x += (%Grid.grid_size.x * %Grid.zoom.x) * $Conductor.numerator * i
 		rect.position.x -= rect.size.x / 2
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
@@ -453,7 +453,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	_on_event_tracks_ready()
 
 func update_grid():
-	%Grid.columns = $Conductor.steps_per_measure
+	%Grid.columns = pow($Conductor.numerator, 2)
 	%Grid.rows = 1 + ChartManager.event_tracks.size()
 	
 	$"UI/Event Tracks".position.y = -%Grid.get_size().y / 2 - 4
@@ -528,7 +528,7 @@ func time_to_y_position(time: float) -> float:
 		meter = ChartManager.chart.get_meter_at(L)
 		
 		_offset += R - L
-		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * (meter[1] / meter[0]), 0)).x
+		y_offset += %Grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * meter[0], 0)).x
 		
 		L = R
 		i += 1

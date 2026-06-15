@@ -13,7 +13,7 @@ transparent_bg = true
 oversampling_override = 1.0
 title = "Song Metadata"
 position = Vector2i(0, 24)
-size = Vector2i(640, 229)
+size = Vector2i(640, 280)
 transparent = true
 popup_window = true
 theme = ExtResource("1_n6ac0")
@@ -38,7 +38,7 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=53172043]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Song Title:"
+text = "Title:"
 
 [node name="Song Name" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=1651112645]
 unique_name_in_owner = true
@@ -51,9 +51,22 @@ layout_mode = 2
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=1851621022]
 layout_mode = 2
 size_flags_horizontal = 0
-text = "Song Artist:"
+text = "Artist(s):"
 
 [node name="Song Artist" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=584101658]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Song Charter" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1842267230]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Charter" unique_id=743539655]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Charter(s):"
+
+[node name="Song Charter" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Charter" unique_id=1633594632]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -179,7 +192,7 @@ layout_mode = 2
 selected = 0
 allow_reselect = true
 item_count = 1
-popup/item_0/text = "00:00.00 - BPM: 60.0 in TS: 4/4"
+popup/item_0/text = "00:00.00 - BPM: 60.0 in 4/4"
 popup/item_0/id = 0
 
 [node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2" unique_id=1471525188]
@@ -215,7 +228,7 @@ unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 32.0
-value = 1.0
+value = 4.0
 rounded = true
 prefix = "N:"
 
@@ -224,7 +237,7 @@ unique_name_in_owner = true
 layout_mode = 2
 min_value = 2.0
 max_value = 16.0
-value = 2.0
+value = 4.0
 rounded = true
 prefix = "D:"
 
@@ -240,7 +253,7 @@ text = "Remove Current Time Change"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
-[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Artist/Song Artist" to="." method="_on_song_artist_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Charter/Song Charter" to="." method="_on_song_charter_text_changed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
 [connection signal="file_selected" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
 [connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]

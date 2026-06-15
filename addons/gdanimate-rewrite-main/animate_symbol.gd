@@ -3,11 +3,13 @@
 extends Node2D
 class_name AnimateSymbol
 
+signal animation_changed
 
 @export_placeholder("Name or Prefix") var symbol: String = "":
 	set(value):
 		if symbol != value:
 			frame_dirty = true
+			animation_changed.emit()
 			queue_redraw()
 
 		symbol = value

@@ -51,6 +51,7 @@ var scroll_speed: float = 1.0
 var current_note: int = -1
 # The index of the latest loaded event
 var current_event: int = -1
+var output_latency: float = AudioServer.get_output_latency()
 
 var chart: Chart
 
@@ -145,6 +146,9 @@ func _ready():
 	get_tree().call_group(&"strums", "connect", "note_holding", host.note_holding)
 	get_tree().call_group(&"strums", "connect", "note_miss", host.note_miss)
 	get_tree().call_group(&"strums", "set_skin", note_skin)
+	get_tree().call_group(&"strums", "set_offset",
+	SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset"))
+	
 	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
 		get_tree().call_group(&"strums", "set_scroll", -1)
 	
@@ -189,8 +193,7 @@ func _process(delta):
 			song_starting = false
 	else:
 		GameManager.song_position = instrumental.get_playback_position() + \
-				AudioServer.get_time_since_last_mix() - \
-				AudioServer.get_output_latency()
+				AudioServer.get_time_since_last_mix() - output_latency
 		
 		GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
 		GameManager.conductor.offset += chart.offset
@@ -209,8 +212,8 @@ func _process(delta):
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
 	var meter: Array = chart.get_meter_at(GameManager.song_position)
-	GameManager.conductor.beats_per_measure = meter[0]
-	GameManager.conductor.steps_per_measure = meter[1]
+	GameManager.conductor.numerator = meter[0]
+	GameManager.conductor.denominator = meter[1]
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
@@ -293,6 +296,8 @@ func play_audios(time: float):
 		0.0, song_speed))
 	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
+	if not song_started:
+		Signals.play_song_start.emit()
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
@@ -369,8 +374,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			camera.go_to_marker(marker)
 		
 		"camera_bop":
-			var camera_bop = float(event_parameters[0])
-			var ui_bop = float(event_parameters[1])
+			var camera_bop: float = 0.015
+			if not event_parameters[0].is_empty():
+				camera_bop = float(event_parameters[0])
+				
+			var ui_bop: float = 0.03
+			if not event_parameters[1].is_empty():
+				camera_bop = float(event_parameters[1])
 			
 			camera.bump(camera_bop)
 			ui.scale += Vector2.ONE * ui_bop
@@ -382,12 +392,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 			var zoom_time = Global.string_to_time(event_parameters[1])
-			var ease_string = event_parameters.get(2)
 			var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
-			if ease_string != null:
+			
+			var ease_string = event_parameters.get(2)
+			if ease_string:
 				_ease = Global.string_to_ease(ease_string)
 			
-			camera.tween_zoom(new_zoom, zoom_time * song_speed, _ease[0], _ease[1])
+			camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease[0], _ease[1])
 		
 		"bop_rate":
 			host.bop_rate = int(event_parameters[0])
@@ -411,7 +422,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				for lane in strum.strums.size() - 1:
 					var tween = create_tween()
 					tween.tween_method(
-						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed, tween_time * song_speed
+						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed, tween_time / song_speed
 						)
 		
 		"camera_shake":

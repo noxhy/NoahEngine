@@ -7,13 +7,11 @@ var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 var fullscreen: bool = false
 var transitioning: bool = false
 
-
-
 func _ready():
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
-	_correctWindowSize()
+	_correct_window_size()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -62,7 +60,6 @@ func _notification(what: int) -> void:
 #region Scene Changing
 func change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true): 
 	transitioning = true
-	
 	
 	if transition: 
 		Transitions.transition(transition)
@@ -329,7 +326,7 @@ func string_to_time(formatted_time: String) -> float:
 	
 	return float(formatted_time)
 
-func _correctWindowSize() -> void:
+func _correct_window_size() -> void:
 	if not OS.get_name().to_lower().contains('windows'): 
 		return
 	
