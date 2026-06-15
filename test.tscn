@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dgeoxvlevwjik"]
+
+[ext_resource type="Script" path="res://test.gd" id="1_8uh7m"]
+[ext_resource type="Resource" path="res://playable_songs/sync/Synchronization - hard.tres" id="2_6uqi0"]
+
+[node name="Node2D" type="Node2D" unique_id=1118972542]
+script = ExtResource("1_8uh7m")
+chart = ExtResource("2_6uqi0")
