@@ -332,13 +332,6 @@ func pause():
 	var pause_scene_instance = pause_preload.instantiate()
 	
 	Signals.emit_signal(&"play_paused")
-	pause_scene_instance.song_title = song_data.title
-	pause_scene_instance.credits = song_data.artist
-	if GameManager.freeplay:
-		pause_scene_instance.deaths = GameManager.deaths
-	else:
-		pause_scene_instance.deaths = GameManager.week_deaths
-	
 	host.add_child(pause_scene_instance)
 	
 	get_tree().paused = true

@@ -23,4 +23,5 @@ difficulties = Dictionary[String, Dictionary]({
 events = "res://playable_songs/lit up/charts/events.tres"
 title = "Lit Up (Bf Mix)"
 artist = "Saruky"
+charter = "fabs + Spazkid"
 icons = ExtResource("1_5hr86")
