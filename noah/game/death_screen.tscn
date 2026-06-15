@@ -181,9 +181,8 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0)
 metadata/_edit_lock_ = true
 
-[node name="CameraController" type="Node" parent="." unique_id=1913434865 node_paths=PackedStringArray("parent_2D")]
+[node name="CameraController" type="Node" parent="." unique_id=1913434865]
 script = ExtResource("7_553pn")
-parent_2D = NodePath("../Camera2D")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]
