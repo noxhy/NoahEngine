@@ -192,11 +192,15 @@ func set_description(text: String = ""):
 
 func pressed_button(id: StringName):
 	match id:
-		
 		&"offset":
 			Global.change_scene_to("uid://cw85perbwjqqy")
 			SoundManager.accept.play()
 			SoundManager.music.stop()
+		
+		&"clear_save":
+			SaveManager.instance = Save.new()
+			SaveManager.flush()
+			SoundManager.accept.play()
 		
 		_:
 			printerr("No function assigned to: ", id)

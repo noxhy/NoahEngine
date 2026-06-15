@@ -87,7 +87,7 @@ func update_week(i: int):
 	
 	var display_list:String = ''
 	for song in weeks[i].song_list:
-		if song.dont_display_until_played and !SaveManager.has_week_stats(weeks[i].week_name): display_list += ''
+		if song.dont_display_until_played and !SaveManager.has_week_stats(weeks[i]): display_list += ''
 		else: display_list += song.title + "\n"
 	
 	$"UI/Week UI/SubViewport/Song List Label".text = display_list

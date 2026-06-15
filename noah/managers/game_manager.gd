@@ -119,9 +119,9 @@ func finished_song(_score: int):
 				highscore = false
 			
 			_:
-				highscore = SaveManager.set_song_stats(current_song.title, difficulty, _score, get_grade(tallies))
+				highscore = SaveManager.set_song_stats(current_song, difficulty, _score, get_grade(tallies))
 				if !GameManager.freeplay and current_week_song == week_songs.size():
-					highscore = SaveManager.set_week_stats(current_week.week_name, difficulty, week_score, grade)
+					highscore = SaveManager.set_week_stats(current_week, difficulty, week_score, grade)
 	else:
 		highscore = false
 
