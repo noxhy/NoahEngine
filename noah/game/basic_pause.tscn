@@ -48,6 +48,18 @@ tracks/1/keys = {
 "update": 0,
 "values": [850.0, 0.0]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/Other Info:offset_right")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.36602122, 1),
+"update": 0,
+"values": [850.0, 0.0]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lkqyl"]
 _data = {
@@ -120,6 +132,7 @@ anchor_left = -0.3125
 anchor_right = 0.4875
 offset_left = 400.0
 offset_top = -280.0
+offset_right = 850.0
 offset_bottom = -240.0
 grow_horizontal = 0
 text = "SONG CREDITS"
@@ -137,6 +150,7 @@ anchor_left = -0.3125
 anchor_right = 0.4875
 offset_left = 400.0
 offset_top = -240.0
+offset_right = 850.0
 offset_bottom = -200.0
 grow_horizontal = 0
 text = "DEATHS"
