@@ -53,6 +53,8 @@ var grade: float
 var highscore: bool = false
 var score: int = 0
 
+var health: float = 50
+
 var accuracy: float = 0.0
 var deaths: int = 0
 var song_position: float

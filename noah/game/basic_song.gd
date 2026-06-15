@@ -25,14 +25,12 @@ func _ready():
 	assert(playstate_host, "Playstate host not found")
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	if player:
-		playstate_host.ui.set_player_icons(player.icons)
-		playstate_host.ui.set_player_color(player.color)
+		playstate_host.ui.update_player(player)
 		DeathScreen.player_position = player.global_position
 		DeathScreen.player_scale = Vector2(player.scale.x,player.scale.y)
 	
 	if enemy:
-		playstate_host.ui.set_enemy_icons(enemy.icons)
-		playstate_host.ui.set_enemy_color(enemy.color)
+		playstate_host.ui.update_enemy(enemy)
 	
 	await Signals.play_setup_finished
 	
@@ -47,9 +45,7 @@ func _ready():
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat: int, measure_relative: int):
-	playstate_host.ui.icon_bop(GameManager.conductor.seconds_per_beat * 0.5 *
-	(1 / playstate_host.instrumental.pitch_scale))
-
+	pass
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if current_step % bop_rate == 0:
@@ -61,7 +57,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 			playstate_host.camera.bump(bump)
 		
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
-			playstate_host.ui.scale += playstate_host.ui_bop_strength
+			playstate_host.ui.bump(playstate_host.ui_bop_strength)
 
 
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):

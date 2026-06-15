@@ -15,7 +15,7 @@ const COMPENSATION: float = 1.0 / 30.0
 ## The host song script. Usually the parent of this node.
 @export var host: Node
 ## The UI node that requires a list: [code]strums[/code].
-@export var ui: CanvasLayer
+@export var ui: BasicUI
 ## Camera with built-in functions.
 @export var camera: CameraController
 
@@ -157,7 +157,7 @@ func _ready():
 
 func _process(delta):
 	health = clamp(health, 0.0, 100.0)
-	ui.target_health = health
+	GameManager.health = health
 	GameManager.score = int(score)
 	
 	if health <= 0:
@@ -383,7 +383,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				camera_bop = float(event_parameters[1])
 			
 			camera.bump(camera_bop)
-			ui.scale += Vector2.ONE * ui_bop
+			ui.bump(Vector2.ONE * ui_bop)
 		
 		"psych_camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
@@ -410,7 +410,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"lerping":
 			
 			var lerping = event_parameters[0] == "true"
-			ui.lerping = lerping
+			ui.zoom_smoothing = lerping
 			camera.zoom_smoothing = lerping
 		
 		"scroll_speed":
