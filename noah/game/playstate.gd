@@ -93,9 +93,6 @@ func _ready():
 	
 	GameManager.reset_conductor()
 	
-	Signals.play_conductor_beat_hit.connect(new_beat)
-	Signals.play_conductor_step_hit.connect(new_step)
-	
 	strums = ui.strums
 	pause_scene = ui_skin.pause_scene
 	
@@ -444,13 +441,6 @@ func song_finished():
 			Global.change_scene_to(next_scene)
 		else:
 			Global.change_scene_to(GameManager.current_week.song_list[GameManager.current_week_song].scene, "down")
-
-# Conductor Util
-func new_beat(current_beat, measure_relative):
-	pass
-
-func new_step(current_step, measure_relative):
-	pass
 
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):

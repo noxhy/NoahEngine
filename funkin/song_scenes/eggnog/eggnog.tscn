@@ -10,7 +10,7 @@
 [ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://funkin/assets/shaders/adjust_hsv.gdshader" id="13_vkil6"]
 [ext_resource type="PackedScene" uid="uid://civkgglbefejt" path="res://funkin/assets/characters/parents/mom_dad_christmas.tscn" id="14_5qnon"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/assets/characters/girlfriend/girlfriend.tscn" id="15_pd6oi"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="16_2vulp"]
+[ext_resource type="PackedScene" uid="uid://cwgvima0s0hbm" path="res://funkin/funkin_ui.tscn" id="16_2vulp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_8k6f7"]
 shader = ExtResource("13_vkil6")

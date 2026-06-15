@@ -3,8 +3,6 @@ extends BasicSong
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	super()
-	playstate_host.ui.set_player_color(Color.GREEN)
-	playstate_host.ui.set_enemy_color(Color.RED)
 	playstate_host.ui.player_icon.visible = false
 	playstate_host.ui.enemy_icon.visible = false
 	

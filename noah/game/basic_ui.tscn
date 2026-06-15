@@ -4,53 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="2_58g8k"]
 [ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="4_jqq0h"]
 [ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="5_2fmdm"]
-[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://funkin/assets/game/icon-face.png" id="6_6rn83"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qk3vi"]
-atlas = ExtResource("6_6rn83")
-region = Rect2(0, 0, 150, 150)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_61m8t"]
-atlas = ExtResource("6_6rn83")
-region = Rect2(150, 0, 150, 150)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_3m780"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qk3vi")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_61m8t")
-}],
-"loop": true,
-"name": &"losing",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_utqgv"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qk3vi")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_61m8t")
-}],
-"loop": true,
-"name": &"losing",
-"speed": 5.0
-}]
 
 [sub_resource type="FontVariation" id="FontVariation_u0077"]
 base_font = ExtResource("4_jqq0h")
@@ -100,27 +53,8 @@ value = 50.0
 fill_mode = 1
 texture_under = ExtResource("5_2fmdm")
 texture_progress = ExtResource("5_2fmdm")
-tint_under = Color(0.168627, 0.121569, 0.2, 1)
-tint_progress = Color(0.168627, 0.121569, 0.2, 1)
-metadata/_edit_lock_ = true
-
-[node name="Icon Manager" type="Node2D" parent="Health Bar" unique_id=1193764486]
-position = Vector2(300, 10)
-metadata/_edit_lock_ = true
-
-[node name="Player" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1355437051]
-position = Vector2(-8, -75)
-scale = Vector2(0.8, 0.8)
-sprite_frames = SubResource("SpriteFrames_3m780")
-offset = Vector2(75, 75)
-flip_h = true
-metadata/_edit_lock_ = true
-
-[node name="Enemy" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1286006923]
-position = Vector2(8, -75)
-scale = Vector2(0.8, 0.8)
-sprite_frames = SubResource("SpriteFrames_utqgv")
-offset = Vector2(-75, 75)
+tint_under = Color(1, 0, 0, 1)
+tint_progress = Color(0, 1, 0, 1)
 metadata/_edit_lock_ = true
 
 [node name="Performance" type="Label" parent="Health Bar" unique_id=644853046]
