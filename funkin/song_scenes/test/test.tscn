@@ -20,7 +20,6 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("3_t3ytx")
 ui_skin = ExtResource("4_sqoco")
-combo_scale_multiplier = Vector2(0.8, 0.8)
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1969881465]
 position = Vector2(640, 432)
@@ -75,11 +74,13 @@ gizmo_extents = 26.5
 [node name="Rating Marker" type="Marker2D" parent="." unique_id=735466184]
 unique_name_in_owner = true
 position = Vector2(876, 348)
+scale = Vector2(0.7, 0.7)
 gizmo_extents = 20.0
 
 [node name="Combo Marker" type="Marker2D" parent="." unique_id=1280946567]
 unique_name_in_owner = true
 position = Vector2(953, 380)
+scale = Vector2(0.7, 0.7)
 gizmo_extents = 20.0
 
 [node name="Characters" type="CanvasLayer" parent="." unique_id=64038069]

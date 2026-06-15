@@ -172,12 +172,12 @@ func show_combo(rating: String, _combo: int):
 	else:
 		if rating_marker:
 			rating_instance.position = rating_marker.global_position
-			rating_instance.scale *= playstate_host.combo_scale_multiplier
+			rating_instance.scale = rating_marker.scale
 			rating_instance.z_index = 1000
 		
 		if combo_marker:
 			combo_numbers_manager_instance.position = combo_marker.global_position
-			combo_numbers_manager_instance.scale *= playstate_host.combo_scale_multiplier
+			combo_numbers_manager_instance.scale = combo_marker.scale
 			combo_numbers_manager_instance.z_index = 1000
 		
 		self.add_child(rating_instance)

@@ -23,10 +23,6 @@ const COMPENSATION: float = 1.0 / 30.0
 @export var note_skin: NoteSkin
 @export var ui_skin: UISkin
 
-@export_group("Values")
-## Scales the Rating and Combo sprites.
-@export_custom(PROPERTY_HINT_LINK, "x") var combo_scale_multiplier: Vector2 = Vector2(1, 1)
-
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
 @export_file('*.tscn') var death_scene: String = "uid://bd083xcqslcsd"
@@ -118,7 +114,6 @@ func _ready():
 	
 	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 	
-	ui.set_credits(song_data.title, song_data.artist)
 	match GameManager.play_mode:
 		GameManager.PLAY_MODE.CHARTING:
 			if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):

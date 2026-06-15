@@ -30,5 +30,6 @@ func update_player(player: Character):
 
 func update_enemy(enemy: Character):
 	pass
+
 func downscroll_ui():
 	pass
