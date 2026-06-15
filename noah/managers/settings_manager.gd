@@ -46,7 +46,8 @@ static var _defaults: Dictionary = {
 		"note_splashes": true,
 		"ui_bops": true, ## The UI w"ill bop when called, this affetcs the main menus too
 		"hit_sounds": false,
-		"fullscreen": false ##i dont like this here but where else
+		"fullscreen": false, ##i dont like this here but where else,
+		"underlay_opacity": 0.0 ## Adds a black ColorRect on the UI node with the given opacity.
 	},
 	
 	SEC_AUDIO: {

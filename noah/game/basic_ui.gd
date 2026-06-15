@@ -17,6 +17,15 @@ var strums:Array[StrumManager] = []
 func _ready() -> void:
 	for node in get_tree().get_nodes_in_group(&"strums"):
 		strums.append(node)
+	
+	var underlay: ColorRect = ColorRect.new()
+	underlay.color = Color(0, 0, 0,
+	SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "underlay_opacity"))
+	underlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	underlay.position -= self.offset
+	underlay.z_index = -1000
+	
+	add_child(underlay)
 
 func _process(delta: float) -> void:
 	if zoom_smoothing:
