@@ -34,6 +34,9 @@ const EVENT_DATA: Dictionary = {
 		"parameters": ["Amount", "Duration"],
 		"texture": "uid://da6pn1kq8iao0"
 	},
+	"set_prefix": {
+		"parameters": ["Group Name", "Prefix"]
+	}
 }
 
 var song: Song
