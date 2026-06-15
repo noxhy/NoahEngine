@@ -7,8 +7,8 @@
 [ext_resource type="Resource" uid="uid://ct8grfybb6caa" path="res://playable_songs/darnell/Darnell (Bf Mix).res" id="5_nld3m"]
 [ext_resource type="Resource" uid="uid://r1vewm4pti0w" path="res://playable_songs/lit up/Lit Up (Bf Mix).tres" id="6_de8bw"]
 [ext_resource type="Resource" uid="uid://ia6rqsb2mp1v" path="res://playable_songs/senpai/Senpai.res" id="7_dndsk"]
-[ext_resource type="Resource" uid="uid://mliwyg2lilrr" path="res://playable_songs/eggnog/Eggnog Erect.res" id="9_k2n3v"]
-[ext_resource type="Resource" uid="uid://b83fy7iw728a0" path="res://playable_songs/test/Test.res" id="10_nld3m"]
+[ext_resource type="Resource" uid="uid://deu5m7t3jkte7" path="res://playable_songs/eggnog/Eggnog Erect.res" id="9_k2n3v"]
+[ext_resource type="Resource" uid="uid://baylcq07xloae" path="res://playable_songs/test/Test.res" id="10_nld3m"]
 
 [resource]
 script = ExtResource("2_de8bw")
