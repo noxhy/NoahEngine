@@ -19,18 +19,6 @@ func _process(_delta):
 	progress_bar.value = progress[0] * 100.0
 	
 	if scene_load_status == ResourceLoader.THREAD_LOAD_LOADED:
-		
 		get_tree().change_scene_to_packed(ResourceLoader.load_threaded_get(scene))
 		Global.transitioning = false
 		Transitions.resume()
-
-
-func _input(event):
-	# Funny Bop
-	if event.is_pressed():
-		var tween = create_tween()
-		var time = 0.2
-		
-		tween.set_trans(Tween.TRANS_CUBIC)
-		tween.tween_property($Background/LoadingScreen, "scale", Vector2(1.05, 1.05), time * 0.0625).set_ease(Tween.EASE_IN_OUT)
-		tween.tween_property($Background/LoadingScreen, "scale", Vector2(1.0, 1.0), time).set_delay(time * 0.0625).set_ease(Tween.EASE_OUT)
