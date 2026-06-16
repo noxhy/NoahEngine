@@ -1,88 +1,45 @@
 extends CanvasLayer
+class_name BasicUI
 
-@onready var strums = [$"Player Strum", $"Enemy Strum"]
-@onready var player_icon = $"Health Bar/Icon Manager/Player"
-@onready var enemy_icon = $"Health Bar/Icon Manager/Enemy"
+@export_custom(PROPERTY_HINT_LINK, 'x') var target_zoom:Vector2 = Vector2.ONE
 
-@onready var rating_marker = $"Rating Marker"
-@onready var combo_marker = $"Combo Marker"
+@export_group("Zoom Smoothing")
+## If [code]true[/code], the camera's zoom smoothly zoom towards its target position at [member zoom_smoothing_speed].
+@export_custom(PROPERTY_HINT_GROUP_ENABLE, '') var zoom_smoothing: bool = true
+## The asymptotic speed of the camera's zoom smoothing effect when [member zoom_smoothing] is true.
+@export_custom(PROPERTY_HINT_RANGE, '1, 64, suffix:weight') var zoom_smoothing_speed: float = 5
 
-@export_custom(PROPERTY_HINT_LINK, 'x') var target_scale:Vector2 = Vector2(1, 1)
-@export_range(1, 25) var lerp_weight: float = 5.0
-@export var lerping = true
+@onready var rating_marker: Node = $"Rating Marker"
+@onready var combo_marker: Node = $"Combo Marker"
 
-@export var target_health = 50.0
+var strums:Array[StrumManager] = []
 
-@onready var health_bar:TextureProgressBar = $"Health Bar"
-@onready var performance_text:Label = $"Health Bar/Performance"
+func _ready() -> void:
+	for node in get_tree().get_nodes_in_group(&"strums"):
+		strums.append(node)
+	
+	var underlay: ColorRect = ColorRect.new()
+	underlay.color = Color(0, 0, 0,
+	SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "underlay_opacity"))
+	underlay.set_anchors_preset(Control.PRESET_FULL_RECT)
+	underlay.position -= self.offset
+	underlay.z_index = -1000
+	
+	add_child(underlay)
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
+func _process(delta: float) -> void:
+	if zoom_smoothing:
+		scale = Global.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
+
+func bump(strength: Vector2):
+	scale += strength
+
+func update_player(player: Character):
 	pass
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	update_performance_text()
-	update_health_bar(Global.frame_independent_lerp(health_bar.value, target_health, 25, delta))
-
-
-func _physics_process(delta):
-	scale = Global.frame_independent_lerp(scale,target_scale, lerp_weight, delta)
-
-# Util
-func set_player_icons(icons: SpriteFrames): player_icon.frames = icons
-func set_enemy_icons(icons: SpriteFrames): enemy_icon.frames = icons
-
-func set_player_color(color: Color): health_bar.tint_progress = color
-func set_enemy_color(color: Color): health_bar.tint_under = color
-
-
-# Visual Util
-func icon_bop(time: float):
-	Global.bop_tween(player_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
-	Global.bop_tween(enemy_icon, "scale", Vector2(0.8, 0.8), Vector2(0.9, 0.9), time, Tween.TRANS_QUAD)
-
-
-func update_performance_text():
-	var perf_str: String = 'Botplay'
-	
-	if not SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
-		perf_str = "Score: " + Global.format_number(GameManager.score) \
-		+ " • " + "Misses: " + str(GameManager.tallies.get("miss", 0))
-	
-	performance_text.text = perf_str
-
-
-func update_health_bar(health: float):
-	health_bar.value = health
-	
-	var display_x: float = (health_bar.value / health_bar.max_value) * health_bar.size.x
-	display_x = health_bar.size.x - display_x
-	
-	$"Health Bar/Icon Manager".position = Vector2(display_x, 10)
-	
-	var conditions = [
-		[health >= 80, "winning", "losing"],
-		[health <= 20, "losing", "winning"],
-		[true, "default", "default"],
-	]
-	
-	for condition in conditions:
-		if condition[0]:
-			if player_icon.sprite_frames.get_animation_names().has(condition[1]):
-				player_icon.play(condition[1])
-			
-			if enemy_icon.sprite_frames.get_animation_names().has(condition[2]):
-				enemy_icon.play(condition[2])
-			break
-
+func update_enemy(enemy: Character):
+	pass
 
 func downscroll_ui():
-	$"Player Strum".position.y *= -1
-	$"Enemy Strum".position.y *= -1
-	health_bar.position.y *= -1
-
-
-func set_credits(song_name: String, artist_names: String):
-	pass
+	for strum_line in strums:
+		strum_line.position.y *= -1

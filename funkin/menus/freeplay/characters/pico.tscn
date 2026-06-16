@@ -3,12 +3,12 @@
 [ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://funkin/menus/freeplay/atlas_sprite.gd" id="1_0g3vl"]
 [ext_resource type="Texture2D" uid="uid://hixm41vvywvp" path="res://funkin/assets/images/menus/freeplay/characters/pico/middleLoop.png" id="2_0g3vl"]
 [ext_resource type="Texture2D" uid="uid://c3sgt5pj1cv85" path="res://funkin/assets/images/menus/freeplay/characters/pico/lowerLoop.png" id="2_h85ek"]
-[ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="3_f3030"]
 [ext_resource type="SpriteFrames" uid="uid://de052qdphy3h1" path="res://funkin/assets/images/menus/freeplay/characters/pico/topLoop.res" id="4_f3030"]
-[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="6_b5agd"]
+[ext_resource type="Script" uid="uid://3t6ei05ucncj" path="res://noah/noahAnimate.gd" id="6_b5agd"]
+[ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="6_tl432"]
 [ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="7_6c8ho"]
 
-[sub_resource type="Resource" id="Resource_8lrrs"]
+[sub_resource type="Resource" id="Resource_ocrp5"]
 script = ExtResource("7_6c8ho")
 folder_path = "res://funkin/assets/images/menus/freeplay/characters/pico/"
 format = "adobe"
@@ -116,7 +116,8 @@ frame_progress = 1.0
 [node name="AnimateSymbol" type="Node2D" parent="." unique_id=1727482253]
 z_index = 1
 position = Vector2(448, -312)
-script = ExtResource("3_f3030")
+script = ExtResource("6_b5agd")
 symbol = "Pico DJ"
-atlases = Array[ExtResource("6_b5agd")]([SubResource("Resource_8lrrs")])
+frame = 13
+atlases = Array[ExtResource("6_tl432")]([SubResource("Resource_ocrp5")])
 metadata/_edit_lock_ = true

@@ -2,13 +2,10 @@ extends Node2D
 
 @onready var music = $Audio/Music
 
-@export var song_title: String = ""
-@export var credits: String = ""
-@export var deaths: int = 0
 ## Nested dictionary where each key has keys: [code]name[/code] and [code]icon[/code].[br]
 ## [br][code]name[/code] - The display name of the option.
 ## [br][code]icon[/code] - The texture that will display next to the display name.
-@export var pages: Dictionary = {
+var pages: Dictionary = {
 	"default": {
 		"resume": {
 			"name": "Resume"
@@ -60,6 +57,7 @@ var options: Dictionary = {}
 
 var option_nodes = []
 var selected: int = 0
+var current_credit: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -68,9 +66,10 @@ func _ready():
 	tween.tween_property(music, "volume_linear", 1, 4)
 	$AnimationPlayer.play("intro")
 	
-	%"Song Name".text = song_title
-	%"Other Info".text = "Artist: " + credits
-	%"Other Info".text += "\n" + str(deaths) + " Blue Balls"
+	%"Song Name".text = GameManager.current_song.title
+	display_credits()
+	current_credit += 1
+	%"Other Info".text = str(GameManager.deaths, " Deaths")
 	
 	var mode_display: String = ""
 	match GameManager.play_mode:
@@ -200,3 +199,23 @@ func change_difficulty(difficulty: String):
 	GameManager.deaths = 0
 	get_tree().paused = false
 	get_tree().reload_current_scene()
+
+
+func _on_timer_timeout() -> void:
+	var time: float = 0.5
+	
+	var tween = create_tween()
+	tween.tween_property(%Credits, "modulate", Color.TRANSPARENT, time)
+	tween.tween_property(%Credits, "modulate", Color.WHITE, 1).set_delay(time)
+	
+	await get_tree().create_timer(time).timeout
+	
+	display_credits()
+	current_credit += 1
+
+
+func display_credits():
+	if current_credit % 2 == 0:
+		%Credits.text = str("Artist: ", GameManager.current_song.artist)
+	else:
+		%Credits.text = str("Charter: ", GameManager.current_song.charter)

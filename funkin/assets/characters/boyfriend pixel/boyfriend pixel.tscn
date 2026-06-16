@@ -28,5 +28,6 @@ use_parent_material = true
 position = Vector2(0, -28)
 sprite_frames = ExtResource("2_rn51i")
 animation = &"BF IDLE instance 1"
+frame_progress = 0.517304
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

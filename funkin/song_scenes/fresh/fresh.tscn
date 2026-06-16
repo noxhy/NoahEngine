@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dg6rnkjn5f5gm" path="res://funkin/assets/characters/boyfriend/boyfriend.tscn" id="9_dqjx1"]
 [ext_resource type="PackedScene" uid="uid://dwn3bvltjsem4" path="res://funkin/assets/characters/daddy dearest/daddy_dearest.tscn" id="10_f8uei"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/assets/characters/girlfriend/girlfriend.tscn" id="11_pruvp"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="12_b2bjn"]
+[ext_resource type="PackedScene" uid="uid://cwgvima0s0hbm" path="res://funkin/funkin_ui.tscn" id="12_b2bjn"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="12_c6rlm"]
 [ext_resource type="Shader" uid="uid://bgwusoh6kicj3" path="res://funkin/assets/shaders/adjust_hsv.gdshader" id="14_orev5"]
 

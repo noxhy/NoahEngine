@@ -87,4 +87,4 @@ use_parent_material = true
 position = Vector2(-16, -160)
 sprite_frames = ExtResource("3_cqa6h")
 animation = &"BF idle dance"
-frame_progress = 0.89344805
+frame_progress = 0.513456

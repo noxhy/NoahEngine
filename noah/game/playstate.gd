@@ -15,17 +15,13 @@ const COMPENSATION: float = 1.0 / 30.0
 ## The host song script. Usually the parent of this node.
 @export var host: Node
 ## The UI node that requires a list: [code]strums[/code].
-@export var ui: CanvasLayer
+@export var ui: BasicUI
 ## Camera with built-in functions.
 @export var camera: CameraController
 
 @export_group("Resources")
 @export var note_skin: NoteSkin
 @export var ui_skin: UISkin
-
-@export_group("Values")
-## Scales the Rating and Combo sprites.
-@export_custom(PROPERTY_HINT_LINK, "x") var combo_scale_multiplier: Vector2 = Vector2(1, 1)
 
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
@@ -97,9 +93,6 @@ func _ready():
 	
 	GameManager.reset_conductor()
 	
-	Signals.play_conductor_beat_hit.connect(new_beat)
-	Signals.play_conductor_step_hit.connect(new_step)
-	
 	strums = ui.strums
 	pause_scene = ui_skin.pause_scene
 	
@@ -118,7 +111,6 @@ func _ready():
 	
 	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 	
-	ui.set_credits(song_data.title, song_data.artist)
 	match GameManager.play_mode:
 		GameManager.PLAY_MODE.CHARTING:
 			if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):
@@ -157,8 +149,8 @@ func _ready():
 
 func _process(delta):
 	health = clamp(health, 0.0, 100.0)
-	ui.target_health = health
-	GameManager.score = floor(score)
+	GameManager.health = health
+	GameManager.score = int(score)
 	
 	if health <= 0:
 		GameManager.deaths += 1
@@ -340,13 +332,6 @@ func pause():
 	var pause_scene_instance = pause_preload.instantiate()
 	
 	Signals.emit_signal(&"play_paused")
-	pause_scene_instance.song_title = song_data.title
-	pause_scene_instance.credits = song_data.artist
-	if GameManager.freeplay:
-		pause_scene_instance.deaths = GameManager.deaths
-	else:
-		pause_scene_instance.deaths = GameManager.week_deaths
-	
 	host.add_child(pause_scene_instance)
 	
 	get_tree().paused = true
@@ -383,7 +368,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				camera_bop = float(event_parameters[1])
 			
 			camera.bump(camera_bop)
-			ui.scale += Vector2.ONE * ui_bop
+			ui.bump(Vector2.ONE * ui_bop)
 		
 		"psych_camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
@@ -410,7 +395,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"lerping":
 			
 			var lerping = event_parameters[0] == "true"
-			ui.lerping = lerping
+			ui.zoom_smoothing = lerping
 			camera.zoom_smoothing = lerping
 		
 		"scroll_speed":
@@ -449,13 +434,6 @@ func song_finished():
 			Global.change_scene_to(next_scene)
 		else:
 			Global.change_scene_to(GameManager.current_week.song_list[GameManager.current_week_song].scene, "down")
-
-# Conductor Util
-func new_beat(current_beat, measure_relative):
-	pass
-
-func new_step(current_step, measure_relative):
-	pass
 
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):

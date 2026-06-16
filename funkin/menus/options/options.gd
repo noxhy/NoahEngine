@@ -68,7 +68,15 @@ var pages: Dictionary = {
 			[&"option", {"id": "glow_notes", "description": "Makes the notes brighter when active."}],
 			[&"option", {"id": "note_splashes", "description": "Makes the notes brighter when active."}],
 			[&"option", {"id": "ui_bops", "description": "Makes the UI layer bop in menus and gameplay."}],
-			[&"option", {"id": "hit_sounds", "description": "Plays a sound upon hitting a note."}]
+			[&"option", {"id": "hit_sounds", "description": "Plays a sound upon hitting a note."}],
+			[&"option", {"id": "underlay_opacity",
+			"description": "Adds a black underlay to the UI with the given opacity.",
+			"min": 0,
+			"max": 100,
+			"snap": 10,
+			"unit": "%",
+			"scale": 0.01
+			}]
 		]
 	},
 	SettingsManager.SEC_AUDIO: {

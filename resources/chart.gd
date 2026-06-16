@@ -322,6 +322,10 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	if diff.is_empty():
 		diff = 'normal'
 	
+	if not data.get('notes').has(diff):
+		diff = meta.get('playData').get('difficulties')[0]
+	
+	
 	var chart = Chart.new()
 	
 	var note_data = []
@@ -330,7 +334,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	var meter_data = {0.0: [4, 4]}
 	
 	# Get tempo at certain time
-	var get_temp_at_struct = func(time:float,tempo_dict:Dictionary) -> float:
+	var get_temp_at_struct = func(time:float, tempo_dict:Dictionary) -> float:
 		var output: float = -1
 		for point in tempo_dict:
 			if time >= point:
@@ -339,6 +343,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 				continue
 		
 		return output
+	
 	
 	chart.scroll_speed = data.scrollSpeed[diff]
 	

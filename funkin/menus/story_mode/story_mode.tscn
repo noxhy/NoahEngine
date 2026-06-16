@@ -17,7 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://funkin/menus/freeplay/freeplay_arrow.tscn" id="9_gdyqo"]
 [ext_resource type="Resource" uid="uid://diniy0qu228rp" path="res://funkin/assets/weeks/week6.tres" id="9_juwvh"]
 [ext_resource type="PackedScene" uid="uid://bpv5demojrg67" path="res://funkin/assets/characters/girlfriend/girlfriend.tscn" id="9_qcirc"]
-[ext_resource type="PackedScene" path="res://funkin/difficulty_display.tscn" id="10_fvhjj"]
+[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://funkin/difficulty_display.tscn" id="10_fvhjj"]
 [ext_resource type="Resource" uid="uid://cri5rrqbbi5cv" path="res://funkin/assets/weeks/week7.tres" id="10_l4fpr"]
 [ext_resource type="PackedScene" uid="uid://dwn3bvltjsem4" path="res://funkin/assets/characters/daddy dearest/daddy_dearest.tscn" id="10_p6gkq"]
 [ext_resource type="PackedScene" uid="uid://dddh323rffgon" path="res://funkin/assets/characters/spooky kids/spooky_kids.tscn" id="11_2m25c"]

@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://k3e5qpeoyea4" path="res://funkin/assets/characters/darnell/darnell.tscn" id="10_1osac"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="11_1yy12"]
 [ext_resource type="PackedScene" uid="uid://biw6xh624onjh" path="res://funkin/assets/characters/nene/nene.tscn" id="11_6d88t"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="12_a2iw0"]
+[ext_resource type="PackedScene" uid="uid://cwgvima0s0hbm" path="res://funkin/funkin_ui.tscn" id="12_a2iw0"]
 
 [node name="Darnell" type="Node2D" unique_id=1675426916]
 script = ExtResource("1_mmofa")

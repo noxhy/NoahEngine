@@ -22,7 +22,5 @@ texture_filter = 1
 position = Vector2(0, -64)
 sprite_frames = ExtResource("3_1ui7q")
 animation = &"df_idle"
-frame = 9
-frame_progress = 1.0
 
 [connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]

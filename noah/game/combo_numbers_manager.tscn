@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cx1htpn1vv8cj" path="res://noah/game/combo_numbers_manager'.gd" id="1_1qshc"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="2_6o34s"]
 
-[node name="Combo Numbers Handeler" type="Node2D" unique_id=356175894]
+[node name="Combo Numbers Handeler" type="Node2D" unique_id=356175894 groups=["ratings"]]
 script = ExtResource("1_1qshc")
 ui_skin = ExtResource("2_6o34s")
 

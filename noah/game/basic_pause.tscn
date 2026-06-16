@@ -11,53 +11,54 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UI/Song Name:position")
+tracks/0/path = NodePath("UI/Song Name:offset_right")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1280, -344)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("UI/Other Info:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1280, -288)]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_2eyce"]
 resource_name = "intro"
+step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("UI/Song Name:position")
-tracks/0/interp = 1
+tracks/0/path = NodePath("UI/Song Name:offset_right")
+tracks/0/interp = 2
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.241484, 1),
+"transitions": PackedFloat32Array(0.36602122, 1),
 "update": 0,
-"values": [Vector2(1280, -344), Vector2(-128, -344)]
+"values": [850.0, 0.0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("UI/Other Info:position")
-tracks/1/interp = 1
+tracks/1/path = NodePath("UI/Credits:offset_right")
+tracks/1/interp = 2
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(0.241484, 1),
+"transitions": PackedFloat32Array(0.36602122, 1),
 "update": 0,
-"values": [Vector2(1280, -280), Vector2(64, -280)]
+"values": [850.0, 0.0]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("UI/Other Info:offset_right")
+tracks/2/interp = 2
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.36602122, 1),
+"update": 0,
+"values": [850.0, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_lkqyl"]
@@ -113,24 +114,46 @@ anchor_left = 0.487
 anchor_top = -0.478
 anchor_right = 0.487
 anchor_bottom = -0.478
-offset_left = 656.64
+offset_left = -623.36
 offset_top = 0.16000366
-offset_right = 1408.64
-offset_bottom = 696.16003
+offset_bottom = 60.160004
 grow_horizontal = 0
 pivot_offset = Vector2(376, 30)
 text = "SONG NAME"
 label_settings = SubResource("LabelSettings_0uk4b")
 horizontal_alignment = 2
 
-[node name="Other Info" type="Label" parent="UI" unique_id=783180668]
+[node name="Credits" type="Label" parent="UI" unique_id=783180668]
 unique_name_in_owner = true
 z_index = 1
-offset_left = 1280.0
-offset_top = -288.0
-offset_right = 1840.0
-offset_bottom = -248.0
+layout_direction = 2
+anchors_preset = -1
+anchor_left = -0.3125
+anchor_right = 0.4875
+offset_left = 400.0
+offset_top = -280.0
+offset_right = 850.0
+offset_bottom = -240.0
+grow_horizontal = 0
 text = "SONG CREDITS"
+label_settings = SubResource("LabelSettings_k3dth")
+horizontal_alignment = 2
+vertical_alignment = 1
+uppercase = true
+
+[node name="Other Info" type="Label" parent="UI" unique_id=157683897]
+unique_name_in_owner = true
+z_index = 1
+layout_direction = 2
+anchors_preset = -1
+anchor_left = -0.3125
+anchor_right = 0.4875
+offset_left = 400.0
+offset_top = -240.0
+offset_right = 850.0
+offset_bottom = -200.0
+grow_horizontal = 0
+text = "DEATHS"
 label_settings = SubResource("LabelSettings_k3dth")
 horizontal_alignment = 2
 vertical_alignment = 1
@@ -142,3 +165,9 @@ offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
 offset_bottom = 360.0
+
+[node name="Timer" type="Timer" parent="." unique_id=647206337]
+wait_time = 8.0
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
