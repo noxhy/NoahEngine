@@ -4,15 +4,11 @@
 [ext_resource type="Script" uid="uid://dg85pn3cqf6yj" path="res://funkin/menus/options/options_menu.gd" id="2_f8jhe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2gin"]
-content_margin_left = 4.0
-content_margin_top = 4.0
-content_margin_right = 4.0
-content_margin_bottom = 4.0
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
 bg_color = Color(0.08984375, 0.08984375, 0.08984375, 0.6784314)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-corner_radius_bottom_right = 8
-corner_radius_bottom_left = 8
 
 [node name="Options Menu" type="Node2D" unique_id=1346411306]
 process_mode = 2

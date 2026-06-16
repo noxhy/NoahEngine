@@ -18,6 +18,8 @@ var current_time_change: int = -1
 func update_stats():
 	%"Song Name".text = ChartManager.song.title
 	%"Song Artist".text = ChartManager.song.artist
+	%"Song Charter".text = ChartManager.song.charter
+	
 	_on_icon_file_dailog_file_selected(ChartManager.song.icons.resource_path)
 	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
 	
