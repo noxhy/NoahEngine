@@ -1,12 +1,7 @@
 [gd_scene format=3 uid="uid://bflvolhan5xvh"]
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="1_n6ac0"]
-[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://funkin/assets/game/icon-face.png" id="2_4ci21"]
 [ext_resource type="Script" uid="uid://jbhtf0t57xw3" path="res://noah/tools/chart_editor/metadata_window.gd" id="2_bkkpl"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4ci21"]
-atlas = ExtResource("2_4ci21")
-region = Rect2(0, 0, 150, 150)
 
 [node name="Metadata Window" type="Window" unique_id=1340846673]
 transparent_bg = true
@@ -82,7 +77,6 @@ text = "Icon Texture:"
 [node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/Icons" unique_id=74823753]
 unique_name_in_owner = true
 layout_mode = 2
-texture = SubResource("AtlasTexture_4ci21")
 expand_mode = 3
 
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Icons" unique_id=1852332401]

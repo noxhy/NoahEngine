@@ -30,6 +30,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if zoom_smoothing:
 		scale = Global.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
+	
+	$"Health Bar".value = GameManager.health
 
 func bump(strength: Vector2):
 	scale += strength

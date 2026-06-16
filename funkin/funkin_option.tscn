@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://55odtbd2v2ql"]
 
-[ext_resource type="Script" uid="uid://cqm4c08o6008r" path="res://funkin/menu_option.gd" id="1_tf7lj"]
+[ext_resource type="Script" uid="uid://cg16m2uehvi5r" path="res://funkin/funkin_option.gd" id="1_tf7lj"]
 [ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://noah/alphabet.gd" id="2_qtyc2"]
 [ext_resource type="SpriteFrames" uid="uid://d0226owhgqr41" path="res://funkin/assets/fonts/alphabet.res" id="3_8ad4t"]
 

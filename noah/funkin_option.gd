@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var option_name: String = "Menu Option"
+@export var text: String = "Menu Option"
 @export var icon: Texture
 
 @onready var label = $Alphabet
@@ -8,10 +8,8 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	label.text = option_name
+	label.text = text
 	if icon != null:
 		sprite.texture = icon
-		
 		await Engine.get_main_loop().process_frame
-		
-		sprite.position.x = label.get_string_size(option_name).x + sprite.texture.get_width() * 0.5 + 15
+		sprite.position.x = label.get_string_size(text).x + sprite.texture.get_width() * 0.5 + 15

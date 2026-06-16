@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://dp453vkw4s2xg"]
+
+[ext_resource type="Script" uid="uid://dp8il1ghxf3be" path="res://noah/basic_option.gd" id="1_n5r72"]
+
+[node name="Menu Option" type="Node2D" unique_id=2001507303]
+script = ExtResource("1_n5r72")
+
+[node name="Label" type="Label" parent="." unique_id=1127103559]
+offset_top = -64.0
+offset_right = 448.0
+offset_bottom = 64.0
+text = "Menu Option"
+vertical_alignment = 1

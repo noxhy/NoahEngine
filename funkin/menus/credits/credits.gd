@@ -43,7 +43,7 @@ func _ready():
 	for i in options:
 		var menu_option_instance = MENU_OPTION_NODE.instantiate()
 		
-		menu_option_instance.option_name = i.to_upper()
+		menu_option_instance.text = i.to_upper()
 		menu_option_instance.position = Vector2(-1000, object_amount * 175)
 		menu_option_instance.modulate = Color(1, 1, 1, 1)
 		
@@ -56,7 +56,7 @@ func _ready():
 		for j in options.get(i):
 			menu_option_instance = MENU_OPTION_NODE.instantiate()
 			
-			menu_option_instance.option_name = j[0]
+			menu_option_instance.text = j[0]
 			if j[1] != null: menu_option_instance.icon = j[1]
 			menu_option_instance.position = Vector2(-1000, object_amount * 175)
 			menu_option_instance.modulate = Color(0.5, 0.5, 0.5, 0.5)
@@ -120,19 +120,19 @@ func update(i: int):
 		
 		index += 1
 	
-	if option_stats.has(option_nodes[i].option_name):
-		var stats = option_stats.get(option_nodes[i].option_name)
+	if option_stats.has(option_nodes[i].text):
+		var stats = option_stats.get(option_nodes[i].text)
 		$Desc/ColorRect/Label.text = stats[0]
 	else:
-		$Desc/ColorRect/Label.text = option_nodes[i].option_name
+		$Desc/ColorRect/Label.text = option_nodes[i].text
 	
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
 # Called when an option was selected
 func select(i: int):
-	if option_stats.has(option_nodes[i].option_name):
-		var stats = option_stats.get(option_nodes[i].option_name)
+	if option_stats.has(option_nodes[i].text):
+		var stats = option_stats.get(option_nodes[i].text)
 		if stats[1] != null:
 			if stats[1] == "link":
 				OS.shell_open(stats[2])
