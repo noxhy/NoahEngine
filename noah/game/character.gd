@@ -144,7 +144,7 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	# Will not run idle animation if you can not run
 	if animation_player is AnimateSymbol:
 		if offsets.has(animation_name):
-			animation_player.offset = offsets.get(animation_name, animation_player.offset)
+			animation_player.position = offsets.get(animation_name, animation_player.offset)
 		
 		animation_player.symbol = animation_name
 		if restart:
