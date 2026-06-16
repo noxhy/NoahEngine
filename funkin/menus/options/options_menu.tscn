@@ -9,6 +9,10 @@ content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
 bg_color = Color(0.08984375, 0.08984375, 0.08984375, 0.6784314)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="Options Menu" type="Node2D" unique_id=1346411306]
 process_mode = 2
