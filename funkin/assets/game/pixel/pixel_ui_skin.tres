@@ -13,3 +13,4 @@ rating_scale = 5.0
 numbers_scale = 5.0
 numbers_spacing = 10
 countdown_animation = "pixel_countdown"
+pause_scene = "uid://l8gwfipcfkne"
