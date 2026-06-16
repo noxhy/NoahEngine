@@ -40,7 +40,7 @@ var offset: float = 0
 			emit_signal(&"new_numerator", v)
 
 
-var denominator: int = 4:
+@export var denominator: int = 4:
 	set(v):
 		var emit: bool = false
 		if denominator != v:
