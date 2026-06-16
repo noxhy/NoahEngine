@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://djhqiluiy02ao"]
 
 [ext_resource type="Script" uid="uid://w2wf71visfm7" path="res://noah/game/basic_pause.gd" id="1_kynsm"]
-[ext_resource type="Shader" uid="uid://bjlt3yq805r3t" path="res://funkin/assets/shaders/blur.gdshader" id="1_p4mtm"]
 [ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://funkin/assets/songs/pause_menu/breakfast.ogg" id="2_kxcr8"]
 [ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="4_wf52a"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="5_ml30i"]
@@ -79,12 +78,6 @@ font_size = 32
 outline_size = 16
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_q4ixn"]
-shader = ExtResource("1_p4mtm")
-shader_parameter/blur_amount = 1.2
-shader_parameter/mix_amount = 0.336
-shader_parameter/color_over = Color(0, 0, 0, 1)
-
 [node name="Pause Menu" type="Node2D" unique_id=1934046313]
 process_mode = 2
 script = ExtResource("1_kynsm")
@@ -160,11 +153,11 @@ vertical_alignment = 1
 uppercase = true
 
 [node name="ColorRect" type="ColorRect" parent="UI" unique_id=735001670]
-material = SubResource("ShaderMaterial_q4ixn")
 offset_left = -640.0
 offset_top = -360.0
 offset_right = 640.0
 offset_bottom = 360.0
+color = Color(0, 0, 0, 0.3)
 
 [node name="Timer" type="Timer" parent="." unique_id=647206337]
 wait_time = 8.0
