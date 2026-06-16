@@ -111,8 +111,7 @@ func update_difficulty(i: int, week: Week = weeks[selected_week]):
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT).set_parallel()
 	tween.tween_property(%"Difficulty Display", "scale", Vector2(1, 1), 0.2)
 	
-	var display_name = week.week_name
-	var _week_score = SaveManager.get_week_highscore(display_name, difficulties[i])
+	var _week_score = SaveManager.get_week_highscore(week, difficulties[i])
 	if _week_score == -1:
 		update_week_score(-1)
 	else:
