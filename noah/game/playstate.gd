@@ -445,7 +445,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
 			SoundManager.hit.play()
 		
-		if note.bad_hit:
+		if note.mine:
 			host.note_miss(note, lane, strum_manager)
 			return
 		
@@ -485,10 +485,10 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
-		health += abs(hold_difference) * Constants.HOLD_HEALTH_GAIN_PER_SECOND
+		health += hold_difference * Constants.HOLD_HEALTH_GAIN_PER_SECOND
 		
 		if note.scoreable:
-			score += abs(hold_difference) * Constants.HOLD_SCORE_GAIN_PER_SECOND
+			score += hold_difference * Constants.HOLD_SCORE_GAIN_PER_SECOND
 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):

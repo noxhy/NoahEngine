@@ -20,7 +20,7 @@ var damage_mult: float = 1.0
 var health_mult: float = 1.0
 var anim_prefix: String = ''
 var scoreable: bool = true
-var bad_hit: bool = false
+var mine: bool = false
 
 # Applying Note Skin
 func _ready(): 

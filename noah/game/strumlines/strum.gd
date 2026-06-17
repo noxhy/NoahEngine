@@ -97,7 +97,7 @@ func _process(delta):
 						
 						note.note.visible = false
 						
-						emit_signal(&"note_holding", note, temp - note.length, self)
+						emit_signal(&"note_holding", note, temp - max(0, note.length), self)
 						state = STATE.GLOW
 					else:
 						reset_timer = GameManager.seconds_per_step
@@ -173,7 +173,7 @@ func _process(delta):
 							note.length = ((note.time - offset) + (note.start_length * GameManager.seconds_per_beat)) - GameManager.song_position
 							note.length /= GameManager.seconds_per_beat
 							note.note.visible = false
-							emit_signal(&"note_holding", note, temp - note.length, self)
+							emit_signal(&"note_holding", note, temp - max(0, note.length), self)
 							
 							
 							if !pressing:
