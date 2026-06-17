@@ -126,7 +126,7 @@ func _on_animation_finished():
 ## Setting a [param time] will make the animation play within the given time.
 ## [br][br]See [enum AnimContext] for information of animation contexts.
 func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContext.NONE, restart: bool = true, time: float = -1.0):
-	if process_mode == Node.PROCESS_MODE_DISABLED or current_context == AnimContext.LOCKED and !animation_player:
+	if process_mode == Node.PROCESS_MODE_DISABLED or current_context == AnimContext.LOCKED or !animation_player:
 		return
 	
 	anim_id = StringName(animation_prefix + anim_id)
