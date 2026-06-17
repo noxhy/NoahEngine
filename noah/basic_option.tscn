@@ -9,5 +9,6 @@ script = ExtResource("1_n5r72")
 offset_top = -64.0
 offset_right = 448.0
 offset_bottom = 64.0
+theme_override_font_sizes/font_size = 64
 text = "Menu Option"
 vertical_alignment = 1
