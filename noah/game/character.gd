@@ -219,7 +219,7 @@ func hold_animation():
 		return
 	
 	if animation_player is AnimateSymbol:
-		if animation_player.looped:
+		if animation_player.loop:
 			return
 		
 		length = animation_player.get_animation_length()

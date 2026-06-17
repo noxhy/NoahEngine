@@ -36,6 +36,9 @@ const EVENT_DATA: Dictionary = {
 	},
 	"set_prefix": {
 		"parameters": ["Group Name", "Prefix"]
+	},
+	"comment": {
+		"parameters": ["uid://bwp1pd1s3xmka"]
 	}
 }
 
