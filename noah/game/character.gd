@@ -104,7 +104,7 @@ func _ready():
 			play_animation(dance_animations[0])
 	
 	if animation_player is AnimateSymbol:
-		animation_player.connect(&"finished", self._on_animation_finished)
+		animation_player.connect(&"animation_finished", self._on_animation_finished)
 		if Engine.is_editor_hint():
 			animation_player.connect(&"animation_changed", self.update_ghost)
 	else:
