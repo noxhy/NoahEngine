@@ -32,6 +32,7 @@ SoundManager="*res://noah/managers/sound_manager.tscn"
 SaveManager="*res://noah/managers/save_manager.gd"
 Signals="*res://noah/signals.gd"
 Constants="*uid://dctyx01j6jvbu"
+DiscordRPCLoader="*uid://c513hgnd8oyl0"
 
 [debug]
 
@@ -47,7 +48,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
+enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg", "res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
 
 [file_customization]
 
