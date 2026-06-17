@@ -18,6 +18,32 @@ func _ready() -> void:
 	for node in get_tree().get_nodes_in_group(&"strums"):
 		strums.append(node)
 	
+	apply_underlay()
+
+
+func _process(delta: float) -> void:
+	if zoom_smoothing:
+		scale = Global.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
+
+
+func bump(strength: Vector2):
+	scale += strength
+
+
+func update_player(player: Character):
+	pass
+
+
+func update_enemy(enemy: Character):
+	pass
+
+
+func downscroll_ui():
+	for strum_line in strums:
+		strum_line.position.y *= -1
+
+
+func apply_underlay():
 	var underlay: ColorRect = ColorRect.new()
 	underlay.color = Color(0, 0, 0,
 	SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "underlay_opacity"))
@@ -26,22 +52,3 @@ func _ready() -> void:
 	underlay.z_index = -1000
 	
 	add_child(underlay)
-
-func _process(delta: float) -> void:
-	if zoom_smoothing:
-		scale = Global.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
-	
-	$"Health Bar".value = GameManager.health
-
-func bump(strength: Vector2):
-	scale += strength
-
-func update_player(player: Character):
-	pass
-
-func update_enemy(enemy: Character):
-	pass
-
-func downscroll_ui():
-	for strum_line in strums:
-		strum_line.position.y *= -1

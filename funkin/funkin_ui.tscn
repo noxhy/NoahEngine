@@ -2,66 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byu172po8rot7" path="res://funkin/funkin_ui.gd" id="1_p8431"]
 [ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="2_csc1d"]
-[ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="3_wmkti"]
-[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://funkin/assets/game/icon-face.png" id="4_8krtb"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="5_4k0g7"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qk3vi"]
-atlas = ExtResource("4_8krtb")
-region = Rect2(0, 0, 150, 150)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_61m8t"]
-atlas = ExtResource("4_8krtb")
-region = Rect2(150, 0, 150, 150)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_3m780"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qk3vi")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_61m8t")
-}],
-"loop": true,
-"name": &"losing",
-"speed": 5.0
-}]
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_utqgv"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qk3vi")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_61m8t")
-}],
-"loop": true,
-"name": &"losing",
-"speed": 5.0
-}]
-
-[sub_resource type="FontVariation" id="FontVariation_u0077"]
-base_font = ExtResource("5_4k0g7")
-spacing_glyph = 2
-
-[sub_resource type="LabelSettings" id="LabelSettings_578am"]
-font = SubResource("FontVariation_u0077")
-font_size = 18
-outline_size = 11
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 0
+[ext_resource type="PackedScene" uid="uid://b35uowfrluxgt" path="res://funkin/health_bar.tscn" id="3_plkgl"]
 
 [node name="UI" type="CanvasLayer" unique_id=359206]
 offset = Vector2(640, 360)
@@ -83,64 +24,11 @@ can_press = false
 auto_play = true
 enemy_slot = true
 
-[node name="Health Bar" type="TextureProgressBar" parent="." unique_id=2016330840]
-z_index = -2
-anchors_preset = -1
-anchor_left = -0.23400001
-anchor_top = 0.40300003
-anchor_right = 0.23400001
-anchor_bottom = 0.43300003
+[node name="Health Bar" parent="." unique_id=332155055 instance=ExtResource("3_plkgl")]
 offset_left = -0.47998047
 offset_top = -0.16003418
 offset_right = 0.47998047
 offset_bottom = -1.7600098
-pivot_offset = Vector2(300, 10)
-step = 0.001
-value = 50.0
-fill_mode = 1
-texture_under = ExtResource("3_wmkti")
-texture_progress = ExtResource("3_wmkti")
-tint_under = Color(1, 0, 0, 1)
-tint_progress = Color(0, 1, 0, 1)
-metadata/_edit_lock_ = true
-
-[node name="Icon Manager" type="Node2D" parent="Health Bar" unique_id=1193764486]
-position = Vector2(300, 10)
-metadata/_edit_lock_ = true
-
-[node name="Player" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1355437051]
-position = Vector2(-8, -75)
-scale = Vector2(0.8, 0.8)
-sprite_frames = SubResource("SpriteFrames_3m780")
-offset = Vector2(75, 75)
-flip_h = true
-metadata/_edit_lock_ = true
-
-[node name="Enemy" type="AnimatedSprite2D" parent="Health Bar/Icon Manager" unique_id=1286006923]
-position = Vector2(8, -75)
-scale = Vector2(0.8, 0.8)
-sprite_frames = SubResource("SpriteFrames_utqgv")
-offset = Vector2(-75, 75)
-metadata/_edit_lock_ = true
-
-[node name="Performance" type="Label" parent="Health Bar" unique_id=644853046]
-z_index = 1
-custom_minimum_size = Vector2(512, 26)
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.07300001
-anchor_top = 1.5000001
-anchor_right = 0.92700005
-anchor_bottom = 2.8000002
-offset_left = 0.19999695
-offset_right = -0.2000122
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(280, 13)
-text = "Score: 0 • Misses: 0"
-label_settings = SubResource("LabelSettings_578am")
-horizontal_alignment = 2
-vertical_alignment = 1
 
 [node name="Rating Marker" type="Marker2D" parent="." unique_id=509594647]
 position = Vector2(-32, 182)

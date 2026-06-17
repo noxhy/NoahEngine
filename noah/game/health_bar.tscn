@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://cgawo31pletyg"]
+
+[ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="1_r0228"]
+[ext_resource type="Script" uid="uid://cbv1u8j14drje" path="res://noah/game/basic_health_bar.gd" id="2_l7ubq"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="2_mfs1y"]
+
+[sub_resource type="FontVariation" id="FontVariation_u0077"]
+base_font = ExtResource("2_mfs1y")
+spacing_glyph = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_578am"]
+font = SubResource("FontVariation_u0077")
+font_size = 18
+outline_size = 11
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
+[node name="Health Bar" type="TextureProgressBar" unique_id=830584313]
+z_index = -2
+anchors_preset = -1
+anchor_left = -0.23400001
+anchor_top = 0.40300003
+anchor_right = 0.23400001
+anchor_bottom = 0.43300003
+offset_left = 299.52002
+offset_top = -290.16003
+offset_right = 300.47998
+offset_bottom = -291.76
+pivot_offset = Vector2(300, 10)
+step = 0.001
+value = 50.0
+fill_mode = 1
+texture_under = ExtResource("1_r0228")
+texture_progress = ExtResource("1_r0228")
+tint_under = Color(1, 0, 0, 1)
+tint_progress = Color(0, 1, 0, 1)
+script = ExtResource("2_l7ubq")
+metadata/_edit_lock_ = true
+
+[node name="Performance" type="Label" parent="." unique_id=1939464848]
+z_index = 1
+custom_minimum_size = Vector2(512, 26)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.07300001
+anchor_top = 1.5000001
+anchor_right = 0.92700005
+anchor_bottom = 2.8000002
+offset_left = 0.19999695
+offset_right = -0.2000122
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(280, 13)
+text = "Score: 0 • Misses: 0"
+label_settings = SubResource("LabelSettings_578am")
+horizontal_alignment = 2
+vertical_alignment = 1
