@@ -502,6 +502,8 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 			score -= 10
 			health -= 1
 		elif note.scoreable:
+			if note.mine and !note.hit:
+				return
 			score -= 100
 			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
 			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult

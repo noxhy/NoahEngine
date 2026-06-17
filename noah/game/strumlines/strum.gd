@@ -82,6 +82,7 @@ func _process(delta):
 			if time_difference <= delta:
 				if !ignored_note_types.has(note.note_type):
 					if note != previous_note:
+						note.hit = true
 						emit_signal(&"note_hit", note, 0, self)
 						previous_note = note
 					
@@ -122,7 +123,6 @@ func _process(delta):
 			note_list.erase(note)
 			emit_signal(&"note_miss", note, self)
 			note.queue_free()
-			
 	# Inputs
 	if Input.is_action_just_pressed(input):
 		if can_press:
@@ -133,6 +133,7 @@ func _process(delta):
 						state = STATE.GLOW
 						coyote_timer = 0
 						
+						note.hit = true
 						note_list.erase(note)
 						note.queue_free()
 						pressing = false
@@ -141,6 +142,7 @@ func _process(delta):
 					else:
 						var time_difference = (note.time - offset) - (GameManager.song_position)
 						if note != previous_note:
+							note.hit = true
 							emit_signal(&"note_hit", note, time_difference, self)
 						
 						coyote_timer = 0
