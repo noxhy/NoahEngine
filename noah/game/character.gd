@@ -130,7 +130,6 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		return
 	
 	anim_id = StringName(animation_prefix + anim_id)
-	
 	var animation_name: StringName = get_animation_name(anim_id)
 	
 	if animation_name.is_empty():
