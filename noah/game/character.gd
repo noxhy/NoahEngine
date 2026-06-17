@@ -130,7 +130,6 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 		return
 	
 	anim_id = StringName(animation_prefix + anim_id)
-	current_animation = anim_id
 	
 	var animation_name: StringName = get_animation_name(anim_id)
 	
@@ -140,6 +139,9 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and !holding:
 		return
+	
+	current_animation = anim_id
+	current_context = context
 	
 	# Will not run idle animation if you can not run
 	if animation_player is AnimateSymbol:
