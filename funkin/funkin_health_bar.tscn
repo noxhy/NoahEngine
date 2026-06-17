@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="1_u175w"]
 [ext_resource type="Script" uid="uid://bkm5k63ljaial" path="res://funkin/funkin_health_bar.gd" id="2_8pxkm"]
 [ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://funkin/assets/game/icon-face.png" id="2_i06na"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="3_8pxkm"]
+[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://funkin/assets/fonts/vcr.ttf" id="4_i06na"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qk3vi"]
 atlas = ExtResource("2_i06na")
@@ -51,14 +51,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="FontVariation" id="FontVariation_u0077"]
-base_font = ExtResource("3_8pxkm")
-spacing_glyph = 2
-
 [sub_resource type="LabelSettings" id="LabelSettings_578am"]
-font = SubResource("FontVariation_u0077")
+font = ExtResource("4_i06na")
 font_size = 18
-outline_size = 11
+outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 

@@ -78,5 +78,5 @@ unique_name_in_owner = true
 position = Vector2(368, 528)
 gizmo_extents = 20.0
 
-[node name="UI" parent="." unique_id=1358688643 instance=ExtResource("12_q80n4")]
-layer = 10
+[node name="UI" parent="." unique_id=359206 instance=ExtResource("12_q80n4")]
+pixel = true

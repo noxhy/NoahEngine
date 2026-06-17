@@ -2,24 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dk2hwc3g5el21" path="res://funkin/assets/songs/pause_menu/funkin_pause.gd" id="1_x6f6k"]
 [ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://funkin/assets/songs/pause_menu/breakfast.ogg" id="2_7n3tq"]
-[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="3_2547t"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="4_kck6o"]
+[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://funkin/assets/fonts/vcr.ttf" id="3_x6f6k"]
 [ext_resource type="Shader" uid="uid://bjlt3yq805r3t" path="res://funkin/assets/shaders/blur.gdshader" id="5_3keax"]
 
 [sub_resource type="Animation" id="Animation_yvwx3"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("UI/Song Name:offset_right")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
 
 [sub_resource type="Animation" id="Animation_2eyce"]
 resource_name = "intro"
@@ -68,13 +55,13 @@ _data = {
 }
 
 [sub_resource type="LabelSettings" id="LabelSettings_0uk4b"]
-font = ExtResource("3_2547t")
+font = ExtResource("3_x6f6k")
 font_size = 48
-outline_size = 24
+outline_size = 16
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_k3dth"]
-font = ExtResource("4_kck6o")
+font = ExtResource("3_x6f6k")
 font_size = 32
 outline_size = 16
 outline_color = Color(0, 0, 0, 1)
@@ -116,12 +103,14 @@ anchor_right = 0.487
 anchor_bottom = -0.478
 offset_left = -623.36
 offset_top = 0.16000366
+offset_right = 850.0
 offset_bottom = 60.160004
 grow_horizontal = 0
 pivot_offset = Vector2(376, 30)
 text = "SONG NAME"
 label_settings = SubResource("LabelSettings_0uk4b")
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Credits" type="Label" parent="UI" unique_id=783180668]
 unique_name_in_owner = true
@@ -138,8 +127,6 @@ grow_horizontal = 0
 text = "SONG CREDITS"
 label_settings = SubResource("LabelSettings_k3dth")
 horizontal_alignment = 2
-vertical_alignment = 1
-uppercase = true
 
 [node name="Other Info" type="Label" parent="UI" unique_id=157683897]
 unique_name_in_owner = true
@@ -157,7 +144,6 @@ text = "DEATHS"
 label_settings = SubResource("LabelSettings_k3dth")
 horizontal_alignment = 2
 vertical_alignment = 1
-uppercase = true
 
 [node name="ColorRect" type="ColorRect" parent="UI" unique_id=735001670]
 material = SubResource("ShaderMaterial_q4ixn")

@@ -7,18 +7,6 @@
 
 [sub_resource type="Animation" id="Animation_yvwx3"]
 length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("UI/Song Name:offset_right")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [0.0]
-}
 
 [sub_resource type="Animation" id="Animation_2eyce"]
 resource_name = "intro"
@@ -109,12 +97,14 @@ anchor_right = 0.487
 anchor_bottom = -0.478
 offset_left = -623.36
 offset_top = 0.16000366
+offset_right = 850.0
 offset_bottom = 60.160004
 grow_horizontal = 0
 pivot_offset = Vector2(376, 30)
 text = "SONG NAME"
 label_settings = SubResource("LabelSettings_0uk4b")
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Credits" type="Label" parent="UI" unique_id=783180668]
 unique_name_in_owner = true
@@ -131,7 +121,6 @@ grow_horizontal = 0
 text = "SONG CREDITS"
 label_settings = SubResource("LabelSettings_k3dth")
 horizontal_alignment = 2
-vertical_alignment = 1
 uppercase = true
 
 [node name="Other Info" type="Label" parent="UI" unique_id=157683897]

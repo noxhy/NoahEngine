@@ -1,5 +1,8 @@
 extends BasicPause
 
+func _ready():
+	super()
+	%"Other Info".text = str(GameManager.deaths, " Blue balls")
 
 func load_page(page: String):
 	option_nodes = []

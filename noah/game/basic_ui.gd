@@ -41,6 +41,9 @@ func update_enemy(enemy: Character):
 func downscroll_ui():
 	for strum_line in strums:
 		strum_line.position.y *= -1
+	
+	$"Health Bar".position.y *= -1
+
 
 
 func apply_underlay():
