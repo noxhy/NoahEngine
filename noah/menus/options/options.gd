@@ -1,7 +1,7 @@
 extends Node2D
 class_name OptionsMenu
 
-var OPTION_SUBMENU_PRELOAD = load("uid://c7jk6j1osvapw")
+var OPTIONS_SUBMENU_PRELOAD = load("uid://c7jk6j1osvapw")
 var MENU_OPTION_PRELOAD = load("uid://dp453vkw4s2xg")
 
 var can_click = true
@@ -144,6 +144,7 @@ func _ready():
 	$Conductor.tempo = SoundManager.music.stream._get_bpm()
 	print(SoundManager.music.stream._get_bpm())
 
+
 func _process(delta: float) -> void:
 	if can_click:
 		if Input.is_action_just_pressed(&"menu_cancel"):
@@ -165,8 +166,10 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed(&"menu_accept"):
 			select(selected)
 
+
 func _exit_tree() -> void:
 	SettingsManager.load_keybinds()
+
 
 func update(i: int):
 	selected = wrapi(i, 0, pages.size())
@@ -182,14 +185,16 @@ func update(i: int):
 	nodes[selected].modulate = Color.WHITE
 	SoundManager.scroll.play()
 
+
 func select(i: int):
 	SoundManager.accept.play()
 	var page = pages.keys()[i]
-	var option_menu_instance = OPTION_SUBMENU_PRELOAD.instantiate()
+	var option_menu_instance = OPTIONS_SUBMENU_PRELOAD.instantiate()
 	add_child(option_menu_instance)
 	Global.manual_pause = true
 	get_tree().paused = true
 	option_menu_instance.load_category(page, pages.get(page).get("options", [[&"label", "This page is empty."]]))
+
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):

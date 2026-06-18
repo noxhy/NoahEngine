@@ -2,7 +2,7 @@ extends OptionsMenu
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	OPTION_SUBMENU_PRELOAD = load("uid://bp581x6mu5f1w")
+	OPTIONS_SUBMENU_PRELOAD = load("uid://bp581x6mu5f1w")
 	MENU_OPTION_PRELOAD = load("uid://55odtbd2v2ql")
 	Global.set_window_title("Options Menu")
 	
