@@ -727,6 +727,7 @@ func _on_event_parameters_about_to_popup() -> void:
 	else:
 		%"Place Event".text = "Place Event"
 	
+	%"Event Name".text = current_event.capitalize()
 	var parameter_names: Array = ChartManager.EVENT_DATA[current_event]["parameters"]
 	
 	var i: int = 0

@@ -202,12 +202,10 @@ text = "+"
 
 [node name="Event Creator" type="PopupPanel" parent="UI" unique_id=1125385941]
 unique_name_in_owner = true
-oversampling_override = 1.0
 title = "Event Creator"
 initial_position = 1
 size = Vector2i(480, 240)
 unresizable = false
-borderless = false
 always_on_top = true
 theme = ExtResource("15_ue8jl")
 
