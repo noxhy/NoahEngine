@@ -69,7 +69,7 @@ func update_selection(i: int):
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 	tween.tween_property(%"Difficulty Display", "scale", Vector2(1, 1), 0.2)
 	
-	%Scroll.play()
+	SoundManager.scroll.play()
 	
 	emit_signal("selected_difficulty", difficulty)
 

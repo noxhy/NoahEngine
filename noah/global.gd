@@ -15,12 +15,11 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	# Peformance Test
+	$"Volume Node".position.x = get_window().content_scale_size.x / 2
 	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
 	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
-		var performance_string: String = "FPS: " + str(int(Engine.get_frames_per_second())) + \
-			"\nVMem: " + String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))) + \
-			"\nDelta: " + str(snappedf(delta, 0.001))
+		var performance_string: String = str("FPS: ", int(Engine.get_frames_per_second()),
+		" • VMem: ", String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))))
 		
 		performance_label.text = performance_string
 	
@@ -149,23 +148,23 @@ func frame_independent_lerp(a, b, decay: float, delta: float) -> Variant:
 func show_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"Voume Node", "position", Vector2(0, -360), 0.5)
-	$"Voume Node/Volume Sound".play()
+	tween.tween_property($"Volume Node", "position:y", 0, 0.5)
+	SoundManager.scroll.play()
 	
 	var master_volume = SettingsManager.get_value(SettingsManager.SEC_AUDIO, "master_volume")
 	
 	if AudioServer.is_bus_mute(0):
-		$"Voume Node/ColorRect/Label".text = "Muted"
+		$"Volume Node/Label".text = "Muted"
 	else:
-		$"Voume Node/ColorRect/Label".text = "Master Volume: " + str(roundi(master_volume * 100)) + "%"
+		$"Volume Node/Label".text = "Master Volume: " + str(roundi(master_volume * 100)) + "%"
 	
-	$"Voume Node/Hide Timer".start()
+	$"Volume Node/Hide Timer".start()
 
 
 func hide_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"Voume Node", "position", Vector2(0, -392), 0.5)
+	tween.tween_property($"Volume Node", "position:y", -32, 0.5)
 
 
 func _on_hide_timer_timeout():
