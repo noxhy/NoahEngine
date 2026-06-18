@@ -102,6 +102,7 @@ metadata/_edit_lock_ = true
 [node name="Performance" type="Label" parent="." unique_id=1289314004]
 unique_name_in_owner = true
 z_index = 1
+texture_filter = 1
 custom_minimum_size = Vector2(512, 26)
 layout_mode = 1
 anchors_preset = -1

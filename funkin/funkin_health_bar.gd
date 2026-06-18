@@ -3,15 +3,20 @@ extends BasicHealthBar
 @onready var player_icon = $Icons/Player
 @onready var enemy_icon = $Icons/Enemy
 
-var pixel: bool = false
+var pixel: bool = false:
+	set(v):
+		if v:
+			player_icon.texture_filter = TEXTURE_FILTER_NEAREST
+			enemy_icon.texture_filter = TEXTURE_FILTER_NEAREST
+		else:
+			player_icon.texture_filter = TEXTURE_FILTER_PARENT_NODE
+			enemy_icon.texture_filter = TEXTURE_FILTER_PARENT_NODE
+		
+		pixel = v
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Signals.connect("play_conductor_beat_hit", on_beat)
-	
-	if pixel:
-		player_icon.texture_filter = TEXTURE_FILTER_NEAREST
-		enemy_icon.texture_filter = TEXTURE_FILTER_NEAREST
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

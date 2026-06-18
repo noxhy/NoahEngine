@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dp453vkw4s2xg"]
 
 [ext_resource type="Script" uid="uid://dp8il1ghxf3be" path="res://noah/basic_option.gd" id="1_n5r72"]
+[ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="2_62hs6"]
 
 [node name="Menu Option" type="Node2D" unique_id=2001507303]
 script = ExtResource("1_n5r72")
@@ -9,6 +10,7 @@ script = ExtResource("1_n5r72")
 offset_top = -64.0
 offset_right = 448.0
 offset_bottom = 64.0
+theme_override_fonts/font = ExtResource("2_62hs6")
 theme_override_font_sizes/font_size = 64
 text = "Menu Option"
 vertical_alignment = 1

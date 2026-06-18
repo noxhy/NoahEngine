@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://coivso5sghc2p"
-path="res://.godot/imported/fnf_font.ttf-fd2c929b24376f766f562ab5049d6c80.fontdata"
+path="res://.godot/imported/fnf_font.ttf-69e05feab14611640f799967be872f17.fontdata"
 
 [deps]
 
-source_file="res://noah/assets/fonts/fnf_font.ttf"
-dest_files=["res://.godot/imported/fnf_font.ttf-fd2c929b24376f766f562ab5049d6c80.fontdata"]
+source_file="res://funkin/assets/fonts/fnf_font.ttf"
+dest_files=["res://.godot/imported/fnf_font.ttf-69e05feab14611640f799967be872f17.fontdata"]
 
 [params]
 
