@@ -398,6 +398,17 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 			parameters = [i.v.zoom, str(i.v.duration, 's'), i.v.get("ease", "CLASSIC")]
 		elif event == "SetCameraBop":
 			parameters = [i.v.rate * 4]
+		elif event == "PlayAnimation":
+			var char_group: String = i.v.target.to_lower()
+			match char:
+				'bf', 'boyfriend':
+					char_group = 'player'
+				'gf', 'girlfriend':
+					char_group = 'metronome'
+				_:
+					char_group = 'enemy'
+			
+			parameters = [char_group, i.v.anim]
 		
 		event_data.append([time, event_name, parameters])
 	
