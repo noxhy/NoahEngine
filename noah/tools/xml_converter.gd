@@ -28,6 +28,7 @@ func do_it():
 	print(ResourceSaver.get_recognized_extensions(frames))
 	
 	var err = xml_parser.read()
+	var has_default: bool = false
 	while err == OK:
 		if xml_parser.get_node_type() == XMLParser.NODE_ELEMENT or xml_parser.get_node_type() == XMLParser.NODE_ELEMENT_END:
 			print("--- " + xml_parser.get_node_name() + " ---")
@@ -40,6 +41,9 @@ func do_it():
 				
 				if cur_anim_name != loaded_anim_name:
 					frames.add_animation(loaded_anim_name)
+					if loaded_anim_name == "default":
+						has_default = true
+					
 					frames.set_animation_loop(loaded_anim_name, false)
 					frames.set_animation_speed(loaded_anim_name, 24)
 					cur_anim_name = loaded_anim_name
@@ -91,12 +95,15 @@ func do_it():
 				anim_sprite.scale.y = anim_sprite.scale.x
 				
 				anim_sprite.play(loaded_anim_name)
+		
 		await get_tree().create_timer(0.01).timeout
 		err = xml_parser.read()
 	
 	print("done")
 	
-	frames.remove_animation("default")
+	if !has_default:
+		frames.remove_animation("default")
+	
 	ResourceSaver.save(frames, save_path + ".res", ResourceSaver.FLAG_COMPRESS)
 	
 	emit_signal("finished")
