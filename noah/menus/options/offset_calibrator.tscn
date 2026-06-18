@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cw85perbwjqqy"]
 
-[ext_resource type="Script" uid="uid://disrmsl28koee" path="res://funkin/menus/options/offset_calibrator.gd" id="1_to22u"]
+[ext_resource type="Script" uid="uid://disrmsl28koee" path="res://noah/menus/options/offset_calibrator.gd" id="1_to22u"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="3_wcm4s"]
 [ext_resource type="AudioStream" uid="uid://c7t6ab85b1td1" path="res://funkin/assets/songs/offset song.ogg" id="4_65mtm"]
 [ext_resource type="AudioStream" uid="uid://bka17tk7s4w3n" path="res://funkin/assets/songs/offset drums.ogg" id="5_0fft6"]

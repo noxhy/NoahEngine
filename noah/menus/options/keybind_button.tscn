@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://darhx23v4e15y"]
 
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_4vhs0"]
-[ext_resource type="Script" uid="uid://do062uyfox1je" path="res://funkin/menus/options/keybind_button.gd" id="2_nnenw"]
+[ext_resource type="Script" uid="uid://do062uyfox1je" path="res://noah/menus/options/keybind_button.gd" id="2_nnenw"]
 
 [node name="Button" type="Button" unique_id=799638181 groups=["buttons"]]
 anchors_preset = 6
@@ -18,7 +17,6 @@ pivot_offset = Vector2(0, 16)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 focus_mode = 0
-theme = ExtResource("1_4vhs0")
 toggle_mode = true
 text = "wewewe"
 script = ExtResource("2_nnenw")

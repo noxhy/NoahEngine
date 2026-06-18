@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://clg58h4buylla"]
+
+[ext_resource type="Script" uid="uid://be5mnc8yifhii" path="res://noah/menus/options/options.gd" id="1_bb4y4"]
+[ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_n8o6u"]
+[ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="5_bb4y4"]
+
+[node name="Options" type="Node2D" unique_id=821166048]
+process_mode = 1
+script = ExtResource("1_bb4y4")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1189380718]
+position = Vector2(640, 360)
+
+[node name="Conductor" type="Node" parent="." unique_id=897385196]
+script = ExtResource("2_n8o6u")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1290965703]
+follow_viewport_enabled = true
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=1718717647]
+layer = -1
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+follow_viewport_enabled = true
+
+[node name="Background" type="Sprite2D" parent="Background" unique_id=516021354]
+z_index = -1
+texture = ExtResource("5_bb4y4")
+metadata/_edit_lock_ = true
+
+[connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]

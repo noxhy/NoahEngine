@@ -1,4 +1,5 @@
 extends Node2D
+class_name OptionsSubmenu
 
 var BOOL_PRELOAD = load("uid://uj644hsg8thl")
 var NUMBER_PRELOAD = load("uid://77c763qfjduu")
@@ -132,7 +133,7 @@ func load_category(category: String, options: Array):
 			else:
 				printerr("Not a valid option type: ", option.get_class())
 			
-			instance.display_name = option_name.replace("_", " ")
+			instance.display_name = option_name.capitalize()
 			description = data.get("description", "")
 		elif type == &"label":
 			instance = LABEL_PRELOAD.instantiate()
@@ -149,7 +150,7 @@ func load_category(category: String, options: Array):
 		
 		%Options.add_child(instance)
 		instance.add_to_group(&"options")
-		if type == &"button":
+		if instance is ButtonOptionNode:
 			instance.button.connect(&"pressed", self.pressed_button.bind(data["id"]))
 		
 		instance.modulate.a = 0

@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://uj644hsg8thl"]
 
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_2q3va"]
-[ext_resource type="Script" uid="uid://bf27tnjlhgyf0" path="res://funkin/menus/options/option_node_bool.gd" id="1_o12jt"]
+[ext_resource type="Script" uid="uid://bf27tnjlhgyf0" path="res://noah/menus/options/option_node_bool.gd" id="1_o12jt"]
 
 [node name="Options Node" type="MarginContainer" unique_id=1132103474]
 custom_minimum_size = Vector2(0, 48)
@@ -15,7 +14,6 @@ offset_bottom = -0.020000458
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(0, 16)
-theme = ExtResource("1_2q3va")
 script = ExtResource("1_o12jt")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=481444044]
@@ -30,7 +28,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
 text = "Option Name"
-uppercase = true
 
 [node name="Button" type="CheckButton" parent="HBoxContainer" unique_id=900391047]
 unique_name_in_owner = true
@@ -38,7 +35,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 focus_mode = 1
 mouse_default_cursor_shape = 2
-text = "FALSE"
+text = "False"
 flat = true
 
 [node name="VSeparator2" type="VSeparator" parent="HBoxContainer" unique_id=253298618]

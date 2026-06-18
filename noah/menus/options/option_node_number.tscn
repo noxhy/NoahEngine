@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://77c763qfjduu"]
 
-[ext_resource type="Script" uid="uid://bg4fsu5xdmb1x" path="res://funkin/menus/options/option_node_number.gd" id="1_0r6q7"]
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_jppfe"]
+[ext_resource type="Script" uid="uid://bg4fsu5xdmb1x" path="res://noah/menus/options/option_node_number.gd" id="1_0r6q7"]
 
 [node name="Options Node" type="MarginContainer" unique_id=1348403737]
 custom_minimum_size = Vector2(0, 48)
@@ -16,7 +15,6 @@ grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(0, 16)
 size_flags_horizontal = 3
-theme = ExtResource("1_jppfe")
 script = ExtResource("1_0r6q7")
 metadata/_edit_use_anchors_ = true
 
@@ -33,7 +31,6 @@ layout_mode = 2
 size_flags_horizontal = 2
 text = "Option Name"
 vertical_alignment = 1
-uppercase = true
 
 [node name="Value" type="SpinBox" parent="HBoxContainer" unique_id=907001181]
 unique_name_in_owner = true

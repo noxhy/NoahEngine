@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://oi2cyiu5cgsq"]
 
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_cu3px"]
-[ext_resource type="Script" uid="uid://maaic73my3s6" path="res://funkin/menus/options/option_node_button.gd" id="2_cu3px"]
+[ext_resource type="Script" uid="uid://maaic73my3s6" path="res://noah/menus/options/option_node_button.gd" id="2_cu3px"]
 
 [node name="Options Node" type="MarginContainer" unique_id=1160024691]
 custom_minimum_size = Vector2(0, 48)
@@ -15,7 +14,6 @@ offset_bottom = -0.020000458
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(0, 16)
-theme = ExtResource("1_cu3px")
 script = ExtResource("2_cu3px")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=615207970]
@@ -25,7 +23,6 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 focus_mode = 0
-theme = ExtResource("1_cu3px")
 toggle_mode = true
 
 [node name="Background" type="ColorRect" parent="." unique_id=901802126]
