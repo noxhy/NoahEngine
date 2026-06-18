@@ -261,7 +261,15 @@ func set_sing_timer(time: float = -1):
 ## Helper function for [code]basic_song.gd[/code] to call idle whenever possible
 func on_step_hit(current_step: int, measure_relative: int):  
 	if dance_rate > 0 and measure_relative % dance_rate == 0:
-		dance()
+		var restart: bool = true
+		var dance_to_play: StringName = get_animation_name(dance_animations[current_dance])
+		
+		if animation_player is AnimateSymbol:
+			restart = !animation_player.loop
+		else:
+			restart = !animation_player.sprite_frames.get_animation_loop(dance_to_play)
+		
+		dance(restart)
 
 #region Tool funcs
 func _editor_process(delta: float) -> void:
