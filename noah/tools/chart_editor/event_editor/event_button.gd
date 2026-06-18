@@ -5,7 +5,7 @@ signal removed
 var event: String:
 	set(v):
 		%"Track Name".text = v
-		var icon: String = ChartManager.EVENT_DATA.get(v, {}).get("texture", "")
+		var icon: String = Constants.EVENT_DATA.get(v, {}).get("texture", "")
 		if ResourceLoader.exists(icon):
 			%"Track Name".right_icon = load(icon)
 		

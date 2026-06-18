@@ -12,9 +12,9 @@ var grid_size: Vector2 = Vector2(128, 128)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if ChartManager.EVENT_DATA.has(event):
-		if ChartManager.EVENT_DATA[event].has("texture"):
-			sprite.texture = load(ChartManager.EVENT_DATA[event]["texture"])
+	if Constants.EVENT_DATA.has(event):
+		if Constants.EVENT_DATA[event].has("texture"):
+			sprite.texture = load(Constants.EVENT_DATA[event]["texture"])
 	
 	update()
 

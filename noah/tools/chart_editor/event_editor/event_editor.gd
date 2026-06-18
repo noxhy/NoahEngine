@@ -102,11 +102,11 @@ func _process(delta: float) -> void:
 						
 						if time <= %Instrumental.stream.get_length():
 							if !is_event_at(event, time):
-								if ChartManager.EVENT_DATA.has(event):
+								if Constants.EVENT_DATA.has(event):
 									current_event = event
 									current_event_time = time
 									editing = -1
-									if ChartManager.EVENT_DATA.get(event).has("parameters"):
+									if Constants.EVENT_DATA.get(event).has("parameters"):
 										%"Event Creator".popup()
 									else:
 										add_action("Placed Event", self.place_event.bind(time, event, [], true),
@@ -138,8 +138,8 @@ func _process(delta: float) -> void:
 							var event: String = ChartManager.chart.chart_data["events"][hovered_event][1]
 							var time: float = ChartManager.chart.chart_data["events"][hovered_event][0]
 							
-							if (ChartManager.EVENT_DATA.has(event)
-							and ChartManager.EVENT_DATA.get(event).has("parameters")):
+							if (Constants.EVENT_DATA.has(event)
+							and Constants.EVENT_DATA.get(event).has("parameters")):
 									current_event = event
 									current_event_time = time
 									editing = hovered_event
@@ -301,10 +301,10 @@ func _draw() -> void:
 		var event: String = ChartManager.chart.get_events_data()[hovered_event][1]
 		var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
 		var text: String =  ""
-		if ChartManager.EVENT_DATA.has(event):
+		if Constants.EVENT_DATA.has(event):
 			var i: int = 0
 			for parameter in parameters:
-				text = str(ChartManager.EVENT_DATA[event]["parameters"][i], ": ", parameter)
+				text = str(Constants.EVENT_DATA[event]["parameters"][i], ": ", parameter)
 				draw_string_outline(default_font, get_global_mouse_position() + Vector2(0, default_font_size * i), text,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
 				draw_string(default_font, get_global_mouse_position() + Vector2(0, default_font_size * i), text,
@@ -728,7 +728,7 @@ func _on_event_parameters_about_to_popup() -> void:
 		%"Place Event".text = "Place Event"
 	
 	%"Event Name".text = current_event.capitalize()
-	var parameter_names: Array = ChartManager.EVENT_DATA[current_event]["parameters"]
+	var parameter_names: Array = Constants.EVENT_DATA[current_event]["parameters"]
 	
 	var i: int = 0
 	for _name in parameter_names:
@@ -784,12 +784,12 @@ func _on_add_track_pressed() -> void:
 func _on_window_about_to_popup() -> void:
 	can_chart = false
 	%"Event Option".clear()
-	var events: Array = ChartManager.EVENT_DATA.keys()
+	var events: Array = Constants.EVENT_DATA.keys()
 	events = events.filter(func(_name): return !ChartManager.event_tracks.has(_name))
 	
 	for event in events:
 		%"Event Option".add_item(event)
-		var icon: String = ChartManager.EVENT_DATA.get(event, {}).get("texture", "")
+		var icon: String = Constants.EVENT_DATA.get(event, {}).get("texture", "")
 		if ResourceLoader.exists(icon):
 			%"Event Option".set_item_icon(%"Event Option".item_count - 1, load(icon))
 			%"Event Option".get_popup().set_item_icon_max_width(%"Event Option".item_count - 1, 32)

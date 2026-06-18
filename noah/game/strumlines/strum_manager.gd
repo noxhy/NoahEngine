@@ -98,11 +98,6 @@ func get_scroll_speed(lane: int) -> float:
 	return get_strumline(lane).scroll_speed
 
 
-func note_types(_note_types: Array):
-	for strum in strums:
-		strum.note_types = _note_types
-
-
 func create_note(time: float, lane: int, length: float, note_type: String, tempo: float):
 	strums[lane].create_note(time, length, note_type, tempo)
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://7leho7yp6nrt"]
 
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://noah/themes/options.tres" id="1_ghwhd"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_ghwhd"]
 [ext_resource type="Script" uid="uid://fyndmf80kdkg" path="res://funkin/menus/options/option_node_label.gd" id="2_ghwhd"]
 
 [node name="Options Node" type="MarginContainer" unique_id=535076503]

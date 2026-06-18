@@ -22,7 +22,7 @@ func _on_about_to_popup() -> void:
 	%Options.add_item("Default")
 	%Options.add_item("Custom")
 	
-	for type in Strum.NOTE_TYPES:
+	for type in Constants.NOTE_TYPES:
 		%Options.add_item(type)
 	
 	if %Options.selected == -1:

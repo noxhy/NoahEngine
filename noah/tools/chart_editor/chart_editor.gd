@@ -926,7 +926,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	# sizing purposes
 	note_instance.scroll_speed = meter[0]
 	note_instance.direction = directions[lane % 4]
-	note_instance.animation = str(Strum.NOTE_TYPES.get(type, ""), directions[lane % 4])
+	note_instance.animation = str(Constants.NOTE_TYPES.get(type, ""), directions[lane % 4])
 	update_note_position(note_instance)
 	
 	note_instance.note_skin = note_skin

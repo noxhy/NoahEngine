@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bp581x6mu5f1w"]
 
-[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://noah/themes/options.tres" id="1_tg56e"]
+[ext_resource type="Theme" uid="uid://b02clh77m72y7" path="res://funkin/themes/options.tres" id="1_tg56e"]
 [ext_resource type="Script" uid="uid://dg85pn3cqf6yj" path="res://funkin/menus/options/options_menu.gd" id="2_f8jhe"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2gin"]

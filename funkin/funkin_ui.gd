@@ -2,10 +2,6 @@ extends BasicUI
 
 @export var pixel: bool = false
 
-@onready var player_icon = $"Health Bar/Icon Manager/Player"
-@onready var enemy_icon = $"Health Bar/Icon Manager/Enemy"
-@onready var icon_manager = $"Health Bar/Icon Manager"
-
 
 func _ready() -> void:
 	super()
