@@ -9,7 +9,7 @@ var gravity = 0.0
 var elapsed: float = 0.0
 
 # Called when the node enters the scene tree for the first time.
-func vanilla_2120247715__ready():
+func _ready():
 	
 	$OffsetSprite.sprite_frames = ui_skin.rating_texture
 	
@@ -31,7 +31,7 @@ func vanilla_2120247715__ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func vanilla_2120247715__physics_process(delta):
+func _physics_process(delta):
 	if $Timer.time_left <= 0.7:
 		self.modulate.a -= delta / 0.25
 	
@@ -40,29 +40,5 @@ func vanilla_2120247715__physics_process(delta):
 	gravity += -40 * delta
 
 
-func vanilla_2120247715__on_timer_timeout():
-	queue_free()
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2120247715__ready, [], 1384243543)
-	else:
-		return vanilla_2120247715__ready()
-
-
-func _physics_process(delta):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2120247715__physics_process, [delta], 2852440419)
-	else:
-		return vanilla_2120247715__physics_process(delta)
-
-
 func _on_timer_timeout():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2120247715__on_timer_timeout, [], 2072076517)
-	else:
-		return vanilla_2120247715__on_timer_timeout()
+	queue_free()

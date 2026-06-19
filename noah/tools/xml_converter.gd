@@ -15,7 +15,7 @@ signal finished
 
 @onready var anim_sprite = $VBoxContainer/PreviewSpr
 
-func vanilla_951476029_do_it():
+func do_it():
 	if load_path.length() == 0:
 		printerr("path was not specified")
 	var xml_parser = XMLParser.new()
@@ -110,7 +110,7 @@ func vanilla_951476029_do_it():
 	frames = null
 
 
-func vanilla_951476029__ready():
+func _ready():
 	set_process(false)
 	Global.set_window_title("XML to SpriteFrames Converter")
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
@@ -120,7 +120,7 @@ func vanilla_951476029__ready():
 	$VBoxContainer/LoadTxt.text = load_path
 
 var _running:bool = false
-func vanilla_951476029_init_converter():
+func init_converter():
 	if _running: return
 	_running = true
 	
@@ -142,7 +142,7 @@ func vanilla_951476029_init_converter():
 	
 	_running = false
 
-func vanilla_951476029_on_files_dropped(files: PackedStringArray):
+func on_files_dropped(files: PackedStringArray):
 	print("Received files: ", files)
 	var file: String = files[0]
 	var local_file: String = ProjectSettings.localize_path(file)
@@ -155,54 +155,9 @@ func vanilla_951476029_on_files_dropped(files: PackedStringArray):
 		$SaveDialog.current_dir = local_file.get_base_dir()
 		$SaveDialog.current_file = local_file.get_file().trim_suffix(".png").trim_suffix(".xml")
 
-func vanilla_951476029__on_save_dialog_file_selected(path: String) -> void:
+func _on_save_dialog_file_selected(path: String) -> void:
 	save_path = path
 	init_converter()
 
-func vanilla_951476029__on_file_dialog_file_selected(path: String) -> void:
+func _on_file_dialog_file_selected(path: String) -> void:
 	$VBoxContainer/LoadTxt.text = path
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func do_it():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_951476029_do_it, [], 1243906028)
-	else:
-		return await vanilla_951476029_do_it()
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_951476029__ready, [], 2202280561)
-	else:
-		return await vanilla_951476029__ready()
-
-
-func init_converter():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_951476029_init_converter, [], 3183003400)
-	else:
-		return await vanilla_951476029_init_converter()
-
-
-func on_files_dropped(files: PackedStringArray):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_951476029_on_files_dropped, [files], 3777006425)
-	else:
-		return vanilla_951476029_on_files_dropped(files)
-
-
-func _on_save_dialog_file_selected(path: String):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_951476029__on_save_dialog_file_selected, [path], 3663187293)
-	else:
-		vanilla_951476029__on_save_dialog_file_selected(path)
-
-
-func _on_file_dialog_file_selected(path: String):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_951476029__on_file_dialog_file_selected, [path], 3259963854)
-	else:
-		vanilla_951476029__on_file_dialog_file_selected(path)

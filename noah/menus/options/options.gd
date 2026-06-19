@@ -119,7 +119,7 @@ var pages: Dictionary = {
 var selected: int = 0
 
 # Called when the node enters the scene tree for the first time.
-func vanilla_686257459__ready():
+func _ready():
 	Global.set_window_title("Options Menu")
 	
 	for i in pages.size():
@@ -145,7 +145,7 @@ func vanilla_686257459__ready():
 	print(SoundManager.music.stream.get_bpm())
 
 
-func vanilla_686257459__process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if can_click:
 		if Input.is_action_just_pressed(&"menu_cancel"):
 			can_click = false
@@ -167,11 +167,11 @@ func vanilla_686257459__process(delta: float) -> void:
 			select(selected)
 
 
-func vanilla_686257459__exit_tree() -> void:
+func _exit_tree() -> void:
 	SettingsManager.load_keybinds()
 
 
-func vanilla_686257459_update(i: int):
+func update(i: int):
 	selected = wrapi(i, 0, pages.size())
 	var nodes = get_tree().get_nodes_in_group(&"pages")
 	var tween = create_tween()
@@ -186,7 +186,7 @@ func vanilla_686257459_update(i: int):
 	SoundManager.scroll.play()
 
 
-func vanilla_686257459_select(i: int):
+func select(i: int):
 	SoundManager.accept.play()
 	var page = pages.keys()[i]
 	var option_menu_instance = OPTIONS_SUBMENU_PRELOAD.instantiate()
@@ -196,51 +196,6 @@ func vanilla_686257459_select(i: int):
 	option_menu_instance.load_category(page, pages.get(page).get("options", [[&"label", "This page is empty."]]))
 
 
-func vanilla_686257459__on_conductor_new_beat(current_beat, measure_relative):
+func _on_conductor_new_beat(current_beat, measure_relative):
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_686257459__ready, [], 2477218023)
-	else:
-		return await vanilla_686257459__ready()
-
-
-func _process(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_686257459__process, [delta], 2688305713)
-	else:
-		vanilla_686257459__process(delta)
-
-
-func _exit_tree():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_686257459__exit_tree, [], 2181563739)
-	else:
-		vanilla_686257459__exit_tree()
-
-
-func update(i: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_686257459_update, [i], 3335789398)
-	else:
-		return vanilla_686257459_update(i)
-
-
-func select(i: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_686257459_select, [i], 3244764787)
-	else:
-		return vanilla_686257459_select(i)
-
-
-func _on_conductor_new_beat(current_beat, measure_relative):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_686257459__on_conductor_new_beat, [current_beat, measure_relative], 1822013987)
-	else:
-		return vanilla_686257459__on_conductor_new_beat(current_beat, measure_relative)

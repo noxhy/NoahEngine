@@ -18,15 +18,15 @@ var instance: ConfigFile
 #these are the only functions u need to worry about
 
 ## Grabs a save value from instance
-func vanilla_199208605_get_value(section: String, key: String, fallback: Variant = null) -> Variant:
+func get_value(section: String, key: String, fallback: Variant = null) -> Variant:
 	return instance.get_value(section, key, fallback)
 
 ## Sets a save value in instance
-func vanilla_199208605_set_value(section: String, key: String, value: Variant) -> void:
+func set_value(section: String, key: String, value: Variant) -> void:
 	instance.set_value(section, key, value)
 
 ## Saves to disk
-func vanilla_199208605_flush() -> void:
+func flush() -> void:
 	instance.save(LOAD_PATH)
 	print('(SettingsManager): Saved preferences')
 
@@ -99,12 +99,12 @@ static var _defaults: Dictionary = {
 }
 
 
-func vanilla_199208605__ready() -> void:
+func _ready() -> void:
 	instance = get_default()
 	load_values()
 	load_keybinds()
 
-func vanilla_199208605_load_values() -> void:
+func load_values() -> void:
 	if not FileAccess.file_exists(LOAD_PATH):
 		print('(SettingsManager): Preferences not detected. Using defaults')
 		return
@@ -139,7 +139,7 @@ func vanilla_199208605_load_values() -> void:
 	
 	print("(SettingsManager): Preferences loaded")
 
-func vanilla_199208605_get_default() -> ConfigFile:
+func get_default() -> ConfigFile:
 	var temp_config = ConfigFile.new()
 	
 	for section:String in _defaults.keys():
@@ -149,16 +149,16 @@ func vanilla_199208605_get_default() -> ConfigFile:
 	
 	return temp_config
 
-func vanilla_199208605_get_keybind(keybind_name: String) -> Array : 
+func get_keybind(keybind_name: String) -> Array : 
 	return instance.get_value(SEC_KEY_BINDS, keybind_name, [])
 
-func vanilla_199208605_set_keybind(keybind_name: String, keycode: int, index: int):
+func set_keybind(keybind_name: String, keycode: int, index: int):
 	var new_keycodes = instance.get_value(SEC_KEY_BINDS, keybind_name)
 	new_keycodes[index] = keycode
 	
 	instance.set_value(SEC_KEY_BINDS,keybind_name,new_keycodes)
 
-func vanilla_199208605_load_keybinds():
+func load_keybinds():
 	for key in instance.get_section_keys(SEC_KEY_BINDS):
 		InputMap.action_erase_events(key)
 		
@@ -168,69 +168,3 @@ func vanilla_199208605_load_keybinds():
 			InputMap.action_add_event(key, new_key)
 		
 	print("(SettingsManager): Keybinds loaded")
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func get_value(section: String, key: String, fallback: Variant=null):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_199208605_get_value, [section, key, fallback], 1534383545)
-	else:
-		return vanilla_199208605_get_value(section, key, fallback)
-
-
-func set_value(section: String, key: String, value: Variant):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_199208605_set_value, [section, key, value], 3511296453)
-	else:
-		vanilla_199208605_set_value(section, key, value)
-
-
-func flush():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_199208605_flush, [], 2794018303)
-	else:
-		vanilla_199208605_flush()
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_199208605__ready, [], 1740863953)
-	else:
-		vanilla_199208605__ready()
-
-
-func load_values():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_199208605_load_values, [], 217864012)
-	else:
-		vanilla_199208605_load_values()
-
-
-func get_default() -> ConfigFile:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_199208605_get_default, [], 2873511105)
-	else:
-		return vanilla_199208605_get_default()
-
-
-func get_keybind(keybind_name: String) -> Array:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_199208605_get_keybind, [keybind_name], 3346407714)
-	else:
-		return vanilla_199208605_get_keybind(keybind_name)
-
-
-func set_keybind(keybind_name: String, keycode: int, index: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_199208605_set_keybind, [keybind_name, keycode, index], 130981934)
-	else:
-		return vanilla_199208605_set_keybind(keybind_name, keycode, index)
-
-
-func load_keybinds():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_199208605_load_keybinds, [], 1736544213)
-	else:
-		return vanilla_199208605_load_keybinds()

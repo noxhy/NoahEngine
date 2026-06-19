@@ -68,7 +68,7 @@ var offset: float :
 	get():
 		return conductor.offset
 
-func vanilla_1214129798_reset_conductor():
+func reset_conductor():
 	if conductor:
 		remove_child(conductor)
 		conductor.free()
@@ -77,24 +77,24 @@ func vanilla_1214129798_reset_conductor():
 	conductor.new_beat.connect(_beat_change)
 	conductor.new_step.connect(_step_change)
 
-func vanilla_1214129798__step_change(step: int, measure: int):
+func _step_change(step: int, measure: int):
 	Signals.play_conductor_step_hit.emit(step, measure)
 
-func vanilla_1214129798__beat_change(beat: int, measure: int):
+func _beat_change(beat: int, measure: int):
 	Signals.play_conductor_beat_hit.emit(beat, measure)
 
-func vanilla_1214129798__ready() -> void:
+func _ready() -> void:
 	reset_conductor()
 	reset_stats()
 
-func vanilla_1214129798_started_song(song: Song):
+func started_song(song: Song):
 	tallies = DEFAULT_TALLIES.duplicate()
 	accuracy = 0.0
 	current_song = song
 	character = Preload.character_data[current_character]
 	score = 0
 
-func vanilla_1214129798_finished_song(_score: int):
+func finished_song(_score: int):
 	week_score += _score
 	week_deaths += deaths
 	total_accuracy += accuracy
@@ -125,7 +125,7 @@ func vanilla_1214129798_finished_song(_score: int):
 	else:
 		highscore = false
 
-func vanilla_1214129798_reset_stats():
+func reset_stats():
 	accuracy = 0.0
 	deaths = 0
 	week_score = 0
@@ -136,10 +136,10 @@ func vanilla_1214129798_reset_stats():
 	tallies = DEFAULT_TALLIES.duplicate()
 	week_tallies = DEFAULT_TALLIES.duplicate()
 
-func vanilla_1214129798_get_week_accuracy() -> float:
+func get_week_accuracy() -> float:
 	return total_accuracy / songs_played
 
-func vanilla_1214129798_get_grade(_tallies: Dictionary) -> float:
+func get_grade(_tallies: Dictionary) -> float:
 	if _tallies.total_notes > 0:
 		if _tallies.sick == _tallies.total_notes:
 			return 2
@@ -148,7 +148,7 @@ func vanilla_1214129798_get_grade(_tallies: Dictionary) -> float:
 	else:
 		return 0
 
-func vanilla_1214129798_get_rank(_grade: float) -> String:
+func get_rank(_grade: float) -> String:
 	var accuracies = [
 		[_grade == 2, "gold"],
 		[_grade == 1, "perfect"],
@@ -161,76 +161,3 @@ func vanilla_1214129798_get_rank(_grade: float) -> String:
 	for condition in accuracies: if condition[0]:
 		return condition[1]
 	return "?"
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func reset_conductor():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_reset_conductor, [], 4123681433)
-	else:
-		return vanilla_1214129798_reset_conductor()
-
-
-func _step_change(step: int, measure: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798__step_change, [step, measure], 629601830)
-	else:
-		return vanilla_1214129798__step_change(step, measure)
-
-
-func _beat_change(beat: int, measure: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798__beat_change, [beat, measure], 3973446502)
-	else:
-		return vanilla_1214129798__beat_change(beat, measure)
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_1214129798__ready, [], 3972037754)
-	else:
-		vanilla_1214129798__ready()
-
-
-func started_song(song: Song):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_started_song, [song], 2618351283)
-	else:
-		return vanilla_1214129798_started_song(song)
-
-
-func finished_song(_score: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_finished_song, [_score], 1153413894)
-	else:
-		return vanilla_1214129798_finished_song(_score)
-
-
-func reset_stats():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_reset_stats, [], 2643518743)
-	else:
-		return vanilla_1214129798_reset_stats()
-
-
-func get_week_accuracy() -> float:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_get_week_accuracy, [], 2401393883)
-	else:
-		return vanilla_1214129798_get_week_accuracy()
-
-
-func get_grade(_tallies: Dictionary) -> float:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_get_grade, [_tallies], 465630632)
-	else:
-		return vanilla_1214129798_get_grade(_tallies)
-
-
-func get_rank(_grade: float) -> String:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1214129798_get_rank, [_grade], 3138099825)
-	else:
-		return vanilla_1214129798_get_rank(_grade)

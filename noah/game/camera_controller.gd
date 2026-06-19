@@ -77,7 +77,7 @@ var rotation: Variant : set = set_rotation, get = get_rotation
 var position: Variant : set = set_position, get = get_position
 var zoom: Variant : set = set_zoom, get = get_zoom
 
-func vanilla_2067137226__ready() -> void:
+func _ready() -> void:
 	if not parent_2d and not parent_3d:
 		printerr('(Camera Controller): No parent was assigned.')
 	
@@ -94,7 +94,7 @@ func vanilla_2067137226__ready() -> void:
 		_position_3d = parent_3d.position
 		target_zoom = Vector2(parent_3d.fov, parent_3d.fov)
 
-func vanilla_2067137226_get_direct() -> Variant:
+func get_direct() -> Variant:
 	if parent_2d: 
 		return parent_2d
 	elif parent_3d:
@@ -176,7 +176,7 @@ func get_rotation() -> Variant:
 	elif parent_3d: return parent_3d.rotation
 	return Vector2.ZERO
 
-func vanilla_2067137226__process(delta) -> void:
+func _process(delta) -> void:
 	if parent_2d: 
 		update_2d(delta)
 	if parent_3d: 
@@ -184,11 +184,11 @@ func vanilla_2067137226__process(delta) -> void:
 	if shaking:
 		update_shake(delta)
 
-func vanilla_2067137226_update_2d(delta: float) -> void:
+func update_2d(delta: float) -> void:
 	if zoom_smoothing:
 		parent_2d.zoom = Global.frame_independent_lerp(parent_2d.zoom, target_zoom, zoom_smoothing_speed, delta)
 
-func vanilla_2067137226_update_3d(delta: float) -> void:
+func update_3d(delta: float) -> void:
 	if zoom_smoothing:
 		parent_3d.fov = Global.frame_independent_lerp(parent_3d.fov, target_zoom.x, zoom_smoothing_speed, delta)
 	
@@ -201,7 +201,7 @@ func vanilla_2067137226_update_3d(delta: float) -> void:
 		parent_3d.rotation.y = lerp_angle(parent_3d.rotation.y, _rotation_3d.y, rot_rate)
 		parent_3d.rotation.z = lerp_angle(parent_3d.rotation.z, _rotation_3d.z, rot_rate)
 
-func vanilla_2067137226_update_shake(delta: float) -> void:
+func update_shake(delta: float) -> void:
 	shake_strength = move_toward(shake_strength, 0, shake_decay_rate * delta)
 	
 	var shake_offset: Vector2 = get_noise_offset(delta, shake_speed, shake_strength)
@@ -216,13 +216,13 @@ func vanilla_2067137226_update_shake(delta: float) -> void:
 		end_shake()
 
 
-func vanilla_2067137226_shake(amount: int, time: float) -> void:
+func shake(amount: int, time: float) -> void:
 	shake_time = time
 	shake_decay_rate = time
 	shake_strength = amount
 	shaking = true
 
-func vanilla_2067137226_end_shake() -> void:
+func end_shake() -> void:
 	shaking = false
 	
 	if not parent_2d and not parent_3d:
@@ -239,7 +239,7 @@ func vanilla_2067137226_end_shake() -> void:
 		tween.tween_property(self, "v_offset", default_offset.y, 0.1)
 		
 
-func vanilla_2067137226_get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
+func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 	noise_i += delta * speed
 	# Set the x values of each call to 'get_noise_2d' to a different value
 	# so that our x and y vectors will be reading from unrelated areas of noise
@@ -248,7 +248,7 @@ func vanilla_2067137226_get_noise_offset(delta: float, speed: float, strength: f
 		noise.get_noise_2d(100, noise_i) * strength
 	)
 
-func vanilla_2067137226_bump(strength: Variant) -> void:
+func bump(strength: Variant) -> void:
 	if parent_3d:
 		strength *= -1
 		zoom += strength
@@ -258,12 +258,12 @@ func vanilla_2067137226_bump(strength: Variant) -> void:
 		else:
 			zoom += strength
 
-func vanilla_2067137226_go_to_marker(marker: Variant) -> void:
+func go_to_marker(marker: Variant) -> void:
 	position = marker.global_position
 	rotation = marker.global_rotation
 
 var _zoom_tween:Tween = null
-func vanilla_2067137226_tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
+func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
 	
 	if _zoom_tween:
 		_zoom_tween.kill()
@@ -273,100 +273,6 @@ func vanilla_2067137226_tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.
 	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, speed)
 	_zoom_tween.tween_property(self, 'zoom', new_zoom, speed)
 
-func vanilla_2067137226_lerp_position(cur: Variant, intended: Variant, delta: float) -> Variant:
+func lerp_position(cur: Variant, intended: Variant, delta: float) -> Variant:
 	var c = position_smoothing_speed * delta
 	return ((intended - cur) * c) + cur
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226__ready, [], 595950526)
-	else:
-		vanilla_2067137226__ready()
-
-
-func get_direct():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2067137226_get_direct, [], 2420223076)
-	else:
-		return vanilla_2067137226_get_direct()
-
-
-func _process(delta):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226__process, [delta], 2687401672)
-	else:
-		vanilla_2067137226__process(delta)
-
-
-func update_2d(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_update_2d, [delta], 1401669122)
-	else:
-		vanilla_2067137226_update_2d(delta)
-
-
-func update_3d(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_update_3d, [delta], 1401669155)
-	else:
-		vanilla_2067137226_update_3d(delta)
-
-
-func update_shake(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_update_shake, [delta], 484127704)
-	else:
-		vanilla_2067137226_update_shake(delta)
-
-
-func shake(amount: int, time: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_shake, [amount, time], 1993671990)
-	else:
-		vanilla_2067137226_shake(amount, time)
-
-
-func end_shake():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_end_shake, [], 780556140)
-	else:
-		vanilla_2067137226_end_shake()
-
-
-func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2067137226_get_noise_offset, [delta, speed, strength], 101209357)
-	else:
-		return vanilla_2067137226_get_noise_offset(delta, speed, strength)
-
-
-func bump(strength: Variant):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_bump, [strength], 1491473694)
-	else:
-		vanilla_2067137226_bump(strength)
-
-
-func go_to_marker(marker: Variant):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2067137226_go_to_marker, [marker], 796426531)
-	else:
-		vanilla_2067137226_go_to_marker(marker)
-
-
-func tween_zoom(new_zoom: Vector2, speed: float, trans: Tween.TransitionType=Tween.TransitionType.TRANS_CUBIC, ease_type: Tween.EaseType=Tween.EaseType.EASE_IN_OUT):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2067137226_tween_zoom, [new_zoom, speed, trans, ease_type], 36708561)
-	else:
-		return vanilla_2067137226_tween_zoom(new_zoom, speed, trans, ease_type)
-
-
-func lerp_position(cur: Variant, intended: Variant, delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2067137226_lerp_position, [cur, intended, delta], 3280267825)
-	else:
-		return vanilla_2067137226_lerp_position(cur, intended, delta)

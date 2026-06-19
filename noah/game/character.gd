@@ -92,7 +92,7 @@ var sing_time: float = 0
 
 var _ghost_sprite = null
 
-func vanilla_2669117867__ready():
+func _ready():
 	animation_player = verify_animation_player(animation_player)
 	
 	if not animation_player:
@@ -119,13 +119,13 @@ func vanilla_2669117867__ready():
 	dance()
 
 
-func vanilla_2669117867__on_animation_finished():
+func _on_animation_finished():
 	holding = true
 
 ## Plays an animation with the given context. Setting [param restart] to [code]true[/code] will replay the animation from the beginning.
 ## Setting a [param time] will make the animation play within the given time.
 ## [br][br]See [enum AnimContext] for information of animation contexts.
-func vanilla_2669117867_play_animation(anim_id: StringName = &"", context: AnimContext = AnimContext.NONE, restart: bool = true, time: float = -1.0):
+func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContext.NONE, restart: bool = true, time: float = -1.0):
 	if process_mode == Node.PROCESS_MODE_DISABLED or current_context == AnimContext.LOCKED or !animation_player:
 		return
 	
@@ -187,7 +187,7 @@ func vanilla_2669117867_play_animation(anim_id: StringName = &"", context: AnimC
 			animation_player.position.y = offsets_to_use.y
 
 
-func vanilla_2669117867__process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		_editor_process(delta)
 	else:
@@ -199,15 +199,15 @@ func vanilla_2669117867__process(delta: float) -> void:
 			can_dance = true
 
 ## Gets the [SpriteFrames] animation name of the given [param anim_id] in [member animation_names].
-func vanilla_2669117867_get_animation_name(anim_id: StringName = &""):
+func get_animation_name(anim_id: StringName = &""):
 	return animation_names.get(anim_id, &"")
 
 
-func vanilla_2669117867_set_prefix(prefix: StringName):
+func set_prefix(prefix: StringName):
 	animation_prefix = prefix
 
 ## Lets an animation loop at the given [code]hold_frame[/code] until given another animation.
-func vanilla_2669117867_hold_animation():
+func hold_animation():
 	if !animation_player: return
 	
 	var hold_frame: int = 0
@@ -241,7 +241,7 @@ func vanilla_2669117867_hold_animation():
 		animation_player.play()
 
 ## Play the current idle animation.
-func vanilla_2669117867_dance(restart: bool = true, time: float = -1) -> void:
+func dance(restart: bool = true, time: float = -1) -> void:
 	if !can_dance and !dance_animations.has(current_animation):
 		return
 	
@@ -251,7 +251,7 @@ func vanilla_2669117867_dance(restart: bool = true, time: float = -1) -> void:
 	current_dance = wrapi(current_dance + 1, 0, dance_animations.size())
 
 ## Sets the sing timer, characters cannot return to idle until this timer is finished.
-func vanilla_2669117867_set_sing_timer(time: float = -1):
+func set_sing_timer(time: float = -1):
 	if time == -1:
 		time = sing_duration * GameManager.seconds_per_step
 	
@@ -259,7 +259,7 @@ func vanilla_2669117867_set_sing_timer(time: float = -1):
 	can_dance = false
 
 ## Helper function for [code]basic_song.gd[/code] to call idle whenever possible
-func vanilla_2669117867_on_step_hit(current_step: int, measure_relative: int):  
+func on_step_hit(current_step: int, measure_relative: int):  
 	if dance_rate > 0 and measure_relative % dance_rate == 0:
 		var restart: bool = true
 		var dance_to_play: StringName = get_animation_name(dance_animations[current_dance])
@@ -272,7 +272,7 @@ func vanilla_2669117867_on_step_hit(current_step: int, measure_relative: int):
 		dance(restart)
 
 #region Tool funcs
-func vanilla_2669117867__editor_process(delta: float) -> void:
+func _editor_process(delta: float) -> void:
 	var is_player_added = animation_player != null
 	if is_player_added:
 		is_player_added = animation_player.get_parent() != null
@@ -280,19 +280,19 @@ func vanilla_2669117867__editor_process(delta: float) -> void:
 	if not is_player_added and _ghost_sprite:
 		_cleanup_ghost()
 
-func vanilla_2669117867__is_character_root():
+func _is_character_root():
 	if not is_inside_tree():
 		return false
 		
 	var tree = get_tree()
 	return tree and tree.edited_scene_root == self
 
-func vanilla_2669117867__cleanup_ghost():
+func _cleanup_ghost():
 	if _ghost_sprite:
 		remove_child(_ghost_sprite)
 		_ghost_sprite.queue_free()
 
-func vanilla_2669117867__get_configuration_warnings() -> PackedStringArray:
+func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	
 	if !animation_player:
@@ -302,7 +302,7 @@ func vanilla_2669117867__get_configuration_warnings() -> PackedStringArray:
 
 ## [b]Tool Script[/b] - Used for offsetring.
 ## [br][br]Updates the position and texture of the ghost sprite. 
-func vanilla_2669117867_update_ghost():
+func update_ghost():
 	if !Engine.is_editor_hint() or not _is_character_root():
 		return
 	
@@ -347,7 +347,7 @@ func vanilla_2669117867_update_ghost():
 
 ## [b]Tool Script[/b] - Used for offsetring.
 ## [br][br]Resets the current sprite back to the corresponding offset.
-func vanilla_2669117867__reset_position():
+func _reset_position():
 	if !Engine.is_editor_hint():
 		return
 		
@@ -368,7 +368,7 @@ func vanilla_2669117867__reset_position():
 
 ## [b]Tool Script[/b] - Used for offsetring.
 ## [br][br]Saves the offset into the [member offsets] dictionary.
-func vanilla_2669117867__save_offset():
+func _save_offset():
 	if !Engine.is_editor_hint():
 		return
 	
@@ -392,14 +392,14 @@ func vanilla_2669117867__save_offset():
 
 ## helper function to get the editors undo and redo.
 ## only works in editor dont use this elsewhere
-func vanilla_2669117867___get_editor_undo_redo() -> Object:
+func __get_editor_undo_redo() -> Object:
 	var ei: Object = Engine.get_singleton(&"EditorInterface")
 	if not ei:
 		return null
 	var undo_redo: Object = ei.get_editor_undo_redo()
 	return undo_redo
 
-func vanilla_2669117867_verify_animation_player(node: Node):
+func verify_animation_player(node: Node):
 	if !node:
 		node = $AnimatedSprite2D
 		if !node:
@@ -407,139 +407,3 @@ func vanilla_2669117867_verify_animation_player(node: Node):
 	
 	return node
 #endregion
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__ready, [], 3187466079)
-	else:
-		return vanilla_2669117867__ready()
-
-
-func _on_animation_finished():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__on_animation_finished, [], 3424007439)
-	else:
-		return vanilla_2669117867__on_animation_finished()
-
-
-func play_animation(anim_id: StringName=&"", context: AnimContext=AnimContext.NONE, restart: bool=true, time: float=-1.0):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_play_animation, [anim_id, context, restart, time], 2264065664)
-	else:
-		return vanilla_2669117867_play_animation(anim_id, context, restart, time)
-
-
-func _process(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2669117867__process, [delta], 3054325417)
-	else:
-		vanilla_2669117867__process(delta)
-
-
-func get_animation_name(anim_id: StringName=&""):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_get_animation_name, [anim_id], 2728173898)
-	else:
-		return vanilla_2669117867_get_animation_name(anim_id)
-
-
-func set_prefix(prefix: StringName):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_set_prefix, [prefix], 3861671492)
-	else:
-		return vanilla_2669117867_set_prefix(prefix)
-
-
-func hold_animation():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_hold_animation, [], 3303561937)
-	else:
-		return vanilla_2669117867_hold_animation()
-
-
-func dance(restart: bool=true, time: float=-1):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2669117867_dance, [restart, time], 622520518)
-	else:
-		vanilla_2669117867_dance(restart, time)
-
-
-func set_sing_timer(time: float=-1):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_set_sing_timer, [time], 1596709863)
-	else:
-		return vanilla_2669117867_set_sing_timer(time)
-
-
-func on_step_hit(current_step: int, measure_relative: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_on_step_hit, [current_step, measure_relative], 3085888615)
-	else:
-		return vanilla_2669117867_on_step_hit(current_step, measure_relative)
-
-
-func _editor_process(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2669117867__editor_process, [delta], 2625493967)
-	else:
-		vanilla_2669117867__editor_process(delta)
-
-
-func _is_character_root():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__is_character_root, [], 2428117205)
-	else:
-		return vanilla_2669117867__is_character_root()
-
-
-func _cleanup_ghost():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__cleanup_ghost, [], 3747074518)
-	else:
-		return vanilla_2669117867__cleanup_ghost()
-
-
-func _get_configuration_warnings() -> PackedStringArray:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__get_configuration_warnings, [], 976705257)
-	else:
-		return vanilla_2669117867__get_configuration_warnings()
-
-
-func update_ghost():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_update_ghost, [], 2727879378)
-	else:
-		return vanilla_2669117867_update_ghost()
-
-
-func _reset_position():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__reset_position, [], 3682740929)
-	else:
-		return vanilla_2669117867__reset_position()
-
-
-func _save_offset():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867__save_offset, [], 4284502079)
-	else:
-		return vanilla_2669117867__save_offset()
-
-
-func __get_editor_undo_redo() -> Object:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867___get_editor_undo_redo, [], 2793793741)
-	else:
-		return vanilla_2669117867___get_editor_undo_redo()
-
-
-func verify_animation_player(node: Node):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2669117867_verify_animation_player, [node], 1230526027)
-	else:
-		return vanilla_2669117867_verify_animation_player(node)

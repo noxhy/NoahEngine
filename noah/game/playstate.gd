@@ -62,7 +62,7 @@ var ui_bop_strength: Vector2 = Vector2(0.025, 0.025)
 var pause_preload: PackedScene
 
 # Called when the node enters the scene tree for the first time.
-func vanilla_3997333237__ready():
+func _ready():
 	if GameManager.freeplay:
 		self.song_data = GameManager.current_song
 	else:
@@ -147,7 +147,7 @@ func vanilla_3997333237__ready():
 	Signals.play_setup_finished.emit()
 
 
-func vanilla_3997333237__process(delta):
+func _process(delta):
 	health = clamp(health, 0.0, 100.0)
 	GameManager.health = health
 	GameManager.score = int(score)
@@ -244,7 +244,7 @@ func vanilla_3997333237__process(delta):
 					current_event += 1
 
 
-func vanilla_3997333237_play_song(time: float):
+func play_song(time: float):
 	await Signals.play_song_ready_to_start
 	
 	song_starting = true
@@ -281,7 +281,7 @@ func vanilla_3997333237_play_song(time: float):
 
 # This if for actually playing the audio tracks, the reason this is a function is because
 # I also call it in the process function for when the song starts before 4 beats are possible.
-func vanilla_3997333237_play_audios(time: float):
+func play_audios(time: float):
 	var playback = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
@@ -294,7 +294,7 @@ func vanilla_3997333237_play_audios(time: float):
 	song_started = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
-func vanilla_3997333237_bsearch_left_range(value_set: Array, left_range: float) -> int:
+func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var length = value_set.size()
 	if (length == 0):
 		return -1
@@ -314,7 +314,7 @@ func vanilla_3997333237_bsearch_left_range(value_set: Array, left_range: float) 
 	
 	return high + 1
 
-static func vanilla_3997333237_get_rating(time: float) -> String:
+static func get_rating(time: float) -> String:
 	var ratings = [
 		[time <= GameManager.SICK_RATING_WINDOW, "sick"],
 		[time <= GameManager.GOOD_RATING_WINDOW, "good"],
@@ -329,7 +329,7 @@ static func vanilla_3997333237_get_rating(time: float) -> String:
 	
 	return "miss"
 
-func vanilla_3997333237_pause():
+func pause():
 	var pause_scene_instance = pause_preload.instantiate()
 	
 	Signals.emit_signal(&"play_paused")
@@ -338,14 +338,14 @@ func vanilla_3997333237_pause():
 	get_tree().paused = true
 
 
-func vanilla_3997333237_score_note(hit_time: float):
+func score_note(hit_time: float):
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
 	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
 	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	score += add
 
 
-func vanilla_3997333237_basic_event(time: float, event_name: String, event_parameters: Array):
+func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		"camera_position":
 			if host.camera_positions.size() == 0:
@@ -416,7 +416,7 @@ func vanilla_3997333237_basic_event(time: float, event_name: String, event_param
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 
 
-func vanilla_3997333237_song_finished():
+func song_finished():
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
@@ -436,7 +436,7 @@ func vanilla_3997333237_song_finished():
 			Global.change_scene_to(GameManager.current_week.song_list[GameManager.current_week_song].scene, "down")
 
 # Strum Util
-func vanilla_3997333237_note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.get(strum_manager.id):
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
@@ -479,7 +479,7 @@ func vanilla_3997333237_note_hit(note: Note, lane: int, hit_time: float, strum_m
 				note_miss(note, lane, strum_manager)
 
 
-func vanilla_3997333237_note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.get(strum_manager.id):
 		playback.set_stream_volume(vocal_tracks[strum_manager.id],  linear_to_db(1.0))
@@ -491,7 +491,7 @@ func vanilla_3997333237_note_holding(note: Note, lane: int, hold_difference: flo
 			score += hold_difference * Constants.HOLD_SCORE_GAIN_PER_SECOND
 
 
-func vanilla_3997333237_note_miss(note: Note, lane: int, strum_manager: StrumManager):
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_tracks.get(strum_manager.id):
 		if (note and !note.mine) or !note:
@@ -517,119 +517,11 @@ func vanilla_3997333237_note_miss(note: Note, lane: int, strum_manager: StrumMan
 			Signals.play_combo_break.emit()
 
 
-func vanilla_3997333237_add_combo():
+func add_combo():
 	combo += 1
 	if combo > GameManager.tallies["max_combo"]:
 		GameManager.tallies["max_combo"] = combo
 
 
-func vanilla_3997333237_reset_combo():
-	combo = 0
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_3997333237__ready, [], 18949161)
-	else:
-		return await vanilla_3997333237__ready()
-
-
-func _process(delta):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237__process, [delta], 1398140403)
-	else:
-		return vanilla_3997333237__process(delta)
-
-
-func play_song(time: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_3997333237_play_song, [time], 3284443489)
-	else:
-		return await vanilla_3997333237_play_song(time)
-
-
-func play_audios(time: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_play_audios, [time], 2648494287)
-	else:
-		return vanilla_3997333237_play_audios(time)
-
-
-func bsearch_left_range(value_set: Array, left_range: float) -> int:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_bsearch_left_range, [value_set, left_range], 2314580547)
-	else:
-		return vanilla_3997333237_bsearch_left_range(value_set, left_range)
-
-
-static func get_rating(time: float) -> String:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_get_rating, [time], 3407491641)
-	else:
-		return vanilla_3997333237_get_rating(time)
-
-
-func pause():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_pause, [], 2883453491)
-	else:
-		return vanilla_3997333237_pause()
-
-
-func score_note(hit_time: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_score_note, [hit_time], 225379974)
-	else:
-		return vanilla_3997333237_score_note(hit_time)
-
-
-func basic_event(time: float, event_name: String, event_parameters: Array):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_basic_event, [time, event_name, event_parameters], 3240113720)
-	else:
-		return vanilla_3997333237_basic_event(time, event_name, event_parameters)
-
-
-func song_finished():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_song_finished, [], 2670095093)
-	else:
-		return vanilla_3997333237_song_finished()
-
-
-func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_note_hit, [note, lane, hit_time, strum_manager], 3794428047)
-	else:
-		return vanilla_3997333237_note_hit(note, lane, hit_time, strum_manager)
-
-
-func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_note_holding, [note, lane, hold_difference, strum_manager], 3357336303)
-	else:
-		return vanilla_3997333237_note_holding(note, lane, hold_difference, strum_manager)
-
-
-func note_miss(note: Note, lane: int, strum_manager: StrumManager):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_note_miss, [note, lane, strum_manager], 662253734)
-	else:
-		return vanilla_3997333237_note_miss(note, lane, strum_manager)
-
-
-func add_combo():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_add_combo, [], 955914157)
-	else:
-		return vanilla_3997333237_add_combo()
-
-
 func reset_combo():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3997333237_reset_combo, [], 2458164455)
-	else:
-		return vanilla_3997333237_reset_combo()
+	combo = 0

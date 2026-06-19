@@ -5,7 +5,7 @@ class_name ModChartNote
 var last_length: float
 
 # Applying Note Skin
-func vanilla_627503626__ready(): 
+func _ready(): 
 	$Note.sprite_frames = note_skin.notes_texture
 	if note_skin.animation_names != null: 
 		if note_skin.animation_names.keys().size() > 0: 
@@ -33,7 +33,7 @@ func vanilla_627503626__ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func vanilla_627503626__process(delta):
+func _process(delta):
 	time_difference = (time - GameManager.offset) - GameManager.song_position
 	
 	if length > 0:
@@ -47,20 +47,3 @@ func vanilla_627503626__process(delta):
 			tail.points = [Vector2.ZERO, Vector2(0, line_length)]
 	else: 
 		tail.visible = false
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_627503626__ready, [], 2398935806)
-	else:
-		return vanilla_627503626__ready()
-
-
-func _process(delta):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_627503626__process, [delta], 3338317320)
-	else:
-		return vanilla_627503626__process(delta)

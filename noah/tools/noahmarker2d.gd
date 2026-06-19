@@ -8,12 +8,12 @@ class_name NoahMarker2D
 var window_size: Vector2
 var _draw_helper: Node2D
 
-func vanilla_1345666259__notification(what: int) -> void:
+func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
 		if _draw_helper:
 			_draw_helper.queue_free()
 
-func vanilla_1345666259__gen_camera_view():
+func _gen_camera_view():
 	window_size = Vector2(
 		ProjectSettings.get_setting_with_override(&"display/window/size/viewport_width"),
 		ProjectSettings.get_setting_with_override(&"display/window/size/viewport_height")
@@ -27,7 +27,7 @@ func vanilla_1345666259__gen_camera_view():
 	_draw_helper.draw.connect(_draw_camera_view)
 	get_tree().edited_scene_root.add_child.call_deferred(_draw_helper)
 	
-func vanilla_1345666259__process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if Engine.is_editor_hint():
 		if _draw_helper:
 			_draw_helper.queue_redraw()
@@ -36,7 +36,7 @@ func vanilla_1345666259__process(delta: float) -> void:
 			
 
 var _camera2d_ref: Camera2D
-func vanilla_1345666259__find_camera_2d(parent: Node):
+func _find_camera_2d(parent: Node):
 	if _camera2d_ref:
 		return
 		
@@ -49,7 +49,7 @@ func vanilla_1345666259__find_camera_2d(parent: Node):
 		
 		_find_camera_2d(child)
 
-func vanilla_1345666259__draw_camera_view() -> void:
+func _draw_camera_view() -> void:
 	if Engine.is_editor_hint() and _bounds_visible:
 		
 		_find_camera_2d(get_tree().edited_scene_root)
@@ -63,41 +63,3 @@ func vanilla_1345666259__draw_camera_view() -> void:
 		
 		_draw_helper.draw_set_transform(global_position, global_rotation)
 		_draw_helper.draw_rect(Rect2(-rect.size / 2, rect.size), _bounds_colour, false, 1)
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _notification(what: int):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_1345666259__notification, [what], 2962012953)
-	else:
-		vanilla_1345666259__notification(what)
-
-
-func _gen_camera_view():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1345666259__gen_camera_view, [], 775057006)
-	else:
-		return vanilla_1345666259__gen_camera_view()
-
-
-func _process(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_1345666259__process, [delta], 1311224273)
-	else:
-		vanilla_1345666259__process(delta)
-
-
-func _find_camera_2d(parent: Node):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_1345666259__find_camera_2d, [parent], 1502104304)
-	else:
-		return vanilla_1345666259__find_camera_2d(parent)
-
-
-func _draw_camera_view():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_1345666259__draw_camera_view, [], 1674545890)
-	else:
-		vanilla_1345666259__draw_camera_view()

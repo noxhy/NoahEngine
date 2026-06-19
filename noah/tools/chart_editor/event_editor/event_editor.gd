@@ -7,12 +7,12 @@ var current_event: String
 var editing: int = -1
 
 # Called when the node enters the scene tree for the first time.
-func vanilla_2835131099__ready() -> void:
-	super._ready()
+func _ready() -> void:
+	super()
 	%"Upper UI".get_node("%View Button").get_popup().set_item_disabled(1, true)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func vanilla_2835131099__process(delta: float) -> void:
+func _process(delta: float) -> void:
 	if start_offset < 0:
 		start_offset = 0
 	
@@ -251,7 +251,7 @@ func vanilla_2835131099__process(delta: float) -> void:
 	queue_redraw()
 
 
-func vanilla_2835131099__draw() -> void:
+func _draw() -> void:
 	var rect: Rect2
 	
 	## Box when you're holding control
@@ -318,7 +318,7 @@ func vanilla_2835131099__draw() -> void:
 			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
 
 ## View button item pressed
-func vanilla_2835131099_view_button_item_pressed(id):
+func view_button_item_pressed(id):
 	match id:
 		0:
 			ChartManager.event_editor = false
@@ -346,7 +346,7 @@ func vanilla_2835131099_view_button_item_pressed(id):
 
 
 ## Loads all the notes and waveforms for the next two waveforms.
-func vanilla_2835131099_load_section(time: float):
+func load_section(time: float):
 	if ChartManager.chart.get_events_data().is_empty():
 		return
 	
@@ -385,7 +385,7 @@ func vanilla_2835131099_load_section(time: float):
 		current_visible_events_R = R
 
 
-func vanilla_2835131099_update_note_position(node: Node2D):
+func update_note_position(node: Node2D):
 	if node is ChartEvent:
 		node.position = Vector2(time_to_y_position(node.time) + %Grid.grid_size.x * %Grid.zoom.x / 2,
 		%Grid.get_real_position(Vector2(0, 1.5 + ChartManager.event_tracks.find(node.event))).y)
@@ -396,7 +396,7 @@ func vanilla_2835131099_update_note_position(node: Node2D):
 		printerr(node.get_class(), " isn't a valid node.")
 
 
-func vanilla_2835131099_load_dividers():
+func load_dividers():
 	get_tree().call_group(&"dividers", &"queue_free")
 	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
@@ -443,8 +443,8 @@ func vanilla_2835131099_load_dividers():
 		self.add_child(rect)
 		rect.add_to_group(&"dividers")
 
-func vanilla_2835131099_load_chart(file: Chart, ghost: bool = false):
-	super.load_chart(file, ghost)
+func load_chart(file: Chart, ghost: bool = false):
+	super(file, ghost)
 	ChartManager.event_tracks = []
 	for event in file.get_events_data():
 		if !ChartManager.event_tracks.has(event[1]):
@@ -452,7 +452,7 @@ func vanilla_2835131099_load_chart(file: Chart, ghost: bool = false):
 	update_grid()
 	_on_event_tracks_ready()
 
-func vanilla_2835131099_update_grid():
+func update_grid():
 	%Grid.columns = pow($Conductor.numerator, 2)
 	%Grid.rows = 1 + ChartManager.event_tracks.size()
 	
@@ -475,7 +475,7 @@ func vanilla_2835131099_update_grid():
 	$"UI/Event Tracks".size.y = %Grid.get_size().y + (ChartManager.event_tracks.size() * 1)
 
 
-func vanilla_2835131099_remove_track(node):
+func remove_track(node):
 	var event: String = node.event
 	node.queue_free()
 	
@@ -495,14 +495,14 @@ func vanilla_2835131099_remove_track(node):
 	%"Mouse Click".play()
 
 
-func vanilla_2835131099__on_event_tracks_ready() -> void:
+func _on_event_tracks_ready() -> void:
 	if ChartManager.chart:
 		await Engine.get_main_loop().process_frame
 		update_grid()
 		load_dividers()
 
 ## This assumes that the tempo and meter dictionaries are sorted
-func vanilla_2835131099_time_to_y_position(time: float) -> float:
+func time_to_y_position(time: float) -> float:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var _offset: float = -ChartManager.chart.offset
 	var y_offset: float = 0
@@ -550,11 +550,11 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	return output
 
 
-func vanilla_2835131099_is_event_at(_name: String, time: float) -> bool:
+func is_event_at(_name: String, time: float) -> bool:
 	return (find_event(_name, time) != -1)
 
 ## Returns the index of the given event in the events list.
-func vanilla_2835131099_find_event(_name: String, time: float) -> int:
+func find_event(_name: String, time: float) -> int:
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.00001)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.00001)
 	
@@ -574,7 +574,7 @@ func vanilla_2835131099_find_event(_name: String, time: float) -> int:
 	return -1
 
 ## Giving only 1 parameter removes the note at the given index
-func vanilla_2835131099_remove_note(_name, time: float = -1):
+func remove_note(_name, time: float = -1):
 	var i: int
 	if time != -1:
 		i = find_event(_name, time)
@@ -598,7 +598,7 @@ func vanilla_2835131099_remove_note(_name, time: float = -1):
 	ChartManager.chart.chart_data["events"].remove_at(i)
 
 ## In the event editor, lane_a is a list of event names
-func vanilla_2835131099_select_area(L: int, R: int, lane_a, lane_b = null):
+func select_area(L: int, R: int, lane_a, lane_b = null):
 	selected_notes = range(L, R + 1)
 	selected_note_nodes = []
 	
@@ -618,7 +618,7 @@ func vanilla_2835131099_select_area(L: int, R: int, lane_a, lane_b = null):
 		%"Note Place".play()
 
 
-func vanilla_2835131099_move_selection(time_distance: float, lane_distance: float):
+func move_selection(time_distance: float, lane_distance: float):
 	var events: Array = []
 	for event in selected_note_nodes:
 		events.append([event.time + time_distance, event.event, event.parameters])
@@ -634,7 +634,7 @@ func vanilla_2835131099_move_selection(time_distance: float, lane_distance: floa
 	%"Note Place".play()
 
 # Returns the indexes of the new notes
-func vanilla_2835131099_place_notes(events: Array) -> Array:
+func place_notes(events: Array) -> Array:
 	var indices: Array = []
 	for event in events:
 		place_event(event[0], event[1], event[2], true)
@@ -649,7 +649,7 @@ func vanilla_2835131099_place_notes(events: Array) -> Array:
 	return indices
 
 
-func vanilla_2835131099_remove_notes(events: Array):
+func remove_notes(events: Array):
 	var i: int = 0
 	for event in events:
 		var _event = ChartManager.chart.get_events_data()[event - i]
@@ -657,7 +657,7 @@ func vanilla_2835131099_remove_notes(events: Array):
 		i += 1
 
 
-func vanilla_2835131099_cut() -> void:
+func cut() -> void:
 	if selected_notes.size() > 0:
 		var temp: Array = []
 		for i in selected_notes:
@@ -669,14 +669,14 @@ func vanilla_2835131099_cut() -> void:
 		%"Note Remove".play()
 
 
-func vanilla_2835131099_copy() -> void:
+func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
 		clipboard.append(ChartManager.chart.get_events_data()[note])
 	%"Note Place".play()
 
 
-func vanilla_2835131099_paste() -> void:
+func paste() -> void:
 	if clipboard.is_empty():
 		return
 	
@@ -688,7 +688,7 @@ func vanilla_2835131099_paste() -> void:
 	%"Note Place".play()
 
 
-func vanilla_2835131099_delete_stacked_notes() -> void:
+func delete_stacked_notes() -> void:
 	if ChartManager.chart.get_events_data().size() > 1:
 		var i: int = 0
 		var deleted: bool = false
@@ -707,14 +707,14 @@ func vanilla_2835131099_delete_stacked_notes() -> void:
 				%"Note Remove".play()
 
 
-func vanilla_2835131099_select_all():
+func select_all():
 	selected_notes = range(current_visible_events_L, current_visible_events_R + 1)
 	selected_note_nodes = get_tree().get_nodes_in_group(&"events")
 	if selected_notes.size() > 0:
 		%"Note Place".play()
 
 
-func vanilla_2835131099__on_event_parameters_about_to_popup() -> void:
+func _on_event_parameters_about_to_popup() -> void:
 	can_chart = false
 	for node in %"Event Parameters".get_children():
 		node.queue_free()
@@ -744,7 +744,7 @@ func vanilla_2835131099__on_event_parameters_about_to_popup() -> void:
 	%"Open Window".play()
 
 
-func vanilla_2835131099__on_place_event_pressed() -> void:
+func _on_place_event_pressed() -> void:
 	var parameters: Array = []
 	for node in %"Event Parameters".get_children():
 		parameters.append(node.text)
@@ -772,16 +772,16 @@ func vanilla_2835131099__on_place_event_pressed() -> void:
 	auto_save()
 
 
-func vanilla_2835131099_change_parameters(i: int, parameters: Array) -> void:
+func change_parameters(i: int, parameters: Array) -> void:
 	ChartManager.chart.chart_data["events"][i][2] = parameters
 
 
-func vanilla_2835131099__on_add_track_pressed() -> void:
+func _on_add_track_pressed() -> void:
 	%"Add Track Window".popup()
 	%"Mouse Click".play()
 
 
-func vanilla_2835131099__on_window_about_to_popup() -> void:
+func _on_window_about_to_popup() -> void:
 	can_chart = false
 	%"Event Option".clear()
 	var events: Array = Constants.EVENT_DATA.keys()
@@ -795,7 +795,7 @@ func vanilla_2835131099__on_window_about_to_popup() -> void:
 			%"Event Option".get_popup().set_item_icon_max_width(%"Event Option".item_count - 1, 32)
 
 
-func vanilla_2835131099__on_add_event_track_pressed() -> void:
+func _on_add_event_track_pressed() -> void:
 	if %"Event Option".selected != -1:
 		var event: String = %"Event Option".get_item_text(%"Event Option".get_selected_id())
 		ChartManager.event_tracks.append(event)
@@ -807,258 +807,17 @@ func vanilla_2835131099__on_add_event_track_pressed() -> void:
 	close_popup()
 
 
-func vanilla_2835131099__on_add_track_window_close_requested() -> void:
+func _on_add_track_window_close_requested() -> void:
 	%"Add Track Window".hide()
 
 
-func vanilla_2835131099__on_export_external_popup_canceled() -> void:
+func _on_export_external_popup_canceled() -> void:
 	pass # Replace with function body.
 
 
-func vanilla_2835131099__on_note_skin_window_canceled() -> void:
+func _on_note_skin_window_canceled() -> void:
 	pass # Replace with function body.
 
 
-func vanilla_2835131099__on_note_type_window_selected_note_type(type: Variant) -> void:
+func _on_note_type_window_selected_note_type(type: Variant) -> void:
 	pass # Replace with function body.
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func _ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__ready, [], 1648897167)
-	else:
-		vanilla_2835131099__ready()
-
-
-func _process(delta: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__process, [delta], 2590025689)
-	else:
-		vanilla_2835131099__process(delta)
-
-
-func _draw():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__draw, [], 960531304)
-	else:
-		vanilla_2835131099__draw()
-
-
-func view_button_item_pressed(id):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_view_button_item_pressed, [id], 1386416564)
-	else:
-		return vanilla_2835131099_view_button_item_pressed(id)
-
-
-func load_section(time: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_load_section, [time], 3150257743)
-	else:
-		return vanilla_2835131099_load_section(time)
-
-
-func update_note_position(node: Node2D):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_update_note_position, [node], 3693399111)
-	else:
-		return vanilla_2835131099_update_note_position(node)
-
-
-func load_dividers():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_load_dividers, [], 3154014452)
-	else:
-		return vanilla_2835131099_load_dividers()
-
-
-func load_chart(file: Chart, ghost: bool=false):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_load_chart, [file, ghost], 1821906796)
-	else:
-		return vanilla_2835131099_load_chart(file, ghost)
-
-
-func update_grid():
-	if _ModLoaderHooks.any_mod_hooked:
-		return await _ModLoaderHooks.call_hooks_async(vanilla_2835131099_update_grid, [], 2703852419)
-	else:
-		return await vanilla_2835131099_update_grid()
-
-
-func remove_track(node):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_remove_track, [node], 3575652541)
-	else:
-		return vanilla_2835131099_remove_track(node)
-
-
-func _on_event_tracks_ready():
-	if _ModLoaderHooks.any_mod_hooked:
-		await _ModLoaderHooks.call_hooks_async(vanilla_2835131099__on_event_tracks_ready, [], 560566419)
-	else:
-		await vanilla_2835131099__on_event_tracks_ready()
-
-
-func time_to_y_position(time: float) -> float:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_time_to_y_position, [time], 4247282936)
-	else:
-		return vanilla_2835131099_time_to_y_position(time)
-
-
-func is_event_at(_name: String, time: float) -> bool:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_is_event_at, [_name, time], 1922338444)
-	else:
-		return vanilla_2835131099_is_event_at(_name, time)
-
-
-func find_event(_name: String, time: float) -> int:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_find_event, [_name, time], 2565982429)
-	else:
-		return vanilla_2835131099_find_event(_name, time)
-
-
-func remove_note(_name, time: float=-1):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_remove_note, [_name, time], 2190543230)
-	else:
-		return vanilla_2835131099_remove_note(_name, time)
-
-
-func select_area(L: int, R: int, lane_a, lane_b=null):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_select_area, [L, R, lane_a, lane_b], 3309487603)
-	else:
-		return vanilla_2835131099_select_area(L, R, lane_a, lane_b)
-
-
-func move_selection(time_distance: float, lane_distance: float):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_move_selection, [time_distance, lane_distance], 394161047)
-	else:
-		return vanilla_2835131099_move_selection(time_distance, lane_distance)
-
-
-func place_notes(events: Array) -> Array:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_place_notes, [events], 3785974536)
-	else:
-		return vanilla_2835131099_place_notes(events)
-
-
-func remove_notes(events: Array):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_remove_notes, [events], 3568449969)
-	else:
-		return vanilla_2835131099_remove_notes(events)
-
-
-func cut():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099_cut, [], 892220839)
-	else:
-		vanilla_2835131099_cut()
-
-
-func copy():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099_copy, [], 3673477366)
-	else:
-		vanilla_2835131099_copy()
-
-
-func paste():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099_paste, [], 980585848)
-	else:
-		vanilla_2835131099_paste()
-
-
-func delete_stacked_notes():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099_delete_stacked_notes, [], 3587678228)
-	else:
-		vanilla_2835131099_delete_stacked_notes()
-
-
-func select_all():
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_2835131099_select_all, [], 2052545171)
-	else:
-		return vanilla_2835131099_select_all()
-
-
-func _on_event_parameters_about_to_popup():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_event_parameters_about_to_popup, [], 3928106170)
-	else:
-		vanilla_2835131099__on_event_parameters_about_to_popup()
-
-
-func _on_place_event_pressed():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_place_event_pressed, [], 1464307857)
-	else:
-		vanilla_2835131099__on_place_event_pressed()
-
-
-func change_parameters(i: int, parameters: Array):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099_change_parameters, [i, parameters], 3184500212)
-	else:
-		vanilla_2835131099_change_parameters(i, parameters)
-
-
-func _on_add_track_pressed():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_add_track_pressed, [], 3074189160)
-	else:
-		vanilla_2835131099__on_add_track_pressed()
-
-
-func _on_window_about_to_popup():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_window_about_to_popup, [], 1095589213)
-	else:
-		vanilla_2835131099__on_window_about_to_popup()
-
-
-func _on_add_event_track_pressed():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_add_event_track_pressed, [], 2048081929)
-	else:
-		vanilla_2835131099__on_add_event_track_pressed()
-
-
-func _on_add_track_window_close_requested():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_add_track_window_close_requested, [], 1480458320)
-	else:
-		vanilla_2835131099__on_add_track_window_close_requested()
-
-
-func _on_export_external_popup_canceled():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_export_external_popup_canceled, [], 2573566171)
-	else:
-		vanilla_2835131099__on_export_external_popup_canceled()
-
-
-func _on_note_skin_window_canceled():
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_note_skin_window_canceled, [], 2455036965)
-	else:
-		vanilla_2835131099__on_note_skin_window_canceled()
-
-
-func _on_note_type_window_selected_note_type(type: Variant):
-	if _ModLoaderHooks.any_mod_hooked:
-		_ModLoaderHooks.call_hooks(vanilla_2835131099__on_note_type_window_selected_note_type, [type], 3331693474)
-	else:
-		vanilla_2835131099__on_note_type_window_selected_note_type(type)

@@ -97,7 +97,7 @@ class_name Alphabet
 		update_text(text)
 
 
-func vanilla_3407017174_get_suffix(character:String) -> StringName:
+func get_suffix(character:String) -> StringName:
 	if !sprite_frames:
 		return &""
 	
@@ -113,18 +113,18 @@ func vanilla_3407017174_get_suffix(character:String) -> StringName:
 	return &""
 
 
-func vanilla_3407017174_get_glyph_name(character: String) -> StringName:
+func get_glyph_name(character: String) -> StringName:
 	var glyph_name: String = glyph_name_overrides.get(character, character)
 	return glyph_name + get_suffix(glyph_name)
 
-func vanilla_3407017174_get_glyph_texture(glyph: String) -> Texture2D:
+func get_glyph_texture(glyph: String) -> Texture2D:
 	if sprite_frames and sprite_frames.has_animation(glyph):
 		return sprite_frames.get_frame_texture(glyph, 0)
 	
 	return null
 
 ## Returns the size of the string's glyphs
-func vanilla_3407017174_get_string_size(_text: String) -> Vector2:
+func get_string_size(_text: String) -> Vector2:
 	if _text.is_empty():
 		return Vector2.ZERO
 	
@@ -177,7 +177,7 @@ func vanilla_3407017174_get_string_size(_text: String) -> Vector2:
 	return Vector2(width, height)
 
 
-func vanilla_3407017174_update_text(new_text: String):
+func update_text(new_text: String):
 	for glyph in get_children():
 		glyph.queue_free()
 	
@@ -252,41 +252,3 @@ func vanilla_3407017174_update_text(new_text: String):
 			next_y += default_bottom_padding
 		
 		j += 1
-
-
-# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
-
-
-func get_suffix(character: String) -> StringName:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3407017174_get_suffix, [character], 1788712298)
-	else:
-		return vanilla_3407017174_get_suffix(character)
-
-
-func get_glyph_name(character: String) -> StringName:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3407017174_get_glyph_name, [character], 1053626265)
-	else:
-		return vanilla_3407017174_get_glyph_name(character)
-
-
-func get_glyph_texture(glyph: String) -> Texture2D:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3407017174_get_glyph_texture, [glyph], 3359501321)
-	else:
-		return vanilla_3407017174_get_glyph_texture(glyph)
-
-
-func get_string_size(_text: String) -> Vector2:
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3407017174_get_string_size, [_text], 3010016390)
-	else:
-		return vanilla_3407017174_get_string_size(_text)
-
-
-func update_text(new_text: String):
-	if _ModLoaderHooks.any_mod_hooked:
-		return _ModLoaderHooks.call_hooks(vanilla_3407017174_update_text, [new_text], 3989022269)
-	else:
-		return vanilla_3407017174_update_text(new_text)
