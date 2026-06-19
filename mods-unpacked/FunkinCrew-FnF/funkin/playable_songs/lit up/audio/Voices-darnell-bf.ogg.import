@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://4k4ic3uap0fg"
+path="res://.godot/imported/Voices-darnell-bf.ogg-eb395aeb45f77288746ca4026140493d.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/lit up/audio/Voices-darnell-bf.ogg"
+dest_files=["res://.godot/imported/Voices-darnell-bf.ogg-eb395aeb45f77288746ca4026140493d.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

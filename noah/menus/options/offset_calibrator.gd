@@ -106,9 +106,6 @@ func _input(event):
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
-	$UI/Speaker.frame = 0
-	$UI/Speaker.play_animation(&"bump")
-	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 

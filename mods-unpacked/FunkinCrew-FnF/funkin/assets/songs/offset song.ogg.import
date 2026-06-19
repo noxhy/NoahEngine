@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c7t6ab85b1td1"
+path="res://.godot/imported/offset song.ogg-0005c480a459109d7d666d9097138cef.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/offset song.ogg"
+dest_files=["res://.godot/imported/offset song.ogg-0005c480a459109d7d666d9097138cef.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=100.0
+beat_count=0
+bar_beats=4

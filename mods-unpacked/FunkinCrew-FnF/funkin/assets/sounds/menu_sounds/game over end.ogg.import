@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dbdx3d7yv6085"
+path="res://.godot/imported/game over end.ogg-5f4fe82513fb61c2c3e7a86165cba90d.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/game over end.ogg"
+dest_files=["res://.godot/imported/game over end.ogg-5f4fe82513fb61c2c3e7a86165cba90d.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

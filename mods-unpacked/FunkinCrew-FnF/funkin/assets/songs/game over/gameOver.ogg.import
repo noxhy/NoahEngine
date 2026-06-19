@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cqoad5jx15ele"
+path="res://.godot/imported/gameOver.ogg-b55d39cf9d47aef5c3640babc8278c29.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/game over/gameOver.ogg"
+dest_files=["res://.godot/imported/gameOver.ogg-b55d39cf9d47aef5c3640babc8278c29.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=100.0
+beat_count=0
+bar_beats=4
