@@ -386,7 +386,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			
 			camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease[0], _ease[1])
 		
-		"bop_rate":
+		"bop_rate", "bop_delay":
 			host.bop_rate = int(event_parameters[0])
 		
 		"bop_strength":
