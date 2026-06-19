@@ -141,8 +141,8 @@ func _ready():
 	
 	await $Conductor.ready
 	
-	$Conductor.tempo = SoundManager.music.stream._get_bpm()
-	print(SoundManager.music.stream._get_bpm())
+	$Conductor.tempo = SoundManager.music.stream.get_bpm()
+	print(SoundManager.music.stream.get_bpm())
 
 
 func _process(delta: float) -> void:

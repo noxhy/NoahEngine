@@ -1,7 +1,7 @@
 extends Node2D
 class_name DeathScreen
 
-static var player_position: Variant = Vector2.ONE
+static var player_position: Variant = Vector2.ZERO
 static var player_scale: Vector2 = Vector2.ONE
 static var camera_zoom: Variant = Vector2.ONE
 
