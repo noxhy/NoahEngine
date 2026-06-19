@@ -39,7 +39,7 @@ var EVENT_DATA: Dictionary = {
 	"bop_strength": {
 		"parameters": ["Camera Amount", "UI Amount"],
 	},
-	"lerping": {
+	"set_smoothing": {
 		"parameters": ["Toggled"],
 	},
 	"scroll_speed": {

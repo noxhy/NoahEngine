@@ -393,11 +393,10 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			camera_bop_strength = Vector2.ONE * float(event_parameters[0])
 			ui_bop_strength = Vector2.ONE * float(event_parameters[1])
 		
-		"lerping":
-			
-			var lerping = event_parameters[0] == "true"
-			ui.zoom_smoothing = lerping
-			camera.zoom_smoothing = lerping
+		"set_smoothing":
+			var smoothing: bool = event_parameters[0] == "true"
+			ui.zoom_smoothing = smoothing
+			camera.zoom_smoothing = smoothing
 		
 		"scroll_speed":
 			var tween_time = Global.string_to_time(event_parameters[1])
