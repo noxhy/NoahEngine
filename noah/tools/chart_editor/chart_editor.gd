@@ -70,7 +70,7 @@ var default_font: Font = ThemeDB.fallback_font
 var default_font_size: int = ThemeDB.fallback_font_size
 
 # Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+func vanilla_983418804__ready() -> void:
 	if name == "Chart Editor":
 		if ChartManager.event_editor:
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
@@ -274,7 +274,7 @@ func _ready() -> void:
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func vanilla_983418804__process(delta: float) -> void:
 	if start_offset < 0:
 		start_offset = 0
 	
@@ -572,7 +572,7 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-func _draw() -> void:
+func vanilla_983418804__draw() -> void:
 	var rect: Rect2
 	
 	## Box when you're holding control
@@ -636,7 +636,7 @@ func _draw() -> void:
 		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
 
 
-func on_files_dropped(files: PackedStringArray):
+func vanilla_983418804_on_files_dropped(files: PackedStringArray):
 	print("Received files: ", files)
 	var file: String = files[0]
 	var local_file: String = ProjectSettings.localize_path(file)
@@ -648,7 +648,7 @@ func on_files_dropped(files: PackedStringArray):
 			printerr("(ChartEdtior) File is not a song is %s correct?" % local_file)
 
 
-func update_grid():
+func vanilla_983418804_update_grid():
 	%Grid.columns = 2 + ChartManager.strum_count
 	%Grid.rows = pow($Conductor.numerator, 2)
 	%"Strum Labels".position = %Grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
@@ -686,7 +686,7 @@ func update_grid():
 	%"Strum Labels".size.y = 32
 
 
-func load_song(song: Song, difficulty: Variant = null):
+func vanilla_983418804_load_song(song: Song, difficulty: Variant = null):
 	if ChartManager.song != song:
 		song_position = 0.0
 	
@@ -726,7 +726,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	can_chart = true
 
 
-func load_song_path(path: String, difficulty: Variant = null):
+func vanilla_983418804_load_song_path(path: String, difficulty: Variant = null):
 	var song = load(path)
 	if song is not Song:
 		printerr("File: ", path, " is not a song file.")
@@ -734,7 +734,7 @@ func load_song_path(path: String, difficulty: Variant = null):
 	load_song(song, difficulty)
 
 
-func load_chart(file: Chart, ghost: bool = false):
+func vanilla_983418804_load_chart(file: Chart, ghost: bool = false):
 	if file:
 		backup_chart = file.duplicate(true)
 	selected_notes = []
@@ -764,7 +764,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	load_dividers()
 
 ## Loads all the notes and waveforms for the next two waveforms.
-func load_section(time: float):
+func vanilla_983418804_load_section(time: float):
 	if ChartManager.chart.get_notes_data().is_empty():
 		return
 	
@@ -834,7 +834,7 @@ func load_section(time: float):
 		current_visible_events_R = R
 #endregion
 
-func load_dividers():
+func vanilla_983418804_load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
 	for i in range($Conductor.numerator):
 		var rect = ColorRect.new()
@@ -897,7 +897,7 @@ func load_dividers():
 		rect.add_to_group(&"dividers")
 
 
-func new_file(path: String, song: Song):
+func vanilla_983418804_new_file(path: String, song: Song):
 	var old_song = ChartManager.song
 	load_song(song)
 	var action: String = "Created New Song"
@@ -910,7 +910,7 @@ func new_file(path: String, song: Song):
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
-func place_note(time: float, lane: int, length: float, type: String, placed: bool = false, moved: bool = false,
+func vanilla_983418804_place_note(time: float, lane: int, length: float, type: String, placed: bool = false, moved: bool = false,
 sorted: bool = false, sort_index: int = -1) -> int:
 	var directions: Array = ["left", "down", "up", "right"]
 	
@@ -987,7 +987,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	return output
 
 ## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
-func place_event(time: float, event: String, parameters: Array, placed: bool = false, moved: bool = false,
+func vanilla_983418804_place_event(time: float, event: String, parameters: Array, placed: bool = false, moved: bool = false,
 sorted: bool = false, sort_index: int = -1) -> int:
 	var event_instance = EVENT_PRELOAD.instantiate()
 	
@@ -1054,11 +1054,11 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	return output
 
 
-func sort_note(a, b):
+func vanilla_983418804_sort_note(a, b):
 	return a.time < b.time
 
 # Returns the indexes of the new notes
-func place_notes(notes: Array) -> Array:
+func vanilla_983418804_place_notes(notes: Array) -> Array:
 	var indices: Array = []
 	for note in notes:
 		place_note(note[0], note[1], note[2], note[3], true)
@@ -1073,7 +1073,7 @@ func place_notes(notes: Array) -> Array:
 	return indices
 
 ## Giving only 1 parameter removes the note at the given index
-func remove_note(lane, time: float = -1):
+func vanilla_983418804_remove_note(lane, time: float = -1):
 	var i: int
 	if time != -1:
 		i = find_note(lane, time)
@@ -1096,7 +1096,7 @@ func remove_note(lane, time: float = -1):
 	
 	ChartManager.chart.chart_data["notes"].remove_at(i)
 
-func remove_notes(notes: Array):
+func vanilla_983418804_remove_notes(notes: Array):
 	var i: int = 0
 	for note in notes:
 		var _note = ChartManager.chart.get_notes_data()[note - i]
@@ -1104,7 +1104,7 @@ func remove_notes(notes: Array):
 		i += 1
 
 ## Returns the index of the given note in the notes list.
-func find_note(lane: int, time: float) -> int:
+func vanilla_983418804_find_note(lane: int, time: float) -> int:
 	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - 0.00001)
 	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + 0.00001)
 	
@@ -1123,7 +1123,7 @@ func find_note(lane: int, time: float) -> int:
 	
 	return -1
 
-func find_event(event: String, time: float) -> int:
+func vanilla_983418804_find_event(event: String, time: float) -> int:
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.1)
 	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.1)
 	
@@ -1142,7 +1142,7 @@ func find_event(event: String, time: float) -> int:
 	
 	return -1
 
-func play_audios(time: float):
+func vanilla_983418804_play_audios(time: float):
 	%Vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
 	%Vocals.play()
@@ -1168,7 +1168,7 @@ func play_audios(time: float):
 			current_note = ChartManager.chart.get_notes_data().size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
-func time_to_y_position(time: float) -> float:
+func vanilla_983418804_time_to_y_position(time: float) -> float:
 	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
 	var _offset: float = 0# -ChartManager.chart.offset
 	var y_offset: float = 0
@@ -1201,7 +1201,7 @@ func time_to_y_position(time: float) -> float:
 	
 	return y_offset
 
-func update_note_position(node: Node2D):
+func vanilla_983418804_update_note_position(node: Node2D):
 	if node is ChartNote:
 		node.position = Vector2(%Grid.get_real_position(Vector2(1.5 + node.lane, 0)).x,
 		time_to_y_position(node.time) + %Grid.grid_size.y * %Grid.zoom.y / 2)
@@ -1218,7 +1218,7 @@ func update_note_position(node: Node2D):
 		printerr(node.get_class(), " isn't a valid node.")
 
 ## This assumes that the tempo and meter dictionaries are sorted
-func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
+func vanilla_983418804_grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
 	var meter: Array = ChartManager.chart.get_meter_at(time)
 	var L: float = ChartManager.chart.get_tempo_time_at(time)
@@ -1232,7 +1232,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	return output
 
 ## Binary searches for both notes and events
-func bsearch_left_range(value_set: Array, left_range: float) -> int:
+func vanilla_983418804_bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var length: int = value_set.size()
 	if (length == 0):
 		return -1
@@ -1253,7 +1253,7 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	return found
 
 
-func bsearch_right_range(value_set: Array, right_range: float) -> int:
+func vanilla_983418804_bsearch_right_range(value_set: Array, right_range: float) -> int:
 	var length: int = value_set.size()
 	if (length == 0):
 		return -1
@@ -1274,7 +1274,7 @@ func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	return found
 
 ## Binary searches for note nodes
-func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
+func vanilla_983418804_bsearch_left_range_note(value_set: Array, left_range: float) -> int:
 	var length: int = value_set.size()
 	if (length == 0):
 		return -1
@@ -1296,10 +1296,10 @@ func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
 	
 	return found
 
-func is_note_at(lane: int, time: float) -> bool:
+func vanilla_983418804_is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)
 
-func _on_play_button_toggled(toggled_on: bool) -> void:
+func vanilla_983418804__on_play_button_toggled(toggled_on: bool) -> void:
 	%Vocals.stream_paused = !toggled_on
 	%Instrumental.stream_paused = !toggled_on
 	
@@ -1309,7 +1309,7 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	
 	else: %"Lower UI".get_node("%Play Button").icon = load("uid://byl3boevtc02p")
 
-func move_bound_left(strum_id: int):
+func vanilla_983418804_move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
 	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartManager.strum_count - 1)
 	
@@ -1320,7 +1320,7 @@ func move_bound_left(strum_id: int):
 	update_grid()
 	load_dividers()
 
-func move_bound_right(strum_id: int):
+func vanilla_983418804_move_bound_right(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
 	strum_data["strums"][1] = clamp(strum_data["strums"][1] + 1, 0, ChartManager.strum_count - 1)
 	
@@ -1331,36 +1331,36 @@ func move_bound_right(strum_id: int):
 	update_grid()
 	load_dividers()
 
-func find_strum_id(strum_name: String) -> int:
+func vanilla_983418804_find_strum_id(strum_name: String) -> int:
 	for id in ChartManager.strum_data.size():
 		var strum_data = ChartManager.strum_data[id]
 		if strum_data["name"] == strum_name:
 			return id
 	return -1
 
-func _on_song_slider_value_changed(value: float) -> void:
+func vanilla_983418804__on_song_slider_value_changed(value: float) -> void:
 	song_position = value
 
-func _on_skip_forward_pressed() -> void:
+func vanilla_983418804__on_skip_forward_pressed() -> void:
 	song_position += 10
 	_on_play_button_toggled(true)
 
-func _on_skip_backward_pressed() -> void:
+func vanilla_983418804__on_skip_backward_pressed() -> void:
 	song_position -= 10
 	_on_play_button_toggled(true)
 
-func _on_skip_to_beginning_pressed() -> void:
+func vanilla_983418804__on_skip_to_beginning_pressed() -> void:
 	song_position = start_offset
 	_on_play_button_toggled(true)
 
-func _on_skip_to_end_pressed() -> void:
+func vanilla_983418804__on_skip_to_end_pressed() -> void:
 	song_position = %Instrumental.stream.get_length() - 0.1
 	_on_play_button_toggled(true)
 
-func _on_instrumental_finished() -> void:
+func vanilla_983418804__on_instrumental_finished() -> void:
 	_on_play_button_toggled(false)
 
-func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
+func vanilla_983418804__on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"):
 		if measure_relative == 0:
 			%"Conductor Beat".play(0.55)
@@ -1372,18 +1372,18 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	
 	%"Lower UI".get_node("%Beat").text = str("Beat: ", current_beat + 1)
 
-func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
+func vanilla_983418804__on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"):
 		%"Conductor Step".play(0.55)
 	%"Lower UI".get_node("%Step").text = str("Step: ", current_step + 1)
 
-func _on_conductor_new_tempo(_tempo: float) -> void:
+func vanilla_983418804__on_conductor_new_tempo(_tempo: float) -> void:
 	%"Lower UI".get_node("%Tempo").text = str("Tempo: ", _tempo)
 	update_grid()
 	load_dividers()
 
 ## File button item pressed
-func file_button_item_pressed(id):
+func vanilla_983418804_file_button_item_pressed(id):
 	match id:
 		0:
 			can_chart = false
@@ -1517,7 +1517,7 @@ func file_button_item_pressed(id):
 			print("id: ", id)
 
 ## Edit button item pressed
-func edit_button_item_pressed(id):
+func vanilla_983418804_edit_button_item_pressed(id):
 	match id:
 		0:
 			undo()
@@ -1550,7 +1550,7 @@ func edit_button_item_pressed(id):
 			print("id: ", id)
 
 ## Audio button item pressed
-func audio_button_item_pressed(id):
+func vanilla_983418804_audio_button_item_pressed(id):
 	match id:
 		0:
 			_on_play_button_toggled(!%Instrumental.playing)
@@ -1592,7 +1592,7 @@ func audio_button_item_pressed(id):
 			print("id: ", id)
 
 ## View button item pressed
-func view_button_item_pressed(id):
+func vanilla_983418804_view_button_item_pressed(id):
 	match id:
 		0:
 			ChartManager.event_editor = true
@@ -1619,7 +1619,7 @@ func view_button_item_pressed(id):
 			print("id: ", id)
 
 ## Window button item pressed
-func window_button_item_pressed(id):
+func vanilla_983418804_window_button_item_pressed(id):
 	match id:
 		0:
 			if %"Upper UI".get_node("%History Window").visible:
@@ -1650,7 +1650,7 @@ func window_button_item_pressed(id):
 			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%Note Type Window").visible)
 
 ## Edit button item pressed
-func test_button_item_pressed(id):
+func vanilla_983418804_test_button_item_pressed(id):
 	match id:
 		0:
 			if ResourceLoader.exists(ChartManager.song.scene):
@@ -1684,16 +1684,16 @@ func test_button_item_pressed(id):
 			print("id: ", id)
 
 
-func disable_charting():
+func vanilla_983418804_disable_charting():
 	can_chart = false
 
 
-func close_popup():
+func vanilla_983418804_close_popup():
 	can_chart = true
 	%"Close Window".play()
 
 
-func undo():
+func vanilla_983418804_undo():
 	if undo_redo.has_undo():
 		%Undo.play()
 		undo_redo.undo()
@@ -1703,7 +1703,7 @@ func undo():
 	%"Upper UI".get_node("%Edit Button").get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 
-func redo():
+func vanilla_983418804_redo():
 	if undo_redo.has_redo():
 		%Redo.play()
 		undo_redo.redo()
@@ -1713,12 +1713,12 @@ func redo():
 	%"Upper UI".get_node("%Edit Button").get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 
-func auto_save():
+func vanilla_983418804_auto_save():
 	if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
 		save()
 
 
-func save():
+func vanilla_983418804_save():
 	# Checks if it's a json
 	if (ChartManager.chart.resource_path.is_empty()):
 		var path: String = ChartManager.song.difficulties.get(ChartManager.difficulty).get("chart")
@@ -1737,7 +1737,7 @@ func save():
 	backup_chart = ChartManager.chart
 
 
-func move_selection(time_distance: float, lane_distance: float):
+func vanilla_983418804_move_selection(time_distance: float, lane_distance: float):
 	var notes: Array = []
 	for note in selected_note_nodes:
 		notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
@@ -1753,11 +1753,11 @@ func move_selection(time_distance: float, lane_distance: float):
 	%"Note Place".play()
 
 
-func updated_strums():
+func vanilla_983418804_updated_strums():
 	can_chart = true
 	update_grid()
 
-func load_waveforms():
+func vanilla_983418804_load_waveforms():
 	get_tree().call_group(&"waveforms", &"queue_free")
 	return
 	@warning_ignore("unreachable_code")
@@ -1788,59 +1788,59 @@ func load_waveforms():
 			else:
 				printerr("(load_waveforms) Track ", track, " does not exist.")
 
-func _on_chart_snap_value_changed(value: float) -> void:
+func vanilla_983418804__on_chart_snap_value_changed(value: float) -> void:
 	# This is really dumb and janky
 	chart_snap = value
 
-func _on_difficulty_button_item_selected(index: int) -> void:
+func vanilla_983418804__on_difficulty_button_item_selected(index: int) -> void:
 	var _difficulty = %"Lower UI".get_node("%Difficulty Button").get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(_difficulty):
 		ChartManager.chart = Chart.load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
 		ChartManager.difficulty = _difficulty
 		load_chart(ChartManager.chart)
 
-func _on_history_window_close_requested() -> void:
+func vanilla_983418804__on_history_window_close_requested() -> void:
 	%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(0, false)
 	%"Close Window".play()
 
-func _on_metadata_window_close_requested() -> void:
+func vanilla_983418804__on_metadata_window_close_requested() -> void:
 	%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(1, false)
 	%"Close Window".play()
 
-func _on_metadata_window_updated_icon_texture(path: String) -> void:
+func vanilla_983418804__on_metadata_window_updated_icon_texture(path: String) -> void:
 	ChartManager.song.icons = load(path)
 	auto_save()
 
-func _on_metadata_window_updated_song_artist(text: String) -> void:
+func vanilla_983418804__on_metadata_window_updated_song_artist(text: String) -> void:
 	ChartManager.song.artist = text
 	auto_save()
 
-func _on_metadata_window_updated_song_charter(text: String) -> void:
+func vanilla_983418804__on_metadata_window_updated_song_charter(text: String) -> void:
 	ChartManager.song.charter = text
 	auto_save()
 
-func _on_metadata_window_updated_song_name(text: String) -> void:
+func vanilla_983418804__on_metadata_window_updated_song_name(text: String) -> void:
 	ChartManager.song.title = text
 	auto_save()
 
-func _on_metadata_window_updated_song_scene(path: String) -> void:
+func vanilla_983418804__on_metadata_window_updated_song_scene(path: String) -> void:
 	ChartManager.song.scene = path
 	auto_save()
 
-func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
+func vanilla_983418804__on_metadata_window_updated_starting_tempo(tempo: float) -> void:
 	ChartManager.song.tempo = tempo
 	auto_save()
 
-func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
+func vanilla_983418804__on_metadata_window_updated_scroll_speed(speed: float) -> void:
 	ChartManager.chart.scroll_speed = speed
 	auto_save()
 
-func _on_metadata_window_selected_time_change(time: float) -> void:
+func vanilla_983418804__on_metadata_window_selected_time_change(time: float) -> void:
 	song_position = time
 	start_offset = 0
 	_on_play_button_toggled(false)
 
-func _on_metadata_window_add_time_change() -> void:
+func vanilla_983418804__on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
 	ChartManager.chart.chart_data["tempos"][time] = $Conductor.tempo
 	ChartManager.chart.chart_data["meters"][time] = [
@@ -1852,30 +1852,30 @@ func _on_metadata_window_add_time_change() -> void:
 	%"Upper UI".get_node("%Metadata Window").update_stats()
 	auto_save()
 
-func _on_metadata_window_remove_time_change() -> void:
+func vanilla_983418804__on_metadata_window_remove_time_change() -> void:
 	auto_save()
 
-func update_note(note):
+func vanilla_983418804_update_note(note):
 	if note:
 		hovered_note = find_note(note.lane, note.time)
 	else:
 		hovered_note = -1
 
-func update_event(event):
+func vanilla_983418804_update_event(event):
 	if event:
 		hovered_event = find_event(event.event, event.time)
 	else:
 		hovered_event = -1
 
-func _on_export_external_popup_file_selected(path: String) -> void:
+func vanilla_983418804__on_export_external_popup_file_selected(path: String) -> void:
 	ResourceSaver.save(ChartManager.chart, path)
 	%"Upper UI".get_node("%Export External Popup").hide()
 
-func _on_gui_focus_changed(node):
+func vanilla_983418804__on_gui_focus_changed(node):
 	current_focus_owner = node
 	current_focus_viewport = node.get_viewport()
 
-func set_chart_from_chart(_chart: Chart):
+func vanilla_983418804_set_chart_from_chart(_chart: Chart):
 	if !_chart:
 		return
 	ChartManager.chart.chart_data = backup_chart.chart_data
@@ -1883,7 +1883,7 @@ func set_chart_from_chart(_chart: Chart):
 	ChartManager.chart.offset = backup_chart.offset
 
 
-func _on_note_skin_window_file_selected(path: String) -> void:
+func vanilla_983418804__on_note_skin_window_file_selected(path: String) -> void:
 	can_chart = true
 	if !FileAccess.file_exists(path):
 		printerr("File does not exist is (%s) correct?" % path)
@@ -1898,7 +1898,7 @@ func _on_note_skin_window_file_selected(path: String) -> void:
 	note_skin = skin
 	%"Open Window".play()
 
-func cut() -> void:
+func vanilla_983418804_cut() -> void:
 	if selected_notes.size() > 0:
 		var temp: Array = []
 		for i in selected_notes:
@@ -1912,14 +1912,14 @@ func cut() -> void:
 		%"Note Remove".play()
 
 
-func copy() -> void:
+func vanilla_983418804_copy() -> void:
 	clipboard = []
 	for note in selected_notes:
 		clipboard.append(ChartManager.chart.get_notes_data()[note])
 	%"Note Place".play()
 
 
-func paste() -> void:
+func vanilla_983418804_paste() -> void:
 	if clipboard.is_empty():
 		return
 	
@@ -1931,7 +1931,7 @@ func paste() -> void:
 	%"Note Place".play()
 
 
-func delete_stacked_notes() -> void:
+func vanilla_983418804_delete_stacked_notes() -> void:
 	if ChartManager.chart.get_notes_data().size() > 1:
 		var i: int = 0
 		var deleted: bool = false
@@ -1950,11 +1950,11 @@ func delete_stacked_notes() -> void:
 				%"Note Remove".play()
 
 
-func do_flip():
+func vanilla_983418804_do_flip():
 	add_action("Flipped Notes", self.flip, self.flip)
 
 
-func flip():
+func vanilla_983418804_flip():
 	if selected_notes.size() > 1:
 		var _min_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
 		var _max_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
@@ -1993,11 +1993,11 @@ func flip():
 		%"Note Place".play()
 
 
-func change_length(i: int, length: float) -> void:
+func vanilla_983418804_change_length(i: int, length: float) -> void:
 	ChartManager.chart.chart_data["notes"][i][2] = length
 
 
-func select_area(L: int, R: int, lane_a, lane_b = null):
+func vanilla_983418804_select_area(L: int, R: int, lane_a, lane_b = null):
 	selected_notes = range(L, R + 1)
 	selected_note_nodes = []
 	
@@ -2017,7 +2017,7 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 		%"Note Place".play()
 
 
-func add_action(action: String, do_method: Callable, undo_method: Callable):
+func vanilla_983418804_add_action(action: String, do_method: Callable, undo_method: Callable):
 	undo_redo.create_action(action)
 	undo_redo.add_do_method(do_method)
 	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
@@ -2028,14 +2028,14 @@ func add_action(action: String, do_method: Callable, undo_method: Callable):
 	%"Upper UI".get_node("%Edit Button").get_popup().set_item_disabled(1, !undo_redo.has_redo())
 
 
-func select_all():
+func vanilla_983418804_select_all():
 	selected_notes = range(current_visible_notes_L, current_visible_notes_R + 1)
 	selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
 	if selected_notes.size() > 0:
 		%"Note Place".play()
 
 
-func deselect_all():
+func vanilla_983418804_deselect_all():
 	if !selected_notes.is_empty():
 		%"Note Place".play()
 		
@@ -2043,35 +2043,691 @@ func deselect_all():
 		selected_note_nodes = []
 
 
-func _on_conductor_new_numerator(_numerator: int) -> void:
+func vanilla_983418804__on_conductor_new_numerator(_numerator: int) -> void:
 	update_grid()
 	load_dividers()
 
 
-func _on_conductor_new_denominator(_denominator: int) -> void:
+func vanilla_983418804__on_conductor_new_denominator(_denominator: int) -> void:
 	update_grid()
 	load_dividers()
 
 
-func set_note_type(note_type):
+func vanilla_983418804_set_note_type(note_type):
 	current_note_type = note_type
 
 
-func _on_note_type_window_close_requested() -> void:
+func vanilla_983418804__on_note_type_window_close_requested() -> void:
 	%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(2, false)
 	%"Close Window".play()
 
 
-func _on_audios_window_close_requested() -> void:
+func vanilla_983418804__on_audios_window_close_requested() -> void:
 	can_chart = true
 	%"Close Window".play()
 
 
-func _on_audios_window_about_to_popup() -> void:
+func vanilla_983418804__on_audios_window_about_to_popup() -> void:
 	can_chart = false
 	%"Open Window".play()
 
 
-func _on_audios_window_updated() -> void:
+func vanilla_983418804__on_audios_window_updated() -> void:
 	%Instrumental.stream = load(ChartManager.song.instrumental)
 	auto_save()
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__ready, [], 2271987752)
+	else:
+		vanilla_983418804__ready()
+
+
+func _process(delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__process, [delta], 2530839986)
+	else:
+		vanilla_983418804__process(delta)
+
+
+func _draw():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__draw, [], 1109563361)
+	else:
+		vanilla_983418804__draw()
+
+
+func on_files_dropped(files: PackedStringArray):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_on_files_dropped, [files], 2552234448)
+	else:
+		return vanilla_983418804_on_files_dropped(files)
+
+
+func update_grid():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_update_grid, [], 1756055228)
+	else:
+		return vanilla_983418804_update_grid()
+
+
+func load_song(song: Song, difficulty: Variant=null):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_song, [song, difficulty], 965975658)
+	else:
+		return vanilla_983418804_load_song(song, difficulty)
+
+
+func load_song_path(path: String, difficulty: Variant=null):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_song_path, [path, difficulty], 3133103862)
+	else:
+		return vanilla_983418804_load_song_path(path, difficulty)
+
+
+func load_chart(file: Chart, ghost: bool=false):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_chart, [file, ghost], 1793185669)
+	else:
+		return vanilla_983418804_load_chart(file, ghost)
+
+
+func load_section(time: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_section, [time], 1937721512)
+	else:
+		return vanilla_983418804_load_section(time)
+
+
+func load_dividers():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_dividers, [], 1795024493)
+	else:
+		return vanilla_983418804_load_dividers()
+
+
+func new_file(path: String, song: Song):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_new_file, [path, song], 712925917)
+	else:
+		return vanilla_983418804_new_file(path, song)
+
+
+func place_note(time: float, lane: int, length: float, type: String, placed: bool=false, moved: bool=false, 
+sorted: bool=false, sort_index: int=-1) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_place_note, [time, lane, length, type, placed, moved, sorted, sort_index], 3730220046)
+	else:
+		return vanilla_983418804_place_note(time, lane, length, type, placed, moved, sorted, sort_index)
+
+
+func place_event(time: float, event: String, parameters: Array, placed: bool=false, moved: bool=false, 
+sorted: bool=false, sort_index: int=-1) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_place_event, [time, event, parameters, placed, moved, sorted, sort_index], 2827739578)
+	else:
+		return vanilla_983418804_place_event(time, event, parameters, placed, moved, sorted, sort_index)
+
+
+func sort_note(a, b):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_sort_note, [a, b], 2867366705)
+	else:
+		return vanilla_983418804_sort_note(a, b)
+
+
+func place_notes(notes: Array) -> Array:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_place_notes, [notes], 2838177345)
+	else:
+		return vanilla_983418804_place_notes(notes)
+
+
+func remove_note(lane, time: float=-1):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_remove_note, [lane, time], 1242746039)
+	else:
+		return vanilla_983418804_remove_note(lane, time)
+
+
+func remove_notes(notes: Array):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_remove_notes, [notes], 2355913738)
+	else:
+		return vanilla_983418804_remove_notes(notes)
+
+
+func find_note(lane: int, time: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_find_note, [lane, time], 3721417674)
+	else:
+		return vanilla_983418804_find_note(lane, time)
+
+
+func find_event(event: String, time: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_find_event, [event, time], 2537261302)
+	else:
+		return vanilla_983418804_find_event(event, time)
+
+
+func play_audios(time: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_play_audios, [time], 773377070)
+	else:
+		return vanilla_983418804_play_audios(time)
+
+
+func time_to_y_position(time: float) -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_time_to_y_position, [time], 3914935825)
+	else:
+		return vanilla_983418804_time_to_y_position(time)
+
+
+func update_note_position(node: Node2D):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_update_note_position, [node], 2544648096)
+	else:
+		return vanilla_983418804_update_note_position(node)
+
+
+func grid_position_to_time(p: Vector2, factor_in_snap: bool=false) -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_grid_position_to_time, [p, factor_in_snap], 4072861854)
+	else:
+		return vanilla_983418804_grid_position_to_time(p, factor_in_snap)
+
+
+func bsearch_left_range(value_set: Array, left_range: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_bsearch_left_range, [value_set, left_range], 1643596994)
+	else:
+		return vanilla_983418804_bsearch_left_range(value_set, left_range)
+
+
+func bsearch_right_range(value_set: Array, right_range: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_bsearch_right_range, [value_set, right_range], 1476359541)
+	else:
+		return vanilla_983418804_bsearch_right_range(value_set, right_range)
+
+
+func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_bsearch_left_range_note, [value_set, left_range], 1206183703)
+	else:
+		return vanilla_983418804_bsearch_left_range_note(value_set, left_range)
+
+
+func is_note_at(lane: int, time: float) -> bool:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_is_note_at, [lane, time], 2155550905)
+	else:
+		return vanilla_983418804_is_note_at(lane, time)
+
+
+func _on_play_button_toggled(toggled_on: bool):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_play_button_toggled, [toggled_on], 1039379461)
+	else:
+		vanilla_983418804__on_play_button_toggled(toggled_on)
+
+
+func move_bound_left(strum_id: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_move_bound_left, [strum_id], 3223231436)
+	else:
+		return vanilla_983418804_move_bound_left(strum_id)
+
+
+func move_bound_right(strum_id: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_move_bound_right, [strum_id], 3294682367)
+	else:
+		return vanilla_983418804_move_bound_right(strum_id)
+
+
+func find_strum_id(strum_name: String) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_find_strum_id, [strum_name], 1290411803)
+	else:
+		return vanilla_983418804_find_strum_id(strum_name)
+
+
+func _on_song_slider_value_changed(value: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_song_slider_value_changed, [value], 2407934733)
+	else:
+		vanilla_983418804__on_song_slider_value_changed(value)
+
+
+func _on_skip_forward_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_skip_forward_pressed, [], 627558863)
+	else:
+		vanilla_983418804__on_skip_forward_pressed()
+
+
+func _on_skip_backward_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_skip_backward_pressed, [], 775099321)
+	else:
+		vanilla_983418804__on_skip_backward_pressed()
+
+
+func _on_skip_to_beginning_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_skip_to_beginning_pressed, [], 1774772621)
+	else:
+		vanilla_983418804__on_skip_to_beginning_pressed()
+
+
+func _on_skip_to_end_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_skip_to_end_pressed, [], 1196691795)
+	else:
+		vanilla_983418804__on_skip_to_end_pressed()
+
+
+func _on_instrumental_finished():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_instrumental_finished, [], 1132244254)
+	else:
+		vanilla_983418804__on_instrumental_finished()
+
+
+func _on_conductor_new_beat(current_beat: int, measure_relative: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_conductor_new_beat, [current_beat, measure_relative], 716082020)
+	else:
+		vanilla_983418804__on_conductor_new_beat(current_beat, measure_relative)
+
+
+func _on_conductor_new_step(current_step: int, measure_relative: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_conductor_new_step, [current_step, measure_relative], 716709412)
+	else:
+		vanilla_983418804__on_conductor_new_step(current_step, measure_relative)
+
+
+func _on_conductor_new_tempo(_tempo: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_conductor_new_tempo, [_tempo], 2177229805)
+	else:
+		vanilla_983418804__on_conductor_new_tempo(_tempo)
+
+
+func file_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_file_button_item_pressed, [id], 573276370)
+	else:
+		return vanilla_983418804_file_button_item_pressed(id)
+
+
+func edit_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_edit_button_item_pressed, [id], 3522411992)
+	else:
+		return vanilla_983418804_edit_button_item_pressed(id)
+
+
+func audio_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_audio_button_item_pressed, [id], 3357946180)
+	else:
+		return vanilla_983418804_audio_button_item_pressed(id)
+
+
+func view_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_view_button_item_pressed, [id], 2700509581)
+	else:
+		return vanilla_983418804_view_button_item_pressed(id)
+
+
+func window_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_window_button_item_pressed, [id], 4266436554)
+	else:
+		return vanilla_983418804_window_button_item_pressed(id)
+
+
+func test_button_item_pressed(id):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_test_button_item_pressed, [id], 881999378)
+	else:
+		return vanilla_983418804_test_button_item_pressed(id)
+
+
+func disable_charting():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_disable_charting, [], 1119624695)
+	else:
+		return vanilla_983418804_disable_charting()
+
+
+func close_popup():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_close_popup, [], 109416477)
+	else:
+		return vanilla_983418804_close_popup()
+
+
+func undo():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_undo, [], 1596230474)
+	else:
+		return vanilla_983418804_undo()
+
+
+func redo():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_redo, [], 1596112862)
+	else:
+		return vanilla_983418804_redo()
+
+
+func auto_save():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_auto_save, [], 2449524571)
+	else:
+		return vanilla_983418804_auto_save()
+
+
+func save():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_save, [], 1596145027)
+	else:
+		return vanilla_983418804_save()
+
+
+func move_selection(time_distance: float, lane_distance: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_move_selection, [time_distance, lane_distance], 2792132656)
+	else:
+		return vanilla_983418804_move_selection(time_distance, lane_distance)
+
+
+func updated_strums():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_updated_strums, [], 2352071496)
+	else:
+		return vanilla_983418804_updated_strums()
+
+
+func load_waveforms():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_load_waveforms, [], 79526413)
+	else:
+		return vanilla_983418804_load_waveforms()
+
+
+func _on_chart_snap_value_changed(value: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_chart_snap_value_changed, [value], 2932831191)
+	else:
+		vanilla_983418804__on_chart_snap_value_changed(value)
+
+
+func _on_difficulty_button_item_selected(index: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_difficulty_button_item_selected, [index], 3131769363)
+	else:
+		vanilla_983418804__on_difficulty_button_item_selected(index)
+
+
+func _on_history_window_close_requested():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_history_window_close_requested, [], 1580348446)
+	else:
+		vanilla_983418804__on_history_window_close_requested()
+
+
+func _on_metadata_window_close_requested():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_close_requested, [], 907450125)
+	else:
+		vanilla_983418804__on_metadata_window_close_requested()
+
+
+func _on_metadata_window_updated_icon_texture(path: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_icon_texture, [path], 4098038213)
+	else:
+		vanilla_983418804__on_metadata_window_updated_icon_texture(path)
+
+
+func _on_metadata_window_updated_song_artist(text: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_song_artist, [text], 302048857)
+	else:
+		vanilla_983418804__on_metadata_window_updated_song_artist(text)
+
+
+func _on_metadata_window_updated_song_charter(text: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_song_charter, [text], 3547051339)
+	else:
+		vanilla_983418804__on_metadata_window_updated_song_charter(text)
+
+
+func _on_metadata_window_updated_song_name(text: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_song_name, [text], 3412247107)
+	else:
+		vanilla_983418804__on_metadata_window_updated_song_name(text)
+
+
+func _on_metadata_window_updated_song_scene(path: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_song_scene, [path], 940998000)
+	else:
+		vanilla_983418804__on_metadata_window_updated_song_scene(path)
+
+
+func _on_metadata_window_updated_starting_tempo(tempo: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_starting_tempo, [tempo], 1669880988)
+	else:
+		vanilla_983418804__on_metadata_window_updated_starting_tempo(tempo)
+
+
+func _on_metadata_window_updated_scroll_speed(speed: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_updated_scroll_speed, [speed], 3884640203)
+	else:
+		vanilla_983418804__on_metadata_window_updated_scroll_speed(speed)
+
+
+func _on_metadata_window_selected_time_change(time: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_selected_time_change, [time], 2693164610)
+	else:
+		vanilla_983418804__on_metadata_window_selected_time_change(time)
+
+
+func _on_metadata_window_add_time_change():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_add_time_change, [], 4167991298)
+	else:
+		vanilla_983418804__on_metadata_window_add_time_change()
+
+
+func _on_metadata_window_remove_time_change():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_metadata_window_remove_time_change, [], 765454215)
+	else:
+		vanilla_983418804__on_metadata_window_remove_time_change()
+
+
+func update_note(note):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_update_note, [note], 1756303884)
+	else:
+		return vanilla_983418804_update_note(note)
+
+
+func update_event(event):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_update_event, [event], 2113015672)
+	else:
+		return vanilla_983418804_update_event(event)
+
+
+func _on_export_external_popup_file_selected(path: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_export_external_popup_file_selected, [path], 4282782765)
+	else:
+		vanilla_983418804__on_export_external_popup_file_selected(path)
+
+
+func _on_gui_focus_changed(node):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804__on_gui_focus_changed, [node], 1639236924)
+	else:
+		return vanilla_983418804__on_gui_focus_changed(node)
+
+
+func set_chart_from_chart(_chart: Chart):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_set_chart_from_chart, [_chart], 3893452629)
+	else:
+		return vanilla_983418804_set_chart_from_chart(_chart)
+
+
+func _on_note_skin_window_file_selected(path: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_note_skin_window_file_selected, [path], 1396129303)
+	else:
+		vanilla_983418804__on_note_skin_window_file_selected(path)
+
+
+func cut():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804_cut, [], 2130759648)
+	else:
+		vanilla_983418804_cut()
+
+
+func copy():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804_copy, [], 1595585103)
+	else:
+		vanilla_983418804_copy()
+
+
+func paste():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804_paste, [], 1129617905)
+	else:
+		vanilla_983418804_paste()
+
+
+func delete_stacked_notes():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804_delete_stacked_notes, [], 2438927213)
+	else:
+		vanilla_983418804_delete_stacked_notes()
+
+
+func do_flip():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_do_flip, [], 3999190609)
+	else:
+		return vanilla_983418804_do_flip()
+
+
+func flip():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_flip, [], 1595689407)
+	else:
+		return vanilla_983418804_flip()
+
+
+func change_length(i: int, length: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804_change_length, [i, length], 3912316955)
+	else:
+		vanilla_983418804_change_length(i, length)
+
+
+func select_area(L: int, R: int, lane_a, lane_b=null):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_select_area, [L, R, lane_a, lane_b], 2361690412)
+	else:
+		return vanilla_983418804_select_area(L, R, lane_a, lane_b)
+
+
+func add_action(action: String, do_method: Callable, undo_method: Callable):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_add_action, [action, do_method, undo_method], 2242385498)
+	else:
+		return vanilla_983418804_add_action(action, do_method, undo_method)
+
+
+func select_all():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_select_all, [], 2023824044)
+	else:
+		return vanilla_983418804_select_all()
+
+
+func deselect_all():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_deselect_all, [], 967185461)
+	else:
+		return vanilla_983418804_deselect_all()
+
+
+func _on_conductor_new_numerator(_numerator: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_conductor_new_numerator, [_numerator], 3904336389)
+	else:
+		vanilla_983418804__on_conductor_new_numerator(_numerator)
+
+
+func _on_conductor_new_denominator(_denominator: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_conductor_new_denominator, [_denominator], 3195309736)
+	else:
+		vanilla_983418804__on_conductor_new_denominator(_denominator)
+
+
+func set_note_type(note_type):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_983418804_set_note_type, [note_type], 2672686454)
+	else:
+		return vanilla_983418804_set_note_type(note_type)
+
+
+func _on_note_type_window_close_requested():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_note_type_window_close_requested, [], 2142751971)
+	else:
+		vanilla_983418804__on_note_type_window_close_requested()
+
+
+func _on_audios_window_close_requested():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_audios_window_close_requested, [], 1865603697)
+	else:
+		vanilla_983418804__on_audios_window_close_requested()
+
+
+func _on_audios_window_about_to_popup():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_audios_window_about_to_popup, [], 354584634)
+	else:
+		vanilla_983418804__on_audios_window_about_to_popup()
+
+
+func _on_audios_window_updated():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_983418804__on_audios_window_updated, [], 596705489)
+	else:
+		vanilla_983418804__on_audios_window_updated()

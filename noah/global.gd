@@ -7,14 +7,14 @@ var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 var fullscreen: bool = false
 var transitioning: bool = false
 
-func _ready():
+func vanilla_4097779270__ready():
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
 	_correct_window_size()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func vanilla_4097779270__process(delta: float) -> void:
 	$"Volume Node".position.x = get_window().content_scale_size.x / 2
 	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
 	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
@@ -44,7 +44,7 @@ func _process(delta: float) -> void:
 
 #region Auto Pause
 var manual_pause: bool = false
-func _notification(what: int) -> void:
+func vanilla_4097779270__notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
 		if !get_tree().paused:
 			if OS.is_debug_build():
@@ -57,7 +57,7 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true): 
+func vanilla_4097779270_change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true): 
 	transitioning = true
 	
 	if transition: 
@@ -75,14 +75,14 @@ func change_scene_to(path: String, transition: Variant = &"down", show_loading_s
 			Transitions.resume()
 #endregion
 
-func bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
+func vanilla_4097779270_bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
 	var tween = create_tween()
 	tween.set_trans(trans)
 	
 	tween.tween_property(object, property, final_val, duration * 0.0625).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(object, property, original_val, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
 
-func set_window_title(title: String = ''):
+func vanilla_4097779270_set_window_title(title: String = ''):
 	var app_title: String = ProjectSettings.get_setting("application/config/name") + \
 		' ' + ProjectSettings.get_setting("application/config/version")
 	
@@ -91,7 +91,7 @@ func set_window_title(title: String = ''):
 	
 	DisplayServer.window_set_title(app_title)
 
-func format_number(num:float) -> String: 
+func vanilla_4097779270_format_number(num:float) -> String: 
 	var isNegative = num < 0.0
 	
 	num = absf(num)
@@ -124,14 +124,14 @@ func format_number(num:float) -> String:
 	return string
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
-func format_time(time: float) -> String:
+func vanilla_4097779270_format_time(time: float) -> String:
 	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
 	var seconds: int = floor(fmod(time, 60.0))
 	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
 	
 	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
 
-func get_keycode_string(keycodes: Array):
+func vanilla_4097779270_get_keycode_string(keycodes: Array):
 	var strings: PackedStringArray
 	for keycode in keycodes:
 		strings.append(OS.get_keycode_string(keycode))
@@ -141,11 +141,11 @@ func get_keycode_string(keycodes: Array):
 # referenced via https://youtu.be/LSNQuFEDOyQ
 ## A frame independent lerp. Primary purpose is for the camera
 ## your decay should be around 1 - 25
-func frame_independent_lerp(a, b, decay: float, delta: float) -> Variant: 
+func vanilla_4097779270_frame_independent_lerp(a, b, decay: float, delta: float) -> Variant: 
 	return b + (a - b) * exp(-decay * delta)
 
 #region Volume Visual
-func show_volume():
+func vanilla_4097779270_show_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property($"Volume Node", "position:y", 0, 0.5)
@@ -161,20 +161,20 @@ func show_volume():
 	$"Volume Node/Hide Timer".start()
 
 
-func hide_volume():
+func vanilla_4097779270_hide_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	tween.tween_property($"Volume Node", "position:y", -32, 0.5)
 
 
-func _on_hide_timer_timeout():
+func vanilla_4097779270__on_hide_timer_timeout():
 	hide_volume()
 #endregion
 
 #region String to Tween
 ## Returns an array with index 0 containing transition type and
 ## index 1 containing easing type
-func string_to_ease(tween: String) -> Array:
+func vanilla_4097779270_string_to_ease(tween: String) -> Array:
 	match tween:
 		"backIn":
 			return [Tween.TRANS_BACK, Tween.EASE_IN]
@@ -315,7 +315,7 @@ func string_to_ease(tween: String) -> Array:
 			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion
 
-func string_to_time(formatted_time: String) -> float:
+func vanilla_4097779270_string_to_time(formatted_time: String) -> float:
 	if formatted_time.ends_with("b"):
 		return float(formatted_time.trim_suffix("b")) * GameManager.conductor.seconds_per_beat
 	elif formatted_time.ends_with("s"):
@@ -325,7 +325,7 @@ func string_to_time(formatted_time: String) -> float:
 	
 	return float(formatted_time)
 
-func _correct_window_size() -> void:
+func vanilla_4097779270__correct_window_size() -> void:
 	if not OS.get_name().to_lower().contains('windows'): 
 		return
 	
@@ -339,3 +339,118 @@ func _correct_window_size() -> void:
 	
 	get_window().position.x = w_pos.x + (w_size.x - new_size.x) / 2
 	get_window().position.y = w_pos.y + (w_size.y - new_size.y) / 2
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270__ready, [], 4275194938)
+	else:
+		return vanilla_4097779270__ready()
+
+
+func _process(delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_4097779270__process, [delta], 2180079172)
+	else:
+		vanilla_4097779270__process(delta)
+
+
+func _notification(what: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_4097779270__notification, [what], 3984795500)
+	else:
+		vanilla_4097779270__notification(what)
+
+
+func change_scene_to(path: String, transition: Variant=&"down", show_loading_screen: bool=true):
+	if _ModLoaderHooks.any_mod_hooked:
+		return await _ModLoaderHooks.call_hooks_async(vanilla_4097779270_change_scene_to, [path, transition, show_loading_screen], 2808686875)
+	else:
+		return await vanilla_4097779270_change_scene_to(path, transition, show_loading_screen)
+
+
+func bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_bop_tween, [object, property, original_val, final_val, duration, trans], 1934025673)
+	else:
+		return vanilla_4097779270_bop_tween(object, property, original_val, final_val, duration, trans)
+
+
+func set_window_title(title: String=''):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_set_window_title, [title], 369062058)
+	else:
+		return vanilla_4097779270_set_window_title(title)
+
+
+func format_number(num: float) -> String:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_format_number, [num], 517627703)
+	else:
+		return vanilla_4097779270_format_number(num)
+
+
+func format_time(time: float) -> String:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_format_time, [time], 2359163133)
+	else:
+		return vanilla_4097779270_format_time(time)
+
+
+func get_keycode_string(keycodes: Array):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_get_keycode_string, [keycodes], 2790046847)
+	else:
+		return vanilla_4097779270_get_keycode_string(keycodes)
+
+
+func frame_independent_lerp(a, b, decay: float, delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_frame_independent_lerp, [a, b, decay, delta], 3689032464)
+	else:
+		return vanilla_4097779270_frame_independent_lerp(a, b, decay, delta)
+
+
+func show_volume():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_show_volume, [], 2130273022)
+	else:
+		return vanilla_4097779270_show_volume()
+
+
+func hide_volume():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_hide_volume, [], 705582967)
+	else:
+		return vanilla_4097779270_hide_volume()
+
+
+func _on_hide_timer_timeout():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270__on_hide_timer_timeout, [], 3169488929)
+	else:
+		return vanilla_4097779270__on_hide_timer_timeout()
+
+
+func string_to_ease(tween: String) -> Array:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_string_to_ease, [tween], 2095834556)
+	else:
+		return vanilla_4097779270_string_to_ease(tween)
+
+
+func string_to_time(formatted_time: String) -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_4097779270_string_to_time, [formatted_time], 2096382125)
+	else:
+		return vanilla_4097779270_string_to_time(formatted_time)
+
+
+func _correct_window_size():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_4097779270__correct_window_size, [], 3637833736)
+	else:
+		vanilla_4097779270__correct_window_size()

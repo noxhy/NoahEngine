@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Friday Night Funkin': Noah Engine"
 config/version="3.2"
-run/main_scene="res://funkin/menus/start_menu/start_menu.tscn"
+run/main_scene="uid://crfoqsmbdm5bd"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.png"
 
@@ -29,7 +29,7 @@ Transitions="*res://noah/transitions.tscn"
 GameManager="*res://noah/managers/game_manager.gd"
 SettingsManager="*res://noah/managers/settings_manager.gd"
 ChartManager="*res://noah/managers/chart_manager.gd"
-Preload="*res://funkin/preload.gd"
+Preload="*res://mods-unpacked/FunkinCrew-FnF/funkin/preload.gd"
 SoundManager="*res://noah/managers/sound_manager.tscn"
 SaveManager="*res://noah/managers/save_manager.gd"
 Signals="*res://noah/signals.gd"
@@ -49,12 +49,12 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/mod_loader/_export_plugin/plugin.cfg", "res://addons/mod_tool/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
 
 [file_customization]
 
 folder_colors={
-"res://funkin/": "orange",
+"res://mods-unpacked/FunkinCrew-FnF/funkin/": "orange",
 "res://noah/": "red",
 "res://noah/assets/": "yellow",
 "res://noah/game/": "purple",

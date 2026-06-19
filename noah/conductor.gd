@@ -79,7 +79,7 @@ var time: float = 0
 var latency: float = AudioServer.get_output_latency()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func vanilla_709730598__process(_delta):
 	if stream_player and stream_player.playing:
 		time = stream_player.get_playback_position()
 		time -= latency
@@ -89,21 +89,66 @@ func _process(_delta):
 	current_step = get_step_at(time)
 
 
-func get_beat_at(_time: float) -> int:
+func vanilla_709730598_get_beat_at(_time: float) -> int:
 	return floor((_time - offset) / seconds_per_beat)
 
 
-func get_step_at(_time: float) -> int:
+func vanilla_709730598_get_step_at(_time: float) -> int:
 	return floor((_time - offset) / seconds_per_step)
 
 
-func get_measure_at(_time: float) -> int:
+func vanilla_709730598_get_measure_at(_time: float) -> int:
 	return floor((_time - offset) / (seconds_per_beat * numerator))
 
 
-func get_seconds_per_beat() -> float:
+func vanilla_709730598_get_seconds_per_beat() -> float:
 	return (60.0 / tempo) * (4.0 / denominator)
 
 
-func get_seconds_per_step() -> float:
+func vanilla_709730598_get_seconds_per_step() -> float:
 	return seconds_per_beat / numerator
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _process(_delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598__process, [_delta], 549239076)
+	else:
+		return vanilla_709730598__process(_delta)
+
+
+func get_beat_at(_time: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598_get_beat_at, [_time], 1909526485)
+	else:
+		return vanilla_709730598_get_beat_at(_time)
+
+
+func get_step_at(_time: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598_get_step_at, [_time], 2981276309)
+	else:
+		return vanilla_709730598_get_step_at(_time)
+
+
+func get_measure_at(_time: float) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598_get_measure_at, [_time], 2295857451)
+	else:
+		return vanilla_709730598_get_measure_at(_time)
+
+
+func get_seconds_per_beat() -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598_get_seconds_per_beat, [], 843526069)
+	else:
+		return vanilla_709730598_get_seconds_per_beat()
+
+
+func get_seconds_per_step() -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_709730598_get_seconds_per_step, [], 844153461)
+	else:
+		return vanilla_709730598_get_seconds_per_step()

@@ -61,7 +61,7 @@ var selected: int = 0
 var current_credit: int = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func vanilla_2047904093__ready():
 	var tween = create_tween()
 	music.volume_linear = 0
 	tween.tween_property(music, "volume_linear", 1, 4)
@@ -93,7 +93,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func vanilla_2047904093__process(delta):
 	if Input.is_action_just_pressed("menu_up"):
 		update(selected - 1)
 	if Input.is_action_just_pressed("menu_down"):
@@ -102,7 +102,7 @@ func _process(delta):
 		select_option(selected)
 
 
-func load_page(page: String):
+func vanilla_2047904093_load_page(page: String):
 	option_nodes = []
 	get_tree().call_group(&"options", &"queue_free")
 	options = pages.get(page)
@@ -120,7 +120,7 @@ func load_page(page: String):
 		menu_option_instance.add_to_group(&"options")
 
 
-func update(i: int):
+func vanilla_2047904093_update(i: int):
 	selected = wrapi(i, 0, options.keys().size())
 	i = selected
 	var index = -selected
@@ -138,7 +138,7 @@ func update(i: int):
 	option_nodes[i].modulate = Color(1, 1, 1)
 
 
-func select_option(i: int):
+func vanilla_2047904093_select_option(i: int):
 	var option = options.keys()[i]
 	match option:
 		"resume":
@@ -194,14 +194,14 @@ func select_option(i: int):
 			change_difficulty("nightmare")
 
 
-func change_difficulty(difficulty: String):
+func vanilla_2047904093_change_difficulty(difficulty: String):
 	GameManager.difficulty = difficulty
 	GameManager.deaths = 0
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
 
-func _on_timer_timeout() -> void:
+func vanilla_2047904093__on_timer_timeout() -> void:
 	var time: float = 0.5
 	
 	var tween = create_tween()
@@ -214,8 +214,67 @@ func _on_timer_timeout() -> void:
 	current_credit += 1
 
 
-func display_credits():
+func vanilla_2047904093_display_credits():
 	if current_credit % 2 == 0:
 		%Credits.text = str("Artist: ", GameManager.current_song.artist)
 	else:
 		%Credits.text = str("Charter: ", GameManager.current_song.charter)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093__ready, [], 2371708049)
+	else:
+		return vanilla_2047904093__ready()
+
+
+func _process(delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093__process, [delta], 3752061019)
+	else:
+		return vanilla_2047904093__process(delta)
+
+
+func load_page(page: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093_load_page, [page], 2611440793)
+	else:
+		return vanilla_2047904093_load_page(page)
+
+
+func update(i: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093_update, [i], 3230279424)
+	else:
+		return vanilla_2047904093_update(i)
+
+
+func select_option(i: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093_select_option, [i], 3257033397)
+	else:
+		return vanilla_2047904093_select_option(i)
+
+
+func change_difficulty(difficulty: String):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093_change_difficulty, [difficulty], 668096341)
+	else:
+		return vanilla_2047904093_change_difficulty(difficulty)
+
+
+func _on_timer_timeout():
+	if _ModLoaderHooks.any_mod_hooked:
+		await _ModLoaderHooks.call_hooks_async(vanilla_2047904093__on_timer_timeout, [], 4150799327)
+	else:
+		await vanilla_2047904093__on_timer_timeout()
+
+
+func display_credits():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2047904093_display_credits, [], 4235694240)
+	else:
+		return vanilla_2047904093_display_credits()

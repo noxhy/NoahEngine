@@ -14,31 +14,31 @@ class_name BasicUI
 
 var strums:Array[StrumManager] = []
 
-func _ready() -> void:
+func vanilla_1903477885__ready() -> void:
 	for node in get_tree().get_nodes_in_group(&"strums"):
 		strums.append(node)
 	
 	apply_underlay()
 
 
-func _process(delta: float) -> void:
+func vanilla_1903477885__process(delta: float) -> void:
 	if zoom_smoothing:
 		scale = Global.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
 
 
-func bump(strength: Vector2):
+func vanilla_1903477885_bump(strength: Vector2):
 	scale += strength
 
 
-func update_player(player: Character):
+func vanilla_1903477885_update_player(player: Character):
 	pass
 
 
-func update_enemy(enemy: Character):
+func vanilla_1903477885_update_enemy(enemy: Character):
 	pass
 
 
-func downscroll_ui():
+func vanilla_1903477885_downscroll_ui():
 	for strum_line in strums:
 		strum_line.position.y *= -1
 	
@@ -46,7 +46,7 @@ func downscroll_ui():
 
 
 
-func apply_underlay():
+func vanilla_1903477885_apply_underlay():
 	var underlay: ColorRect = ColorRect.new()
 	underlay.color = Color(0, 0, 0,
 	SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "underlay_opacity"))
@@ -55,3 +55,55 @@ func apply_underlay():
 	underlay.z_index = -1000
 	
 	add_child(underlay)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1903477885__ready, [], 3406395313)
+	else:
+		vanilla_1903477885__ready()
+
+
+func _process(delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1903477885__process, [delta], 950092667)
+	else:
+		vanilla_1903477885__process(delta)
+
+
+func bump(strength: Vector2):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1903477885_bump, [strength], 4014241873)
+	else:
+		return vanilla_1903477885_bump(strength)
+
+
+func update_player(player: Character):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1903477885_update_player, [player], 904101772)
+	else:
+		return vanilla_1903477885_update_player(player)
+
+
+func update_enemy(enemy: Character):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1903477885_update_enemy, [enemy], 2226986653)
+	else:
+		return vanilla_1903477885_update_enemy(enemy)
+
+
+func downscroll_ui():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1903477885_downscroll_ui, [], 1095642529)
+	else:
+		return vanilla_1903477885_downscroll_ui()
+
+
+func apply_underlay():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1903477885_apply_underlay, [], 1380744870)
+	else:
+		return vanilla_1903477885_apply_underlay()

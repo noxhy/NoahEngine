@@ -2,10 +2,10 @@
 extends Node
 class_name Stage
 
-func _ready() -> void:
+func vanilla_1268843794__ready() -> void:
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
 
-func _on_conductor_new_beat(current_beat, measure_relative):
+func vanilla_1268843794__on_conductor_new_beat(current_beat, measure_relative):
 	# Every other beat, call the slow and tween boppers.
 	if current_beat % 2 == 0:
 		for node in get_tree().get_nodes_in_group(&"slow_bop"):
@@ -36,3 +36,20 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		elif node is AnimatedSprite2D:
 			node.play(node.animation)
 			node.set_frame_and_progress(0, 0)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1268843794__ready, [], 4077589510)
+	else:
+		vanilla_1268843794__ready()
+
+
+func _on_conductor_new_beat(current_beat, measure_relative):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1268843794__on_conductor_new_beat, [current_beat, measure_relative], 578147138)
+	else:
+		return vanilla_1268843794__on_conductor_new_beat(current_beat, measure_relative)

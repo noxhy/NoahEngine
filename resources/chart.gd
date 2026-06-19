@@ -9,7 +9,7 @@ enum ChartFormat {
 	UNDEFINED = -1
 }
 
-static func chart_format_to_str(type:ChartFormat) -> String:
+static func vanilla_1196994268_chart_format_to_str(type:ChartFormat) -> String:
 	match type:
 		ChartFormat.CODENAME: return "Codename"
 		ChartFormat.VSLICE: return 'VSlice'
@@ -32,12 +32,12 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 	"meters": {0.0: [4, 4]},
 }
 
-func get_notes_data() -> Array: return chart_data.get("notes")
-func get_events_data() -> Array: return chart_data.get("events")
-func get_tempos_data() -> Dictionary: return chart_data.get("tempos")
-func get_meters_data() -> Dictionary: return chart_data.get("meters")
+func vanilla_1196994268_get_notes_data() -> Array: return chart_data.get("notes")
+func vanilla_1196994268_get_events_data() -> Array: return chart_data.get("events")
+func vanilla_1196994268_get_tempos_data() -> Dictionary: return chart_data.get("tempos")
+func vanilla_1196994268_get_meters_data() -> Dictionary: return chart_data.get("meters")
 
-func merge_events_into_this(events:ChartEvents):
+func vanilla_1196994268_merge_events_into_this(events:ChartEvents):
 	var chart_events = get_events_data()
 	
 	chart_events.append_array(events.data)
@@ -60,7 +60,7 @@ func merge_events_into_this(events:ChartEvents):
 	chart_data.set('events', ret_events)
 
 
-func get_tempo_at(time: float) -> float:
+func vanilla_1196994268_get_tempo_at(time: float) -> float:
 	time = max(0, time)
 	var output: float = -1
 	for point in get_tempos_data():
@@ -72,7 +72,7 @@ func get_tempo_at(time: float) -> float:
 	return output
 
 
-func get_meter_at(time: float) -> Array:
+func vanilla_1196994268_get_meter_at(time: float) -> Array:
 	time = max(0, time)
 	var output: Array = []
 	for point in get_meters_data():
@@ -84,7 +84,7 @@ func get_meter_at(time: float) -> Array:
 	return output
 
 
-func get_tempo_time_at(time: float) -> float:
+func vanilla_1196994268_get_tempo_time_at(time: float) -> float:
 	time = max(0, time)
 	var output: float = -1
 	for point in get_tempos_data():
@@ -94,7 +94,7 @@ func get_tempo_time_at(time: float) -> float:
 	return output
 
 
-static func load(path:String) -> Chart:
+static func vanilla_1196994268_load(path:String) -> Chart:
 	if path.begins_with('uid'):
 		path = ResourceUID.uid_to_path(path)
 	
@@ -170,7 +170,7 @@ static func load(path:String) -> Chart:
 	
 	return null
 
-static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
+static func vanilla_1196994268_resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 	
 	if raw_json.has('format'):
 		var format:String = raw_json.get('format')
@@ -189,11 +189,11 @@ static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 	return ChartFormat.UNDEFINED
 
 # Sorting notes
-static func sort_notes(a, b) -> bool:
+static func vanilla_1196994268_sort_notes(a, b) -> bool:
 	return a[0] < b[0]
 
 
-static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> Chart:
+static func vanilla_1196994268_convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> Chart:
 	var chart = Chart.new()
 	
 	var note_data = []
@@ -316,7 +316,7 @@ static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> 
 	
 	return chart
 
-static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') -> Chart:
+static func vanilla_1196994268_convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') -> Chart:
 	if diff.is_empty():
 		diff = GameManager.difficulty
 	if diff.is_empty():
@@ -423,7 +423,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	
 	return chart
 
-static func convert_cne(data:Dictionary, meta:Dictionary, events:Array = []) -> Chart:
+static func vanilla_1196994268_convert_cne(data:Dictionary, meta:Dictionary, events:Array = []) -> Chart:
 	var chart = Chart.new()
 	
 	var note_data = []
@@ -526,3 +526,111 @@ const EVENT_NAMES = {
 	"Scroll Speed Change": "scroll_speed",
 	
 }
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+static func chart_format_to_str(type: ChartFormat) -> String:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_chart_format_to_str, [type], 3826419088)
+	else:
+		return vanilla_1196994268_chart_format_to_str(type)
+
+
+func get_notes_data() -> Array:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_notes_data, [], 2962597469)
+	else:
+		return vanilla_1196994268_get_notes_data()
+
+
+func get_events_data() -> Array:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_events_data, [], 631254377)
+	else:
+		return vanilla_1196994268_get_events_data()
+
+
+func get_tempos_data() -> Dictionary:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_tempos_data, [], 2900306700)
+	else:
+		return vanilla_1196994268_get_tempos_data()
+
+
+func get_meters_data() -> Dictionary:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_meters_data, [], 4141342180)
+	else:
+		return vanilla_1196994268_get_meters_data()
+
+
+func merge_events_into_this(events: ChartEvents):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_merge_events_into_this, [events], 1111211440)
+	else:
+		return vanilla_1196994268_merge_events_into_this(events)
+
+
+func get_tempo_at(time: float) -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_tempo_at, [time], 2867434004)
+	else:
+		return vanilla_1196994268_get_tempo_at(time)
+
+
+func get_meter_at(time: float) -> Array:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_meter_at, [time], 1152087020)
+	else:
+		return vanilla_1196994268_get_meter_at(time)
+
+
+func get_tempo_time_at(time: float) -> float:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_get_tempo_time_at, [time], 1228092482)
+	else:
+		return vanilla_1196994268_get_tempo_time_at(time)
+
+
+static func load(path: String) -> Chart:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_load, [path], 2412370652)
+	else:
+		return vanilla_1196994268_load(path)
+
+
+static func resolve_chart_type(raw_json: Dictionary) -> Chart.ChartFormat:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_resolve_chart_type, [raw_json], 4279746350)
+	else:
+		return vanilla_1196994268_resolve_chart_type(raw_json)
+
+
+static func sort_notes(a, b) -> bool:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_sort_notes, [a, b], 1128131308)
+	else:
+		return vanilla_1196994268_sort_notes(a, b)
+
+
+static func convert_psych(data: Dictionary, events: Array=[], v1: bool=true) -> Chart:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_convert_psych, [data, events, v1], 272808483)
+	else:
+		return vanilla_1196994268_convert_psych(data, events, v1)
+
+
+static func convert_vslice(data: Dictionary, meta: Dictionary, diff: String='') -> Chart:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_convert_vslice, [data, meta, diff], 647096994)
+	else:
+		return vanilla_1196994268_convert_vslice(data, meta, diff)
+
+
+static func convert_cne(data: Dictionary, meta: Dictionary, events: Array=[]) -> Chart:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1196994268_convert_cne, [data, meta, events], 860018418)
+	else:
+		return vanilla_1196994268_convert_cne(data, meta, events)

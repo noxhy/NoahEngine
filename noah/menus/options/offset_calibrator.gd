@@ -17,7 +17,7 @@ var max_length: float = 850
 @onready var conductor = $Conductor
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func vanilla_1475791088__ready():
 	Global.set_window_title("Calibrating Offset")
 	
 	for i in entries_required:
@@ -35,7 +35,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func vanilla_1475791088__process(delta):
 	$"UI/Offset Label".text = str("Offset: ", str(
 		floori(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset") * 1000)),
 		" ms")
@@ -51,7 +51,7 @@ func _process(delta):
 	queue_redraw()
 
 
-func _draw():
+func vanilla_1475791088__draw():
 	var rect_base_position: Vector2i = $UI/Visualizer.global_position + $UI.offset
 	
 	var rect_size: int = 64
@@ -78,7 +78,7 @@ func _draw():
 
 
 # Input Manager
-func _input(event):
+func vanilla_1475791088__input(event):
 	if event.is_action_pressed(&"menu_cancel"):
 		$"Audio/Menu Cancel".play()
 		Global.change_scene_to(Constants.OPTIONS_MENU_SCENE, "down")
@@ -105,7 +105,7 @@ func _input(event):
 					)
 
 
-func _on_conductor_new_beat(current_beat, measure_relative):
+func vanilla_1475791088__on_conductor_new_beat(current_beat, measure_relative):
 	$UI/Speaker.frame = 0
 	$UI/Speaker.play_animation(&"bump")
 	
@@ -113,11 +113,63 @@ func _on_conductor_new_beat(current_beat, measure_relative):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 
 
-func get_length_in_beats() -> int:
+func vanilla_1475791088_get_length_in_beats() -> int:
 	var length: float = stream_player.stream.get_length()
 	return int(length / conductor.seconds_per_beat)
 
 
-func update_next_hit():
+func vanilla_1475791088_update_next_hit():
 	var next_beat: int = wrapi(conductor.current_beat + 1, 0, get_length_in_beats() + 1)
 	next_hit = next_beat * conductor.seconds_per_beat
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088__ready, [], 2288502372)
+	else:
+		return vanilla_1475791088__ready()
+
+
+func _process(delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088__process, [delta], 3335391982)
+	else:
+		return vanilla_1475791088__process(delta)
+
+
+func _draw():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088__draw, [], 2151267997)
+	else:
+		return vanilla_1475791088__draw()
+
+
+func _input(event):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088__input, [event], 2278169407)
+	else:
+		return vanilla_1475791088__input(event)
+
+
+func _on_conductor_new_beat(current_beat, measure_relative):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088__on_conductor_new_beat, [current_beat, measure_relative], 1526170016)
+	else:
+		return vanilla_1475791088__on_conductor_new_beat(current_beat, measure_relative)
+
+
+func get_length_in_beats() -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088_get_length_in_beats, [], 3979803477)
+	else:
+		return vanilla_1475791088_get_length_in_beats()
+
+
+func update_next_hit():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1475791088_update_next_hit, [], 828935349)
+	else:
+		return vanilla_1475791088_update_next_hit()

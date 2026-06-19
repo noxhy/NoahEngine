@@ -5,7 +5,7 @@ class_name ChartNote
 @onready var collision_shape = $Area2D/CollisionShape2D
 
 # Applying Note Skin
-func _ready(): 
+func vanilla_1174719466__ready(): 
 	$Note.sprite_frames = note_skin.notes_texture
 	if note_skin.animation_names != null: 
 		if note_skin.animation_names.keys().size() > 0: 
@@ -25,7 +25,7 @@ func _ready():
 	
 	update()
 
-func update():
+func vanilla_1174719466_update():
 	scale = Vector2(1, 1)
 	$Note.scale = grid_size / $Note.sprite_frames.get_frame_texture($Note.animation, 0).get_size()
 	#$Note.scale *= 0.9
@@ -44,7 +44,7 @@ func update():
 		%"Special Note Label".visible = note_type != ""
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func vanilla_1174719466__process(delta):
 	time_difference = (time - GameManager.offset) - GameManager.song_position
 	
 	if length > 0:
@@ -57,13 +57,51 @@ func _process(delta):
 		tail.visible = false
 
 
-func _on_visible_on_screen_enabler_2d_screen_entered() -> void:
+func vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_entered() -> void:
 	on_screen = true
 	$Note.visible = on_screen
 	tail.visible = on_screen
 
 
-func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
+func vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	on_screen = false
 	$Note.visible = on_screen
 	tail.visible = on_screen
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1174719466__ready, [], 1775148254)
+	else:
+		return vanilla_1174719466__ready()
+
+
+func update():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1174719466_update, [], 2633719629)
+	else:
+		return vanilla_1174719466_update()
+
+
+func _process(delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1174719466__process, [delta], 2638505960)
+	else:
+		return vanilla_1174719466__process(delta)
+
+
+func _on_visible_on_screen_enabler_2d_screen_entered():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_entered, [], 2965092288)
+	else:
+		vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_entered()
+
+
+func _on_visible_on_screen_enabler_2d_screen_exited():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_exited, [], 1793287900)
+	else:
+		vanilla_1174719466__on_visible_on_screen_enabler_2d_screen_exited()

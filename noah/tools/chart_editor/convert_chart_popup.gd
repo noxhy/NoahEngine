@@ -6,11 +6,11 @@ var selected_vocals: PackedStringArray
 var selected_instrumental: String
 var files_to_save: PackedStringArray
 
-func _ready():
+func vanilla_3560047489__ready():
 	pass
 
 # Creates a new file that will send out a signal to the chart editor
-func new_file(files: Array[String]):
+func vanilla_3560047489_new_file(files: Array[String]):
 	# Creates the file base properties
 	var song_file = Song.new()
 	
@@ -155,31 +155,31 @@ func new_file(files: Array[String]):
 	emit_signal("file_created", song_path, song_file)
 
 # "Select File Location" button pressed
-func _on_vocals_button_pressed(): %"Vocals File Dialog".popup()
+func vanilla_3560047489__on_vocals_button_pressed(): %"Vocals File Dialog".popup()
 
 # "Select File Location" button pressed
-func _on_inst_button_pressed(): %"Inst File Dialog".popup()
+func vanilla_3560047489__on_inst_button_pressed(): %"Inst File Dialog".popup()
 
 # When the vocals file is selected 
-func _on_vocals_file_dialog_files_selected(paths: PackedStringArray) -> void:
+func vanilla_3560047489__on_vocals_file_dialog_files_selected(paths: PackedStringArray) -> void:
 	selected_vocals = paths
 	%"Vocals File Location".text = str(paths)
 
 # When the Inst file is selected
-func _on_inst_file_dialog_file_selected(path):
+func vanilla_3560047489__on_inst_file_dialog_file_selected(path):
 	selected_instrumental = path
 	%"Inst File Location".text = path
 
 # "Create New File" button pressed
-func _on_export_file_button_pressed():
+func vanilla_3560047489__on_export_file_button_pressed():
 	%SaveFolderDialog.popup()
 
 # "Select File Location" button pressed
-func _on_chart_button_pressed(): %"Chart File Dialog".popup()
+func vanilla_3560047489__on_chart_button_pressed(): %"Chart File Dialog".popup()
 
-func _on_close_requested(): self.queue_free()
+func vanilla_3560047489__on_close_requested(): self.queue_free()
 
-func _on_create_button_pressed() -> void:
+func vanilla_3560047489__on_create_button_pressed() -> void:
 	
 	if !FileAccess.file_exists(selected_instrumental):
 		printerr("No instrumental file found")
@@ -191,10 +191,97 @@ func _on_create_button_pressed() -> void:
 	new_file(files_to_save)
 	self.queue_free()
 
-func file_dailog_gui_focus_changed(node: Control) -> void:
+func vanilla_3560047489_file_dailog_gui_focus_changed(node: Control) -> void:
 	emit_signal(&"gui_focus_changed", node)
 
 
-func _on_save_folder_dialog_files_selected(paths: PackedStringArray) -> void:
+func vanilla_3560047489__on_save_folder_dialog_files_selected(paths: PackedStringArray) -> void:
 	files_to_save = paths
 	%"Export File Location".text = ', '.join(files_to_save)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__ready, [], 1348659637)
+	else:
+		return vanilla_3560047489__ready()
+
+
+func new_file(files: Array[String]):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489_new_file, [files], 230955946)
+	else:
+		return vanilla_3560047489_new_file(files)
+
+
+func _on_vocals_button_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_vocals_button_pressed, [], 4025859572)
+	else:
+		return vanilla_3560047489__on_vocals_button_pressed()
+
+
+func _on_inst_button_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_inst_button_pressed, [], 3755368586)
+	else:
+		return vanilla_3560047489__on_inst_button_pressed()
+
+
+func _on_vocals_file_dialog_files_selected(paths: PackedStringArray):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3560047489__on_vocals_file_dialog_files_selected, [paths], 2269338348)
+	else:
+		vanilla_3560047489__on_vocals_file_dialog_files_selected(paths)
+
+
+func _on_inst_file_dialog_file_selected(path):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_inst_file_dialog_file_selected, [path], 3231669199)
+	else:
+		return vanilla_3560047489__on_inst_file_dialog_file_selected(path)
+
+
+func _on_export_file_button_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_export_file_button_pressed, [], 2147238445)
+	else:
+		return vanilla_3560047489__on_export_file_button_pressed()
+
+
+func _on_chart_button_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_chart_button_pressed, [], 1319007134)
+	else:
+		return vanilla_3560047489__on_chart_button_pressed()
+
+
+func _on_close_requested():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3560047489__on_close_requested, [], 119538563)
+	else:
+		return vanilla_3560047489__on_close_requested()
+
+
+func _on_create_button_pressed():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3560047489__on_create_button_pressed, [], 2651880384)
+	else:
+		vanilla_3560047489__on_create_button_pressed()
+
+
+func file_dailog_gui_focus_changed(node: Control):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3560047489_file_dailog_gui_focus_changed, [node], 2372088060)
+	else:
+		vanilla_3560047489_file_dailog_gui_focus_changed(node)
+
+
+func _on_save_folder_dialog_files_selected(paths: PackedStringArray):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3560047489__on_save_folder_dialog_files_selected, [paths], 1482024047)
+	else:
+		vanilla_3560047489__on_save_folder_dialog_files_selected(paths)

@@ -16,7 +16,7 @@ var selected: int = 0
 var old_selected: int
 var elapsed: float
 
-func _process(delta: float) -> void:
+func vanilla_3543653681__process(delta: float) -> void:
 	if get_viewport().gui_get_focus_owner():
 		if Input.is_action_just_pressed(&"menu_cancel") or Input.is_action_just_pressed(&'mouse_right'):
 			get_viewport().gui_release_focus()
@@ -97,7 +97,7 @@ func _process(delta: float) -> void:
 			tween.tween_property(%Options, "position",
 			Vector2(%Options.position.x, max(64.0 - (%Options.size.y - box_limit), %Options.position.y - 60)), 0.2)
 
-func load_category(category: String, options: Array):
+func vanilla_3543653681_load_category(category: String, options: Array):
 	get_tree().call_group(&"options", &"queue_free")
 	var tween = create_tween()
 	tween.set_parallel(true)
@@ -161,10 +161,10 @@ func load_category(category: String, options: Array):
 	
 	update(0)
 
-func _exit_tree() -> void:
+func vanilla_3543653681__exit_tree() -> void:
 	SettingsManager.flush()
 
-func update(i: int, mouse: bool = false):
+func vanilla_3543653681_update(i: int, mouse: bool = false):
 	var options = get_tree().get_nodes_in_group(&"options")
 	selected = wrapi(i, 0, options.size())
 	get_tree().call_group(&"options", &"normal")
@@ -184,14 +184,14 @@ func update(i: int, mouse: bool = false):
 		else:
 			tween.tween_property(%Options, "position:y", 64, 0.2)
 
-func get_selected_node() -> Node:
+func vanilla_3543653681_get_selected_node() -> Node:
 	var options = get_tree().get_nodes_in_group(&"options")
 	return options[selected]
 
-func set_description(text: String = ""):
+func vanilla_3543653681_set_description(text: String = ""):
 	%Description.text = text
 
-func pressed_button(id: StringName):
+func vanilla_3543653681_pressed_button(id: StringName):
 	match id:
 		&"offset":
 			Global.change_scene_to("uid://cw85perbwjqqy")
@@ -205,3 +205,55 @@ func pressed_button(id: StringName):
 		
 		_:
 			printerr("No function assigned to: ", id)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _process(delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3543653681__process, [delta], 1065078831)
+	else:
+		vanilla_3543653681__process(delta)
+
+
+func load_category(category: String, options: Array):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3543653681_load_category, [category, options], 2280235150)
+	else:
+		return vanilla_3543653681_load_category(category, options)
+
+
+func _exit_tree():
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_3543653681__exit_tree, [], 4014015193)
+	else:
+		vanilla_3543653681__exit_tree()
+
+
+func update(i: int, mouse: bool=false):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3543653681_update, [i, mouse], 4225632724)
+	else:
+		return vanilla_3543653681_update(i, mouse)
+
+
+func get_selected_node() -> Node:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3543653681_get_selected_node, [], 1367550142)
+	else:
+		return vanilla_3543653681_get_selected_node()
+
+
+func set_description(text: String=""):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3543653681_set_description, [text], 1330281568)
+	else:
+		return vanilla_3543653681_set_description(text)
+
+
+func pressed_button(id: StringName):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_3543653681_pressed_button, [id], 2625841090)
+	else:
+		return vanilla_3543653681_pressed_button(id)

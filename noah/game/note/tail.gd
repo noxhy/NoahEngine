@@ -4,7 +4,7 @@ extends Line2D
 @export var start_texture: Texture
 @export var end_texture: Texture
 
-func _draw():
+func vanilla_2369915565__draw():
 	if points.size() > 1:
 		var direction: Vector2
 		
@@ -23,3 +23,13 @@ func _draw():
 			var offset: Vector2 = Vector2(-end_texture.get_height() / 2.0, end_texture.get_height() / 2.0) * Vector2(sin(angle), cos(angle))
 			draw_set_transform(end_pos - offset, angle)
 			draw_texture(end_texture, Vector2.ZERO)
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _draw():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2369915565__draw, [], 345284218)
+	else:
+		return vanilla_2369915565__draw()

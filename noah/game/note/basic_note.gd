@@ -24,7 +24,7 @@ var mine: bool = false
 var hit: bool = false
 
 # Applying Note Skin
-func _ready(): 
+func vanilla_534796314__ready(): 
 	end = $Tail/End
 	note.sprite_frames = note_skin.notes_texture
 	if note_skin.animation_names != null: 
@@ -61,7 +61,7 @@ func _ready():
 	load_basic_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func vanilla_534796314__process(delta):
 	time_difference = time - GameManager.song_position
 	
 	if length > 0:
@@ -74,7 +74,7 @@ func _process(delta):
 		tail.visible = false
 
 
-func update():
+func vanilla_534796314_update():
 	if !holding:
 		position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
 		var grid_scaler = PIXELS_PER_SECOND * GameManager.seconds_per_beat
@@ -83,9 +83,40 @@ func update():
 		position.y = 0
 
 
-func load_basic_type():
+func vanilla_534796314_load_basic_type():
 	match note_type:
 		"no_animation":
 			no_animation = true
 		"alt_prefix":
 			anim_prefix = 'alt_'
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_534796314__ready, [], 1141804302)
+	else:
+		return vanilla_534796314__ready()
+
+
+func _process(delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_534796314__process, [delta], 121709592)
+	else:
+		return vanilla_534796314__process(delta)
+
+
+func update():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_534796314_update, [], 2000375677)
+	else:
+		return vanilla_534796314_update()
+
+
+func load_basic_type():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_534796314_load_basic_type, [], 2047883740)
+	else:
+		return vanilla_534796314_load_basic_type()

@@ -19,7 +19,7 @@ var camera_positions: Array = []
 var bop_rate: int = 16
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func vanilla_440900150__ready():
 	if not playstate_host:
 		playstate_host = $"PlayState Host"
 	
@@ -46,10 +46,10 @@ func _ready():
 	Signals.play_died.connect(self.died)
 
 # Conductor Util
-func _on_conductor_new_beat(current_beat: int, measure_relative: int):
+func vanilla_440900150__on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
 
-func _on_conductor_new_step(current_step: int, measure_relative: int):
+func vanilla_440900150__on_conductor_new_step(current_step: int, measure_relative: int):
 	if current_step % bop_rate == 0:
 		if playstate_host.camera.parent_3d:
 			var bump: float = playstate_host.camera_bop_strength.x * playstate_host.camera.zoom
@@ -62,14 +62,14 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 			playstate_host.ui.bump(playstate_host.ui_bop_strength)
 
 
-func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
+func vanilla_440900150__on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if (lane > 3):
 		playstate_host.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
 	else:
 		playstate_host.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
-func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
+func vanilla_440900150_note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
 	var anim_to_play: String = note.anim_prefix +  get_direction(lane % 4)
 	
@@ -93,7 +93,7 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 	
 	Signals.play_note_hit.emit(note, lane, strum_manager)
 
-func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+func vanilla_440900150_note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
 	get_tree().call_group(group, &"set_sing_timer")
 	
@@ -102,7 +102,7 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 	Signals.play_note_holding.emit(note, lane, hold_difference, strum_manager)
 
 
-func note_miss(note: Note, lane: int, strum_manager: StrumManager):
+func vanilla_440900150_note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if !strum_manager.enemy_slot:
 		if not note:
 			SoundManager.anti_spam.play()
@@ -121,14 +121,14 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	Signals.play_note_miss.emit(note, lane, strum_manager)
 
 
-func get_group_from_manager(strum_manager: StrumManager) -> StringName:
+func vanilla_440900150_get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
 
-func get_direction(direction: int) -> StringName:
+func vanilla_440900150_get_direction(direction: int) -> StringName:
 	return [&"left", &"down", &"up", &"right"][direction]
 
 
-func _on_new_event(time: float, event_name: String, event_parameters: Array):
+func vanilla_440900150__on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		&"play_animation":
 			var duration: float = -1
@@ -142,10 +142,10 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 			event_parameters[1])
 
 
-func _on_combo_break():
+func vanilla_440900150__on_combo_break():
 	pass
 
-func show_combo(rating: String, _combo: int):
+func vanilla_440900150_show_combo(rating: String, _combo: int):
 	if rating != "miss":
 		if GameManager.tallies.sick == GameManager.tallies.total_notes:
 			rating = "fc_" + rating
@@ -186,5 +186,99 @@ func show_combo(rating: String, _combo: int):
 		self.add_child(combo_numbers_manager_instance)
 
 
-func died():
+func vanilla_440900150_died():
 	pass
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return await _ModLoaderHooks.call_hooks_async(vanilla_440900150__ready, [], 515765290)
+	else:
+		return await vanilla_440900150__ready()
+
+
+func _on_conductor_new_beat(current_beat: int, measure_relative: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150__on_conductor_new_beat, [current_beat, measure_relative], 3196877670)
+	else:
+		return vanilla_440900150__on_conductor_new_beat(current_beat, measure_relative)
+
+
+func _on_conductor_new_step(current_step: int, measure_relative: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150__on_conductor_new_step, [current_step, measure_relative], 3197505062)
+	else:
+		return vanilla_440900150__on_conductor_new_step(current_step, measure_relative)
+
+
+func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150__on_create_note, [time, lane, note_length, note_type, tempo], 577872602)
+	else:
+		return vanilla_440900150__on_create_note(time, lane, note_length, note_type, tempo)
+
+
+func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_note_hit, [note, lane, hit_time, strum_manager], 3661313232)
+	else:
+		return vanilla_440900150_note_hit(note, lane, hit_time, strum_manager)
+
+
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_note_holding, [note, lane, hold_difference, strum_manager], 1225781168)
+	else:
+		return vanilla_440900150_note_holding(note, lane, hold_difference, strum_manager)
+
+
+func note_miss(note: Note, lane: int, strum_manager: StrumManager):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_note_miss, [note, lane, strum_manager], 564432135)
+	else:
+		return vanilla_440900150_note_miss(note, lane, strum_manager)
+
+
+func get_group_from_manager(strum_manager: StrumManager) -> StringName:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_get_group_from_manager, [strum_manager], 1956499471)
+	else:
+		return vanilla_440900150_get_group_from_manager(strum_manager)
+
+
+func get_direction(direction: int) -> StringName:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_get_direction, [direction], 1190270518)
+	else:
+		return vanilla_440900150_get_direction(direction)
+
+
+func _on_new_event(time: float, event_name: String, event_parameters: Array):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150__on_new_event, [time, event_name, event_parameters], 3828202396)
+	else:
+		return vanilla_440900150__on_new_event(time, event_name, event_parameters)
+
+
+func _on_combo_break():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150__on_combo_break, [], 399341285)
+	else:
+		return vanilla_440900150__on_combo_break()
+
+
+func show_combo(rating: String, _combo: int):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_show_combo, [rating, _combo], 111231910)
+	else:
+		return vanilla_440900150_show_combo(rating, _combo)
+
+
+func died():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_440900150_died, [], 3431884588)
+	else:
+		return vanilla_440900150_died()

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://be4q5dr3p0s37"
+path="res://.godot/imported/pixel 2.ogg-de810d8b7f31167232dcc6cf4ec53f8e.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 2.ogg"
+dest_files=["res://.godot/imported/pixel 2.ogg-de810d8b7f31167232dcc6cf4ec53f8e.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0.0
+bpm=0.0
+beat_count=0
+bar_beats=4

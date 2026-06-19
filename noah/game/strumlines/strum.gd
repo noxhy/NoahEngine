@@ -50,14 +50,14 @@ var coyote_timer: float = 0.0
 @onready var hold_cover_sprite: Node = $"Hold Cover"
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func vanilla_2766742398__ready():
 	sprite.play_animation(strum_name)
 	hold_cover_sprite.visible = false
 	Signals.connect(&"play_unpaused", self.release_note)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func vanilla_2766742398__process(delta):
 	for note in note_list:
 		var time_difference: float = note.time_difference
 		
@@ -214,7 +214,7 @@ func _process(delta):
 		sprite.play_animation(strum_name + " glow", false)
 
 # Util
-func set_skin(new_skin: NoteSkin):
+func vanilla_2766742398_set_skin(new_skin: NoteSkin):
 	note_skin = new_skin
 	
 	sprite.frames = note_skin.strums_texture
@@ -235,7 +235,7 @@ func set_skin(new_skin: NoteSkin):
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
 
-func create_note(time: float, length: float, note_type: String, _tempo: float):
+func vanilla_2766742398_create_note(time: float, length: float, note_type: String, _tempo: float):
 	self.tempo = tempo
 	
 	var note_instance = NOTE_PRELOAD.instantiate()
@@ -259,7 +259,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	Signals.play_note_created.emit(note_instance, self)
 
 # Visuals
-func _on_offset_sprite_animation_finished():
+func vanilla_2766742398__on_offset_sprite_animation_finished():
 	if state == STATE.GLOW:
 		if !auto_play:
 			if pressing:
@@ -270,7 +270,7 @@ func _on_offset_sprite_animation_finished():
 			sprite.play()
 
 
-func _on_hold_cover_animation_finished():
+func vanilla_2766742398__on_hold_cover_animation_finished():
 	if hold_cover_sprite.animation == hold_cover_sprite.animation_names.get("cover " + strum_name + " start"):
 		hold_cover_sprite.play_animation("cover " + strum_name)
 	
@@ -278,7 +278,7 @@ func _on_hold_cover_animation_finished():
 		hold_cover_sprite.visible = false
 
 
-func create_splash(animation_name: String = strum_name + " splash"):
+func vanilla_2766742398_create_splash(animation_name: String = strum_name + " splash"):
 	if can_splash:
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "note_splashes"):
 			var splash_instance = SPLASH_PRELOAD.instantiate()
@@ -290,7 +290,7 @@ func create_splash(animation_name: String = strum_name + " splash"):
 			splash_instance.get_node("OffsetSprite").play_animation(animation_name)
 
 
-func release_note():
+func vanilla_2766742398_release_note():
 	if can_press:
 		if pressing:
 			pressing = false
@@ -308,3 +308,62 @@ func release_note():
 					note.start_length = note.length
 		else:
 			state = STATE.IDLE
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _ready():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398__ready, [], 4009972594)
+	else:
+		return vanilla_2766742398__ready()
+
+
+func _process(delta):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398__process, [delta], 1115755388)
+	else:
+		return vanilla_2766742398__process(delta)
+
+
+func set_skin(new_skin: NoteSkin):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398_set_skin, [new_skin], 1819721790)
+	else:
+		return vanilla_2766742398_set_skin(new_skin)
+
+
+func create_note(time: float, length: float, note_type: String, _tempo: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398_create_note, [time, length, note_type, _tempo], 744493127)
+	else:
+		return vanilla_2766742398_create_note(time, length, note_type, _tempo)
+
+
+func _on_offset_sprite_animation_finished():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398__on_offset_sprite_animation_finished, [], 3837717534)
+	else:
+		return vanilla_2766742398__on_offset_sprite_animation_finished()
+
+
+func _on_hold_cover_animation_finished():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398__on_hold_cover_animation_finished, [], 3860009414)
+	else:
+		return vanilla_2766742398__on_hold_cover_animation_finished()
+
+
+func create_splash(animation_name: String=strum_name+"splash"):
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398_create_splash, [animation_name], 3495738588)
+	else:
+		return vanilla_2766742398_create_splash(animation_name)
+
+
+func release_note():
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_2766742398_release_note, [], 2028373044)
+	else:
+		return vanilla_2766742398_release_note()

@@ -7,7 +7,7 @@ signal animation_looped
 
 var frame_progress: float
 
-func _process(delta: float) -> void:
+func vanilla_1690821786__process(delta: float) -> void:
 	if atlases.size() != last_atlases_size:
 		last_atlases_size = atlases.size()
 		notify_property_list_changed()
@@ -64,7 +64,7 @@ func _process(delta: float) -> void:
 	internal_setting_frame = false
 
 
-func validate_frame(value: int, length: int = -1) -> int:
+func vanilla_1690821786_validate_frame(value: int, length: int = -1) -> int:
 	if length == -1:
 		length = get_animation_length()
 
@@ -80,3 +80,20 @@ func validate_frame(value: int, length: int = -1) -> int:
 		value = 0
 
 	return value
+
+
+# ModLoader Hooks - The following code has been automatically added by the Godot Mod Loader.
+
+
+func _process(delta: float):
+	if _ModLoaderHooks.any_mod_hooked:
+		_ModLoaderHooks.call_hooks(vanilla_1690821786__process, [delta], 2402103448)
+	else:
+		vanilla_1690821786__process(delta)
+
+
+func validate_frame(value: int, length: int=-1) -> int:
+	if _ModLoaderHooks.any_mod_hooked:
+		return _ModLoaderHooks.call_hooks(vanilla_1690821786_validate_frame, [value, length], 1358153358)
+	else:
+		return vanilla_1690821786_validate_frame(value, length)
