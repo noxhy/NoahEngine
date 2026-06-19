@@ -35,7 +35,8 @@ func install_script_extensions() -> void:
 
 	# ? Brief description/reason behind this edit of vanilla code...
 	ModLoaderMod.install_script_extension(extensions_dir_path.path_join("main.gd"))
-	ModLoaderMod.install_script_extension(extensions_dir_path + "/noah/start.gd") # ! Note that this file does not exist in this example mod
+	ModLoaderMod.install_script_extension(extensions_dir_path + "/noah/start.gd")
+	ModLoaderMod.install_script_extension(extensions_dir_path + "/noah/constants.gd")
 
 	# ! Add extensions (longform version of the above)
 	#ModLoaderMod.install_script_extension("res://mods-unpacked/AuthorName-ModName/extensions/main.gd")
