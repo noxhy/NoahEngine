@@ -54,7 +54,6 @@ enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res
 [file_customization]
 
 folder_colors={
-"res://mods-unpacked/FunkinCrew-FnF/funkin/": "orange",
 "res://noah/": "red",
 "res://noah/assets/": "yellow",
 "res://noah/game/": "purple",
