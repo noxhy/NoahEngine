@@ -15,7 +15,7 @@ var RESULTS_MENU_SCENE: String = "uid://cmwlnqqj5h0xy"
 var CHART_EDITOR_SCENE: String = "uid://c3lux2ajoe1g6"
 var EVENT_EDITOR_SCENE: String = "uid://cq6xqods6w7lw"
 
-#events
+#region Event Data
 var EVENT_DATA: Dictionary = {
 	"camera_position": {
 		"parameters": ["Position Index"],
@@ -58,6 +58,7 @@ var EVENT_DATA: Dictionary = {
 		"texture": "uid://bwp1pd1s3xmka"
 	}
 }
+#endregion
 
 #playstate constants
 const SCORING_SLOPE: float = 0.08
@@ -74,9 +75,11 @@ const HEALTH_GAIN: float = 1
 const MISS_BASE_HEALTH_PENALTY: float = 4
 const MISS_MAX_HEALTH_PENALTY: float = 20.0
 
+#region Note Types
 ## The note type and the corresponding animation prefix.
 var NOTE_TYPES: Dictionary = {
 	"mom": "",
 	"no_animation": "",
 	"alt_prefix": ""
 }
+#endregion
