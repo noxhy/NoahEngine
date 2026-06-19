@@ -22,6 +22,7 @@ var bop_rate: int = 16
 func _ready():
 	if not playstate_host:
 		playstate_host = $"PlayState Host"
+	
 	assert(playstate_host, "Playstate host not found")
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	if player:
@@ -42,6 +43,7 @@ func _ready():
 	Signals.play_new_event.connect(_on_new_event)
 	
 	Signals.play_song_ready_to_start.emit()
+	Signals.play_died.connect(self.died)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat: int, measure_relative: int):
@@ -50,10 +52,10 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if current_step % bop_rate == 0:
 		if playstate_host.camera.parent_3d:
-			var bump: float = playstate_host.camera_bop_strength.x  * playstate_host.camera.zoom
+			var bump: float = playstate_host.camera_bop_strength.x * playstate_host.camera.zoom
 			playstate_host.camera.bump(bump)
 		else:
-			var bump: Vector2 = playstate_host.camera_bop_strength  * playstate_host.camera.zoom
+			var bump: Vector2 = playstate_host.camera_bop_strength * playstate_host.camera.zoom
 			playstate_host.camera.bump(bump)
 		
 		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
@@ -182,3 +184,7 @@ func show_combo(rating: String, _combo: int):
 		
 		self.add_child(rating_instance)
 		self.add_child(combo_numbers_manager_instance)
+
+
+func died():
+	pass

@@ -72,7 +72,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gy5h7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"down",
 "speed": 24.0
 }, {
@@ -83,7 +83,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wbylh")
 }],
-"loop": false,
+"loop": 0,
 "name": &"down glow",
 "speed": 24.0
 }, {
@@ -91,7 +91,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kjhqj")
 }],
-"loop": false,
+"loop": 0,
 "name": &"down press",
 "speed": 24.0
 }, {
@@ -99,7 +99,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_u6clq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"left",
 "speed": 24.0
 }, {
@@ -110,7 +110,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xnrxq")
 }],
-"loop": false,
+"loop": 0,
 "name": &"left glow",
 "speed": 24.0
 }, {
@@ -118,7 +118,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_bt486")
 }],
-"loop": false,
+"loop": 0,
 "name": &"left press",
 "speed": 24.0
 }, {
@@ -126,7 +126,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_cjq88")
 }],
-"loop": true,
+"loop": 1,
 "name": &"right",
 "speed": 24.0
 }, {
@@ -137,7 +137,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_y8u6y")
 }],
-"loop": false,
+"loop": 0,
 "name": &"right glow",
 "speed": 24.0
 }, {
@@ -145,7 +145,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_21uo5")
 }],
-"loop": false,
+"loop": 0,
 "name": &"right press",
 "speed": 24.0
 }, {
@@ -153,7 +153,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ldex7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"up",
 "speed": 24.0
 }, {
@@ -164,7 +164,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aoimc")
 }],
-"loop": false,
+"loop": 0,
 "name": &"up glow",
 "speed": 24.0
 }, {
@@ -172,7 +172,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_437py")
 }],
-"loop": false,
+"loop": 0,
 "name": &"up press",
 "speed": 24.0
 }]

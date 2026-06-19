@@ -21,7 +21,6 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("4_fnsyj")
 ui_skin = ExtResource("5_gia47")
-combo_scale_multiplier = Vector2(1.2, 1.2)
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1702680818]
 position = Vector2(640, 360)

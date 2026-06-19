@@ -23,3 +23,4 @@ signal play_combo_break()
 
 signal play_paused()
 signal play_unpaused()
+signal play_died()

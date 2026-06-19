@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://blj8dbuorj1h0"]
 
-[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_xeyw4"]
+[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://funkin/song_scenes/funkin_song.gd" id="1_8obse"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_y6xle"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/game/default/default_note_skin.tres" id="4_8nme4"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/game/default/default_ui_skin.tres" id="5_uia00"]
@@ -34,7 +34,7 @@ shader_parameter/contrast = -23.0
 shader_parameter/brightness = -33.0
 
 [node name="Fresh" type="Node2D" unique_id=1049894585]
-script = ExtResource("1_xeyw4")
+script = ExtResource("1_8obse")
 
 [node name="PlayState" parent="." unique_id=586722021 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_y6xle")]
 process_mode = 1

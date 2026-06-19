@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bd083xcqslcsd"]
 
-[ext_resource type="Script" uid="uid://brbf61eud6vql" path="res://noah/game/death_screen.gd" id="1_3knol"]
+[ext_resource type="Script" uid="uid://brbf61eud6vql" path="res://funkin/death_screen.gd" id="1_3knol"]
 [ext_resource type="AudioStream" uid="uid://c7jqa5mdxivnd" path="res://funkin/assets/sounds/menu_sounds/lose sfx.ogg" id="1_l87ty"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_24go6"]
 [ext_resource type="AudioStream" uid="uid://cqoad5jx15ele" path="res://funkin/assets/songs/game over/gameOver.ogg" id="3_3040t"]
@@ -181,8 +181,11 @@ grow_vertical = 2
 color = Color(0, 0, 0, 0)
 metadata/_edit_lock_ = true
 
-[node name="CameraController" type="Node" parent="." unique_id=1913434865]
+[node name="CameraController" type="Node" parent="." unique_id=1913434865 node_paths=PackedStringArray("parent_2d")]
 script = ExtResource("7_553pn")
+parent_2d = NodePath("../Camera2D")
+zoom_smoothing = false
+rotation_smoothing = false
 metadata/_custom_type_script = "uid://b4lmffueni5k"
 
 [connection signal="new_beat" from="Conductor" to="." method="_on_conductor_new_beat"]

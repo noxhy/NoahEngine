@@ -13,7 +13,7 @@ func _ready():
 	$AnimationPlayer.play(&"intro")
 	 
 	if %Player is Node2D:
-		player_position = Vector2(player_position.x,player_position.y)
+		player_position = Vector2(player_position.x, player_position.y)
 	
 	%Player.position = player_position
 	$CameraController.set_position(%Player.global_position)
@@ -25,7 +25,6 @@ func _ready():
 	tween.tween_property(%Player, "scale:y", player_scale.y, 2)
 	
 	tween.tween_property($CameraController, "zoom", camera_zoom, 2)
-	tween.tween_property($CameraController, "target_zoom", camera_zoom, 2)
 	
 	$Conductor.tempo = $Audio/Music.stream.get_bpm()
 

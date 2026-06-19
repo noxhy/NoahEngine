@@ -31,7 +31,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("1_n06vq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"bad",
 "speed": 5.0
 }, {
@@ -39,7 +39,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("2_60fpn")
 }],
-"loop": true,
+"loop": 1,
 "name": &"epic",
 "speed": 5.0
 }, {
@@ -47,7 +47,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ecwq1")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fc_bad",
 "speed": 5.0
 }, {
@@ -55,7 +55,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("4_0548a")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fc_epic",
 "speed": 5.0
 }, {
@@ -63,7 +63,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_w3j38")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fc_good",
 "speed": 5.0
 }, {
@@ -71,7 +71,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yh73s")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fc_shit",
 "speed": 5.0
 }, {
@@ -79,7 +79,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3abti")
 }],
-"loop": true,
+"loop": 1,
 "name": &"fc_sick",
 "speed": 5.0
 }, {
@@ -87,7 +87,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("3_alytb")
 }],
-"loop": true,
+"loop": 1,
 "name": &"good",
 "speed": 5.0
 }, {
@@ -95,7 +95,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("6_d5crq")
 }],
-"loop": true,
+"loop": 1,
 "name": &"miss",
 "speed": 5.0
 }, {
@@ -103,7 +103,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("4_3quq1")
 }],
-"loop": true,
+"loop": 1,
 "name": &"shit",
 "speed": 5.0
 }, {
@@ -111,7 +111,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("5_ceb13")
 }],
-"loop": true,
+"loop": 1,
 "name": &"sick",
 "speed": 5.0
 }]

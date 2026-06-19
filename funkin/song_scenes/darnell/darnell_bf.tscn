@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bg3coqaywlx5b"]
 
-[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_4dseh"]
+[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://funkin/song_scenes/funkin_song.gd" id="1_pgqlt"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_ll1vv"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/game/default/default_note_skin.tres" id="3_sjwel"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/game/default/default_ui_skin.tres" id="4_amk0d"]
@@ -34,7 +34,7 @@ shader_parameter/contrast = -25.0
 shader_parameter/brightness = -20.0
 
 [node name="Darnell Bf Mix" type="Node2D" unique_id=161033940]
-script = ExtResource("1_4dseh")
+script = ExtResource("1_pgqlt")
 
 [node name="PlayState" parent="." unique_id=1341256185 node_paths=PackedStringArray("host", "ui", "camera") instance=ExtResource("2_ll1vv")]
 process_mode = 1
@@ -43,7 +43,6 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("3_sjwel")
 ui_skin = ExtResource("4_amk0d")
-combo_scale_multiplier = Vector2(1.2, 1.2)
 
 [node name="Camera" type="Camera2D" parent="." unique_id=977109525]
 z_index = 999

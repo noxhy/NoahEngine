@@ -210,7 +210,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2oryv")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash blue 1",
 "speed": 24.0
 }, {
@@ -227,7 +227,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qhvgm")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash blue 2",
 "speed": 24.0
 }, {
@@ -244,7 +244,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_j2as4")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash green 1",
 "speed": 24.0
 }, {
@@ -261,7 +261,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2cbs0")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash green 2",
 "speed": 24.0
 }, {
@@ -278,7 +278,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p3h00")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash purple 1",
 "speed": 24.0
 }, {
@@ -295,7 +295,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_lo5dk")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash purple 2",
 "speed": 24.0
 }, {
@@ -312,7 +312,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_shjum")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash red 1",
 "speed": 24.0
 }, {
@@ -329,7 +329,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gbcat")
 }],
-"loop": false,
+"loop": 0,
 "name": &"note splash red 2",
 "speed": 24.0
 }]

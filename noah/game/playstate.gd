@@ -25,7 +25,6 @@ const COMPENSATION: float = 1.0 / 30.0
 
 @export_group("Scenes")
 ## What scene the player will be sent to upon death.
-@export_file('*.tscn') var death_scene: String = "uid://bd083xcqslcsd"
 var pause_scene: String
 ## The scene that will be switched to when the song ends.
 @export_file('*.tscn') var next_scene: String = Constants.RESULTS_MENU_SCENE
@@ -55,6 +54,7 @@ var misses: int = 0
 var score: float = 0
 var health: float = 50.0
 var combo: int = 0
+var died: bool = false
 
 var camera_bop_strength: Vector2 = Vector2(0.05, 0.05)
 var ui_bop_strength: Vector2 = Vector2(0.025, 0.025)
@@ -152,11 +152,12 @@ func _process(delta):
 	GameManager.health = health
 	GameManager.score = int(score)
 	
-	if health <= 0:
+	if health <= 0 and !died:
 		GameManager.deaths += 1
 		DeathScreen.camera_zoom = camera.zoom
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
-		get_tree().change_scene_to_file(death_scene)
+		Signals.play_died.emit()
+		died = true
 	
 	# Why is this a thing I have to do
 	if get_tree():

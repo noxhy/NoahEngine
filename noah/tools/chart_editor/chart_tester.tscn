@@ -23,7 +23,6 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("4_laa4w")
 ui_skin = ExtResource("2_srd2m")
-death_scene = "uid://c56g0k7u2k6wo"
 next_scene = "uid://c3lux2ajoe1g6"
 
 [node name="Camera" type="Camera2D" parent="." unique_id=126874252]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://7dnhab71cxfx"]
 
-[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://funkin/song_scenes/alt_poses.gd" id="1_8k6f7"]
+[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://funkin/song_scenes/funkin_song.gd" id="1_8k6f7"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_vb00p"]
 [ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://funkin/assets/game/default/default_note_skin.tres" id="4_aqdoj"]
 [ext_resource type="Resource" uid="uid://cykk1h52kdqv2" path="res://funkin/assets/game/default/default_ui_skin.tres" id="5_f88c2"]
