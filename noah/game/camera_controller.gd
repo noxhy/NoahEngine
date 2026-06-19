@@ -212,8 +212,9 @@ func update_shake(delta: float) -> void:
 		parent_3d.v_offset = shake_offset.y
 	
 	shake_time -= delta
-	if shake_time <= 0: end_shake()
-	
+	if shake_time <= 0:
+		end_shake()
+
 
 func shake(amount: int, time: float) -> void:
 	shake_time = time
