@@ -411,7 +411,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 						)
 		
 		"camera_shake":
-			camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]))
+			camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]) / song_speed)
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 
