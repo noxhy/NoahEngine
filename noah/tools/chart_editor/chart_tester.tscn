@@ -23,7 +23,8 @@ ui = NodePath("../UI")
 camera = NodePath("../CameraController")
 note_skin = ExtResource("4_laa4w")
 ui_skin = ExtResource("2_srd2m")
-next_scene = "res://scenes/chart editor/chart_editor.tscn"
+death_scene = "uid://c56g0k7u2k6wo"
+next_scene = "uid://c3lux2ajoe1g6"
 
 [node name="Camera" type="Camera2D" parent="." unique_id=126874252]
 position = Vector2(640, 360)
@@ -58,6 +59,7 @@ gizmo_extents = 20.0
 [node name="UI" parent="." unique_id=174843182 instance=ExtResource("5_g7go4")]
 
 [node name="Chart Stats" type="Label" parent="UI" unique_id=2008266331]
+custom_maximum_size = Vector2(256, 256)
 offset_left = -128.0
 offset_top = -104.0
 offset_right = 128.0
