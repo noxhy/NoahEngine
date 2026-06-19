@@ -340,7 +340,7 @@ func pause():
 
 func score_note(hit_time: float):
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
-	var add: int = int(Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN)
+	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
 	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	score += add
 
