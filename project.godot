@@ -22,6 +22,8 @@ buses/default_bus_layout="uid://wp1fb3lbqup6"
 
 [autoload]
 
+ModLoaderStore="*uid://bl378fjhu3ycd"
+ModLoader="*uid://dpvqx6jx6glhs"
 Global="*res://noah/global.tscn"
 Transitions="*res://noah/transitions.tscn"
 GameManager="*res://noah/managers/game_manager.gd"
