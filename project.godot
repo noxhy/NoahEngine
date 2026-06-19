@@ -58,9 +58,9 @@ folder_colors={
 "res://noah/assets/": "yellow",
 "res://noah/game/": "purple",
 "res://noah/managers/": "pink",
+"res://noah/resources/": "green",
 "res://noah/tools/": "gray",
-"res://playable_songs/": "purple",
-"res://resources/": "green"
+"res://playable_songs/": "purple"
 }
 
 [global_group]
