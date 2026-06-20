@@ -5,7 +5,7 @@ class_name Album
 @export_subgroup("Album Stats")
 
 @export var name: String
-@export var cover: Texture2D
+@export var cover: Texture
 @export_multiline var credits: String
 
 @export_subgroup("Song List")

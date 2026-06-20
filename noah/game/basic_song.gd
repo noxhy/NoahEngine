@@ -25,10 +25,9 @@ func _ready() -> void:
 	
 	assert(playstate_host, "Playstate host not found")
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
+	
 	if player:
 		playstate_host.ui.update_player(player)
-		DeathScreen.player_position = player.global_position
-		DeathScreen.player_scale = Vector2(player.scale.x,player.scale.y)
 	
 	if enemy:
 		playstate_host.ui.update_enemy(enemy)

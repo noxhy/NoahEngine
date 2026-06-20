@@ -154,7 +154,6 @@ func _process(delta) -> void:
 	
 	if health <= 0 and !died:
 		GameManager.deaths += 1
-		DeathScreen.camera_zoom = camera.zoom
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		Signals.play_died.emit()
 		died = true

@@ -2,6 +2,8 @@ extends Node
 
 @onready var performance_label: Label = $"Performance Label"
 
+var static_values: Dictionary = {}
+
 var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
 var fullscreen: bool = false
