@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/content/components/IsActiveToggle.gd" type="Script" id=1]
+
+[node name="IsActiveToggle" type="CheckBox"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+
+[connection signal="pressed" from="." to="." method="_on_IsActiveToggle_pressed"]
+[connection signal="toggled" from="." to="." method="_on_IsActiveToggle_toggled"]

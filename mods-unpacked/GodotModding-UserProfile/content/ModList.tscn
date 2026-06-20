@@ -1,0 +1,50 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/content/ModList.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/content/components/IsActiveToggle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/assets/fonts/Heading.tres" type="FontFile" id=3]
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/content/components/CurrentConfigSelect.tscn" type="PackedScene" id=4]
+[ext_resource path="res://mods-unpacked/GodotModding-UserProfile/content/components/ModIdLabel.tscn" type="PackedScene" id=5]
+
+[node name="ModList" type="MarginContainer"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 1900.0
+offset_bottom = 1060.0
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource( 1 )
+mod_id_label_scene = ExtResource( 5 )
+is_active_toggle_scene = ExtResource( 2 )
+current_config_select_scene = ExtResource( 4 )
+
+[node name="Grid" type="GridContainer" parent="."]
+unique_name_in_owner = true
+offset_top = 10.0
+offset_right = 1880.0
+offset_bottom = 1030.0
+theme_override_constants/h_separation = 50
+columns = 3
+
+[node name="LabelModName" type="Label" parent="Grid"]
+unique_name_in_owner = true
+offset_right = 72.0
+offset_bottom = 19.0
+theme_override_fonts/font = ExtResource( 3 )
+text = "Mod Name"
+
+[node name="LabelActiveState" type="Label" parent="Grid"]
+unique_name_in_owner = true
+offset_left = 122.0
+offset_right = 176.0
+offset_bottom = 19.0
+theme_override_fonts/font = ExtResource( 3 )
+text = "active"
+
+[node name="LabelCurrentConfig" type="Label" parent="Grid"]
+unique_name_in_owner = true
+offset_left = 226.0
+offset_right = 352.0
+offset_bottom = 19.0
+theme_override_fonts/font = ExtResource( 3 )
+text = "current config"

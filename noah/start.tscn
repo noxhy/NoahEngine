@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://crfoqsmbdm5bd"]
 
 [ext_resource type="Script" uid="uid://cmn3noo2keqes" path="res://noah/start.gd" id="1_sr1oe"]
+[ext_resource type="PackedScene" uid="uid://i5haaf1g1dh5" path="res://mods-unpacked/GodotModding-UserProfile/content/UserProfiles.tscn" id="2_v6p61"]
 
 [node name="StartMenu" type="Node2D" unique_id=314982262]
 script = ExtResource("1_sr1oe")
@@ -8,9 +9,51 @@ script = ExtResource("1_sr1oe")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1832716492]
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=101636259]
+show_behind_parent = true
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
+
+[node name="UserProfilePopup" parent="CanvasLayer" unique_id=1227858780 instance=ExtResource("2_v6p61")]
+anchors_preset = 9
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 172.0
+offset_bottom = 0.0
+grow_horizontal = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer" unique_id=1848732544]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer" unique_id=1837952736]
+layout_mode = 2
+text = "If you're seeing this right now, you need to have a mod installed.
+To go to the chart/event edtior, press 7."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" type="Button" parent="CanvasLayer/VBoxContainer" unique_id=1159276669]
+layout_mode = 2
+text = "Open Mods Folder"
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1245173394]
+oversampling_override = 1.0
+title = "Open a Directory"
+file_mode = 2
+root_subfolder = "res://mods/"
+filters = PackedStringArray("*.zip")
+use_native_dialog = true
+
+[connection signal="pressed" from="CanvasLayer/VBoxContainer/Button" to="." method="_on_button_pressed"]
