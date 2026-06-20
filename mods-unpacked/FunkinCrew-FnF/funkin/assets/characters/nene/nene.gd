@@ -20,7 +20,7 @@ var update_timer: float
 
 @onready var anim_player:AnimationPlayer = $AnimationPlayer
 
-func _ready():
+func _ready() -> void:
 	super()
 	update_timer = update_rate
 	
@@ -34,7 +34,7 @@ func on_event(time, event_name, event_parameters):
 			else:
 				anim_player.play("look_left")
 
-func _process(delta):
+func _process(delta) -> void:
 	super(delta)
 	
 	var frequency = minFrequency

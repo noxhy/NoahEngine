@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://clbeef0fp6xbw"]
 
-[ext_resource type="Script" uid="uid://c1c4ybha61mn4" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/credits/credits.gd" id="1_twwf5"]
+[ext_resource type="Script" uid="uid://c1c4ybha61mn4" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/credits/credits.gd" id="1_twwf5"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_7ianm"]
-[ext_resource type="Texture2D" uid="uid://djuslh4ulkynw" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/background/menuBGMagenta.png" id="5_7foaj"]
+[ext_resource type="Texture2D" uid="uid://djuslh4ulkynw" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/background/menuBGMagenta.png" id="5_7foaj"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="6_3ucr5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5ywea"]

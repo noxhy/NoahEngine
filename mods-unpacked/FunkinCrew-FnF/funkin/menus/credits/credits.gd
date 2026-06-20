@@ -36,7 +36,7 @@ var credit_indexes: Array[int] = []
 var selected: int = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	Global.set_window_title("Credits Menu")
 	var object_amount: int = 0
 	
@@ -79,7 +79,7 @@ func _ready():
 	$Conductor.tempo = SoundManager.music.stream.get_bpm()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	pass
 
 

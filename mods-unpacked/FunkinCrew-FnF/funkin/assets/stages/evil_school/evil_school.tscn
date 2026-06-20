@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dm1wcp8xtvqv5"]
 
 [ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_nay4l"]
-[ext_resource type="SpriteFrames" uid="uid://csqo7uj2jh4ct" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/evil_school/animatedEvilSchool.res" id="2_8obdx"]
+[ext_resource type="SpriteFrames" uid="uid://csqo7uj2jh4ct" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/evil_school/animatedEvilSchool.res" id="2_8obdx"]
 
 [sub_resource type="Gradient" id="Gradient_hw8ls"]
 colors = PackedColorArray(0, 0, 0, 1, 0.709804, 0.658824, 1, 1)

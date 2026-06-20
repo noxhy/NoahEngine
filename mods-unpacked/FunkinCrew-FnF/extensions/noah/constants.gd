@@ -10,9 +10,6 @@ var OPTIONS_MENU_SCENE: String = "uid://stil5xd6xto6"
 var OPTIONS_SUBMENU_SCENE: String = "uid://bp581x6mu5f1w"
 var CREDITS_MENU_SCENE: String = "uid://clbeef0fp6xbw"
 var RESULTS_MENU_SCENE: String = "uid://cmwlnqqj5h0xy"
-
-var CHART_EDITOR_SCENE: String = "uid://c3lux2ajoe1g6"
-var EVENT_EDITOR_SCENE: String = "uid://cq6xqods6w7lw"
 #endregion
 
 func _init() -> void:

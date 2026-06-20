@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://c1s7cbxg2o4m0"]
 
-[ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/atlas_sprite.gd" id="1_uxy4b"]
+[ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/atlas_sprite.gd" id="1_uxy4b"]
 [ext_resource type="Script" uid="uid://3t6ei05ucncj" path="res://noah/noahAnimate.gd" id="3_8nr8s"]
-[ext_resource type="FontFile" uid="uid://c7hwqqieqbc47" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/results_background.ttf" id="3_dcg1w"]
+[ext_resource type="FontFile" uid="uid://c7hwqqieqbc47" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/results_background.ttf" id="3_dcg1w"]
 [ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="4_t2sh6"]
 [ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="5_benro"]
 

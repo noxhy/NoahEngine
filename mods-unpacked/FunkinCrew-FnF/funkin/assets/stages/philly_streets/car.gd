@@ -5,7 +5,7 @@ extends Node2D
 @export var time: float = 2.0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	
 	$AnimatedSprite2D.play("car" + str(car))
 	$AnimatedSprite2D.scale.x = direction / abs(direction)

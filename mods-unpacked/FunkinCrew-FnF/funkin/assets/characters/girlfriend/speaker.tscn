@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://by2sf7r6otryi"]
 
-[ext_resource type="SpriteFrames" uid="uid://bkox4ut1mmgul" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/objects/speaker.res" id="1_76mpl"]
+[ext_resource type="SpriteFrames" uid="uid://bkox4ut1mmgul" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/objects/speaker.res" id="1_76mpl"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="2_lr3gt"]
 
 [node name="Speaker" type="AnimatedSprite2D" unique_id=420751732]

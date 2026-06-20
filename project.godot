@@ -27,9 +27,9 @@ ModLoader="*uid://dpvqx6jx6glhs"
 Global="*res://noah/global.tscn"
 Transitions="*res://noah/transitions.tscn"
 GameManager="*res://noah/managers/game_manager.gd"
+Preload="*uid://cnqn5donqdijf"
 SettingsManager="*res://noah/managers/settings_manager.gd"
 ChartManager="*res://noah/managers/chart_manager.gd"
-Preload="*res://mods-unpacked/FunkinCrew-FnF/funkin/preload.gd"
 SoundManager="*res://noah/managers/sound_manager.tscn"
 SaveManager="*res://noah/managers/save_manager.gd"
 Signals="*res://noah/signals.gd"
@@ -54,7 +54,6 @@ enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res
 [file_customization]
 
 folder_colors={
-"res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/": "purple",
 "res://noah/": "red",
 "res://noah/assets/": "yellow",
 "res://noah/game/": "purple",

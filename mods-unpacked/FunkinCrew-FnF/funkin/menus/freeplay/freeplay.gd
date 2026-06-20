@@ -21,7 +21,7 @@ var current_highscore: int
 var dj: AtlasSprite
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	difficulty = difficulties[0]
 	$"Difficulty Selector".difficulties = difficulties
 	album = Preload.character_data[GameManager.current_character].album
@@ -117,7 +117,6 @@ func load_page():
 	$"UI/Album Cover".scale.x = 262.0 / album.cover.get_width()
 	$"UI/Album Cover".scale.y = $"UI/Album Cover".scale.x
 	%"Album Name".text = album.name
-	%"Album Song List".text = album.credits
 
 
 func update(i: int):

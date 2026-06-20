@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://c4d42u4d21spo"]
 
-[ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/tankman/icon-tankman.png" id="1_wxx4m"]
+[ext_resource type="Texture2D" uid="uid://1maoevhwp1gf" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/tankman/icon-tankman.png" id="1_wxx4m"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ku5et"]
 atlas = ExtResource("1_wxx4m")

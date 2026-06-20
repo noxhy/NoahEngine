@@ -1,4 +1,5 @@
-class_name AtlasSprite extends Node2D
+extends Node2D
+class_name AtlasSprite
 
 ## [code]start_frame[/code] - Starting frame
 ## [code]end_frame[/code] - Ending frame

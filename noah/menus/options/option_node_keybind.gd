@@ -8,7 +8,7 @@ var object_amount: int = 0
 var buttons: Array[Button] = []
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	%Label.text = display_name
 	for i in SettingsManager.get_keybind(setting_name):
 		var keybind_button_instance = KEYBIND_BUTTON_PRELOAD.instantiate()

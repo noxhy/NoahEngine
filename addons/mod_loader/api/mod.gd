@@ -149,7 +149,7 @@ static func install_script_hooks(vanilla_script_path: String, hook_script_path: 
 ## var version := "vanilla 1.0.0"
 ##
 ##
-## func _ready():
+## func _ready() -> void:
 ##     $CanvasLayer/Control/Label.text = "Version: %s" % version
 ##     print(Utilities.format_date(15, 11, 2024))
 ## [/codeblock]

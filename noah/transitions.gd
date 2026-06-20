@@ -4,7 +4,7 @@ signal waiting
 
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 
-func _ready():
+func _ready() -> void:
 	anim_player.play(&"RESET")
 
 func transition(transition_name: StringName):

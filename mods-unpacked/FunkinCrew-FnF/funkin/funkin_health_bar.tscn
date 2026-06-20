@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://b35uowfrluxgt"]
 
 [ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="1_u175w"]
-[ext_resource type="Script" uid="uid://bkm5k63ljaial" path="res://mods-unpacked/FunkinCrew-FnF/funkin/funkin_health_bar.gd" id="2_8pxkm"]
-[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/icon-face.png" id="2_i06na"]
-[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/vcr.ttf" id="4_i06na"]
+[ext_resource type="Script" uid="uid://bkm5k63ljaial" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/funkin_health_bar.gd" id="2_8pxkm"]
+[ext_resource type="Texture2D" uid="uid://dh4quhljfok4e" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/icon-face.png" id="2_i06na"]
+[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/vcr.ttf" id="4_i06na"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qk3vi"]
 atlas = ExtResource("2_i06na")

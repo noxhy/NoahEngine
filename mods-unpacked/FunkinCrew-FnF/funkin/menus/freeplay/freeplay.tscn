@@ -1,17 +1,16 @@
 [gd_scene format=3 uid="uid://gbra80y44814"]
 
-[ext_resource type="Script" uid="uid://b6vcw0ly2036" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/freeplay.gd" id="1_8wllq"]
+[ext_resource type="Script" uid="uid://b6vcw0ly2036" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/freeplay.gd" id="1_8wllq"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="1_d85pb"]
-[ext_resource type="AudioStream" uid="uid://du4qr2rxqjkw" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/gettin' freaky.ogg" id="2_w52tp"]
-[ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/background/menuDesat.png" id="5_xlpwk"]
-[ext_resource type="Texture2D" uid="uid://5b2u1q1kihtj" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/clearBox.png" id="7_jukaj"]
-[ext_resource type="PackedScene" uid="uid://cnu4wa5x8qwp5" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/difficulty_selector.tscn" id="7_klryl"]
+[ext_resource type="AudioStream" uid="uid://du4qr2rxqjkw" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/gettin' freaky.ogg" id="2_w52tp"]
+[ext_resource type="Texture2D" uid="uid://dix7cy7ydksfi" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/background/menuDesat.png" id="5_xlpwk"]
+[ext_resource type="Texture2D" uid="uid://5b2u1q1kihtj" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/clearBox.png" id="7_jukaj"]
+[ext_resource type="PackedScene" uid="uid://cnu4wa5x8qwp5" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/difficulty_selector.tscn" id="7_klryl"]
 [ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="7_yte2n"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="8_sfkso"]
-[ext_resource type="Texture2D" uid="uid://cgytynqqgidyi" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/album covers/volume1.png" id="9_u33nh"]
-[ext_resource type="PackedScene" uid="uid://d1wj3tkjvp2xi" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/results/score_display.tscn" id="10_5d5kc"]
-[ext_resource type="Texture2D" uid="uid://d38vcbkkjx571" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/pinkBack.png" id="11_j37bj"]
-[ext_resource type="SpriteFrames" uid="uid://dpt4oelxa4rxf" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/highscore.res" id="12_d02cx"]
+[ext_resource type="Texture2D" uid="uid://cgytynqqgidyi" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/album covers/volume1.png" id="9_u33nh"]
+[ext_resource type="PackedScene" uid="uid://d1wj3tkjvp2xi" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/results/score_display.tscn" id="10_5d5kc"]
+[ext_resource type="Texture2D" uid="uid://d38vcbkkjx571" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/pinkBack.png" id="11_j37bj"]
+[ext_resource type="SpriteFrames" uid="uid://dpt4oelxa4rxf" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/highscore.res" id="12_d02cx"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_d02cx"]
 font = ExtResource("7_yte2n")
@@ -22,9 +21,6 @@ font = ExtResource("7_yte2n")
 font_size = 32
 outline_size = 12
 outline_color = Color(0.0273438, 0.0273438, 0.0273438, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_mxklt"]
-font = ExtResource("8_sfkso")
 
 [node name="Freeplay" type="Node2D" unique_id=1965829083]
 script = ExtResource("1_8wllq")
@@ -127,23 +123,6 @@ z_index = 2
 position = Vector2(448, 96)
 rotation = 0.171042
 texture = ExtResource("9_u33nh")
-
-[node name="Album Song List" type="Label" parent="UI" unique_id=1529745135]
-unique_name_in_owner = true
-visible = false
-z_index = 2
-anchors_preset = -1
-anchor_left = 0.225
-anchor_top = 0.122
-anchor_right = 0.466
-anchor_bottom = 0.489
-offset_left = 40.0
-offset_top = -391.84
-offset_right = 35.52
-offset_bottom = -624.08
-text = "Album Credits"
-label_settings = SubResource("LabelSettings_mxklt")
-autowrap_mode = 3
 
 [node name="Highscore Text" type="AnimatedSprite2D" parent="UI" unique_id=133092241]
 unique_name_in_owner = true

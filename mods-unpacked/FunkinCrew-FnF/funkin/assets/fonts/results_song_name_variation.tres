@@ -1,6 +1,6 @@
 [gd_resource type="FontVariation" format=3 uid="uid://dl6wa7fjpfkfs"]
 
-[ext_resource type="FontFile" uid="uid://d23vxklp5i75g" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/results_song_name.png" id="1_d60o3"]
+[ext_resource type="FontFile" uid="uid://d23vxklp5i75g" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/results_song_name.png" id="1_d60o3"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="2_0c7nc"]
 
 [resource]

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="Week" format=3 uid="uid://cc10lr7ky8veu"]
 
-[ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://resources/week.gd" id="1_n8vu6"]
-[ext_resource type="Script" uid="uid://watdarflaprc" path="res://resources/song.gd" id="2_paubv"]
+[ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://noah/resources/week.gd" id="1_n8vu6"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="2_paubv"]
 
 [resource]
 script = ExtResource("1_n8vu6")

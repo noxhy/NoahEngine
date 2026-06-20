@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="PlayableCharacter" format=3 uid="uid://c73l5wk1k58mp"]
 
-[ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://resources/playable_character.gd" id="1_la1qj"]
+[ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://noah/resources/playable_character.gd" id="1_la1qj"]
 [ext_resource type="Resource" uid="uid://c0coafka6m5vs" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/albums/boyfriend_songs.tres" id="1_ue4wv"]
 [ext_resource type="Texture2D" uid="uid://dkupmrky3qwx" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/characters/boyfriend/freeplayBGweek1-bf.png" id="2_iol30"]
 

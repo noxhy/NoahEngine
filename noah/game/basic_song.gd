@@ -19,7 +19,7 @@ var camera_positions: Array = []
 var bop_rate: int = 16
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	if not playstate_host:
 		playstate_host = $"PlayState Host"
 	

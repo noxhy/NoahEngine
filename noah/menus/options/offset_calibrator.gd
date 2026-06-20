@@ -17,7 +17,7 @@ var max_length: float = 850
 @onready var conductor = $Conductor
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	Global.set_window_title("Calibrating Offset")
 	
 	for i in entries_required:
@@ -35,7 +35,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	$"UI/Offset Label".text = str("Offset: ", str(
 		floori(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset") * 1000)),
 		" ms")
@@ -106,6 +106,9 @@ func _input(event):
 
 
 func _on_conductor_new_beat(current_beat, measure_relative):
+	$UI/Speaker.frame = 0
+	$UI/Speaker.play_animation(&"bump")
+	
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
 		Global.bop_tween($Camera2D, "zoom", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
 

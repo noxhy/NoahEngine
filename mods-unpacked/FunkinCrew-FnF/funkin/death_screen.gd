@@ -8,7 +8,7 @@ static var camera_zoom: Variant = Vector2.ONE
 var can_press = true
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	Global.set_window_title("Dead")
 	$AnimationPlayer.play(&"intro")
 	 

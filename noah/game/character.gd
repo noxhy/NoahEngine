@@ -92,7 +92,7 @@ var sing_time: float = 0
 
 var _ghost_sprite = null
 
-func _ready():
+func _ready() -> void:
 	animation_player = verify_animation_player(animation_player)
 	
 	if not animation_player:

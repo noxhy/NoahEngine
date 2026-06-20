@@ -1,14 +1,14 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://clalimjd3yte3"]
 
-[ext_resource type="Texture2D" uid="uid://cec8p444kmlag" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/notes.png" id="1_8e0cq"]
-[ext_resource type="Texture2D" uid="uid://b6tdwwt2viak8" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/down_end.png" id="2_g75p1"]
-[ext_resource type="Texture2D" uid="uid://cb277g1wvto2" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/down_tail.png" id="3_nnvib"]
-[ext_resource type="Texture2D" uid="uid://bd6vdj5t77o00" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/left_end.png" id="4_xdw6a"]
-[ext_resource type="Texture2D" uid="uid://dlutsr7iv6qw0" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/left_tail.png" id="5_wswwc"]
-[ext_resource type="Texture2D" uid="uid://ydn4bjfv0t2w" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/right_end.png" id="6_aka0c"]
-[ext_resource type="Texture2D" uid="uid://bemqo62spfvai" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/right_tail.png" id="7_o3b0n"]
-[ext_resource type="Texture2D" uid="uid://dlucgda8eg8ul" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/up_end.png" id="8_vl1k2"]
-[ext_resource type="Texture2D" uid="uid://cr8c4bu1tacic" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/up_tail.png" id="9_dbaqx"]
+[ext_resource type="Texture2D" uid="uid://cec8p444kmlag" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/notes.png" id="1_8e0cq"]
+[ext_resource type="Texture2D" uid="uid://b6tdwwt2viak8" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/down_end.png" id="2_g75p1"]
+[ext_resource type="Texture2D" uid="uid://cb277g1wvto2" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/down_tail.png" id="3_nnvib"]
+[ext_resource type="Texture2D" uid="uid://bd6vdj5t77o00" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/left_end.png" id="4_xdw6a"]
+[ext_resource type="Texture2D" uid="uid://dlutsr7iv6qw0" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/left_tail.png" id="5_wswwc"]
+[ext_resource type="Texture2D" uid="uid://ydn4bjfv0t2w" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/right_end.png" id="6_aka0c"]
+[ext_resource type="Texture2D" uid="uid://bemqo62spfvai" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/right_tail.png" id="7_o3b0n"]
+[ext_resource type="Texture2D" uid="uid://dlucgda8eg8ul" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/up_end.png" id="8_vl1k2"]
+[ext_resource type="Texture2D" uid="uid://cr8c4bu1tacic" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/up_tail.png" id="9_dbaqx"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kjlga"]
 atlas = ExtResource("1_8e0cq")

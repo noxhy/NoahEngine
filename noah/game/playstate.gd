@@ -62,7 +62,7 @@ var ui_bop_strength: Vector2 = Vector2(0.025, 0.025)
 var pause_preload: PackedScene
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	if GameManager.freeplay:
 		self.song_data = GameManager.current_song
 	else:
@@ -147,7 +147,7 @@ func _ready():
 	Signals.play_setup_finished.emit()
 
 
-func _process(delta):
+func _process(delta) -> void:
 	health = clamp(health, 0.0, 100.0)
 	GameManager.health = health
 	GameManager.score = int(score)

@@ -209,7 +209,7 @@ func _init() -> void:
 	new_hooks_created.connect(_ModLoaderHooks.on_new_hooks_created)
 
 
-func _ready():
+func _ready() -> void:
 	# Hooks must be generated after all autoloads are available.
 	# Variables initialized with an autoload property cause errors otherwise.
 	if _ModLoaderHooks.any_mod_hooked:

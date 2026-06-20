@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://biw6xh624onjh"]
 
-[ext_resource type="Script" uid="uid://c6ny8maae4h3x" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/nene.gd" id="1_4sh7w"]
-[ext_resource type="SpriteFrames" uid="uid://b4tvh3dq0qark" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/nene.res" id="3_dojva"]
-[ext_resource type="Texture2D" uid="uid://c52jx1hd3csrh" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/stereoBG.png" id="3_o2xqu"]
-[ext_resource type="Texture2D" uid="uid://caknetpbu50v2" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/eyes.png" id="3_olp7v"]
-[ext_resource type="SpriteFrames" uid="uid://0ds6v8fl8bd8" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/a-bot_visualzier.res" id="4_spo4n"]
+[ext_resource type="Script" uid="uid://c6ny8maae4h3x" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/nene.gd" id="1_4sh7w"]
+[ext_resource type="SpriteFrames" uid="uid://b4tvh3dq0qark" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/nene.res" id="3_dojva"]
+[ext_resource type="Texture2D" uid="uid://c52jx1hd3csrh" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/stereoBG.png" id="3_o2xqu"]
+[ext_resource type="Texture2D" uid="uid://caknetpbu50v2" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/eyes.png" id="3_olp7v"]
+[ext_resource type="SpriteFrames" uid="uid://0ds6v8fl8bd8" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/nene/a-bot_visualzier.res" id="4_spo4n"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="5_uhb7d"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_m6gpj"]

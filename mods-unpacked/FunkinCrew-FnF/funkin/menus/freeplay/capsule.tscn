@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://qbce8ppotno0"]
 
-[ext_resource type="Script" uid="uid://4ir31o2pro22" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/capsule.gd" id="1_1nmrk"]
-[ext_resource type="SpriteFrames" uid="uid://4clsim45we1u" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/capsule.res" id="1_vbem7"]
-[ext_resource type="Texture2D" uid="uid://c6h0t0s5r33rd" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/lock.png" id="1_wa1ty"]
+[ext_resource type="Script" uid="uid://4ir31o2pro22" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/capsule.gd" id="1_1nmrk"]
+[ext_resource type="SpriteFrames" uid="uid://4clsim45we1u" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/capsule.res" id="1_vbem7"]
+[ext_resource type="Texture2D" uid="uid://c6h0t0s5r33rd" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/lock.png" id="1_wa1ty"]
 [ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite.gd" id="2_v1ul3"]
-[ext_resource type="FontFile" uid="uid://bhwea5frxw2kr" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/freeplay_song.ttf" id="4_1nmrk"]
-[ext_resource type="SpriteFrames" uid="uid://b05nhrgbkua1e" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/rank_badges.res" id="6_lcnhi"]
+[ext_resource type="FontFile" uid="uid://bhwea5frxw2kr" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/freeplay_song.ttf" id="4_1nmrk"]
+[ext_resource type="SpriteFrames" uid="uid://b05nhrgbkua1e" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/freeplay/rank_badges.res" id="6_lcnhi"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_lcnhi"]
 resource_local_to_scene = true

@@ -36,7 +36,7 @@ var _number: int:
 		update_display()
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	update_display()
 
 func update_display():

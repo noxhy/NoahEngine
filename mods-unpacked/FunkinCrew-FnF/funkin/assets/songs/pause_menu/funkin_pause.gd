@@ -1,6 +1,6 @@
 extends BasicPause
 
-func _ready():
+func _ready() -> void:
 	super()
 	%"Other Info".text = str(GameManager.deaths, " Blue balls")
 

@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://dgaywwoiwkbeu"]
 
-[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://mods-unpacked/FunkinCrew-FnF/funkin/song_scenes/funkin_song.gd" id="1_j0bn6"]
+[ext_resource type="Script" uid="uid://cuvteymxyy53u" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/song_scenes/funkin_song.gd" id="1_j0bn6"]
 [ext_resource type="PackedScene" uid="uid://l713j3okh2iq" path="res://noah/game/playstate.tscn" id="2_hvfki"]
-[ext_resource type="Resource" uid="uid://dmw77m5oxkyig" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/pixel_note_skin.tres" id="4_gvt2o"]
-[ext_resource type="Resource" uid="uid://dsqgb7q6eq1mf" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/pixel_ui_skin.tres" id="5_0s4pd"]
-[ext_resource type="PackedScene" uid="uid://cd3leoxyqnk4m" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/weeb_school/weeb_school.tscn" id="7_mjcyn"]
-[ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/boyfriend pixel/boyfriend pixel.tscn" id="9_cvimb"]
-[ext_resource type="PackedScene" uid="uid://c641vxfiu033w" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/senpai/senpai.tscn" id="10_2o85c"]
+[ext_resource type="Resource" uid="uid://dmw77m5oxkyig" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/pixel_note_skin.tres" id="4_gvt2o"]
+[ext_resource type="Resource" uid="uid://dsqgb7q6eq1mf" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/pixel_ui_skin.tres" id="5_0s4pd"]
+[ext_resource type="PackedScene" uid="uid://cd3leoxyqnk4m" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/weeb_school/weeb_school.tscn" id="7_mjcyn"]
+[ext_resource type="PackedScene" uid="uid://dcuxa2yfg27xc" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/boyfriend pixel/boyfriend pixel.tscn" id="9_cvimb"]
+[ext_resource type="PackedScene" uid="uid://c641vxfiu033w" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/senpai/senpai.tscn" id="10_2o85c"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="11_gd42n"]
-[ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/girlfriend pixel/girlfriend pixel.tscn" id="11_norpj"]
-[ext_resource type="PackedScene" uid="uid://cwgvima0s0hbm" path="res://mods-unpacked/FunkinCrew-FnF/funkin/funkin_ui.tscn" id="12_q80n4"]
+[ext_resource type="PackedScene" uid="uid://blyod30lc1qk0" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/girlfriend pixel/girlfriend pixel.tscn" id="11_norpj"]
+[ext_resource type="PackedScene" uid="uid://cwgvima0s0hbm" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/funkin_ui.tscn" id="12_q80n4"]
 
 [node name="Senpai" type="Node2D" unique_id=739542381]
 script = ExtResource("1_j0bn6")

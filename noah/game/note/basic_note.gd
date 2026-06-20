@@ -24,7 +24,7 @@ var mine: bool = false
 var hit: bool = false
 
 # Applying Note Skin
-func _ready(): 
+func _ready() -> void: 
 	end = $Tail/End
 	note.sprite_frames = note_skin.notes_texture
 	if note_skin.animation_names != null: 
@@ -61,7 +61,7 @@ func _ready():
 	load_basic_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	time_difference = time - GameManager.song_position
 	
 	if length > 0:

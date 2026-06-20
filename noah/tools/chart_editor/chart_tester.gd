@@ -1,13 +1,13 @@
 extends BasicSong
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	super()
 	
 	Signals.connect("play_setup_finished", self._on_setup_finished)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	$"UI/Chart Stats".text = "Song: " + str(playstate_host.song_data.title)
 	$"UI/Chart Stats".text += "\n" + "Artist: " + str(playstate_host.song_data.artist)
 	$"UI/Chart Stats".text += "\n" + "Difficulty: " + str(GameManager.difficulty)

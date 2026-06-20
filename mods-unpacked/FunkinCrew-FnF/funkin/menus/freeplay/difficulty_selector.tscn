@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cnu4wa5x8qwp5"]
 
-[ext_resource type="Script" uid="uid://ce03uftq0kk3j" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/difficulty_selector.gd" id="1_1tipg"]
-[ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/freeplay_arrow.tscn" id="3_8hml4"]
-[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://mods-unpacked/FunkinCrew-FnF/funkin/difficulty_display.tscn" id="3_nyydv"]
+[ext_resource type="Script" uid="uid://ce03uftq0kk3j" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/difficulty_selector.gd" id="1_1tipg"]
+[ext_resource type="PackedScene" uid="uid://jjd6x75uoj1x" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/freeplay_arrow.tscn" id="3_8hml4"]
+[ext_resource type="PackedScene" uid="uid://ce4fecrbyxrux" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/difficulty_display.tscn" id="3_nyydv"]
 
 [sub_resource type="Animation" id="Animation_a31c2"]
 length = 0.001

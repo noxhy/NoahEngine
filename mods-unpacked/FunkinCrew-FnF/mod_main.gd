@@ -23,7 +23,7 @@ var translations_dir_path := ""
 func _init() -> void:
 	ModLoaderLog.info("Init", LOG_NAME)
 	mod_dir_path = ModLoaderMod.get_unpacked_dir().path_join(MOD_DIR)
-
+	
 	# Add extensions
 	install_script_extensions()
 	install_script_hook_files()
@@ -32,26 +32,16 @@ func _init() -> void:
 func install_script_extensions() -> void:
 	# ! any script extensions should go in this directory, and should follow the same directory structure as vanilla
 	extensions_dir_path = mod_dir_path.path_join("extensions")
-
-	# ? Brief description/reason behind this edit of vanilla code...
-	ModLoaderMod.install_script_extension(extensions_dir_path.path_join("main.gd"))
-	ModLoaderMod.install_script_extension(extensions_dir_path + "/noah/start.gd")
-	ModLoaderMod.install_script_extension(extensions_dir_path + "/noah/constants.gd")
-
-	# ! Add extensions (longform version of the above)
-	#ModLoaderMod.install_script_extension("res://mods-unpacked/AuthorName-ModName/extensions/main.gd")
-	#ModLoaderMod.install_script_extension("res://mods-unpacked/AuthorName-ModName/extensions/entities/units/player/player.gd")
+	
+	ModLoaderMod.install_script_extension(extensions_dir_path.path_join("noah/start.gd"))
+	ModLoaderMod.install_script_extension(extensions_dir_path.path_join("noah/constants.gd"))
+	ModLoaderMod.install_script_extension(extensions_dir_path.path_join("noah/preload.gd"))
 
 
 func install_script_hook_files() -> void:
-	return
 	extensions_dir_path = mod_dir_path.path_join("extensions")
-	ModLoaderMod.install_script_hooks("res://main.gd", extensions_dir_path.path_join("main.gd"))
+	#ModLoaderMod.install_script_hooks("res://main.gd", extensions_dir_path.path_join("main.gd"))
 
 
 func _ready() -> void:
 	ModLoaderLog.info("Ready", LOG_NAME)
-
-	# ! This uses Godot's native `tr` func, which translates a string. You'll
-	# ! find this particular string in the example CSV here: translations/modname.csv
-	ModLoaderLog.info("Translation Demo: " + tr("MODNAME_READY_TEXT"), LOG_NAME)

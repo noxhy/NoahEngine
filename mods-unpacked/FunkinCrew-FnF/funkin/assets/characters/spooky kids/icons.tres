@@ -1,6 +1,6 @@
 [gd_resource type="SpriteFrames" format=3 uid="uid://bb3qik1pfqgux"]
 
-[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/icon-spooky.png" id="1_pegcm"]
+[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/icon-spooky.png" id="1_pegcm"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mo0po"]
 atlas = ExtResource("1_pegcm")

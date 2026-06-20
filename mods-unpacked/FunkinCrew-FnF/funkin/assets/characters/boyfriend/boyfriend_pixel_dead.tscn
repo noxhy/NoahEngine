@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cbplauofubxhu"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_ybjrm"]
-[ext_resource type="SpriteFrames" uid="uid://dhbxy6xkkv22n" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/boyfriend pixel/boyfriend_pixel_dead.res" id="2_1xd7e"]
-[ext_resource type="SpriteFrames" uid="uid://dt82dx1mf15r" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/face.tres" id="2_wj0y7"]
+[ext_resource type="SpriteFrames" uid="uid://dhbxy6xkkv22n" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/boyfriend pixel/boyfriend_pixel_dead.res" id="2_1xd7e"]
+[ext_resource type="SpriteFrames" uid="uid://dt82dx1mf15r" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/face.tres" id="2_wj0y7"]
 
 [node name="Boyfriend Pixel Dead" type="Node2D" unique_id=435018901 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_ybjrm")

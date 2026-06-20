@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dghi5ce8cupic"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_8s5sa"]
-[ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spirit/icons.tres" id="2_s66hv"]
-[ext_resource type="SpriteFrames" uid="uid://c62bnqtxmntid" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spirit/spirit.res" id="3_1ui7q"]
+[ext_resource type="SpriteFrames" uid="uid://cdmsewf24ks2q" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spirit/icons.tres" id="2_s66hv"]
+[ext_resource type="SpriteFrames" uid="uid://c62bnqtxmntid" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spirit/spirit.res" id="3_1ui7q"]
 
 [node name="Spirit" type="Node2D" unique_id=473816674 node_paths=PackedStringArray("animation_player")]
 script = ExtResource("1_8s5sa")

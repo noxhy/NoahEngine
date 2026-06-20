@@ -25,7 +25,7 @@ signal note_miss(note: Note, lane: int, manager: StrumManager)
 @export var enemy_slot: bool = false
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	set_skin(note_skin)
 	set_press(can_press)
 	set_auto_play(auto_play)
@@ -39,7 +39,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	pass
 
 

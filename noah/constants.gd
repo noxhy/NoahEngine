@@ -1,5 +1,9 @@
 extends Node
 
+#scene ids
+var CHART_EDITOR_SCENE: String = "uid://c3lux2ajoe1g6"
+var EVENT_EDITOR_SCENE: String = "uid://cq6xqods6w7lw"
+
 #region Event Data
 var EVENT_DATA: Dictionary = {
 	"camera_position": {
@@ -63,6 +67,7 @@ const MISS_MAX_HEALTH_PENALTY: float = 20.0
 #region Note Types
 ## The note type and the corresponding animation prefix.
 var NOTE_TYPES: Dictionary = {
+	"mom": "",
 	"no_animation": "",
 	"alt_prefix": ""
 }

@@ -5,7 +5,7 @@ var red_light: bool = true
 var car_list: Array[Node2D] = []
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	var index = 0
 	
 	# This is janky don't do this

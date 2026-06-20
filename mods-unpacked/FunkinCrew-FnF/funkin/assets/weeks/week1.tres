@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://goy42ocon1g1" path="res://noah/resources/week.gd" id="1_6qtv8"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="2_qnuov"]
-[ext_resource type="Resource" uid="uid://dd63bp00dpim5" path="res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/fresh/Fresh Erect.res" id="3_qnuov"]
+[ext_resource type="Resource" uid="uid://dd63bp00dpim5" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/fresh/Fresh Erect.res" id="3_qnuov"]
 
 [resource]
 script = ExtResource("1_6qtv8")

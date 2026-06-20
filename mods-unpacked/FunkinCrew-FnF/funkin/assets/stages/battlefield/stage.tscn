@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://cmiw0sq3dx0ge"]
 
 [ext_resource type="Script" uid="uid://bgx1imb2x4q8y" path="res://noah/game/stage.gd" id="1_5fq04"]
-[ext_resource type="Texture2D" uid="uid://bkmkqx77pa4fg" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/bg.png" id="2_xjsv1"]
-[ext_resource type="SpriteFrames" uid="uid://c7g8hweyo4u3" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/sniper.res" id="3_ar6cq"]
-[ext_resource type="SpriteFrames" uid="uid://cmt42n5860jk0" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/guy.res" id="4_v424k"]
-[ext_resource type="Texture2D" uid="uid://k8skgtfffpuh" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/bricksGround.png" id="5_md1te"]
+[ext_resource type="Texture2D" uid="uid://bkmkqx77pa4fg" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/bg.png" id="2_xjsv1"]
+[ext_resource type="SpriteFrames" uid="uid://c7g8hweyo4u3" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/sniper.res" id="3_ar6cq"]
+[ext_resource type="SpriteFrames" uid="uid://cmt42n5860jk0" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/guy.res" id="4_v424k"]
+[ext_resource type="Texture2D" uid="uid://k8skgtfffpuh" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/battlefield/bricksGround.png" id="5_md1te"]
 
 [node name="Stage" type="Node2D" unique_id=682099508]
 script = ExtResource("1_5fq04")

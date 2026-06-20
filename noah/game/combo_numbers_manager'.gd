@@ -7,7 +7,7 @@ var COMBO_NUMBER_PRELOAD = load("uid://b28wu6vajuag3")
 @export var fc = false
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	if combo > 0:
 		var digits = str(combo).length()
 		for digit in digits:

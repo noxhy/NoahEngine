@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://cj2hoqrld81vv"]
 
-[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/hitsound.wav" id="1_7y8y0"]
-[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://resources/note_skin.gd" id="1_ejrj1"]
-[ext_resource type="SpriteFrames" uid="uid://clalimjd3yte3" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/notes.tres" id="1_lvg3v"]
-[ext_resource type="SpriteFrames" uid="uid://bw8j67b3ju40g" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/covers.res" id="2_hgpr1"]
-[ext_resource type="Texture2D" uid="uid://c45dknw5a4jo2" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/splashes/noteSplashes.png" id="5_wsgle"]
-[ext_resource type="SpriteFrames" uid="uid://dq738acxbgia0" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/strums.res" id="6_wsgle"]
+[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/hitsound.wav" id="1_7y8y0"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="1_ejrj1"]
+[ext_resource type="SpriteFrames" uid="uid://clalimjd3yte3" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/notes.tres" id="1_lvg3v"]
+[ext_resource type="SpriteFrames" uid="uid://bw8j67b3ju40g" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/covers.res" id="2_hgpr1"]
+[ext_resource type="Texture2D" uid="uid://c45dknw5a4jo2" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/splashes/noteSplashes.png" id="5_wsgle"]
+[ext_resource type="SpriteFrames" uid="uid://dq738acxbgia0" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/arrow/strums.res" id="6_wsgle"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w21g2"]
 atlas = ExtResource("5_wsgle")

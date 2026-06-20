@@ -50,14 +50,14 @@ var coyote_timer: float = 0.0
 @onready var hold_cover_sprite: Node = $"Hold Cover"
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	sprite.play_animation(strum_name)
 	hold_cover_sprite.visible = false
 	Signals.connect(&"play_unpaused", self.release_note)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	for note in note_list:
 		var time_difference: float = note.time_difference
 		

@@ -15,7 +15,7 @@ var DIGIT_PRELOAD = load("uid://bys528didpcsu")
 var instances: Array = []
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	update_display()
 
 

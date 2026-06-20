@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ceow5qkjab7tv"]
 
-[ext_resource type="Script" uid="uid://crv78v5bn62qu" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/philly_streets/car.gd" id="1_r8xsj"]
-[ext_resource type="SpriteFrames" uid="uid://bg53sdshf3hm6" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/philly_streets/cars.res" id="2_oe0wc"]
+[ext_resource type="Script" uid="uid://crv78v5bn62qu" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/philly_streets/car.gd" id="1_r8xsj"]
+[ext_resource type="SpriteFrames" uid="uid://bg53sdshf3hm6" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/stages/philly_streets/cars.res" id="2_oe0wc"]
 
 [node name="Car" type="Node2D" unique_id=517167823]
 script = ExtResource("1_r8xsj")

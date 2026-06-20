@@ -1,8 +1,8 @@
 [gd_resource type="Theme" format=3 uid="uid://b02clh77m72y7"]
 
-[ext_resource type="Texture2D" uid="uid://cxln6kj4u8gtj" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/options/checked.png" id="1_kwrwo"]
-[ext_resource type="Texture2D" uid="uid://beqw8ru25pvhn" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/options/empty.png" id="2_h4n71"]
-[ext_resource type="FontFile" uid="uid://coivso5sghc2p" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/fnf_font.ttf" id="3_636bc"]
+[ext_resource type="Texture2D" uid="uid://cxln6kj4u8gtj" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/options/checked.png" id="1_kwrwo"]
+[ext_resource type="Texture2D" uid="uid://beqw8ru25pvhn" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/images/menus/options/empty.png" id="2_h4n71"]
+[ext_resource type="FontFile" uid="uid://coivso5sghc2p" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/fnf_font.ttf" id="3_636bc"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nkri3"]
 bg_color = Color(0.6640625, 0.6640625, 0.6640625, 0.8)

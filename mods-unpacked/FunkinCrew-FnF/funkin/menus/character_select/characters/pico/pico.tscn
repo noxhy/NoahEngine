@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d03jjve4mhk7l"]
 
-[ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/atlas_sprite.gd" id="1_yvya1"]
+[ext_resource type="Script" uid="uid://cblocwqwyjjjy" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/menus/freeplay/atlas_sprite.gd" id="1_yvya1"]
 [ext_resource type="Script" uid="uid://c5ju3u657fyae" path="res://addons/gdanimate-rewrite-main/animate_symbol.gd" id="2_paxb0"]
 [ext_resource type="Script" uid="uid://dy4vnmv4435ty" path="res://addons/gdanimate-rewrite-main/animate_atlas.gd" id="3_2my7b"]
 [ext_resource type="Script" uid="uid://dkyyuwqo0dy7q" path="res://addons/gdanimate-rewrite-main/adobe/adobe_atlas.gd" id="4_xe1tw"]

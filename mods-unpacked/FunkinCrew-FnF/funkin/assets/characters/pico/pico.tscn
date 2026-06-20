@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bs78qo116i5i8"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_fxfjm"]
-[ext_resource type="Texture2D" uid="uid://bvk0rw5rde8dm" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/pico/icon-pico.png" id="2_7hb6n"]
-[ext_resource type="SpriteFrames" uid="uid://7pocubxnwp7b" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/pico/pico.res" id="2_35c1i"]
+[ext_resource type="Texture2D" uid="uid://bvk0rw5rde8dm" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/pico/icon-pico.png" id="2_7hb6n"]
+[ext_resource type="SpriteFrames" uid="uid://7pocubxnwp7b" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/pico/pico.res" id="2_35c1i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7vcws"]
 atlas = ExtResource("2_7hb6n")

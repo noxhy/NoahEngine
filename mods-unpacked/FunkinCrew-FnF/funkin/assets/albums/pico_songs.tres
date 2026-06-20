@@ -10,5 +10,6 @@
 script = ExtResource("1_5iepq")
 name = "Pico Funkin'"
 cover = ExtResource("1_yohgl")
+credits = "Funkin' Crew"
 song_list = Array[ExtResource("2_c0fke")]([ExtResource("4_yohgl"), ExtResource("5_rfqhp")])
 metadata/_custom_type_script = "uid://c85optaap1atb"

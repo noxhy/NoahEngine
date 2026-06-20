@@ -7,7 +7,7 @@ var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 var fullscreen: bool = false
 var transitioning: bool = false
 
-func _ready():
+func _ready() -> void:
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)

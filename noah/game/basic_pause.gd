@@ -61,7 +61,7 @@ var selected: int = 0
 var current_credit: int = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	var tween = create_tween()
 	music.volume_linear = 0
 	tween.tween_property(music, "volume_linear", 1, 4)
@@ -93,7 +93,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	if Input.is_action_just_pressed("menu_up"):
 		update(selected - 1)
 	if Input.is_action_just_pressed("menu_down"):

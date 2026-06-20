@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://l8gwfipcfkne"]
 
-[ext_resource type="Script" uid="uid://dk2hwc3g5el21" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/pause_menu/funkin_pause.gd" id="1_x6f6k"]
-[ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/pause_menu/breakfast.ogg" id="2_7n3tq"]
-[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/vcr.ttf" id="3_x6f6k"]
-[ext_resource type="Shader" uid="uid://bjlt3yq805r3t" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/shaders/blur.gdshader" id="5_3keax"]
+[ext_resource type="Script" uid="uid://dk2hwc3g5el21" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/pause_menu/funkin_pause.gd" id="1_x6f6k"]
+[ext_resource type="AudioStream" uid="uid://clklult1rkiyx" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/pause_menu/breakfast.ogg" id="2_7n3tq"]
+[ext_resource type="FontFile" uid="uid://bo022dgqs5iv6" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/fonts/vcr.ttf" id="3_x6f6k"]
+[ext_resource type="Shader" uid="uid://bjlt3yq805r3t" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/shaders/blur.gdshader" id="5_3keax"]
 
 [sub_resource type="Animation" id="Animation_yvwx3"]
 length = 0.001

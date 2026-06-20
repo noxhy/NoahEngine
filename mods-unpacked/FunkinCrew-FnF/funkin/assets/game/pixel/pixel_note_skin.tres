@@ -1,11 +1,11 @@
 [gd_resource type="Resource" script_class="NoteSkin" format=3 uid="uid://dmw77m5oxkyig"]
 
-[ext_resource type="SpriteFrames" uid="uid://ceg7w3ebtiywi" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/notes.tres" id="1_ky7o3"]
-[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/hitsound.wav" id="1_piid7"]
-[ext_resource type="SpriteFrames" uid="uid://cogig0ulrnksv" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/hold_covers/sustain_cover.res" id="2_g1mvk"]
-[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://resources/note_skin.gd" id="2_v4kjh"]
-[ext_resource type="SpriteFrames" uid="uid://bf1aiuwvslsn2" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/strums.tres" id="3_6f2u5"]
-[ext_resource type="SpriteFrames" uid="uid://d0ex5ejqswdjf" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/splashes/note_splashes.res" id="3_l0k6u"]
+[ext_resource type="SpriteFrames" uid="uid://ceg7w3ebtiywi" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/notes.tres" id="1_ky7o3"]
+[ext_resource type="AudioStream" uid="uid://dcshy6cfnwrkl" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/hitsound.wav" id="1_piid7"]
+[ext_resource type="SpriteFrames" uid="uid://cogig0ulrnksv" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/hold_covers/sustain_cover.res" id="2_g1mvk"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="2_v4kjh"]
+[ext_resource type="SpriteFrames" uid="uid://bf1aiuwvslsn2" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/strums.tres" id="3_6f2u5"]
+[ext_resource type="SpriteFrames" uid="uid://d0ex5ejqswdjf" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/arrow/splashes/note_splashes.res" id="3_l0k6u"]
 
 [resource]
 script = ExtResource("2_v4kjh")

@@ -4,7 +4,7 @@ extends OptionNode
 @export var index = 0
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
 
 func _input(event):

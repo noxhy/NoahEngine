@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dddh323rffgon"]
 
 [ext_resource type="Script" uid="uid://bj7tgh8jkngdx" path="res://noah/game/character.gd" id="1_3qf0p"]
-[ext_resource type="SpriteFrames" uid="uid://c4b4opoweo3x7" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/spooky_kids.res" id="2_gedfe"]
-[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/icon-spooky.png" id="2_noaia"]
+[ext_resource type="SpriteFrames" uid="uid://c4b4opoweo3x7" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/spooky_kids.res" id="2_gedfe"]
+[ext_resource type="Texture2D" uid="uid://c72nt4q16hkkh" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/characters/spooky kids/icon-spooky.png" id="2_noaia"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_mo0po"]
 atlas = ExtResource("2_noaia")
