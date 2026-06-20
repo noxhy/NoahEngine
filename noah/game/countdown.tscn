@@ -1,23 +1,23 @@
 [gd_scene format=3 uid="uid://daky0nn8plbe4"]
 
-[ext_resource type="AudioStream" uid="uid://dy5bmpjexk1x6" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 3.ogg" id="1_u456w"]
-[ext_resource type="AudioStream" uid="uid://cbiytxsc7mt4r" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 2.ogg" id="2_xmcdi"]
-[ext_resource type="AudioStream" uid="uid://pettoq0g1s4u" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 1.ogg" id="3_y5pu8"]
-[ext_resource type="AudioStream" uid="uid://bej2vgcr41fma" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown go.ogg" id="4_i6p65"]
-[ext_resource type="AudioStream" uid="uid://cdf6m0dval6vy" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 3.ogg" id="5_42rys"]
-[ext_resource type="Texture2D" uid="uid://dnvpepyvdscno" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/go.png" id="5_puh5b"]
-[ext_resource type="AudioStream" uid="uid://be4q5dr3p0s37" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 2.ogg" id="6_0h3eb"]
-[ext_resource type="Texture2D" uid="uid://dly654678mq07" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/ready.png" id="6_7ilje"]
-[ext_resource type="AudioStream" uid="uid://cybys1r3vlpvm" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 1.ogg" id="7_1al10"]
-[ext_resource type="Texture2D" uid="uid://t3fb451x46l1" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/set.png" id="7_1fr4n"]
-[ext_resource type="AudioStream" uid="uid://d10o6alcp2arj" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel go.ogg" id="8_3dtd4"]
+[ext_resource type="AudioStream" uid="uid://dy5bmpjexk1x6" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 3.ogg" id="1_u456w"]
+[ext_resource type="AudioStream" uid="uid://cbiytxsc7mt4r" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 2.ogg" id="2_xmcdi"]
+[ext_resource type="AudioStream" uid="uid://pettoq0g1s4u" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown 1.ogg" id="3_y5pu8"]
+[ext_resource type="AudioStream" uid="uid://bej2vgcr41fma" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/default/countdown go.ogg" id="4_i6p65"]
+[ext_resource type="AudioStream" uid="uid://cdf6m0dval6vy" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 3.ogg" id="5_42rys"]
+[ext_resource type="Texture2D" uid="uid://dnvpepyvdscno" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/go.png" id="5_puh5b"]
+[ext_resource type="AudioStream" uid="uid://be4q5dr3p0s37" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 2.ogg" id="6_0h3eb"]
+[ext_resource type="Texture2D" uid="uid://dly654678mq07" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/ready.png" id="6_7ilje"]
+[ext_resource type="AudioStream" uid="uid://cybys1r3vlpvm" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel 1.ogg" id="7_1al10"]
+[ext_resource type="Texture2D" uid="uid://t3fb451x46l1" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/countdown/set.png" id="7_1fr4n"]
+[ext_resource type="AudioStream" uid="uid://d10o6alcp2arj" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/game_sounds/countdown/hating simulator/pixel go.ogg" id="8_3dtd4"]
 [ext_resource type="Texture2D" uid="uid://cktis387bki15" path="res://noah/assets/game/developer/countdown/1.png" id="8_j1rq7"]
 [ext_resource type="Texture2D" uid="uid://tdk7nedtlg0" path="res://noah/assets/game/developer/countdown/2.png" id="9_bwvh8"]
 [ext_resource type="Texture2D" uid="uid://cjydab58mcqnm" path="res://noah/assets/game/developer/countdown/3.png" id="10_xov32"]
 [ext_resource type="Texture2D" uid="uid://b7fi3iccw5c6d" path="res://noah/assets/game/developer/countdown/go.png" id="11_c452y"]
-[ext_resource type="Texture2D" uid="uid://bwsi60kd53cbe" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/date-pixel.png" id="16_7e3pa"]
-[ext_resource type="Texture2D" uid="uid://ck4g2o6nboqrp" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/ready-pixel.png" id="17_ea1w0"]
-[ext_resource type="Texture2D" uid="uid://csrlbcbka6igj" path="res://mods-unpacked/FunkinCrew-FnF/mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/set-pixel.png" id="18_cffyj"]
+[ext_resource type="Texture2D" uid="uid://bwsi60kd53cbe" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/date-pixel.png" id="16_7e3pa"]
+[ext_resource type="Texture2D" uid="uid://ck4g2o6nboqrp" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/ready-pixel.png" id="17_ea1w0"]
+[ext_resource type="Texture2D" uid="uid://csrlbcbka6igj" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/pixel/countdown/set-pixel.png" id="18_cffyj"]
 
 [sub_resource type="Animation" id="Animation_kvlud"]
 length = 0.001
@@ -361,7 +361,7 @@ _data = {
 [sub_resource type="SpriteFrames" id="SpriteFrames_shvg5"]
 animations = [{
 "frames": [],
-"loop": true,
+"loop": 1,
 "name": &"empty",
 "speed": 5.0
 }, {
@@ -369,7 +369,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("5_puh5b")
 }],
-"loop": true,
+"loop": 1,
 "name": &"go",
 "speed": 5.0
 }, {
@@ -377,7 +377,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("6_7ilje")
 }],
-"loop": true,
+"loop": 1,
 "name": &"ready",
 "speed": 5.0
 }, {
@@ -385,7 +385,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("7_1fr4n")
 }],
-"loop": true,
+"loop": 1,
 "name": &"set",
 "speed": 5.0
 }]
@@ -396,7 +396,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("8_j1rq7")
 }],
-"loop": true,
+"loop": 1,
 "name": &"1",
 "speed": 5.0
 }, {
@@ -404,7 +404,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("9_bwvh8")
 }],
-"loop": true,
+"loop": 1,
 "name": &"2",
 "speed": 5.0
 }, {
@@ -412,7 +412,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("10_xov32")
 }],
-"loop": true,
+"loop": 1,
 "name": &"3",
 "speed": 5.0
 }, {
@@ -420,7 +420,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("11_c452y")
 }],
-"loop": true,
+"loop": 1,
 "name": &"go",
 "speed": 5.0
 }]
@@ -431,12 +431,12 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("16_7e3pa")
 }],
-"loop": true,
+"loop": 1,
 "name": &"date",
 "speed": 5.0
 }, {
 "frames": [],
-"loop": true,
+"loop": 1,
 "name": &"empty",
 "speed": 5.0
 }, {
@@ -444,7 +444,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("17_ea1w0")
 }],
-"loop": true,
+"loop": 1,
 "name": &"ready",
 "speed": 5.0
 }, {
@@ -452,7 +452,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("18_cffyj")
 }],
-"loop": true,
+"loop": 1,
 "name": &"set",
 "speed": 5.0
 }]

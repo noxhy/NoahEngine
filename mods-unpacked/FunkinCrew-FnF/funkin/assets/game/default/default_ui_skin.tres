@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UISkin" format=3 uid="uid://cykk1h52kdqv2"]
+
+[ext_resource type="Script" uid="uid://bhm743f04ojig" path="res://noah/resources/ui_skin.gd" id="1_6u2p5"]
+[ext_resource type="SpriteFrames" uid="uid://cwsbbsmnt4dn1" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/rating/numbers.tres" id="1_cok72"]
+[ext_resource type="SpriteFrames" uid="uid://dufdqbcgh26ua" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/game/default/rating/rating.tres" id="2_ewjdd"]
+
+[resource]
+script = ExtResource("1_6u2p5")
+rating_texture = ExtResource("2_ewjdd")
+numbers_texture = ExtResource("1_cok72")
+rating_scale = 0.6
+numbers_scale = 0.4
+numbers_spacing = 92.0
+countdown_animation = "default_countdown"
+pause_scene = "uid://l8gwfipcfkne"

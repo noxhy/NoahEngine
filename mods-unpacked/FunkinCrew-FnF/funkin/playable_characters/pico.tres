@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="PlayableCharacter" format=3 uid="uid://dxqhmrv2rrdkc"]
+
+[ext_resource type="Script" uid="uid://baldo0u3dda86" path="res://noah/resources/playable_character.gd" id="11_r1hcg"]
+
+[resource]
+script = ExtResource("11_r1hcg")
+album_path = "uid://b30g8jurwop0d"
+dj = "uid://bnx6yfjfa6wcj"
+background_path = "uid://cemqnoop727he"
+result_songs = Dictionary[String, String]({
+"excellent": "uid://c06o50jnsmcxy",
+"gold": "uid://bjw4ot02i6liv",
+"good": "uid://ceo3yo6r572we",
+"great": "uid://ceo3yo6r572we",
+"loss": "uid://bfcqox2jxtxgl",
+"perfect": "uid://bjw4ot02i6liv"
+})
+normal_intro = "uid://cfndri37mey1i"
+loss_intro = "uid://bb3dlwx5dct1e"
+result_nodes = Dictionary[String, String]({
+"excellent": "uid://kh424i3octdl",
+"gold": "uid://b3d1p53teyugf",
+"good": "uid://cjm3d7nj7ggbe",
+"great": "uid://kh424i3octdl",
+"loss": "uid://cbgr3nsw1eu3k",
+"perfect": "uid://b3d1p53teyugf"
+})

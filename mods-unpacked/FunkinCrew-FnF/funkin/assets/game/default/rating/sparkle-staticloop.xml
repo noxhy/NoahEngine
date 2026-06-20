@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="sparkle-staticloop.png">
+	<!-- Created with Adobe Flash CS6 12.0.0.481 -->
+	<SubTexture name="Symbol 3 instance 10000" x="3" y="3" width="23" height="33" frameX="-1" frameY="0" frameWidth="26" frameHeight="33"/>
+	<SubTexture name="Symbol 3 instance 10001" x="3" y="3" width="23" height="33" frameX="-1" frameY="0" frameWidth="26" frameHeight="33"/>
+	<SubTexture name="Symbol 3 instance 10002" x="29" y="3" width="26" height="29" frameX="0" frameY="-2" frameWidth="26" frameHeight="33"/>
+	<SubTexture name="Symbol 3 instance 10003" x="29" y="3" width="26" height="29" frameX="0" frameY="-2" frameWidth="26" frameHeight="33"/>
+</TextureAtlas>

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bayc5dsfv3jfg"
+path="res://.godot/imported/Inst-bf.ogg-f46e410b7112270a7793bc592d95dfde.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/lit up/audio/Inst-bf.ogg"
+dest_files=["res://.godot/imported/Inst-bf.ogg-f46e410b7112270a7793bc592d95dfde.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

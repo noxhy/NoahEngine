@@ -1,0 +1,56 @@
+[gd_resource type="Resource" script_class="Song" format=3 uid="uid://r1vewm4pti0w"]
+
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="1_og7cc"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_p3erf"]
+load_path = "res://.godot/imported/icon-darnell.png-ef5da5bcc028dd45de3e0b5ccfd29e43.ctex"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5gxj"]
+atlas = SubResource("CompressedTexture2D_p3erf")
+region = Rect2(0, 0, 150, 150)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ecsi4"]
+atlas = SubResource("CompressedTexture2D_p3erf")
+region = Rect2(150, 0, 150, 150)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sv2o6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5gxj")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ecsi4")
+}],
+"loop": 1,
+"name": &"losing",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_og7cc")
+vocals = Array[String](["uid://dyu8olhk2gcah", "uid://4k4ic3uap0fg"])
+instrumental = "uid://bayc5dsfv3jfg"
+tempo = 176.0
+scene = "uid://bg3coqaywlx5b"
+difficulties = Dictionary[String, Dictionary]({
+"easy": {
+"chart": "res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/lit up/charts/lit-up-chart-bf.json"
+},
+"hard": {
+"chart": "res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/lit up/charts/lit-up-chart-bf.json"
+},
+"normal": {
+"chart": "res://mods-unpacked/FunkinCrew-FnF/funkin/playable_songs/lit up/charts/lit-up-chart-bf.json"
+}
+})
+events = "res://playable_songs/lit up/charts/events.tres"
+title = "Lit Up (Bf Mix)"
+artist = "Saruky"
+charter = "fabs + Spazkid"
+icons = SubResource("SpriteFrames_sv2o6")

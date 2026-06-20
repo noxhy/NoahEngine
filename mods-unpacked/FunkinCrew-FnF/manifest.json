@@ -1,0 +1,28 @@
+{
+	"dependencies": [],
+	"description": "Sample base game songs.",
+	"extra": {
+		"godot": {
+			"authors": [
+				"Funkin' Crew"
+			],
+			"compatible_game_version": [
+				"2.3.0"
+			],
+			"compatible_mod_loader_version": [
+				"7.0.1"
+			],
+			"config_schema": {},
+			"description_rich": "",
+			"image": null,
+			"incompatibilities": [],
+			"load_before": [],
+			"optional_dependencies": [],
+			"tags": []
+		}
+	},
+	"name": "FnF",
+	"namespace": "FunkinCrew",
+	"version_number": "1.0.0",
+	"website_url": ""
+}

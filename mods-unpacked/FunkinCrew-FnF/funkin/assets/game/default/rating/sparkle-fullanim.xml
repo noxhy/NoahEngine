@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="sparkle-fullanim.png">
+	<!-- Created with Adobe Flash CS6 12.0.0.481 -->
+	<SubTexture name="Symbol 5 copy instance 10000" x="215" y="228" width="34" height="50" frameX="-5" frameY="-13" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10001" x="125" y="262" width="39" height="43" frameX="-3" frameY="-16" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10002" x="173" y="222" width="39" height="44" frameX="-3" frameY="-15" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10003" x="3" y="222" width="35" height="51" frameX="-4" frameY="-11" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10004" x="218" y="173" width="32" height="52" frameX="-4" frameY="-10" frameWidth="45" frameHeight="63" rotated="true"/>
+	<SubTexture name="Symbol 5 copy instance 10005" x="129" y="214" width="41" height="45" frameX="-2" frameY="-13" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10006" x="81" y="222" width="41" height="44" frameX="-2" frameY="-13" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10007" x="3" y="166" width="36" height="53" frameX="-4" frameY="-8" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10008" x="42" y="173" width="36" height="53" frameX="-4" frameY="-7" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10009" x="174" y="173" width="41" height="46" frameX="-2" frameY="-10" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10010" x="129" y="165" width="42" height="46" frameX="-2" frameY="-10" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10011" x="90" y="165" width="36" height="54" frameX="-4" frameY="-5" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10012" x="50" y="115" width="37" height="55" frameX="-3" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10013" x="90" y="115" width="43" height="47" frameX="-1" frameY="-8" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10014" x="136" y="115" width="43" height="47" frameX="-1" frameY="-7" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10015" x="208" y="55" width="38" height="56" frameX="-3" frameY="-2" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10016" x="208" y="114" width="38" height="56" frameX="-3" frameY="-1" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10017" x="3" y="115" width="44" height="48" frameX="0" frameY="-5" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10018" x="3" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10019" x="3" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10020" x="3" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10021" x="3" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10022" x="44" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10023" x="44" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10024" x="51" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10025" x="51" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10026" x="85" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10027" x="85" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10028" x="99" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10029" x="99" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10030" x="126" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10031" x="126" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10032" x="147" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10033" x="147" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10034" x="167" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10035" x="167" y="55" width="38" height="57" frameX="-3" frameY="0" frameWidth="45" frameHeight="63"/>
+	<SubTexture name="Symbol 5 copy instance 10036" x="195" y="3" width="45" height="49" frameX="0" frameY="-4" frameWidth="45" frameHeight="63"/>
+</TextureAtlas>
