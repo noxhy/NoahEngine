@@ -11,7 +11,13 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
-static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm")
+static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") : 
+	get():
+		if note_skin == null:
+			note_skin = load("uid://buly8rgmgrrnm")
+		
+		return note_skin
+
 static var song_position: float = 0.0
 
 @export_group("Colors")
