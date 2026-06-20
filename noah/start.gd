@@ -10,4 +10,15 @@ func _process(delta: float) -> void:
 
 
 func _on_button_pressed() -> void:
+	var folder = ""
+	if OS.has_feature("standalone"):
+		# Gets the folder containing the executable when exported
+		folder = OS.get_executable_path().get_base_dir()
+	else:
+		# Defaults to res:// when running in the Godot Editor
+		folder = ProjectSettings.globalize_path("res://")
+	
+	var mod_folder = folder.path_join("mods")
+	
+	$FileDialog.root_subfolder = mod_folder
 	$FileDialog.popup()
