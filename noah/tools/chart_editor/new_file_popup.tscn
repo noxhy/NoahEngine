@@ -30,7 +30,6 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Select Current Folder"
 dialog_hide_on_ok = true
 file_mode = 2
-root_subfolder = "res://playable_songs/"
 
 [node name="FlowContainer" type="FlowContainer" parent="." unique_id=810239821]
 anchors_preset = 15

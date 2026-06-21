@@ -28,7 +28,6 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Select Given Files"
 dialog_hide_on_ok = true
 file_mode = 1
-root_subfolder = "res://playable_songs/"
 filters = PackedStringArray("*.json")
 
 [node name="FlowContainer" type="FlowContainer" parent="." unique_id=190444970]

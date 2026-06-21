@@ -2,7 +2,7 @@ extends Node2D
 class_name LoadingScreen
 
 @onready var progress_bar = $Background/ProgressBar
-static var scene = "uid://rc52vcn2m7ob"
+static var scene = ""
 
 var progress: Array = []
 var scene_load_status: float = 0

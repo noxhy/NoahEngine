@@ -80,7 +80,7 @@ func _draw():
 # Input Manager
 func _input(event):
 	if event.is_action_pressed(&"menu_cancel"):
-		$"Audio/Menu Cancel".play()
+		SoundManager.cancel.play()
 		Global.change_scene_to(Constants.OPTIONS_MENU_SCENE, "down")
 	elif event.is_action_pressed(&"menu_accept"):
 		if can_hit:

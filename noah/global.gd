@@ -1,6 +1,7 @@
 extends Node
 
 @onready var performance_label: Label = $"Performance Label"
+@onready var volume_node = $"Volume Node"
 
 var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
@@ -15,7 +16,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	$"Volume Node".position.x = get_window().content_scale_size.x / 2
+	volume_node.position.x = get_window().content_scale_size.x / 2
 	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
 	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
 		var performance_string: String = str("FPS: ", int(Engine.get_frames_per_second()),
@@ -148,7 +149,7 @@ func frame_independent_lerp(a, b, decay: float, delta: float) -> Variant:
 func show_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"Volume Node", "position:y", 0, 0.5)
+	tween.tween_property(volume_node, "position:y", 0, 0.5)
 	SoundManager.scroll.play()
 	
 	var master_volume = SettingsManager.get_value(SettingsManager.SEC_AUDIO, "master_volume")
@@ -164,7 +165,7 @@ func show_volume():
 func hide_volume():
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	tween.tween_property($"Volume Node", "position:y", -32, 0.5)
+	tween.tween_property(volume_node, "position:y", -32, 0.5)
 
 
 func _on_hide_timer_timeout():

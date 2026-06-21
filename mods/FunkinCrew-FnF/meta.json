@@ -1,8 +1,0 @@
-{
-	"name": "Friday Night Funkin'",
-	"credits": "FunkinCrew",
-	"version": "1.0.0",
-	"supported_versions": ["3.2.0"],
-	"description": "A set of songs from Friday Night Funkin' as an example.",
-	"image": "uid://b6tvkvdbdai2u"
-}
