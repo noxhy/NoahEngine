@@ -22,7 +22,6 @@ offset_right = 1280.0
 offset_bottom = 384.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "If you're seeing this right now, you have no mods installed.
-To go to the chart/event edtior, press 7."
+text = "If you're seeing this right now, you have no mods installed."
 horizontal_alignment = 1
 vertical_alignment = 1

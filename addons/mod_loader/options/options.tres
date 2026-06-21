@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="ModLoaderCurrentOptions" format=3 uid="uid://bls83tkysflvg"]
-
-[ext_resource type="Resource" uid="uid://5ipuhn3mll5u" path="res://addons/mod_loader/options/profiles/default.tres" id="1_yg7p8"]
-[ext_resource type="Script" uid="uid://bfojrl23jvjgp" path="res://addons/mod_loader/resources/options_current.gd" id="2"]
-[ext_resource type="Resource" path="res://addons/mod_loader/options/profiles/editor.tres" id="3"]
-
-[resource]
-script = ExtResource("2")

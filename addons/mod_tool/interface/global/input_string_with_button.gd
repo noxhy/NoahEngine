@@ -1,5 +1,0 @@
-@tool
-class_name ModToolInterfaceInputStringWithButton
-extends ModToolInterfaceInputString
-
-signal button_pressed

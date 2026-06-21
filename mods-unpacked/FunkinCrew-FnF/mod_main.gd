@@ -18,11 +18,17 @@ var mod_dir_path := ""
 var extensions_dir_path := ""
 var translations_dir_path := ""
 
+var resources: Array = []
 
 # ! your _ready func.
 func _init() -> void:
 	ModLoaderLog.info("Init", LOG_NAME)
 	mod_dir_path = ModLoaderMod.get_unpacked_dir().path_join(MOD_DIR)
+	
+	var list = ResourceLoader.list_directory("res://mods-unpacked/FunkinCrew-FnF/funkin/")
+	for res in list:
+		print("found you: ", mod_dir_path.path_join("funkin/" + res))
+		resources.append(load(mod_dir_path.path_join("funkin/" + res)))
 	
 	# Add extensions
 	install_script_extensions()

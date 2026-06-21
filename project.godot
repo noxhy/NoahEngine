@@ -22,8 +22,6 @@ buses/default_bus_layout="uid://wp1fb3lbqup6"
 
 [autoload]
 
-ModLoaderStore="*uid://bl378fjhu3ycd"
-ModLoader="*uid://dpvqx6jx6glhs"
 Global="*res://noah/global.tscn"
 Transitions="*res://noah/transitions.tscn"
 GameManager="*res://noah/managers/game_manager.gd"
@@ -49,7 +47,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/mod_loader/_export_plugin/plugin.cfg", "res://addons/mod_tool/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
+enabled=PackedStringArray("res://addons/gdanimate-rewrite-main/plugin.cfg", "res://addons/parallax2d_preview/plugin.cfg")
 
 [file_customization]
 
