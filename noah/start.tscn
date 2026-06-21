@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cmn3noo2keqes" path="res://noah/start.gd" id="1_sr1oe"]
 
-[node name="StartMenu" type="Node2D" unique_id=314982262]
+[node name="Start" type="Node2D" unique_id=314982262]
 script = ExtResource("1_sr1oe")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1832716492]

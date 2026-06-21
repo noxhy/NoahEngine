@@ -11,4 +11,5 @@ func _ready() -> void:
 	print(GameManager.current_character, ": ", Preload.character_data.get(GameManager.current_character))
 	print("so this shouldn't be null: ", GameManager.character)
 	
+	Constants.set_script("uid://osy8erwmdopi")
 	get_tree().change_scene_to_file("uid://b1kmgjxpce1de")

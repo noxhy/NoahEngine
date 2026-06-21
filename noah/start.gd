@@ -1,27 +1,18 @@
 extends Node2D
 
-const MODS_DIR: String = "user://mods"
+const MODS_DIR: String = "mods"
 
 # Meant to be replaced
 func _ready() -> void:
-	pass
+	load_mods()
 
 
-func _process(delta: float) -> void:
-	if Input.is_action_just_pressed(&"chart_editor"):
-		get_tree().change_scene_to_file(Constants.CHART_EDITOR_SCENE)
-
-
-func _on_button_pressed() -> void:
-	var folder = ""
-	if OS.has_feature("standalone"):
-		# Gets the folder containing the executable when exported
-		folder = OS.get_executable_path().get_base_dir()
+func load_mods() -> void:
+	if DirAccess.dir_exists_absolute(MODS_DIR):
+		print("Opening mods folder at: ", MODS_DIR)
+		for mod_folder in DirAccess.get_directories_at(MODS_DIR):
+			var mod_dir: String = MODS_DIR.path_join(mod_folder)
+			if FileAccess.file_exists(mod_dir.path_join("meta.json")):
+				print("found meta")
 	else:
-		# Defaults to res:// when running in the Godot Editor
-		folder = ProjectSettings.globalize_path("res://")
-	
-	var mod_folder = folder.path_join("mods")
-	
-	$FileDialog.root_subfolder = mod_folder
-	$FileDialog.popup()
+		printerr("No mods folder located at %s" % MODS_DIR)	
