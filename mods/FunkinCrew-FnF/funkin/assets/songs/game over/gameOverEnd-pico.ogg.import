@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://mpqfbdkfnsln"
+path="res://.godot/imported/gameOverEnd-pico.ogg-908816ecc74d70e5fd1db307a04f33fb.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods/FunkinCrew-FnF/funkin/assets/songs/game over/gameOverEnd-pico.ogg"
+dest_files=["res://.godot/imported/gameOverEnd-pico.ogg-908816ecc74d70e5fd1db307a04f33fb.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

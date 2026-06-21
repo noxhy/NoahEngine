@@ -1,0 +1,185 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cwsbbsmnt4dn1"]
+
+[ext_resource type="Texture2D" uid="uid://c8qfa0fti5v1n" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0010.png" id="1_kx7ht"]
+[ext_resource type="Texture2D" uid="uid://bpb31mmv8ai7o" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0001.png" id="2_kskri"]
+[ext_resource type="Texture2D" uid="uid://cebrbbbgld60y" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0002.png" id="3_ju4m7"]
+[ext_resource type="Texture2D" uid="uid://b7mmdivsfv8fw" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0003.png" id="4_wxou3"]
+[ext_resource type="Texture2D" uid="uid://0lmif1hi4jqn" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0004.png" id="5_ostp6"]
+[ext_resource type="Texture2D" uid="uid://c5ry3exh0qjky" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0005.png" id="6_61w0c"]
+[ext_resource type="Texture2D" uid="uid://dma7vwijmfmbn" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0006.png" id="7_60sva"]
+[ext_resource type="Texture2D" uid="uid://dy1e6jooq1o5g" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0007.png" id="8_daump"]
+[ext_resource type="Texture2D" uid="uid://df3vyfwmfn07c" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0008.png" id="9_4miwf"]
+[ext_resource type="Texture2D" uid="uid://dlhv2062vy17x" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/normal/combonum0009.png" id="10_0jl7t"]
+[ext_resource type="Texture2D" uid="uid://cn7rg4u75t108" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0010.png" id="11_xy774"]
+[ext_resource type="Texture2D" uid="uid://dk8ue77obol8a" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0001.png" id="12_xvvhf"]
+[ext_resource type="Texture2D" uid="uid://boydr6b4ecu6j" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0002.png" id="13_kmx2t"]
+[ext_resource type="Texture2D" uid="uid://benylj81eaf1n" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0003.png" id="14_xng43"]
+[ext_resource type="Texture2D" uid="uid://dmv6hm3jfbdl6" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0004.png" id="15_1s2cm"]
+[ext_resource type="Texture2D" uid="uid://bfuvr8lo3jylc" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0005.png" id="16_tschm"]
+[ext_resource type="Texture2D" uid="uid://c81eaurhk7cbw" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0006.png" id="17_0qrjo"]
+[ext_resource type="Texture2D" uid="uid://blbqb0fx7g2fu" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0007.png" id="18_3yo1u"]
+[ext_resource type="Texture2D" uid="uid://e35w13oyd1gw" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0008.png" id="19_c11ug"]
+[ext_resource type="Texture2D" uid="uid://bgchu71qbqkgh" path="res://mods/FunkinCrew-FnF/funkin/assets/game/default/rating/gold/combonumgold0009.png" id="20_1qi3v"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kx7ht")
+}],
+"loop": 1,
+"name": &"0",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_kskri")
+}],
+"loop": 1,
+"name": &"1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_ju4m7")
+}],
+"loop": 1,
+"name": &"2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_wxou3")
+}],
+"loop": 1,
+"name": &"3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ostp6")
+}],
+"loop": 1,
+"name": &"4",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_61w0c")
+}],
+"loop": 1,
+"name": &"5",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_60sva")
+}],
+"loop": 1,
+"name": &"6",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_daump")
+}],
+"loop": 1,
+"name": &"7",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_4miwf")
+}],
+"loop": 1,
+"name": &"8",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_0jl7t")
+}],
+"loop": 1,
+"name": &"9",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_xy774")
+}],
+"loop": 1,
+"name": &"fc_0",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_xvvhf")
+}],
+"loop": 1,
+"name": &"fc_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_kmx2t")
+}],
+"loop": 1,
+"name": &"fc_2",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_xng43")
+}],
+"loop": 1,
+"name": &"fc_3",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_1s2cm")
+}],
+"loop": 1,
+"name": &"fc_4",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_tschm")
+}],
+"loop": 1,
+"name": &"fc_5",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_0qrjo")
+}],
+"loop": 1,
+"name": &"fc_6",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_3yo1u")
+}],
+"loop": 1,
+"name": &"fc_7",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_c11ug")
+}],
+"loop": 1,
+"name": &"fc_8",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_1qi3v")
+}],
+"loop": 1,
+"name": &"fc_9",
+"speed": 5.0
+}]

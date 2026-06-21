@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://disrmsl28koee" path="res://noah/menus/options/offset_calibrator.gd" id="1_to22u"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="3_wcm4s"]
-[ext_resource type="AudioStream" uid="uid://c7t6ab85b1td1" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/offset song.ogg" id="4_65mtm"]
-[ext_resource type="AudioStream" uid="uid://bka17tk7s4w3n" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/songs/offset drums.ogg" id="5_0fft6"]
-[ext_resource type="AudioStream" uid="uid://baajtpwp5hvdp" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/snare.mp3" id="5_picn5"]
-[ext_resource type="AudioStream" uid="uid://dyy2yik0yf60r" path="res://mods-unpacked/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/menu cancel.ogg" id="6_q07ox"]
+[ext_resource type="AudioStream" uid="uid://c7t6ab85b1td1" path="res://mods/FunkinCrew-FnF/funkin/assets/songs/offset song.ogg" id="4_65mtm"]
+[ext_resource type="AudioStream" uid="uid://bka17tk7s4w3n" path="res://mods/FunkinCrew-FnF/funkin/assets/songs/offset drums.ogg" id="5_0fft6"]
+[ext_resource type="AudioStream" uid="uid://baajtpwp5hvdp" path="res://mods/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/snare.mp3" id="5_picn5"]
+[ext_resource type="AudioStream" uid="uid://dyy2yik0yf60r" path="res://mods/FunkinCrew-FnF/funkin/assets/sounds/menu_sounds/menu cancel.ogg" id="6_q07ox"]
 [ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="8_48d4v"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="9_0a7dc"]
 

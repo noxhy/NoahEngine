@@ -1,8 +1,11 @@
 extends Node2D
 
+const MODS_DIR: String = "user://mods"
+
 # Meant to be replaced
 func _ready() -> void:
 	pass
+
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"chart_editor"):

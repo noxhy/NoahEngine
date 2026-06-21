@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bka17tk7s4w3n"
+path="res://.godot/imported/offset drums.ogg-ca7ca2bca3b0e47b49feed8874ea5b54.oggvorbisstr"
+
+[deps]
+
+source_file="res://mods/FunkinCrew-FnF/funkin/assets/songs/offset drums.ogg"
+dest_files=["res://.godot/imported/offset drums.ogg-ca7ca2bca3b0e47b49feed8874ea5b54.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0.0
+bpm=100.0
+beat_count=0
+bar_beats=4
