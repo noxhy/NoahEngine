@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bflvolhan5xvh"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="1_n6ac0"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_n6ac0"]
 [ext_resource type="Script" uid="uid://jbhtf0t57xw3" path="res://noah/tools/chart_editor/metadata_window.gd" id="2_bkkpl"]
 
 [node name="Metadata Window" type="Window" unique_id=1340846673]

@@ -15,7 +15,7 @@
 [ext_resource type="AudioStream" uid="uid://bdbqayhnogbk5" path="res://noah/assets/sounds/chart_editor/exitWindow.ogg" id="12_qymoy"]
 [ext_resource type="AudioStream" uid="uid://bmj7ckgd3tlt1" path="res://noah/assets/sounds/chart_editor/undo.ogg" id="13_am3li"]
 [ext_resource type="AudioStream" uid="uid://rka5qxbj0svd" path="res://noah/assets/sounds/chart_editor/noteLay.ogg" id="14_am3li"]
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="17_75w6f"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://bx3kdd0dt1kkw" path="res://noah/tools/chart_editor/lower_ui.tscn" id="17_sxrev"]
 [ext_resource type="PackedScene" uid="uid://b6b2d2kloq60j" path="res://noah/tools/chart_editor/upper_ui.tscn" id="18_dd0y6"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="19_2ab3f"]

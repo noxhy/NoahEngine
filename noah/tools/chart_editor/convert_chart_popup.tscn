@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c6cl2ayvb4ms3"]
 
 [ext_resource type="Script" uid="uid://drlrm6yoeyvls" path="res://noah/tools/chart_editor/convert_chart_popup.gd" id="1_byst7"]
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="1_p6cg2"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_p6cg2"]
 
 [node name="Convert File Popup" type="Window" unique_id=787528886]
 transparent_bg = true

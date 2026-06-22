@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cdxtqaewsuba3"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/chart_editor.res" id="1_73vcf"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_73vcf"]
 [ext_resource type="Script" uid="uid://cs4644jv1f2he" path="res://noah/tools/chart_editor/audios_window.gd" id="2_73vcf"]
 [ext_resource type="PackedScene" uid="uid://ngxlibrfoqjc" path="res://noah/tools/chart_editor/audio_track.tscn" id="3_uinwu"]
 
