@@ -19,6 +19,7 @@ var no_animation: bool = false
 var damage_mult: float = 1.0
 var health_mult: float = 1.0
 var anim_prefix: String = ''
+var splash_animation: StringName = &""
 var scoreable: bool = true
 var mine: bool = false
 var hit: bool = false

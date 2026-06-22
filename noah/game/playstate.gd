@@ -458,20 +458,20 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		
 		match rating:
 			"sick":
-				health += 1 * note.health_mult
-				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+				health += Constants.HEALTH_GAIN * note.health_mult
+				strum_manager.create_splash(lane, strum_node.strum_name + note.splash_animation)
 				if note.scoreable:
 					add_combo()
 			"good":
-				health += 0.5 * note.health_mult
+				health += Constants.HEALTH_GAIN * note.health_mult
 				if note.scoreable:
 					add_combo()
 			"bad":
-				health -= 0.35 * note.health_mult
+				health -= Constants.BAD_HIT_HEALTH_PENALTY * note.health_mult
 				if note.scoreable:
 					reset_combo()
 			"shit":
-				health -= 0.35 * note.health_mult
+				health -= Constants.BAD_HIT_HEALTH_PENALTY * note.health_mult
 				if note.scoreable:
 					reset_combo()
 			_:
@@ -499,12 +499,13 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	if !strum_manager.enemy_slot:
 		# Ghost tapping
 		if not note:
-			score -= 10
-			health -= 1
+			score -= Constants.SPAM_SCORE_PENALTY
+			health -= Constants.SPAM_HEALTH_PENALTY
 		elif note.scoreable:
 			if note.mine and !note.hit:
 				return
-			score -= 100
+			
+			score -= Constants.MISS_SCORE_PENALTY
 			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
 			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			reset_combo()

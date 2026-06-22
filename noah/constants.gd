@@ -50,19 +50,24 @@ var EVENT_DATA: Dictionary = {
 #endregion
 
 #playstate constants
-const SCORING_SLOPE: float = 0.08
-const SCORING_OFFSET: float = 0.05499
-const COMBO_SLOPE: float = 20.0
+var SCORING_SLOPE: float = 0.08
+var SCORING_OFFSET: float = 0.05499
+var COMBO_SLOPE: float = 20.0
 
-const HOLD_SCORE_GAIN_PER_SECOND: float = 250
-const MIN_SCORE_GAIN: int = 9
-const MAX_SCORE_GAIN: int = 500
+var HOLD_SCORE_GAIN_PER_SECOND: float = 250
+var MIN_SCORE_GAIN: int = 9
+var MAX_SCORE_GAIN: int = 500
 
-const HOLD_HEALTH_GAIN_PER_SECOND: float = 6
-const HEALTH_GAIN: float = 1
+var HEALTH_GAIN: float = 1
+var HOLD_HEALTH_GAIN_PER_SECOND: float = 6
 
-const MISS_BASE_HEALTH_PENALTY: float = 4
-const MISS_MAX_HEALTH_PENALTY: float = 20.0
+var BAD_HIT_HEALTH_PENALTY: float = 0.5
+var MISS_BASE_HEALTH_PENALTY: float = 4
+var MISS_MAX_HEALTH_PENALTY: float = 20.0
+
+var SPAM_SCORE_PENALTY: float = 10
+var SPAM_HEALTH_PENALTY: float = 1
+var MISS_SCORE_PENALTY: float = 100
 
 #region Note Types
 ## The note type and the corresponding animation prefix.
