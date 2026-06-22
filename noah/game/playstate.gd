@@ -459,7 +459,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		match rating:
 			"sick":
 				health += Constants.HEALTH_GAIN * note.health_mult
-				strum_manager.create_splash(lane, strum_node.strum_name + note.splash_animation)
+				strum_manager.create_splash(lane, note.splash_animation)
 				if note.scoreable:
 					add_combo()
 			"good":
