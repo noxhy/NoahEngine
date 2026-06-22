@@ -104,7 +104,8 @@ func create_note(time: float, lane: int, length: float, note_type: String, tempo
 func create_splash(lane: int, animation_name: StringName):
 	var anim_to_play: StringName = animation_name + &"_splash"
 	if animation_name.is_empty():
-		anim_to_play = StringName(strums[lane].strum_name) + &"_splash"
+		anim_to_play = strums[lane].strum_name + &"_splash"
+		print(strums[lane].strum_name)
 	
 	strums[lane].create_splash(anim_to_play)
 

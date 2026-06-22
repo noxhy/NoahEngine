@@ -4,7 +4,6 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	$OffsetSprite.sprite_frames = note_skin.splashes_texture
 	
 	if note_skin.animation_names != null:

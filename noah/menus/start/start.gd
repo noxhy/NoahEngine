@@ -29,6 +29,7 @@ func _ready() -> void:
 		node.connect(&"mouse_entered", self.update.bind(i))
 		node.connect(&"mouse_exited", self.update.bind(-1))
 		node.connect(&"gui_input", self.mod_input.bind(node))
+		i += 1
 
 
 func display_mods() -> void:
