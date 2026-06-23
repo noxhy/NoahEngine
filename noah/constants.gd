@@ -49,6 +49,13 @@ var EVENT_DATA: Dictionary = {
 }
 #endregion
 
+#region Transitions
+var TRANSITIONS: Dictionary = {
+	"down": "uid://degdcsx3er4ug",
+	"fade": "uid://dp5sadsewp7fw"
+}
+#endregion
+
 #playstate constants
 var SCORING_SLOPE: float = 0.08
 var SCORING_OFFSET: float = 0.05499

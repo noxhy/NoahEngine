@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://ilhf3k3in4ph"]
+
+[ext_resource type="Script" uid="uid://imjuinehs3it" path="res://noah/transition_manager.gd" id="1_i0gk1"]
+
+[node name="TransitionManager" type="Node2D" unique_id=2038254812]
+process_mode = 3
+script = ExtResource("1_i0gk1")
+
+[node name="Transitions" type="CanvasLayer" parent="." unique_id=118750203]
+layer = 128
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)

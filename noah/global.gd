@@ -62,8 +62,8 @@ func change_scene_to(path: String, transition: Variant = &"down", show_loading_s
 	transitioning = true
 	
 	if transition: 
-		Transitions.transition(transition)
-		await Transitions.waiting
+		TransitionManager.transition(transition)
+		await TransitionManager.waiting
 	
 	get_tree().paused = false
 	LoadingScreen.scene = path
@@ -73,7 +73,7 @@ func change_scene_to(path: String, transition: Variant = &"down", show_loading_s
 	else: 
 		get_tree().change_scene_to_file(path)
 		if transition: 
-			Transitions.resume()
+			TransitionManager.resume()
 #endregion
 
 func bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
