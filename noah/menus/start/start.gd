@@ -133,4 +133,3 @@ func _on_run_mod_pressed() -> void:
 		print("Running init at: ", init_path)
 		var init_res = load(init_path)
 		var init_instance = init_res.new()
-		init_instance._ready()
