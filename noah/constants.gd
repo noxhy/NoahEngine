@@ -51,8 +51,8 @@ var EVENT_DATA: Dictionary = {
 
 #region Transitions
 var TRANSITIONS: Dictionary = {
-	"down": "uid://degdcsx3er4ug",
-	"fade": "uid://dp5sadsewp7fw"
+	&"down": "uid://degdcsx3er4ug",
+	&"fade": "uid://dp5sadsewp7fw"
 }
 #endregion
 

@@ -6,8 +6,7 @@ signal paused
 signal finished
 
 func _ready() -> void:
-	if animation_player:
-		animation_player.connect("animation_finished", self.finish)
+	animation_player.connect("animation_finished", self.finish)
 
 
 func play() -> void:
@@ -19,6 +18,9 @@ func is_playing() -> bool:
 
 
 func pause() -> void:
+	if animation_player:
+		animation_player.pause()
+
 	paused.emit()
 
 
