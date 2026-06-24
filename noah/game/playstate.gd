@@ -416,6 +416,8 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 
 
 func song_finished():
+	Signals.play_song_finished.emit()
+	
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
