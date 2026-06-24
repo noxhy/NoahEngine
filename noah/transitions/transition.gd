@@ -20,7 +20,7 @@ func is_playing() -> bool:
 func pause() -> void:
 	if animation_player:
 		animation_player.pause()
-
+	
 	paused.emit()
 
 
