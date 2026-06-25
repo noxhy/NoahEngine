@@ -95,12 +95,16 @@ func get_tempo_time_at(time: float) -> float:
 	return output
 
 
+static func make_dummy() -> Chart:
+	return Chart.new()
+
 static func load(path:String) -> Chart:
 	if path.begins_with('uid'):
 		path = ResourceUID.uid_to_path(path)
 	
 	if path.get_extension() == 'res' or path.get_extension() == 'tres': ##probably a chart already
-		return load(path)
+		var chart_resource = load(path)
+		return chart_resource if chart_resource else make_dummy()
 	elif path.get_extension() == 'json':
 		var file = FileAccess.open(path, FileAccess.READ)
 		if file:
