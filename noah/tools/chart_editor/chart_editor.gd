@@ -648,8 +648,11 @@ func on_files_dropped(files: PackedStringArray):
 	var local_file: String = ProjectSettings.localize_path(file)
 	print("File taken: ", local_file)
 	if ResourceLoader.exists(local_file) and ["res", "tres"].has(file.get_extension()):
-		if load(local_file) is Song:
-			load_song(load(local_file))
+		var resource = load(local_file)
+		if resource is Song:
+			load_song(resource)
+		elif resource is Chart:
+			load_chart(resource)
 		else:
 			printerr("(ChartEdtior) File is not a song is %s correct?" % local_file)
 
