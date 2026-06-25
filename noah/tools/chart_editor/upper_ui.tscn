@@ -20,7 +20,7 @@ custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "File"
-item_count = 11
+item_count = 12
 popup/item_0/text = "Create New Song"
 popup/item_0/id = 0
 popup/item_1/text = "Open Song"
@@ -45,6 +45,8 @@ popup/item_9/id = 5
 popup/item_9/separator = true
 popup/item_10/text = "Exit"
 popup/item_10/id = 6
+popup/item_11/text = "Export ZIP"
+popup/item_11/id = 20
 metadata/_edit_use_anchors_ = true
 
 [node name="Export External Popup" type="FileDialog" parent="File Button" unique_id=1942631382]

@@ -1394,6 +1394,35 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 ## File button item pressed
 func file_button_item_pressed(id):
 	match id:
+		20:
+			if not ChartManager.song:
+				return
+				
+			var zip = ZIPPacker.new()
+			zip.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
+			
+			var inst_path: String = ChartManager.song.instrumental
+			if inst_path.begins_with('uid'):
+				inst_path = ResourceUID.uid_to_path(inst_path)
+
+			ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
+			
+			var idx: int = 0
+			for vocal_path: String in ChartManager.song.vocals:
+				if vocal_path.begins_with('uid'):
+					vocal_path = ResourceUID.uid_to_path(vocal_path)
+				
+				ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
+				idx += 1
+			
+			for diff in ChartManager.song.difficulties:
+				var chart = ChartManager.song.difficulties.get(diff).get('chart')
+				if chart:
+					pass
+				
+			
+			zip.close()
+			
 		0:
 			can_chart = false
 			var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
