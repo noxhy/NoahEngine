@@ -94,17 +94,18 @@ func get_tempo_time_at(time: float) -> float:
 	
 	return output
 
-
-static func make_dummy() -> Chart:
-	return Chart.new()
-
+## attempts to load a chart from a given path.
+## This will automatically convert [code]CNE[/code], [code]V-Slice[/code], and [code]Psych[/code] charts to the engines format.
+## [br][br]If a chart could not be loaded, a empty chart is provided.
 static func load(path:String) -> Chart:
 	if path.begins_with('uid'):
 		path = ResourceUID.uid_to_path(path)
 	
 	if path.get_extension() == 'res' or path.get_extension() == 'tres': ##probably a chart already
 		var chart_resource = load(path)
-		return chart_resource if chart_resource else make_dummy()
+		if chart_resource and chart_resource is Chart:
+			return chart_resource
+		return Chart.new()
 	elif path.get_extension() == 'json':
 		var file = FileAccess.open(path, FileAccess.READ)
 		if file:
