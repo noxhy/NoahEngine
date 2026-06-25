@@ -20,7 +20,12 @@ func update_stats():
 	%"Song Artist".text = ChartManager.song.artist
 	%"Song Charter".text = ChartManager.song.charter
 	
-	_on_icon_file_dailog_file_selected(ChartManager.song.icons.resource_path)
+	var path: String = ""
+	
+	if ChartManager.song.icons:
+		path = ChartManager.song.icons.resource_path
+	
+	_on_icon_file_dailog_file_selected(path)
 	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
 	
 	%Difficulty.text = ChartManager.difficulty
