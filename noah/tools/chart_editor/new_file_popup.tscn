@@ -152,7 +152,7 @@ text = "Select File Location"
 [node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=381986006]
 unique_name_in_owner = true
 oversampling_override = 1.0
-title = "Open File(s)"
+title = "Provide Vocals file(s)"
 initial_position = 1
 size = Vector2i(640, 480)
 unresizable = true
@@ -160,6 +160,7 @@ always_on_top = true
 min_size = Vector2i(320, 320)
 ok_button_text = "Open"
 dialog_hide_on_ok = true
+mode_overrides_title = false
 file_mode = 1
 root_subfolder = "res://playable_songs/"
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
@@ -182,7 +183,7 @@ text = "Select File Location"
 
 [node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=812938838]
 unique_name_in_owner = true
-title = "Open a File"
+title = "Provide Inst file"
 initial_position = 1
 size = Vector2i(640, 480)
 unresizable = true
@@ -190,6 +191,7 @@ always_on_top = true
 min_size = Vector2i(320, 320)
 ok_button_text = "Open"
 dialog_hide_on_ok = true
+mode_overrides_title = false
 file_mode = 0
 root_subfolder = "res://playable_songs/"
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
