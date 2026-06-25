@@ -439,7 +439,7 @@ func song_finished():
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
@@ -482,7 +482,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 
 func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id],  linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
@@ -494,7 +494,7 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		if (note and !note.mine) or !note:
 			playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(0.0))
 	
