@@ -23,19 +23,21 @@ func new_file(dir: String):
 	var difficulties: Array[String] = []
 	
 	var selected = %"Difficulty Options".get_selected_items()[0]
-	if selected == 0:
-		difficulties = ["easy", "normal", "hard"]
-	elif selected == 1:
-		difficulties = ["erect", "nightmare"]
-	elif selected == 2:
-		difficulties = ["hard"]
-	else:
-		difficulties = []
+	match selected:
+		0:
+			difficulties = ["easy", "normal", "hard"]
+		
+		1:
+			difficulties = ["erect", "nightmare"]
+		
+		2:
+			difficulties = ["hard"]
+		
+		_:
+			difficulties = []
 	
 	var difficulty_dict: Dictionary[String, Dictionary] = {}
-	
 	for difficulty in difficulties:
-		
 		var chart: Chart = Chart.new()
 		
 		# Barebones chart data
@@ -43,7 +45,7 @@ func new_file(dir: String):
 			"notes": [],
 			"events": [],
 			"tempos": {0.0: song_file.tempo},
-			"meters": {0.0: [4, 16]}
+			"meters": {0.0: [4, 4]}
 		}
 		
 		var chart_path: String = dir + "/" + song_file.title + "-" + difficulty + ".res"
