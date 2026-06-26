@@ -3,7 +3,22 @@ class_name ZipTools
 
 
 ## path used to create dummy files for resource serialization
-static var TEMP_PATH: String = 'user://temp-resource.res'
+static var TEMP_RESOURCE: String = 'user://temp-resource.res'
+
+static func read_dict_from_zip(zip: ZIPReader, file_name: String) -> Dictionary:
+	var buffer = zip.read_file(file_name).get_string_from_utf8()
+	
+	return JSON.parse_string(buffer)
+
+static func write_dict_to_zip(zip: ZIPPacker, file_name: String, dict:Dictionary):
+	
+	var stringify = JSON.stringify(dict)
+	
+	zip.start_file(file_name)
+	zip.write_file(stringify.to_utf8_buffer())
+	zip.close_file()
+	
+	print('Successfully written to zip')
 
 static func write_snd_to_zip(zip: ZIPPacker, file_name: String, snd_path: String):
 	
@@ -29,12 +44,12 @@ static func write_resource_to_zip(zip: ZIPPacker, file_name: String, resource: R
 	if file_name.get_extension().is_empty():
 		file_name = file_name + '.res'
 
-	ResourceSaver.save(resource, TEMP_PATH)
+	ResourceSaver.save(resource, TEMP_RESOURCE)
 	
 	zip.start_file(file_name)
-	zip.write_file(FileAccess.get_file_as_bytes(TEMP_PATH))
+	zip.write_file(FileAccess.get_file_as_bytes(TEMP_RESOURCE))
 	zip.close_file()
 	
-	DirAccess.remove_absolute(TEMP_PATH)
+	DirAccess.remove_absolute(TEMP_RESOURCE)
 	
 	print('Successfully written to zip')

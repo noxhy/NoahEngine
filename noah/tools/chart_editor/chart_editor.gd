@@ -1394,17 +1394,33 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 ## File button item pressed
 func file_button_item_pressed(id):
 	match id:
+		21:
+			var reader = ZIPReader.new()
+			reader.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
+			var bytes = reader.read_file('Inst.ogg')
+			
+			var stream = AudioStreamOggVorbis.load_from_buffer(bytes)
+			SoundManager.play_sound_once(stream)
+			
+			var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
+			print(misc_data)
+		
+			reader.close()
+
+			
 		20:
 			if not ChartManager.song:
 				return
-				
+			
+			var misc_data:Dictionary = {}
+			
 			var zip = ZIPPacker.new()
 			zip.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
 			
 			var inst_path: String = ChartManager.song.instrumental
 			if inst_path.begins_with('uid'):
 				inst_path = ResourceUID.uid_to_path(inst_path)
-
+			
 			ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
 			
 			var idx: int = 0
@@ -1420,6 +1436,13 @@ func file_button_item_pressed(id):
 				if chart:
 					ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
 				
+			
+			misc_data.set('artist', ChartManager.song.artist)
+			misc_data.set('charter', ChartManager.song.charter)
+			misc_data.set('title', ChartManager.song.title)
+			
+			
+			ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
 			
 			zip.close()
 			
