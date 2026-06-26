@@ -5,6 +5,19 @@ class_name ZipTools
 ## path used to create dummy files for resource serialization
 static var TEMP_RESOURCE: String = 'user://temp-resource.res'
 
+static func read_resource_from_zip(zip: ZIPReader, file_name: String):
+	var buffer = zip.read_file(file_name)
+	
+	var file = FileAccess.open(TEMP_RESOURCE, FileAccess.WRITE)
+	file.store_buffer(buffer)
+	file.close()
+	
+	var res = load(TEMP_RESOURCE)
+	
+	DirAccess.remove_absolute(TEMP_RESOURCE)
+	
+	return res
+
 static func read_dict_from_zip(zip: ZIPReader, file_name: String) -> Dictionary:
 	var buffer = zip.read_file(file_name).get_string_from_utf8()
 	

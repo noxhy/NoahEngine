@@ -1400,10 +1400,13 @@ func file_button_item_pressed(id):
 			var bytes = reader.read_file('Inst.ogg')
 			
 			var stream = AudioStreamOggVorbis.load_from_buffer(bytes)
-			SoundManager.play_sound_once(stream)
+			#SoundManager.play_sound_once(stream)
 			
 			var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
 			print(misc_data)
+			
+			var chart = ZipTools.read_resource_from_zip(reader, 'charts/easy.res')
+			#print(chart.get_notes_data())
 		
 			reader.close()
 
@@ -1440,6 +1443,7 @@ func file_button_item_pressed(id):
 			misc_data.set('artist', ChartManager.song.artist)
 			misc_data.set('charter', ChartManager.song.charter)
 			misc_data.set('title', ChartManager.song.title)
+			misc_data.set('tempo', ChartManager.song.tempo)
 			
 			
 			ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
