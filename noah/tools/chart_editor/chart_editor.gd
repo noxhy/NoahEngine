@@ -707,7 +707,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	ChartManager.difficulty = difficulty
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
-	%Instrumental.stream = load(ChartManager.song.instrumental)
+	%Instrumental.stream = SoundManager._get_stream(ChartManager.song.instrumental)
 	play_audios(song_position)
 	
 	%Vocals.stream_paused = true
@@ -1162,7 +1162,7 @@ func play_audios(time: float):
 	var playback = %Vocals.get_stream_playback()
 	vocal_tracks = []
 	for stream in ChartManager.song.vocals:
-		vocal_tracks.append(playback.play_stream(load(stream),
+		vocal_tracks.append(playback.play_stream(SoundManager._get_stream(stream),
 		time + start_offset, 0.0, song_speed))
 	
 	time = clamp(time, 0, %Instrumental.stream.get_length() - 0.1)
@@ -1395,26 +1395,78 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 func file_button_item_pressed(id):
 	match id:
 		21:
+			const TEMP_PATH: String = 'user://temp_song'
+			
+			if not DirAccess.dir_exists_absolute(TEMP_PATH):
+				DirAccess.make_dir_absolute(TEMP_PATH)
+			
+			if not DirAccess.dir_exists_absolute(TEMP_PATH.path_join('charts')):
+				DirAccess.make_dir_absolute(TEMP_PATH.path_join('charts'))
+			
 			var reader = ZIPReader.new()
 			reader.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
-			var bytes = reader.read_file('Inst.ogg')
 			
-			var stream = AudioStreamOggVorbis.load_from_buffer(bytes)
-			#SoundManager.play_sound_once(stream)
+			var temp_song = Song.new()
+			
 			
 			var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
-			print(misc_data)
 			
-			var chart = ZipTools.read_resource_from_zip(reader, 'charts/easy.res')
-			#print(chart.get_notes_data())
-		
+			for key: String in misc_data.get('chart_keys'):
+				var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
+				var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
+				ResourceSaver.save(chart, ch_path)
+				
+				temp_song.difficulties.set(key, {
+					"chart": ch_path
+				})
+				
+			
+			
+			var inst_buffer = reader.read_file('Inst.' + misc_data.get('inst_key', 'ogg'))
+			var inst = SoundManager.get_stream_from_buffer(inst_buffer, misc_data.get('inst_key', 'ogg'))
+			
+			if inst:
+				var inst_path = TEMP_PATH.path_join('inst.' + misc_data.get('inst_key', 'ogg'))
+				var file = FileAccess.open(inst_path, FileAccess.WRITE)
+				file.store_buffer(inst_buffer)
+				file.close()
+				temp_song.instrumental = inst_path
+			
+			
+			var vocal_paths: Array[String] = []
+			var idx: int = 0
+			for key: String in misc_data.get('vocal_keys'):
+				var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
+				
+				var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
+				
+				if stream:
+					var vocals_path = TEMP_PATH.path_join('Voices' + str(idx) + '.' + key)
+					var file = FileAccess.open(vocals_path, FileAccess.WRITE)
+					file.store_buffer(buffer)
+					file.close()
+					
+					vocal_paths.append(vocals_path)
+					
+				idx += 1
+			
+			temp_song.vocals = vocal_paths
+			
+			temp_song.artist = misc_data.get('artist', 'unknown')
+			temp_song.charter = misc_data.get('charter', 'unknown')
+			temp_song.tempo = misc_data.get('tempo', 100)
+			temp_song.title = misc_data.get('title', 'unknown')
+			
 			reader.close()
-
+			
+			load_song(temp_song, misc_data.get('chart_keys')[0])
 			
 		20:
 			if not ChartManager.song:
 				return
 			
+			var vocal_keys:Array = []
+			var chart_keys:Array = []
 			var misc_data:Dictionary = {}
 			
 			var zip = ZIPPacker.new()
@@ -1431,12 +1483,14 @@ func file_button_item_pressed(id):
 				if vocal_path.begins_with('uid'):
 					vocal_path = ResourceUID.uid_to_path(vocal_path)
 				
+				vocal_keys.append(vocal_path.get_extension())
 				ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
 				idx += 1
 			
 			for diff in ChartManager.song.difficulties:
 				var chart = ChartManager.song.difficulties.get(diff).get('chart')
 				if chart:
+					chart_keys.append(diff)
 					ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
 				
 			
@@ -1444,6 +1498,9 @@ func file_button_item_pressed(id):
 			misc_data.set('charter', ChartManager.song.charter)
 			misc_data.set('title', ChartManager.song.title)
 			misc_data.set('tempo', ChartManager.song.tempo)
+			misc_data.set('vocal_keys', vocal_keys)
+			misc_data.set('chart_keys', chart_keys)
+			misc_data.set('inst_key', inst_path.get_extension())
 			
 			
 			ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
@@ -2138,5 +2195,5 @@ func _on_audios_window_about_to_popup() -> void:
 
 
 func _on_audios_window_updated() -> void:
-	%Instrumental.stream = load(ChartManager.song.instrumental)
+	%Instrumental.stream = SoundManager._get_stream(ChartManager.song.instrumental)
 	auto_save()
