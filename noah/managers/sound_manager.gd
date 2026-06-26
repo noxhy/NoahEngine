@@ -91,12 +91,12 @@ func _get_stream(stream: Variant) -> AudioStream:
 	elif stream is String:
 		
 		if stream.begins_with('user://'):
-			pass
 			var file = FileAccess.open(stream, FileAccess.READ)
 			
 			var raw_buffer = file.get_buffer(file.get_length())
 			
 			var potential_stream = get_stream_from_buffer(raw_buffer, stream.get_extension())
+			file.close()
 			if potential_stream:
 				return potential_stream
 		
