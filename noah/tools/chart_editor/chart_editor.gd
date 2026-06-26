@@ -1418,7 +1418,7 @@ func file_button_item_pressed(id):
 			for diff in ChartManager.song.difficulties:
 				var chart = ChartManager.song.difficulties.get(diff).get('chart')
 				if chart:
-					pass
+					ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
 				
 			
 			zip.close()
