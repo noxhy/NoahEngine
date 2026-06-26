@@ -174,7 +174,7 @@ static func load(path:String) -> Chart:
 						pass
 	
 	
-	return null
+	return Chart.new()
 
 static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 	
