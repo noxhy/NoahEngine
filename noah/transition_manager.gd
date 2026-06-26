@@ -22,6 +22,9 @@ func pause():
 
 
 func resume():
+	if !current_transition:
+		return
+	
 	if !current_transition.is_playing():
 		current_transition.play()
 

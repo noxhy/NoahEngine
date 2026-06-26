@@ -32,6 +32,11 @@ func _ready() -> void:
 		i += 1
 
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"chart_editor"):
+		Global.change_scene_to(Constants.CHART_EDITOR_SCENE, null)
+
+
 func display_mods() -> void:
 	for mod_dir in mods:
 		var data = mod_data[mod_dir]
