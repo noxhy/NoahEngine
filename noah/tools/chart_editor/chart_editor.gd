@@ -355,7 +355,7 @@ func _process(delta: float) -> void:
 	if song_speed != 1:
 		%"Lower UI".get_node("%Current Time Label").text += str(" (", song_speed, "x)")
 	
-	if ChartManager.song:
+	if ChartManager.song and %Instrumental.stream:
 		%"Lower UI".get_node("%Time Left Label").text = "-" + Global.format_time(%Instrumental.stream.get_length() - song_position)
 	else:
 		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
@@ -1429,7 +1429,7 @@ func file_button_item_pressed(id):
 				
 				var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
 				
-				for key: String in misc_data.get('chart_keys'):
+				for key: String in misc_data.get('chart_keys', []):
 					var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
 					var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
 					ResourceSaver.save(chart, ch_path)
@@ -1452,7 +1452,7 @@ func file_button_item_pressed(id):
 				
 				var vocal_paths: Array[String] = []
 				var idx: int = 0
-				for key: String in misc_data.get('vocal_keys'):
+				for key: String in misc_data.get('vocal_keys', []):
 					var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
 					
 					var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
@@ -1508,10 +1508,11 @@ func file_button_item_pressed(id):
 				zip.open(path)
 				
 				var inst_path: String = ChartManager.song.instrumental
-				if inst_path.begins_with('uid'):
-					inst_path = ResourceUID.uid_to_path(inst_path)
-				
-				ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
+				if not inst_path.is_empty():
+					if inst_path.begins_with('uid'):
+						inst_path = ResourceUID.uid_to_path(inst_path)
+					
+					ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
 				
 				var idx: int = 0
 				for vocal_path: String in ChartManager.song.vocals:
@@ -1543,7 +1544,7 @@ func file_button_item_pressed(id):
 				zip.close()
 			
 			file_dialog.file_selected.connect(export_zip)
-		0:
+		0: # make a new song
 			can_chart = false
 			var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
 			
