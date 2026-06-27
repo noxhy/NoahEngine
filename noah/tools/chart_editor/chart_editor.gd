@@ -1431,6 +1431,8 @@ func file_button_item_pressed(id):
 				
 				for key: String in misc_data.get('chart_keys', []):
 					var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
+					if not chart:
+						chart = ZipTools.read_text_resource_from_zip(reader, 'charts/' + key + '.tres')
 					var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
 					ResourceSaver.save(chart, ch_path)
 					
