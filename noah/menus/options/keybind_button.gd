@@ -2,35 +2,40 @@ extends OptionNode
 
 @export var checking = false
 @export var index = 0
+@export_enum("Key", "Controller") var type: int
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
+	update_text()
 
 func _input(event):
 	if checking:
-		if event is InputEventKey:
-			if event.is_pressed():
-				if event.keycode == KEY_DELETE:
-					event.keycode = KEY_NONE
-				
-				checking = false
-				SettingsManager.set_keybind(setting_name, event.keycode, index)
-				SettingsManager.flush()
-				self.text = OS.get_keycode_string(event.keycode)
-				self.button_pressed = false
-				SoundManager.accept.play()
-		elif event is InputEventJoypadButton:
-			if event.is_pressed():
-				if event.button_index == JOY_BUTTON_BACK:
-					event.button_index = JOY_BUTTON_INVALID
-				
-				checking = false
-				SettingsManager.set_keybind(setting_name, event.button_index, index)
-				SettingsManager.flush()
-				self.text = event.as_text()
-				self.button_pressed = false
-				SoundManager.accept.play()
+		match type:
+			0:
+				if event is InputEventKey:
+					if event.is_pressed():
+						if event.keycode == KEY_DELETE:
+							event.keycode = KEY_NONE
+						
+						checking = false
+						SettingsManager.set_keybind(setting_name, event.keycode, index)
+						SettingsManager.flush()
+						self.text = OS.get_keycode_string(event.keycode)
+						self.button_pressed = false
+						SoundManager.accept.play()
+			
+			1:
+				if event is InputEventJoypadButton:
+					if event.is_pressed():
+						if event.button_index == JOY_BUTTON_GUIDE:
+							event.button_index = JOY_BUTTON_INVALID
+						
+						checking = false
+						SettingsManager.set_controller_bind(setting_name, event.button_index, index)
+						SettingsManager.flush()
+						update_text()
+						self.button_pressed = false
+						SoundManager.accept.play()
 
 
 func _on_toggled(button_pressed):
@@ -46,6 +51,15 @@ func select():
 func normal():
 	remove_theme_stylebox_override("normal")
 	checking = false
-	self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
+	update_text()
 	self.button_pressed = false
 	_on_toggled(false)
+
+
+func update_text():
+	match type:
+		0:
+			self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
+		
+		1: 
+			self.text = SettingsManager.JOY_BUTTON_NAMES.get(SettingsManager.get_controller_bind(setting_name)[index], "")

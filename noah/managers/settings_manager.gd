@@ -11,8 +11,27 @@ const SEC_AUDIO: String = 'audio'
 const SEC_CHART: String = 'chart'
 const SEC_DEBUG: String = 'debug'
 const SEC_KEY_BINDS: String = 'keybinds'
+const SEC_CONTROLLER_BINDS: String = 'controller_binds'
 const SEC_SONGS: String = 'songs'
 const SEC_WEEKS: String = 'weeks'
+
+var JOY_BUTTON_NAMES: Dictionary = {
+	JoyButton.JOY_BUTTON_INVALID: "",
+	JoyButton.JOY_BUTTON_A: "A",
+	JoyButton.JOY_BUTTON_B: "B",
+	JoyButton.JOY_BUTTON_X: "X",
+	JoyButton.JOY_BUTTON_Y: "Y",
+	JoyButton.JOY_BUTTON_LEFT_SHOULDER: "LB",
+	JoyButton.JOY_BUTTON_RIGHT_SHOULDER: "RB",
+	JoyButton.JOY_BUTTON_BACK: "Back",
+	JoyButton.JOY_BUTTON_START: "Start",
+	JoyButton.JOY_BUTTON_LEFT_STICK: "LS Click",
+	JoyButton.JOY_BUTTON_RIGHT_STICK: "RS Click",
+	JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
+	JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
+	JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
+	JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right"
+}
 
 var instance: ConfigFile
 #these are the only functions u need to worry about
@@ -76,6 +95,7 @@ static var _defaults: Dictionary = {
 		"note_up": [KEY_UP, KEY_W],
 		"note_right": [KEY_RIGHT, KEY_D],
 		
+		"pause": [KEY_ENTER, KEY_KP_ENTER, KEY_ESCAPE, KEY_BACKSPACE],
 		"kill": [KEY_R],
 		
 		# Ui Keybinds
@@ -96,6 +116,25 @@ static var _defaults: Dictionary = {
 		"mute": [KEY_0]
 	},
 	
+	SEC_CONTROLLER_BINDS: {
+		"note_left": [JOY_BUTTON_X, JOY_BUTTON_DPAD_LEFT],
+		"note_down": [JOY_BUTTON_A, JOY_BUTTON_DPAD_DOWN],
+		"note_up": [JOY_BUTTON_Y, JOY_BUTTON_DPAD_UP],
+		"note_right": [JOY_BUTTON_B, JOY_BUTTON_DPAD_RIGHT],
+		
+		"pause": [JOY_BUTTON_START],
+		"kill": [JOY_BUTTON_BACK],
+		
+		# Ui Keybinds
+		"menu_accept": [JOY_BUTTON_A],
+		"menu_cancel": [JOY_BUTTON_B],
+		"character_select": [JOY_BUTTON_START],
+		
+		"menu_left": [JOY_BUTTON_DPAD_LEFT],
+		"menu_down": [JOY_BUTTON_DPAD_DOWN],
+		"menu_up": [JOY_BUTTON_DPAD_UP],
+		"menu_right": [JOY_BUTTON_DPAD_RIGHT]
+	}
 }
 
 
@@ -149,23 +188,28 @@ func get_default() -> ConfigFile:
 	
 	return temp_config
 
+
 func get_keybind(keybind_name: String) -> Array:
-	var saved_binds: Array = instance.get_value(SEC_KEY_BINDS, keybind_name, [])
-	var default_binds: Array = _defaults.get(SEC_KEY_BINDS).get(keybind_name, [])
-	
-	if default_binds.size() != saved_binds.size():
-		saved_binds = saved_binds.slice(0, default_binds.size())
-		
-		if default_binds.size() > saved_binds.size():
-			saved_binds.append_array(default_binds.slice(saved_binds.size(), default_binds.size()))
-	
-	return saved_binds
+	return instance.get_value(SEC_KEY_BINDS, keybind_name, [])
+
+
+func get_controller_bind(bind_name: String) -> Array:
+	return instance.get_value(SEC_CONTROLLER_BINDS, bind_name, [])
+
 
 func set_keybind(keybind_name: String, keycode: int, index: int):
 	var new_keycodes = instance.get_value(SEC_KEY_BINDS, keybind_name)
 	new_keycodes[index] = keycode
 	
 	instance.set_value(SEC_KEY_BINDS, keybind_name, new_keycodes)
+
+
+func set_controller_bind(bind_name: String, button_index: int, index: int):
+	var new_keycodes = instance.get_value(SEC_CONTROLLER_BINDS, bind_name)
+	new_keycodes[index] = button_index
+	
+	instance.set_value(SEC_CONTROLLER_BINDS, bind_name, new_keycodes)
+
 
 func load_keybinds():
 	for key in instance.get_section_keys(SEC_KEY_BINDS):
@@ -176,4 +220,11 @@ func load_keybinds():
 			new_key.keycode = bind
 			InputMap.action_add_event(key, new_key)
 	
-	print("(SettingsManager): Keybinds loaded")
+	for bind_id in instance.get_section_keys(SEC_CONTROLLER_BINDS):
+		for bind in get_controller_bind(bind_id):
+			var new_key = InputEventJoypadButton.new()
+			new_key.button_index = bind
+			
+			InputMap.action_add_event(bind_id, new_key)
+	
+	print("(SettingsManager): Key and Controller binds loaded")

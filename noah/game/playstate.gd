@@ -162,7 +162,7 @@ func _process(delta) -> void:
 	if get_tree():
 		get_tree().call_group(&"note", &"update")
 	
-	if Input.is_action_just_pressed(&"menu_cancel") or Input.is_action_just_pressed(&"menu_accept"):
+	if Input.is_action_just_pressed(&"menu_pause"):
 		Global.manual_pause = true
 		pause()
 	
