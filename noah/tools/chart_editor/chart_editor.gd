@@ -1474,7 +1474,7 @@ func file_button_item_pressed(id):
 				reader.close()
 				load_song(temp_song, misc_data.get('chart_keys')[0])
 			
-			file_dialog.files_selected.connect(load_zip)
+			file_dialog.file_selected.connect(load_zip)
 		20: #Export ZIP
 			var file_dialog: FileDialog = FileDialog.new()
 			file_dialog.filters = PackedStringArray(["*.zip"])
