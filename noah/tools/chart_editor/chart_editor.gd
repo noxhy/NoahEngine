@@ -355,7 +355,7 @@ func _process(delta: float) -> void:
 	if song_speed != 1:
 		%"Lower UI".get_node("%Current Time Label").text += str(" (", song_speed, "x)")
 	
-	if ChartManager.song:
+	if ChartManager.song and %Instrumental.stream:
 		%"Lower UI".get_node("%Time Left Label").text = "-" + Global.format_time(%Instrumental.stream.get_length() - song_position)
 	else:
 		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
@@ -1406,6 +1406,9 @@ func file_button_item_pressed(id):
 			file_dialog.close_requested.connect(file_dialog.queue_free)
 			file_dialog.gui_focus_changed.connect(self._on_gui_focus_changed)
 			file_dialog.theme = TOOL_THEME
+			file_dialog.use_native_dialog = true
+			file_dialog.mode_overrides_title = false
+			file_dialog.title = 'Load a Song Zip'
 			
 			add_child(file_dialog)
 			file_dialog.popup()
@@ -1426,7 +1429,7 @@ func file_button_item_pressed(id):
 				
 				var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
 				
-				for key: String in misc_data.get('chart_keys'):
+				for key: String in misc_data.get('chart_keys', []):
 					var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
 					var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
 					ResourceSaver.save(chart, ch_path)
@@ -1449,7 +1452,7 @@ func file_button_item_pressed(id):
 				
 				var vocal_paths: Array[String] = []
 				var idx: int = 0
-				for key: String in misc_data.get('vocal_keys'):
+				for key: String in misc_data.get('vocal_keys', []):
 					var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
 					
 					var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
@@ -1474,12 +1477,15 @@ func file_button_item_pressed(id):
 				reader.close()
 				load_song(temp_song, misc_data.get('chart_keys')[0])
 			
-			file_dialog.files_selected.connect(load_zip)
+			file_dialog.file_selected.connect(load_zip)
 		20: #Export ZIP
 			var file_dialog: FileDialog = FileDialog.new()
 			file_dialog.filters = PackedStringArray(["*.zip"])
 			file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+			file_dialog.use_native_dialog = true
+			file_dialog.mode_overrides_title = false
+			file_dialog.title = 'Export a Song Zip'
 			
 			file_dialog.about_to_popup.connect(self.open_popup)
 			file_dialog.close_requested.connect(self.close_popup)
@@ -1502,10 +1508,11 @@ func file_button_item_pressed(id):
 				zip.open(path)
 				
 				var inst_path: String = ChartManager.song.instrumental
-				if inst_path.begins_with('uid'):
-					inst_path = ResourceUID.uid_to_path(inst_path)
-				
-				ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
+				if not inst_path.is_empty():
+					if inst_path.begins_with('uid'):
+						inst_path = ResourceUID.uid_to_path(inst_path)
+					
+					ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
 				
 				var idx: int = 0
 				for vocal_path: String in ChartManager.song.vocals:
@@ -1537,7 +1544,7 @@ func file_button_item_pressed(id):
 				zip.close()
 			
 			file_dialog.file_selected.connect(export_zip)
-		0:
+		0: # make a new song
 			can_chart = false
 			var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
 			
@@ -1545,7 +1552,7 @@ func file_button_item_pressed(id):
 			new_file_popup_instance.popup()
 			new_file_popup_instance.connect("file_created", self.new_file)
 			new_file_popup_instance.connect("close_requested", self.close_popup)
-			new_file_popup_instance.connect(&"guip_focus_changed", self._on_gui_focus_changed)
+			new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		1:

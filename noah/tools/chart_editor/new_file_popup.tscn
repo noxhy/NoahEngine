@@ -217,7 +217,7 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://assets/songs/playable songs/"
+text = "res://"
 placeholder_text = "Export Location"
 editable = false
 
@@ -237,6 +237,10 @@ alignment = 1
 layout_mode = 2
 text = "Create New Song"
 
+[node name="Dummy Button" type="Button" parent="FlowContainer/VBoxContainer/HBoxContainer" unique_id=300108460]
+layout_mode = 2
+text = "Create Dummy Song"
+
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="dir_selected" from="SaveFolderDialog" to="." method="_on_save_folder_dialog_dir_selected"]
 [connection signal="gui_focus_changed" from="SaveFolderDialog" to="." method="file_dailog_gui_focus_changed"]
@@ -248,3 +252,4 @@ text = "Create New Song"
 [connection signal="gui_focus_changed" from="FlowContainer/Audio Files/HBoxContainer3/Inst File Dialog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="pressed" from="FlowContainer/VBoxContainer/Export Location/Button" to="." method="_on_export_button_pressed"]
 [connection signal="pressed" from="FlowContainer/VBoxContainer/HBoxContainer/Create Button" to="." method="_on_create_button_pressed"]
+[connection signal="pressed" from="FlowContainer/VBoxContainer/HBoxContainer/Dummy Button" to="." method="_on_dummy_button_pressed"]
