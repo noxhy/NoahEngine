@@ -1552,7 +1552,7 @@ func file_button_item_pressed(id):
 			new_file_popup_instance.popup()
 			new_file_popup_instance.connect("file_created", self.new_file)
 			new_file_popup_instance.connect("close_requested", self.close_popup)
-			new_file_popup_instance.connect(&"guip_focus_changed", self._on_gui_focus_changed)
+			new_file_popup_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		1:
