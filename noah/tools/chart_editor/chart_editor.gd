@@ -212,7 +212,9 @@ func _ready() -> void:
 	key_event.keycode = KEY_EQUAL
 	key_event.ctrl_pressed = true
 	key_event.command_or_control_autoremap = true
-	shortcut.events = [key_event]
+	var key_event_2 = InputEventKey.new()
+	key_event_2.keycode = KEY_Z
+	shortcut.events = [key_event, key_event_2]
 	%"Upper UI".get_node("%View Button").get_popup().set_item_shortcut(
 		%"Upper UI".get_node("%View Button").get_popup().get_item_index(3), shortcut)
 	
@@ -221,7 +223,9 @@ func _ready() -> void:
 	key_event.keycode = KEY_MINUS
 	key_event.ctrl_pressed = true
 	key_event.command_or_control_autoremap = true
-	shortcut.events = [key_event]
+	key_event_2 = InputEventKey.new()
+	key_event_2.keycode = KEY_X
+	shortcut.events = [key_event, key_event_2]
 	%"Upper UI".get_node("%View Button").get_popup().set_item_shortcut(
 		%"Upper UI".get_node("%View Button").get_popup().get_item_index(4), shortcut)
 	
@@ -566,8 +570,9 @@ func _process(delta: float) -> void:
 			
 			if (L == R + 1):
 				L -= 1
+			
 			L = max(0, L)
-			add_action("Selected Area", self.select_area.bind(L, R, lane_a, lane_b), self.deselect_all)
+			add_action("Selected Area", self.select_area.bind(L, R, lane_a, lane_b), self.set.bind(&"selected_notes", self.selected_notes))
 		
 		if moving_notes:
 			add_action("Moved Note(s)", self.move_selection.bind(moved_time_distance, moved_lane_distance),
