@@ -30,7 +30,9 @@ var JOY_BUTTON_NAMES: Dictionary = {
 	JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
 	JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
 	JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
-	JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right"
+	JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right",
+	(JoyAxis.JOY_AXIS_TRIGGER_LEFT + 100): "LT",
+	(JoyAxis.JOY_AXIS_TRIGGER_RIGHT + 100): "LR"
 }
 
 var instance: ConfigFile
@@ -221,9 +223,14 @@ func load_keybinds():
 			InputMap.action_add_event(key, new_key)
 	
 	for bind_id in instance.get_section_keys(SEC_CONTROLLER_BINDS):
+		var new_key: InputEvent
 		for bind in get_controller_bind(bind_id):
-			var new_key = InputEventJoypadButton.new()
-			new_key.button_index = bind
+			if bind >= 100:
+				new_key = InputEventJoypadMotion.new()
+				new_key.axis = bind - 100
+			else:
+				new_key = InputEventJoypadButton.new()
+				new_key.button_index = bind
 			
 			InputMap.action_add_event(bind_id, new_key)
 	

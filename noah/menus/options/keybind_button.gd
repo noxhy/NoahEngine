@@ -36,6 +36,14 @@ func _input(event):
 						update_text()
 						self.button_pressed = false
 						SoundManager.accept.play()
+				elif event is InputEventJoypadMotion:
+					checking = false
+					if event.axis == JoyAxis.JOY_AXIS_TRIGGER_LEFT or event.axis == JoyAxis.JOY_AXIS_TRIGGER_RIGHT:
+						SettingsManager.set_controller_bind(setting_name, event.axis + 100, index)
+						SettingsManager.flush()
+						update_text()
+						self.button_pressed = false
+						SoundManager.accept.play()
 
 
 func _on_toggled(button_pressed):
