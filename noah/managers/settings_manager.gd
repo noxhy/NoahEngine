@@ -149,14 +149,23 @@ func get_default() -> ConfigFile:
 	
 	return temp_config
 
-func get_keybind(keybind_name: String) -> Array : 
-	return instance.get_value(SEC_KEY_BINDS, keybind_name, [])
+func get_keybind(keybind_name: String) -> Array:
+	var saved_binds: Array = instance.get_value(SEC_KEY_BINDS, keybind_name, [])
+	var default_binds: Array = _defaults.get(SEC_KEY_BINDS).get(keybind_name, [])
+	
+	if default_binds.size() != saved_binds.size():
+		saved_binds = saved_binds.slice(0, default_binds.size())
+		
+		if default_binds.size() > saved_binds.size():
+			saved_binds.append_array(default_binds.slice(saved_binds.size(), default_binds.size()))
+	
+	return saved_binds
 
 func set_keybind(keybind_name: String, keycode: int, index: int):
 	var new_keycodes = instance.get_value(SEC_KEY_BINDS, keybind_name)
 	new_keycodes[index] = keycode
 	
-	instance.set_value(SEC_KEY_BINDS,keybind_name,new_keycodes)
+	instance.set_value(SEC_KEY_BINDS, keybind_name, new_keycodes)
 
 func load_keybinds():
 	for key in instance.get_section_keys(SEC_KEY_BINDS):
@@ -166,5 +175,5 @@ func load_keybinds():
 			var new_key = InputEventKey.new()
 			new_key.keycode = bind
 			InputMap.action_add_event(key, new_key)
-		
+	
 	print("(SettingsManager): Keybinds loaded")

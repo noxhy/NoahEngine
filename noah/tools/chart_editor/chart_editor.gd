@@ -72,6 +72,7 @@ var event_nodes: Array = []
 var current_visible_events_L: int = -1
 var current_visible_events_R: int = -1
 
+var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var default_font: Font = ThemeDB.fallback_font
 var default_font_size: int = ThemeDB.fallback_font_size
 
@@ -1394,119 +1395,148 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 ## File button item pressed
 func file_button_item_pressed(id):
 	match id:
-		21:
-			const TEMP_PATH: String = 'user://temp_song'
+		21: # Load ZIP
+			var file_dialog: FileDialog = FileDialog.new()
+			file_dialog.filters = PackedStringArray(["*.zip"])
+			file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+			file_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 			
-			if not DirAccess.dir_exists_absolute(TEMP_PATH):
-				DirAccess.make_dir_absolute(TEMP_PATH)
+			file_dialog.about_to_popup.connect(self.open_popup)
+			file_dialog.close_requested.connect(self.close_popup)
+			file_dialog.close_requested.connect(file_dialog.queue_free)
+			file_dialog.gui_focus_changed.connect(self._on_gui_focus_changed)
+			file_dialog.theme = TOOL_THEME
 			
-			if not DirAccess.dir_exists_absolute(TEMP_PATH.path_join('charts')):
-				DirAccess.make_dir_absolute(TEMP_PATH.path_join('charts'))
+			add_child(file_dialog)
+			file_dialog.popup()
 			
-			var reader = ZIPReader.new()
-			reader.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
-			
-			var temp_song = Song.new()
-			
-			
-			var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
-			
-			for key: String in misc_data.get('chart_keys'):
-				var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
-				var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
-				ResourceSaver.save(chart, ch_path)
+			var load_zip = func(path: String) -> void:
+				const TEMP_PATH: String = 'user://temp_song'
 				
-				temp_song.difficulties.set(key, {
-					"chart": ch_path
-				})
+				if not DirAccess.dir_exists_absolute(TEMP_PATH):
+					DirAccess.make_dir_absolute(TEMP_PATH)
 				
-			
-			
-			var inst_buffer = reader.read_file('Inst.' + misc_data.get('inst_key', 'ogg'))
-			var inst = SoundManager.get_stream_from_buffer(inst_buffer, misc_data.get('inst_key', 'ogg'))
-			
-			if inst:
-				var inst_path = TEMP_PATH.path_join('inst.' + misc_data.get('inst_key', 'ogg'))
-				var file = FileAccess.open(inst_path, FileAccess.WRITE)
-				file.store_buffer(inst_buffer)
-				file.close()
-				temp_song.instrumental = inst_path
-			
-			
-			var vocal_paths: Array[String] = []
-			var idx: int = 0
-			for key: String in misc_data.get('vocal_keys'):
-				var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
+				if not DirAccess.dir_exists_absolute(TEMP_PATH.path_join('charts')):
+					DirAccess.make_dir_absolute(TEMP_PATH.path_join('charts'))
 				
-				var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
+				var reader = ZIPReader.new()
+				reader.open(path)
 				
-				if stream:
-					var vocals_path = TEMP_PATH.path_join('Voices' + str(idx) + '.' + key)
-					var file = FileAccess.open(vocals_path, FileAccess.WRITE)
-					file.store_buffer(buffer)
+				var temp_song = Song.new()
+				
+				var misc_data = ZipTools.read_dict_from_zip(reader, 'misc_data.json')
+				
+				for key: String in misc_data.get('chart_keys'):
+					var chart = ZipTools.read_resource_from_zip(reader, 'charts/' + key + '.res')
+					var ch_path = TEMP_PATH.path_join('charts/' + key + '.res')
+					ResourceSaver.save(chart, ch_path)
+					
+					temp_song.difficulties.set(key, {
+						"chart": ch_path
+					})
+					
+				
+				var inst_buffer = reader.read_file('Inst.' + misc_data.get('inst_key', 'ogg'))
+				var inst = SoundManager.get_stream_from_buffer(inst_buffer, misc_data.get('inst_key', 'ogg'))
+				
+				if inst:
+					var inst_path = TEMP_PATH.path_join('inst.' + misc_data.get('inst_key', 'ogg'))
+					var file = FileAccess.open(inst_path, FileAccess.WRITE)
+					file.store_buffer(inst_buffer)
 					file.close()
-					
-					vocal_paths.append(vocals_path)
-					
-				idx += 1
-			
-			temp_song.vocals = vocal_paths
-			
-			temp_song.artist = misc_data.get('artist', 'unknown')
-			temp_song.charter = misc_data.get('charter', 'unknown')
-			temp_song.tempo = misc_data.get('tempo', 100)
-			temp_song.title = misc_data.get('title', 'unknown')
-			
-			reader.close()
-			
-			load_song(temp_song, misc_data.get('chart_keys')[0])
-			
-		20:
-			if not ChartManager.song:
-				return
-			
-			var vocal_keys:Array = []
-			var chart_keys:Array = []
-			var misc_data:Dictionary = {}
-			
-			var zip = ZIPPacker.new()
-			zip.open(OS.get_system_dir(OS.SYSTEM_DIR_DESKTOP).path_join('song.zip'))
-			
-			var inst_path: String = ChartManager.song.instrumental
-			if inst_path.begins_with('uid'):
-				inst_path = ResourceUID.uid_to_path(inst_path)
-			
-			ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
-			
-			var idx: int = 0
-			for vocal_path: String in ChartManager.song.vocals:
-				if vocal_path.begins_with('uid'):
-					vocal_path = ResourceUID.uid_to_path(vocal_path)
+					temp_song.instrumental = inst_path
 				
-				vocal_keys.append(vocal_path.get_extension())
-				ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
-				idx += 1
-			
-			for diff in ChartManager.song.difficulties:
-				var chart = ChartManager.song.difficulties.get(diff).get('chart')
-				if chart:
-					chart_keys.append(diff)
-					ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
 				
+				var vocal_paths: Array[String] = []
+				var idx: int = 0
+				for key: String in misc_data.get('vocal_keys'):
+					var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
+					
+					var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
+					
+					if stream:
+						var vocals_path = TEMP_PATH.path_join('Voices' + str(idx) + '.' + key)
+						var file = FileAccess.open(vocals_path, FileAccess.WRITE)
+						file.store_buffer(buffer)
+						file.close()
+						
+						vocal_paths.append(vocals_path)
+					
+					idx += 1
+				
+				temp_song.vocals = vocal_paths
+				
+				temp_song.artist = misc_data.get('artist', 'unknown')
+				temp_song.charter = misc_data.get('charter', 'unknown')
+				temp_song.tempo = misc_data.get('tempo', 60)
+				temp_song.title = misc_data.get('title', 'unknown')
+				
+				reader.close()
+				load_song(temp_song, misc_data.get('chart_keys')[0])
 			
-			misc_data.set('artist', ChartManager.song.artist)
-			misc_data.set('charter', ChartManager.song.charter)
-			misc_data.set('title', ChartManager.song.title)
-			misc_data.set('tempo', ChartManager.song.tempo)
-			misc_data.set('vocal_keys', vocal_keys)
-			misc_data.set('chart_keys', chart_keys)
-			misc_data.set('inst_key', inst_path.get_extension())
+			file_dialog.files_selected.connect(load_zip)
+		20: #Export ZIP
+			var file_dialog: FileDialog = FileDialog.new()
+			file_dialog.filters = PackedStringArray(["*.zip"])
+			file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 			
+			file_dialog.about_to_popup.connect(self.open_popup)
+			file_dialog.close_requested.connect(self.close_popup)
+			file_dialog.close_requested.connect(file_dialog.queue_free)
+			file_dialog.gui_focus_changed.connect(self._on_gui_focus_changed)
+			file_dialog.theme = TOOL_THEME
 			
-			ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
+			add_child(file_dialog)
+			file_dialog.popup()
 			
-			zip.close()
+			var export_zip = func(path: String) -> void:
+				if not ChartManager.song:
+					return
+				
+				var vocal_keys:Array = []
+				var chart_keys:Array = []
+				var misc_data:Dictionary = {}
+				
+				var zip = ZIPPacker.new()
+				zip.open(path)
+				
+				var inst_path: String = ChartManager.song.instrumental
+				if inst_path.begins_with('uid'):
+					inst_path = ResourceUID.uid_to_path(inst_path)
+				
+				ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
+				
+				var idx: int = 0
+				for vocal_path: String in ChartManager.song.vocals:
+					if vocal_path.begins_with('uid'):
+						vocal_path = ResourceUID.uid_to_path(vocal_path)
+					
+					vocal_keys.append(vocal_path.get_extension())
+					ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
+					idx += 1
+				
+				for diff in ChartManager.song.difficulties:
+					var chart = ChartManager.song.difficulties.get(diff).get('chart')
+					if chart:
+						chart_keys.append(diff)
+						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
+					
+				
+				misc_data.set('artist', ChartManager.song.artist)
+				misc_data.set('charter', ChartManager.song.charter)
+				misc_data.set('title', ChartManager.song.title)
+				misc_data.set('tempo', ChartManager.song.tempo)
+				misc_data.set('vocal_keys', vocal_keys)
+				misc_data.set('chart_keys', chart_keys)
+				misc_data.set('inst_key', inst_path.get_extension())
+				
+				
+				ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
+				
+				zip.close()
 			
+			file_dialog.file_selected.connect(export_zip)
 		0:
 			can_chart = false
 			var new_file_popup_instance = NEW_FILE_POPUP_PRELOAD.instantiate()
@@ -1808,6 +1838,11 @@ func test_button_item_pressed(id):
 
 func disable_charting():
 	can_chart = false
+
+
+func open_popup():
+	can_chart = false
+	%"Open Window".play()
 
 
 func close_popup():

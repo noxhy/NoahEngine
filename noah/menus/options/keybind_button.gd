@@ -17,7 +17,18 @@ func _input(event):
 				checking = false
 				SettingsManager.set_keybind(setting_name, event.keycode, index)
 				SettingsManager.flush()
-				self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
+				self.text = OS.get_keycode_string(event.keycode)
+				self.button_pressed = false
+				SoundManager.accept.play()
+		elif event is InputEventJoypadButton:
+			if event.is_pressed():
+				if event.button_index == JOY_BUTTON_BACK:
+					event.button_index = JOY_BUTTON_INVALID
+				
+				checking = false
+				SettingsManager.set_keybind(setting_name, event.button_index, index)
+				SettingsManager.flush()
+				self.text = event.as_text()
 				self.button_pressed = false
 				SoundManager.accept.play()
 
