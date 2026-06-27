@@ -1406,6 +1406,9 @@ func file_button_item_pressed(id):
 			file_dialog.close_requested.connect(file_dialog.queue_free)
 			file_dialog.gui_focus_changed.connect(self._on_gui_focus_changed)
 			file_dialog.theme = TOOL_THEME
+			file_dialog.use_native_dialog = true
+			file_dialog.mode_overrides_title = false
+			file_dialog.title = 'Load a Song Zip'
 			
 			add_child(file_dialog)
 			file_dialog.popup()
@@ -1480,6 +1483,9 @@ func file_button_item_pressed(id):
 			file_dialog.filters = PackedStringArray(["*.zip"])
 			file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 			file_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+			file_dialog.use_native_dialog = true
+			file_dialog.mode_overrides_title = false
+			file_dialog.title = 'Export a Song Zip'
 			
 			file_dialog.about_to_popup.connect(self.open_popup)
 			file_dialog.close_requested.connect(self.close_popup)
