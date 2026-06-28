@@ -2,6 +2,8 @@
 extends Resource
 class_name Chart
 
+const CURRENT_VERSION: int = 1
+
 enum ChartFormat {
 	VSLICE = 0,
 	PSYCH = 1,
@@ -32,6 +34,13 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 	"tempos": {0.0: 60},
 	"meters": {0.0: [4, 4]},
 }
+
+#this isnt a "great" way to handle versions but i cant justify doing anything more elaborate
+var version: int :
+	get():
+		return chart_data.get('version', 0)
+	set(v):
+		chart_data.set('version', v)
 
 func get_notes_data() -> Array: return chart_data.get("notes")
 func get_events_data() -> Array: return chart_data.get("events")
@@ -100,11 +109,13 @@ func get_tempo_time_at(time: float) -> float:
 static func load(path:String) -> Chart:
 	if path.begins_with('uid'):
 		path = ResourceUID.uid_to_path(path)
-	
+
 	if path.get_extension() == 'res' or path.get_extension() == 'tres': ##probably a chart already
 		var chart_resource = load(path)
+		
 		if chart_resource and chart_resource is Chart:
-			return chart_resource
+			return update_chart(chart_resource)
+			
 		return Chart.new()
 	elif path.get_extension() == 'json':
 		var file = FileAccess.open(path, FileAccess.READ)
@@ -198,6 +209,29 @@ static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 static func sort_notes(a, b) -> bool:
 	return a[0] < b[0]
 
+
+static func update_chart(chart: Chart) -> Chart:
+	
+	if chart.version < CURRENT_VERSION:
+		
+		if chart.version == 0: #old chart
+			print('updating legacy chart')
+			var meters = chart.get_meters_data()
+			
+			for time in meters:
+				var meter_data = meters.get(time)
+				if meter_data[1] == int(meter_data[0] * 4):
+					meter_data[1] /= meter_data[0]
+			
+			for note in chart.get_notes_data():
+				note[3] = str(note[3])
+			
+			chart.version = CURRENT_VERSION
+		
+		
+		ResourceSaver.save(chart, chart.resource_path)
+	
+	return chart
 
 static func convert_psych(data:Dictionary,events:Array = [], v1:bool = true) -> Chart:
 	var chart = Chart.new()
