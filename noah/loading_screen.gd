@@ -10,6 +10,7 @@ var scene_load_status: float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	assert(ResourceLoader.exists(scene), '%s could not be loaded.' % scene)
+	
 	ResourceLoader.load_threaded_request(scene)
 	get_window().content_scale_size = Vector2(
 		ProjectSettings.get_setting("display/window/size/viewport_width"),

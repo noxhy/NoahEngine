@@ -58,7 +58,12 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true): 
+func change_scene_to(path: String, transition: Variant = &"down", show_loading_screen: bool = true) -> void:
+	
+	if not ResourceLoader.exists(path):
+		printerr("Cannot switch to '%s' as it does not exist" % path)
+		return
+	
 	transitioning = true
 	
 	if transition: 
@@ -67,6 +72,7 @@ func change_scene_to(path: String, transition: Variant = &"down", show_loading_s
 	
 	get_tree().paused = false
 	LoadingScreen.scene = path
+	
 	
 	if show_loading_screen: 
 		get_tree().change_scene_to_packed(loading_screen)
