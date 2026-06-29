@@ -152,6 +152,7 @@ func _on_run_mod_pressed() -> void:
 	if ResourceLoader.exists(init_path):
 		print("Running init at: ", init_path)
 		var init_res = load(init_path)
-		# You have to keep the script alive for it to keep changes to ProjectSettings.
-		@warning_ignore("unused_variable")
-		var init_instance = init_res.new()
+		if init_res:
+			# You have to keep the script alive for it to keep changes to ProjectSettings.
+			@warning_ignore("unused_variable")
+			var init_instance = init_res.new()
