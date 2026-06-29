@@ -1139,8 +1139,8 @@ func find_note(lane: int, time: float) -> int:
 	return -1
 
 func find_event(event: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.1)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.1)
+	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - 0.00001)
+	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + 0.00001)
 	
 	if (L == -1 or R == -1):
 		return -1
