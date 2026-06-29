@@ -136,12 +136,12 @@ func _on_run_mod_pressed() -> void:
 				mod_path = mod_dir.path_join(file)
 				init_path = "res://".path_join(mod_path.get_file().get_basename())
 		
-		var rsp = ProjectSettings.load_resource_pack(mod_path, false)
+		var rsp = ProjectSettings.load_resource_pack(mod_path, true)
 		if rsp:
 			print("Loading mod: ", mod_data[mod_dir].get("name", "No name found."))
-			init_path = init_path.path_join("init.gdc")
+			init_path = init_path.path_join("init.gd")
 	
-	if FileAccess.file_exists(init_path):
+	if ResourceLoader.exists(init_path):
 		print("Running init at: ", init_path)
 		var init_res = load(init_path)
 		# You have to keep the script alive for it to keep changes to ProjectSettings.
