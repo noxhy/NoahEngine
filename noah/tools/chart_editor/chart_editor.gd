@@ -31,6 +31,9 @@ static var song_position: float = 0.0
 
 @onready var undo_redo: UndoRedo = UndoRedo.new()
 
+@onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
+@onready var lower_ui: Control = %"Lower UI"
+
 ## Chart Variables
 var backup_chart: Chart = null
 # So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
@@ -76,8 +79,10 @@ var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var default_font: Font = ThemeDB.fallback_font
 var default_font_size: int = ThemeDB.fallback_font_size
 
-
-@onready var upper_ui: Control = %"Upper UI"
+func make_shortcut_quick(events: Array) -> Shortcut:
+	var shortcut: Shortcut = Shortcut.new()
+	shortcut.events = events
+	return shortcut
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -111,142 +116,6 @@ func _ready() -> void:
 	
 	## Initializing Popup Signals
 	
-	var shortcut: Shortcut = Shortcut.new()
-	var key_event: InputEventKey
-	shortcut.events = InputMap.action_get_events(&"save")
-	%"Upper UI".get_node("%File Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%File Button").get_popup().get_item_index(2), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_undo")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(0), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_redo")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(1), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_cut")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(3), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_copy")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(4), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_paste")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(5), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_text_delete_word")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(6), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"flip_notes")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(8), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"ui_text_select_all")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(10), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"deselect")
-	%"Upper UI".get_node("%Edit Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Edit Button").get_popup().get_item_index(11), shortcut)
-	
-	shortcut = Shortcut.new()
-	shortcut.events = InputMap.action_get_events(&"menu_accept")
-	%"Upper UI".get_node("%Audio Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(0), shortcut)
-	
-	%"Upper UI".get_node("%Audio Button").get_popup().connect(&"id_pressed", self.audio_button_item_pressed)
-	%"Upper UI".get_node("%Audio Button").get_popup().set_item_checked(
-		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(7),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
-	%"Upper UI".get_node("%Audio Button").get_popup().set_item_checked(
-		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(8),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
-	%"Upper UI".get_node("%Audio Button").get_popup().set_hide_on_checkable_item_selection(false)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_EQUAL
-	key_event.shift_pressed = true
-	shortcut.events = [key_event]
-	%"Upper UI".get_node("%Audio Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(4), shortcut)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_MINUS
-	key_event.shift_pressed = true
-	shortcut.events = [key_event]
-	%"Upper UI".get_node("%Audio Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(5), shortcut)
-	
-	%"Upper UI".get_node("%View Button").get_popup().connect(&"id_pressed", self.view_button_item_pressed)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_TAB
-	shortcut.events = [key_event]
-	%"Upper UI".get_node("%View Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%View Button").get_popup().get_item_index(0), shortcut)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_EQUAL
-	key_event.ctrl_pressed = true
-	key_event.command_or_control_autoremap = true
-	var key_event_2 = InputEventKey.new()
-	key_event_2.keycode = KEY_Z
-	shortcut.events = [key_event, key_event_2]
-	%"Upper UI".get_node("%View Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%View Button").get_popup().get_item_index(3), shortcut)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_MINUS
-	key_event.ctrl_pressed = true
-	key_event.command_or_control_autoremap = true
-	key_event_2 = InputEventKey.new()
-	key_event_2.keycode = KEY_X
-	shortcut.events = [key_event, key_event_2]
-	%"Upper UI".get_node("%View Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%View Button").get_popup().get_item_index(4), shortcut)
-	
-	%"Upper UI".get_node("%Test Button").get_popup().connect(&"id_pressed", self.test_button_item_pressed)
-	%"Upper UI".get_node("%Test Button").get_popup().set_item_checked(
-		%"Upper UI".get_node("%Test Button").get_popup().get_item_index(3),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
-	%"Upper UI".get_node("%Test Button").get_popup().set_hide_on_checkable_item_selection(false)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_ENTER
-	shortcut.events = [key_event]
-	%"Upper UI".get_node("%Test Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Test Button").get_popup().get_item_index(0), shortcut)
-	
-	shortcut = Shortcut.new()
-	key_event = InputEventKey.new()
-	key_event.keycode = KEY_ENTER
-	key_event.shift_pressed = true
-	shortcut.events = [key_event]
-	%"Upper UI".get_node("%Test Button").get_popup().set_item_shortcut(
-		%"Upper UI".get_node("%Test Button").get_popup().get_item_index(1), shortcut)
-	
-	%"Upper UI".get_node("%Window Button").get_popup().connect(&"id_pressed", self.window_button_item_pressed)
-	%"Upper UI".get_node("%Window Button").get_popup().set_hide_on_checkable_item_selection(false)
-	
 	%"Lower UI".get_node("%Play Button").connect(&"toggled", self._on_play_button_toggled)
 	%"Lower UI".get_node("%Skip to Beginning").connect(&"pressed", self._on_skip_to_beginning_pressed)
 	%"Lower UI".get_node("%Skip to End").connect(&"pressed", self._on_skip_to_end_pressed)
@@ -254,27 +123,6 @@ func _ready() -> void:
 	%"Lower UI".get_node("%Skip Forward").connect(&"pressed", self._on_skip_forward_pressed)
 	%"Lower UI".get_node("%Difficulty Button").connect(&"item_selected", self._on_difficulty_button_item_selected)
 	%"Lower UI".get_node("%Chart Snap").connect(&"value_changed", self._on_chart_snap_value_changed)
-	
-	%"Upper UI".get_node("%Export External Popup").connect(&"file_selected", self._on_export_external_popup_file_selected)
-	
-	%"Upper UI".get_node("%Note Skin Window").connect(&"file_selected", self._on_note_skin_window_file_selected)
-	
-	%"Upper UI".get_node("%History Window").connect(&"close_requested", self._on_history_window_close_requested)
-	
-	%"Upper UI".get_node("%Metadata Window").connect(&"add_time_change", self._on_metadata_window_add_time_change)
-	%"Upper UI".get_node("%Metadata Window").connect(&"remove_time_change", self._on_metadata_window_remove_time_change)
-	%"Upper UI".get_node("%Metadata Window").connect(&"selected_time_change", self._on_metadata_window_selected_time_change)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_icon_texture", self._on_metadata_window_updated_icon_texture)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_scroll_speed", self._on_metadata_window_updated_scroll_speed)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_artist", self._on_metadata_window_updated_song_artist)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_charter", self._on_metadata_window_updated_song_charter)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_name", self._on_metadata_window_updated_song_name)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_song_scene", self._on_metadata_window_updated_song_scene)
-	%"Upper UI".get_node("%Metadata Window").connect(&"updated_starting_tempo", self._on_metadata_window_updated_starting_tempo)
-	%"Upper UI".get_node("%Metadata Window").connect(&"close_requested", self._on_metadata_window_close_requested)
-	
-	%"Upper UI".get_node("%Note Type Window").connect(&"selected_note_type", self.set_note_type)
-	%"Upper UI".get_node("%Note Type Window").connect(&"close_requested", self._on_note_type_window_close_requested)
 	
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
 
@@ -1282,29 +1130,6 @@ func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	
 	return found
 
-## Binary searches for note nodes
-func bsearch_left_range_note(value_set: Array, left_range: float) -> int:
-	var length: int = value_set.size()
-	if (length == 0):
-		return -1
-	if (value_set[length - 1].time < left_range):
-		return -1
-	
-	var low: int = 0
-	var high: int = length - 1
-	var found: int = -1
-	
-	while (low <= high):
-		var mid: int = (low + high) / 2
-		
-		if (value_set[mid].time >= left_range):
-			found = mid
-			high = mid - 1
-		else:
-			low = mid + 1
-	
-	return found
-
 func is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)
 
@@ -1397,35 +1222,16 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 ## Edit button item pressed
 func edit_button_item_pressed(id):
 	match id:
-		0:
-			undo()
-		
-		1:
-			redo()
-		
-		3:
-			cut()
-		
-		4:
-			copy()
-		
-		5:
-			paste()
-		
-		6:
-			delete_stacked_notes()
-		
-		8:
-			do_flip()
-		
-		10:
-			select_all()
-		
-		11:
-			deselect_all()
-		
-		_:
-			print("id: ", id)
+		0:  undo()
+		1:  redo()
+		3:  cut()
+		4:  copy()
+		5:  paste()
+		6:  delete_stacked_notes()
+		8:  do_flip()
+		10: select_all()
+		11: deselect_all()
+		_:  print("id: ", id)
 
 ## Audio button item pressed
 func audio_button_item_pressed(id):

@@ -1,4 +1,5 @@
 extends HBoxContainer
+class_name ChartEditorUpperUI
 
 var chart_editor: ChartEditor
 
@@ -7,7 +8,18 @@ var chart_editor: ChartEditor
 @onready var view_button: MenuButton = %"View Button"
 @onready var audio_button: MenuButton = %"Audio Button"
 @onready var test_button: MenuButton = %"Test Button"
+@onready var window_button: MenuButton = %"Window Button"
+
 @onready var help_button: MenuButton = %"Help Button"
+
+@onready var export_external_popup: FileDialog = %"Export External Popup"
+@onready var note_skin_window: FileDialog = %"Note Skin Window"
+@onready var audios_window: Window = %"Audios Window"
+@onready var metadata_window: Window = %"Metadata Window"
+@onready var note_type_window: Window = %"Note Type Window"
+@onready var history_window: Window = %"History Window"
+
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -21,6 +33,156 @@ func _ready() -> void:
 	
 	edit_button.get_popup().id_pressed.connect(chart_editor.edit_button_item_pressed)
 	edit_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	audio_button.get_popup().connect(&"id_pressed", chart_editor.audio_button_item_pressed)
+	audio_button.get_popup().set_item_checked(
+		audio_button.get_popup().get_item_index(7),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+		
+	audio_button.get_popup().set_item_checked(
+		audio_button.get_popup().get_item_index(8),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	
+	view_button.get_popup().connect(&"id_pressed", chart_editor.view_button_item_pressed)
+	
+	test_button.get_popup().connect(&"id_pressed", chart_editor.test_button_item_pressed)
+	test_button.get_popup().set_item_checked(
+		test_button.get_popup().get_item_index(3),
+		SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+	test_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	
+	window_button.get_popup().connect(&"id_pressed", chart_editor.window_button_item_pressed)
+	window_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	
+	#setup windows
+	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
+	
+	note_skin_window.connect(&"file_selected", chart_editor._on_note_skin_window_file_selected)
+	
+	history_window.connect(&"close_requested", chart_editor._on_history_window_close_requested)
+	
+	metadata_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
+	metadata_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
+	metadata_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
+	metadata_window.connect(&"updated_icon_texture", chart_editor._on_metadata_window_updated_icon_texture)
+	metadata_window.connect(&"updated_scroll_speed", chart_editor._on_metadata_window_updated_scroll_speed)
+	metadata_window.connect(&"updated_song_artist", chart_editor._on_metadata_window_updated_song_artist)
+	metadata_window.connect(&"updated_song_charter", chart_editor._on_metadata_window_updated_song_charter)
+	metadata_window.connect(&"updated_song_name", chart_editor._on_metadata_window_updated_song_name)
+	metadata_window.connect(&"updated_song_scene", chart_editor._on_metadata_window_updated_song_scene)
+	metadata_window.connect(&"updated_starting_tempo", chart_editor._on_metadata_window_updated_starting_tempo)
+	metadata_window.connect(&"close_requested", chart_editor._on_metadata_window_close_requested)
+	
+	note_type_window.connect(&"selected_note_type", chart_editor.set_note_type)
+	note_type_window.connect(&"close_requested", chart_editor._on_note_type_window_close_requested)
+	
+
+	
+	
+	
+	setup_shortcuts()
+
+
+func setup_shortcuts():
+	var shortcut:Shortcut
+	
+	# file buttons
+	file_button.get_popup().set_item_shortcut(
+		file_button.get_popup().get_item_index(2), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"save")))
+	
+	
+	# edit button
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(0), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_undo")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(1), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_redo")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(3), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_cut")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(4), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_copy")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(5), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_paste")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(6), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_text_delete_word")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(8), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"flip_notes")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(10), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_text_select_all")))
+	
+	edit_button.get_popup().set_item_shortcut(
+		edit_button.get_popup().get_item_index(11), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"deselect")))
+	
+	#audio button
+	audio_button.get_popup().set_item_shortcut(
+		audio_button.get_popup().get_item_index(0), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"menu_accept")))
+		
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_EQUAL
+	shortcut.events[0].shift_pressed = true
+	
+	audio_button.get_popup().set_item_shortcut(
+		audio_button.get_popup().get_item_index(4), shortcut)
+		
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_MINUS
+	shortcut.events[0].shift_pressed = true
+	
+	audio_button.get_popup().set_item_shortcut(
+		audio_button.get_popup().get_item_index(5), shortcut)
+		
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0] = KEY_TAB
+	
+	#view button
+	view_button.get_popup().set_item_shortcut(
+		view_button.get_popup().get_item_index(0), shortcut)
+		
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_EQUAL
+	shortcut.events[0].ctrl_pressed = true
+	shortcut.events[0].command_or_control_autoremap = true
+	
+	shortcut.events[1].keycode = KEY_Z
+	
+	view_button.get_popup().set_item_shortcut(
+		view_button.get_popup().get_item_index(3), shortcut)
+		
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
+	
+	shortcut.events[0].keycode = KEY_MINUS
+	shortcut.events[0].ctrl_pressed = true
+	shortcut.events[0].command_or_control_autoremap = true
+	
+	shortcut.events[1].keycode = KEY_X
+	
+	view_button.get_popup().set_item_shortcut(
+		view_button.get_popup().get_item_index(4), shortcut)
+		
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_ENTER
+
+	#test button
+	test_button.get_popup().set_item_shortcut(
+		test_button.get_popup().get_item_index(0), shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_ENTER
+	shortcut.events[0].shift_pressed = true
+	test_button.get_popup().set_item_shortcut(
+		test_button.get_popup().get_item_index(1), shortcut)
 	
 
 func file_button_item_pressed(id):
@@ -210,7 +372,7 @@ func file_button_item_pressed(id):
 			
 			add_child(convert_chart_popup_instance)
 			convert_chart_popup_instance.popup()
-			# convert_chart_popup_instance.connect("file_created", self._on_save_folder_dialog_dir_selected)
+			# convert_chart_popup_instance.connect("file_created", chart_editor._on_save_folder_dialog_dir_selected)
 			convert_chart_popup_instance.connect("file_created", chart_editor.new_file)
 			convert_chart_popup_instance.connect("close_requested", chart_editor.close_popup)
 			convert_chart_popup_instance.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
