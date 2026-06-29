@@ -22,7 +22,7 @@ var selected: int = -1
 func _ready() -> void:
 	load_mods()
 	if mod_data.size() == 1:
-		selected = 1
+		selected = 0
 		_on_run_mod_pressed()
 		return
 	
