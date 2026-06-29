@@ -55,7 +55,7 @@ var target_zoom: Vector2 = Vector2(1, 1)
 ## How quickly to move through the noise
 @export var shake_speed: float = 30.0
 ## Noise returns values in the range (-1, 1)
-## So this is how much to multiply the returned value by
+## [br][br]So this is how much to multiply the returned value by
 @export var shake_strength: float = 60.0
 ## The starting range of possible offsets using random values
 @export var random_shake_strength: float = 30.0
@@ -94,6 +94,7 @@ func _ready() -> void:
 		_position_3d = parent_3d.position
 		target_zoom = Vector2(parent_3d.fov, parent_3d.fov)
 
+## returns the actual camera node ([code]Camera2D[/code], [code]Camera3D[/code]) used by [code]this[/code]
 func get_direct() -> Variant:
 	if parent_2d: 
 		return parent_2d
@@ -260,6 +261,9 @@ func bump(strength: Variant) -> void:
 		else:
 			zoom += strength
 
+## Moves the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code]
+## [br][br]This method abides by the [member position_smoothing] and [member rotation_smoothing] settings.
+## [br][br]Check [method tween_to_marker] for eased movements
 func go_to_marker(marker: Variant) -> void:
 	if _marker_tween:
 		_marker_tween.kill()
@@ -276,7 +280,10 @@ func _reapply_smoothing_settings():
 	position_smoothing = _last_position_smoothing
 	rotation_smoothing = _last_rotation_smoothing
 	
-func tween_to_marker(marker: Variant, time: float, ease_type: String = '') -> void:
+## Tweens the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code] in the span of the [code]duration[/code]
+## [br][br]See [code]Global.string_to_ease[/code] for ease options
+## [br][br]This method ignores [member position_smoothing] and [member rotation_smoothing] 
+func tween_to_marker(marker: Variant, duration: float, ease_type: String = '') -> void:
 	
 	if _marker_tween:
 		_marker_tween.kill()
@@ -292,21 +299,27 @@ func tween_to_marker(marker: Variant, time: float, ease_type: String = '') -> vo
 	
 	_marker_tween = create_tween().set_trans(ease_info[0]).set_ease(ease_info[1])
 	
-	_marker_tween.tween_property(self, 'position', marker.global_position, time)
-	_marker_tween.tween_property(self, 'rotation', marker.global_rotation, time)
+	_marker_tween.tween_property(self, 'position', marker.global_position, duration)
+	_marker_tween.tween_property(self, 'rotation', marker.global_rotation, duration)
 	_marker_tween.finished.connect(_reapply_smoothing_settings)
 
 var _zoom_tween: Tween = null
-func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
+## Tweens the camera's [member zoom] to [code]new_zoom[/code] in the span of [code]duration[/code]
+## [br][br]See [code]Global.string_to_ease[/code] for ease options
+func tween_zoom(new_zoom: Vector2, duration: float, ease_type: String = ''):
 	
 	if _zoom_tween:
 		_zoom_tween.kill()
 		
-	_zoom_tween = create_tween().set_parallel().set_trans(trans).set_ease(ease_type)
+	var ease_info: Array = Global.string_to_ease(ease_type)
 	
-	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, speed)
-	_zoom_tween.tween_property(self, 'zoom', new_zoom, speed)
+	_zoom_tween = create_tween().set_parallel().set_trans(ease_info[0]).set_ease(ease_info[1])
+	
+	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, duration)
+	_zoom_tween.tween_property(self, 'zoom', new_zoom, duration)
 
+## Recreation of godot's internal method for [code]position_smoothing[/code].
+## [br][br]Used to give [code]Camera3D[/code] [member position_smoothing]
 func lerp_position(cur: Variant, intended: Variant, delta: float) -> Variant:
 	var c = position_smoothing_speed * delta
 	return ((intended - cur) * c) + cur

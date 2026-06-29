@@ -197,7 +197,7 @@ func string_to_ease(tween: String) -> Array:
 		"bouncein":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_IN]
 		
-		"bouncinout":
+		"bounceinout":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT]
 		
 		"bounceout":
