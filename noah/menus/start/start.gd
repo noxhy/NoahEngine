@@ -68,6 +68,7 @@ func load_mods() -> void:
 							mod_data[mod_dir] = data
 							mods.append(mod_dir)
 							print("Found metadata for: ", data.get("name"))
+						break
 	# Loading mods when testing
 	else:
 		print("Development Strategy")
@@ -135,6 +136,8 @@ func _on_run_mod_pressed() -> void:
 			if ["zip", "pck"].has(file.get_extension()):
 				mod_path = mod_dir.path_join(file)
 				init_path = "res://".path_join(mod_path.get_file().get_basename())
+			
+			break
 		
 		var rsp = ProjectSettings.load_resource_pack(mod_path, true)
 		if rsp:
