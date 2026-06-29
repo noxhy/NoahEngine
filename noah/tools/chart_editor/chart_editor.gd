@@ -33,6 +33,7 @@ static var song_position: float = 0.0
 
 @onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
 @onready var lower_ui: Control = %"Lower UI"
+@onready var instrumental: AudioStreamPlayer = %Instrumental
 
 ## Chart Variables
 var backup_chart: Chart = null
@@ -221,7 +222,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed(&"mouse_left"):
 		if !Input.is_action_pressed(&"control"):
-			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
+			if is_grid_focused(false):
 				if can_chart:
 					if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
 					and !current_focus_owner):
@@ -268,110 +269,104 @@ func _process(delta: float) -> void:
 				bounding_box = true
 				start_box = get_global_mouse_position()
 	
-	if Input.is_action_pressed(&"mouse_right"):
-		if !Input.is_action_pressed(&"control"):
-				if screen_mouse_position.y > 64 and screen_mouse_position.y < 640 and !current_focus_owner:
-					if can_chart:
-						if !Input.is_action_pressed("control"):
-							var lane: int = snapped_position.x - 1
+	if can_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_grid_focused():
+		var lane: int = snapped_position.x - 1
+		if hovered_note != -1:
+			var i: int = hovered_note
+			var note = ChartManager.chart.chart_data.notes[i]
+			var length: float = note[2]
+			var note_type = note[3]
+			
+			add_action("Removed Note", self.remove_note.bind(i),
+			self.place_note.bind(note[0], lane, length, note_type, true))
+			%"Note Remove".play()
+			
+			if selected_notes.has(i):
+				var j: int = selected_notes.find(i)
+				
+				selected_notes.remove_at(j)
+				selected_note_nodes.remove_at(j)
+				
+				if selected_notes.size() > 1:
+					var k: int = 0
+					for _i in range(selected_notes.size()):
+						if k >= j:
+							selected_notes[k] -= 1
+						k += 1
+			
+			hovered_note = -1
+			
+			auto_save()
+	
+	if Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control"):
+		if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
+			if !%Instrumental.playing:
+				if can_chart and !current_focus_owner:
+					## Song Position Slider
+					if grid_position.x < 1 and grid_position.x >= 0:
+						if Input.is_action_pressed(&"shift"):
+							var time: float = grid_position_to_time(snapped_position, true)
+							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+							time += ChartManager.chart.offset
+							start_offset = time - song_position
+						else:
+							var time: float = grid_position_to_time(grid_position)
+							time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+							time += ChartManager.chart.offset
+							start_offset = time - song_position
+						
+					elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
+						if placing_note:
+							var cursor_time = grid_position_to_time(snapped_position, true)
+							cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 							
-							if hovered_note != -1:
-								var i: int = hovered_note
-								var note = ChartManager.chart.chart_data.notes[i]
-								var length: float = note[2]
+							for i in selected_notes:
+								var note: Array = ChartManager.chart.get_notes_data()[i]
+								
+								var time: float = note[0]
+								var lane: int = note[1]
 								var note_type = note[3]
 								
-								add_action("Removed Note", self.remove_note.bind(i),
-								self.place_note.bind(note[0], lane, length, note_type, true))
-								%"Note Remove".play()
+								var distance = snappedf(clamp(cursor_time - time, 0.0, 16.0) / $Conductor.seconds_per_beat, 1.0 / chart_snap)
+								ChartManager.chart.chart_data.notes[i] = [time, lane, distance, note_type]
 								
-								if selected_notes.has(i):
-									var j: int = selected_notes.find(i)
-									
-									selected_notes.remove_at(j)
-									selected_note_nodes.remove_at(j)
-									
-									if selected_notes.size() > 1:
-										var k: int = 0
-										for _i in range(selected_notes.size()):
-											if k >= j:
-												selected_notes[k] -= 1
-											k += 1
-								
-								hovered_note = -1
+								changed_length = (distance > 0)
+								if changed_length:
+									if (note_nodes[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
+									note_nodes[i - current_visible_notes_L].length = distance
 								
 								auto_save()
-	
-	if Input.is_action_pressed(&"mouse_left"):
-		if !Input.is_action_pressed(&"control"):
-			if screen_mouse_position.y > 64 and screen_mouse_position.y < 640:
-				if !%Instrumental.playing:
-					if can_chart and !current_focus_owner:
-						## Song Position Slider
-						if grid_position.x < 1 and grid_position.x >= 0:
-							if Input.is_action_pressed(&"shift"):
-								var time: float = grid_position_to_time(snapped_position, true)
-								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-								time += ChartManager.chart.offset
-								start_offset = time - song_position
-							else:
-								var time: float = grid_position_to_time(grid_position)
-								time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-								time += ChartManager.chart.offset
-								start_offset = time - song_position
+					
+					if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
+						if moving_notes:
+							var cursor_time = grid_position_to_time(snapped_position, true)
+							cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+							var cursor_lane = snapped_position.x - 1
 							
-						elif ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
-							if placing_note:
-								var cursor_time = grid_position_to_time(snapped_position, true)
-								cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-								
-								for i in selected_notes:
-									var note: Array = ChartManager.chart.get_notes_data()[i]
-									
-									var time: float = note[0]
-									var lane: int = note[1]
-									var note_type = note[3]
-									
-									var distance = snappedf(clamp(cursor_time - time, 0.0, 16.0) / $Conductor.seconds_per_beat, 1.0 / chart_snap)
-									ChartManager.chart.chart_data.notes[i] = [time, lane, distance, note_type]
-									
-									changed_length = (distance > 0)
-									if changed_length:
-										if (note_nodes[i - current_visible_notes_L].length != distance): %"Note Stretch".play()
-										note_nodes[i - current_visible_notes_L].length = distance
+							var lane_distance = cursor_lane - start_lane
+							var time_distance = cursor_time - start_time
+							changed_length = true
+							
+							if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
+								if changed_length:
+									var j: int = 0
+									for i in selected_notes:
+										var node = selected_note_nodes[j]
+										var time: float = node.time
+										var lane: int = node.lane
+										
+										node.position = Vector2(
+											%Grid.get_real_position(Vector2(1.5 + node.lane + lane_distance, 0)).x,
+											time_to_y_position(node.time + time_distance) + %Grid.grid_size.y * %Grid.zoom.y / 2) + $"Grid Layer".offset
+										j += 1
 									
 									auto_save()
-						
-						if ((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count):
-							if moving_notes:
-								var cursor_time = grid_position_to_time(snapped_position, true)
-								cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-								var cursor_lane = snapped_position.x - 1
-								
-								var lane_distance = cursor_lane - start_lane
-								var time_distance = cursor_time - start_time
-								changed_length = true
-								
-								if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
-									if changed_length:
-										var j: int = 0
-										for i in selected_notes:
-											var node = selected_note_nodes[j]
-											var time: float = node.time
-											var lane: int = node.lane
-											
-											node.position = Vector2(
-												%Grid.get_real_position(Vector2(1.5 + node.lane + lane_distance, 0)).x,
-												time_to_y_position(node.time + time_distance) + %Grid.grid_size.y * %Grid.zoom.y / 2) + $"Grid Layer".offset
-											j += 1
-										
-										auto_save()
-										moved_time_distance = time_distance
-										moved_lane_distance = lane_distance
-										# start_time += time_distance
-										# start_lane += lane_distance
-										# min_lane = 0 + (start_lane - min_lane)
-										# max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
+									moved_time_distance = time_distance
+									moved_lane_distance = lane_distance
+									# start_time += time_distance
+									# start_lane += lane_distance
+									# min_lane = 0 + (start_lane - min_lane)
+									# max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
 	
 	if Input.is_action_just_released(&"mouse_left"):
 		if placing_note:
@@ -425,6 +420,14 @@ func _process(delta: float) -> void:
 	
 	queue_redraw()
 
+
+func is_grid_focused(check_control_focus: bool = true) -> bool:
+	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360)
+	
+	var mouse_over = screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
+	if check_control_focus:
+		return mouse_over and not current_focus_owner
+	return mouse_over
 
 func _draw() -> void:
 	var rect: Rect2
