@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_y1a63"]
 [ext_resource type="PackedScene" uid="uid://cdxtqaewsuba3" path="res://noah/tools/chart_editor/audios_window.tscn" id="2_esjoi"]
+[ext_resource type="Script" uid="uid://ci5vocm58ajmg" path="res://noah/tools/chart_editor/upper_ui.gd" id="2_pkb6e"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/history_window.tscn" id="3_xi38a"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/note_type_window.tscn" id="5_c03gx"]
@@ -13,6 +14,7 @@ offset_top = -360.0
 offset_right = 640.0
 offset_bottom = -327.0
 theme = ExtResource("1_y1a63")
+script = ExtResource("2_pkb6e")
 
 [node name="File Button" type="MenuButton" parent="." unique_id=1228980765]
 unique_name_in_owner = true
