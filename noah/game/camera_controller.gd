@@ -101,6 +101,7 @@ func get_direct() -> Variant:
 		return parent_3d
 	return null
 
+#region setters/getters
 func set_zoom(value: Variant) -> void:
 	if value == null: return
 	
@@ -175,6 +176,7 @@ func get_rotation() -> Variant:
 	if parent_2d: return parent_2d.rotation
 	elif parent_3d: return parent_3d.rotation
 	return Vector2.ZERO
+#endregion
 
 func _process(delta) -> void:
 	if parent_2d: 
@@ -196,7 +198,7 @@ func update_3d(delta: float) -> void:
 		parent_3d.position = lerp_position(parent_3d.position, _position_3d, delta)
 	
 	if rotation_smoothing:
-		var rot_rate = delta * rotation_smoothing_speed
+		var rot_rate: float = delta * rotation_smoothing_speed
 		parent_3d.rotation.x = lerp_angle(parent_3d.rotation.x, _rotation_3d.x, rot_rate)
 		parent_3d.rotation.y = lerp_angle(parent_3d.rotation.y, _rotation_3d.y, rot_rate)
 		parent_3d.rotation.z = lerp_angle(parent_3d.rotation.z, _rotation_3d.z, rot_rate)
@@ -259,10 +261,42 @@ func bump(strength: Variant) -> void:
 			zoom += strength
 
 func go_to_marker(marker: Variant) -> void:
+	if _marker_tween:
+		_marker_tween.kill()
+		_reapply_smoothing_settings()
+	
 	position = marker.global_position
 	rotation = marker.global_rotation
 
-var _zoom_tween:Tween = null
+var _last_position_smoothing: bool = true
+var _last_rotation_smoothing: bool = true
+var _marker_tween: Tween = null
+
+func _reapply_smoothing_settings():
+	position_smoothing = _last_position_smoothing
+	rotation_smoothing = _last_rotation_smoothing
+	
+func tween_to_marker(marker: Variant, time: float, ease_type: String = '') -> void:
+	
+	if _marker_tween:
+		_marker_tween.kill()
+		_reapply_smoothing_settings()
+	
+	_last_position_smoothing = position_smoothing
+	_last_rotation_smoothing = rotation_smoothing
+	
+	position_smoothing = false
+	rotation_smoothing = false
+	
+	var ease_info: Array = Global.string_to_ease(ease_type)
+	
+	_marker_tween = create_tween().set_trans(ease_info[0]).set_ease(ease_info[1])
+	
+	_marker_tween.tween_property(self, 'position', marker.global_position, time)
+	_marker_tween.tween_property(self, 'rotation', marker.global_rotation, time)
+	_marker_tween.finished.connect(_reapply_smoothing_settings)
+
+var _zoom_tween: Tween = null
 func tween_zoom(new_zoom: Vector2, speed: float, trans:Tween.TransitionType = Tween.TransitionType.TRANS_CUBIC, ease_type:Tween.EaseType = Tween.EaseType.EASE_IN_OUT):
 	
 	if _zoom_tween:

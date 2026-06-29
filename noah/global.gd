@@ -179,143 +179,130 @@ func _on_hide_timer_timeout():
 #endregion
 
 #region String to Tween
-## Returns an array with index 0 containing transition type and
-## index 1 containing easing type
+## Returns an array containing an transition and ease type formatted as [code][TransType, EaseType][/code]
 func string_to_ease(tween: String) -> Array:
-	match tween:
-		"backIn":
+	match tween.to_lower():
+		"backin":
 			return [Tween.TRANS_BACK, Tween.EASE_IN]
 		
-		"backInOut":
+		"backinout":
 			return [Tween.TRANS_BACK, Tween.EASE_IN_OUT]
 		
-		"backOut":
+		"backout":
 			return [Tween.TRANS_BACK, Tween.EASE_OUT]
 		
-		"backOutIn":
+		"backoutin":
 			return [Tween.TRANS_BACK, Tween.EASE_OUT_IN]
 		
-		"bounceIn":
+		"bouncein":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_IN]
 		
-		"bounceOut":
+		"bouncinout":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT]
 		
-		"bounceOut":
+		"bounceout":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_OUT]
 		
-		"bounceOutIn":
+		"bounceoutin":
 			return [Tween.TRANS_BOUNCE, Tween.EASE_OUT_IN]
 		
-		"circkIn":
+		"circin":
 			return [Tween.TRANS_CIRC, Tween.EASE_IN]
 		
-		"circInOut":
+		"circinout":
 			return [Tween.TRANS_CIRC, Tween.EASE_IN_OUT]
 		
-		"circOut":
+		"circout":
 			return [Tween.TRANS_CIRC, Tween.EASE_OUT]
 		
-		"circOutIn":
+		"circoutin":
 			return [Tween.TRANS_CIRC, Tween.EASE_OUT_IN]
 		
-		"cubeIn":
+		"cubein":
 			return [Tween.TRANS_CUBIC, Tween.EASE_IN]
 		
-		"cubeInOut":
+		"cubeinout":
 			return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
 		
-		"cubeOut":
+		"cubeout":
 			return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
 		
-		"cubeOutIn":
+		"cubeoutin":
 			return [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN]
 		
-		"cubeIn":
-			return [Tween.TRANS_CUBIC, Tween.EASE_IN]
-		
-		"cubeInOut":
-			return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
-		
-		"cubeOut":
-			return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
-		
-		"cubeOutIn":
-			return [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN]
-		
-		"elasticIn":
+		"elasticin":
 			return [Tween.TRANS_ELASTIC, Tween.EASE_IN]
 		
-		"elasticInOut":
+		"elasticinout":
 			return [Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT]
 		
-		"elasticOut":
+		"elasticout":
 			return [Tween.TRANS_ELASTIC, Tween.EASE_OUT]
 		
-		"elasticOutIn":
+		"elasticoutin":
 			return [Tween.TRANS_ELASTIC, Tween.EASE_OUT_IN]
 		
-		"expoIn":
+		"expoin":
 			return [Tween.TRANS_EXPO, Tween.EASE_IN]
 		
-		"expoInOut":
+		"expoinout":
 			return [Tween.TRANS_EXPO, Tween.EASE_IN_OUT]
 		
-		"expoOut":
+		"expoout":
 			return [Tween.TRANS_EXPO, Tween.EASE_OUT]
 		
-		"expoOutIn":
+		"expooutin":
 			return [Tween.TRANS_EXPO, Tween.EASE_OUT_IN]
 		
-		"quadIn":
+		"quadin":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN]
 		
-		"quadInOut":
+		"quadinout":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
 		
-		"quadOut":
+		"quadout":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
 		
-		"quadOutIn":
+		"quadoutin":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
 		
-		"quartIn":
+		"quartin":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN]
 		
-		"quartInOut":
+		"quartinout":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
 		
-		"quartOut":
+		"quartout":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
 		
-		"quartOutIn":
+		"quartoutin":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
 		
-		"quintIn":
+		"quintin":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN]
 		
-		"quintInOut":
+		"quintinout":
 			return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
 		
-		"quintOut":
+		"quintout":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT]
 		
-		"quintOutIn":
+		"quintoutin":
 			return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
 		
-		"sineIn":
+		"sinein":
 			return [Tween.TRANS_SINE, Tween.EASE_IN]
 		
-		"sinetInOut":
+		"sineinout":
 			return [Tween.TRANS_SINE, Tween.EASE_IN_OUT]
 		
-		"sineOut":
+		"sineout":
 			return [Tween.TRANS_SINE, Tween.EASE_OUT]
 		
-		"sineOutIn":
+		"sineoutin":
 			return [Tween.TRANS_SINE, Tween.EASE_OUT_IN]
 		
-		"CLASSIC":
+		"classic":
 			return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
 		
 		_:
