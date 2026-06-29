@@ -63,10 +63,8 @@ var pause_preload: PackedScene
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if GameManager.freeplay:
-		self.song_data = GameManager.current_song
-	else:
-		self.song_data = GameManager.week_songs[GameManager.current_week_song]
+	
+	song_data = GameManager.get_current_song()
 	
 	assert(host, 'A Host was not assigned.')
 	assert(ui, 'A UI was not assigned.')

@@ -220,7 +220,7 @@ static func update_chart(chart: Chart) -> Chart:
 			
 			for time in meters:
 				var meter_data = meters.get(time)
-				if meter_data[1] == int(meter_data[0] * 4):
+				if int(meter_data[1]) == int(meter_data[0] * 4):
 					meter_data[1] /= meter_data[0]
 			
 			for note in chart.get_notes_data():
