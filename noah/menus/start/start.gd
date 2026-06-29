@@ -43,7 +43,7 @@ func display_mods() -> void:
 		
 		var mod_instance = mod_node.instantiate()
 		mod_container.add_child(mod_instance)
-		mod_instance.image = load(data.get("image"))
+		mod_instance.image = ImageTexture.create_from_image(Image.load_from_file(mod_dir.path_join("icon.png")))
 		mod_instance.mod_name = data.get("name", "No name found.")
 		mod_instance.description = data.get("credits", "No credits found.")
 		mod_instance.dir = mod_dir
@@ -54,24 +54,20 @@ func load_mods() -> void:
 	if !OS.is_debug_build():
 		print("Exported Build Strategy")
 		if DirAccess.dir_exists_absolute(MODS_DIR):
-			var mod_dir: String = OS.get_executable_path().get_base_dir().path_join(MODS_DIR)
-			print("Opening mods folder at: ", mod_dir)
-			for mod_pack in DirAccess.get_files_at(mod_dir):
-				var mod_path: String = mod_dir.path_join(mod_pack)
-				print("Reading RSP at: ", mod_path)
-				var rsp = ProjectSettings.load_resource_pack(mod_path)
+			var mods_dir: String = OS.get_executable_path().get_base_dir().path_join(MODS_DIR)
+			print("Opening mods folder at: ", mods_dir)
+			for mod_dir_name in DirAccess.get_directories_at(mods_dir):
+				var mod_dir: String = mods_dir.path_join(mod_dir_name)
 				
-				if rsp:
-					mod_dir = "res://".path_join(mod_pack.get_basename())
-					var meta_path: String = mod_dir.path_join("meta.json")
-					print("Looking for meta at %s" % meta_path)
-					if FileAccess.file_exists(meta_path):
-						var data = JSON.parse_string(FileAccess.open(meta_path, FileAccess.READ).get_as_text())
-						mod_data[mod_dir] = data
-						mods.append(mod_dir)
-						print("Found metadata for: ", data.get("name"))
-				else:
-					printerr("File is not a resource pack: ", mod_path)
+				for file in DirAccess.get_files_at(mod_dir):
+					if ["zip", "pck"].has(file.get_extension()):
+						var meta_path: String = mod_dir.path_join("meta.json")
+						print("Looking for meta at %s" % meta_path)
+						if FileAccess.file_exists(meta_path):
+							var data = JSON.parse_string(FileAccess.open(meta_path, FileAccess.READ).get_as_text())
+							mod_data[mod_dir] = data
+							mods.append(mod_dir)
+							print("Found metadata for: ", data.get("name"))
 	# Loading mods when testing
 	else:
 		print("Development Strategy")
@@ -110,7 +106,7 @@ func update(i: int):
 func update_mod_info():
 	var mod_dir: String = mods[selected]
 	
-	mod_icon.texture = load(mod_data[mod_dir].get("image"))
+	mod_icon.texture = ImageTexture.create_from_image(Image.load_from_file(mod_dir.path_join("icon.png")))
 	mod_name.text = mod_data[mod_dir].get("name", "No name found.")
 	credits.text = mod_data[mod_dir].get("credits", "No credits found.")
 	mod_description.text = str("Version: ", mod_data[mod_dir].get("version", "0.0.0"))
@@ -128,13 +124,26 @@ func mod_input(event: InputEvent, node: Variant):
 
 func _on_run_mod_pressed() -> void:
 	var mod_dir: String = mods[selected]
+	
 	var init_path: String = mod_dir
+	
 	if OS.is_debug_build():
 		init_path = init_path.path_join("init.gd")
 	else:
-		init_path = init_path.path_join("init.gdc")
+		var mod_path: String
+		for file in DirAccess.get_files_at(mod_dir):
+			if ["zip", "pck"].has(file.get_extension()):
+				mod_path = mod_dir.path_join(file)
+				init_path = "res://".path_join(mod_path.get_file().get_basename())
+		
+		var rsp = ProjectSettings.load_resource_pack(mod_path, false)
+		if rsp:
+			print("Loading mod: ", mod_data[mod_dir].get("name", "No name found."))
+			init_path = init_path.path_join("init.gdc")
 	
 	if FileAccess.file_exists(init_path):
 		print("Running init at: ", init_path)
 		var init_res = load(init_path)
+		# You have to keep the script alive for it to keep changes to ProjectSettings.
+		@warning_ignore("unused_variable")
 		var init_instance = init_res.new()
