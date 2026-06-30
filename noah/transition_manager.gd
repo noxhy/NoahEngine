@@ -29,5 +29,5 @@ func resume():
 		current_transition.play()
 
 
-func transition_finished(trans_name: StringName) -> void:
+func transition_finished() -> void:
 	current_transition.queue_free()
