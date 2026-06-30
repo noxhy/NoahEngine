@@ -383,9 +383,6 @@ func _process(delta: float) -> void:
 		bounding_box = false
 	
 	queue_redraw()
-#
-#func process_():
-	#pass
 
 
 func is_grid_focused(check_control_focus: bool = true) -> bool:
