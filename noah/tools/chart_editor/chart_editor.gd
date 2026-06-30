@@ -124,6 +124,7 @@ func _process(delta: float) -> void:
 		song_position = instrumental.get_playback_position() - start_offset
 		%"Song Slider".value = song_position
 		
+		GameManager.seconds_per_beat = $Conductor.seconds_per_beat
 		
 		var notes_list = ChartManager.chart.get_notes_data()
 		
@@ -382,6 +383,9 @@ func _process(delta: float) -> void:
 		bounding_box = false
 	
 	queue_redraw()
+#
+#func process_():
+	#pass
 
 
 func is_grid_focused(check_control_focus: bool = true) -> bool:
