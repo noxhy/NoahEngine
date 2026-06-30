@@ -55,6 +55,7 @@ func _ready() -> void:
 	if tail:
 		tail.scale = Vector2.ONE * note_skin.notes_scale
 		tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
+		tail.modulate.a = note_skin.sustain_opacity
 	
 	if end:
 		end.scale.x = note_skin.notes_scale
