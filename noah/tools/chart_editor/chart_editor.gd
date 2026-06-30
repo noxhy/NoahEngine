@@ -35,6 +35,7 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 @onready var instrumental: AudioStreamPlayer = %Instrumental
 @onready var vocals: AudioStreamPlayer = %Vocals
 @onready var conductor: Conductor = $Conductor
+@onready var camera_2d: Camera2D = $Camera2D
 
 
 ## Chart Variables
@@ -118,10 +119,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var mouse_over_window: bool = is_any_window_overlapped(get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360))
+	var mouse_over_window: bool = is_any_window_overlapped(get_corrected_mouse_position())
 	
-	var can_interact_with_chart: bool = can_chart and not mouse_over_window
-	
+	var can_interact_with_chart: bool = can_chart and not mouse_over_window and ChartManager.chart
 	
 	if ChartManager.song and instrumental.playing:
 		song_position = instrumental.get_playback_position() - start_offset
@@ -180,7 +180,7 @@ func _process(delta: float) -> void:
 		var meter = ChartManager.chart.get_meter_at(time)
 		conductor.numerator = meter[0]
 		conductor.denominator = meter[1]
-		$Camera2D.position.y = 360 + time_to_y_position(song_position)
+		camera_2d.position.y = 360 + time_to_y_position(song_position)
 		conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartManager.chart.offset)
 	
@@ -401,12 +401,15 @@ func is_any_window_overlapped(point: Vector2) -> bool:
 	return false
 
 func is_grid_focused(check_control_focus: bool = true) -> bool:
-	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360)
+	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, camera_2d.position.y - 360)
 	
 	var mouse_over = screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
 	if check_control_focus:
 		return mouse_over and not current_focus_owner
 	return mouse_over
+
+func get_corrected_mouse_position() -> Vector2:
+	return get_global_mouse_position() - Vector2(0, camera_2d.position.y - 360)
 
 func _draw() -> void:
 	var rect: Rect2
@@ -438,7 +441,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		# Hover Box
-		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_any_window_overlapped(get_global_mouse_position()):
+		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_any_window_overlapped(get_corrected_mouse_position()):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow(conductor.numerator, 2) / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, pow(conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
@@ -465,8 +468,6 @@ func _draw() -> void:
 			var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
 			var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
 			draw_string_at_position(get_global_mouse_position(), text)
-
-
 
 func draw_string_at_position(pos: Vector2, text: String) -> void:
 	draw_string_outline(DEFAULT_FONT, pos, text,
@@ -593,10 +594,10 @@ func load_chart(file: Chart, ghost: bool = false):
 	var action: String = "Loaded Chart"
 	undo_redo.create_action(action)
 	undo_redo.add_do_property(self, SettingsManager.SEC_CHART, file)
-	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
+	undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 	undo_redo.commit_action()
 	
-	%"Upper UI".get_node("%Metadata Window").update_stats()
+	upper_ui.metadata_window.update_stats()
 	can_chart = true
 	load_section(song_position)
 	update_grid()
@@ -1108,10 +1109,9 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	instrumental.stream_paused = !toggled_on
 	
 	if toggled_on:
-		lower_ui.get_node("%Play Button").icon = load("uid://c1mgxe0dqdbgh")
 		play_audios(song_position)
 	
-	else: lower_ui.get_node("%Play Button").icon = load("uid://byl3boevtc02p")
+	lower_ui.toggle_play_button_visual(toggled_on)
 
 func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]

@@ -13,6 +13,7 @@ class_name ChartEditorLowerUI
 
 @onready var time_left_label: Label = %"Time Left Label"
 
+
 var chart_editor: ChartEditor
 
 # Called when the node enters the scene tree for the first time.
@@ -40,4 +41,6 @@ func _process(delta: float) -> void:
 		
 	current_time_label.text = Global.format_time(chart_editor.song_position + chart_editor.start_offset)
 	current_time_label.text += str(" (", chart_editor.song_speed, "x)")
-	
+
+func toggle_play_button_visual(playing: bool):
+	play_button.icon = load("uid://c1mgxe0dqdbgh") if playing else load("uid://byl3boevtc02p")
