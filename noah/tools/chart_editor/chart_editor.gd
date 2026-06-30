@@ -53,10 +53,7 @@ var clipboard: Array = []
 var can_chart: bool = false
 
 var current_snap: int = 3
-var chart_snap: float = SNAPS[current_snap] :
-	set(v):
-		if lower_ui:
-			lower_ui.chart_snap.value = v
+var chart_snap: float = SNAPS[current_snap]
 
 var selected_notes: Array = []
 var selected_note_nodes: Array = []
@@ -111,9 +108,10 @@ func _ready() -> void:
 	
 	update_grid()
 	
-	chart_snap = chart_snap
-	
 	## Initializing Popup Signals
+	
+	lower_ui.chart_snap.value = chart_snap
+	
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -157,6 +155,7 @@ func _process(delta: float) -> void:
 			else:
 				current_snap += 1
 				chart_snap = SNAPS[current_snap % SNAPS.size()]
+				lower_ui.chart_snap.value = chart_snap
 		
 		if Input.is_action_just_pressed(&"mouse_scroll_down"):
 			if !Input.is_action_pressed(&"control") and can_chart:
@@ -167,6 +166,8 @@ func _process(delta: float) -> void:
 			else:
 				current_snap -= 1
 				chart_snap = SNAPS[current_snap % SNAPS.size()]
+				lower_ui.chart_snap.value = chart_snap
+				
 		
 		conductor.time = song_position
 	
