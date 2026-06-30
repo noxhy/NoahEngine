@@ -397,6 +397,15 @@ func is_any_window_overlapped(point: Vector2) -> bool:
 			return true
 	return false
 
+func is_mouse_over_ui() -> bool:
+	var point = get_corrected_mouse_position()
+	var mouse_over_upper_ui = Rect2i(upper_ui.global_position + upper_ui.get_parent().offset, upper_ui.size).has_point(point)
+	var mouse_over_lower_ui = Rect2i(lower_ui.global_position + lower_ui.get_parent().offset, lower_ui.size).has_point(point)
+	
+	if mouse_over_lower_ui or mouse_over_upper_ui:
+		return true
+	return false
+
 func is_grid_focused(check_control_focus: bool = true) -> bool:
 	var screen_mouse_pos = get_corrected_mouse_position()
 	
@@ -438,7 +447,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		# Hover Box
-		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_any_window_overlapped(get_corrected_mouse_position()):
+		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_mouse_over_ui() and not is_any_window_overlapped(get_corrected_mouse_position()):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow(conductor.numerator, 2) / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, pow(conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
