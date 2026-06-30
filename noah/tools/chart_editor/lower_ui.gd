@@ -1,4 +1,5 @@
 extends HBoxContainer
+class_name ChartEditorLowerUI
 
 @onready var play_button: Button = %"Play Button"
 @onready var skip_to_beginning: Button = %"Skip to Beginning"
