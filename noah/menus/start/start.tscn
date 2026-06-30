@@ -26,9 +26,9 @@ custom_minimum_size = Vector2(360, 0)
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_left = 16.0
-offset_top = 16.0
+offset_top = 32.0
 offset_right = 448.0
-offset_bottom = -16.0
+offset_bottom = -32.0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -49,10 +49,10 @@ anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -704.0
-offset_top = 16.0
+offset_left = -448.0
+offset_top = 32.0
 offset_right = -16.0
-offset_bottom = -16.0
+offset_bottom = -32.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -119,10 +119,25 @@ layout_mode = 2
 layout_mode = 2
 text = "Run Mod"
 
+[node name="Notification Label" type="RichTextLabel" parent="CanvasLayer" unique_id=1169355344]
+unique_name_in_owner = true
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -23.0
+grow_horizontal = 2
+grow_vertical = 0
+bbcode_enabled = true
+text = "Press [7] to go to the chart editor"
+horizontal_alignment = 1
+
 [node name="GenericBg" type="Sprite2D" parent="." unique_id=1802085648]
 show_behind_parent = true
 position = Vector2(640, 360)
 texture = ExtResource("2_dub8w")
 metadata/_edit_lock_ = true
 
+[connection signal="meta_clicked" from="CanvasLayer/Information Container/Panel/VBoxContainer/Description" to="." method="_on_description_meta_clicked"]
 [connection signal="pressed" from="CanvasLayer/Information Container/Run Mod" to="." method="_on_run_mod_pressed"]
+[connection signal="meta_clicked" from="CanvasLayer/Notification Label" to="." method="_on_notification_label_meta_clicked"]

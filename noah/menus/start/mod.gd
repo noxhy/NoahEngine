@@ -13,6 +13,7 @@ enum ButtonStyle {
 @onready var description_label = $HBoxContainer/VBoxContainer/Credits
 
 var dir: String
+var errors: Array = []
 
 var image: Texture:
 	set(v):
