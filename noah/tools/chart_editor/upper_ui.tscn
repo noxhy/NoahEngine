@@ -53,7 +53,7 @@ popup/item_12/text = "Exit"
 popup/item_12/id = 6
 metadata/_edit_use_anchors_ = true
 
-[node name="Export External Popup" type="FileDialog" parent="File Button" unique_id=1942631382]
+[node name="Export External Popup" type="FileDialog" parent="File Button" unique_id=1942631382 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Save Events"
@@ -114,7 +114,7 @@ popup/item_4/text = "Zoom Out"
 popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Note Skin Window" type="FileDialog" parent="View Button" unique_id=833636911]
+[node name="Note Skin Window" type="FileDialog" parent="View Button" unique_id=833636911 groups=["windows"]]
 unique_name_in_owner = true
 title = "Open a File"
 initial_position = 1
@@ -152,7 +152,7 @@ popup/item_8/checkable = 1
 popup/item_8/id = 8
 metadata/_edit_use_anchors_ = true
 
-[node name="Audios Window" parent="Audio Button" unique_id=740299600 instance=ExtResource("2_esjoi")]
+[node name="Audios Window" parent="Audio Button" unique_id=740299600 groups=["windows"] instance=ExtResource("2_esjoi")]
 unique_name_in_owner = true
 visible = false
 
@@ -190,17 +190,17 @@ popup/item_2/checkable = 1
 popup/item_2/id = 2
 metadata/_edit_use_anchors_ = true
 
-[node name="History Window" parent="Window Button" unique_id=1289274319 instance=ExtResource("3_xi38a")]
+[node name="History Window" parent="Window Button" unique_id=1289274319 groups=["windows"] instance=ExtResource("3_xi38a")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Metadata Window" parent="Window Button" unique_id=1340846673 instance=ExtResource("4_ax5pr")]
+[node name="Metadata Window" parent="Window Button" unique_id=1340846673 groups=["windows"] instance=ExtResource("4_ax5pr")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Note Type Window" parent="Window Button" unique_id=1644438816 instance=ExtResource("5_c03gx")]
+[node name="Note Type Window" parent="Window Button" unique_id=1644438816 groups=["windows"] instance=ExtResource("5_c03gx")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false

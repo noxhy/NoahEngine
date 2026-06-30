@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_pptwc"]
 [ext_resource type="Script" uid="uid://dsec7v7be3ekg" path="res://noah/tools/chart_editor/new_file_popup.gd" id="1_qca52"]
 
-[node name="New File Popup" type="Window" unique_id=1776972529]
+[node name="New File Popup" type="Window" unique_id=1776972529 groups=["windows"]]
 transparent_bg = true
 msaa_2d = 1
 oversampling_override = 1.0

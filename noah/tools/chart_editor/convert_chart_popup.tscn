@@ -16,7 +16,7 @@ min_size = Vector2i(480, 0)
 theme = ExtResource("1_p6cg2")
 script = ExtResource("1_byst7")
 
-[node name="SaveFolderDialog" type="FileDialog" parent="." unique_id=987853376]
+[node name="SaveFolderDialog" type="FileDialog" parent="." unique_id=987853376 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open File(s)"
