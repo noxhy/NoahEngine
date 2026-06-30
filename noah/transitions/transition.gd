@@ -3,7 +3,7 @@ class_name Transition extends Node2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 signal paused
-signal finished
+signal finished(trans_name: StringName)
 
 func _ready() -> void:
 	animation_player.connect("animation_finished", self.finish)
@@ -24,5 +24,5 @@ func pause() -> void:
 	paused.emit()
 
 
-func finish() -> void:
+func finish(trans_name: StringName) -> void:
 	finished.emit()
