@@ -60,7 +60,7 @@ _data = {
 script = ExtResource("1_ecikk")
 
 [node name="Gradient" type="Node2D" parent="." unique_id=1258365202]
-position = Vector2(0, -1440)
+position = Vector2(640, -1440)
 
 [node name="ColorRect" type="ColorRect" parent="Gradient" unique_id=547804266]
 offset_left = -672.0
