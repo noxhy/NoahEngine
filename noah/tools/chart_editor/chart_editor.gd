@@ -118,6 +118,11 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
+	var mouse_over_window: bool = is_any_window_overlapped(get_global_mouse_position())
+	
+	var can_interact_with_chart: bool = can_chart and not mouse_over_window
+	
+	
 	if ChartManager.song and instrumental.playing:
 		song_position = instrumental.get_playback_position() - start_offset
 		%"Song Slider".value = song_position
@@ -147,7 +152,7 @@ func _process(delta: float) -> void:
 					vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	else:
 		if Input.is_action_just_pressed(&"mouse_scroll_up"):
-			if !Input.is_action_pressed(&"control") and can_chart:
+			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
 				song_position -= conductor.seconds_per_beat
 				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
 				song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
@@ -158,7 +163,7 @@ func _process(delta: float) -> void:
 				lower_ui.chart_snap.value = chart_snap
 		
 		if Input.is_action_just_pressed(&"mouse_scroll_down"):
-			if !Input.is_action_pressed(&"control") and can_chart:
+			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
 				song_position += conductor.seconds_per_beat
 				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
 				song_position = clamp(song_position, start_offset - ChartManager.chart.offset, instrumental.stream.get_length())
@@ -192,7 +197,7 @@ func _process(delta: float) -> void:
 	
 	$"Grid Layer/Parallax2D".repeat_size.y = %Grid.get_size().y
 	
-	if can_chart and Input.is_action_just_pressed(&"mouse_left"):
+	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
 			bounding_box = true
 			start_box = get_global_mouse_position()
@@ -239,7 +244,7 @@ func _process(delta: float) -> void:
 				current_focus_viewport.gui_release_focus()
 				current_focus_owner = null
 	
-	if can_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_grid_focused():
+	if can_interact_with_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_grid_focused():
 		var lane: int = snapped_position.x - 1
 		if hovered_note != -1:
 			var i: int = hovered_note
@@ -268,7 +273,7 @@ func _process(delta: float) -> void:
 			
 			auto_save()
 	
-	if can_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
+	if can_interact_with_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
 		is_grid_focused(true) and not instrumental.playing:
 		## Song Position Slider
 		if grid_position.x < 1 and grid_position.x >= 0:
@@ -386,6 +391,30 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
+var _found_windows:Array[Window] = []
+func is_any_window_overlapped(point: Vector2) -> bool:
+	if _found_windows.is_empty():
+		_find_window(self)
+		
+	for window: Window in _found_windows:
+		if not window or not window.visible:
+			continue
+		
+		var position_offset = window.get_position_with_decorations() - window.position
+		var window_rect = Rect2i(window.get_position_with_decorations() + position_offset, window.get_size_with_decorations())
+		if window_rect.has_point(point):
+			return true
+	
+	
+	return false
+
+func _find_window(parent: Node):
+	for child in parent.get_children():
+		if child is Window and child.get_class() == 'Window':
+			_found_windows.append(child)
+		
+		_find_window(child)
+
 func is_grid_focused(check_control_focus: bool = true) -> bool:
 	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360)
 	
@@ -402,7 +431,7 @@ func _draw() -> void:
 		rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 		draw_rect(rect, box_color)
 	
-	if ChartManager.chart:
+	if ChartManager.chart and not is_any_window_overlapped(get_global_mouse_position()):
 		# The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
