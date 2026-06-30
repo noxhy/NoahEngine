@@ -118,7 +118,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var mouse_over_window: bool = is_any_window_overlapped(get_global_mouse_position())
+	var mouse_over_window: bool = is_any_window_overlapped(get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360))
 	
 	var can_interact_with_chart: bool = can_chart and not mouse_over_window
 	
