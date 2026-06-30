@@ -8,5 +8,3 @@ script = ExtResource("1_i0gk1")
 
 [node name="Transitions" type="CanvasLayer" parent="." unique_id=118750203]
 layer = 128
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
