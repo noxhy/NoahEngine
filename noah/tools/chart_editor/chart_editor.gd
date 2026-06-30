@@ -127,8 +127,6 @@ func _process(delta: float) -> void:
 		song_position = instrumental.get_playback_position() - start_offset
 		%"Song Slider".value = song_position
 		
-		GameManager.seconds_per_beat = $Conductor.seconds_per_beat
-		
 		var notes_list = ChartManager.chart.get_notes_data()
 		
 		if notes_list.size() > 0:
@@ -392,7 +390,6 @@ func _process(delta: float) -> void:
 
 
 func is_any_window_overlapped(point: Vector2) -> bool:
-		
 	for window: Window in get_tree().get_nodes_in_group(&"windows"):
 		if not window or not window.visible or window is not Window:
 			continue
@@ -419,7 +416,7 @@ func _draw() -> void:
 		rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 		draw_rect(rect, box_color)
 	
-	if ChartManager.chart and not is_any_window_overlapped(get_global_mouse_position()):
+	if ChartManager.chart:
 		# The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -441,7 +438,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		# Hover Box
-		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner):
+		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_any_window_overlapped(get_global_mouse_position()):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow(conductor.numerator, 2) / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, pow(conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
@@ -456,24 +453,26 @@ func _draw() -> void:
 				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
 				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
 				draw_rect(rect, selected_color)
-	
-	if hovered_note != -1 and ChartManager.chart:
-		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
-		if note_type != "":
-			draw_string_outline(DEFAULT_FONT, get_global_mouse_position(), str("Type: ", note_type),
-			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
-			draw_string(DEFAULT_FONT, get_global_mouse_position(), str("Type: ", note_type),
-			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
-	
-	if hovered_event != -1 and ChartManager.chart:
-		var event = ChartManager.chart.get_events_data()[hovered_event][1]
-		var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
-		var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
-		draw_string_outline(DEFAULT_FONT, get_global_mouse_position(), text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
-		draw_string(DEFAULT_FONT, get_global_mouse_position(), text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
+		
+		
+		if hovered_note != -1:
+			var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
+			if note_type != "":
+				draw_string_at_position(get_global_mouse_position(), str("Type: ", note_type))
+			
+		if hovered_event != -1:
+			var event = ChartManager.chart.get_events_data()[hovered_event][1]
+			var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
+			var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
+			draw_string_at_position(get_global_mouse_position(), text)
 
+
+
+func draw_string_at_position(pos: Vector2, text: String) -> void:
+	draw_string_outline(DEFAULT_FONT, pos, text,
+	HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
+	draw_string(DEFAULT_FONT, pos, text,
+	HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
 
 func on_files_dropped(files: PackedStringArray):
 	var file: String = files[0]
