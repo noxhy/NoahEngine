@@ -267,8 +267,6 @@ func play_song(time: float):
 			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
 			
 			ui.add_child(countdown_instance)
-			
-			countdown_instance.play(ui_skin.countdown_animation)
 			countdown_instance.seek(time)
 	
 	var notes_list = chart.get_notes_data()
