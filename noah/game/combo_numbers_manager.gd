@@ -14,7 +14,7 @@ func _ready() -> void:
 			
 			var combo_number_instance = COMBO_NUMBER_PRELOAD.instantiate()
 			
-			combo_number_instance.position.x = ui_skin.numbers_spacing * (digit - (digits / 2.0)) * ui_skin.numbers_scale
+			combo_number_instance.position.x = ui_skin.numbers_spacing * ((digits - 1) / -2.0 + digit) * ui_skin.numbers_scale
 			combo_number_instance.ui_skin = ui_skin
 			combo_number_instance.digit = int(combo / pow(10, digits - digit - 1)) % 10
 			combo_number_instance.fc = fc
