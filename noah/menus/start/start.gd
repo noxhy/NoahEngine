@@ -27,12 +27,13 @@ var selected: int = -1
 # Meant to be replaced
 func _ready() -> void:
 	load_mods()
-	if mod_data.size() == 1:
+	display_mods()
+	
+	if mod_data.size() == 1 and get_tree().get_nodes_in_group(&"mods")[0].errors.is_empty():
 		selected = 0
 		_on_run_mod_pressed()
 		return
 	
-	display_mods()
 	update(-1)
 	
 	var i: int = 0
@@ -212,7 +213,7 @@ func format_errors(list: Array, data: Dictionary = {}) -> String:
 	for error in list:
 		match error:
 			ModError.OUTDATED_ENGINE:
-				output.append(str("This mod supports NoahEngine versions ", data.get("supported_versions", [])))
+				output.append(str("This mod supports NoahEngine versions: ", ", ".join(data.get("supported_versions", []))))
 			
 			ModError.OUTDATED_MOD:
 				output.append(str("There is a new release available. Download it [url=", data.get("download_link"), "]here[/url]."))

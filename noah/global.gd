@@ -7,12 +7,21 @@ var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
 var fullscreen: bool = false
 var transitioning: bool = false
+var current_controller: int = -1
 
 func _ready() -> void:
 	# FPS Booster
 	PhysicsServer2D.set_active(false)
 	PhysicsServer3D.set_active(false)
 	_correct_window_size()
+	Input.joy_connection_changed.connect(self.changed_contoller)
+
+
+func changed_contoller(device: int, connected: bool):
+	if connected:
+		current_controller = device
+	else:
+		current_controller = -1 if !Input.get_connected_joypads().front() else Input.get_connected_joypads().front()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -40,7 +49,6 @@ func _process(delta: float) -> void:
 		if Input.is_action_just_pressed(&"reload"): 
 			get_tree().reload_current_scene()
 			get_tree().paused = false
-
 
 
 #region Auto Pause

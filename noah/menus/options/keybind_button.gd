@@ -7,6 +7,7 @@ extends OptionNode
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	update_text()
+	Input.joy_connection_changed.connect(self.update_text)
 
 func _input(event):
 	if checking:
@@ -64,10 +65,13 @@ func normal():
 	_on_toggled(false)
 
 
-func update_text():
+func update_text(device: int = -1, connected: bool = false):
 	match type:
 		0:
 			self.text = OS.get_keycode_string(SettingsManager.get_keybind(setting_name)[index])
 		
 		1: 
-			self.text = SettingsManager.JOY_BUTTON_NAMES.get(SettingsManager.get_controller_bind(setting_name)[index], "")
+			if device == -1:
+				self.text = SettingsManager.translate_joy_bind(Global.current_controller, SettingsManager.get_controller_bind(setting_name)[index])
+			else:
+				self.text = SettingsManager.translate_joy_bind(device, SettingsManager.get_controller_bind(setting_name)[index])

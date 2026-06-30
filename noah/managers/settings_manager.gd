@@ -15,25 +15,6 @@ const SEC_CONTROLLER_BINDS: String = 'controller_binds'
 const SEC_SONGS: String = 'songs'
 const SEC_WEEKS: String = 'weeks'
 
-var JOY_BUTTON_NAMES: Dictionary = {
-	JoyButton.JOY_BUTTON_INVALID: "",
-	JoyButton.JOY_BUTTON_A: "A",
-	JoyButton.JOY_BUTTON_B: "B",
-	JoyButton.JOY_BUTTON_X: "X",
-	JoyButton.JOY_BUTTON_Y: "Y",
-	JoyButton.JOY_BUTTON_LEFT_SHOULDER: "LB",
-	JoyButton.JOY_BUTTON_RIGHT_SHOULDER: "RB",
-	JoyButton.JOY_BUTTON_BACK: "Back",
-	JoyButton.JOY_BUTTON_START: "Start",
-	JoyButton.JOY_BUTTON_LEFT_STICK: "LS Click",
-	JoyButton.JOY_BUTTON_RIGHT_STICK: "RS Click",
-	JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
-	JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
-	JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
-	JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right",
-	(JoyAxis.JOY_AXIS_TRIGGER_LEFT + 100): "LT",
-	(JoyAxis.JOY_AXIS_TRIGGER_RIGHT + 100): "LR"
-}
 
 var instance: ConfigFile
 #these are the only functions u need to worry about
@@ -235,3 +216,69 @@ func load_keybinds():
 			InputMap.action_add_event(bind_id, new_key)
 	
 	print("(SettingsManager): Key and Controller binds loaded")
+
+
+#region Controller Button Names
+func translate_joy_bind(device: int, bind: int) -> String:
+	var device_name: String = Input.get_joy_name(device)
+	
+	var joy_button_names: Dictionary = {
+		JoyButton.JOY_BUTTON_A: "A",
+		JoyButton.JOY_BUTTON_B: "B",
+		JoyButton.JOY_BUTTON_X: "X",
+		JoyButton.JOY_BUTTON_Y: "Y",
+		JoyButton.JOY_BUTTON_LEFT_SHOULDER: "LB",
+		JoyButton.JOY_BUTTON_RIGHT_SHOULDER: "RB",
+		JoyButton.JOY_BUTTON_BACK: "Back",
+		JoyButton.JOY_BUTTON_START: "Start",
+		JoyButton.JOY_BUTTON_LEFT_STICK: "LS Click",
+		JoyButton.JOY_BUTTON_RIGHT_STICK: "RS Click",
+		JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
+		JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
+		JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
+		JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right",
+		(JoyAxis.JOY_AXIS_TRIGGER_LEFT + 100): "LT",
+		(JoyAxis.JOY_AXIS_TRIGGER_RIGHT + 100): "LR"
+	}
+	
+	if device_name.to_lower().contains("dualsense") or device_name.to_lower().contains("dualshock"):
+		joy_button_names = {
+			JoyButton.JOY_BUTTON_A: "❌",
+			JoyButton.JOY_BUTTON_B: "⭕",
+			JoyButton.JOY_BUTTON_X: "□",
+			JoyButton.JOY_BUTTON_Y: "🔺",
+			JoyButton.JOY_BUTTON_LEFT_SHOULDER: "L1",
+			JoyButton.JOY_BUTTON_RIGHT_SHOULDER: "R1",
+			JoyButton.JOY_BUTTON_BACK: "Select",
+			JoyButton.JOY_BUTTON_START: "Options",
+			JoyButton.JOY_BUTTON_LEFT_STICK: "L3",
+			JoyButton.JOY_BUTTON_RIGHT_STICK: "R3",
+			JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
+			JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
+			JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
+			JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right",
+			(JoyAxis.JOY_AXIS_TRIGGER_LEFT + 100): "L2",
+			(JoyAxis.JOY_AXIS_TRIGGER_RIGHT + 100): "R2"
+		}
+	elif device_name.to_lower().contains("nintendo"):
+		joy_button_names = {
+			JoyButton.JOY_BUTTON_A: "B",
+			JoyButton.JOY_BUTTON_B: "A",
+			JoyButton.JOY_BUTTON_X: "Y",
+			JoyButton.JOY_BUTTON_Y: "X",
+			JoyButton.JOY_BUTTON_LEFT_SHOULDER: "L",
+			JoyButton.JOY_BUTTON_RIGHT_SHOULDER: "R",
+			JoyButton.JOY_BUTTON_BACK: "-",
+			JoyButton.JOY_BUTTON_START: "+",
+			JoyButton.JOY_BUTTON_LEFT_STICK: "LS Click",
+			JoyButton.JOY_BUTTON_RIGHT_STICK: "RS Click",
+			JoyButton.JOY_BUTTON_DPAD_UP: "D-Pad Up",
+			JoyButton.JOY_BUTTON_DPAD_DOWN: "D-Pad Down",
+			JoyButton.JOY_BUTTON_DPAD_LEFT: "D-Pad Left",
+			JoyButton.JOY_BUTTON_DPAD_RIGHT: "D-Pad Right",
+			(JoyAxis.JOY_AXIS_TRIGGER_LEFT + 100): "ZL",
+			(JoyAxis.JOY_AXIS_TRIGGER_RIGHT + 100): "ZR"
+		}
+	
+	return joy_button_names.get(bind, "?")
+#endregion

@@ -64,7 +64,6 @@ static func write_snd_to_zip(zip: ZIPPacker, file_name: String, snd_path: String
 	file.close()
 	
 	print('Successfully written to zip')
-	
 
 
 static func write_resource_to_zip(zip: ZIPPacker, file_name: String, resource: Resource):
