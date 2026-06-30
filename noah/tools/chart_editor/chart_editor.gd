@@ -127,8 +127,6 @@ func _process(delta: float) -> void:
 		song_position = instrumental.get_playback_position() - start_offset
 		%"Song Slider".value = song_position
 		
-		GameManager.seconds_per_beat = $Conductor.seconds_per_beat
-		
 		var notes_list = ChartManager.chart.get_notes_data()
 		
 		if notes_list.size() > 0:
@@ -392,7 +390,6 @@ func _process(delta: float) -> void:
 
 
 func is_any_window_overlapped(point: Vector2) -> bool:
-		
 	for window: Window in get_tree().get_nodes_in_group(&"windows"):
 		if not window or not window.visible or window is not Window:
 			continue
