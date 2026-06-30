@@ -33,6 +33,19 @@ streams_count = 2
 stream_0/stream = ExtResource("8_s4ovn")
 stream_1/stream = ExtResource("9_v13a8")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ab3f"]
+content_margin_left = 0.0
+content_margin_top = 2.0
+content_margin_right = 0.0
+content_margin_bottom = 2.0
+bg_color = Color(0.23420388, 0.25974068, 0.3035215, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 3
+anti_aliasing = false
+
 [node name="Chart Editor" type="Node2D" unique_id=373963802]
 script = ExtResource("1_ugmsy")
 divider_color = Color(0.71484375, 0.71484375, 0.71484375, 1)
@@ -183,6 +196,7 @@ offset_right = 640.0
 offset_bottom = 312.0
 focus_mode = 1
 theme = ExtResource("17_75w6f")
+theme_override_styles/slider = SubResource("StyleBoxFlat_2ab3f")
 step = 0.001
 metadata/_edit_lock_ = true
 

@@ -37,7 +37,6 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 @onready var conductor: Conductor = $Conductor
 @onready var camera_2d: Camera2D = $Camera2D
 
-
 ## Chart Variables
 var backup_chart: Chart = null
 # So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
@@ -401,7 +400,7 @@ func is_any_window_overlapped(point: Vector2) -> bool:
 	return false
 
 func is_grid_focused(check_control_focus: bool = true) -> bool:
-	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, camera_2d.position.y - 360)
+	var screen_mouse_pos = get_corrected_mouse_position()
 	
 	var mouse_over = screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
 	if check_control_focus:

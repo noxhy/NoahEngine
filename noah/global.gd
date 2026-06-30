@@ -15,6 +15,10 @@ func _ready() -> void:
 	PhysicsServer3D.set_active(false)
 	_correct_window_size()
 	Input.joy_connection_changed.connect(self.changed_contoller)
+	
+	if not OS.is_debug_build():
+		RenderingServer.set_default_clear_color(Color.BLACK)
+		
 
 
 func changed_contoller(device: int, connected: bool):
