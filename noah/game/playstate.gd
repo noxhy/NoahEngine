@@ -4,7 +4,6 @@ class_name PlayState
 
 const COMPENSATION: float = 1.0 / 30.0
 
-@onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
 @onready var instrumental: AudioStreamPlayer
@@ -262,14 +261,15 @@ func play_song(time: float):
 	if time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
-		var countdown_instance = countdown_node.instantiate()
-		
-		countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
-		
-		ui.add_child(countdown_instance)
-		
-		countdown_instance.play(ui_skin.countdown_animation)
-		countdown_instance.seek(time)
+		if !ui_skin.countdown.is_empty():
+			var countdown_instance: AnimationPlayer = load(ui_skin.countdown_node).instantiate()
+			
+			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
+			
+			ui.add_child(countdown_instance)
+			
+			countdown_instance.play(ui_skin.countdown_animation)
+			countdown_instance.seek(time)
 	
 	var notes_list = chart.get_notes_data()
 	current_note = bsearch_left_range(notes_list, time)
