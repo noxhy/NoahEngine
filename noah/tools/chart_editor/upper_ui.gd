@@ -120,8 +120,11 @@ func setup_shortcuts():
 		edit_button.get_popup().get_item_index(11), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"deselect")))
 	
 	#audio button
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_SPACE
 	audio_button.get_popup().set_item_shortcut(
-		audio_button.get_popup().get_item_index(0), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"menu_accept")))
+		audio_button.get_popup().get_item_index(0), shortcut)
 		
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])

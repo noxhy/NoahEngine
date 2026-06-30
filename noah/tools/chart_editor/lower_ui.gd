@@ -42,5 +42,6 @@ func _process(delta: float) -> void:
 	current_time_label.text = Global.format_time(chart_editor.song_position + chart_editor.start_offset)
 	current_time_label.text += str(" (", chart_editor.song_speed, "x)")
 
-func toggle_play_button_visual(playing: bool):
+func toggle_play_button_state(playing: bool):
 	play_button.icon = load("uid://c1mgxe0dqdbgh") if playing else load("uid://byl3boevtc02p")
+	play_button.set_pressed_no_signal(playing)

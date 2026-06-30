@@ -183,8 +183,6 @@ func _process(delta: float) -> void:
 		conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartManager.chart.offset)
 	
-	if Input.is_action_just_pressed(&"menu_accept"):
-		_on_play_button_toggled(!instrumental.stream_paused)
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -1104,13 +1102,17 @@ func is_note_at(lane: int, time: float) -> bool:
 	return (find_note(lane, time) != -1)
 
 func _on_play_button_toggled(toggled_on: bool) -> void:
-	vocals.stream_paused = !toggled_on
-	instrumental.stream_paused = !toggled_on
+	toggle_audios(not toggled_on)
+
+func toggle_audios(paused: bool):
+	vocals.stream_paused = paused
+	instrumental.stream_paused = paused
 	
-	if toggled_on:
+	if not paused:
 		play_audios(song_position)
 	
-	lower_ui.toggle_play_button_visual(toggled_on)
+	lower_ui.toggle_play_button_state(not paused)
+	
 
 func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
@@ -1143,6 +1145,10 @@ func find_strum_id(strum_name: String) -> int:
 
 func _on_song_slider_value_changed(value: float) -> void:
 	song_position = value
+
+func _on_song_slider_drag_started() -> void:
+	toggle_audios(true)
+
 
 func _on_skip_forward_pressed() -> void:
 	song_position += 10
@@ -1709,7 +1715,6 @@ func _on_conductor_new_denominator(_denominator: int) -> void:
 
 func set_note_type(note_type):
 	current_note_type = note_type
-
 
 func _on_note_type_window_close_requested() -> void:
 	%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(2, false)
