@@ -142,7 +142,7 @@ func setup_shortcuts():
 		audio_button.get_popup().get_item_index(5), shortcut)
 		
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0] = KEY_TAB
+	shortcut.events[0].keycode = KEY_TAB
 	
 	#view button
 	view_button.get_popup().set_item_shortcut(
