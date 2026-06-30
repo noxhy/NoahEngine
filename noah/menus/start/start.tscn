@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cmn3noo2keqes" path="res://noah/menus/start/start.gd" id="1_ha2j4"]
 [ext_resource type="Texture2D" uid="uid://dr2pbdp8x8xpb" path="res://icon.svg" id="2_4na06"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="2_dub8w"]
+[ext_resource type="Material" uid="uid://b87ibevalpejo" path="res://noah/shaders/generic_big_mat.tres" id="3_2fx4s"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4na06"]
 content_margin_left = 8.0
@@ -134,6 +135,7 @@ horizontal_alignment = 1
 
 [node name="GenericBg" type="Sprite2D" parent="." unique_id=1802085648]
 show_behind_parent = true
+material = ExtResource("3_2fx4s")
 position = Vector2(640, 360)
 texture = ExtResource("2_dub8w")
 metadata/_edit_lock_ = true

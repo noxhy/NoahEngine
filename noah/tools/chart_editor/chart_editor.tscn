@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://bx3kdd0dt1kkw" path="res://noah/tools/chart_editor/lower_ui.tscn" id="17_sxrev"]
 [ext_resource type="PackedScene" uid="uid://b6b2d2kloq60j" path="res://noah/tools/chart_editor/upper_ui.tscn" id="18_dd0y6"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="19_2ab3f"]
+[ext_resource type="Shader" uid="uid://bhu6241gkj6yn" path="res://noah/shaders/squigglevision.gdshader" id="19_almg3"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_50rmr"]
 
@@ -45,6 +46,15 @@ corner_radius_bottom_right = 3
 corner_radius_bottom_left = 3
 corner_detail = 3
 anti_aliasing = false
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1ni40"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ym35o"]
+shader = ExtResource("19_almg3")
+shader_parameter/scale = Vector2(60, 60)
+shader_parameter/strength = 0.15
+shader_parameter/fps = 2.0
+shader_parameter/noise = SubResource("NoiseTexture2D_1ni40")
 
 [node name="Chart Editor" type="Node2D" unique_id=373963802]
 script = ExtResource("1_ugmsy")
@@ -195,6 +205,7 @@ offset_top = 296.0
 offset_right = 640.0
 offset_bottom = 312.0
 focus_mode = 1
+mouse_default_cursor_shape = 2
 theme = ExtResource("17_75w6f")
 theme_override_styles/slider = SubResource("StyleBoxFlat_2ab3f")
 step = 0.001
@@ -221,6 +232,7 @@ transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="genericBG" type="Sprite2D" parent="Background" unique_id=1878471884]
 modulate = Color(0.56078434, 0.6431373, 0.7490196, 1)
+material = SubResource("ShaderMaterial_ym35o")
 texture = ExtResource("19_2ab3f")
 metadata/_edit_lock_ = true
 
