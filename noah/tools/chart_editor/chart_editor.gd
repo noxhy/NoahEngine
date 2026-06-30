@@ -116,13 +116,11 @@ func _ready() -> void:
 	%"Lower UI".get_node("%Chart Snap").value = chart_snap
 	
 	## Initializing Popup Signals
-	
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if start_offset < 0:
-		start_offset = 0
+	start_offset = clampf(start_offset, 0, start_offset)
 	
 	if ChartManager.song and instrumental.playing:
 		song_position = %Instrumental.get_playback_position() - start_offset
@@ -148,9 +146,9 @@ func _process(delta: float) -> void:
 			var track = ChartManager.strum_data[strum]["track"]
 			if track < vocal_tracks.size():
 				if ChartManager.strum_data[strum]["muted"]:
-					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], -80)
+					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(0))
 				else:
-					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], 0)
+					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	else:
 		if Input.is_action_just_pressed(&"mouse_scroll_up"):
 			if !Input.is_action_pressed(&"control") and can_chart:
@@ -464,7 +462,6 @@ func _draw() -> void:
 
 
 func on_files_dropped(files: PackedStringArray):
-	print("Received files: ", files)
 	var file: String = files[0]
 	var local_file: String = ProjectSettings.localize_path(file)
 	print("File taken: ", local_file)
@@ -511,7 +508,6 @@ func update_grid():
 		strum_label_instance.connect(&"opened", self.disable_charting)
 		strum_label_instance.connect(&"closed", self.close_popup)
 		strum_label_instance.connect(&"updated", self.updated_strums)
-		#strum_label_instance.connect(&"gui_focus_changed", self._on_gui_focus_changed)
 	
 	%"Strum Labels".size.y = 32
 
@@ -1075,7 +1071,6 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 			low = mid + 1
 	
 	return found
-
 
 func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	var length: int = value_set.size()
