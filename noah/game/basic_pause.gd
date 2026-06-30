@@ -1,8 +1,6 @@
 extends Node2D
 class_name BasicPause
 
-@onready var music = $Audio/Music
-
 ## Nested dictionary where each key has keys: [code]name[/code] and [code]icon[/code].[br]
 ## [br][code]name[/code] - The display name of the option.
 ## [br][code]icon[/code] - The texture that will display next to the display name.
@@ -62,9 +60,6 @@ var current_credit: int = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var tween = create_tween()
-	music.volume_linear = 0
-	tween.tween_property(music, "volume_linear", 1, 4)
 	$AnimationPlayer.play("intro")
 	
 	%"Song Name".text = GameManager.current_song.title
