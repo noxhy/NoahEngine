@@ -1,16 +1,6 @@
 extends Node2D
 class_name ChartEditor
 
-var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
-var EVENT_PRELOAD = load("uid://n6k15grja0uh")
-var STRUM_BUTTON_PRELOAD = load("uid://ddohksqocyhnx")
-
-var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
-var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
-var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
-
-const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
-
 static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") : 
 	get():
 		if note_skin == null:
@@ -18,6 +8,18 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 		return note_skin
 
 static var song_position: float = 0.0
+
+var TOOL_THEME = load("uid://b1gv0wfdmojbx")
+var DEFAULT_FONT: Font = ThemeDB.fallback_font
+var DEFAULT_FONT_SIZE: int = ThemeDB.fallback_font_size
+
+var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
+var EVENT_PRELOAD = load("uid://n6k15grja0uh")
+var STRUM_BUTTON_PRELOAD = load("uid://ddohksqocyhnx")
+
+var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
+var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
+var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 @export_group("Colors")
 @export var hover_color: Color = Color(1, 1, 1, 0.5)
@@ -28,12 +30,11 @@ static var song_position: float = 0.0
 @export var selected_color: Color = Color.GREEN
 @export var time_change_color: Color = Color.PURPLE
 
-@onready var undo_redo: UndoRedo = UndoRedo.new()
-
 @onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
-@onready var lower_ui: Control = %"Lower UI"
+@onready var lower_ui: ChartEditorLowerUI = %"Lower UI"
 @onready var instrumental: AudioStreamPlayer = %Instrumental
 @onready var vocals: AudioStreamPlayer = %Vocals
+
 
 ## Chart Variables
 var backup_chart: Chart = null
@@ -41,6 +42,9 @@ var backup_chart: Chart = null
 var vocal_tracks: Array = []
 
 ## Editor Variables
+var undo_redo: UndoRedo = UndoRedo.new()
+const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
+
 var start_offset: float = 0.0
 var song_speed: float = 1.0
 var note_nodes: Array = []
@@ -76,15 +80,6 @@ var event_nodes: Array = []
 var current_visible_events_L: int = -1
 var current_visible_events_R: int = -1
 
-var TOOL_THEME = load("uid://b1gv0wfdmojbx")
-var default_font: Font = ThemeDB.fallback_font
-var default_font_size: int = ThemeDB.fallback_font_size
-
-func make_shortcut_quick(events: Array) -> Shortcut:
-	var shortcut: Shortcut = Shortcut.new()
-	shortcut.events = events
-	return shortcut
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if name == "Chart Editor":
@@ -100,20 +95,19 @@ func _ready() -> void:
 	if not ChartManager.song:
 		upper_ui.file_button_item_pressed(1)
 	else:
-		var old_song = null
 		var song = ChartManager.song
 		load_song(song, ChartManager.difficulty)
 		var action: String = "Loaded Song"
 		undo_redo.create_action(action)
 		undo_redo.add_do_property(self, "song", song)
-		undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
-		undo_redo.add_undo_property(self, "song", old_song)
+		undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
+		undo_redo.add_undo_property(self, "song", null)
 		undo_redo.commit_action()
 		can_chart = true
 	
 	update_grid()
 	
-	%"Lower UI".get_node("%Chart Snap").value = chart_snap
+	lower_ui.chart_snap.value = chart_snap
 	
 	## Initializing Popup Signals
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
@@ -123,7 +117,7 @@ func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
 	if ChartManager.song and instrumental.playing:
-		song_position = %Instrumental.get_playback_position() - start_offset
+		song_position = instrumental.get_playback_position() - start_offset
 		%"Song Slider".value = song_position
 		
 		GameManager.seconds_per_beat = $Conductor.seconds_per_beat
@@ -446,19 +440,19 @@ func _draw() -> void:
 	if hovered_note != -1 and ChartManager.chart:
 		var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
 		if note_type != "":
-			draw_string_outline(default_font, get_global_mouse_position(), str("Type: ", note_type),
-			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
-			draw_string(default_font, get_global_mouse_position(), str("Type: ", note_type),
-			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+			draw_string_outline(DEFAULT_FONT, get_global_mouse_position(), str("Type: ", note_type),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
+			draw_string(DEFAULT_FONT, get_global_mouse_position(), str("Type: ", note_type),
+			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
 	
 	if hovered_event != -1 and ChartManager.chart:
 		var event = ChartManager.chart.get_events_data()[hovered_event][1]
 		var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
 		var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
-		draw_string_outline(default_font, get_global_mouse_position(), text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
-		draw_string(default_font, get_global_mouse_position(), text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+		draw_string_outline(DEFAULT_FONT, get_global_mouse_position(), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
+		draw_string(DEFAULT_FONT, get_global_mouse_position(), text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
 
 
 func on_files_dropped(files: PackedStringArray):
@@ -879,10 +873,6 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
 	return output
 
-
-func sort_note(a, b):
-	return a.time < b.time
-
 # Returns the indexes of the new notes
 func place_notes(notes: Array) -> Array:
 	var indices: Array = []
@@ -937,9 +927,8 @@ func find_note(lane: int, time: float) -> int:
 	
 	for i in range(L, R + 1):
 		var note: Array = ChartManager.chart.get_notes_data()[i]
-		if (note[1] == lane):
-			if is_equal_approx(note[0], time):
-				return i
+		if note[1] == lane and is_equal_approx(note[0], time):
+			return i
 	
 	return -1
 
@@ -963,22 +952,22 @@ func find_event(event: String, time: float) -> int:
 	return -1
 
 func play_audios(time: float):
-	%Vocals.stream = AudioStreamPolyphonic.new()
+	vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
-	%Vocals.play()
+	vocals.play()
 	if not ChartManager.song:
 		return
-	%Vocals.stream.polyphony = ChartManager.song.vocals.size()
+	vocals.stream.polyphony = ChartManager.song.vocals.size()
 	
-	var playback = %Vocals.get_stream_playback()
+	var playback = vocals.get_stream_playback()
 	vocal_tracks = []
 	for stream in ChartManager.song.vocals:
 		vocal_tracks.append(playback.play_stream(SoundManager._get_stream(stream),
 		time + start_offset, 0.0, song_speed))
 	
-	time = clamp(time, 0, %Instrumental.stream.get_length() - 0.1)
-	%Instrumental.play(time + start_offset)
-	%Instrumental.pitch_scale = song_speed
+	time = clamp(time, 0, instrumental.stream.get_length() - 0.1)
+	instrumental.play(time + start_offset)
+	instrumental.pitch_scale = song_speed
 	song_position = time + start_offset
 	
 	current_note = bsearch_left_range(ChartManager.chart.get_notes_data(), song_position)
@@ -1268,55 +1257,31 @@ func view_button_item_pressed(id):
 func window_button_item_pressed(id):
 	match id:
 		0:
-			if %"Upper UI".get_node("%History Window").visible:
-				%"Upper UI".get_node("%History Window").hide()
-				%"Close Window".play()
-			else:
-				%"Upper UI".get_node("%History Window").popup()
-				%"Open Window".play()
+			toggle_window_visibility(upper_ui.history_window)
 			
 			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%History Window").visible)
 		1:
-			if %"Upper UI".get_node("%Metadata Window").visible:
-				%"Upper UI".get_node("%Metadata Window").hide()
-				%"Close Window".play()
-			else:
-				%"Upper UI".get_node("%Metadata Window").popup()
-				%"Open Window".play()
+			toggle_window_visibility(upper_ui.metadata_window)
 			
 			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%Metadata Window").visible)
 		2:
-			if %"Upper UI".get_node("%Note Type Window").visible:
-				%"Upper UI".get_node("%Note Type Window").hide()
-				%"Close Window".play()
-			else:
-				%"Upper UI".get_node("%Note Type Window").popup()
-				%"Open Window".play()
+			toggle_window_visibility(upper_ui.note_type_window)
 			
 			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%Note Type Window").visible)
+
+func toggle_window_visibility(window: Window):
+	if window.visible:
+		window.hide()
+		%"Close Window".play()
+	else:
+		window.popup()
+		%"Open Window".play()
 
 ## Edit button item pressed
 func test_button_item_pressed(id):
 	match id:
-		0:
-			if ResourceLoader.exists(ChartManager.song.scene):
-				GameManager.current_song = ChartManager.song
-				GameManager.difficulty = ChartManager.difficulty
-				GameManager.freeplay = true
-				GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
-				Global.change_scene_to(ChartManager.song.scene)
-				self.process_mode = Node.PROCESS_MODE_DISABLED
-			else:
-				printerr("(Chart Editor) Scene does not exist")
-		
-		1:
-			GameManager.current_song = ChartManager.song
-			GameManager.difficulty = ChartManager.difficulty
-			GameManager.freeplay = true
-			GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
-			Global.change_scene_to("uid://c56g0k7u2k6wo")
-			self.process_mode = Node.PROCESS_MODE_DISABLED
-		
+		0: test_current_song(false)
+		1: test_current_song(true)
 		2:
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "start_at_current_position",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
@@ -1326,8 +1291,29 @@ func test_button_item_pressed(id):
 			"start_at_current_position"))
 			%"Mouse Click".play()
 		
-		_:
-			print("id: ", id)
+		_: print("id: ", id)
+
+func test_current_song(minimal: bool):
+	if not ChartManager.song:
+		printerr("(Chart Editor) Cannot test chart as there is no Song")
+		return
+	if not ResourceLoader.exists(ChartManager.song.scene) and not minimal:
+		printerr('(Chart Editor) Cannot test chart as (%s) could not be found' % ChartManager.song.scene)
+		return
+	
+	var scene_to_load: String = "uid://c56g0k7u2k6wo" if minimal else ChartManager.song.scene
+	
+	GameManager.current_song = ChartManager.song
+	GameManager.difficulty = ChartManager.difficulty
+	GameManager.freeplay = true
+	GameManager.play_mode = GameManager.PLAY_MODE.CHARTING
+	Global.change_scene_to(scene_to_load)
+
+
+func make_shortcut_quick(events: Array) -> Shortcut:
+	var shortcut: Shortcut = Shortcut.new()
+	shortcut.events = events
+	return shortcut
 
 
 func disable_charting():
