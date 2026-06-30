@@ -2,6 +2,11 @@ extends Node2D
 
 const MODS_DIR: String = "mods"
 
+enum ModError {
+	OUTDATED_ENGINE,
+	OUTDATED_MOD
+}
+
 @export_dir var debug_mod_dirs: PackedStringArray
 
 var mod_node = load("uid://dquulk3yl1u8e")
@@ -17,14 +22,15 @@ var selected: int = -1
 @onready var mod_name = %Name
 @onready var mod_description = %Description
 @onready var credits = %Credits
+@onready var information_label = %"Notification Label"
 
 # Meant to be replaced
 func _ready() -> void:
 	load_mods()
-	if mod_data.size() == 1:
-		selected = 0
-		_on_run_mod_pressed()
-		return
+	#if mod_data.size() == 1:
+		#selected = 0
+		#_on_run_mod_pressed()
+		#return
 	
 	display_mods()
 	update(-1)
@@ -35,6 +41,14 @@ func _ready() -> void:
 		node.connect(&"mouse_exited", self.update.bind(-1))
 		node.connect(&"gui_input", self.mod_input.bind(node))
 		i += 1
+	
+	var http: HTTPRequest = HTTPRequest.new()
+	add_child(http)
+	http.connect(&"request_completed", self.engine_http)
+	
+	var error = http.request("https://raw.githubusercontent.com/noxhy/NoahEngine/refs/heads/master/project.godot")
+	if error != OK:
+		push_error("An error occurred in the HTTP request.")
 
 
 func _input(event: InputEvent) -> void:
@@ -52,6 +66,23 @@ func display_mods() -> void:
 		mod_instance.mod_name = data.get("name", "No name found.")
 		mod_instance.description = data.get("credits", "No credits found.")
 		mod_instance.dir = mod_dir
+		
+		if !data.get("supported_versions", []).has(ProjectSettings.get_setting("application/config/version")):
+			mod_instance.errors.append(ModError.OUTDATED_ENGINE)
+		
+		if data.has("meta_link"):
+			var http: HTTPRequest = HTTPRequest.new()
+			add_child(http)
+			var github_http = func(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+				var mod_version = JSON.parse_string(body.get_string_from_utf8()).get("version", "0.0.0")
+				
+				if mod_version != mod_data[mod_dir].get("version", "0.0.0"):
+					mod_instance.errors.append(ModError.OUTDATED_MOD)
+				
+				update(selected)
+			
+			http.connect(&"request_completed", github_http)
+			http.request(data.get("meta_link", ""))
 
 
 func load_mods() -> void:
@@ -93,11 +124,8 @@ func load_mods() -> void:
 func update(i: int):
 	var j: int = 0
 	for node in get_tree().get_nodes_in_group(&"mods"):
-		var mod: String = mods[j]
-		var data = mod_data[mod]
-		
 		if j != selected:
-			if !data.get("supported_versions", []).has(ProjectSettings.get_setting("application/config/version")):
+			if !node.errors.is_empty():
 				node.change_style(ModNode.ButtonStyle.WRONG)
 			elif j == i:
 				node.change_style(ModNode.ButtonStyle.HOVER)
@@ -111,11 +139,17 @@ func update(i: int):
 
 func update_mod_info():
 	var mod_dir: String = mods[selected]
+	var mod_instance = get_tree().get_nodes_in_group(&"mods")[selected]
 	
 	mod_icon.texture = ImageTexture.create_from_image(Image.load_from_file(mod_dir.path_join("icon.png")))
 	mod_name.text = mod_data[mod_dir].get("name", "No name found.")
 	credits.text = mod_data[mod_dir].get("credits", "No credits found.")
-	mod_description.text = str("Version: ", mod_data[mod_dir].get("version", "0.0.0"))
+	mod_description.text = ""
+	
+	if !mod_instance.errors.is_empty():
+		mod_description.text = str("[color=red]Error(s): ", format_errors(mod_instance.errors, mod_data[mod_dir]), "[/color]\n")
+	
+	mod_description.text += str("Version: ", mod_data[mod_dir].get("version", "0.0.0"))
 	mod_description.text += str("\nDescription: ", mod_data[mod_dir].get("description", "No description found."))
 
 
@@ -156,3 +190,35 @@ func _on_run_mod_pressed() -> void:
 			# You have to keep the script alive for it to keep changes to ProjectSettings.
 			@warning_ignore("unused_variable")
 			var init_instance = init_res.new()
+
+# Checks the current master engine version
+func engine_http(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
+	var config: ConfigFile = ConfigFile.new()
+	config.parse(body.get_string_from_utf8())
+	
+	var engine_version: String = config.get_value("application", "config/version", "0.0.0")
+	var current_version: String = ProjectSettings.get_setting("application/config/version")
+	
+	if current_version != engine_version:
+		information_label.text = "Your NoahEngine is out of date! Click [url=https://github.com/noxhy/NoahEngine/releases]here[/url] to download the latest version."
+
+
+func _on_notification_label_meta_clicked(meta: Variant) -> void:
+	OS.shell_open(str(meta))
+
+
+func format_errors(list: Array, data: Dictionary = {}) -> String:
+	var output: Array = []
+	for error in list:
+		match error:
+			ModError.OUTDATED_ENGINE:
+				output.append(str("This mod supports NoahEngine versions ", data.get("supported_versions", [])))
+			
+			ModError.OUTDATED_MOD:
+				output.append(str("There is a new release available. Download it [url=", data.get("download_link"), "]here[/url]."))
+	
+	return "\n".join(output)
+
+
+func _on_description_meta_clicked(meta: Variant) -> void:
+	OS.shell_open(str(meta))
