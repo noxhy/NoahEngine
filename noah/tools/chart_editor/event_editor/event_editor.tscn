@@ -200,7 +200,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "+"
 
-[node name="Event Creator" type="PopupPanel" parent="UI" unique_id=1125385941]
+[node name="Event Creator" type="PopupPanel" parent="UI" unique_id=1125385941 groups=["windows"]]
 unique_name_in_owner = true
 title = "Event Creator"
 initial_position = 1
@@ -241,7 +241,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 text = "Place Event"
 
-[node name="Add Track Window" type="Window" parent="UI" unique_id=433443772]
+[node name="Add Track Window" type="Window" parent="UI" unique_id=433443772 groups=["windows"]]
 unique_name_in_owner = true
 transparent_bg = true
 oversampling_override = 1.0

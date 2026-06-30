@@ -83,7 +83,7 @@ func _process(delta: float) -> void:
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(
-			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
+			%Grid.get_grid_position(mouse_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)).floor()
 			)
 	
 	$"Grid Layer/Parallax2D".repeat_size.x = %Grid.get_size().x
@@ -94,7 +94,7 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 				if can_chart:
-					if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)
+					if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < %Grid.rows)
 					and !current_focus_owner):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
 						var time: float = grid_position_to_time(snapped_position, true)
