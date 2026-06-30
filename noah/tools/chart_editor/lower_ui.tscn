@@ -141,7 +141,7 @@ size_flags_horizontal = 10
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
-text = "TEMPO"
+text = "tempo: ??"
 vertical_alignment = 1
 
 [node name="VSeparator2" type="VSeparator" parent="HBoxContainer3" unique_id=431522723]
