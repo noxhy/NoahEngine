@@ -53,7 +53,10 @@ var clipboard: Array = []
 var can_chart: bool = false
 
 var current_snap: int = 3
-var chart_snap: float = SNAPS[current_snap]
+var chart_snap: float = SNAPS[current_snap] :
+	set(v):
+		if lower_ui:
+			lower_ui.chart_snap.value = v
 
 var selected_notes: Array = []
 var selected_note_nodes: Array = []
@@ -108,7 +111,7 @@ func _ready() -> void:
 	
 	update_grid()
 	
-	lower_ui.chart_snap.value = chart_snap
+	chart_snap = chart_snap
 	
 	## Initializing Popup Signals
 	get_tree().get_root().files_dropped.connect(on_files_dropped)
@@ -153,7 +156,6 @@ func _process(delta: float) -> void:
 			else:
 				current_snap += 1
 				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
 		
 		if Input.is_action_just_pressed(&"mouse_scroll_down"):
 			if !Input.is_action_pressed(&"control") and can_chart:
@@ -164,7 +166,6 @@ func _process(delta: float) -> void:
 			else:
 				current_snap -= 1
 				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
 		
 		conductor.time = song_position
 	
@@ -532,11 +533,11 @@ func load_song(song: Song, difficulty: Variant = null):
 	conductor.denominator = meter[1]
 	conductor.offset = ChartManager.chart.offset
 	
-	%"Lower UI".get_node("%Difficulty Button").get_popup().clear()
+	lower_ui.get_node("%Difficulty Button").get_popup().clear()
 	for d in ChartManager.song.difficulties.keys():
-		%"Lower UI".get_node("%Difficulty Button").get_popup().add_item(d)
+		lower_ui.get_node("%Difficulty Button").get_popup().add_item(d)
 	
-	%"Lower UI".get_node("%Difficulty Button").select(ChartManager.song.difficulties.keys().find(difficulty))
+	lower_ui.get_node("%Difficulty Button").select(ChartManager.song.difficulties.keys().find(difficulty))
 	%"Upper UI".get_node("%Metadata Window").update_stats()
 	
 	load_chart(ChartManager.chart)
@@ -1089,10 +1090,10 @@ func _on_play_button_toggled(toggled_on: bool) -> void:
 	instrumental.stream_paused = !toggled_on
 	
 	if toggled_on:
-		%"Lower UI".get_node("%Play Button").icon = load("uid://c1mgxe0dqdbgh")
+		lower_ui.get_node("%Play Button").icon = load("uid://c1mgxe0dqdbgh")
 		play_audios(song_position)
 	
-	else: %"Lower UI".get_node("%Play Button").icon = load("uid://byl3boevtc02p")
+	else: lower_ui.get_node("%Play Button").icon = load("uid://byl3boevtc02p")
 
 func move_bound_left(strum_id: int):
 	var strum_data = ChartManager.strum_data[strum_id]
@@ -1155,15 +1156,15 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if ChartManager.chart:
 		load_section(song_position)
 	
-	%"Lower UI".get_node("%Beat").text = str("Beat: ", current_beat + 1)
+	lower_ui.get_node("%Beat").text = str("Beat: ", current_beat + 1)
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"):
 		%"Conductor Step".play(0.55)
-	%"Lower UI".get_node("%Step").text = str("Step: ", current_step + 1)
+	lower_ui.get_node("%Step").text = str("Step: ", current_step + 1)
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
-	%"Lower UI".get_node("%Tempo").text = str("Tempo: ", _tempo)
+	lower_ui.get_node("%Tempo").text = str("Tempo: ", _tempo)
 	update_grid()
 	load_dividers()
 
@@ -1426,11 +1427,10 @@ func load_waveforms():
 				printerr("(load_waveforms) Track ", track, " does not exist.")
 
 func _on_chart_snap_value_changed(value: float) -> void:
-	# This is really dumb and janky
 	chart_snap = value
 
 func _on_difficulty_button_item_selected(index: int) -> void:
-	var _difficulty = %"Lower UI".get_node("%Difficulty Button").get_popup().get_item_text(index)
+	var _difficulty = lower_ui.get_node("%Difficulty Button").get_popup().get_item_text(index)
 	if ChartManager.song.difficulties.keys().has(_difficulty):
 		ChartManager.chart = Chart.load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
 		ChartManager.difficulty = _difficulty

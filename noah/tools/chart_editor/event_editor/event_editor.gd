@@ -305,17 +305,17 @@ func _draw() -> void:
 			var i: int = 0
 			for parameter in parameters:
 				text = str(Constants.EVENT_DATA[event]["parameters"][i], ": ", parameter)
-				draw_string_outline(default_font, get_global_mouse_position() + Vector2(0, default_font_size * i), text,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
-				draw_string(default_font, get_global_mouse_position() + Vector2(0, default_font_size * i), text,
-				HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+				draw_string_outline(DEFAULT_FONT, get_global_mouse_position() + Vector2(0, DEFAULT_FONT_SIZE * i), text,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
+				draw_string(DEFAULT_FONT, get_global_mouse_position() + Vector2(0, DEFAULT_FONT_SIZE * i), text,
+				HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
 				i += 1
 		else:
 			text = str(parameters)
-			draw_string_outline(default_font, get_global_mouse_position(), text,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size, default_font_size / 2, Color.BLACK)
-			draw_string(default_font, get_global_mouse_position(), text,
-			HORIZONTAL_ALIGNMENT_LEFT, -1, default_font_size)
+			draw_string_outline(DEFAULT_FONT, get_global_mouse_position(), text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE, DEFAULT_FONT_SIZE / 2, Color.BLACK)
+			draw_string(DEFAULT_FONT, get_global_mouse_position(), text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, DEFAULT_FONT_SIZE)
 
 ## View button item pressed
 func view_button_item_pressed(id):
