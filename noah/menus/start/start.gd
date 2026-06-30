@@ -27,10 +27,10 @@ var selected: int = -1
 # Meant to be replaced
 func _ready() -> void:
 	load_mods()
-	#if mod_data.size() == 1:
-		#selected = 0
-		#_on_run_mod_pressed()
-		#return
+	if mod_data.size() == 1:
+		selected = 0
+		_on_run_mod_pressed()
+		return
 	
 	display_mods()
 	update(-1)
