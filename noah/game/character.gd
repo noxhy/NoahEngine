@@ -229,7 +229,7 @@ func hold_animation():
 		
 		animation_player.playing = true
 	else:
-		if animation_player.sprite_frames.get_animation_loop(animation_name):
+		if animation_player.sprite_frames.get_animation_loop_mode(animation_name) != SpriteFrames.LoopMode.LOOP_NONE:
 			return
 		
 		length = animation_player.sprite_frames.get_frame_count(animation_name)
