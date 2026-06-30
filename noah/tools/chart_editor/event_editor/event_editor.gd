@@ -13,15 +13,15 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if start_offset < 0:
-		start_offset = 0
+	start_offset = clampf(start_offset, 0, start_offset)
+	
+	
+	var can_interact_with_chart: bool = can_chart and not is_any_window_overlapped(get_corrected_mouse_position()) and ChartManager.chart
 	
 	if ChartManager.song:
 		if %Instrumental.playing:
 			song_position = %Instrumental.get_playback_position() - start_offset
 			%"Song Slider".value = song_position
-			
-			GameManager.seconds_per_beat = $Conductor.seconds_per_beat
 			
 			for strum in ChartManager.strum_data.size():
 				var track = ChartManager.strum_data[strum]["track"]
@@ -67,14 +67,6 @@ func _process(delta: float) -> void:
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
-	%"Lower UI".get_node("%Current Time Label").text = Global.format_time(song_position + start_offset)
-	if song_speed != 1:
-		%"Lower UI".get_node("%Current Time Label").text += str(" (", song_speed, "x)")
-	
-	if ChartManager.song:
-		%"Lower UI".get_node("%Time Left Label").text = "-" + Global.format_time(%Instrumental.stream.get_length() - song_position)
-	else:
-		%"Lower UI".get_node("%Time Left Label").text = "- ??:??"
 	
 	if Input.is_action_just_pressed(&"menu_accept"):
 		_on_play_button_toggled(!%Instrumental.stream_paused)
@@ -93,7 +85,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"mouse_left"):
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
-				if can_chart:
+				if can_interact_with_chart:
 					if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < %Grid.rows)
 					and !current_focus_owner):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
@@ -112,6 +104,7 @@ func _process(delta: float) -> void:
 										add_action("Placed Event", self.place_event.bind(time, event, [], true),
 										self.remove_note.bind(event, time))
 										%"Note Place".play()
+										
 							else:
 								var i: int = find_event(event, time)
 								if selected_notes.has(i):
@@ -281,7 +274,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		## Hover Box
-		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner):
+		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner) and not is_any_window_overlapped(get_corrected_mouse_position()):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			draw_rect(rect, hover_color)

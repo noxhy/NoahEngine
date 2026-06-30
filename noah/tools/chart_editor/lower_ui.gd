@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 		return
 		
 	if ChartManager.song and chart_editor.instrumental and chart_editor.instrumental.stream:
-		time_left_label.text = "-" + Global.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position)
+		time_left_label.text = "-" + Global.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position - chart_editor.start_offset)
 	else:
 		time_left_label.text = "- ??:??"
 		
