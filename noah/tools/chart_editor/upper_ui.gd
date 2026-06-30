@@ -427,7 +427,7 @@ func file_button_item_pressed(id):
 			
 			export_window.connect(&"file_selected", chart_editor.on_save)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
-			export_window.connect(&"close_requested", chart_editor.on_close)
+			export_window.connect(&"close_requested", on_close)
 			export_window.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 		10: #Load events
 			chart_editor.can_chart = false
@@ -467,7 +467,7 @@ func file_button_item_pressed(id):
 			
 			export_window.connect(&"file_selected", chart_editor.on_open)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
-			export_window.connect(&"close_requested", chart_editor.on_close)
+			export_window.connect(&"close_requested", on_close)
 			export_window.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 
 		_:
