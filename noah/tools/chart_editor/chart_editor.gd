@@ -391,29 +391,17 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
-var _found_windows:Array[Window] = []
 func is_any_window_overlapped(point: Vector2) -> bool:
-	if _found_windows.is_empty():
-		_find_window(self)
 		
-	for window: Window in _found_windows:
-		if not window or not window.visible:
+	for window: Window in get_tree().get_nodes_in_group(&"windows"):
+		if not window or not window.visible or window is not Window:
 			continue
 		
 		var position_offset = window.get_position_with_decorations() - window.position
 		var window_rect = Rect2i(window.get_position_with_decorations() + position_offset, window.get_size_with_decorations())
 		if window_rect.has_point(point):
 			return true
-	
-	
 	return false
-
-func _find_window(parent: Node):
-	for child in parent.get_children():
-		if child is Window and child.get_class() == 'Window':
-			_found_windows.append(child)
-		
-		_find_window(child)
 
 func is_grid_focused(check_control_focus: bool = true) -> bool:
 	var screen_mouse_pos = get_global_mouse_position() - Vector2(0, $Camera2D.position.y - 360)

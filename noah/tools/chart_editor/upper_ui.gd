@@ -201,6 +201,7 @@ func file_button_item_pressed(id):
 			file_dialog.use_native_dialog = true
 			file_dialog.mode_overrides_title = false
 			file_dialog.title = 'Load a Song Zip'
+			file_dialog.add_to_group(&"windows")
 			
 			add_child(file_dialog)
 			file_dialog.popup()
@@ -280,6 +281,7 @@ func file_button_item_pressed(id):
 			file_dialog.use_native_dialog = true
 			file_dialog.mode_overrides_title = false
 			file_dialog.title = 'Export a Song Zip'
+			file_dialog.add_to_group(&"windows")
 			
 			file_dialog.about_to_popup.connect(chart_editor.open_popup)
 			file_dialog.close_requested.connect(chart_editor.close_popup)
@@ -405,6 +407,7 @@ func file_button_item_pressed(id):
 			export_window.filters = PackedStringArray(['*.res','*.tres'])
 			export_window.file_mode = FileDialog.FILE_MODE_SAVE_FILE
 			export_window.display_mode = FileDialog.DISPLAY_LIST
+			export_window.add_to_group(&"windows")
 			$"UI/Upper UI".add_child(export_window)
 			
 			export_window.popup_centered()
@@ -435,6 +438,7 @@ func file_button_item_pressed(id):
 			export_window.filters = PackedStringArray(['*.res','*.tres'])
 			export_window.file_mode = FileDialog.FILE_MODE_OPEN_FILE
 			export_window.display_mode = FileDialog.DISPLAY_LIST
+			export_window.add_to_group(&"windows")
 			$"UI/Upper UI".add_child(export_window)
 			
 			export_window.popup_centered()

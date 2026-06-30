@@ -18,7 +18,7 @@ min_size = Vector2i(480, 0)
 theme = ExtResource("1_pptwc")
 script = ExtResource("1_qca52")
 
-[node name="SaveFolderDialog" type="FileDialog" parent="." unique_id=1404695521]
+[node name="SaveFolderDialog" type="FileDialog" parent="." unique_id=1404695521 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a Directory"
@@ -149,7 +149,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File Location"
 
-[node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=381986006]
+[node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=381986006 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Provide Vocals file(s)"
@@ -181,7 +181,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File Location"
 
-[node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=812938838]
+[node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=812938838 groups=["windows"]]
 unique_name_in_owner = true
 title = "Provide Inst file"
 initial_position = 1

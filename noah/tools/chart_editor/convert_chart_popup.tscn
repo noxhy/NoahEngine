@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://drlrm6yoeyvls" path="res://noah/tools/chart_editor/convert_chart_popup.gd" id="1_byst7"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_p6cg2"]
 
-[node name="Convert File Popup" type="Window" unique_id=787528886]
+[node name="Convert File Popup" type="Window" unique_id=787528886 groups=["windows"]]
 transparent_bg = true
 msaa_2d = 1
 oversampling_override = 1.0
@@ -114,7 +114,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File"
 
-[node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=250682584]
+[node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=250682584 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open File(s)"
@@ -145,7 +145,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Select File"
 
-[node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=34144751]
+[node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=34144751 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Open a File"
