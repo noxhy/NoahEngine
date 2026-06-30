@@ -215,6 +215,35 @@ func load_keybinds():
 			
 			InputMap.action_add_event(bind_id, new_key)
 	
+#region Joystick Controls
+	var event: InputEventJoypadMotion
+	for axis in [JOY_AXIS_LEFT_X, JOY_AXIS_RIGHT_X]:
+		event = InputEventJoypadMotion.new()
+		event.axis = axis
+		event.axis_value = -1
+		InputMap.action_add_event("note_left", event)
+		InputMap.action_add_event("menu_left", event)
+		
+		event = InputEventJoypadMotion.new()
+		event.axis = axis
+		event.axis_value = 1
+		InputMap.action_add_event("note_right", event)
+		InputMap.action_add_event("menu_right", event)
+	
+	for axis in [JOY_AXIS_LEFT_Y, JOY_AXIS_RIGHT_Y]:
+		event = InputEventJoypadMotion.new()
+		event.axis = axis
+		event.axis_value = -1
+		InputMap.action_add_event("note_up", event)
+		InputMap.action_add_event("menu_up", event)
+		
+		event = InputEventJoypadMotion.new()
+		event.axis = axis
+		event.axis_value = 1
+		InputMap.action_add_event("note_down", event)
+		InputMap.action_add_event("menu_down", event)
+#endregion
+	
 	print("(SettingsManager): Key and Controller binds loaded")
 
 
