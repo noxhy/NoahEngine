@@ -46,6 +46,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Current beat (Relative to previous tempo/meter change)"
+mouse_filter = 0
 text = "BEAT"
 vertical_alignment = 1
 
@@ -54,6 +55,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Current step (Relative to previous tempo/meter change)"
+mouse_filter = 0
 text = "STEP"
 vertical_alignment = 1
 

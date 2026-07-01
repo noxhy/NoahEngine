@@ -70,7 +70,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Edit"
-item_count = 12
+item_count = 14
 popup/item_0/text = "Undo"
 popup/item_0/id = 0
 popup/item_1/text = "Redo"
@@ -95,6 +95,10 @@ popup/item_10/text = "Select All Visible Notes"
 popup/item_10/id = 10
 popup/item_11/text = "Deselect All"
 popup/item_11/id = 11
+popup/item_12/text = "Increase Note Length"
+popup/item_12/id = 12
+popup/item_13/text = "Decrease Note Length"
+popup/item_13/id = 13
 metadata/_edit_use_anchors_ = true
 
 [node name="View Button" type="MenuButton" parent="." unique_id=331440346]
@@ -219,6 +223,7 @@ visible = false
 
 [node name="Help Button" type="MenuButton" parent="." unique_id=1457749919]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0

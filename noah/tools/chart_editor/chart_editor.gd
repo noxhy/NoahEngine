@@ -1230,6 +1230,8 @@ func edit_button_item_pressed(id):
 		8:  do_flip()
 		10: select_all()
 		11: deselect_all()
+		12: increase_length()
+		13: decrease_length()
 		_:  print("id: ", id)
 
 ## Audio button item pressed
@@ -1711,6 +1713,35 @@ func flip():
 		selected_notes.sort()
 		
 		%"Note Place".play()
+
+func increase_length():
+	var action: String = "Changed Note Length(s)"
+	undo_redo.create_action(action)
+	for i in selected_notes:
+		var length: float = ChartManager.chart.get_notes_data()[i][2]
+		var delta: float = (pow(conductor.numerator, 2) / chart_snap) * conductor.seconds_per_step
+		undo_redo.add_do_method(self.change_length.bind(i, length + delta))
+		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length + delta)
+		undo_redo.add_undo_method(self.change_length.bind(i, length))
+		undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L], "length", length)
+	
+	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
+	undo_redo.commit_action()
+
+
+func decrease_length():
+	var action: String = "Changed Note Length(s)"
+	undo_redo.create_action(action)
+	for i in selected_notes:
+		var length: float = ChartManager.chart.get_notes_data()[i][2]
+		var delta: float = (pow(conductor.numerator, 2) / chart_snap) * conductor.seconds_per_step
+		undo_redo.add_do_method(self.change_length.bind(i, length - delta))
+		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length - delta)
+		undo_redo.add_undo_method(self.change_length.bind(i, length))
+		undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L], "length", length)
+	
+	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
+	undo_redo.commit_action()
 
 
 func change_length(i: int, length: float) -> void:
