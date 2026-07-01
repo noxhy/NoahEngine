@@ -1466,7 +1466,7 @@ func update_waveforms(time: float = 0):
 		
 		if waveform:
 			var L: float = max(time, 0)
-			var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat(), instrumental.stream.get_length())
+			var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat() * 2, instrumental.stream.get_length())
 			waveform.time = (L * 1000) / 7.8
 			waveform.duration = (R - L) * 130
 			#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
