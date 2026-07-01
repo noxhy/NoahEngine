@@ -179,9 +179,14 @@ func _process(delta: float) -> void:
 		var meter = ChartManager.chart.get_meter_at(time)
 		conductor.numerator = meter[0]
 		conductor.denominator = meter[1]
-		camera_2d.position.y = 360 + time_to_y_position(song_position)
 		conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartManager.chart.offset)
+		
+		if instrumental.playing:
+			camera_2d.position.y = 360 + time_to_y_position(song_position)
+		else:
+			camera_2d.position.y = Global.frame_independent_lerp(
+				camera_2d.position.y, 360 + time_to_y_position(song_position), 15, delta)
 	
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
