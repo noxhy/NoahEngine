@@ -78,6 +78,7 @@ var SPAM_SCORE_PENALTY: float = 10
 var SPAM_HEALTH_PENALTY: float = 1
 var MISS_SCORE_PENALTY: float = 100
 
+var DEFAULT_NOTE_SKIN: String = "uid://buly8rgmgrrnm"
 #region Note Types
 ## The note type and the corresponding animation prefix.
 var NOTE_TYPES: Dictionary = {

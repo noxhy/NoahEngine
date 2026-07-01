@@ -1,10 +1,10 @@
 extends Node2D
 class_name ChartEditor
 
-static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") : 
+static var note_skin: NoteSkin = load(Constants.DEFAULT_NOTE_SKIN) : 
 	get():
 		if note_skin == null:
-			note_skin = load("uid://buly8rgmgrrnm")
+			note_skin = load(Constants.DEFAULT_NOTE_SKIN)
 		return note_skin
 
 static var song_position: float = 0.0
