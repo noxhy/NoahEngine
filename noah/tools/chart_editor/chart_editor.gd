@@ -1322,18 +1322,18 @@ func view_button_item_pressed(id):
 			load_section(song_position)
 		
 		5: #Toggle Vocal Waveforms
-			var new = !vocal_waveforms
-			vocal_waveforms = new
+			vocal_waveforms = !vocal_waveforms
 			%"Mouse Click".play()
 			upper_ui.view_button.get_popup().set_item_checked(
-				upper_ui.view_button.get_popup().get_item_index(id), new)
+				upper_ui.view_button.get_popup().get_item_index(id), vocal_waveforms)
+			update_waveforms(song_position)
 		
-		6: #Toggle Vocal Waveforms
-			var new = !instrumental_waveforms
-			instrumental_waveforms = new
+		6: #Toggle Inst Waveforms
+			instrumental_waveforms = !instrumental_waveforms
 			%"Mouse Click".play()
 			upper_ui.view_button.get_popup().set_item_checked(
-				upper_ui.view_button.get_popup().get_item_index(id), new)
+				upper_ui.view_button.get_popup().get_item_index(id), instrumental_waveforms)
+			update_waveforms(song_position)
 		
 		_:
 			print("id: ", id)

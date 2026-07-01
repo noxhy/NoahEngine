@@ -34,6 +34,7 @@ func _ready() -> void:
 	edit_button.get_popup().id_pressed.connect(chart_editor.edit_button_item_pressed)
 	edit_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
+	#audio button
 	audio_button.get_popup().connect(&"id_pressed", chart_editor.audio_button_item_pressed)
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(7),
@@ -51,12 +52,17 @@ func _ready() -> void:
 		audio_button.get_popup().get_item_index(10),
 		SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
 	
+	#view button
 	view_button.get_popup().connect(&"id_pressed", chart_editor.view_button_item_pressed)
+	
 	view_button.get_popup().set_item_checked(
 		view_button.get_popup().get_item_index(5), ChartEditor.vocal_waveforms)
+		
 	view_button.get_popup().set_item_checked(
 		view_button.get_popup().get_item_index(6), ChartEditor.instrumental_waveforms)
 	view_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	
 	
 	test_button.get_popup().connect(&"id_pressed", chart_editor.test_button_item_pressed)
 	test_button.get_popup().set_item_checked(
