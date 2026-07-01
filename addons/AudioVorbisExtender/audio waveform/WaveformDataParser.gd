@@ -1,7 +1,7 @@
 class_name WaveformDataParser
 
 
-static func interpretSound(soundPath:String):
+static func interpretSound(soundPath:String) -> WaveformData:
 	if soundPath == null: 
 		push_error("sound path is null?,... consider putting one in??")
 		return null
@@ -25,7 +25,7 @@ static func interpretSound(soundPath:String):
 
 #im fucking geeked man !!! 
 #straight tweakinnnnggggg
-static func interpretPackets(soundBuffer):
+static func interpretPackets(soundBuffer) -> WaveformData:
 	var samplesPerPoint = 256
 	var result = WaveformData.new()
 	result.create(2, soundBuffer.channels, soundBuffer.sample_rate, samplesPerPoint, soundBuffer.bitsPerSample, soundBuffer.pcm_data.size(), soundBuffer.pcm_data)

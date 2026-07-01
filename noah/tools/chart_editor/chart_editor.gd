@@ -1449,14 +1449,11 @@ func load_waveforms():
 			if track < ChartManager.song.vocals.size() and vocal_tracks.get(track):
 				var data: WaveformData = waveform_data.get(vocal_tracks.get(track), null)
 				if data:
-					var waveform: WaveformRenderer = WaveformRenderer.new()
-					
-					waveform.keepData = true
+					var waveform: WaveformRenderer = WaveformRenderer.new(data, 0, Color.MEDIUM_PURPLE, Color.TRANSPARENT)
 					
 					$"Waveform Layer".add_child(waveform)
-					waveform.setOrientation("VERTICAL")
+					waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
 					waveform.add_to_group(&"waveforms")
-					waveform.create(data, Color.MEDIUM_PURPLE, null)
 					
 					waveform_nodes[track] = waveform
 			else:
@@ -1476,7 +1473,7 @@ func update_waveforms(time: float = 0):
 			waveform.width = time_to_y_position(R) - time_to_y_position(L)
 			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
 			waveform.position.y += time_to_y_position(L)
-			waveform.is_dirty = true
+			waveform.dirty = true
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
