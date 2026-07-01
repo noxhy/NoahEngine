@@ -357,7 +357,7 @@ func _process(delta: float) -> void:
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 			# Added leniency since notes are centered from the top
 			var pos_1: Vector2 = %Grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
-			var pos_2: Vector2 = %Grid.get_grid_position(rect.end - grid_offset) - Vector2(1, 0.5)
+			var pos_2: Vector2 = %Grid.get_grid_position(rect.end - grid_offset) + Vector2(-1, 0.5)
 			
 			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset
 			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset
@@ -1461,12 +1461,13 @@ func load_waveforms():
 
 
 func update_waveforms(time: float = 0):
+	var time_range: float = conductor.numerator * conductor.get_seconds_per_beat() * 2
 	for id in waveform_nodes:
 		var waveform = waveform_nodes.get(id)
 		
 		if waveform:
 			var L: float = max(time, 0)
-			var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat() * 2, instrumental.stream.get_length())
+			var R: float = min(time + time_range, instrumental.stream.get_length())
 			waveform.time = (L * 1000) / 7.8
 			waveform.duration = (R - L) * 130
 			#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
@@ -1481,8 +1482,6 @@ func update_waveforms(time: float = 0):
 				0))
 			waveform.position.y += time_to_y_position(L)
 			waveform.dirty = true
-
-			
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
@@ -1697,14 +1696,9 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 	selected_notes = range(L, R + 1)
 	selected_note_nodes = []
 	
-	var _i: int = 0
-	for i in range(selected_notes.size()):
-		var lane: int = int(ChartManager.chart.get_notes_data()[selected_notes[_i]][1])
-		if !(lane >= lane_a and lane <= lane_b):
-			selected_notes.remove_at(_i)
-			_i -= 1
-		
-		_i += 1
+	selected_notes = selected_notes.filter(func(i):
+		var lane = ChartManager.chart.get_notes_data()[i][1]
+		return (lane >= lane_a and lane <= lane_b))
 	
 	for i in selected_notes:
 		selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
