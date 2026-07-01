@@ -1529,7 +1529,7 @@ func update_waveforms(time: float = 0):
 		var L: float = max(time, 0)
 		var R: float = min(time + time_range, instrumental.stream.get_length())
 		waveform.time = (L * 1000) / 7.8
-		waveform.duration = (R - L) * 130
+		waveform.duration = (R - L) * 128
 		#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
 		
 		waveform.width = time_to_y_position(R) - time_to_y_position(L)
