@@ -78,6 +78,7 @@ var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
 var waveform_data: Dictionary = {}
+var waveform_nodes: Dictionary = {}
 
 var event_nodes: Array = []
 var current_visible_events_L: int = -1
@@ -576,6 +577,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		i += 1
 	
 	load_waveforms()
+	update_waveforms(song_position)
 	can_chart = true
 
 
@@ -686,6 +688,7 @@ func load_section(time: float):
 		current_visible_events_L = L
 		current_visible_events_R = R
 #endregion
+
 
 func load_dividers():
 	get_tree().call_group(&"dividers",  &"queue_free")
@@ -1194,7 +1197,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	
 	if ChartManager.chart:
 		load_section(song_position)
-		load_waveforms(song_position + start_offset)
+		update_waveforms(song_position)
 	
 	lower_ui.get_node("%Beat").text = str("Beat: ", current_beat + 1)
 
@@ -1436,7 +1439,7 @@ func updated_strums():
 	update_grid()
 
 
-func load_waveforms(time: float = 0):
+func load_waveforms():
 	get_tree().call_group(&"waveforms", &"queue_free")
 	if ChartManager.song:
 		for id in ChartManager.strum_data.size():
@@ -1444,24 +1447,34 @@ func load_waveforms(time: float = 0):
 			if track < ChartManager.song.vocals.size() and vocal_tracks.get(track):
 				var data: WaveformData = waveform_data.get(vocal_tracks.get(track), null)
 				if data:
-					var L: float = max(time, 0)
-					var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat(), instrumental.stream.get_length())
-					
 					var waveform: WaveformRenderer = WaveformRenderer.new()
 					
 					waveform.keepData = true
-					waveform.width = time_to_y_position(R) - time_to_y_position(L)
-					waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
-					waveform.position.y += time_to_y_position(L)
 					
 					$"Waveform Layer".add_child(waveform)
 					waveform.setOrientation("VERTICAL")
 					waveform.add_to_group(&"waveforms")
-					waveform.create(data, Color.MEDIUM_PURPLE, null, (R - L) * 130)
-					waveform.is_dirty = true
-					waveform.time = L
+					waveform.create(data, Color.MEDIUM_PURPLE, null)
+					
+					waveform_nodes[track] = waveform
 			else:
 				printerr("(load_waveforms) Track ", track, " does not exist.")
+
+
+func update_waveforms(time: float = 0):
+	for id in waveform_nodes:
+		var waveform = waveform_nodes.get(id)
+		
+		if waveform:
+			var L: float = max(time, 0)
+			var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat(), instrumental.stream.get_length())
+			waveform.time = L
+			waveform.duration = (R - L) * 130
+			
+			waveform.width = time_to_y_position(R) - time_to_y_position(L)
+			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
+			waveform.position.y += time_to_y_position(L)
+
 
 func _on_chart_snap_value_changed(value: float) -> void:
 	chart_snap = value
