@@ -181,12 +181,7 @@ func _process(delta: float) -> void:
 		conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartManager.chart.offset)
 		
-		if instrumental.playing:
-			camera_2d.position.y = 360 + time_to_y_position(song_position)
-		else:
-			camera_2d.position.y = Global.frame_independent_lerp(
-				camera_2d.position.y, 360 + time_to_y_position(song_position), 20, delta)
-	
+		update_camera_song_position(instrumental.playing)
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -626,6 +621,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	load_section(song_position)
 	update_grid()
 	load_dividers()
+	update_camera_song_position(true)
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
@@ -1511,6 +1507,12 @@ func load_waveforms():
 	
 	waveform_nodes[-1] = waveform
 
+func update_camera_song_position(instant: bool = false):
+	if instant:
+		camera_2d.position.y = 360 + time_to_y_position(song_position)
+	else:
+		camera_2d.position.y = Global.frame_independent_lerp(
+			camera_2d.position.y, 360 + time_to_y_position(song_position), 20, get_process_delta_time())
 
 func update_waveforms(time: float = 0):
 	var time_range: float = conductor.numerator * conductor.get_seconds_per_beat() * 2
