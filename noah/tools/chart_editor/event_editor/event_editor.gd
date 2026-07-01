@@ -15,7 +15,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	
 	var can_interact_with_chart: bool = can_chart and not is_any_window_overlapped(get_corrected_mouse_position()) and ChartManager.chart
 	
 	if ChartManager.song:
@@ -814,3 +813,11 @@ func _on_note_skin_window_canceled() -> void:
 
 func _on_note_type_window_selected_note_type(type: Variant) -> void:
 	pass # Replace with function body.
+
+
+func load_waveforms():
+	return
+
+
+func update_waveforms(time: float = 0):
+	return

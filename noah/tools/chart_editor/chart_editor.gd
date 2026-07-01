@@ -9,6 +9,7 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 
 static var song_position: float = 0.0
 static var start_offset: float = 0.0
+static var mute_instrumental: bool = false
 
 var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var DEFAULT_FONT: Font = ThemeDB.fallback_font
@@ -123,6 +124,8 @@ func _process(delta: float) -> void:
 	var mouse_over_window: bool = is_any_window_overlapped(get_corrected_mouse_position())
 	
 	var can_interact_with_chart: bool = can_chart and not mouse_over_window and ChartManager.chart
+	
+	instrumental.volume_linear = 1 if !mute_instrumental else 0
 	
 	if ChartManager.song and instrumental.playing:
 		song_position = instrumental.get_playback_position() - start_offset
@@ -1248,7 +1251,7 @@ func audio_button_item_pressed(id):
 			SettingsManager.flush()
 			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
 		
-		7:
+		7: #Toggle Beat Sound
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_beat",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
 			SettingsManager.flush()
@@ -1257,7 +1260,7 @@ func audio_button_item_pressed(id):
 				%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(id),
 				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
 		
-		8:
+		8: #Toggle Step Sound
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_step",
 			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
 			SettingsManager.flush()
@@ -1265,6 +1268,10 @@ func audio_button_item_pressed(id):
 			%"Upper UI".get_node("%Audio Button").get_popup().set_item_checked(
 				%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(id),
 				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+		
+		9: #Mute Instrumental
+			mute_instrumental = !mute_instrumental
+			%"Mouse Click".play()
 		
 		_:
 			print("id: ", id)

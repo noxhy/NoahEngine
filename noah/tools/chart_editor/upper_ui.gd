@@ -38,12 +38,14 @@ func _ready() -> void:
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(7),
 		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
-		
+	
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(8),
 		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
+	audio_button.get_popup().set_item_checked(
+		audio_button.get_popup().get_item_index(9), ChartEditor.mute_instrumental)
 	
 	view_button.get_popup().connect(&"id_pressed", chart_editor.view_button_item_pressed)
 	
