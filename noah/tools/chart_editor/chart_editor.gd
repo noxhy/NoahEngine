@@ -568,7 +568,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	load_chart(ChartManager.chart)
 	chart_snap = pow(conductor.numerator, 2)
 	current_snap = SNAPS.bsearch(pow(conductor.numerator, 2))
-	waveform_data = {}
+	waveform_data.clear()
 	
 	var i: int = 0
 	for track in vocal_tracks:
