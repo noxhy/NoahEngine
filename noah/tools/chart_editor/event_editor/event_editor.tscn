@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://noah/tools/chart_editor/grid.tscn" id="14_srmuw"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="15_ue8jl"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/images/menus/genericBG.png" id="19_5evum"]
+[ext_resource type="Material" uid="uid://b87ibevalpejo" path="res://noah/shaders/generic_big_mat.tres" id="19_ea7xq"]
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_4188h"]
 
@@ -287,6 +288,7 @@ transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="genericBG" type="Sprite2D" parent="Background" unique_id=650173941]
 modulate = Color(0.56078434, 0.6431373, 0.7490196, 1)
+material = ExtResource("19_ea7xq")
 texture = ExtResource("19_5evum")
 metadata/_edit_lock_ = true
 
