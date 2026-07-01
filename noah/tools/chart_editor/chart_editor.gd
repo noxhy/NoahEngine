@@ -8,7 +8,7 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 		return note_skin
 
 static var song_position: float = 0.0
-static var chart_zoom: float = 1.0
+static var start_offset: float = 0.0
 
 var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var DEFAULT_FONT: Font = ThemeDB.fallback_font
@@ -47,7 +47,6 @@ var vocal_tracks: Array = []
 var undo_redo: UndoRedo = UndoRedo.new()
 const SNAPS = [4.0, 8.0, 12.0, 16.0, 20.0, 24.0, 32.0, 48.0, 64.0, 96.0, 192.0]
 
-var start_offset: float = 0.0
 var song_speed: float = 1.0
 var note_nodes: Array = []
 var clipboard: Array = []
