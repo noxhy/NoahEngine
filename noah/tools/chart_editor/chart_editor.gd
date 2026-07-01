@@ -1470,26 +1470,25 @@ func update_waveforms(time: float = 0):
 	for id in waveform_nodes:
 		var waveform = waveform_nodes.get(id)
 		
-		if !waveform.visibile:
-			return
+		if not waveform or not waveform.visible:
+			continue
 		
-		if waveform:
-			var L: float = max(time, 0)
-			var R: float = min(time + time_range, instrumental.stream.get_length())
-			waveform.time = (L * 1000) / 7.8
-			waveform.duration = (R - L) * 130
-			#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
-			
-			waveform.height = %Grid.grid_size.x * (
-				ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
-				) * %Grid.zoom.x
-			waveform.width = time_to_y_position(R) - time_to_y_position(L)
-			waveform.position = %Grid.get_real_position(Vector2(
-				(ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
-				) / 2.0 + ChartManager.strum_data[id]["strums"][0],
-				0))
-			waveform.position.y += time_to_y_position(L)
-			waveform.dirty = true
+		var L: float = max(time, 0)
+		var R: float = min(time + time_range, instrumental.stream.get_length())
+		waveform.time = (L * 1000) / 7.8
+		waveform.duration = (R - L) * 130
+		#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
+		
+		waveform.height = %Grid.grid_size.x * (
+			ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
+			) * %Grid.zoom.x
+		waveform.width = time_to_y_position(R) - time_to_y_position(L)
+		waveform.position = %Grid.get_real_position(Vector2(
+			(ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
+			) / 2.0 + ChartManager.strum_data[id]["strums"][0],
+			0))
+		waveform.position.y += time_to_y_position(L)
+		waveform.dirty = true
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
