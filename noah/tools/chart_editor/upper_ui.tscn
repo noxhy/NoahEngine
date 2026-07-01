@@ -133,7 +133,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Audio"
-item_count = 9
+item_count = 11
 popup/item_0/text = "Play/Pause"
 popup/item_0/id = 0
 popup/item_1/id = 1
@@ -154,6 +154,12 @@ popup/item_7/id = 7
 popup/item_8/text = "Conductor Step"
 popup/item_8/checkable = 1
 popup/item_8/id = 8
+popup/item_9/text = "Mute Instrumental"
+popup/item_9/checkable = 1
+popup/item_9/id = 9
+popup/item_10/text = "Hit Sounds"
+popup/item_10/checkable = 1
+popup/item_10/id = 10
 metadata/_edit_use_anchors_ = true
 
 [node name="Audios Window" parent="Audio Button" unique_id=740299600 groups=["windows"] instance=ExtResource("2_esjoi")]

@@ -1451,6 +1451,7 @@ func load_waveforms():
 				if data:
 					var waveform: WaveformRenderer = WaveformRenderer.new(data, 0, Color.MEDIUM_PURPLE, Color.TRANSPARENT)
 					
+					waveform.visible = false
 					$"Waveform Layer".add_child(waveform)
 					waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
 					waveform.add_to_group(&"waveforms")
@@ -1462,8 +1463,16 @@ func load_waveforms():
 
 func update_waveforms(time: float = 0):
 	var time_range: float = conductor.numerator * conductor.get_seconds_per_beat() * 2
+	
+	get_tree().set_group(&"waveforms", "visible", SettingsManager.get_value(
+		SettingsManager.SEC_CHART, "waveforms"
+	))
+	
 	for id in waveform_nodes:
 		var waveform = waveform_nodes.get(id)
+		
+		if !waveform.visibile:
+			return
 		
 		if waveform:
 			var L: float = max(time, 0)

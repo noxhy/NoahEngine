@@ -535,10 +535,10 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var L: float = ChartManager.chart.get_tempo_time_at(time)
 	var yR: float = p.x * %Grid.grid_size.x * %Grid.zoom.x
 	if factor_in_snap:
-		yR *= meter[1] / chart_snap
+		yR *= pow(meter[0], 2) / chart_snap
 	
 	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
-	var output: float = yR / (%Grid.grid_size.x * %Grid.zoom.x * (meter[1] / meter[0])) * seconds_per_beat
+	var output: float = yR / (%Grid.grid_size.x * %Grid.zoom.x * meter[0]) * seconds_per_beat
 	
 	return output
 
