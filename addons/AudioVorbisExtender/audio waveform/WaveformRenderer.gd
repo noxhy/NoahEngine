@@ -52,17 +52,16 @@ var useDummy = false
 
 #create accepts a path to an ogg a waveform color
 func create(InitialData, this_color:Color = DEFAULT_COLOR,background_color = null,visible_duration = null):
-	match InitialData:
-		WaveformData:
-			waveformdata = InitialData
-		_:
-			if typeof(InitialData) == TYPE_STRING:
-				waveformdata = WaveformDataParser.interpretSound(InitialData)
-				if waveformdata == null:
-					return
-			else:
-				push_error("Initial Waveform input must be Waveform data or a path to the sound!!")
+	if InitialData is WaveformData:
+		waveformdata = InitialData
+	else:
+		if typeof(InitialData) == TYPE_STRING:
+			waveformdata = WaveformDataParser.interpretSound(InitialData)
+			if waveformdata == null:
 				return
+		else:
+			push_error("Initial Waveform input must be Waveform data or a path to the sound!!")
+			return
 	
 	if visible_duration == null:
 		#something something pixel something something, basically 130 
