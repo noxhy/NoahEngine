@@ -140,7 +140,8 @@ func _process(delta: float) -> void:
 					var lane: float = note[1]
 					for id in ChartManager.strum_data.size():
 						if ((lane >= ChartManager.strum_data[id]["strums"][0]) and (lane <= ChartManager.strum_data[id]["strums"][1])):
-							if (!ChartManager.strum_data[id]["muted"]):
+							if (!ChartManager.strum_data[id]["muted"] and
+							SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds")):
 								%"Hit Sound".play()
 					
 					current_note += 1
@@ -1272,6 +1273,15 @@ func audio_button_item_pressed(id):
 		9: #Mute Instrumental
 			mute_instrumental = !mute_instrumental
 			%"Mouse Click".play()
+		
+		10: #Toggle Hit Sound
+			SettingsManager.set_value(SettingsManager.SEC_CHART, "hit_sounds",
+			!SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
+			SettingsManager.flush()
+			%"Mouse Click".play()
+			%"Upper UI".get_node("%Audio Button").get_popup().set_item_checked(
+				%"Upper UI".get_node("%Audio Button").get_popup().get_item_index(id),
+				SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
 		
 		_:
 			print("id: ", id)
