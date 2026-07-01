@@ -148,30 +148,21 @@ func _process(delta: float) -> void:
 					vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(0))
 				else:
 					vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
-	else:
-		if Input.is_action_just_pressed(&"mouse_scroll_up"):
-			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
-				song_position -= conductor.seconds_per_beat
-				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-				song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-				%"Song Slider".value = song_position
-			else:
-				current_snap += 1
-				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
-		
-		if Input.is_action_just_pressed(&"mouse_scroll_down"):
-			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
-				song_position += conductor.seconds_per_beat
-				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-				song_position = clamp(song_position, start_offset - ChartManager.chart.offset, instrumental.stream.get_length())
-				%"Song Slider".value = song_position
-			else:
-				current_snap -= 1
-				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
-				
-		
+	
+	var axis: int = int(Input.is_action_just_pressed("mouse_scroll_down")) - int(Input.is_action_just_pressed("mouse_scroll_up"))
+	if axis:
+		if can_interact_with_chart and not Input.is_action_pressed("control"): #song scrubbing
+			if not instrumental.stream_paused:
+				toggle_audios(true)
+			song_position += conductor.seconds_per_beat * axis
+			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
+			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
+			%"Song Slider".value = song_position
+		else: #snap scrubbing
+			current_snap += axis
+			chart_snap = SNAPS[current_snap % SNAPS.size()]
+			lower_ui.chart_snap.value = chart_snap
+			
 		conductor.time = song_position
 	
 	if ChartManager.chart:
