@@ -70,7 +70,8 @@ static var _defaults: Dictionary = {
 		"start_at_current_position": false,
 		"conductor_beat": false,
 		"conductor_step": false,
-		"waveforms": true,
+		"vocal_waveforms": true,
+		"instrumental_waveforms": true,
 		"hit_sounds": true
 	},
 	
