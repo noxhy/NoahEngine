@@ -297,7 +297,7 @@ func _process(delta: float) -> void:
 					var lane: int = note[1]
 					var note_type = note[3]
 					
-					var distance = snappedf(clamp(cursor_time - time, 0.0, 16.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
+					var distance = snappedf(max(cursor_time - time, 0.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
 					ChartManager.chart.chart_data.notes[i] = [time, lane, distance, note_type]
 					
 					changed_length = (distance > 0)
@@ -414,6 +414,7 @@ func is_grid_focused(check_control_focus: bool = true) -> bool:
 	var mouse_over = screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
 	if check_control_focus:
 		return mouse_over and not current_focus_owner
+	
 	return mouse_over
 
 func get_corrected_mouse_position() -> Vector2:

@@ -138,8 +138,8 @@ bus = &"SFX"
 
 [node name="Grid Layer" type="CanvasLayer" parent="." unique_id=1476007864]
 layer = -2
-offset = Vector2(640, 64)
-transform = Transform2D(1, 0, 0, 1, 640, 64)
+offset = Vector2(640, 80)
+transform = Transform2D(1, 0, 0, 1, 640, 80)
 
 [node name="Parallax2D" type="Parallax2D" parent="Grid Layer" unique_id=1878580833]
 repeat_times = 3
@@ -155,8 +155,8 @@ position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
 
 [node name="Waveform Layer" type="CanvasLayer" parent="." unique_id=476894491]
 layer = 2
-offset = Vector2(640, 64)
-transform = Transform2D(1, 0, 0, 1, 640, 64)
+offset = Vector2(640, 80)
+transform = Transform2D(1, 0, 0, 1, 640, 80)
 follow_viewport_enabled = true
 
 [node name="Notes Layer" type="CanvasLayer" parent="." unique_id=1790758764]
