@@ -77,7 +77,6 @@ var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
-var waveform_data: Dictionary = {}
 
 var event_nodes: Array = []
 var current_visible_events_L: int = -1
@@ -149,31 +148,22 @@ func _process(delta: float) -> void:
 					vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(0))
 				else:
 					vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
-	else:
-		if Input.is_action_just_pressed(&"mouse_scroll_up"):
-			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
-				song_position -= conductor.seconds_per_beat
-				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-				song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-				%"Song Slider".value = song_position
-			else:
-				current_snap += 1
-				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
-		
-		if Input.is_action_just_pressed(&"mouse_scroll_down"):
-			if !Input.is_action_pressed(&"control") and can_interact_with_chart:
-				song_position += conductor.seconds_per_beat
-				song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-				song_position = clamp(song_position, start_offset - ChartManager.chart.offset, instrumental.stream.get_length())
-				%"Song Slider".value = song_position
-			else:
-				current_snap -= 1
-				chart_snap = SNAPS[current_snap % SNAPS.size()]
-				lower_ui.chart_snap.value = chart_snap
-				
-		
-		conductor.time = song_position
+	
+	var axis: int = int(Input.is_action_just_pressed("mouse_scroll_down")) - int(Input.is_action_just_pressed("mouse_scroll_up"))
+	if axis:
+		if can_interact_with_chart and not Input.is_action_pressed("control"): #song scrubbing
+			if not instrumental.stream_paused:
+				toggle_audios(true)
+			song_position += conductor.seconds_per_beat * axis
+			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
+			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
+			%"Song Slider".value = song_position
+		else: #snap scrubbing
+			current_snap += axis
+			chart_snap = SNAPS[current_snap % SNAPS.size()]
+			lower_ui.chart_snap.value = chart_snap
+			
+	conductor.time = song_position
 	
 	if ChartManager.chart:
 		var time: float = song_position + start_offset
@@ -546,7 +536,6 @@ func load_song(song: Song, difficulty: Variant = null):
 	ChartManager.song = song
 	if difficulty == null:
 		difficulty = ChartManager.song.difficulties.keys()[0]
-	
 	var difficulty_data: Dictionary = song.difficulties.get(difficulty)
 	ChartManager.chart = Chart.load(difficulty_data.chart)
 	ChartManager.difficulty = difficulty
@@ -576,14 +565,6 @@ func load_song(song: Song, difficulty: Variant = null):
 	load_chart(ChartManager.chart)
 	chart_snap = pow(conductor.numerator, 2)
 	current_snap = SNAPS.bsearch(pow(conductor.numerator, 2))
-	waveform_data = {}
-	
-	var i: int = 0
-	for track in vocal_tracks:
-		var data: WaveformData = WaveformDataParser.interpretSound(song.vocals[i])
-		waveform_data[track] = data
-		i += 1
-	
 	load_waveforms()
 	can_chart = true
 
@@ -1203,7 +1184,6 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	
 	if ChartManager.chart:
 		load_section(song_position)
-		load_waveforms(song_position + start_offset)
 	
 	lower_ui.get_node("%Beat").text = str("Beat: ", current_beat + 1)
 
@@ -1444,31 +1424,32 @@ func updated_strums():
 	can_chart = true
 	update_grid()
 
-
-func load_waveforms(time: float = 0):
+func load_waveforms():
 	get_tree().call_group(&"waveforms", &"queue_free")
 	if ChartManager.song:
 		for id in ChartManager.strum_data.size():
 			var track: int = ChartManager.strum_data[id]["track"]
-			if track < ChartManager.song.vocals.size() and vocal_tracks.get(track):
-				var data: WaveformData = waveform_data.get(vocal_tracks.get(track), null)
-				if data:
-					var L: float = max(time, 0)
-					var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat(), instrumental.stream.get_length())
+			if track < ChartManager.song.vocals.size():
+				for i in ChartManager.chart.get_tempos_data().size():
+					var L: float = ChartManager.chart.get_tempos_data().keys()[i]
+					var R: float
+					if (i + 1) == ChartManager.chart.get_tempos_data().size():
+						R = instrumental.stream.get_length()
+					else:
+						R = ChartManager.chart.get_tempos_data().keys()[i + 1]
+					var waveform = WaveformRenderer.new()
 					
-					var waveform: WaveformRenderer = WaveformRenderer.new()
-					
+					var stream = ChartManager.song.vocals[track]
 					waveform.keepData = true
 					waveform.width = time_to_y_position(R) - time_to_y_position(L)
-					waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
+					waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0.5))
 					waveform.position.y += time_to_y_position(L)
+					waveform.duration = R - L
 					
 					$"Waveform Layer".add_child(waveform)
 					waveform.setOrientation("VERTICAL")
 					waveform.add_to_group(&"waveforms")
-					waveform.create(data, Color.MEDIUM_PURPLE, null, (R - L) * 130)
-					waveform.is_dirty = true
-					waveform.time = L
+					waveform.create(stream, Color.MEDIUM_PURPLE, null, (R - L) * 130)
 			else:
 				printerr("(load_waveforms) Track ", track, " does not exist.")
 
