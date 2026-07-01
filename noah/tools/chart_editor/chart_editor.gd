@@ -1471,10 +1471,10 @@ func update_waveforms(time: float = 0):
 			var L: float = max(time, 0)
 			var R: float = min(time + conductor.numerator * conductor.get_seconds_per_beat(), instrumental.stream.get_length())
 			waveform.time = (L * 1000) / 7.8
-			waveform.duration = (R - L) * 130
+			waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
 			
-			waveform.width = (time_to_y_position(R) - time_to_y_position(L) )* 1.5
-			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0.5))
+			waveform.width = time_to_y_position(R) - time_to_y_position(L)
+			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
 			waveform.position.y += time_to_y_position(L)
 			waveform.is_dirty = true
 
