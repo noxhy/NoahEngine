@@ -1715,28 +1715,22 @@ func flip():
 		%"Note Place".play()
 
 func increase_length():
-	var action: String = "Changed Note Length(s)"
-	undo_redo.create_action(action)
-	for i in selected_notes:
-		var length: float = ChartManager.chart.get_notes_data()[i][2]
-		var delta: float = (pow(conductor.numerator, 2) / chart_snap) * conductor.seconds_per_step
-		undo_redo.add_do_method(self.change_length.bind(i, length + delta))
-		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length + delta)
-		undo_redo.add_undo_method(self.change_length.bind(i, length))
-		undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L], "length", length)
-	
-	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
-	undo_redo.commit_action()
-
+	var delta: float = (pow(conductor.numerator, 2) / chart_snap) * (1.0 / conductor.numerator)
+	change_note_lengths(selected_notes,delta )
 
 func decrease_length():
+	var delta: float = (pow(conductor.numerator, 2) / chart_snap) * (1.0 / conductor.numerator)
+	change_note_lengths(selected_notes, -delta)
+
+
+func change_note_lengths(notes: Array, delta: float):
 	var action: String = "Changed Note Length(s)"
 	undo_redo.create_action(action)
-	for i in selected_notes:
+	for i in notes:
 		var length: float = ChartManager.chart.get_notes_data()[i][2]
-		var delta: float = (pow(conductor.numerator, 2) / chart_snap) * conductor.seconds_per_step
-		undo_redo.add_do_method(self.change_length.bind(i, length - delta))
-		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length - delta)
+		undo_redo.add_do_method(self.change_length.bind(i, length + delta))
+		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length + delta)
+		undo_redo.add_do_method(%"Note Stretch".play)
 		undo_redo.add_undo_method(self.change_length.bind(i, length))
 		undo_redo.add_undo_property(note_nodes[i - current_visible_notes_L], "length", length)
 	
@@ -1745,7 +1739,7 @@ func decrease_length():
 
 
 func change_length(i: int, length: float) -> void:
-	ChartManager.chart.chart_data["notes"][i][2] = length
+	ChartManager.chart.chart_data["notes"][i][2] = max(length, 0)
 
 
 func select_area(L: int, R: int, lane_a, lane_b = null):

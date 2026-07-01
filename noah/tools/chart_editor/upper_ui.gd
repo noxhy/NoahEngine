@@ -133,12 +133,12 @@ func setup_shortcuts():
 		edit_button.get_popup().get_item_index(11), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"deselect")))
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_Q
+	shortcut.events[0].keycode = KEY_E
 	edit_button.get_popup().set_item_shortcut(
 		edit_button.get_popup().get_item_index(12), shortcut)
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_E
+	shortcut.events[0].keycode = KEY_Q
 	edit_button.get_popup().set_item_shortcut(
 		edit_button.get_popup().get_item_index(13), shortcut)
 	
