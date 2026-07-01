@@ -10,6 +10,8 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 static var song_position: float = 0.0
 static var start_offset: float = 0.0
 static var mute_instrumental: bool = false
+static var vocal_waveforms: bool = false
+static var instrumental_waveforms: bool = false
 
 var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var DEFAULT_FONT: Font = ThemeDB.fallback_font
@@ -1274,8 +1276,11 @@ func audio_button_item_pressed(id):
 				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
 		
 		9: #Mute Instrumental
-			mute_instrumental = !mute_instrumental
+			var new = !mute_instrumental
+			mute_instrumental = new
 			%"Mouse Click".play()
+			upper_ui.audio_button.get_popup().set_item_checked(
+				upper_ui.audio_button.get_popup().get_item_index(id), new)
 		
 		10: #Toggle Hit Sound
 			SettingsManager.set_value(SettingsManager.SEC_CHART, "hit_sounds",
@@ -1312,6 +1317,20 @@ func view_button_item_pressed(id):
 			update_grid()
 			load_dividers()
 			load_section(song_position)
+		
+		5: #Toggle Vocal Waveforms
+			var new = !vocal_waveforms
+			vocal_waveforms = new
+			%"Mouse Click".play()
+			upper_ui.view_button.get_popup().set_item_checked(
+				upper_ui.view_button.get_popup().get_item_index(id), new)
+		
+		6: #Toggle Vocal Waveforms
+			var new = !instrumental_waveforms
+			instrumental_waveforms = new
+			%"Mouse Click".play()
+			upper_ui.view_button.get_popup().set_item_checked(
+				upper_ui.view_button.get_popup().get_item_index(id), new)
 		
 		_:
 			print("id: ", id)
@@ -1483,12 +1502,13 @@ func load_waveforms():
 func update_waveforms(time: float = 0):
 	var time_range: float = conductor.numerator * conductor.get_seconds_per_beat() * 2
 	
-	get_tree().set_group(&"waveforms", "visible", SettingsManager.get_value(
-		SettingsManager.SEC_CHART, "waveforms"
-	))
-	
 	for id in waveform_nodes:
 		var waveform = waveform_nodes.get(id)
+		
+		if id == -1:
+			waveform.visible = instrumental
+		else:
+			waveform.visible = vocal_waveforms
 		
 		if not waveform or not waveform.visible:
 			continue
