@@ -582,6 +582,9 @@ func load_song(song: Song, difficulty: Variant = null):
 		waveform_data[track] = data
 		i += 1
 	
+	var data: WaveformData = WaveformDataParser.interpretSound(song.instrumental)
+	waveform_data[-1] = data
+	
 	load_waveforms()
 	update_waveforms(song_position)
 	can_chart = true
@@ -1497,6 +1500,16 @@ func load_waveforms():
 					waveform_nodes[track] = waveform
 			else:
 				printerr("(load_waveforms) Track ", track, " does not exist.")
+	
+	var data: WaveformData = waveform_data.get(-1, null)
+	var waveform: WaveformRenderer = WaveformRenderer.new(data, 0, Color.LIME, Color.TRANSPARENT)
+	
+	waveform.visible = false
+	$"Waveform Layer".add_child(waveform)
+	waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
+	waveform.add_to_group(&"waveforms")
+	
+	waveform_nodes[-1] = waveform
 
 
 func update_waveforms(time: float = 0):
@@ -1506,7 +1519,7 @@ func update_waveforms(time: float = 0):
 		var waveform = waveform_nodes.get(id)
 		
 		if id == -1:
-			waveform.visible = instrumental
+			waveform.visible = instrumental_waveforms
 		else:
 			waveform.visible = vocal_waveforms
 		
@@ -1519,14 +1532,19 @@ func update_waveforms(time: float = 0):
 		waveform.duration = (R - L) * 130
 		#waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
 		
-		waveform.height = %Grid.grid_size.x * (
-			ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
-			) * %Grid.zoom.x
 		waveform.width = time_to_y_position(R) - time_to_y_position(L)
-		waveform.position = %Grid.get_real_position(Vector2(
-			(ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
-			) / 2.0 + ChartManager.strum_data[id]["strums"][0],
-			0))
+		if id == -1:
+			waveform.position = %Grid.get_real_position(Vector2(1, 0))
+			waveform.height = %Grid.grid_size.x * (%Grid.columns - 2) * %Grid.zoom.x
+		else:
+			waveform.position = %Grid.get_real_position(Vector2(
+				(ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
+				) / 2.0 + ChartManager.strum_data[id]["strums"][0],
+				0))
+			waveform.height = %Grid.grid_size.x * (
+				ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
+				) * %Grid.zoom.x
+		
 		waveform.position.y += time_to_y_position(L)
 		waveform.dirty = true
 
