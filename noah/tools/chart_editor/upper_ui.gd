@@ -80,7 +80,14 @@ func _ready() -> void:
 	note_type_window.connect(&"selected_note_type", chart_editor.set_note_type)
 	note_type_window.connect(&"close_requested", chart_editor._on_note_type_window_close_requested)
 	
+	
+	
 	setup_shortcuts()
+	
+	#add menupopups to the thing
+	for child in get_children():
+		if child is MenuButton:
+			child.get_popup().add_to_group(&"windows")
 
 
 func setup_shortcuts():
