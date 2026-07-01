@@ -8,6 +8,7 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 		return note_skin
 
 static var song_position: float = 0.0
+static var chart_zoom: float = 1.0
 
 var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 var DEFAULT_FONT: Font = ThemeDB.fallback_font
@@ -186,7 +187,7 @@ func _process(delta: float) -> void:
 			camera_2d.position.y = 360 + time_to_y_position(song_position)
 		else:
 			camera_2d.position.y = Global.frame_independent_lerp(
-				camera_2d.position.y, 360 + time_to_y_position(song_position), 15, delta)
+				camera_2d.position.y, 360 + time_to_y_position(song_position), 20, delta)
 	
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
@@ -573,7 +574,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	load_chart(ChartManager.chart)
 	chart_snap = pow(conductor.numerator, 2)
 	current_snap = SNAPS.bsearch(pow(conductor.numerator, 2))
-	#load_waveforms()
+	load_waveforms()
 	can_chart = true
 
 
@@ -1434,8 +1435,6 @@ func updated_strums():
 
 func load_waveforms():
 	get_tree().call_group(&"waveforms", &"queue_free")
-	return
-	@warning_ignore("unreachable_code")
 	if ChartManager.song:
 		for id in ChartManager.strum_data.size():
 			var track: int = ChartManager.strum_data[id]["track"]
