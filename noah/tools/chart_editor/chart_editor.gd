@@ -8,7 +8,7 @@ static var note_skin: NoteSkin = load("uid://buly8rgmgrrnm") :
 		return note_skin
 
 static var song_position: float = 0.0
-static var start_offset: float = 0.0
+static var start_offset: float = 0.2
 static var mute_instrumental: bool = false
 
 var TOOL_THEME = load("uid://b1gv0wfdmojbx")
