@@ -1471,7 +1471,7 @@ func update_waveforms(time: float = 0):
 			waveform.duration = (conductor.get_seconds_per_beat() * 1000) / 1.95
 			
 			waveform.width = time_to_y_position(R) - time_to_y_position(L)
-			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] + 1.5, 0))
+			waveform.position = %Grid.get_real_position(Vector2(ChartManager.strum_data[id]["strums"][1] - 1.5, 0))
 			waveform.position.y += time_to_y_position(L)
 			waveform.dirty = true
 
