@@ -15,7 +15,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var can_interact_with_chart: bool = can_chart and not is_point_in_any_window(get_corrected_mouse_position()) and ChartManager.chart
+	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartManager.chart
 	
 	if ChartManager.song:
 		if %Instrumental.playing:
@@ -26,9 +26,9 @@ func _process(delta: float) -> void:
 				var track = ChartManager.strum_data[strum]["track"]
 				if track < vocal_tracks.size():
 					if ChartManager.strum_data[strum]["muted"]:
-						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], -80)
+						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(0))
 					else:
-						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], 0)
+						%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	
 	var axis: int = int(Input.is_action_just_pressed("mouse_scroll_down")) - int(Input.is_action_just_pressed("mouse_scroll_up"))
 	if axis:
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 			song_position += conductor.seconds_per_beat * axis
 			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
 			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-			%"Song Slider".value = song_position
+			song_slider.value = song_position
 		else: #snap scrubbing
 			current_snap += axis
 			chart_snap = SNAPS[current_snap % SNAPS.size()]
@@ -50,9 +50,9 @@ func _process(delta: float) -> void:
 		var meter = ChartManager.chart.get_meter_at(song_position + start_offset)
 		$Conductor.numerator = meter[0]
 		$Conductor.denominator = meter[1]
-		$Camera2D.position.x = 640 + time_to_y_position(song_position)
 		$Conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
+		update_camera_song_position(instrumental.playing)
 	
 	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
@@ -64,11 +64,9 @@ func _process(delta: float) -> void:
 	
 	$"Grid Layer/Parallax2D".repeat_size.x = %Grid.get_size().x
 	
-	var screen_mouse_position = get_global_mouse_position() - Vector2($Camera2D.position.x, 0)
-	
 	if Input.is_action_just_pressed(&"mouse_left"):
 		if !Input.is_action_pressed(&"control"):
-			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+			if is_mouse_over_grid():
 				if can_interact_with_chart:
 					if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < %Grid.rows)):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
@@ -102,7 +100,7 @@ func _process(delta: float) -> void:
 				start_box = get_global_mouse_position()
 	
 	if Input.is_action_just_pressed(&"mouse_middle"):
-		if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+		if is_mouse_over_grid():
 			if can_chart:
 				if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)):
 						if hovered_event != -1:
@@ -118,7 +116,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed(&"mouse_right"):
 		if !Input.is_action_pressed(&"control"):
-				if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+				if is_mouse_over_grid():
 					if can_chart:
 						if !Input.is_action_pressed(&"control"):
 							if hovered_event != -1:
@@ -151,7 +149,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed(&"mouse_left"):
 		if !Input.is_action_pressed(&"control"):
-			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
+			if is_mouse_over_grid():
 				if !%Instrumental.playing:
 					if can_chart:
 						## Song Position Slider
@@ -222,6 +220,21 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 
+func update_camera_song_position(instant: bool = false):
+	if instant:
+		camera_2d.position.x = 640 + time_to_y_position(song_position)
+	else:
+		camera_2d.position.x = Global.frame_independent_lerp(
+			camera_2d.position.x, 640 + time_to_y_position(song_position), 20, get_process_delta_time())
+			
+
+func get_corrected_mouse_position() -> Vector2:
+	return get_global_mouse_position() - Vector2(camera_2d.position.x, 0)
+
+func is_mouse_over_grid() -> bool:
+	var screen_mouse_pos = get_corrected_mouse_position()
+	return screen_mouse_pos.x > -512 and screen_mouse_pos.x < 640
+
 func _draw() -> void:
 	var rect: Rect2
 	
@@ -252,7 +265,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		## Hover Box
-		if (grid_position.y >= 1 and grid_position.y < %Grid.rows) and not is_point_in_any_window(get_corrected_mouse_position()):
+		if (grid_position.y >= 1 and grid_position.y < %Grid.rows) and not is_mouse_over_any_ui():
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			draw_rect(rect, hover_color)
