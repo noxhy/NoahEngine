@@ -41,7 +41,7 @@ var current_week: Week
 var week_songs: Array[Song]
 var current_week_song: int = 0
 var character: PlayableCharacter
-var current_character: String = "boyfriend"
+var current_character: String = ""
 
 var week_score: int = 0
 var week_deaths: int = 0
