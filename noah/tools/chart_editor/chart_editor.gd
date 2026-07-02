@@ -463,18 +463,6 @@ func _draw() -> void:
 				rect = Rect2(note.global_position - (%Grid.grid_size / 2 * %Grid.zoom),
 				Vector2(%Grid.grid_size.x * %Grid.zoom.x, length))
 				draw_rect(rect, selected_color)
-		
-		
-		if hovered_note != -1:
-			var note_type = ChartManager.chart.get_notes_data()[hovered_note][3]
-			if note_type != "":
-				draw_string_at_position(get_global_mouse_position(), str("Type: ", note_type))
-			
-		if hovered_event != -1:
-			var event = ChartManager.chart.get_events_data()[hovered_event][1]
-			var parameters = ChartManager.chart.get_events_data()[hovered_event][2]
-			var text: String = str("\"", event, "\":  ", ", ".join(PackedStringArray(parameters)))
-			draw_string_at_position(get_global_mouse_position(), text)
 
 func draw_string_at_position(pos: Vector2, text: String) -> void:
 	draw_string_outline(DEFAULT_FONT, pos, text,
