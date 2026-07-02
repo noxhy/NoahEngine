@@ -401,7 +401,12 @@ func is_point_in_any_window(point: Vector2) -> bool:
 			continue
 		
 		var position_offset = window.get_position_with_decorations() - window.position
+		
+		#the decoration addition is only needed for the y
 		var window_rect = Rect2i(window.get_position_with_decorations() + position_offset, window.get_size_with_decorations())
+		window_rect.position.x = window.position.x
+		window_rect.size.x = window.size.x
+		
 		if window_rect.has_point(point):
 			return true
 	return false
