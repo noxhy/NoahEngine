@@ -27,6 +27,11 @@ func _ready() -> void:
 	skip_forward.connect(&"pressed", chart_editor._on_skip_forward_pressed)
 	difficulty_button.connect(&"item_selected", chart_editor._on_difficulty_button_item_selected)
 	chart_snap.connect(&"value_changed", chart_editor._on_chart_snap_value_changed)
+	
+	#add menupopups to the thing
+	for child in get_children():
+		if child is OptionButton:
+			child.get_popup().add_to_group(&"windows")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -19,7 +19,7 @@ var DEFAULT_FONT_SIZE: int = ThemeDB.fallback_font_size
 
 var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
 var EVENT_PRELOAD = load("uid://n6k15grja0uh")
-var STRUM_BUTTON_PRELOAD = load("uid://ddohksqocyhnx")
+var STRUM_BUTTON_PRELOAD: PackedScene = load("uid://ddohksqocyhnx")
 
 var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
 var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
@@ -79,6 +79,7 @@ var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
+
 var waveform_data: Dictionary = {}
 var waveform_nodes: Dictionary = {}
 
@@ -384,6 +385,24 @@ func _process(delta: float) -> void:
 	
 	queue_redraw()
 
+func is_hovering_any_ui() -> bool:
+	var mouse = get_corrected_mouse_position()
+	
+	if is_any_window_overlapped(mouse):
+		return true
+	
+	if Rect2i(upper_ui.global_position + upper_ui.get_parent().offset, upper_ui.size).has_point(mouse):
+		return true
+	
+	if Rect2i(lower_ui.global_position + lower_ui.get_parent().offset, lower_ui.size).has_point(mouse):
+		return true
+	
+	for button:HFlowContainer in get_tree().get_nodes_in_group(&"strum_buttons"):
+		#they sahre the same parent as lower ui so this is fine
+		if Rect2i(button.global_position + lower_ui.get_parent().offset, button.size).has_point(mouse):
+			return true
+	
+	return false
 
 func is_any_window_overlapped(point: Vector2) -> bool:
 	for window: Window in get_tree().get_nodes_in_group(&"windows"):
@@ -528,6 +547,7 @@ func update_grid():
 		strum_label_instance.connect(&"opened", self.disable_charting)
 		strum_label_instance.connect(&"closed", self.close_popup)
 		strum_label_instance.connect(&"updated", self.updated_strums)
+		strum_label_instance.add_to_group(&"strum_buttons")
 	
 	%"Strum Labels".size.y = 32
 
@@ -625,7 +645,7 @@ func load_chart(file: Chart, ghost: bool = false):
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float):
-	if ChartManager.chart.get_notes_data().is_empty():
+	if not ChartManager.chart or ChartManager.chart.get_notes_data().is_empty():
 		return
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / %Grid.zoom.y
