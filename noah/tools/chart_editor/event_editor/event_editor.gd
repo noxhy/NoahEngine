@@ -55,9 +55,6 @@ func _process(delta: float) -> void:
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position($Conductor.offset - ChartManager.chart.offset)
 	
 	
-	if Input.is_action_just_pressed(&"menu_accept"):
-		_on_play_button_toggled(!%Instrumental.stream_paused)
-	
 	var grid_offset: Vector2 = %Grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = %Grid.get_grid_position(mouse_position)

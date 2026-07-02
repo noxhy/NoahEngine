@@ -380,17 +380,7 @@ func file_button_item_pressed(id):
 			new_file_popup_instance.connect("close_requested", chart_editor.close_popup)
 			%"Open Window".play()
 		
-		1:
-			chart_editor.can_chart = false
-			var open_file_popup_instance = chart_editor.OPEN_FILE_POPUP_PRELOAD.instantiate()
-			
-			add_child(open_file_popup_instance)
-			open_file_popup_instance.popup()
-			open_file_popup_instance.connect("file_selected", chart_editor.load_song_path)
-			open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
-			open_file_popup_instance.connect("canceled", chart_editor.close_popup)
-			%"Open Window".play()
-		
+		1: open_open_file_window()
 		2:
 			if ChartManager.song and ChartManager.chart:
 				chart_editor.save()
@@ -497,3 +487,14 @@ func file_button_item_pressed(id):
 
 		_:
 			print("id: ", id)
+
+func open_open_file_window():
+	chart_editor.can_chart = false
+	var open_file_popup_instance = chart_editor.OPEN_FILE_POPUP_PRELOAD.instantiate()
+	
+	add_child(open_file_popup_instance)
+	open_file_popup_instance.popup()
+	open_file_popup_instance.connect("file_selected", chart_editor.load_song_path)
+	open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
+	open_file_popup_instance.connect("canceled", chart_editor.close_popup)
+	%"Open Window".play()

@@ -20,7 +20,7 @@ var chart_editor: ChartEditor
 func _ready() -> void:
 	chart_editor = get_parent().get_parent()
 	
-	play_button.connect(&"toggled", chart_editor._on_play_button_toggled)
+	play_button.connect(&"toggled", _play_button_pressed)
 	skip_to_beginning.connect(&"pressed", chart_editor._on_skip_to_beginning_pressed)
 	skip_to_end.connect(&"pressed", chart_editor._on_skip_to_end_pressed)
 	skip_backward.connect(&"pressed", chart_editor._on_skip_backward_pressed)
@@ -32,6 +32,8 @@ func _ready() -> void:
 	
 	difficulty_button.get_popup().add_to_group(&"windows")
 
+func _play_button_pressed(v):
+	chart_editor.toggle_audios(not v)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

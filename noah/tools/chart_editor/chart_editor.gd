@@ -40,6 +40,7 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 @onready var vocals: AudioStreamPlayer = %Vocals
 @onready var conductor: Conductor = $Conductor
 @onready var camera_2d: Camera2D = $Camera2D
+@onready var song_slider: HSlider = %"Song Slider"
 
 ## Chart Variables
 var backup_chart: Chart = null
@@ -97,7 +98,7 @@ func _ready() -> void:
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
 	if not ChartManager.song:
-		upper_ui.file_button_item_pressed(1)
+		upper_ui.open_open_file_window()
 	else:
 		var song = ChartManager.song
 		load_song(song, ChartManager.difficulty)
@@ -107,7 +108,7 @@ func _ready() -> void:
 		undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 		undo_redo.add_undo_property(self, "song", null)
 		undo_redo.commit_action()
-		can_chart = true
+		enable_can_chart_on_next_frame()
 	
 	update_grid()
 	
@@ -121,15 +122,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var mouse_over_window: bool = is_hovering_any_ui()
-	
-	var can_interact_with_chart: bool = can_chart and not mouse_over_window and ChartManager.chart
+	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartManager.chart
 	
 	instrumental.volume_linear = 1 if !mute_instrumental else 0
 	
 	if ChartManager.song and instrumental.playing:
 		song_position = instrumental.get_playback_position() - start_offset
-		%"Song Slider".value = song_position
+		song_slider.value = song_position
 		
 		var notes_list = ChartManager.chart.get_notes_data()
 		
@@ -162,7 +161,7 @@ func _process(delta: float) -> void:
 			song_position += conductor.seconds_per_beat * axis
 			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
 			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-			%"Song Slider".value = song_position
+			song_slider.value = song_position
 		else: #snap scrubbing
 			current_snap += axis
 			chart_snap = SNAPS[current_snap % SNAPS.size()]
@@ -193,8 +192,7 @@ func _process(delta: float) -> void:
 		if Input.is_action_pressed(&"control"):
 			bounding_box = true
 			start_box = get_global_mouse_position()
-			
-		elif is_mouse_over_grid() and not is_mouse_over_ui():
+		elif is_mouse_over_grid() and not is_mouse_over_any_ui():
 			if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)):
 				var lane: int = snapped_position.x - 1
 				var time: float = grid_position_to_time(snapped_position, true)
@@ -204,6 +202,7 @@ func _process(delta: float) -> void:
 					if !is_note_at(lane, time):
 						add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
 						self.remove_note.bind(lane, time))
+						
 						
 						%"Note Place".play()
 						placing_note = true
@@ -377,7 +376,7 @@ func _process(delta: float) -> void:
 	
 	queue_redraw()
 
-func is_hovering_any_ui() -> bool:
+func is_mouse_over_any_ui() -> bool:
 	var mouse = get_corrected_mouse_position()
 	
 	if is_point_in_any_window(mouse):
@@ -405,15 +404,6 @@ func is_point_in_any_window(point: Vector2) -> bool:
 		var window_rect = Rect2i(window.get_position_with_decorations() + position_offset, window.get_size_with_decorations())
 		if window_rect.has_point(point):
 			return true
-	return false
-
-func is_mouse_over_ui() -> bool:
-	var point = get_corrected_mouse_position()
-	var mouse_over_upper_ui = Rect2i(upper_ui.global_position + upper_ui.get_parent().offset, upper_ui.size).has_point(point)
-	var mouse_over_lower_ui = Rect2i(lower_ui.global_position + lower_ui.get_parent().offset, lower_ui.size).has_point(point)
-	
-	if mouse_over_lower_ui or mouse_over_upper_ui:
-		return true
 	return false
 
 func is_mouse_over_grid() -> bool:
@@ -453,7 +443,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		# Hover Box
-		if grid_position.x >= 0 and grid_position.x < %Grid.columns and not is_hovering_any_ui():
+		if grid_position.x >= 0 and grid_position.x < %Grid.columns and not is_mouse_over_any_ui():
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow(conductor.numerator, 2) / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, pow(conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
@@ -558,8 +548,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	vocals.stream_paused = true
 	instrumental.stream_paused = true
 	
-	%"Song Slider".max_value = instrumental.stream.get_length()
-	%"Song Slider".value = 0.0
+	song_slider.max_value = instrumental.stream.get_length()
+	song_slider.value = 0.0
 	conductor.tempo = ChartManager.chart.get_tempo_at(0.0)
 	var meter = ChartManager.chart.get_meter_at(0.0)
 	conductor.numerator = meter[0]
@@ -589,7 +579,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	load_waveforms()
 	update_waveforms(song_position)
-	can_chart = true
+	enable_can_chart_on_next_frame()
 
 
 func load_song_path(path: String, difficulty: Variant = null):
@@ -624,7 +614,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	undo_redo.commit_action()
 	
 	upper_ui.metadata_window.update_stats()
-	can_chart = true
+	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
 	load_dividers()
@@ -774,7 +764,7 @@ func new_file(path: String, song: Song):
 	undo_redo.add_do_reference(%"Upper UI".get_node("%History Window").add_action(action))
 	undo_redo.add_undo_property(self, "song", old_song)
 	undo_redo.commit_action()
-	can_chart = true
+	enable_can_chart_on_next_frame()
 
 ## Adds an instance of a note on the chart editor, placed boolean adds it to the chart data.
 ## Reset the select notes and note nodes list before calling moved
@@ -1057,6 +1047,10 @@ func time_to_y_position(time: float) -> float:
 		i += 1
 	
 	return y_offset
+	
+
+func enable_can_chart_on_next_frame():
+	get_tree().create_timer(0.0).timeout.connect(func(): can_chart = true)
 
 func update_note_position(node: Node2D):
 	if node is ChartNote:
@@ -1130,12 +1124,9 @@ func bsearch_right_range(value_set: Array, right_range: float) -> int:
 	return found
 
 func is_note_at(lane: int, time: float) -> bool:
-	return (find_note(lane, time) != -1)
+	return find_note(lane, time) != -1
 
-func _on_play_button_toggled(toggled_on: bool) -> void:
-	toggle_audios(not toggled_on)
-
-func toggle_audios(paused: bool):
+func toggle_audios(paused: bool = true):
 	vocals.stream_paused = paused
 	instrumental.stream_paused = paused
 	
@@ -1183,22 +1174,23 @@ func _on_song_slider_drag_started() -> void:
 
 func _on_skip_forward_pressed() -> void:
 	song_position += 10
-	_on_play_button_toggled(true)
+	toggle_audios(false)
 
 func _on_skip_backward_pressed() -> void:
 	song_position -= 10
-	_on_play_button_toggled(true)
+	toggle_audios(false)
+	
 
 func _on_skip_to_beginning_pressed() -> void:
 	song_position = start_offset
-	_on_play_button_toggled(true)
+	toggle_audios(false)
 
 func _on_skip_to_end_pressed() -> void:
 	song_position = instrumental.stream.get_length() - 0.1
-	_on_play_button_toggled(true)
+	toggle_audios(false)
 
 func _on_instrumental_finished() -> void:
-	_on_play_button_toggled(false)
+	toggle_audios(true)
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"):
@@ -1245,9 +1237,7 @@ func edit_button_item_pressed(id):
 ## Audio button item pressed
 func audio_button_item_pressed(id):
 	match id:
-		0:
-			_on_play_button_toggled(!instrumental.playing)
-		
+		0: toggle_audios(instrumental.playing)
 		2:
 			%"Upper UI".get_node("%Audios Window").popup()
 		
@@ -1344,26 +1334,19 @@ func view_button_item_pressed(id):
 ## Window button item pressed
 func window_button_item_pressed(id):
 	match id:
-		0:
-			toggle_window_visibility(upper_ui.history_window)
-			
-			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%History Window").visible)
-		1:
-			toggle_window_visibility(upper_ui.metadata_window)
-			
-			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%Metadata Window").visible)
-		2:
-			toggle_window_visibility(upper_ui.note_type_window)
-			
-			%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(id, %"Upper UI".get_node("%Note Type Window").visible)
+		0: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.history_window))
+		1: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.metadata_window))
+		2: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.note_type_window))
 
-func toggle_window_visibility(window: Window):
+func toggle_window_visibility(window: Window) -> bool:
+	var ret = not window.visible
 	if window.visible:
 		window.hide()
 		%"Close Window".play()
 	else:
 		window.popup()
 		%"Open Window".play()
+	return ret
 
 ## Edit button item pressed
 func test_button_item_pressed(id):
@@ -1414,7 +1397,7 @@ func open_popup():
 
 
 func close_popup():
-	can_chart = true
+	enable_can_chart_on_next_frame()
 	%"Close Window".play()
 
 
@@ -1479,7 +1462,7 @@ func move_selection(time_distance: float, lane_distance: float):
 
 
 func updated_strums():
-	can_chart = true
+	enable_can_chart_on_next_frame()
 	update_grid()
 
 
@@ -1607,7 +1590,7 @@ func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
 func _on_metadata_window_selected_time_change(time: float) -> void:
 	song_position = time
 	start_offset = 0
-	_on_play_button_toggled(false)
+	toggle_audios(true)
 
 func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
@@ -1649,7 +1632,7 @@ func set_chart_from_chart(_chart: Chart):
 
 
 func _on_note_skin_window_file_selected(path: String) -> void:
-	can_chart = true
+	enable_can_chart_on_next_frame()
 	if !FileAccess.file_exists(path):
 		printerr("File does not exist is (%s) correct?" % path)
 		return
@@ -1819,17 +1802,17 @@ func select_all():
 
 
 func deselect_all():
-	if !selected_notes.is_empty():
-		%"Note Place".play()
-		
-		selected_notes = []
-		selected_note_nodes = []
+	if selected_notes.is_empty():
+		return
+	
+	selected_notes = []
+	selected_note_nodes = []
+	%"Note Place".play()
 
 
 func _on_conductor_new_numerator(_numerator: int) -> void:
 	update_grid()
 	load_dividers()
-
 
 func _on_conductor_new_denominator(_denominator: int) -> void:
 	update_grid()
@@ -1843,16 +1826,13 @@ func _on_note_type_window_close_requested() -> void:
 	%"Upper UI".get_node("%Window Button").get_popup().set_item_checked(2, false)
 	%"Close Window".play()
 
-
 func _on_audios_window_close_requested() -> void:
-	can_chart = true
+	enable_can_chart_on_next_frame()
 	%"Close Window".play()
-
 
 func _on_audios_window_about_to_popup() -> void:
 	can_chart = false
 	%"Open Window".play()
-
 
 func _on_audios_window_updated() -> void:
 	instrumental.stream = SoundManager._get_stream(ChartManager.song.instrumental)
