@@ -35,8 +35,10 @@ var dimensions:Vector2:
 func _init(p_data:WaveformData,p_duration := 0.0,p_color := Color.WHITE,p_bg := Color.GRAY) -> void:
 	wave_color = p_color ; bg_color = p_bg
 	data = p_data
-	if p_duration <= 0.0: p_duration = data.songLength * 130
-	duration = p_duration
+	if data:
+		if p_duration <= 0.0: p_duration = data.songLength * 130
+		duration = p_duration
+	
 	dirty = true
 
 func _process(_delta) -> void:
