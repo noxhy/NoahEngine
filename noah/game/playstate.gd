@@ -4,7 +4,6 @@ class_name PlayState
 
 const COMPENSATION: float = 1.0 / 30.0
 
-@onready var countdown_node = load("uid://daky0nn8plbe4")
 @onready var song_data: Song
 @onready var vocals: AudioStreamPlayer
 @onready var instrumental: AudioStreamPlayer
@@ -62,11 +61,9 @@ var ui_bop_strength: Vector2 = Vector2(0.025, 0.025)
 var pause_preload: PackedScene
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	if GameManager.freeplay:
-		self.song_data = GameManager.current_song
-	else:
-		self.song_data = GameManager.week_songs[GameManager.current_week_song]
+func _ready() -> void:
+	
+	song_data = GameManager.get_current_song()
 	
 	assert(host, 'A Host was not assigned.')
 	assert(ui, 'A UI was not assigned.')
@@ -80,10 +77,10 @@ func _ready():
 	vocals.stream.polyphony = song_data.vocals.size()
 	vocals.set_bus(&"Music")
 	for v in song_data.vocals:
-		vocal_streams.append(load(v))
+		vocal_streams.append(SoundManager._get_stream(v))
 	
 	instrumental = AudioStreamPlayer.new()
-	instrumental.stream = load(song_data.instrumental)
+	instrumental.stream = SoundManager._get_stream(song_data.instrumental)
 	instrumental.connect("finished", song_finished)
 	instrumental.pitch_scale = song_speed
 	instrumental.set_bus(&"Music")
@@ -147,14 +144,13 @@ func _ready():
 	Signals.play_setup_finished.emit()
 
 
-func _process(delta):
+func _process(delta) -> void:
 	health = clamp(health, 0.0, 100.0)
 	GameManager.health = health
 	GameManager.score = int(score)
 	
 	if health <= 0 and !died:
 		GameManager.deaths += 1
-		DeathScreen.camera_zoom = camera.zoom
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		Signals.play_died.emit()
 		died = true
@@ -163,7 +159,7 @@ func _process(delta):
 	if get_tree():
 		get_tree().call_group(&"note", &"update")
 	
-	if Input.is_action_just_pressed(&"menu_cancel") or Input.is_action_just_pressed(&"menu_accept"):
+	if Input.is_action_just_pressed(&"pause"):
 		Global.manual_pause = true
 		pause()
 	
@@ -265,14 +261,13 @@ func play_song(time: float):
 	if time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
-		var countdown_instance = countdown_node.instantiate()
-		
-		countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
-		
-		ui.add_child(countdown_instance)
-		
-		countdown_instance.play(ui_skin.countdown_animation)
-		countdown_instance.seek(time)
+		if !ui_skin.countdown.is_empty():
+			var countdown_instance: AnimationPlayer = load(ui_skin.countdown_node).instantiate()
+			
+			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
+			
+			ui.add_child(countdown_instance)
+			countdown_instance.seek(time)
 	
 	var notes_list = chart.get_notes_data()
 	current_note = bsearch_left_range(notes_list, time)
@@ -378,13 +373,13 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"camera_zoom":
 			var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 			var zoom_time = Global.string_to_time(event_parameters[1])
-			var _ease = [Tween.TRANS_CUBIC, Tween.EASE_OUT]
+			var _ease: String = "CLASSIC"
 			
 			var ease_string = event_parameters.get(2)
 			if ease_string:
-				_ease = Global.string_to_ease(ease_string)
+				_ease = ease_string
 			
-			camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease[0], _ease[1])
+			camera.tween_zoom(new_zoom, zoom_time / song_speed, ease_string)
 		
 		"bop_rate", "bop_delay":
 			host.bop_rate = int(event_parameters[0])
@@ -417,6 +412,8 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 
 
 func song_finished():
+	Signals.play_song_finished.emit()
+	
 	if GameManager.freeplay:
 		match GameManager.play_mode:
 			GameManager.PLAY_MODE.CHARTING:
@@ -438,7 +435,7 @@ func song_finished():
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
@@ -459,20 +456,20 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		
 		match rating:
 			"sick":
-				health += 1 * note.health_mult
-				strum_manager.create_splash(lane, strum_node.strum_name + " splash")
+				health += Constants.HEALTH_GAIN * note.health_mult
+				strum_manager.create_splash(lane, note.splash_animation)
 				if note.scoreable:
 					add_combo()
 			"good":
-				health += 0.5 * note.health_mult
+				health += Constants.HEALTH_GAIN * note.health_mult
 				if note.scoreable:
 					add_combo()
 			"bad":
-				health -= 0.35 * note.health_mult
+				health -= Constants.BAD_HIT_HEALTH_PENALTY * note.health_mult
 				if note.scoreable:
 					reset_combo()
 			"shit":
-				health -= 0.35 * note.health_mult
+				health -= Constants.BAD_HIT_HEALTH_PENALTY * note.health_mult
 				if note.scoreable:
 					reset_combo()
 			_:
@@ -481,7 +478,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 
 func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_tracks[strum_manager.id],  linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
@@ -493,19 +490,20 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.get(strum_manager.id):
+	if vocal_tracks.size() > strum_manager.id:
 		if (note and !note.mine) or !note:
 			playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(0.0))
 	
 	if !strum_manager.enemy_slot:
 		# Ghost tapping
 		if not note:
-			score -= 10
-			health -= 1
+			score -= Constants.SPAM_SCORE_PENALTY
+			health -= Constants.SPAM_HEALTH_PENALTY
 		elif note.scoreable:
 			if note.mine and !note.hit:
 				return
-			score -= 100
+			
+			score -= Constants.MISS_SCORE_PENALTY
 			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
 			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			reset_combo()

@@ -19,16 +19,15 @@ var camera_positions: Array = []
 var bop_rate: int = 16
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	if not playstate_host:
 		playstate_host = $"PlayState Host"
 	
 	assert(playstate_host, "Playstate host not found")
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
+	
 	if player:
 		playstate_host.ui.update_player(player)
-		DeathScreen.player_position = player.global_position
-		DeathScreen.player_scale = Vector2(player.scale.x,player.scale.y)
 	
 	if enemy:
 		playstate_host.ui.update_enemy(enemy)
@@ -132,7 +131,7 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		&"play_animation":
 			var duration: float = -1
-			if event_parameters.get(2):
+			if event_parameters.get(2) and !event_parameters[2].is_empty():
 				duration = Global.string_to_time(event_parameters[2])
 			
 			get_tree().call_group(event_parameters[0], &"play_animation",

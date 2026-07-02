@@ -3,8 +3,7 @@ extends Node2D
 @export var note_skin = NoteSkin.new()
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
-	
+func _ready() -> void:
 	$OffsetSprite.sprite_frames = note_skin.splashes_texture
 	
 	if note_skin.animation_names != null:
@@ -19,7 +18,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	pass
 
 

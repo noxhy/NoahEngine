@@ -13,6 +13,7 @@ signal closed
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	_on_window_about_to_popup()
+	$Window.add_to_group(&"windows")
 
 
 func _on_button_pressed() -> void:

@@ -25,7 +25,7 @@ signal note_miss(note: Note, lane: int, manager: StrumManager)
 @export var enemy_slot: bool = false
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	set_skin(note_skin)
 	set_press(can_press)
 	set_auto_play(auto_play)
@@ -39,7 +39,7 @@ func _ready():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta) -> void:
 	pass
 
 
@@ -101,8 +101,12 @@ func get_scroll_speed(lane: int) -> float:
 func create_note(time: float, lane: int, length: float, note_type: String, tempo: float):
 	strums[lane].create_note(time, length, note_type, tempo)
 
-func create_splash(lane: int, animation_name: String):
-	strums[lane].create_splash(animation_name) 
+func create_splash(lane: int, animation_name: StringName):
+	var anim_to_play: StringName = animation_name + &"_splash"
+	if animation_name.is_empty():
+		anim_to_play = strums[lane].strum_name + &"_splash"
+	
+	strums[lane].create_splash(anim_to_play)
 
 # Visual Util
 func glow_strum(lane: int):

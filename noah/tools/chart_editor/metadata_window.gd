@@ -20,7 +20,12 @@ func update_stats():
 	%"Song Artist".text = ChartManager.song.artist
 	%"Song Charter".text = ChartManager.song.charter
 	
-	_on_icon_file_dailog_file_selected(ChartManager.song.icons.resource_path)
+	var path: String = ""
+	
+	if ChartManager.song.icons:
+		path = ChartManager.song.icons.resource_path
+	
+	_on_icon_file_dailog_file_selected(path)
 	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
 	
 	%Difficulty.text = ChartManager.difficulty
@@ -101,7 +106,7 @@ func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	var meter_data: Dictionary = ChartManager.chart.get_meters_data()
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	%Numerator.value = meter[0]
-	%Denominator.value = meter[0]
+	%Denominator.value = meter[1]
 	if emit:
 		emit_signal(&"selected_time_change", time)
 

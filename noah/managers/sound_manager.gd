@@ -84,11 +84,25 @@ func play_sound_once(stream: Variant, volume_linear: float = 1) -> void:
 	remove_child(player)
 	player.queue_free()
 
-## asserts a given stream IS a AudioStream
+## attempts to retrieve a stream more thoroughly and asserts when failure.
+## [br][br]If the given file is a [code]String[/code], the func will attempt to load it (supports absolute paths)
 func _get_stream(stream: Variant) -> AudioStream:
 	if stream is AudioStream or stream is AudioStreamOggVorbis:
 		return stream
 	elif stream is String:
+		
+		if not stream.begins_with('res://'):
+			var file: FileAccess = FileAccess.open(stream, FileAccess.READ)
+			if file:
+				var raw_buffer = file.get_buffer(file.get_length())
+				
+				var potential_stream = get_stream_from_buffer(raw_buffer, stream.get_extension())
+				
+				file.close()
+				
+				if potential_stream:
+					return potential_stream
+		
 		assert(ResourceLoader.exists(stream), '%s could not be found and played.' % stream)
 		
 		var loaded_sound = load(stream)
@@ -99,3 +113,14 @@ func _get_stream(stream: Variant) -> AudioStream:
 		assert(false, '%s provided is not a valid stream' % stream)
 	
 	return null
+
+func get_stream_from_buffer(buffer: PackedByteArray, ext: String) -> AudioStream:
+		match ext:
+			'ogg':
+				return AudioStreamOggVorbis.load_from_buffer(buffer)
+			'wav':
+				return AudioStreamWAV.load_from_buffer(buffer)
+			'mp3':
+				return AudioStreamMP3.load_from_buffer(buffer)
+		return null
+	
