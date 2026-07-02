@@ -15,7 +15,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var can_interact_with_chart: bool = can_chart and not is_any_window_overlapped(get_corrected_mouse_position()) and ChartManager.chart
+	var can_interact_with_chart: bool = can_chart and not is_point_in_any_window(get_corrected_mouse_position()) and ChartManager.chart
 	
 	if ChartManager.song:
 		if %Instrumental.playing:
@@ -73,8 +73,7 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 				if can_interact_with_chart:
-					if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < %Grid.rows)
-					and !current_focus_owner):
+					if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < %Grid.rows)):
 						var event: String = ChartManager.event_tracks[snapped_position.y - 1]
 						var time: float = grid_position_to_time(snapped_position, true)
 						time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
@@ -100,10 +99,6 @@ func _process(delta: float) -> void:
 								else:
 									selected_notes = [i]
 									selected_note_nodes = [event_nodes[i - current_visible_events_L]]
-					elif (((grid_position.y - 1) >= -1 and (grid_position.y - 1) <= ChartManager.strum_count)
-					and current_focus_owner):
-						current_focus_viewport.gui_release_focus()
-						current_focus_owner = null
 		else:
 			if can_chart:
 				bounding_box = true
@@ -112,8 +107,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"mouse_middle"):
 		if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 			if can_chart:
-				if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)
-					and !current_focus_owner):
+				if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < %Grid.rows)):
 						if hovered_event != -1:
 							var event: String = ChartManager.chart.chart_data["events"][hovered_event][1]
 							var time: float = ChartManager.chart.chart_data["events"][hovered_event][0]
@@ -127,7 +121,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_pressed(&"mouse_right"):
 		if !Input.is_action_pressed(&"control"):
-				if screen_mouse_position.x > -512 and screen_mouse_position.x < 640 and !current_focus_owner:
+				if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 					if can_chart:
 						if !Input.is_action_pressed(&"control"):
 							if hovered_event != -1:
@@ -162,7 +156,7 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if screen_mouse_position.x > -512 and screen_mouse_position.x < 640:
 				if !%Instrumental.playing:
-					if can_chart and !current_focus_owner:
+					if can_chart:
 						## Song Position Slider
 						if grid_position.y < 1 and grid_position.y >= 0:
 							if Input.is_action_pressed(&"shift"):
@@ -261,7 +255,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		## Hover Box
-		if (grid_position.y >= 1 and grid_position.y < %Grid.rows and !current_focus_owner) and not is_any_window_overlapped(get_corrected_mouse_position()):
+		if (grid_position.y >= 1 and grid_position.y < %Grid.rows) and not is_point_in_any_window(get_corrected_mouse_position()):
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(pow($Conductor.numerator, 2) / chart_snap, 1))
 			draw_rect(rect, hover_color)

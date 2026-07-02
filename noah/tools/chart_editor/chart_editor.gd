@@ -74,8 +74,6 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
-var current_focus_owner = null
-var current_focus_viewport: Viewport = null
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
@@ -95,7 +93,6 @@ func _ready() -> void:
 			return
 	
 	get_window().content_scale_size = Vector2(1280, 720)
-	get_viewport().gui_focus_changed.connect(_on_gui_focus_changed)
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.get_value("gameplay", "song_speed")
 	
@@ -124,7 +121,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var mouse_over_window: bool = is_any_window_overlapped(get_corrected_mouse_position())
+	var mouse_over_window: bool = is_hovering_any_ui()
 	
 	var can_interact_with_chart: bool = can_chart and not mouse_over_window and ChartManager.chart
 	
@@ -197,9 +194,8 @@ func _process(delta: float) -> void:
 			bounding_box = true
 			start_box = get_global_mouse_position()
 			
-		elif is_grid_focused(false):
-			if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)
-			and !current_focus_owner):
+		elif is_mouse_over_grid() and not is_mouse_over_ui():
+			if (((grid_position.x - 1) > 0 and (grid_position.x - 1) < ChartManager.strum_count)):
 				var lane: int = snapped_position.x - 1
 				var time: float = grid_position_to_time(snapped_position, true)
 				time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
@@ -234,12 +230,8 @@ func _process(delta: float) -> void:
 							max_lane = ChartManager.strum_count - 1
 						
 						%"Mouse Click".play()
-			elif (((grid_position.x - 1) >= -1 and (grid_position.x - 1) <= ChartManager.strum_count)
-			and current_focus_owner):
-				current_focus_viewport.gui_release_focus()
-				current_focus_owner = null
 	
-	if can_interact_with_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_grid_focused():
+	if can_interact_with_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_mouse_over_grid():
 		var lane: int = snapped_position.x - 1
 		if hovered_note != -1:
 			var i: int = hovered_note
@@ -269,7 +261,7 @@ func _process(delta: float) -> void:
 			auto_save()
 	
 	if can_interact_with_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
-		is_grid_focused(true) and not instrumental.playing:
+		is_mouse_over_grid() and not instrumental.playing:
 		## Song Position Slider
 		if grid_position.x < 1 and grid_position.x >= 0:
 			if Input.is_action_pressed(&"shift"):
@@ -388,7 +380,7 @@ func _process(delta: float) -> void:
 func is_hovering_any_ui() -> bool:
 	var mouse = get_corrected_mouse_position()
 	
-	if is_any_window_overlapped(mouse):
+	if is_point_in_any_window(mouse):
 		return true
 	
 	if Rect2i(upper_ui.global_position + upper_ui.get_parent().offset, upper_ui.size).has_point(mouse):
@@ -404,7 +396,7 @@ func is_hovering_any_ui() -> bool:
 	
 	return false
 
-func is_any_window_overlapped(point: Vector2) -> bool:
+func is_point_in_any_window(point: Vector2) -> bool:
 	for window: Window in get_tree().get_nodes_in_group(&"windows"):
 		if not window or not window.visible or window is not Window:
 			continue
@@ -424,14 +416,9 @@ func is_mouse_over_ui() -> bool:
 		return true
 	return false
 
-func is_grid_focused(check_control_focus: bool = true) -> bool:
+func is_mouse_over_grid() -> bool:
 	var screen_mouse_pos = get_corrected_mouse_position()
-	
-	var mouse_over = screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
-	if check_control_focus:
-		return mouse_over and not current_focus_owner
-	
-	return mouse_over
+	return screen_mouse_pos.y > 64 and screen_mouse_pos.y < 640
 
 func get_corrected_mouse_position() -> Vector2:
 	return get_global_mouse_position() - Vector2(0, camera_2d.position.y - 360)
@@ -466,7 +453,7 @@ func _draw() -> void:
 		draw_rect(rect, current_time_color)
 		
 		# Hover Box
-		if (grid_position.x >= 0 and grid_position.x < %Grid.columns and !current_focus_owner) and not is_mouse_over_ui() and not is_any_window_overlapped(get_corrected_mouse_position()):
+		if grid_position.x >= 0 and grid_position.x < %Grid.columns and not is_hovering_any_ui():
 			rect = Rect2(%Grid.get_real_position(snapped_position, %Grid.grid_size * Vector2(1, pow(conductor.numerator, 2) / chart_snap)) + grid_offset, \
 			%Grid.grid_size * %Grid.zoom * Vector2(1, pow(conductor.numerator, 2) / chart_snap))
 			draw_rect(rect, hover_color)
@@ -1652,10 +1639,6 @@ func update_event(event):
 func _on_export_external_popup_file_selected(path: String) -> void:
 	ResourceSaver.save(ChartManager.chart, path)
 	%"Upper UI".get_node("%Export External Popup").hide()
-
-func _on_gui_focus_changed(node):
-	current_focus_owner = node
-	current_focus_viewport = node.get_viewport()
 
 func set_chart_from_chart(_chart: Chart):
 	if !_chart:

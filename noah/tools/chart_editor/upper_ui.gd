@@ -228,7 +228,6 @@ func file_button_item_pressed(id):
 			file_dialog.about_to_popup.connect(chart_editor.open_popup)
 			file_dialog.close_requested.connect(chart_editor.close_popup)
 			file_dialog.close_requested.connect(file_dialog.queue_free)
-			file_dialog.gui_focus_changed.connect(chart_editor._on_gui_focus_changed)
 			file_dialog.theme = chart_editor.TOOL_THEME
 			file_dialog.use_native_dialog = true
 			file_dialog.mode_overrides_title = false
@@ -318,7 +317,6 @@ func file_button_item_pressed(id):
 			file_dialog.about_to_popup.connect(chart_editor.open_popup)
 			file_dialog.close_requested.connect(chart_editor.close_popup)
 			file_dialog.close_requested.connect(file_dialog.queue_free)
-			file_dialog.gui_focus_changed.connect(chart_editor._on_gui_focus_changed)
 			file_dialog.theme = chart_editor.TOOL_THEME
 			
 			add_child(file_dialog)
@@ -380,7 +378,6 @@ func file_button_item_pressed(id):
 			new_file_popup_instance.popup()
 			new_file_popup_instance.connect("file_created", chart_editor.new_file)
 			new_file_popup_instance.connect("close_requested", chart_editor.close_popup)
-			new_file_popup_instance.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		1:
@@ -392,7 +389,6 @@ func file_button_item_pressed(id):
 			open_file_popup_instance.connect("file_selected", chart_editor.load_song_path)
 			open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
 			open_file_popup_instance.connect("canceled", chart_editor.close_popup)
-			open_file_popup_instance.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		2:
@@ -409,7 +405,6 @@ func file_button_item_pressed(id):
 			# convert_chart_popup_instance.connect("file_created", chart_editor._on_save_folder_dialog_dir_selected)
 			convert_chart_popup_instance.connect("file_created", chart_editor.new_file)
 			convert_chart_popup_instance.connect("close_requested", chart_editor.close_popup)
-			convert_chart_popup_instance.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 			%"Open Window".play()
 		
 		3:
@@ -460,7 +455,6 @@ func file_button_item_pressed(id):
 			export_window.connect(&"file_selected", chart_editor.on_save)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
 			export_window.connect(&"close_requested", on_close)
-			export_window.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 		10: #Load events
 			chart_editor.can_chart = false
 			%"Open Window".play()
@@ -500,7 +494,6 @@ func file_button_item_pressed(id):
 			export_window.connect(&"file_selected", chart_editor.on_open)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
 			export_window.connect(&"close_requested", on_close)
-			export_window.connect(&"gui_focus_changed", chart_editor._on_gui_focus_changed)
 
 		_:
 			print("id: ", id)
