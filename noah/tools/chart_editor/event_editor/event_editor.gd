@@ -44,6 +44,8 @@ func _process(delta: float) -> void:
 			chart_snap = SNAPS[current_snap % SNAPS.size()]
 			lower_ui.chart_snap.value = chart_snap
 	
+	conductor.time = song_position
+	
 	if ChartManager.chart:
 		var time: float = song_position + start_offset
 		$Conductor.tempo = ChartManager.chart.get_tempo_at(song_position + start_offset)
