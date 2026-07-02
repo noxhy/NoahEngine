@@ -201,7 +201,7 @@ func engine_http(result: int, response_code: int, headers: PackedStringArray, bo
 	var current_version: String = ProjectSettings.get_setting("application/config/version")
 	
 	if current_version != engine_version:
-		information_label.text = "Your NoahEngine is out of date! Click [url=https://github.com/noxhy/NoahEngine/releases]here[/url] to download the latest version."
+		information_label.text = "[url=https://github.com/noxhy/NoahEngine/releases]Update available: %s[/url]" % engine_version
 
 
 func _on_notification_label_meta_clicked(meta: Variant) -> void:
@@ -216,7 +216,7 @@ func format_errors(list: Array, data: Dictionary = {}) -> String:
 				output.append(str("This mod supports NoahEngine versions: ", ", ".join(data.get("supported_versions", []))))
 			
 			ModError.OUTDATED_MOD:
-				output.append(str("There is a new release available. Download it [url=", data.get("download_link"), "]here[/url]."))
+				output.append(str("[url=", data.get("download_link"), "]Update available[/url]."))
 	
 	return "\n".join(output)
 
