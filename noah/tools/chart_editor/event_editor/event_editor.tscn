@@ -125,8 +125,8 @@ bus = &"SFX"
 
 [node name="Grid Layer" type="CanvasLayer" parent="." unique_id=35060227]
 layer = -2
-offset = Vector2(128, 360)
-transform = Transform2D(1, 0, 0, 1, 128, 360)
+offset = Vector2(144, 360)
+transform = Transform2D(1, 0, 0, 1, 144, 360)
 
 [node name="Parallax2D" type="Parallax2D" parent="Grid Layer" unique_id=1621966626]
 repeat_times = 9
