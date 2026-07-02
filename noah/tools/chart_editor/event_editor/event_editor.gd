@@ -157,9 +157,9 @@ func _process(delta: float) -> void:
 						## Song Position Slider
 						if grid_position.y < 1 and grid_position.y >= 0:
 							if Input.is_action_pressed(&"shift"):
-								start_offset = grid_position_to_time(snapped_position, true) - song_position
+								start_offset = grid_position_to_time(snapped_position, true) + conductor.offset - song_position
 							else:
-								start_offset = grid_position_to_time(grid_position) - song_position
+								start_offset = grid_position_to_time(grid_position) + conductor.offset - song_position
 						
 						if ((grid_position.y - 1) > 0 and (grid_position.y - 1) < %Grid.rows):
 							if moving_notes:
