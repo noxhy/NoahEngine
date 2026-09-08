@@ -14,6 +14,8 @@ const BACKUP_HOLD_TEXTURE = preload("uid://ds5jlynhtryxg")
 var update_callable: Callable
 var start_length: float = 0.0
 var time_difference: float = INF
+var sync_visual_time: bool = true
+var visual_time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
 
@@ -70,6 +72,8 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta) -> void:
 	time_difference = time - GameManager.song_position
+	if sync_visual_time:
+		visual_time_difference = time_difference
 
 
 func update() -> void:
@@ -82,7 +86,7 @@ func update() -> void:
 
 func default_update() -> void:
 	if !holding:
-		position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
+		position.y = PIXELS_PER_SECOND * visual_time_difference * scroll_speed * scroll
 		var grid_scaler: float = PIXELS_PER_SECOND * GameManager.conductor.seconds_per_beat
 		grid_size.y = grid_scaler
 	else:
