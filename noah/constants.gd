@@ -29,7 +29,7 @@ var EVENT_DATA: Dictionary = {
 	},
 	"bop_rate": {
 		"parameters": ["Step Rate"],
-		"description": "How often (in steps) the camera should bump"
+		"description": "How often (in steps) the camera should bump."
 	},
 	"bop_strength": {
 		"parameters": ["Camera Amount", "UI Amount"],
@@ -40,22 +40,23 @@ var EVENT_DATA: Dictionary = {
 		"description": "Toggles the zoom smoothing of the camera and ui."
 	},
 	"scroll_speed": {
-		"parameters": ["Amount", "Ease Duration"],
+		"parameters": ["Amount", "Duration"],
 		"texture": "res://addons/at-icons/node/fast_forward.svg",
-		"description": "Eases the scroll speed of all strums"
+		"description": "Tweens the scroll speed of all strums."
 	},
 	"camera_shake": {
 		"parameters": ["Amount", "Duration"],
 		"texture": "res://addons/at-icons/animation/video_camera.svg",
-		"description": "Shakes the camera"
+		"description": "Shakes the camera."
 	},
 	"set_prefix": {
 		"parameters": ["Group Name", "Prefix"],
-		"description": "Sets the animation prefix of a character group"
+		"description": "Sets the animation prefix of a character group."
 	},
 	"comment": {
 		"parameters": [""],
-		"texture": "res://addons/at-icons/node/speech_bubble_ellipsis.svg"
+		"texture": "res://addons/at-icons/node/speech_bubble_ellipsis.svg",
+		"description": "Doesnt do anything. Useful for simple custom events."
 	}
 }
 #endregion
