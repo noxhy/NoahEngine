@@ -167,6 +167,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	note_instance.animation = note_type + strum_name
 	
 	note_instance.note_skin = note_skin
+	note_instance.modchart_effects = modchart_effects
 	
 	add_child(note_instance)
 	note_list.append(note_instance)

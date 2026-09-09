@@ -28,8 +28,8 @@ func _on_setup_finished() -> void:
 	drunk.x_speed = 2
 	drunk.x_period = 1
 	
-	playstate.strums[0].strums[0].modchart_effects.add_effect(drunk)
+	#playstate.strums[0].strums[0].modchart_effects.add_effect(drunk)
 	
-	#for strum in playstate.strums[0].strums:
-		#if strum is Strum:
-			#strum.modchart_effects.add_effect(drunk)
+	for strum in playstate.strums[0].strums:
+		if strum is Strum:
+			strum.modchart_effects.add_effect(drunk)

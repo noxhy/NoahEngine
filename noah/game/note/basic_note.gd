@@ -12,7 +12,14 @@ const BACKUP_HOLD_TEXTURE = preload("uid://ds5jlynhtryxg")
 
 ## Callable for updating how the note handles its position and note length.
 var start_length: float = 0.0
-var time_difference: float = INF
+var time_difference: float:
+	get():
+		return time - GameManager.song_position
+
+var visual_time_difference: float:
+	get():
+		return time - GameManager.visual_song_position
+
 var on_screen: bool = false
 var holding: bool = false
 
@@ -68,10 +75,6 @@ func _ready() -> void:
 	
 	load_basic_type()
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta) -> void:
-	time_difference = time - GameManager.song_position
-
 
 func update() -> void:
 	default_update()
@@ -85,7 +88,7 @@ func update() -> void:
 func default_update() -> void:
 	position.x = 0
 	if !holding:
-		position.y = PIXELS_PER_SECOND * (time - GameManager.visual_song_position) * scroll_speed * scroll
+		position.y = PIXELS_PER_SECOND * visual_time_difference * scroll_speed * scroll
 		var grid_scaler: float = PIXELS_PER_SECOND * GameManager.conductor.seconds_per_beat
 		grid_size.y = grid_scaler
 	else:

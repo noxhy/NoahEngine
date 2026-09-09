@@ -19,14 +19,12 @@ func _init() -> void:
 	name = &'drunk'
 
 func update_general(node: Node2D) -> void:
-	var time: float = GameManager.song_position / 1000
-	if node is Strum:
-		time = 0
+	var time: float = GameManager.song_position
 	
 	if !is_zero_approx(x_percentage):
 		var visual_time: float
 		if node is BasicNote:
-			visual_time = node.time - GameManager.visual_song_position
+			visual_time = node.visual_time_difference
 		elif node is Strum:
 			visual_time = 0
 		
