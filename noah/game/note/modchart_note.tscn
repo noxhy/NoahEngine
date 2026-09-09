@@ -17,24 +17,12 @@ use_parent_material = true
 sprite_frames = ExtResource("2_o35eu")
 animation = &"left"
 script = ExtResource("3_3ud5f")
-animation_names = Dictionary[StringName, StringName]({
-&"down": &"down",
-&"down_end": &"down_end",
-&"down_tail": &"down_tail",
-&"left": &"left",
-&"left_end": &"left_end",
-&"left_tail": &"left_tail",
-&"right": &"right",
-&"right_end": &"right_end",
-&"right_tail": &"right_tail",
-&"up": &"up",
-&"up_end": &"up_end",
-&"up_tail": &"up_tail"
-})
 
 [node name="Tail" type="Line2D" parent="." unique_id=2024668033]
 modulate = Color(1, 1, 1, 0.588235)
 use_parent_material = true
+points = PackedVector2Array(288, 24, 288, 288)
+width = 600.0
 texture = ExtResource("4_ieyxg")
 texture_mode = 1
 joint_mode = 2

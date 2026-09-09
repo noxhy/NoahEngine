@@ -20,7 +20,7 @@ func _ready() -> void:
 		tail.end_texture = note_skin.notes_texture.get_frame_texture(end_animation, 0)
 	
 	note.offsets = note_skin.offsets
-	note.play_animation(animation)
+	note.play(animation)
 	
 	if note_skin.pixel_texture: 
 		note.texture_filter = TEXTURE_FILTER_NEAREST
@@ -33,14 +33,9 @@ func _ready() -> void:
 		if tail.texture:
 			tail.width = tail.texture.get_height()
 		
-		tail.scale.x = note_skin.notes_scale
+		tail.scale = Vector2.ONE * note_skin.notes_scale
 	
 	load_basic_type()
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta) -> void:
-	time_difference = (time - GameManager.conductor.offset) - GameManager.song_position
 
 
 func default_update():
@@ -53,7 +48,7 @@ func default_update():
 		position.y = 0
 	
 	if length > 0:
-		var line_length: float = length * scroll_speed * grid_size.y
+		var line_length: float = length * scroll_speed * grid_size.y / tail.scale.y
 		tail.visible = true
 		tail.points = [Vector2.ZERO, Vector2(0, line_length)]
 	else:

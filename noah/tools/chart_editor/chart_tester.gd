@@ -32,4 +32,5 @@ func _on_setup_finished() -> void:
 	
 	for strum in playstate.strums[0].strums:
 		if strum is Strum:
+			strum.node_type = 1
 			strum.modchart_effects.add_effect(drunk)
