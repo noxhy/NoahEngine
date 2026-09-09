@@ -20,13 +20,14 @@ func _init() -> void:
 
 func update_general(node: Node2D) -> void:
 	var time: float = GameManager.song_position / 1000
+	if node is Strum:
+		time = 0
 	
 	if !is_zero_approx(x_percentage):
 		var visual_time: float
 		if node is BasicNote:
 			visual_time = node.time - GameManager.visual_song_position
 		elif node is Strum:
-			#time = 0
 			visual_time = 0
 		
 		var angle: float = time * (1 + x_speed) + node.lane * ((x_offset * 0.2) + 0.2) + visual_time * ((x_period * 10) + 10) / node.get_window().size.y
