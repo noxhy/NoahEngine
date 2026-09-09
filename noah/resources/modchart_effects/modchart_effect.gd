@@ -11,9 +11,9 @@ const STRUM_WIDTH: float = 128
 var name: StringName
 
 ## Update function for a receptor or note called on loop
-func update_general(node: Node2D) -> void:
+func update_strum(strum: Strum) -> void:
 	pass
 
 ## Update function for notes, returns a [Callabe]
-func update_note(note: BasicNote) -> void:
+func update_note(note: ModChartNote) -> void:
 	pass

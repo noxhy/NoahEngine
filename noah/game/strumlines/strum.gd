@@ -126,7 +126,7 @@ func _process(delta) -> void:
 	if modchart_effects and !modchart_effects.effects.is_empty():
 		for e in modchart_effects.effects:
 			var effect: ModchartEffect = modchart_effects.get_effect(e)
-			effect.update_general(self)
+			effect.update_strum(self)
 
 # Util
 func set_skin(new_skin: NoteSkin):

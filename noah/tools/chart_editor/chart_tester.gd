@@ -26,7 +26,7 @@ func _on_setup_finished() -> void:
 	var drunk: ModchartEffect = DrunkModchartEffect.new()
 	drunk.x_percentage = 3
 	drunk.x_speed = 2
-	drunk.x_period = 1
+	drunk.x_period = 200 * PI
 	
 	#playstate.strums[0].strums[0].modchart_effects.add_effect(drunk)
 	

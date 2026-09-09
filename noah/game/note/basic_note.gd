@@ -77,16 +77,6 @@ func _ready() -> void:
 
 
 func update() -> void:
-	default_update()
-	if modchart_effects and !modchart_effects.effects.is_empty():
-		for e in modchart_effects.effects:
-			var effect: ModchartEffect = modchart_effects.get_effect(e)
-			effect.update_general(self)
-			effect.update_note(self)
-
-
-func default_update() -> void:
-	position.x = 0
 	if !holding:
 		position.y = PIXELS_PER_SECOND * visual_time_difference * scroll_speed * scroll
 		var grid_scaler: float = PIXELS_PER_SECOND * GameManager.conductor.seconds_per_beat

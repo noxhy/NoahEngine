@@ -38,7 +38,7 @@ func _ready() -> void:
 	load_basic_type()
 
 
-func default_update():
+func update():
 	position.x = 0
 	if !holding:
 		position.y = PIXELS_PER_SECOND * time_difference * scroll_speed * scroll
@@ -53,3 +53,8 @@ func default_update():
 		tail.points = [Vector2.ZERO, Vector2(0, line_length)]
 	else:
 		tail.visible = false
+	
+	if modchart_effects and !modchart_effects.effects.is_empty():
+		for e in modchart_effects.effects:
+			var effect: ModchartEffect = modchart_effects.get_effect(e)
+			effect.update_note(self)
