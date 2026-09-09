@@ -356,8 +356,10 @@ func scrub(axis: int) -> void:
 	if not instrumental.stream_paused:
 		toggle_audios(true)
 	
-	song_position += conductor.seconds_per_beat * axis
-	song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
+	var rate = conductor.seconds_per_step if Input.is_action_pressed("shift") else conductor.seconds_per_beat
+	
+	song_position += rate * axis
+	song_position = snapped(song_position - conductor.offset, rate) + conductor.offset
 	song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
 	song_slider.set_value_no_signal(song_position)
 
