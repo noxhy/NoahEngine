@@ -21,7 +21,6 @@ script = ExtResource("3_3ud5f")
 [node name="Tail" type="Line2D" parent="." unique_id=2024668033]
 modulate = Color(1, 1, 1, 0.588235)
 use_parent_material = true
-points = PackedVector2Array(288, 24, 288, 288)
 width = 600.0
 texture = ExtResource("4_ieyxg")
 texture_mode = 1

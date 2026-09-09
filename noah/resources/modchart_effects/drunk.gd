@@ -31,7 +31,8 @@ func update_strum(strum: Strum) -> void:
 		strum.position.y += y_percentage * (cos((time * ((y_speed * 1.2) + 1.2) + strum.lane * ((y_offset * 1.8) + 1.8))) * STRUM_WIDTH * 0.4)
 	
 	if !is_zero_approx(z_percentage):
-		strum.z_index += floori(z_percentage * (cos(time * ((z_speed * 1.2) + 1.2) + strum.lane * ((z_offset * 1.8)) + 3.2) * 0.15))
+		strum.scale += Vector2.ONE * z_percentage * (cos(time * ((z_speed * 1.2) + 1.2) + strum.lane * ((z_offset * 1.8)) + 3.2) * 0.15)
+		#strum.z_index += floori(z_percentage * (cos(time * ((z_speed * 1.2) + 1.2) + strum.lane * ((z_offset * 1.8)) + 3.2) * 0.15))
 
 
 func update_note(note: ModChartNote) -> void:
@@ -44,21 +45,23 @@ func update_note(note: ModChartNote) -> void:
 		return y_percentage * (cos(((time + visual_diff) * ((y_speed * 1.2) + 1.2) + note.lane * ((y_offset * 1.8) + 1.8))) * STRUM_WIDTH * 0.4)
 	
 	if !is_zero_approx(x_percentage):
-		note.position.x += get_x_offset.call(note.visual_time_difference)
+		note.position.x += get_x_offset.call(max(0, note.visual_time_difference))
 	
 	if !is_zero_approx(y_percentage):
 		note.position.y += get_y_offset.call(0)
-	
-	if !is_zero_approx(z_percentage):
-		note.z_index += floori(z_percentage * (cos(time * ((z_speed * 1.2) + 1.2) + note.lane * ((z_offset * 1.8)) + 3.2) * 0.15))
 	
 	note.position += (note.get_parent().base_position - note.get_parent().position)
 	if note.tail and note.length > 0:
 		var line_length: float = note.length * note.scroll_speed * note.grid_size.y / note.tail.scale.y
 		var step: float = line_length / tail_precision
 		note.tail.clear_points()
+		var visual_diff: float = 0
+		if !note.holding:
+			visual_diff = note.visual_time_difference
+		
 		for i in range(tail_precision + 1):
-			var pos: Vector2 = Vector2(get_x_offset.call(note.visual_time_difference + ((GameManager.conductor.seconds_per_beat * note.length / tail_precision) * i)),
+			var pos: Vector2 = Vector2(get_x_offset.call(max(0, visual_diff) + ((GameManager.conductor.seconds_per_beat * note.length / tail_precision) * i)),
 			step * i)
 			
+			pos.x -= note.position.x
 			note.tail.add_point(pos)

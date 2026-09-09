@@ -1,7 +1,7 @@
 [gd_resource type="ParticleProcessMaterial" format=3 uid="uid://m6kc757sopaj"]
 
 [sub_resource type="Gradient" id="Gradient_vaa1g"]
-offsets = PackedFloat32Array(0, 0.31304348, 0.59130436)
+offsets = PackedFloat32Array(0, 0.31304348, 0.47791165)
 colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_vaa1g"]

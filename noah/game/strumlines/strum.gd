@@ -123,6 +123,7 @@ func _process(delta) -> void:
 			sprite.play(animation_name)
 	
 	position = base_position
+	scale = Vector2.ONE
 	if modchart_effects and !modchart_effects.effects.is_empty():
 		for e in modchart_effects.effects:
 			var effect: ModchartEffect = modchart_effects.get_effect(e)
