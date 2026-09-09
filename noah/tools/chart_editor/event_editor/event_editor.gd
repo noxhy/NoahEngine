@@ -124,7 +124,7 @@ func _process(delta: float) -> void:
 				save()
 	
 	if (Input.is_action_pressed(&"mouse_left") and !Input.is_action_pressed(&"control")
-	and is_mouse_over_grid() and !dragging_song_slider):
+	and is_mouse_over_grid() and !dragging_song_slider and not is_mouse_over_any_ui()):
 		if !instrumental.playing:
 			if can_chart:
 				## Song Position Slider
