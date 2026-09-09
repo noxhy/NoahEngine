@@ -185,8 +185,8 @@ func _process(delta) -> void:
 	
 	if !song_started and song_starting:
 		song_start_offset += delta
-		GameManager.song_position = song_start_offset
-		GameManager.conductor.time = GameManager.song_position
+		GameManager.conductor.time = song_start_offset
+		GameManager.conductor.visual_time = song_start_offset
 		
 		if song_start_offset >= max(chart.offset, song_start_time):
 			play_audios(song_start_time)
@@ -195,28 +195,27 @@ func _process(delta) -> void:
 		GameManager.song_position = instrumental.get_playback_position() + \
 				AudioServer.get_time_since_last_mix() - output_latency
 		
-		GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
-		GameManager.conductor.offset += chart.offset
+		GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position) + chart.offset
 		
-		# Idk how exactly this works I stole this code from sqirradotdev
 		position_delta = abs(position_lerp - GameManager.song_position)
 		position_lerp += delta * instrumental.pitch_scale
 		
 		if delta > COMPENSATION or sync_timer <= 0.0 or position_delta >= DELTA_LENIENCY * instrumental.pitch_scale:
 			if position_delta >= 0.025 * instrumental.pitch_scale:
 				position_lerp = GameManager.song_position
+			
 			sync_timer = 0.5
 		
-		GameManager.song_position = position_lerp
+		GameManager.conductor.time = position_lerp
 		sync_timer -= delta
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
-	var meter: Array = chart.get_meter_at(GameManager.song_position)
-	if meter.is_empty():
+	var time_signature: Array = chart.get_time_signature_at(GameManager.song_position)
+	if time_signature.is_empty():
 		printerr("(PlayState): ", "Chart has no time signatures.")
 	else:
-		GameManager.conductor.numerator = meter[0]
-		GameManager.conductor.denominator = meter[1]
+		GameManager.conductor.numerator = time_signature[0]
+		GameManager.conductor.denominator = time_signature[1]
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
@@ -276,6 +275,7 @@ func play_song(time: float):
 	if time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
+		GameManager.conductor.sync_visual_time = false
 		if !ui_skin.countdown.is_empty() and ui:
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
@@ -300,7 +300,9 @@ func play_audios(time: float):
 	instrumental.pitch_scale = song_speed
 	if not song_started:
 		Signals.play_song_start.emit()
+	
 	song_started = true
+	GameManager.conductor.sync_visual_time = true
 
 # Binary Search of notes and events, gives the index of the note nearest to the given time
 func bsearch_left_range(value_set: Array, left_range: float) -> int:

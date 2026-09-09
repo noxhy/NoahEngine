@@ -11,11 +11,8 @@ const BACKUP_HOLD_TEXTURE = preload("uid://ds5jlynhtryxg")
 @onready var end = null
 
 ## Callable for updating how the note handles its position and note length.
-var update_callable: Callable
 var start_length: float = 0.0
 var time_difference: float = INF
-var sync_visual_time: bool = true
-var visual_time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
 
@@ -27,6 +24,8 @@ var splash_animation: StringName = &""
 var scoreable: bool = true
 var mine: bool = false
 var hit: bool = false
+
+var modchart_effects: ModchartEffects = ModchartEffects.new()
 
 # Applying Note Skin
 func _ready() -> void: 
@@ -72,21 +71,21 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta) -> void:
 	time_difference = time - GameManager.song_position
-	if sync_visual_time:
-		visual_time_difference = time_difference
 
 
 func update() -> void:
-	if update_callable:
-		update_callable.call()
-		return
-	else:
-		default_update()
+	default_update()
+	if modchart_effects and !modchart_effects.effects.is_empty():
+		for e in modchart_effects.effects:
+			var effect: ModchartEffect = modchart_effects.get_effect(e)
+			effect.update_general(self)
+			effect.update_note(self)
 
 
 func default_update() -> void:
+	position.x = 0
 	if !holding:
-		position.y = PIXELS_PER_SECOND * visual_time_difference * scroll_speed * scroll
+		position.y = PIXELS_PER_SECOND * (time - GameManager.visual_song_position) * scroll_speed * scroll
 		var grid_scaler: float = PIXELS_PER_SECOND * GameManager.conductor.seconds_per_beat
 		grid_size.y = grid_scaler
 	else:
@@ -111,5 +110,5 @@ func load_basic_type():
 
 
 func apply_miss_effect():
-	modulate *= 2
+	modulate *= 0.5
 	modulate.a = min(modulate.a / 2, 0.5)

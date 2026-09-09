@@ -75,6 +75,8 @@ var current_step: int = -1:
 var measure_relative_beat: int = 0
 var measure_relative_step: int = 0
 var time: float = 0
+var sync_visual_time: bool = true
+var visual_time: float = time
 var latency: float = AudioServer.get_output_latency()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -83,6 +85,9 @@ func _process(_delta):
 		time = stream_player.get_playback_position()
 		time -= latency
 		# time += AudioServer.get_time_since_last_mix()
+	
+	if sync_visual_time:
+		visual_time = time
 	
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)

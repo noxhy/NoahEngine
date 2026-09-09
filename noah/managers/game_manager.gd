@@ -85,7 +85,15 @@ var current_character: String = ""
 var highscore: bool = false
 
 ## The current song position. updated via [PlayState]
-var song_position: float = 0.0
+var song_position: float:
+	set(v):
+		conductor.time = v
+	get():
+		return conductor.time
+
+var visual_song_position: float:
+	get():
+		return conductor.visual_time
 
 ## Refreshes the conductor with a new instance.
 func reset_conductor():

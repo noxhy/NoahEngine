@@ -23,3 +23,11 @@ func _process(delta) -> void:
 
 func _on_setup_finished() -> void:
 	get_tree().call_group(&"strums", "set_skin", ChartEditor.note_skin)
+	var drunk: ModchartEffect = DrunkModchartEffect.new()
+	drunk.x_percentage = 1
+	drunk.x_speed = 3
+	drunk.x_period = PI
+	
+	for strum in playstate.strums[0].strums:
+		if strum is Strum:
+			strum.modchart_effects.add_effect(drunk)

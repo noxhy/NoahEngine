@@ -16,6 +16,7 @@ signal play_conductor_step_hit(step: int, measure: int)
 ## Signal to emitted whenever a new beat has been reached by the conductor.
 signal play_conductor_beat_hit(beat: int, measure: int)
 
+## Signal to be emitted whenever a song starts.
 signal play_song_start()
 
 ## Signal to be emitted whenever a song is finished.

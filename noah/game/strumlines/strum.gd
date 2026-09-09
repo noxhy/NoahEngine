@@ -41,11 +41,15 @@ var lane: int = -1
 var reset_timer: float = 0.0
 var coyote_timer: float = 0.0
 
+var modchart_effects: ModchartEffects = ModchartEffects.new()
+var base_position: Vector2
+
 @onready var sprite: Node = $OffsetSprite
 @onready var hold_cover_sprite: Node = $"Hold Cover"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	base_position = position
 	hold_cover_sprite.visible = false
 	Signals.connect(&"play_unpaused", self.release_note)
 
@@ -117,6 +121,12 @@ func _process(delta) -> void:
 		var animation_name: StringName = &"glow_" + strum_name + &"_strum"
 		if sprite.animation != animation_name:
 			sprite.play(animation_name)
+	
+	position = base_position
+	if modchart_effects and !modchart_effects.effects.is_empty():
+		for e in modchart_effects.effects:
+			var effect: ModchartEffect = modchart_effects.get_effect(e)
+			effect.update_general(self)
 
 # Util
 func set_skin(new_skin: NoteSkin):
