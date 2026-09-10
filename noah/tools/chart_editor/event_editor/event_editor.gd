@@ -323,7 +323,7 @@ func load_dividers():
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for i in [0, 1, grid.rows]:
+	for i in [0, 1, maxi(grid.rows, 2)]:
 		var rect = ColorRect.new()
 		var size: float = 2
 		
@@ -331,7 +331,7 @@ func load_dividers():
 		rect.size = Vector2(grid.get_size().x, size)
 		rect.position = grid.position
 		rect.position.y -= grid.get_size().y / 2
-		rect.position.y += (grid.grid_size.y * grid.zoom.y)* i
+		rect.position.y += (grid.grid_size.y * grid.zoom.y) * i
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
