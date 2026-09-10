@@ -181,7 +181,7 @@ func _process(delta: float) -> void:
 			add_action("Moved Events(s)", self.move_selection.bind(moved_time_distance, 0),
 			self.move_selection.bind(-moved_time_distance, 0))
 	
-	if Input.is_action_just_released(&"control"):
+	if Input.is_action_just_released(&"control") or dragging_song_slider:
 		bounding_box = false
 	
 	queue_redraw()
