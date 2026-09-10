@@ -40,4 +40,6 @@ icon = ExtResource("3_hdi5e")
 icon_alignment = 1
 expand_icon = true
 
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="." unique_id=2009163218]
+
 [connection signal="pressed" from="Remove Track" to="." method="_on_remove_track_pressed"]

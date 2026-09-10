@@ -20,4 +20,28 @@ var event: String:
 
 
 func _on_remove_track_pressed() -> void:
-	emit_signal(&"removed")
+	if Input.is_action_pressed("shift"):
+		emit_signal(&"removed")
+	else:
+		var dialog = ConfirmationDialog.new()
+		
+		
+		var close_window = func():
+			if dialog:
+				dialog.queue_free()
+			SoundManager.tool_close_window.play()
+			
+		var confirmed = func():
+			emit_signal(&"removed")
+			SoundManager.tool_close_window.play()
+		
+		dialog.unresizable = true
+		dialog.size = Vector2i(380, 100)
+		dialog.dialog_text = "Deleting (%s) track will remove all events associated with it. Are you sure?" % event
+		dialog.dialog_autowrap = true
+		dialog.canceled.connect(close_window)
+		dialog.confirmed.connect(confirmed)
+		dialog.add_to_group(&"windows")
+		add_child(dialog)
+		dialog.popup_centered()
+		SoundManager.tool_open_window.play()
