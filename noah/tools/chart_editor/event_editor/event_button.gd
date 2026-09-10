@@ -24,16 +24,18 @@ func _on_remove_track_pressed() -> void:
 		emit_signal(&"removed")
 	else:
 		var dialog = ConfirmationDialog.new()
-		
+		pre_delete()
 		
 		var close_window = func():
 			if dialog:
 				dialog.queue_free()
 			SoundManager.tool_close_window.play()
+			post_we_are_safe_woohoo()
 			
 		var confirmed = func():
 			emit_signal(&"removed")
 			SoundManager.tool_close_window.play()
+			
 		
 		dialog.unresizable = true
 		dialog.size = Vector2i(380, 100)
@@ -45,3 +47,9 @@ func _on_remove_track_pressed() -> void:
 		add_child(dialog)
 		dialog.popup_centered()
 		SoundManager.tool_open_window.play()
+
+func pre_delete():
+	modulate = Color(1, 0.3, 0.3,1)
+	
+func post_we_are_safe_woohoo():
+	modulate = Color.WHITE
