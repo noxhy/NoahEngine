@@ -135,7 +135,6 @@ title = "Open a File"
 initial_position = 1
 size = Vector2i(640, 480)
 file_mode = 0
-root_subfolder = "res://assets/sprites/playstate/"
 filters = PackedStringArray("*.tres", "*.res")
 
 [node name="Audio Button" type="MenuButton" parent="." unique_id=441078833]
@@ -245,3 +244,7 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Song Name"
+
+[node name="Control" type="Control" parent="." unique_id=362869513]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
