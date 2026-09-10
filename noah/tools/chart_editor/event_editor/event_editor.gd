@@ -740,7 +740,7 @@ func _on_add_event_track_pressed() -> void:
 	
 	%"Add Track Window".hide()
 	close_popup()
-	load_section(song_position)
+	load_section(song_position, true)
 
 func update_desc(_str: String) -> void:
 	%"Desc Label".text = _str
