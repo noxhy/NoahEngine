@@ -407,6 +407,9 @@ func remove_track(node):
 	current_visible_events_R = -1
 	load_section(song_position)
 	SoundManager.tool_mouse_click.play()
+	
+	if minimap:
+		minimap.refresh(ChartManager.chart.get_notes_data(), ChartManager.chart.get_events_data())
 
 
 func _on_event_tracks_ready() -> void:
@@ -504,7 +507,14 @@ func remove_note(_name, time: float = -1):
 		event_nodes.remove_at(index)
 		current_visible_events_R -= 1
 	
+	var ev = ChartManager.chart.events.get(i)
+	if minimap and ev:
+		if find_events_at(ev[0]).size() <= 1: # TODO this still removes events in cases it shouldnt maybe make a custom epsilon or just refresh the entire texture
+			minimap.unmap_event_from_image(ev[0])
+	
 	ChartManager.chart.events.remove_at(i)
+	
+
 
 ## In the event editor, lane_a is a list of event names
 func select_area(L: int, R: int, lane_a, lane_b = null):
@@ -673,6 +683,8 @@ func _on_place_event_pressed() -> void:
 		self.remove_note.bind(current_event, current_event_time))
 		SoundManager.tool_note_place.play()
 		%"Event Creator".hide()
+		if minimap:
+			minimap.map_event_to_image(current_event_time)
 	else:
 		var action: String = "Edit Event"
 		undo_redo.create_action(action)

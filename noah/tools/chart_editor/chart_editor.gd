@@ -624,7 +624,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.get_notes_data())
+		minimap.refresh(file.get_notes_data(), file.get_events_data())
 	
 	load_dividers()
 	update_camera_song_position(true)
@@ -972,8 +972,8 @@ func remove_note(lane, time: float = -1):
 		note_nodes[index].queue_free()
 		note_nodes.remove_at(index)
 		current_visible_notes_R -= 1
-	
-	minimap.unmap_from_texture(ChartManager.chart.notes[i])
+	if minimap:
+		minimap.unmap_from_texture(ChartManager.chart.notes[i])
 	ChartManager.chart.notes.remove_at(i)
 
 ## Removes the notes in the given indices

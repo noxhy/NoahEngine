@@ -11,7 +11,7 @@ Color(0.235, 0.769, 0.208), Color(0.757, 0.149, 0.322)]
 var chart_editor: ChartEditor
 var point_width: float:
 	get():
-		return size.x / ChartManager.strum_count
+		return size.x / (ChartManager.strum_count + 1)
 
 #var minimap_image: Image
 var source_texture: Texture
@@ -52,7 +52,7 @@ func _draw() -> void:
 		chart_editor.song_position + chart_editor.start_offset)), Vector2(size.x, precision), Color.RED)
 
 ## Creates an image texture of a map of the given data
-func refresh(data: Array):
+func refresh(data: Array, events:Array = []):
 	texture = DrawableTexture2D.new()
 	texture.setup(int(size.x), int(size.y), DrawableTexture2D.DRAWABLE_FORMAT_RGBA8, Color.TRANSPARENT)
 	point_data = {}
@@ -61,12 +61,18 @@ func refresh(data: Array):
 	for packet in data:
 		map_to_image(packet)
 	
-	update()
+	for ev in events:
+		map_event_to_image(ev[0])
 
+func map_event_to_image(event_time: float): 
+	@warning_ignore("narrowing_conversion")
+	var pos: Vector2i = Vector2i(ChartManager.strum_count, event_time)
+	draw_rect_on_image(map_to_image_position(pos), point_size, Color.GRAY)
 
-func update():
-	return
-	#texture.update(minimap_image)
+func unmap_event_from_image(event_time: float):
+	@warning_ignore("narrowing_conversion")
+	var pos: Vector2i = Vector2i(ChartManager.strum_count, event_time)
+	draw_rect_on_image(map_to_image_position(pos), point_size, background_color)
 
 ## Draws the note color at a point on the image.
 func map_to_image(packet):
