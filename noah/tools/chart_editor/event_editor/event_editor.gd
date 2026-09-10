@@ -633,7 +633,7 @@ func delete_stacked_notes() -> void:
 
 
 func select_all():
-	selected_notes = ChartManager.chart.get_events_data()
+	selected_notes = range(ChartManager.chart.get_events_data().size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"events")
 	if selected_notes.size() > 0:
 		SoundManager.tool_note_place.play()
