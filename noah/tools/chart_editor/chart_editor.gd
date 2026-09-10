@@ -1019,6 +1019,22 @@ func find_events_at(time: float) -> Array[int]:
 			ret.append(i)
 	return ret
 
+func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
+	if epsilon == -1.0:
+		epsilon = EPSILON
+	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - epsilon)
+	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + epsilon)
+	if L == -1 or R == -1:
+		return []
+	if L == (R + 1):
+		L -= 1
+	
+	var ret: Array[int] = []
+	
+	for i in range(L, R + 1):
+		ret.append(i)
+	return ret
+
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
 	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - EPSILON)

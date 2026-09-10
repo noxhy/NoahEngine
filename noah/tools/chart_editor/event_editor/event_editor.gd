@@ -509,7 +509,7 @@ func remove_note(_name, time: float = -1):
 	
 	var ev = ChartManager.chart.events.get(i)
 	if minimap and ev:
-		if find_events_at(ev[0]).size() <= 1: # TODO this still removes events in cases it shouldnt maybe make a custom epsilon or just refresh the entire texture
+		if find_events_within_time(ev[0], conductor.seconds_per_step).size() <= 1: # TODO this still removes events in cases it shouldnt maybe make a custom epsilon or just refresh the entire texture
 			minimap.unmap_event_from_image(ev[0])
 	
 	ChartManager.chart.events.remove_at(i)
