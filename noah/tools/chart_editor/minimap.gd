@@ -4,6 +4,8 @@ class_name EditorMinimap
 const COLORS: Array[Color] = [Color(0.49, 0.078, 1.0), Color(0.086, 0.737, 0.749),
 Color(0.235, 0.769, 0.208), Color(0.757, 0.149, 0.322)]
 
+const EVENT_COLOR: Color = Color.GRAY
+
 @export var background_color: Color = Color(0.114, 0.133, 0.161)
 @export var area_color: Color = Color(1.0, 1.0, 1.0, 0.4)
 @export var precision: int = 2
@@ -13,9 +15,7 @@ var point_width: float:
 	get():
 		return size.x / (ChartManager.strum_count + 1)
 
-#var minimap_image: Image
 var source_texture: Texture
-var point_data: Dictionary[int, Dictionary] = {}
 
 var point_size: Vector2:
 	get():
@@ -35,10 +35,6 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	if ChartManager.chart:
-		#for pixel in point_data:
-			#var packet: Dictionary = point_data[pixel]
-			#draw_rect_on_texture(packet.get("position"), point_size, packet.get("color"))
-		
 		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step / chart_editor.grid.zoom.y
 		var point_a: Vector2i = map_to_image_position(Vector2(0, chart_editor.song_position))
 		var point_b: Vector2i = map_to_image_position(Vector2(0,
@@ -55,7 +51,6 @@ func _draw() -> void:
 func refresh(data: Array, events:Array = []):
 	texture = DrawableTexture2D.new()
 	texture.setup(int(size.x), int(size.y), DrawableTexture2D.DRAWABLE_FORMAT_RGBA8, Color.TRANSPARENT)
-	point_data = {}
 	draw_rect_on_image(Vector2i(0, 0), size, background_color)
 	
 	for packet in data:
@@ -67,7 +62,7 @@ func refresh(data: Array, events:Array = []):
 func map_event_to_image(event_time: float): 
 	@warning_ignore("narrowing_conversion")
 	var pos: Vector2i = Vector2i(ChartManager.strum_count, event_time)
-	draw_rect_on_image(map_to_image_position(pos), point_size, Color.GRAY)
+	draw_rect_on_image(map_to_image_position(pos), point_size, EVENT_COLOR)
 
 func unmap_event_from_image(event_time: float):
 	@warning_ignore("narrowing_conversion")
@@ -84,30 +79,6 @@ func unmap_from_image(packet):
 	var pos: Vector2i = Vector2i(packet[1], packet[0])
 	draw_rect_on_image(map_to_image_position(pos), point_size, background_color)
 
-## Returns the given point to its pixel number
-func map_point_to_pixel(point: Vector2i) -> int:
-	return point.x + point.y * texture.get_height()
-
-## Adds a point to draw over the image with the note color.
-func map_to_texture(packet):
-	map_to_image(packet)
-	#var pos: Vector2i = Vector2i(packet[1], packet[0])
-	#var point: Vector2i = map_to_image_position(pos)
-	#point_data[map_point_to_pixel(pos)] = {
-		#"position": point,
-		#"color": COLORS[packet[1] % 4]
-	#}
-
-## Adds a point to draw over the image with the background color.
-func unmap_from_texture(packet):
-	unmap_from_image(packet)
-	#var pos: Vector2i = Vector2i(packet[1], packet[0])
-	#var point: Vector2i = map_to_image_position(pos)
-	#point_data[map_point_to_pixel(pos)] = {
-		#"position": point,
-		#"color": background_color
-	#}
-
 ## Maps a point to a position on the container
 func map_to_image_position(point: Vector2) -> Vector2i:
 	var y: float = point.y / chart_editor.instrumental.stream.get_length()
@@ -116,10 +87,6 @@ func map_to_image_position(point: Vector2) -> Vector2i:
 
 ## Draws a rectangle on the image
 func draw_rect_on_image(pos: Vector2i, rect_size: Vector2i, color: Color):
-	#for y in rect_size.y:
-		#for x in rect_size.x:
-			#minimap_image.set_pixel(pos.x + x, pos.y + y, color)
-	
 	var rect: Rect2 = Rect2i(pos, rect_size)
 	texture.blit_rect(rect, source_texture, color)
 
