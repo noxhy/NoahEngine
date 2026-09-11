@@ -46,7 +46,7 @@ var position_delta: float = 0.0
 var position_lerp: float = 0.0
 var sync_timer: float = 0.0
 var song_speed: float = 1.0
-var scroll_speed: float = 1.0
+var scroll_speed: float = 1.0 : set = set_scroll_speed
 # The index of the latest loaded note
 var current_note: int = -1
 # The index of the latest loaded event
@@ -70,6 +70,10 @@ func set_health(v: float):
 	
 	Signals.play_health_changed.emit(v, v - health)
 	health = v
+
+func set_scroll_speed(v: float):
+	get_tree().call_group(&"strums", "set_scroll_speed", v)
+	scroll_speed = v
 
 var song_stats: NoahStats = NoahStats.new()
 
@@ -157,7 +161,6 @@ func _ready() -> void:
 	
 	scroll_speed = chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
 	
-	get_tree().call_group(&"strums", "set_scroll_speed", scroll_speed)
 	get_tree().call_group(&"strums", "set_skin", note_skin)
 	get_tree().call_group(&"strums", "set_offset",
 	SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset"))
@@ -411,13 +414,10 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"scroll_speed":
 			var tween_time: float = Global.string_to_time(event_parameters[1])
 			
-			scroll_speed = float(event_parameters[0]) * SettingsManager.get_value(
+			var new_speed = float(event_parameters[0]) * SettingsManager.get_value(
 				SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
 			
-			for strum in strums:
-				for lane in strum.strums.size() - 1:
-					create_tween().tween_method(
-						strum.set_scroll_speed, strum.get_scroll_speed(lane), scroll_speed, tween_time / song_speed)
+			create_tween().tween_property(self, "scroll_speed", new_speed, tween_time / song_speed)
 		
 		"camera_shake":
 			if camera:
