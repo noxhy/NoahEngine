@@ -725,8 +725,11 @@ func load_dividers() -> void:
 	for i in range(conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
+		var col = divider_color
+		if i == 0:
+			col *= 1.25
 		
-		rect.color = divider_color
+		rect.color = col
 		rect.size = Vector2(grid.get_size().x, size)
 		rect.position = grid.position
 		rect.position.x -= grid.get_size().x / 2
