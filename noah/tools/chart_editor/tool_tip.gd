@@ -23,11 +23,16 @@ func _process(delta: float) -> void:
 
 	var last_text = text
 	if chart_editor.hovered_note != -1:
-		var note_type: String = ChartManager.chart.get_notes_data()[chart_editor.hovered_note][3]
-		var text_str: String = str('Type: ', note_type if not note_type.is_empty() else '?') 
+		var note = ChartManager.chart.get_notes_data()[chart_editor.hovered_note]
+		var text_str: String = get_time_str(note[0])
+		if not note[3].is_empty():
+			text_str += 'Type: %s' % str(note[3])
+			
 		text = text_str
 	elif chart_editor.hovered_event != -1:
-		text = get_event_str()
+		var ev = ChartManager.chart.get_events_data()[chart_editor.hovered_event]
+		
+		text = get_time_str(ev[0]) + '\n' + get_event_str()
 	
 	if last_text != text:
 		size = get_minimum_size()
@@ -57,3 +62,8 @@ func get_event_str() -> String:
 		var ev_params = ev[2]
 		ret += ev[1] + ': [%s]' % ", ".join(PackedStringArray(ev_params)) + '\n'
 	return ret.strip_edges()
+
+func get_time_str(time: float) -> String:
+	var beat_time = Conductor.get_accumulated_beat_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
+	var step_time = Conductor.get_accumulated_step_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
+	return 'Time: ' + "(%s, b: %s, s: %s)" % [str(snappedf(time, 0.01)), str(beat_time), str(step_time)]
