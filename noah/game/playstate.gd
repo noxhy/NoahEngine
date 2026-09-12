@@ -215,9 +215,7 @@ func _process(delta) -> void:
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
 	var meter: Array = chart.get_meter_at(GameManager.song_position)
-	if meter.is_empty():
-		printerr("(PlayState): ", "Chart has no time signatures.")
-	else:
+	if not meter.is_empty():
 		GameManager.conductor.numerator = meter[0]
 		GameManager.conductor.denominator = meter[1]
 	
