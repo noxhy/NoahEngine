@@ -25,8 +25,11 @@ func _process(delta: float) -> void:
 	if chart_editor.hovered_note != -1:
 		var note = ChartManager.chart.get_notes_data()[chart_editor.hovered_note]
 		var text_str: String = get_time_str(note[0])
+		
+		if note[2] > 0:
+			text_str += '\nLength: %s' % str(note[2])
 		if not note[3].is_empty():
-			text_str += 'Type: %s' % str(note[3])
+			text_str += '\nType: %s' % str(note[3])
 			
 		text = text_str
 	elif chart_editor.hovered_event != -1:
