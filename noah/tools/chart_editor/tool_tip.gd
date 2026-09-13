@@ -15,8 +15,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
-	
+		
+
 	visible = ChartManager.chart and chart_editor and chart_editor.is_mouse_over_grid() and (chart_editor.hovered_event != -1 or chart_editor.hovered_note != -1)
 	if not visible:
 		return

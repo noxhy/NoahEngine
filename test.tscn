@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://bhiri1bvrvuqt"]
+
+[ext_resource type="Script" uid="uid://c120bw4p68olq" path="res://test.gd" id="1_8uh7m"]
+[ext_resource type="PackedScene" uid="uid://dxve8vb6wq2a0" path="res://noah/tools/chart_editor/event_editor/event_editor_window.tscn" id="1_37kl0"]
+
+[node name="Node2D" type="Node2D" unique_id=1717706880]
+script = ExtResource("1_8uh7m")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1326124609]
+offset = Vector2(640, 360)
+transform = Transform2D(1, 0, 0, 1, 640, 360)
+
+[node name="EventEditorWindow2" parent="CanvasLayer" unique_id=431385232 instance=ExtResource("1_37kl0")]

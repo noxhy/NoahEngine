@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://ustf4vogtxy5"]
+
+[ext_resource type="Script" uid="uid://dlrxinkyswgtv" path="res://noah/tools/chart_editor/event_editor/event_window_tab.gd" id="1_ow3vg"]
+
+[node name="VBoxContainer" type="VBoxContainer" unique_id=1459251385]
+custom_minimum_size = Vector2(460, 220)
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 113.0
+offset_bottom = 228.0
+script = ExtResource("1_ow3vg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=147229753]
+visible = false
+layout_mode = 2
+
+[node name="Event Name" type="Label" parent="HBoxContainer" unique_id=440218899]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Event Name"
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer" unique_id=1043661869]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Desc Label" type="Label" parent="." unique_id=586052715]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "hello this is a description"
+
+[node name="Event Container" type="ScrollContainer" parent="." unique_id=1331461079]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 170)
+custom_maximum_size = Vector2(-1, 170)
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Event Parameters" type="VBoxContainer" parent="Event Container" unique_id=215269235]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(460, 0)
+custom_maximum_size = Vector2(460, -1)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSeparator" type="HSeparator" parent="." unique_id=1811685501]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1242858147]
+layout_mode = 2
+alignment = 1
+
+[node name="Place Event" type="Button" parent="HBoxContainer2" unique_id=1692575281]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Place Event"
+
+[node name="Delete Event" type="Button" parent="HBoxContainer2" unique_id=1876343036]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Delete Event"

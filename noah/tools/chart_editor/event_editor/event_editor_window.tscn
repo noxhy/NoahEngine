@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://dxve8vb6wq2a0"]
+
+[ext_resource type="Texture2D" uid="uid://cf7m0a2krovb6" path="res://addons/at-icons/node/plus_sign_in_square.svg" id="1_rr1js"]
+[ext_resource type="Script" uid="uid://dqtxdevp731rk" path="res://noah/tools/chart_editor/event_editor/event_editor_window.gd" id="1_w143l"]
+
+[node name="EventEditorWindow" type="PopupPanel" unique_id=431385232]
+oversampling_override = 1.0
+size = Vector2i(513, 259)
+visible = true
+script = ExtResource("1_w143l")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=2111313286]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 509.0
+offset_bottom = 255.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="VBoxContainer" unique_id=172762430]
+layout_mode = 2
+
+[node name="Event Name" type="Label" parent="VBoxContainer/HBoxContainer2" unique_id=1532999453]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Event Name"
+
+[node name="Add Tab" type="Button" parent="VBoxContainer/HBoxContainer2" unique_id=1406783727]
+layout_mode = 2
+theme_override_colors/icon_pressed_color = Color(0.735357, 0.735357, 0.735357, 1)
+theme_override_colors/icon_hover_color = Color(0.67851543, 0.8559276, 1, 1)
+text = "      "
+icon = ExtResource("1_rr1js")
+flat = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer/HBoxContainer2" unique_id=1849446984]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Desc Label" type="Label" parent="VBoxContainer" unique_id=716814532]
+unique_name_in_owner = true
+layout_mode = 2
+text = "hello this is a description
+with 2 lines as a test"
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer" unique_id=623774832]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/HBoxContainer2/Add Tab" to="." method="_on_add_tab_pressed"]

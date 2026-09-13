@@ -7,6 +7,11 @@ var START_MENU_SCENE: String = "uid://cmn3noo2keqes"
 #region Event Data
 
 var EVENT_DATA: Dictionary = {
+	"dummy": {
+		"parameters": ["Marker Index", "(Optional = 0) Duration", "(Optional = CLASSIC) Easing Type", '', '', '', '', ''],
+		"texture": "res://addons/at-icons/animation/film_camera.svg",
+		"description": "Moves a camera towards a marker, copying its positon and rotation."
+	},
 	"camera_position": {
 		"parameters": ["Marker Index", "(Optional = 0) Duration", "(Optional = CLASSIC) Easing Type"],
 		"texture": "res://addons/at-icons/animation/film_camera.svg",
