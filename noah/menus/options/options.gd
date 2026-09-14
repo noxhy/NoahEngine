@@ -6,7 +6,7 @@ var MENU_OPTION_PRELOAD = load("uid://dp453vkw4s2xg")
 
 var can_click = true
 var pages: Dictionary = {
-	SettingsManager.SEC_KEY_BINDS: {
+	"keybinds": {
 		"name": "Keybinds",
 		"options": [
 			[&"label", "Gameplay"],
@@ -31,7 +31,7 @@ var pages: Dictionary = {
 			[&"option", {"id": "character_select"}]
 		]
 	},
-	SettingsManager.SEC_CONTROLLER_BINDS: {
+	"controller_binds": {
 		"name": "Controller Binds",
 		"options": [
 			[&"label", "Gameplay"],
@@ -50,7 +50,7 @@ var pages: Dictionary = {
 			[&"option", {"id": "menu_cancel"}]
 		]
 	},
-	SettingsManager.SEC_GAMEPLAY: {
+	"gameplay": {
 		"name": "Gameplay",
 		"options": [
 			[&"option", {"id": "offset",
@@ -81,7 +81,7 @@ var pages: Dictionary = {
 			}]
 		]
 	},
-	SettingsManager.SEC_PREFERENCES: {
+	"preferences": {
 		"name": "Preferences",
 		"options": [
 			[&"option", {"id": "combo_ui", "description": "Displays the rating and combo on the UI layer rather than the world layer."}],
@@ -99,7 +99,7 @@ var pages: Dictionary = {
 			}]
 		]
 	},
-	SettingsManager.SEC_AUDIO: {
+	"audio": {
 		"name": "Audio",
 		"options": [
 			[&"option", {"id": "master_volume",
@@ -122,7 +122,7 @@ var pages: Dictionary = {
 			"scale": 0.01}],
 		]
 	},
-	SettingsManager.SEC_DEBUG: {
+	"debug": {
 		"name": "Debug",
 		"options": [
 			[&"option", {"id": "show_performance"}],
