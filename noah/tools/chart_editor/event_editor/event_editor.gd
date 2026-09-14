@@ -120,7 +120,7 @@ func _process(delta: float) -> void:
 			
 			hovered_event = -1
 			
-			if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
+			if SettingsManager.data.chart_auto_save:
 				save()
 	
 	if (Input.is_action_pressed(&"mouse_left") and !Input.is_action_pressed(&"control")
