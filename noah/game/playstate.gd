@@ -242,16 +242,15 @@ func _process(delta) -> void:
 	if instrumental.playing:
 		var events_list = chart.get_events_data()
 		if events_list.size() > 0:
-			if current_event < events_list.size():
-				while events_list[current_event][0] <= GameManager.song_position:
-					var event = events_list[current_event]
-					var time: float = event[0]
-					var event_name: String = event[1]
-					var event_parameters: Array = event[2]
-					
-					print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
-					basic_event(time, event_name, event_parameters)
-					current_event += 1
+			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+				var event = events_list[current_event]
+				var time: float = event[0]
+				var event_name: String = event[1]
+				var event_parameters: Array = event[2]
+				
+				print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
+				basic_event(time, event_name, event_parameters)
+				current_event += 1
 
 
 func play_song(time: float):
