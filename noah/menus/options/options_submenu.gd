@@ -12,6 +12,7 @@ const HOLD_RATE = 50
 
 @export var box_limit: float = 320
 
+var can_interact: bool = true
 var selected: int = 0
 var old_selected: int
 var elapsed: float
@@ -26,56 +27,47 @@ func _process(delta: float) -> void:
 		get_tree().paused = false
 		self.queue_free()
 	
-	if Input.is_action_just_pressed(&"menu_up"):
-		if get_selected_node() is KeyBindOptionNode:
-			old_selected = get_selected_node().selected
-		update(selected - 1)
-		if get_selected_node() is KeyBindOptionNode:
-			get_selected_node().select_button(old_selected)
+	var selected_node = get_selected_node()
+	var axis: int = Global.get_input_axis_just_pressed(&"menu_down", &"menu_up")
 	
-	if Input.is_action_just_pressed(&"menu_down"):
-		if get_selected_node() is KeyBindOptionNode:
-			old_selected = get_selected_node().selected
-		update(selected + 1)
-		if get_selected_node() is KeyBindOptionNode:
-			get_selected_node().select_button(old_selected)
+	if axis and can_interact:
+		if selected_node is KeyBindOptionNode:
+			old_selected = selected_node.selected
+		update(selected + axis)
+		selected_node = get_selected_node()
+		if selected_node is KeyBindOptionNode:
+			selected_node.select_button(old_selected)
 	
 	if (Input.is_action_just_pressed(&"menu_accept")
 	or Input.is_action_just_pressed(&"menu_left")
 	or Input.is_action_just_pressed(&"menu_right")):
-		if get_selected_node() is BoolOptionNode:
-			var button: Button = get_selected_node().get_node("%Button")
+		if selected_node is BoolOptionNode:
+			var button: Button = selected_node.get_node("%Button")
 			button.button_pressed = !button.button_pressed
 	
-	if Input.is_action_just_pressed(&"menu_accept"):
-		if get_selected_node() is KeyBindOptionNode:
-			get_selected_node().buttons[get_selected_node().selected]._on_toggled(true)
-			get_selected_node().buttons[get_selected_node().selected].button_pressed = true
-		elif get_selected_node() is ButtonOptionNode:
-			get_selected_node().button.emit_signal(&"pressed")
+	if Input.is_action_just_pressed(&"menu_accept") and can_interact:
+		if selected_node is KeyBindOptionNode and selected_node.selected > -1:
+			selected_node.buttons[selected_node.selected]._on_toggled(true)
+			selected_node.buttons[selected_node.selected].button_pressed = true
+			can_interact = false
+		elif selected_node is ButtonOptionNode:
+			selected_node.button.emit_signal(&"pressed")
 	
-	if Input.is_action_just_pressed(&"menu_left"):
-		if get_selected_node() is NumberOptionNode:
-			var spin_box: SpinBox = get_selected_node().spin_box
-			spin_box.value -= spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
-		elif get_selected_node() is KeyBindOptionNode:
-			get_selected_node().selected = get_selected_node().selected - 1
-			get_selected_node().select_button(get_selected_node().selected)
-			# get_tree().call_group("buttons", "normal")
+	var h_axis: int = Global.get_input_axis_just_pressed(&"menu_right", &"menu_left")
 	
-	if Input.is_action_just_pressed(&"menu_right"):
-		if get_selected_node() is NumberOptionNode:
-			var spin_box: SpinBox = get_selected_node().spin_box
-			spin_box.value += spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step
-		elif get_selected_node() is KeyBindOptionNode:
-			get_selected_node().selected = get_selected_node().selected + 1
-			get_selected_node().select_button(get_selected_node().selected)
+	if h_axis and can_interact:
+		if selected_node is NumberOptionNode:
+			var spin_box: SpinBox = selected_node.spin_box
+			spin_box.value += h_axis * spin_box.step * 5 if Input.is_action_pressed(&"shift") else spin_box.step * h_axis
+		elif selected_node is KeyBindOptionNode:
+			selected_node.selected = selected_node.selected + h_axis
+			selected_node.select_button(selected_node.selected)
 	
 	if Input.is_action_pressed(&"menu_left") or Input.is_action_pressed(&"menu_right"):
 		elapsed += delta
 		if elapsed >= HOLD_THRESHOLD:
-			if get_selected_node() is NumberOptionNode:
-				var spin_box: SpinBox = get_selected_node().spin_box
+			if selected_node is NumberOptionNode:
+				var spin_box: SpinBox = selected_node.spin_box
 				spin_box.value += spin_box.step * -1 if Input.is_action_pressed(&"menu_left") else spin_box.step
 	
 	if Input.is_action_just_released(&"menu_left") or Input.is_action_just_released(&"menu_right"):
@@ -130,8 +122,10 @@ func load_category(category: String, options: Array):
 				instance = BOOL_PRELOAD.instantiate()
 			elif (category == SettingsManager.SEC_KEY_BINDS):
 				instance = KEYBIND_PRELOAD.instantiate()
+				instance.connect(&"binded", binded_action)
 			elif (category == SettingsManager.SEC_CONTROLLER_BINDS):
 				instance = KEYBIND_PRELOAD.instantiate()
+				instance.connect(&"binded", binded_action)
 				instance.type = 1
 			else:
 				printerr("Not a valid option type: ", option.get_class())
@@ -171,19 +165,20 @@ func update(i: int, mouse: bool = false):
 	var options = get_tree().get_nodes_in_group(&"options")
 	selected = wrapi(i, 0, options.size())
 	get_tree().call_group(&"options", &"normal")
-	get_selected_node().select()
+	var selected_node = get_selected_node()
+	selected_node.select()
 	
 	SoundManager.scroll.play()
 	get_viewport().gui_release_focus()
 	
-	set_description(get_selected_node().description)
+	set_description(selected_node.description)
 	
 	if !mouse:
 		var tween = create_tween()
 		tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
-		if get_selected_node().position.y >= box_limit:
+		if selected_node.position.y >= box_limit:
 			tween.tween_property(%Options, "position:y",
-			-(get_selected_node().position.y - box_limit) + 64, 0.2)
+			-(selected_node.position.y - box_limit) + 64, 0.2)
 		else:
 			tween.tween_property(%Options, "position:y", 64, 0.2)
 
@@ -208,3 +203,7 @@ func pressed_button(id: StringName):
 		
 		_:
 			printerr("No function assigned to: ", id)
+
+func binded_action():
+	await get_tree().create_timer(0.0).timeout
+	can_interact = true

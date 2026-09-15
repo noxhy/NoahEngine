@@ -19,6 +19,7 @@ func _input(event):
 							event.keycode = KEY_NONE
 						
 						checking = false
+						get_parent().get_parent().binded.emit()
 						SettingsManager.set_keybind(setting_name, event.keycode, index)
 						SettingsManager.flush()
 						self.text = OS.get_keycode_string(event.keycode)
@@ -32,6 +33,7 @@ func _input(event):
 							event.button_index = JOY_BUTTON_INVALID
 						
 						checking = false
+						get_parent().get_parent().binded.emit()
 						SettingsManager.set_controller_bind(setting_name, event.button_index, index)
 						SettingsManager.flush()
 						update_text()
@@ -39,6 +41,7 @@ func _input(event):
 						SoundManager.accept.play()
 				elif event is InputEventJoypadMotion:
 					checking = false
+					get_parent().get_parent().binded.emit()
 					if event.axis == JoyAxis.JOY_AXIS_TRIGGER_LEFT or event.axis == JoyAxis.JOY_AXIS_TRIGGER_RIGHT:
 						SettingsManager.set_controller_bind(setting_name, event.axis + 100, index)
 						SettingsManager.flush()

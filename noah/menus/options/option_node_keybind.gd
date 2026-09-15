@@ -1,6 +1,9 @@
 extends OptionNode
 class_name KeyBindOptionNode
 
+@warning_ignore("unused_signal")
+signal binded
+
 var KEYBIND_BUTTON_PRELOAD = load("uid://darhx23v4e15y")
 
 var selected: int = 0
@@ -37,7 +40,7 @@ func _ready() -> void:
 
 func select_button(i: int):
 	selected = wrapi(i, 0, buttons.size())
-	get_tree().call_group("buttons", "normal")
+	get_tree().call_group(&"buttons", &"normal")
 	if i > -100:
 		SoundManager.scroll.play()
 		buttons[selected].select()
