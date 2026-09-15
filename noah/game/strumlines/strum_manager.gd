@@ -2,7 +2,7 @@
 extends Node2D
 class_name StrumManager
 
-@export var note_skin: NoteSkin: set = set_skin
+var note_skin: NoteSkin: set = set_skin
 ## List of Nodes of the strumlines.
 @export var strums: Array[Strum]
 ## Vocal track ID.

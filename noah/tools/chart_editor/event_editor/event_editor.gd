@@ -124,7 +124,7 @@ func _process(delta: float) -> void:
 				save()
 	
 	if (Input.is_action_pressed(&"mouse_left") and !Input.is_action_pressed(&"control")
-	and is_mouse_over_grid() and !dragging_song_slider):
+	and is_mouse_over_grid() and !dragging_song_slider and not is_mouse_over_any_ui()):
 		if !instrumental.playing:
 			if can_chart:
 				## Song Position Slider
@@ -181,7 +181,7 @@ func _process(delta: float) -> void:
 			add_action("Moved Events(s)", self.move_selection.bind(moved_time_distance, 0),
 			self.move_selection.bind(-moved_time_distance, 0))
 	
-	if Input.is_action_just_released(&"control"):
+	if Input.is_action_just_released(&"control") or dragging_song_slider:
 		bounding_box = false
 	
 	queue_redraw()
@@ -296,7 +296,7 @@ func load_section(time: float, forced: bool = false):
 	update_selected_notes()
 
 
-func update_note_position(node: Node2D):
+func update_note_position(node: Node2D) -> void:
 	if node is ChartEvent:
 		node.position = Vector2(time_to_y_position(node.time) + grid.grid_size.x * grid.zoom.x / 2,
 		grid.get_real_position(Vector2(0, 1.5 + ChartManager.event_tracks.find(node.event))).y)
@@ -307,7 +307,7 @@ func update_note_position(node: Node2D):
 		printerr(node.get_class(), " isn't a valid node.")
 
 
-func load_dividers():
+func load_dividers() -> void:
 	get_tree().call_group(&"dividers", &"queue_free")
 	for i in range(conductor.numerator):
 		var rect = ColorRect.new()
@@ -323,7 +323,7 @@ func load_dividers():
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for i in [0, 1, grid.rows]:
+	for i in [0, 1, maxi(grid.rows, 2)]:
 		var rect = ColorRect.new()
 		var size: float = 2
 		
@@ -331,7 +331,7 @@ func load_dividers():
 		rect.size = Vector2(grid.get_size().x, size)
 		rect.position = grid.position
 		rect.position.y -= grid.get_size().y / 2
-		rect.position.y += (grid.grid_size.y * grid.zoom.y)* i
+		rect.position.y += (grid.grid_size.y * grid.zoom.y) * i
 		
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
@@ -354,7 +354,7 @@ func load_dividers():
 		self.add_child(rect)
 		rect.add_to_group(&"dividers")
 
-func load_chart(file: Chart, ghost: bool = false):
+func load_chart(file: Chart, ghost: bool = false) -> void:
 	super(file, ghost)
 	ChartManager.event_tracks = []
 	for event in file.get_events_data():
@@ -364,7 +364,7 @@ func load_chart(file: Chart, ghost: bool = false):
 	update_grid()
 	_on_event_tracks_ready()
 
-func update_grid():
+func update_grid() -> void:
 	grid.columns = conductor.numerator * conductor.denominator
 	grid.rows = 1 + ChartManager.event_tracks.size()
 	
@@ -389,7 +389,7 @@ func update_grid():
 	$"UI/Event Tracks".custom_minimum_size.y = grid.get_size().y
 
 
-func remove_track(node):
+func remove_track(node) -> void:
 	var event: String = node.event
 	node.queue_free()
 	
@@ -407,6 +407,9 @@ func remove_track(node):
 	current_visible_events_R = -1
 	load_section(song_position)
 	SoundManager.tool_mouse_click.play()
+	
+	if minimap:
+		minimap.refresh(ChartManager.chart.get_notes_data(), ChartManager.chart.get_events_data())
 
 
 func _on_event_tracks_ready() -> void:
@@ -488,7 +491,7 @@ func find_event(_name: String, time: float) -> int:
 	return -1
 
 ## Giving only 1 parameter removes the note at the given index
-func remove_note(_name, time: float = -1):
+func remove_note(_name, time: float = -1) -> void:
 	var i: int
 	if time != -1:
 		i = find_event(_name, time)
@@ -504,10 +507,17 @@ func remove_note(_name, time: float = -1):
 		event_nodes.remove_at(index)
 		current_visible_events_R -= 1
 	
+	var ev = ChartManager.chart.events.get(i)
+	if minimap and ev:
+		if find_events_within_time(ev[0], conductor.seconds_per_step).size() <= 1: # TODO this still removes events in cases it shouldnt maybe make a custom epsilon or just refresh the entire texture
+			minimap.unmap_event_from_image(ev[0])
+	
 	ChartManager.chart.events.remove_at(i)
+	
+
 
 ## In the event editor, lane_a is a list of event names
-func select_area(L: int, R: int, lane_a, lane_b = null):
+func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
 		var event: String = ChartManager.chart.get_events_data()[i][1]
 		return lane_a.has(event)
@@ -518,7 +528,7 @@ func select_area(L: int, R: int, lane_a, lane_b = null):
 		SoundManager.tool_note_place.play()
 
 
-func move_selection(time_distance: float, lane_distance: float):
+func move_selection(time_distance: float, lane_distance: float) -> void:
 	var events: Array = []
 	for event in selected_note_nodes:
 		events.append([event.time + time_distance, event.event, event.parameters])
@@ -549,7 +559,7 @@ func place_notes(events: Array) -> Array:
 	return indices
 
 
-func remove_notes(events: Array):
+func remove_notes(events: Array) -> void:
 	var i: int = 0
 	for event in events:
 		var _event = ChartManager.chart.get_events_data()[event - i]
@@ -622,8 +632,8 @@ func delete_stacked_notes() -> void:
 				SoundManager.tool_note_remove.play()
 
 
-func select_all():
-	selected_notes = ChartManager.chart.get_events_data()
+func select_all() -> void:
+	selected_notes = range(ChartManager.chart.get_events_data().size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"events")
 	if selected_notes.size() > 0:
 		SoundManager.tool_note_place.play()
@@ -673,6 +683,8 @@ func _on_place_event_pressed() -> void:
 		self.remove_note.bind(current_event, current_event_time))
 		SoundManager.tool_note_place.play()
 		%"Event Creator".hide()
+		if minimap:
+			minimap.map_event_to_image(current_event_time)
 	else:
 		var action: String = "Edit Event"
 		undo_redo.create_action(action)
@@ -728,9 +740,9 @@ func _on_add_event_track_pressed() -> void:
 	
 	%"Add Track Window".hide()
 	close_popup()
-	load_section(song_position)
+	load_section(song_position, true)
 
-func update_desc(_str: String):
+func update_desc(_str: String) -> void:
 	%"Desc Label".text = _str
 	%"Event Desc Label".text = _str
 	
@@ -753,7 +765,7 @@ func _on_note_type_window_selected_note_type(type: Variant) -> void:
 	pass # Replace with function body.
 
 
-func update_waveforms(time: float = 0):
+func update_waveforms(time: float = 0) -> void:
 	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.x
 	
 	if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
