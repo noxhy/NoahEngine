@@ -33,7 +33,6 @@ SaveManager="*res://noah/managers/save_manager.gd"
 Signals="*res://noah/signals.gd"
 Constants="*uid://dctyx01j6jvbu"
 ModManager="*uid://xhbi3kfk6n15"
-DataSave="*uid://bcbuv2gunq23k"
 
 [debug]
 
