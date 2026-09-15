@@ -1,50 +1,62 @@
 extends Resource
 class_name NoahSettings
 
-#TODO add docsto every var
-
 ## Applies a visual offset to the notes
 var offset: float = 0.0
 ## Allows tapping when no notes are active
 var ghost_tapping: bool = false
-## Notes go down instead of up, downscroll ui function is called
+## Notes go down instead of up
 var downscroll: bool = false
 ## By default it only works for one strumline, more support for botplay on strumlines will be need to be per song script.
 var botplay: bool = false
 ## The playback rate for a song
 var song_speed: float = 1.0
-
+## Multiplier applied onto the notes scroll speed.
 var scroll_speed_scale: float = 1.0
-## Spawns the combo shit on the ui instead of world
+## Spawns the combo sprites onto the UI layer rather than world space.
 var combo_ui: bool = false
 ## Glows notes when that are able to be pressed
 var glow_notes: bool = false
 
+## Whether notesplashes should spawn when hitting a [code]Sick[/code]
 var note_splashes: bool = false
-## The UI w"ill bop when called, this affetcs the main menus too
+## The UI will bop when called, this affects menus as well
 var ui_bops: bool = true
 
+## Explanatory.
 var hit_sounds: bool = false
-##i dont like this here but where else,
+## Whether the game is in fullscreen mode or not
 var fullscreen: bool = false
-## Adds a black ColorRect on the UI node with the given opacity.
+## Adds a black underlay below the ui.
 var underlay_opacity: float = 0.0
 
+## The master volume. Affects all music and sounds
 var master_volume: float = 0.5
+## The sfx volume. Affects only sound effects.
 var sfx_volume: float = 1.0
+## The music volume. Affects only the music.
 var music_volume: float = 1.0
+## Whether the game is currently muted.
 var is_muted: bool = false
 
+## Whether to show the current framerate and memory usage.
 var show_performance: bool = true
+## Whether the frame rate should be uncapped or not.
 var cap_fps: bool = true
+## The caapped fps to target. Only works when [member cap_fps] is [code]true[/code]
 var fps_cap: int = int(DisplayServer.screen_get_refresh_rate())
 
+## Tells the chart editor to save chart after any change
 var chart_auto_save: bool = true
+## Editor playtesting will start at the current position within the editor
 var chart_start_at_current_position: bool = false
+## Plays a sound effect every step
 var chart_hit_sound_on_step: bool = false
+## Plays a sound effect every beat
 var chart_hit_sound_on_beat: bool = false
 var chart_hit_sounds: bool = true
 
+## A dictionary of all keybinds used in game.
 var key_binds: Dictionary[String, Array] = {
 	"note_left": [KEY_LEFT, KEY_A],
 	"note_down": [KEY_DOWN, KEY_S],
@@ -71,7 +83,7 @@ var key_binds: Dictionary[String, Array] = {
 	"menu_right": [KEY_RIGHT, KEY_D],
 	"mute": [KEY_0]
 }
-
+## A dictionary of all controller binds used in game.
 var joy_binds: Dictionary[String, Array] = {
 	"note_left": [JOY_BUTTON_X, JOY_BUTTON_DPAD_LEFT],
 	"note_down": [JOY_BUTTON_A, JOY_BUTTON_DPAD_DOWN],
