@@ -55,14 +55,14 @@ func _input(event: InputEvent) -> void:
 			
 			_updated_volume()
 		elif ev.is_action(&'volume_up'):
-			SettingsManager.data.is_muted = !SettingsManager.data.is_muted
+			SettingsManager.data.is_muted = false
 			
 			var new_vol = clampf(SettingsManager.data.master_volume + 0.05, 0.0, 1.0)
 			SettingsManager.data.master_volume = new_vol
 			
 			_updated_volume()
 		elif ev.is_action(&'volume_down'):
-			SettingsManager.data.is_muted = !SettingsManager.data.is_muted
+			SettingsManager.data.is_muted = false
 			
 			var new_vol = clampf(SettingsManager.data.master_volume - 0.05, 0.0, 1.0)
 			SettingsManager.data.master_volume = new_vol
