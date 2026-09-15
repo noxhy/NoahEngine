@@ -38,10 +38,10 @@ func _ready() -> void:
 func select_button(i: int):
 	selected = wrapi(i, 0, buttons.size())
 	get_tree().call_group("buttons", "normal")
-	if i > -1:
+	if i > -100:
 		SoundManager.scroll.play()
 		buttons[selected].select()
 
 func normal():
 	super()
-	selected = -1
+	selected = -100
