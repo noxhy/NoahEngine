@@ -21,7 +21,7 @@ enum AnimContext {
 
 ##The actual sprite node that will be used to play the anims. If not assigned, it will fallback to
 ##[AnimatedSprite2D] or [AnimateSymbol2D]
-@export var animation_player: Node = null:
+@export_custom(PROPERTY_HINT_NODE_TYPE, "AnimationPlayer,AnimatedSprite2D,AnimatedSprite3D,AnimateSymbol2D") var animation_player: Node = null:
 	set(v):
 		animation_player = verify_animation_player(v)
 		update_configuration_warnings()
