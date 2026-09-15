@@ -77,7 +77,8 @@ var current_visible_notes_R: int = -1
 var current_note_type: String = ""
 var dragging_song_slider: bool = false
 
-var waveform_nodes: Dictionary[int, WaveformRenderer] = {}
+## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
+var waveform_nodes: Dictionary[int, Variant] = {}
 var waveform_dirty: bool = false
 
 var event_nodes: Array = []
