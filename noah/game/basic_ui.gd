@@ -13,7 +13,7 @@ class_name BasicUI
 @onready var combo_marker: Node = $"Combo Marker"
 
 func _ready() -> void:
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
+	if SettingsManager.data.downscroll:
 		downscroll_ui()
 	
 	apply_underlay()
@@ -40,8 +40,7 @@ func downscroll_ui():
 
 func apply_underlay():
 	var underlay: ColorRect = ColorRect.new()
-	underlay.color = Color(0, 0, 0,
-	SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "underlay_opacity"))
+	underlay.color = Color(0, 0, 0, SettingsManager.data.underlay_opacity)
 	underlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	underlay.position -= self.offset
 	underlay.z_index = -1000

@@ -118,7 +118,7 @@ func load_category(category: String, options: Array):
 				if !OS.is_debug_build():
 					continue
 			
-			var option = SettingsManager._defaults.get(category).get(option_name)
+			var option = SettingsManager.data.get(option_name)
 			if (option is float) or (option is int):
 				instance = NUMBER_PRELOAD.instantiate()
 				instance.minimum = data.get("min", 0)

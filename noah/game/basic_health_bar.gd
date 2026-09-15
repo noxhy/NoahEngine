@@ -26,7 +26,7 @@ func _process(delta: float) -> void:
 func update_performance_text():
 	var perf_str: String = 'Botplay'
 	
-	if not SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
+	if not SettingsManager.data.botplay:
 		perf_str = "Score: " + Global.format_number(target_score) \
 		+ " • " + "Misses: " + str(target_misses)
 	

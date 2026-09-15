@@ -29,7 +29,7 @@ func _ready() -> void:
 	file_button.get_popup().set_hide_on_checkable_item_selection(false)
 	file_button.get_popup().set_item_checked(
 		file_button.get_popup().get_item_index(3),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+		SettingsManager.data.chart_auto_save)
 	
 	edit_button.get_popup().id_pressed.connect(chart_editor.edit_button_item_pressed)
 	edit_button.get_popup().set_hide_on_checkable_item_selection(false)
@@ -38,11 +38,11 @@ func _ready() -> void:
 	audio_button.get_popup().connect(&"id_pressed", chart_editor.audio_button_item_pressed)
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(7),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+		SettingsManager.data.chart_hit_sound_on_beat)
 	
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(8),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+		SettingsManager.data.chart_hit_sound_on_step)
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	audio_button.get_popup().set_item_checked(
@@ -64,7 +64,7 @@ func _ready() -> void:
 	test_button.get_popup().connect(&"id_pressed", chart_editor.test_button_item_pressed)
 	test_button.get_popup().set_item_checked(
 		test_button.get_popup().get_item_index(3),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+		SettingsManager.data.chart_start_at_current_position)
 	test_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	
@@ -430,11 +430,11 @@ func file_button_item_pressed(id):
 			SoundManager.tool_open_window.play()
 		
 		3: #Autosave
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			SettingsManager.data.chart_auto_save = !SettingsManager.data.chart_auto_save
+			
 			SettingsManager.flush()
 			file_button.get_popup().set_item_checked(
-				file_button.get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+				file_button.get_popup().get_item_index(id), SettingsManager.data.chart_auto_save)
 			SoundManager.tool_mouse_click.play()
 		
 		6: #Exit

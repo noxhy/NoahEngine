@@ -105,7 +105,7 @@ func _ready() -> void:
 	
 	get_window().content_scale_size = Vector2(1280, 720)
 	Global.set_window_title("Chart Editor")
-	song_speed = SettingsManager.get_value("gameplay", "song_speed")
+	song_speed = SettingsManager.data.song_speed
 	
 	$"UI/LoadedSong error".visible = not ChartManager.song
 	
@@ -1272,7 +1272,7 @@ func _on_instrumental_finished() -> void:
 	toggle_audios(true)
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
-	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"):
+	if SettingsManager.data.chart_hit_sound_on_beat:
 		if measure_relative == 0:
 			SoundManager.conductor_beat.play()
 		else:
@@ -1287,7 +1287,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
-	if SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"):
+	if SettingsManager.data.chart_hit_sound_on_step:
 		SoundManager.conductor_step.play()
 	
 	if ChartManager.chart:
@@ -1339,34 +1339,31 @@ func audio_button_item_pressed(id) -> void:
 	match id:
 		0: toggle_audios(instrumental.playing)
 		4:
-			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
-			min(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") + 0.05, 2))
+			SettingsManager.data.song_speed = min(SettingsManager.data.song_speed + 0.05, 2)
 			SettingsManager.flush()
-			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+			song_speed = SettingsManager.data.song_speed
 		
 		5:
-			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
-			max(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") - 0.05, 0.5))
+			SettingsManager.data.song_speed = max(SettingsManager.data.song_speed - 0.05, 2)
+			
 			SettingsManager.flush()
-			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+			song_speed = SettingsManager.data.song_speed
 		
 		7: #Toggle Beat Sound
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_beat",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+			SettingsManager.data.chart_hit_sound_on_step = !SettingsManager.data.chart_hit_sound_on_beat
 			SettingsManager.flush()
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
 				upper_ui.get_node("%Audio Button").get_popup().get_item_index(id),
-				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+				SettingsManager.data.chart_hit_sound_on_beat)
 		
 		8: #Toggle Step Sound
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "conductor_step",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+			SettingsManager.data.chart_hit_sound_on_step = !SettingsManager.data.chart_hit_sound_on_step
 			SettingsManager.flush()
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
 				upper_ui.get_node("%Audio Button").get_popup().get_item_index(id),
-				SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+				SettingsManager.data.chart_hit_sound_on_step)
 		11: #Toggle Vocal Waveforms
 			vocal_waveforms = !vocal_waveforms
 			SoundManager.tool_mouse_click.play()
@@ -1382,13 +1379,13 @@ func audio_button_item_pressed(id) -> void:
 			update_waveforms(song_position)
 			
 		10: #Toggle Hit Sound
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "hit_sounds",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
+			SettingsManager.data.chart_hit_sounds = !SettingsManager.data.chart_hit_sounds
+			
 			SettingsManager.flush()
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
 				upper_ui.get_node("%Audio Button").get_popup().get_item_index(id),
-				SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
+				SettingsManager.data.chart_hit_sounds)
 		
 		_:
 			print("id: ", id)
@@ -1459,12 +1456,10 @@ func test_button_item_pressed(id) -> void:
 		0: test_current_song(false)
 		1: test_current_song(true)
 		2:
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "start_at_current_position",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+			SettingsManager.data.chart_start_at_current_position = !SettingsManager.data.chart_start_at_current_position
 			SettingsManager.flush()
 			upper_ui.get_node("%Test Button").get_popup().set_item_checked(
-			upper_ui.get_node("%Test Button").get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART,
-			"start_at_current_position"))
+			upper_ui.get_node("%Test Button").get_popup().get_item_index(id), SettingsManager.data.chart_start_at_current_position)
 			SoundManager.tool_mouse_click.play()
 		
 		_: print("id: ", id)
@@ -1524,7 +1519,7 @@ func redo() -> void:
 
 
 func auto_save() -> void:
-	if SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"):
+	if SettingsManager.data.chart_auto_save:
 		save()
 
 

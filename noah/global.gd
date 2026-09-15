@@ -24,15 +24,15 @@ func changed_contoller(device: int, connected: bool):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
-	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
+	performance_label.visible = SettingsManager.data.show_performance
+	if performance_label.visible:
 		var performance_string: String = str("FPS: ", int(Engine.get_frames_per_second()),
 		" • VMem: ", String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))))
 		
 		performance_label.text = performance_string
 	
-	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"cap_fps"):
-		Engine.max_fps = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"fps_cap")
+	if SettingsManager.data.cap_fps:
+		Engine.max_fps = SettingsManager.data.fps_cap
 	else:
 		Engine.max_fps = 0
 	

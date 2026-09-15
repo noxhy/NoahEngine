@@ -85,7 +85,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 			else:
 				playstate.camera.bump(playstate.camera_bop_strength)
 			
-			if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops") and playstate.ui:
+			if SettingsManager.data.ui_bops and playstate.ui:
 				playstate.ui.bump(playstate.ui_bop_strength)
 
 
@@ -220,7 +220,7 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 					
 					parent.add_child(combo_number_instance)
 		
-		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "combo_ui") and playstate.ui:
+		if SettingsManager.data.combo_ui and playstate.ui:
 			if playstate.ui.rating_marker:
 				playstate.ui.rating_marker.add_child(rating_instance)
 			
