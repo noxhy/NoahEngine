@@ -140,11 +140,11 @@ func _ready() -> void:
 		else:
 			ext_events.free()
 	
-	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+	song_speed = SettingsManager.data.song_speed
 	
 	match GameManager.play_mode:
 		GameManager.PLAY_MODE.CHARTING:
-			if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):
+			if SettingsManager.data.chart_start_at_current_position:
 				play_song(ChartEditor.song_position)
 			else:
 				play_song(0)
@@ -154,18 +154,17 @@ func _ready() -> void:
 	
 	Global.set_window_title("Playing: " + song_data.title)
 	
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
+	if SettingsManager.data.botplay:
 		if OS.is_debug_build():
 			get_tree().call_group(&"strums", "set_auto_play", true)
 			get_tree().call_group(&"strums", "set_press", false)
 	
-	scroll_speed = chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
+	scroll_speed = chart.scroll_speed * SettingsManager.data.scroll_speed_scale
 	
 	get_tree().call_group(&"strums", "set_skin", note_skin)
-	get_tree().call_group(&"strums", "set_offset",
-	SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset"))
+	get_tree().call_group(&"strums", "set_offset", SettingsManager.data.offset)
 	
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
+	if SettingsManager.data.downscroll:
 		get_tree().call_group(&"strums", "set_scroll", -1)
 	
 	Signals.play_note_hit.connect(note_hit)
@@ -266,7 +265,7 @@ func play_song(time: float):
 	GameManager.conductor.tempo = chart.get_tempo_at(-chart.offset + time)
 	GameManager.conductor.seconds_per_beat = 60.0 / GameManager.conductor.tempo
 	
-	GameManager.conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
+	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
 	
 	song_started = false
 	song_start_time = time + chart.offset
@@ -412,8 +411,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 		"scroll_speed":
 			var tween_time: float = Global.string_to_time(event_parameters[1])
 			
-			var new_speed = float(event_parameters[0]) * SettingsManager.get_value(
-				SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
+			var new_speed = float(event_parameters[0]) * SettingsManager.data.scroll_speed_scale
 			
 			create_tween().tween_property(self, "scroll_speed", new_speed, tween_time / song_speed)
 		
@@ -452,7 +450,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
-		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
+		if SettingsManager.data.hit_sounds:
 			SoundManager.hit.play()
 		
 		if note.mine:

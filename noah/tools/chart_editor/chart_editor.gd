@@ -105,7 +105,7 @@ func _ready() -> void:
 	
 	get_window().content_scale_size = Vector2(1280, 720)
 	Global.set_window_title("Chart Editor")
-	song_speed = SettingsManager.get_value("gameplay", "song_speed")
+	song_speed = SettingsManager.data.song_speed
 	
 	$"UI/LoadedSong error".visible = not ChartManager.song
 	
@@ -1339,16 +1339,15 @@ func audio_button_item_pressed(id) -> void:
 	match id:
 		0: toggle_audios(instrumental.playing)
 		4:
-			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
-			min(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") + 0.05, 2))
+			SettingsManager.data.song_speed = min(SettingsManager.data.song_speed + 0.05, 2)
 			SettingsManager.flush()
-			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+			song_speed = SettingsManager.data.song_speed
 		
 		5:
-			SettingsManager.set_value(SettingsManager.SEC_GAMEPLAY, "song_speed",
-			max(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed") - 0.05, 0.5))
+			SettingsManager.data.song_speed = max(SettingsManager.data.song_speed - 0.05, 2)
+			
 			SettingsManager.flush()
-			song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+			song_speed = SettingsManager.data.song_speed
 		
 		7: #Toggle Beat Sound
 			SettingsManager.data.chart_hit_sound_on_step = !SettingsManager.data.chart_hit_sound_on_beat

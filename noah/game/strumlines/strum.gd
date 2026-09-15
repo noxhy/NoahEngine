@@ -56,7 +56,7 @@ func _process(delta) -> void:
 	
 	if target_note:
 		if !enemy_slot:
-			if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "glow_notes") and !ignored_note_types.has(target_note.note_type):
+			if SettingsManager.data.glow_notes and !ignored_note_types.has(target_note.note_type):
 				target_note.modulate = Color(1.5, 1.5, 1.5)
 		
 		var relative_time: float = target_note.time_difference - offset + (target_note.start_length * GameManager.conductor.seconds_per_beat)
@@ -82,7 +82,7 @@ func _process(delta) -> void:
 			if target_note:
 				press_note()
 			else:
-				if !SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "ghost_tapping"):
+				if not SettingsManager.data.ghost_tapping:
 					Signals.play_note_miss.emit(null, lane, get_parent())
 		
 		if Input.is_action_pressed(input):
@@ -185,14 +185,13 @@ func _on_hold_cover_animation_finished():
 
 
 func create_splash(animation_name: StringName = strum_name + &"_splash"):
-	if can_splash:
-		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "note_splashes"):
-			var splash_instance = SPLASH_PRELOAD.instantiate()
-			
-			splash_instance.note_skin = note_skin
-			
-			add_child(splash_instance)
-			splash_instance.sprite.play(animation_name)
+	if can_splash and SettingsManager.data.note_splashes:
+		var splash_instance = SPLASH_PRELOAD.instantiate()
+		
+		splash_instance.note_skin = note_skin
+		
+		add_child(splash_instance)
+		splash_instance.sprite.play(animation_name)
 
 ## Calls when first pressing the input
 func press_note():
