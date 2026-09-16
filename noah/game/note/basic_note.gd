@@ -6,9 +6,9 @@ class_name BasicNote
 const PIXELS_PER_SECOND = 450
 const BACKUP_HOLD_TEXTURE = preload("uid://ds5jlynhtryxg")
 
-@onready var note = $Note
-@onready var tail = $Tail
-@onready var end = null
+@onready var note: Node = $Note
+@onready var tail: Node = $Tail
+@onready var end: Node = null
 
 ## Callable for updating how the note handles its position and note length.
 var update_callable: Callable
@@ -17,13 +17,17 @@ var time_difference: float = INF
 var on_screen: bool = false
 var holding: bool = false
 
+## If the note should not make the character "sing"
 var no_animation: bool = false
 var damage_mult: float = 1.0
 var health_mult: float = 1.0
 var anim_prefix: String = ''
 var splash_animation: StringName = &""
+## Whether the note should provide score when hit
 var scoreable: bool = true
+## If true, this note should be avoided from being hit
 var mine: bool = false
+## If the note was hit already
 var hit: bool = false
 
 # Applying Note Skin
@@ -68,7 +72,7 @@ func _ready() -> void:
 	load_basic_type()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta) -> void:
+func _process(delta: float) -> void:
 	time_difference = time - GameManager.song_position
 
 
@@ -98,7 +102,7 @@ func default_update() -> void:
 		tail.visible = false
 
 
-func load_basic_type():
+func load_basic_type() -> void:
 	match note_type:
 		"no_animation":
 			no_animation = true
@@ -106,6 +110,6 @@ func load_basic_type():
 			anim_prefix = 'alt_'
 
 
-func apply_miss_effect():
+func apply_miss_effect() -> void:
 	modulate *= 2
 	modulate.a = min(modulate.a / 2, 0.5)

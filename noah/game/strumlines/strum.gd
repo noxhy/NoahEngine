@@ -14,10 +14,10 @@ var SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
 ## Strum direction name
 @export var strum_name: StringName = ""
 
-@export var can_press: bool  = true
-@export var auto_play: bool  = false
-@export var can_splash: bool  = false
-@export var enemy_slot: bool = false
+var can_press: bool  = true
+var auto_play: bool  = false
+var can_splash: bool  = false
+var enemy_slot: bool = false
 ## Note types that will be skipped over in note prioritization.
 @export var ignored_note_types: Array = []
 @export_enum("NORMAL", "MODCHART") var node_type: int
@@ -29,13 +29,19 @@ enum STATE {
 }
 
 var note_skin: NoteSkin
+## A multiplier applied to the notes visual movement speed.
 var scroll_speed: float = 1.0: set = set_scroll_speed
+## A additional multiplier to the notes visual movement speed. Used to invert scroll for downscroll.
 var scroll: float = 1.0: set = set_scroll
 var song_speed: float = 1.0
 var offset: float = 0.0
+## The loaded notes for this strum to hit/miss
 var note_list: Array[BasicNote] = []
+
 var pressing: bool = false
+## The current prioritized note for this strum to hit next.
 var target_note: BasicNote = null
+## The current Animation State for this strum
 var state: STATE = STATE.IDLE
 var lane: int = -1
 
@@ -120,7 +126,7 @@ func _process(delta) -> void:
 			sprite.play(animation_name)
 
 # Util
-func set_skin(new_skin: NoteSkin):
+func set_skin(new_skin: NoteSkin) -> void:
 	note_skin = new_skin
 	
 	sprite.sprite_frames = note_skin.strums_texture
@@ -136,7 +142,7 @@ func set_skin(new_skin: NoteSkin):
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
 
-func create_note(time: float, length: float, note_type: String, _tempo: float):
+func create_note(time: float, length: float, note_type: String, _tempo: float) -> BasicNote:
 	var note_instance: BasicNote
 	if node_type == 0:
 		note_instance = NOTE_PRELOAD.instantiate()
@@ -163,9 +169,10 @@ func create_note(time: float, length: float, note_type: String, _tempo: float):
 	note_list.append(note_instance)
 	
 	Signals.play_note_created.emit(note_instance, self)
+	return note_instance
 
 # Visuals
-func _on_offset_sprite_animation_finished():
+func _on_offset_sprite_animation_finished() -> void:
 	if state == STATE.GLOW:
 		if !auto_play:
 			if pressing:
@@ -176,7 +183,7 @@ func _on_offset_sprite_animation_finished():
 			sprite.play()
 
 
-func _on_hold_cover_animation_finished():
+func _on_hold_cover_animation_finished() -> void:
 	if hold_cover_sprite.animation == &"start_" + strum_name + &"_cover":
 		hold_cover_sprite.play(strum_name + &"_cover")
 	
@@ -184,7 +191,7 @@ func _on_hold_cover_animation_finished():
 		hold_cover_sprite.visible = false
 
 
-func create_splash(animation_name: StringName = strum_name + &"_splash"):
+func create_splash(animation_name: StringName = strum_name + &"_splash") -> void:
 	if can_splash and SettingsManager.data.note_splashes:
 		var splash_instance = SPLASH_PRELOAD.instantiate()
 		
@@ -194,7 +201,7 @@ func create_splash(animation_name: StringName = strum_name + &"_splash"):
 		splash_instance.sprite.play(animation_name)
 
 ## Calls when first pressing the input
-func press_note():
+func press_note() -> void:
 	state = STATE.GLOW
 	coyote_timer = 0
 	var hit_time: float = (target_note.time - offset) - (GameManager.song_position) if !auto_play else 0.0
@@ -218,7 +225,7 @@ func press_note():
 	Signals.play_note_hit.emit(target_note, lane, hit_time, get_parent())
 
 ## Calls when holding the input
-func hold_note():
+func hold_note() -> void:
 	state = STATE.GLOW
 	target_note.position.y = 0
 	var temp = target_note.length
@@ -239,7 +246,7 @@ func hold_note():
 		target_note.queue_free()
 
 ## Calls when releasing the input
-func release_note():
+func release_note() -> void:
 	if can_press:
 		if pressing:
 			pressing = false
@@ -267,7 +274,7 @@ func get_prioritized_note(hit_window: float) -> BasicNote:
 	if note_list.is_empty():
 		return null
 	
-	var target = null
+	var target:BasicNote = null
 	for note in note_list: 
 		if !note:
 			continue
@@ -286,16 +293,14 @@ func get_prioritized_note(hit_window: float) -> BasicNote:
 	
 	return target
 
-
-func set_scroll_speed(s: float):
-	scroll_speed = s
+func set_scroll_speed(v: float) -> void:
+	scroll_speed = v
 	
 	for note in note_list:
-		note.scroll_speed = s
+		note.scroll_speed = v
 
-
-func set_scroll(s: float):
-	scroll = s
+func set_scroll(v: float) -> void:
+	scroll = v
 	
 	for note in note_list:
-		note.scroll = s
+		note.scroll = v

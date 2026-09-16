@@ -2,6 +2,7 @@
 extends Node2D
 class_name StrumManager
 
+## skin
 var note_skin: NoteSkin: set = set_skin
 ## List of Nodes of the strumlines.
 @export var strums: Array[Strum]
@@ -32,72 +33,66 @@ func _ready() -> void:
 		strum.lane = i
 		i += 1
 
-
 func set_skin(new_skin: NoteSkin) -> void:
 	note_skin = new_skin
 	for strum in strums:
 		strum.set_skin(new_skin)
 
-
 func set_scroll_speed(new_scroll_speed: float) -> void:
 	for strum in strums:
 		strum.scroll_speed = new_scroll_speed
 
-
 func set_scroll(new_scroll: float) -> void:
 	for strum in strums:
 		strum.scroll = new_scroll
-
 
 func set_press(toggle: bool) -> void:
 	can_press = toggle
 	for strum in strums:
 		strum.can_press = toggle
 
-
 func set_auto_play(toggle: bool) -> void:
 	auto_play = toggle
 	for strum in strums:
 		strum.auto_play = toggle
 
-
 func set_offset(offset: float) -> void:
 	for strum in strums:
 		strum.offset = offset
-
 
 func set_can_splash(toggle: bool) -> void:
 	can_splash = toggle
 	for strum in strums:
 		strum.can_splash = toggle
 
-
 func set_enemy_slot(toggle: bool) -> void:
 	enemy_slot = toggle
 	for strum in strums:
 		strum.enemy_slot = toggle
 
-
 func set_ignored_note_types(_note_types: Array) -> void:
 	for strum in strums:
 		strum.ignored_note_types = _note_types
 
-
+## @deprecated: Use [member get_strum] instead.
 func get_strumline(lane: int) -> Strum:
+	return get_strum(lane)
+
+## Gets a strum from lane
+func get_strum(lane: int) -> Strum:
 	return strums[lane]
 
-
+## Gets the scroll speed of a specific strum by lane
 func get_scroll_speed(lane: int) -> float:
-	return get_strumline(lane).scroll_speed
-
-
-func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> void:
-	get_strumline(lane).create_note(time, length, note_type, tempo)
-
+	return get_strum(lane).scroll_speed
+	
+## Creates a new [BasicNote] for a lane
+func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> BasicNote:
+	return get_strum(lane).create_note(time, length, note_type, tempo)
 
 func create_splash(lane: int, animation_name: StringName) -> void:
 	var anim_to_play: StringName = animation_name + &"_splash"
 	if animation_name.is_empty():
-		anim_to_play = get_strumline(lane).strum_name + &"_splash"
+		anim_to_play = get_strum(lane).strum_name + &"_splash"
 	
-	get_strumline(lane).create_splash(anim_to_play)
+	get_strum(lane).create_splash(anim_to_play)
