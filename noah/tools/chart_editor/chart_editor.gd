@@ -1837,8 +1837,9 @@ func delete_stacked_notes() -> void:
 			var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
 			
 			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
+				var idx_to_delete = index - i if note_b[2] > note_a[2] else index - i + 1
 				deleted = true
-				remove_note(index - i)
+				remove_note(idx_to_delete)
 				i += 1
 			
 			if deleted:
