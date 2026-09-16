@@ -22,10 +22,10 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 		_: return "Undefined"
 
 ## Scroll speed of the arrows in gameplay
-@export_range(0.0, 5.0, 0.1) var scroll_speed = 1.0
+@export_range(0.0, 5.0, 0.1) var scroll_speed: float = 1.0
 
 ## Audio latency.
-@export var offset = 0.0
+@export var offset: float = 0.0
 @export var notes: Array = []
 @export var events: Array = []
 @export var tempos: Dictionary = {}

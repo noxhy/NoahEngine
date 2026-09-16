@@ -4,7 +4,7 @@ class_name NoahSettings
 ## Applies a visual offset to the notes
 var offset: float = 0.0
 ## Allows tapping when no notes are active
-var ghost_tapping: bool = false
+var ghost_tapping: bool = true
 ## Notes go down instead of up
 var downscroll: bool = false
 ## By default it only works for one strumline, more support for botplay on strumlines will be need to be per song script.
@@ -19,7 +19,7 @@ var combo_ui: bool = false
 var glow_notes: bool = false
 
 ## Whether notesplashes should spawn when hitting a [code]Sick[/code]
-var note_splashes: bool = false
+var note_splashes: bool = true
 ## The UI will bop when called, this affects menus as well
 var ui_bops: bool = true
 

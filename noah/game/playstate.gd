@@ -5,11 +5,6 @@ class_name PlayState
 const COMPENSATION: float = 1.0 / 30.0
 const DELTA_LENIENCY: float = 0.01
 
-@onready var song_data: Song
-@onready var vocals: AudioStreamPlayer
-@onready var instrumental: AudioStreamPlayer
-@onready var strums: Array = []
-
 @export_group("Nodes")
 ## The host song script. Usually the parent of this node.
 @export var host: Node
@@ -38,19 +33,34 @@ var song_starting:bool = false
 var song_started: bool = false
 var song_start_offset: float = -4.0
 var song_start_time: float = 0.0
-# So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
-var vocal_tracks: Array = []
-var vocal_streams: Array = []
+
+## Helper var to get [member GameManager.current_song]
+var song_data: Song : 
+	get():
+		return GameManager.current_song
+		
+## The player used for the vocals. The used stream is a [AudioStreamPolyphonic]
+var vocals: AudioStreamPlayer
+## The player for the inst.
+var instrumental: AudioStreamPlayer
+
+## The ids of the streams within [member vocals]. [AudioStreamPolyphonic] track ID's are not sequential so this is used to keep track of them.
+var vocal_tracks: Array[int] = []
+## The streams of all vocal files in the song.
+var vocal_streams: Array[AudioStream] = []
 
 var position_delta: float = 0.0
 var position_lerp: float = 0.0
 var sync_timer: float = 0.0
 var song_speed: float = 1.0
+
 var scroll_speed: float = 1.0 : set = set_scroll_speed
-# The index of the latest loaded note
+
+## The index of the latest loaded note
 var current_note: int = -1
-# The index of the latest loaded event
+## The index of the latest loaded event
 var current_event: int = -1
+
 var output_latency: float = AudioServer.get_output_latency()
 
 var chart: Chart
@@ -58,11 +68,15 @@ var chart: Chart
 ## Flag enabled whenever the player has "died"
 var died: bool = false
 
-## The UI node that requires a list: [code]strums[/code].
+## The UI node.
 @onready var ui: BasicUI
+
 ## Camera with built-in functions.
 @onready var camera: CameraController
 
+@onready var strums: Array = []
+
+## The players current health. Ranges from [member health_min] to [member health_max]
 var health: float = health_max * 0.5 : set = set_health
 
 func set_health(v: float):
@@ -87,7 +101,6 @@ var misses: int :
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	song_data = GameManager.current_song
 	
 	ui = get_tree().get_first_node_in_group(&"ui")
 	camera = get_tree().get_first_node_in_group(&"cameras")
@@ -148,7 +161,6 @@ func _ready() -> void:
 				play_song(ChartEditor.song_position)
 			else:
 				play_song(0)
-		
 		_:
 			play_song(0)
 	
@@ -290,7 +302,7 @@ func play_song(time: float):
 # This if for actually playing the audio tracks, the reason this is a function is because
 # I also call it in the process function for when the song starts before 4 beats are possible.
 func play_audios(time: float):
-	var playback = vocals.get_stream_playback()
+	var playback: AudioStreamPlaybackPolyphonic = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
 		vocal_tracks.append(playback.play_stream(stream, time, \
@@ -301,7 +313,7 @@ func play_audios(time: float):
 		Signals.play_song_start.emit()
 	song_started = true
 
-# Binary Search of notes and events, gives the index of the note nearest to the given time
+## Binary Search of notes and events, gives the index of the note nearest to the given time
 func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var length = value_set.size()
 	if (length == 0):
@@ -322,14 +334,12 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	
 	return high + 1
 
-
 func score_note(hit_time: float):
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
 	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
 	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	song_stats.score += add
 	Signals.play_stats_changed.emit(song_stats)
-
 
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
@@ -434,7 +444,7 @@ func finished_song():
 		GameManager.PLAY_MODE.CHARTING:
 			scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
-	if scene_to_enter.is_empty() or not ResourceLoader.exists(scene_to_enter):
+	if not ResourceLoader.exists(scene_to_enter):
 		printerr("(PlayState): next_scene at %s was not found. falling back to ChartEditor." % scene_to_enter)
 		scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
@@ -519,7 +529,7 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 			song_stats.score -= Constants.SPAM_SCORE_PENALTY
 			
 			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (song_stats.combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
-			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
+				Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			reset_combo()
 			
 			song_stats.misses += 1

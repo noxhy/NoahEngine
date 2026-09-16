@@ -142,7 +142,7 @@ func get_stream_from_buffer(buffer: PackedByteArray, ext: String) -> AudioStream
 				return AudioStreamMP3.load_from_buffer(buffer)
 		return null
 
-## Creates a new [AudioStreamPlayer] that will always exist in memory.
+## Creates a new [AudioStreamPlayer] that will exist within [SoundManager]
 func create_player(id: StringName, sound: Variant) -> AudioStreamPlayer:
 	var player: AudioStreamPlayer = AudioStreamPlayer.new()
 	player.bus = &'SFX'
@@ -153,4 +153,4 @@ func create_player(id: StringName, sound: Variant) -> AudioStreamPlayer:
 
 ## Returns an [AudioStreamPlayer] from the user-generated players dictionary.
 func get_player(id: StringName) -> AudioStreamPlayer:
-	return players.get(id, null)
+	return players.get(id)
