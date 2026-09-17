@@ -45,7 +45,7 @@ var vocals: AudioStreamPlayer
 var instrumental: AudioStreamPlayer
 
 ## The ids of the streams within [member vocals]. [AudioStreamPolyphonic] track ID's are not sequential so this is used to keep track of them.
-var vocal_tracks: Array[int] = []
+var vocal_track_ids: Array[int] = []
 ## The streams of all vocal files in the song.
 var vocal_streams: Array[AudioStream] = []
 
@@ -146,8 +146,15 @@ func _ready() -> void:
 	
 	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
 	
-	if not song_data.events.is_empty() and ResourceLoader.exists(song_data.events):
-		var ext_events = load(song_data.events)
+	if ResourceLoader.exists(song_data.difficulties[GameManager.difficulty].events):
+		var ext_events: Resource = load(song_data.difficulties[GameManager.difficulty].events)
+		if ext_events is ChartEvents:
+			chart.merge_events_into_this(ext_events)
+		else:
+			ext_events.free()
+	
+	if ResourceLoader.exists(song_data.events):
+		var ext_events: Resource = load(song_data.events)
 		if ext_events is ChartEvents:
 			chart.merge_events_into_this(ext_events)
 		else:
@@ -305,7 +312,7 @@ func play_audios(time: float):
 	var playback: AudioStreamPlaybackPolyphonic = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
-		vocal_tracks.append(playback.play_stream(stream, time, \
+		vocal_track_ids.append(playback.play_stream(stream, time, \
 		0.0, song_speed))
 	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
@@ -453,10 +460,10 @@ func finished_song():
 # Strum Util
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() == 1:
-		playback.set_stream_volume(vocal_tracks[0], linear_to_db(1.0))
-	elif vocal_tracks.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
+	if vocal_track_ids.size() == 1:
+		playback.set_stream_volume(vocal_track_ids[0], linear_to_db(1.0))
+	elif vocal_track_ids.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
 		if SettingsManager.data.hit_sounds:
@@ -498,8 +505,8 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 
 func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_tracks[strum_manager.id],  linear_to_db(1.0))
+	if vocal_track_ids.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
 		health += hold_difference * Constants.HOLD_HEALTH_GAIN_PER_SECOND
@@ -511,9 +518,9 @@ func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: 
 
 func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id:
+	if vocal_track_ids.size() > strum_manager.id:
 		if (note and !note.mine) or !note:
-			playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(0.0))
+			playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(0.0))
 	
 	if !strum_manager.enemy_slot:
 		# Ghost tapping
