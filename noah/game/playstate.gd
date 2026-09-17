@@ -273,7 +273,7 @@ func _process(delta) -> void:
 
 
 func play_song(time: float):
-	await Signals.play_song_ready_to_start
+	await Signals.play_song_ready_to_start ## TODO: dont do it like this maybe ?
 	
 	song_starting = true
 	
@@ -302,7 +302,7 @@ func play_song(time: float):
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)
 	
-	var notes_list = chart.get_notes_data()
+	var notes_list: Array = chart.get_notes_data()
 	current_note = bsearch_left_range(notes_list, time)
 	current_event = 0
 
@@ -341,6 +341,7 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	
 	return high + 1
 
+## Handles adding score based off the time the player hit a note
 func score_note(hit_time: float):
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
 	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
@@ -348,6 +349,7 @@ func score_note(hit_time: float):
 	song_stats.score += add
 	Signals.play_stats_changed.emit(song_stats)
 
+## Triggers built in event behavior and dispatches [member Signals.play_new_event]
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
 		"camera_position":

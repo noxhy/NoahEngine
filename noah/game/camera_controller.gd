@@ -1,7 +1,8 @@
 @icon("uid://kdr1a765du27")
 extends Node
 class_name CameraController
-
+## Handles setting camera properties with additional helper functions.
+## [br][br] Provides [Camera3D] some [Camera2D] behavior/features
 
 ## A camera2D node that this will control.
 @export var parent_2d: Camera2D

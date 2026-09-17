@@ -1,5 +1,6 @@
 extends Resource
 class_name NoahSettings
+## The raw structure for the user settings. The actual instance used by the game is accessed by [member SettingsManager.data]
 
 ## Applies a visual offset to the notes
 var offset: float = 0.0

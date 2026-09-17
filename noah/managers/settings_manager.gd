@@ -32,7 +32,7 @@ func _ready() -> void:
 	load_values()
 	load_keybinds()
 
-## Saves to disk
+## Saves [member data] to disk.
 func flush() -> void:
 	var conf: ConfigFile = ConfigFile.new()
 	
@@ -46,6 +46,7 @@ func flush() -> void:
 	conf.save(LOAD_PATH)
 	print('(SettingsManager): Saved preferences')
 
+## Loads player settings and applies it to [member data]
 func load_values() -> void:
 	
 	if not FileAccess.file_exists(LOAD_PATH):
@@ -70,28 +71,29 @@ func load_values() -> void:
 	DisplayServer.window_set_mode(mode)
 	
 	print("(SettingsManager): Preferences loaded")
-
+	
+## Returns an array of key binds from a key
 func get_keybind(keybind_name: String) -> Array:
 	return data.key_binds.get(keybind_name, [])
 
+## Returns an array of controller binds from a key
 func get_controller_bind(bind_name: String) -> Array:
 	return data.joy_binds.get(bind_name, [])
 
-func set_keybind(keybind_name: String, keycode: int, index: int):
+func set_keybind(keybind_name: String, keycode: int, index: int) -> void:
 	var new_keycodes = data.key_binds.get(keybind_name)
 	new_keycodes[index] = keycode
 	
 	data.key_binds.set(keybind_name, new_keycodes)
 
-
-func set_controller_bind(bind_name: String, button_index: int, index: int):
+func set_controller_bind(bind_name: String, button_index: int, index: int) -> void:
 	var new_keycodes = data.joy_binds.get(bind_name)
 	new_keycodes[index] = button_index
 	
 	data.joy_binds.set(bind_name, new_keycodes)
 
-
-func load_keybinds():
+## Updates [InputMap] to use the player defined keybinds
+func load_keybinds() -> void:
 	for key in data.key_binds.keys():
 		InputMap.action_erase_events(key)
 		

@@ -63,7 +63,8 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = Constants.DEFAULT_TRANSITION, show_loading_screen: bool = false) -> void:
+## Changes the main scene to another with a transition
+func change_scene_to(path: String, transition: StringName = Constants.DEFAULT_TRANSITION, show_loading_screen: bool = false) -> void:
 	
 	if not ResourceLoader.exists(path):
 		printerr("Cannot switch to '%s' as it does not exist" % path)
@@ -86,6 +87,7 @@ func change_scene_to(path: String, transition: Variant = Constants.DEFAULT_TRANS
 			TransitionManager.resume()
 #endregion
 
+## Tweens a [Object] property to and back to a value
 func bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
 	var tween = create_tween()
 	tween.set_trans(trans)
@@ -306,9 +308,12 @@ func string_to_ease(tween: String) -> Array:
 			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion
 
+## Alternative to [member Input.get_axis] that supports [code]just_pressed[/code] actions
 func get_input_axis_just_pressed(negative_action: String, positive_action: String) -> int:
 	return int(Input.is_action_just_pressed(negative_action)) - int(Input.is_action_just_pressed(positive_action))
 
+## Provides a time from [String]. If the time ends with [code]b[/code] or [code]s[/code], it will be converterd to [code]Beats[/code] or [code]Steps[/code]
+## [br][br] So [code]"4s"[/code] is equivalent to [code]4 Conductor steps[/code] in seconds
 func string_to_time(formatted_time: String) -> float:
 	if formatted_time.ends_with("b"):
 		return float(formatted_time.trim_suffix("b")) * GameManager.conductor.seconds_per_beat
@@ -319,6 +324,7 @@ func string_to_time(formatted_time: String) -> float:
 	
 	return float(formatted_time)
 
+## Updates the window size based on display dpi/scale
 func _correct_window_size() -> void:
 	if OS.get_name().to_lower().contains('windows'): 
 		var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0

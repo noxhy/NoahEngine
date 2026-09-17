@@ -3,8 +3,10 @@
 extends Resource
 class_name Chart
 
+## The current latest version of the chart format.
 const CURRENT_VERSION: int = 2
 
+## The Json formats supported by the engine. Used for conversion
 enum ChartFormat {
 	VSLICE = 0,
 	PSYCH = 1,
@@ -12,7 +14,7 @@ enum ChartFormat {
 	CODENAME = 3,
 	UNDEFINED = -1
 }
-
+## Provides a [enum ChartFormat] represented as a [String]
 static func chart_format_to_str(type:ChartFormat) -> String:
 	match type:
 		ChartFormat.CODENAME: return "Codename"
@@ -21,15 +23,20 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 		ChartFormat.PSYCH_V1: return 'Psych V1'
 		_: return "Undefined"
 
-## Scroll speed of the arrows in gameplay
+## Multiplicative speed applied to the notes during gameplay
 @export_range(0.0, 5.0, 0.1) var scroll_speed: float = 1.0
 
 ## Audio latency.
 @export var offset: float = 0.0
+## All the notes within the chart Stored as [code][TIME, LANE, SUSTAIN_LENGTH, TYPE][/code]
 @export var notes: Array = []
+## All the events within the chart. Stored as [code][TIME, EVENT_NAME, [EVENT_PARAMETERS]][/code]
 @export var events: Array = []
+## All the tempos/bpms within the chart. Stored as [code]TIME => TEMPO[/code]
 @export var tempos: Dictionary = {}
+## All of the time signature changes within the chart. Stored as [code]TIME => [NUMERATOR, DENOMINATOR][/code]
 @export var time_signatures: Dictionary = {}
+## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
 
 #this isnt a "great" way to handle versions but i cant justify doing anything more elaborate
@@ -39,21 +46,27 @@ var version: int:
 	set(v):
 		chart_data.set('version', v)
 
+## @deprecated: Use [member notes] instead
 func get_notes_data() -> Array:
 	return chart_data.get("notes", notes)
-
+	
+## @deprecated: Use [member events] instead
 func get_events_data() -> Array:
 	return chart_data.get("events", events)
-
+	
+## @deprecated: Use [member tempos] instead
 func get_tempos_data() -> Dictionary:
 	return chart_data.get("tempos", tempos)
-
+	
+## @deprecated: Use [member time_signatures] instead
 func get_meters_data() -> Dictionary:
 	return chart_data.get("meters", time_signatures)
-
+	
+## @deprecated: Use [member time_signatures] instead
 func get_time_signature_data() -> Dictionary:
 	return chart_data.get("time_signatures", time_signatures)
 
+## Loads a external [ChartEvents] and merges them into this charts events.
 func merge_events_into_this(_events: ChartEvents):
 	var chart_events: Array = get_events_data()
 	
@@ -100,7 +113,7 @@ func get_time_signature_at(time: float) -> Array:
 	
 	return output
 
-# @deprecated: Refactored to [method get_time_signature_at].
+## @deprecated: Refactored to [method get_time_signature_at].
 func get_meter_at(time: float) -> Array:
 	return get_time_signature_at(time)
 
@@ -114,13 +127,14 @@ func get_tempo_time_at(time: float) -> float:
 	
 	return output
 
-static func load_from_song(_song: Song, _difficulty: String = '-1'):
+## Helper function to get a chart from [Song]
+static func load_from_song(_song: Song, _difficulty: String = '-1') -> Chart:
 	if _difficulty == '-1':
 		_difficulty = GameManager.difficulty
 		
 	return Chart.load(_song.difficulties[_difficulty].chart)
 
-## attempts to load a chart from a given path.
+## Attempts to load a chart from a given path.
 ## This will automatically convert [code]CNE[/code], [code]V-Slice[/code], and [code]Psych[/code] charts to the engines format.
 ## [br][br]If a chart could not be loaded, a empty chart is provided.
 static func load(path: String) -> Chart:
@@ -206,6 +220,7 @@ static func load(path: String) -> Chart:
 	
 	return Chart.new()
 
+## Tries to find a chart format from a dictionary/json
 static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 	if raw_json.has('format'):
 		var format:String = raw_json.get('format')

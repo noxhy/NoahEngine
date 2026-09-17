@@ -9,17 +9,22 @@ var NOTE_PRELOAD = preload("uid://krhxbwnjnr7r")
 var MODCHART_NOTE_PRELOAD = preload("uid://bfovtttcq6f32")
 var SPLASH_PRELOAD = preload("uid://c23s1pbajtga2")
 
-## Name of the input in the [code]InputMap[/code]
+## Name of the input in the [InputMap]
 @export var input: String = ""
 ## Strum direction name
 @export var strum_name: StringName = ""
 
+## Whether the strums are playable by the user
 var can_press: bool  = true
+## If true, the strums will play themselves
 var auto_play: bool  = false
+## Spawns a note splash when a note is hit within the [member NoahStats.SICK_RATING_WINDOW]
 var can_splash: bool  = false
+## TODO: kill this probably
 var enemy_slot: bool = false
 ## Note types that will be skipped over in note prioritization.
 @export var ignored_note_types: Array = []
+## TODO: finish modchart mode
 @export_enum("NORMAL", "MODCHART") var node_type: int
 
 enum STATE {
@@ -34,6 +39,7 @@ var scroll_speed: float = 1.0: set = set_scroll_speed
 ## A additional multiplier to the notes visual movement speed. Used to invert scroll for downscroll.
 var scroll: float = 1.0: set = set_scroll
 var song_speed: float = 1.0
+## A offset that gets applied to the notes time
 var offset: float = 0.0
 ## The loaded notes for this strum to hit/miss
 var note_list: Array[BasicNote] = []
@@ -61,9 +67,8 @@ func _process(delta) -> void:
 	target_note = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
 	
 	if target_note:
-		if !enemy_slot:
-			if SettingsManager.data.glow_notes and !ignored_note_types.has(target_note.note_type):
-				target_note.modulate = Color(1.5, 1.5, 1.5)
+		if not enemy_slot and SettingsManager.data.glow_notes and not ignored_note_types.has(target_note.note_type):
+			target_note.modulate = Color(1.5, 1.5, 1.5)
 		
 		var relative_time: float = target_note.time_difference - offset + (target_note.start_length * GameManager.conductor.seconds_per_beat)
 		var hit_window: float = NoahStats.SHIT_RATING_WINDOW
