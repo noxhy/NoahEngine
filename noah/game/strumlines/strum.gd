@@ -20,16 +20,18 @@ var can_press: bool  = true
 var auto_play: bool  = false
 ## Spawns a note splash when a note is hit within the [member NoahStats.SICK_RATING_WINDOW]
 var can_splash: bool  = false
-## TODO: kill this probably
-var enemy_slot: bool = false
 ## Note types that will be skipped over in note prioritization.
 @export var ignored_note_types: Array = []
 ## TODO: finish modchart mode
 @export_enum("NORMAL", "MODCHART") var node_type: int
 
+## The animation states of this strum
 enum STATE {
+	## Default status
 	IDLE,
+	## The strum is pressed when there is no notes
 	PRESSED,
+	## The strum is pressed and hit a note
 	GLOW,
 }
 
@@ -67,7 +69,7 @@ func _process(delta) -> void:
 	target_note = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
 	
 	if target_note:
-		if not enemy_slot and SettingsManager.data.glow_notes and not ignored_note_types.has(target_note.note_type):
+		if can_press and SettingsManager.data.glow_notes and not ignored_note_types.has(target_note.note_type):
 			target_note.modulate = Color(1.5, 1.5, 1.5)
 		
 		var relative_time: float = target_note.time_difference - offset + (target_note.start_length * GameManager.conductor.seconds_per_beat)

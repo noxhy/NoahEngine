@@ -42,7 +42,7 @@ func _ready() -> void:
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed(&"chart_editor"):
-		Global.change_scene_to(Constants.CHART_EDITOR_SCENE, null)
+		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 
 
 func display_mods() -> void:

@@ -19,15 +19,14 @@ var note_skin: NoteSkin: set = set_skin
 @export var can_splash: bool: set = set_can_splash
 ## If [code]true[/code], the strumlines will count as a enemy strumline. Enemy strumlines do not
 ## affect player stats.
-@export var enemy_slot: bool: set = set_enemy_slot
+@export var enemy_slot: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	can_press = can_press
 	auto_play = auto_play
 	can_splash = can_splash
-	enemy_slot = enemy_slot
-	
+
 	var i: int = 0
 	for strum in strums:
 		strum.lane = i
@@ -65,11 +64,6 @@ func set_can_splash(toggle: bool) -> void:
 	for strum in strums:
 		strum.can_splash = toggle
 
-func set_enemy_slot(toggle: bool) -> void:
-	enemy_slot = toggle
-	for strum in strums:
-		strum.enemy_slot = toggle
-
 func set_ignored_note_types(_note_types: Array) -> void:
 	for strum in strums:
 		strum.ignored_note_types = _note_types
@@ -90,6 +84,7 @@ func get_scroll_speed(lane: int) -> float:
 func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> BasicNote:
 	return get_strum(lane).create_note(time, length, note_type, tempo)
 
+## Spawns a notes splash onto a strum
 func create_splash(lane: int, animation_name: StringName) -> void:
 	var anim_to_play: StringName = animation_name + &"_splash"
 	if animation_name.is_empty():
