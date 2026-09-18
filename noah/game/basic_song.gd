@@ -5,7 +5,6 @@ var camera_positions: Array = []
 
 @onready var playstate: PlayState = $"PlayState"
 
-@onready var stage: Node = %Stage
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
 
