@@ -69,4 +69,4 @@ func get_event_str() -> String:
 func get_time_str(time: float) -> String:
 	var beat_time = Conductor.get_accumulated_beat_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
 	var step_time = Conductor.get_accumulated_step_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
-	return 'Time: ' + "(%s, b: %s, s: %s)" % [str(snappedf(time, 0.01)), str(beat_time), str(step_time)]
+	return 'Time: ' + "(%s, b: %s, s: %s)" % [Global.format_time(time), str(beat_time), str(step_time)]
