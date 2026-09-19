@@ -168,7 +168,7 @@ static func get_hit_rating(hit_time: float) -> HIT_RATING:
 
 func _to_string() -> String:
 	var buffer: PackedStringArray = PackedStringArray()
-	buffer.append('	Score: ' + str(int(score)))
+	buffer.append('	Score: ' + Global.format_number(floori(score)))
 	buffer.append('\n	Misses: ' + str(misses))
 	buffer.append('\n	Max Combo: ' + str(max_combo))
 	buffer.append('\n	Combo: ' + str(combo))
