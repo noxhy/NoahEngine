@@ -193,18 +193,18 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 			if playstate.song_stats.sicks == playstate.song_stats.total_notes:
 				hit_rating = str("fc_", hit_rating)
 		
-		var rating_instance = rating_node.instantiate()
+		var rating_instance: GPUParticles2D = rating_node.instantiate()
 		
 		rating_instance.ui_skin = playstate.ui_skin
 		rating_instance.animation = hit_rating
 		rating_instance.z_index = 1000
 		
 		var add_numbers: Callable = func(parent: Node) -> void:
-			if _combo >= 10:
+			if _combo > 0:
 				var combo_string: String = str(_combo)
 				var digits: int = combo_string.length()
 				for digit in digits:
-					var combo_number_instance = combo_numbers_node.instantiate()
+					var combo_number_instance: GPUParticles2D = combo_numbers_node.instantiate()
 					
 					combo_number_instance.position.x = playstate.ui_skin.numbers_spacing * (
 						(digits - 1) / -2.0 + digit) * playstate.ui_skin.numbers_scale
