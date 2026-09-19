@@ -29,11 +29,12 @@ func _ready() -> void:
 	auto_play = auto_play
 	can_splash = can_splash
 	note_skin = note_skin
-
-	var i: int = 0
-	for strum in strums:
-		strum.lane = i
-		i += 1
+	
+	if not Engine.is_editor_hint():
+		var i: int = 0
+		for strum in strums:
+			strum.lane = i
+			i += 1
 
 func _refresh_skin():
 	note_skin = note_skin
@@ -80,7 +81,7 @@ func set_skin(v: NoteSkin) -> void:
 		
 
 func set_press(v: bool) -> void:
-	if not is_node_ready():
+	if not is_node_ready() or Engine.is_editor_hint():
 		can_press = v
 		return
 	
@@ -89,7 +90,7 @@ func set_press(v: bool) -> void:
 		strum.can_press = v
 
 func set_auto_play(v: bool) -> void:
-	if not is_node_ready():
+	if not is_node_ready() or Engine.is_editor_hint():
 		auto_play = v
 		return
 	
@@ -98,7 +99,7 @@ func set_auto_play(v: bool) -> void:
 		strum.auto_play = v
 
 func set_can_splash(v: bool) -> void:
-	if not is_node_ready():
+	if not is_node_ready() or Engine.is_editor_hint():
 		can_splash = v
 		return
 	
