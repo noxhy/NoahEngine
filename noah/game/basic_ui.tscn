@@ -1,28 +1,12 @@
 [gd_scene format=3 uid="uid://cigsmwajnw2jq"]
 
 [ext_resource type="Script" uid="uid://b8vidbqkywlax" path="res://noah/game/basic_ui.gd" id="1_pm5h1"]
-[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="2_58g8k"]
 [ext_resource type="PackedScene" uid="uid://cgawo31pletyg" path="res://noah/game/health_bar.tscn" id="3_uat68"]
 
 [node name="UI" type="CanvasLayer" unique_id=359206 groups=["ui"]]
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 script = ExtResource("1_pm5h1")
-
-[node name="Player Strum" parent="." unique_id=1539647269 instance=ExtResource("2_58g8k")]
-position = Vector2(288, -256)
-rotation = -0.00021224
-scale = Vector2(0.85, 0.85)
-can_press = true
-can_splash = true
-
-[node name="Enemy Strum" parent="." unique_id=2070035072 instance=ExtResource("2_58g8k")]
-position = Vector2(-352, -256)
-rotation = -0.00021224
-scale = Vector2(0.85, 0.85)
-id = 1
-auto_play = true
-enemy_slot = true
 
 [node name="Health Bar" parent="." unique_id=830584313 instance=ExtResource("3_uat68")]
 offset_left = -0.47998047

@@ -1,11 +1,13 @@
 @icon("uid://yl4giaklgpx0")
+@tool
 extends Node2D
 class_name StrumManager
 
+@export_tool_button("Refresh Skin", "ArrowUp") var _force_skin_update = _refresh_skin
 ## skin
-var note_skin: NoteSkin: set = set_skin
+@export var note_skin: NoteSkin: set = set_skin
 ## List of Nodes of the strumlines.
-@export var strums: Array[Strum]
+@export var strums: Array[Strum] : set = set_strums
 ## Vocal track ID.
 @export var id: int = 0
 
@@ -26,47 +28,100 @@ func _ready() -> void:
 	can_press = can_press
 	auto_play = auto_play
 	can_splash = can_splash
+	note_skin = note_skin
 
 	var i: int = 0
 	for strum in strums:
 		strum.lane = i
 		i += 1
 
-func set_skin(new_skin: NoteSkin) -> void:
-	note_skin = new_skin
-	for strum in strums:
-		strum.set_skin(new_skin)
+func _refresh_skin():
+	note_skin = note_skin
 
-func set_scroll_speed(new_scroll_speed: float) -> void:
-	for strum in strums:
-		strum.scroll_speed = new_scroll_speed
+#region Setters
+func set_strums(v: Array[Strum]) -> void:
+	strums = v
+	if Engine.is_editor_hint():
+		note_skin = note_skin
 
-func set_scroll(new_scroll: float) -> void:
+func set_skin_editor(v: NoteSkin) -> void:
+	if not v:
+		v = load("uid://buly8rgmgrrnm")
+	
 	for strum in strums:
-		strum.scroll = new_scroll
+		var spr = strum.get_node("OffsetSprite") #this isnt ideal but i do not want to make strums themselves tool . . . 
+		if not spr:
+			return
+		
+		var anim = strum.strum_name + '_strum'
+		if not v.strums_texture.has_animation(anim):
+			anim = 'left_strum'
+		
+		spr.sprite_frames = v.strums_texture
+		spr.animation = anim
+		spr.scale = Vector2.ONE * v.notes_scale
+		spr.offsets = v.offsets
+		
+		if v.pixel_texture:
+			spr.texture_filter = TEXTURE_FILTER_NEAREST
+		
 
-func set_press(toggle: bool) -> void:
-	can_press = toggle
-	for strum in strums:
-		strum.can_press = toggle
+func set_skin(v: NoteSkin) -> void:
+	if not is_node_ready():
+		note_skin = v
+		return
+	
+	note_skin = v
+	if Engine.is_editor_hint():
+		set_skin_editor(v)
+	else:
+		for strum in strums:
+			strum.set_skin(v)
+		
 
-func set_auto_play(toggle: bool) -> void:
-	auto_play = toggle
+func set_press(v: bool) -> void:
+	if not is_node_ready():
+		can_press = v
+		return
+	
+	can_press = v
 	for strum in strums:
-		strum.auto_play = toggle
+		strum.can_press = v
 
-func set_offset(offset: float) -> void:
+func set_auto_play(v: bool) -> void:
+	if not is_node_ready():
+		auto_play = v
+		return
+	
+	auto_play = v
 	for strum in strums:
-		strum.offset = offset
+		strum.auto_play = v
 
-func set_can_splash(toggle: bool) -> void:
-	can_splash = toggle
+func set_can_splash(v: bool) -> void:
+	if not is_node_ready():
+		can_splash = v
+		return
+	
+	can_splash = v
 	for strum in strums:
-		strum.can_splash = toggle
+		strum.can_splash = v
+#region
 
-func set_ignored_note_types(_note_types: Array) -> void:
+func set_offset(v: float) -> void:
 	for strum in strums:
-		strum.ignored_note_types = _note_types
+		strum.offset = v
+
+func set_ignored_note_types(v: Array) -> void:
+	for strum in strums:
+		strum.ignored_note_types = v
+
+func set_scroll_speed(v: float) -> void:
+	for strum in strums:
+		strum.scroll_speed = v
+
+func set_scroll(v: float) -> void:
+	for strum in strums:
+		strum.scroll = v
 
 ## @deprecated: Use [member get_strum] instead.
 func get_strumline(lane: int) -> Strum:

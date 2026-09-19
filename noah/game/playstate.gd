@@ -10,7 +10,6 @@ const DELTA_LENIENCY: float = 0.01
 @export var host: Node
 
 @export_group("Resources")
-@export var note_skin: NoteSkin
 @export var ui_skin: UISkin
 
 @export_group("Scenes")
@@ -180,7 +179,6 @@ func _ready() -> void:
 	
 	scroll_speed = chart.scroll_speed * SettingsManager.data.scroll_speed_scale
 	
-	get_tree().call_group(&"strums", "set_skin", note_skin)
 	get_tree().call_group(&"strums", "set_offset", SettingsManager.data.offset)
 	
 	if SettingsManager.data.downscroll:

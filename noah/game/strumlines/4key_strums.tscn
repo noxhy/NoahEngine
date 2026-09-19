@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://ce3dgr61438sa"]
 
 [ext_resource type="Script" uid="uid://b48nsssraxwsb" path="res://noah/game/strumlines/strum_manager.gd" id="1_4d8j4"]
+[ext_resource type="Resource" uid="uid://cj2hoqrld81vv" path="res://Funkin-Modpack/funkin/assets/game/default/default_note_skin.tres" id="2_b8jsb"]
 [ext_resource type="PackedScene" uid="uid://bbyq5kxppcvc8" path="res://noah/game/strumlines/strum.tscn" id="3_aabop"]
 
 [node name="4KeyStrums" type="Node2D" unique_id=1619773465 node_paths=PackedStringArray("strums") groups=["strums"]]
 script = ExtResource("1_4d8j4")
+note_skin = ExtResource("2_b8jsb")
 strums = [NodePath("Left"), NodePath("Down"), NodePath("Up"), NodePath("Right")]
 
 [node name="Left" parent="." unique_id=102609042 instance=ExtResource("3_aabop")]
