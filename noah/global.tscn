@@ -28,4 +28,3 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_bm3mx")
 text = "PERFORMANCE"
 
 [node name="Volume Display" parent="." unique_id=703114555 instance=ExtResource("2_aun3h")]
-visible = false
