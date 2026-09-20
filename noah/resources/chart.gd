@@ -195,7 +195,7 @@ static func load(path: String) -> Chart:
 							return convert_vslice(json, meta_json)
 					
 					ChartFormat.CODENAME:
-						var meta_path: String = path.get_base_dir() + '/meta.json'
+						var meta_path: String = path.get_base_dir().path_join("meta.json")
 						
 						assert(FileAccess.file_exists(meta_path), 'failed to find cne chart meta.json')
 						
@@ -545,10 +545,12 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 		else:
 			event = [event_packet.time / 1000.0, event_packet.name, event_packet.params]
 		
-		event_data.append(event)
+		if !event.is_empty():
+			event_data.append(event)
 	
 	event_data.sort_custom(sort_notes)
 	
+	var lane_offset: int = 0
 	for strumline in data.get('strumLines'):
 		for i in strumline.notes:
 			# Format: time, lane, length in notes, note type
@@ -561,14 +563,15 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 			if i.sLen:
 				ms_to_notes = ((i.sLen / 1000.0) / seconds_per_beat)
 			
-			var lane = i.id
+			var lane: int = i.id + lane_offset
 			
-			if strumline.position == "dad":
-				lane += 4
+			var type: String = "" if i.type == 0 else data.get('noteTypes')[i.type - 1]
 			
 			# Creates the note
-			var note = [time, lane, ms_to_notes, i.type]
+			var note = [time, lane, ms_to_notes, type]
 			note_data.append(note)
+		
+		lane_offset += strumline.keyCount
 	
 	note_data.sort_custom(sort_notes)
 	

@@ -15,6 +15,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 3
 focus_behavior_recursive = 1
 theme = ExtResource("1_4c1on")
+theme_override_constants/h_separation = 0
 script = ExtResource("2_yyjwr")
 
 [node name="Move Lane Left" type="Button" parent="." unique_id=1554626627]

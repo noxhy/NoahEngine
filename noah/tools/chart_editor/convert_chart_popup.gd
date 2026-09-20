@@ -100,7 +100,7 @@ func new_file(files: Array[String]):
 					return input.substr(input.get_base_dir().length() + 1).begins_with('meta')
 				)
 				
-				assert(!meta_file.is_empty(), "failed to find cne meta")
+				
 				
 				var events = []
 				var events_file = FileAccess.open(file.get_base_dir() + '/events.json', FileAccess.READ)

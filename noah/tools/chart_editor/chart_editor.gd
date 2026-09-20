@@ -504,10 +504,9 @@ func on_files_dropped(files: PackedStringArray):
 func update_grid():
 	grid.columns = 2 + ChartManager.strum_count
 	grid.rows = conductor.numerator * conductor.denominator
-	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(2, 296)
+	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
 	%"Strum Labels".size.x = 0
-	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (
-		grid.grid_size.x * grid.zoom.x) + (4 * ChartManager.strum_data.size())
+	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (grid.grid_size.x * grid.zoom.x)
 	
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
