@@ -309,8 +309,8 @@ func string_to_ease(tween: String) -> Array:
 #endregion
 
 ## Alternative to [member Input.get_axis] that supports [code]just_pressed[/code] actions
-func get_input_axis_just_pressed(negative_action: String, positive_action: String) -> int:
-	return int(Input.is_action_just_pressed(negative_action)) - int(Input.is_action_just_pressed(positive_action))
+func get_input_axis_just_pressed(negative_action: StringName, positive_action: StringName) -> int:
+	return int(Input.is_action_just_pressed(positive_action)) - int(Input.is_action_just_pressed(negative_action))
 
 ## Provides a time from [String]. If the time ends with [code]b[/code] or [code]s[/code], it will be converterd to [code]Beats[/code] or [code]Steps[/code]
 ## [br][br] So [code]"4s"[/code] is equivalent to [code]4 Conductor steps[/code] in seconds
