@@ -8,7 +8,7 @@ content_margin_left = 4.0
 content_margin_top = 4.0
 content_margin_right = 4.0
 content_margin_bottom = 4.0
-bg_color = Color(0, 0, 0, 0.2509804)
+bg_color = Color(0, 0, 0, 0.11764706)
 
 [node name="Global" type="CanvasLayer" unique_id=1630799042]
 process_mode = 3

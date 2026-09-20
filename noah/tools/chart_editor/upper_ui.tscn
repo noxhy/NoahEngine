@@ -244,7 +244,3 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Song Name"
-
-[node name="Control" type="Control" parent="." unique_id=362869513]
-custom_minimum_size = Vector2(10, 0)
-layout_mode = 2

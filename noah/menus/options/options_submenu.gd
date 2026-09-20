@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 		self.queue_free()
 	
 	var selected_node = get_selected_node()
-	var axis: int = Global.get_input_axis_just_pressed(&"menu_down", &"menu_up")
+	var axis: int = Global.get_input_axis_just_pressed(&"menu_up", &"menu_down")
 	
 	if axis and can_interact:
 		if selected_node is KeyBindOptionNode:
@@ -53,7 +53,7 @@ func _process(delta: float) -> void:
 		elif selected_node is ButtonOptionNode:
 			selected_node.button.emit_signal(&"pressed")
 	
-	var h_axis: int = Global.get_input_axis_just_pressed(&"menu_right", &"menu_left")
+	var h_axis: int = Global.get_input_axis_just_pressed(&"menu_left", &"menu_right")
 	
 	if h_axis and can_interact:
 		if selected_node is NumberOptionNode:

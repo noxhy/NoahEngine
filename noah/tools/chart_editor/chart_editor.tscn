@@ -122,6 +122,7 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("18_dd0y6")]
 unique_name_in_owner = true
+offset_left = -472.0
 
 [node name="Strum Labels" type="HFlowContainer" parent="UI" unique_id=1205544976]
 unique_name_in_owner = true

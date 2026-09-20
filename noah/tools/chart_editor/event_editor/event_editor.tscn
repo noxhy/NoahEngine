@@ -219,6 +219,7 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("6_ud782")]
 unique_name_in_owner = true
+offset_left = -480.0
 
 [node name="Tool Tip" type="Label" parent="UI" unique_id=2030407488]
 top_level = true

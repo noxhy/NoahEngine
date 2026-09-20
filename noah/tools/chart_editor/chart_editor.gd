@@ -158,7 +158,7 @@ func _process(delta: float) -> void:
 		
 		refresh_audios()
 	
-	var axis: int = int(Input.is_action_just_pressed("mouse_scroll_down")) - int(Input.is_action_just_pressed("mouse_scroll_up"))
+	var axis: int = Global.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
 	if axis and can_interact_with_chart:
 		scrub(axis)
 	
@@ -1351,7 +1351,7 @@ func audio_button_item_pressed(id) -> void:
 			song_speed = SettingsManager.data.song_speed
 		
 		7: #Toggle Beat Sound
-			SettingsManager.data.chart_hit_sound_on_step = !SettingsManager.data.chart_hit_sound_on_beat
+			SettingsManager.data.chart_hit_sound_on_beat = !SettingsManager.data.chart_hit_sound_on_beat
 			SettingsManager.flush()
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
