@@ -6,6 +6,7 @@ const LOAD_PATH: String = 'user://settings.cfg'
 ## The actual save instance. Access save values through this
 var data: NoahSettings
 
+var _default_data: NoahSettings = NoahSettings.new()
 
 ## categories (this is our way of doing text enums
 const SEC_PREFERENCES: String = 'preferences'
@@ -53,8 +54,6 @@ func load_values() -> void:
 		print('(SettingsManager): Preferences not detected. Using defaults')
 		return
 	
-	var dummy = NoahSettings.new()
-	
 	var conf: ConfigFile = ConfigFile.new()
 	conf.load(LOAD_PATH)
 	
@@ -63,7 +62,7 @@ func load_values() -> void:
 	for v in save_vars:
 		if not v['usage'] == PropertyUsageFlags.PROPERTY_USAGE_SCRIPT_VARIABLE:
 			continue
-		var val = conf.get_value("", v['name'], dummy.get(v['name']))
+		var val = conf.get_value("", v['name'], _default_data.get(v['name']))
 		data.set(v["name"], val)
 	
 	# sets fullscreen
