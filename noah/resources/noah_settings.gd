@@ -46,6 +46,8 @@ var show_performance: bool = true
 var cap_fps: bool = true
 ## The caapped fps to target. Only works when [member cap_fps] is [code]true[/code]
 var fps_cap: int = int(DisplayServer.screen_get_refresh_rate())
+## The games framerate will be locked to monitor refresh rate. May increase input delay but prevents screen tearing.
+var vsync: bool = false
 
 ## Tells the chart editor to save chart after any change
 var chart_auto_save: bool = true

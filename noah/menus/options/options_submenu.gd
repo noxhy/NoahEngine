@@ -160,6 +160,7 @@ func load_category(category: String, options: Array):
 
 func _exit_tree() -> void:
 	SettingsManager.flush()
+	SettingsManager.load_values()
 
 func update(i: int, mouse: bool = false):
 	var options = get_tree().get_nodes_in_group(&"options")

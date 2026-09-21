@@ -78,7 +78,9 @@ var pages: Dictionary = {
 			"max": 2,
 			"snap": 0.05,
 			"unit": "x"
-			}]
+			}],
+			[&"option", {"id": "vsync", "description": "Enabling this will cap your framerate to your monitors refresh rate.\nThis fixes screen tearing at the cost of minor input delay."}],
+			
 		]
 	},
 	SettingsManager.SEC_PREFERENCES: {
