@@ -3,6 +3,7 @@
 extends Node2D
 class_name StrumManager
 
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Refresh Skin", "ArrowUp") var _force_skin_update = _refresh_skin
 ## skin
 @export var note_skin: NoteSkin: set = set_skin

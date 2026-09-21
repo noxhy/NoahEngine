@@ -223,8 +223,9 @@ func press_note() -> void:
 			note_list.erase(target_note)
 			target_note.queue_free()
 	else:
-		hold_cover_sprite.play(&"start_" + strum_name + &"_cover")
-		hold_cover_sprite.visible = true
+		if note_skin and note_skin.hold_covers_texture:
+			hold_cover_sprite.play(&"start_" + strum_name + &"_cover")
+			hold_cover_sprite.visible = true
 		
 		pressing = true
 		target_note.holding = true
@@ -244,7 +245,7 @@ func hold_note() -> void:
 
 	if target_note.length <= 0:
 		pressing = false
-		if can_splash:
+		if can_splash and note_skin and note_skin.hold_covers_texture:
 			hold_cover_sprite.play(&"end_" + strum_name + &"_cover")
 		else:
 			hold_cover_sprite.visible = false

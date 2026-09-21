@@ -64,7 +64,6 @@ enum AnimContext {
 ## How many steps an animation can play before being able to revert to idle.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6
 
-
 @export_group("UI")
 ## Icons that are displayed in the ui. Can include [code]default[/code], [code]winning[/code] or [code]losing[/code].
 @export_file("*.tres", "*.res") var icons: String
@@ -93,6 +92,8 @@ var holding: bool = false
 var sing_time: float = 0
 
 var _ghost_sprite = null
+
+var _warned_anims:Array[StringName] = []
 
 func _ready() -> void:
 	animation_player = verify_animation_player(animation_player)
@@ -128,11 +129,13 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	anim_id = correct_anim_id(StringName(animation_prefix + anim_id))
 	var animation_name: StringName = get_animation_name(anim_id)
 	
-	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id):
+	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id) and not _warned_anims.has(anim_id):
 		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
+		_warned_anims.append(anim_id)
 		return
-	elif animation_name.is_empty():
+	elif animation_name.is_empty() and not _warned_anims.has(anim_id):
 		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
+		_warned_anims.append(anim_id)
 		return
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and !holding:
