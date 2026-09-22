@@ -363,8 +363,11 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 						printerr("(PlayState): Marker does not exist at index: ", index)
 						return
 					
-					var easing = event_parameters.get(2)
-					if !easing or easing.is_empty():
+					var easing = 'classic'
+					if event_parameters.size() > 2:
+						easing = event_parameters.get(2)
+						
+					if easing.is_empty():
 						easing = "classic"
 					
 					if easing.to_lower() == "classic":
