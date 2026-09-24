@@ -1530,7 +1530,7 @@ func save() -> void:
 		
 		if (path.get_extension() == "json"):
 			ChartManager.chart.resource_path = str(
-				path.get_base_dir(), "/", ChartManager.song.title, "-", ChartManager.difficulty, ".res"
+				path.get_base_dir(), "/", ChartManager.song.title, "-", ChartManager.difficulty, Chart.DEFAULT_FILE_TYPE
 				)
 			
 			ChartManager.song.difficulties[ChartManager.difficulty]["chart"] = ChartManager.chart.resource_path

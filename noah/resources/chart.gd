@@ -23,6 +23,9 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 		ChartFormat.PSYCH_V1: return 'Psych V1'
 		_: return "Undefined"
 
+## The default file type used whenever saving a new chart. 
+static var DEFAULT_FILE_TYPE:String = '.tres'
+
 ## Multiplicative speed applied to the notes during gameplay
 @export_range(0.0, 5.0, 0.1) var scroll_speed: float = 1.0
 

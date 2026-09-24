@@ -149,7 +149,7 @@ func new_file(files: Array[String]):
 					
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = core_directory + song_file.title + '.res'
+	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
 	ResourceSaver.save(song_file, song_path)
 	
 	#Emits signal to return to the chart editor

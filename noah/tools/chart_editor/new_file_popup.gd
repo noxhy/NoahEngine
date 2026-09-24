@@ -46,14 +46,14 @@ func new_file(dir: String, notify_editor: bool = true):
 		chart.tempos = {0.0: song_file.tempo}
 		chart.time_signatures = {0.0: [4, 4]}
 		
-		var chart_path: String = str(dir.path_join(song_file.title), "-", difficulty, ".res")
+		var chart_path: String = str(dir.path_join(song_file.title), "-", difficulty, Chart.DEFAULT_FILE_TYPE)
 		ResourceSaver.save(chart, chart_path)
 		var difficulty_data: SongDifficultyData = SongDifficultyData.new()
 		difficulty_data.chart = chart_path
 		difficulty_dict[difficulty] = difficulty_data
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = dir + "/" + song_file.title + ".res"
+	var song_path: String = dir + "/" + song_file.title + Chart.DEFAULT_FILE_TYPE
 	ResourceSaver.save(song_file, song_path)
 	
 	# Emits signal to return to the chart editor
