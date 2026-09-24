@@ -5,11 +5,13 @@ var target_health: float = 50
 var target_score: int = 0
 var target_misses: int = 0
 
-
 func _ready() -> void:
 	Signals.play_health_changed.connect(health_changed)
 	Signals.play_stats_changed.connect(stats_changed)
 	update_performance_text()
+	
+	if SettingsManager.data.downscroll:
+		position.y *= -1
 
 func health_changed(v: float, delta: float):
 	target_health = v

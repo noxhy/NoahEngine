@@ -13,8 +13,9 @@ class_name BasicUI
 @onready var combo_marker: Node = $"Combo Marker"
 
 func _ready() -> void:
-	if SettingsManager.data.downscroll:
-		downscroll_ui()
+	if SettingsManager.data.downscroll: 
+		for strum_line in get_tree().get_nodes_in_group(&"strums"):
+			strum_line.position.y *= -1
 	
 	apply_underlay()
 
@@ -31,12 +32,6 @@ func update_player(player: Character):
 
 func update_enemy(enemy: Character):
 	pass
-
-func downscroll_ui():
-	for strum_line in get_tree().get_nodes_in_group(&"strums"):
-		strum_line.position.y *= -1
-	
-	$"Health Bar".position.y *= -1
 
 func apply_underlay():
 	var underlay: ColorRect = ColorRect.new()
