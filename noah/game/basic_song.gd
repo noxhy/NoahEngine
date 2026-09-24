@@ -14,6 +14,9 @@ var camera_positions: Array = []
 @onready var rating_node = load("uid://0l7bo1bqcbcj")
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
 
+var camera: CameraController 
+var ui: BasicUI
+
 ## How often the camera bops in steps.
 var bop_rate: int = 16
 var bop_rate_offset: int = 0
@@ -27,6 +30,9 @@ func _ready() -> void:
 	
 	if not playstate:
 		printerr("Playstate host not found")
+	
+	camera = get_tree().get_first_node_in_group(&"cameras")
+	ui = get_tree().get_first_node_in_group(&"ui")
 	
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	
@@ -79,27 +85,29 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if playstate:
 		if current_step % (bop_rate - bop_rate_offset) == 0:
-			if playstate.camera.parent_3d:
-				var bump: float = playstate.camera_bop_strength.x * playstate.camera.zoom
-				playstate.camera.bump(bump)
-			else:
-				playstate.camera.bump(playstate.camera_bop_strength)
+			var cam_bop_strength: Vector2 = playstate.camera_bop_strength
+			var ui_bop_strength: Vector2 = playstate.ui_bop_strength
 			
-			if SettingsManager.data.ui_bops and playstate.ui:
-				playstate.ui.bump(playstate.ui_bop_strength)
+			if camera:
+				if camera.parent_3d:
+					var bump: float = cam_bop_strength.x * camera.zoom
+					camera.bump(bump)
+				else:
+					playstate.camera.bump(cam_bop_strength)
+			
+			if ui and SettingsManager.data.ui_bops:
+				ui.bump(ui_bop_strength)
 
 
 func update_bop_rate(_i: int) -> void:
 	bop_rate = GameManager.conductor.numerator * GameManager.conductor.denominator
 
-
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
-	if playstate:
-		if not playstate.strums.is_empty():
-			if (lane > 3):
-				playstate.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
-			else:
-				playstate.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
+	if playstate and not playstate.strums.is_empty():
+		if (lane > 3):
+			playstate.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
+		else:
+			playstate.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
 func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):

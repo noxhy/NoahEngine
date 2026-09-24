@@ -258,11 +258,11 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 
 func bump(strength: Variant) -> void:
 	if parent_3d:
-		zoom *= (1 - strength)
+		zoom *= (1.0 - strength)
 	
 	if parent_2d:
 		if strength is float:
-			zoom *= (1 + strength)
+			zoom *= (1.0 + strength)
 		else:
 			zoom *= Vector2.ONE + strength
 
