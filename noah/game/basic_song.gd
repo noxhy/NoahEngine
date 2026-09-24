@@ -14,10 +14,11 @@ var camera_positions: Array = []
 @onready var rating_node = load("uid://0l7bo1bqcbcj")
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
 
-# How often the camera bops. Based off the step rate in the conductor.
+## How often the camera bops in steps.
 var bop_rate: int = 16
 var bop_rate_offset: int = 0
-var pause_preload: PackedScene
+## The scene to use when the Pause input is pressed.
+var pause_preload: PackedScene = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -36,7 +37,8 @@ func _ready() -> void:
 		if enemy:
 			playstate.ui.update_enemy(enemy)
 	
-	pause_preload = load(playstate.ui_skin.pause_scene)
+	if playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
+		pause_preload = load(playstate.ui_skin.pause_scene)
 	
 	await Signals.play_setup_finished
 	
@@ -73,7 +75,6 @@ func _process(delta: float) -> void:
 # Conductor Util
 func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
-
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
 	if playstate:
@@ -234,6 +235,9 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 
 
 func pause():
+	if not pause_preload:
+		printerr("Could not pause as pause_preload is null")
+		return
 	var pause_scene_instance = pause_preload.instantiate()
 	
 	Signals.play_paused.emit()
