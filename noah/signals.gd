@@ -6,10 +6,6 @@ extends Node
 ## Emit this at a later point if u have a intro cutscene
 signal play_song_ready_to_start()
 
-## Signal to be emitted whenever the playstate is ready. 
-## necessary (atm) for its host (BasicSong).
-signal play_setup_finished()
-
 ## Signal to emitted whenever a new step has been reached by the conductor.
 signal play_conductor_step_hit(step: int, measure: int)
 
