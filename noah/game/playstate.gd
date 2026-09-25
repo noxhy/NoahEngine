@@ -350,34 +350,7 @@ func score_note(hit_time: float):
 ## Triggers built in event behavior and dispatches [member Signals.play_new_event]
 func basic_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
-		"camera_position":
-			if host:
-				if host.camera_positions.size() == 0:
-					printerr('(PlayState): no camera_positions exist')
-					return
-				
-				if camera:
-					var index: int = int(event_parameters[0])
-					var marker = host.camera_positions[index]
-					if !marker:
-						printerr("(PlayState): Marker does not exist at index: ", index)
-						return
-					
-					var easing = 'classic'
-					if event_parameters.size() > 2:
-						easing = event_parameters.get(2)
-						
-					if easing.is_empty():
-						easing = "classic"
-					
-					if easing.to_lower() == "classic":
-						camera.go_to_marker(marker)
-					else:
-						camera.tween_to_marker(marker,
-						Global.string_to_time(event_parameters.get(1)) / song_speed,
-						event_parameters.get(2))
-		
-		"camera_bop":
+		&"camera_bop":
 			if camera:
 				var camera_bop: float = camera_bop_strength.x
 				if not event_parameters[0].is_empty():
@@ -392,10 +365,10 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				
 				ui.bump(Vector2.ONE * ui_bop)
 		
-		"psych_camera_zoom":
+		&"psych_camera_zoom":
 			basic_event(time, "camera_zoom", [event_parameters[0], ""])
 		
-		"camera_zoom":
+		&"camera_zoom":
 			if camera:
 				var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 				var zoom_time = Global.string_to_time(event_parameters[1])
@@ -410,15 +383,15 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				else:
 					camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease)
 		
-		"bop_rate", "bop_delay":
+		&"bop_rate", &"bop_delay":
 			if host:
 				host.bop_rate = int(event_parameters[0])
 		
-		"bop_strength":
+		&"bop_strength":
 			camera_bop_strength = Vector2.ONE * float(event_parameters[0])
 			ui_bop_strength = Vector2.ONE * float(event_parameters[1])
 		
-		"set_smoothing", 'lerping':
+		&"set_smoothing", &'lerping':
 			var smoothing: bool = event_parameters[0] == "true"
 			
 			if camera:
@@ -427,14 +400,14 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			if ui:
 				ui.zoom_smoothing = smoothing
 		
-		"scroll_speed":
+		&"scroll_speed":
 			var tween_time: float = Global.string_to_time(event_parameters[1])
 			
 			var new_speed = float(event_parameters[0]) * SettingsManager.data.scroll_speed_scale
 			
 			create_tween().tween_property(self, "scroll_speed", new_speed, tween_time / song_speed)
 		
-		"camera_shake":
+		&"camera_shake":
 			if camera:
 				camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]) / song_speed)
 	

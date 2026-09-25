@@ -50,20 +50,20 @@ func _ready() -> void:
 	Signals.play_combo_break.connect(_on_combo_break)
 	Signals.play_create_note.connect(_on_create_note)
 	Signals.play_new_event.connect(_on_new_event)
-	Signals.play_note_hit.connect(self.note_hit)
-	Signals.play_note_holding.connect(self.note_holding)
-	Signals.play_note_miss.connect(self.note_miss)
+	Signals.play_note_hit.connect(note_hit)
+	Signals.play_note_holding.connect(note_holding)
+	Signals.play_note_miss.connect(note_miss)
 	
 	Signals.play_song_ready_to_start.emit()
-	Signals.play_died.connect(self.died)
+	Signals.play_died.connect(died)
 
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"pause"):
-		Global.manual_pause = true
+		
 		pause()
 	
-	if Input.is_action_just_pressed(&"kill"):
+	if playstate and Input.is_action_just_pressed(&"kill"):
 		playstate.health = 0
 	
 	if Input.is_action_just_pressed(&"chart_editor") and OS.is_debug_build():
@@ -143,13 +143,38 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 func get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
 
-
 func get_direction(direction: int) -> StringName:
 	return [&"left", &"down", &"up", &"right"][direction]
 
-
 func _on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
+		&"camera_position":
+			if camera_positions.is_empty():
+				printerr('(Song): no camera_positions exist')
+				return
+			
+			if camera:
+				var index: int = int(event_parameters[0])
+				var marker = camera_positions[index]
+				if !marker:
+					printerr("(Song): Marker does not exist at index: ", index)
+					return
+				
+				var easing = 'classic'
+				if event_parameters.size() > 2:
+					easing = event_parameters.get(2)
+					
+				if easing.is_empty():
+					easing = "classic"
+				
+				if easing.to_lower() == "classic":
+					camera.go_to_marker(marker)
+				else:
+					var rate: float = 1
+					if playstate:
+						rate = playstate.song_speed
+					camera.tween_to_marker(marker,
+						Global.string_to_time(event_parameters.get(1)) / rate, event_parameters.get(2))
 		&"play_animation":
 			var duration: float = -1
 			if event_parameters.get(2) and !event_parameters[2].is_empty():
@@ -219,12 +244,12 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 					
 					parent.add_child(combo_number_instance)
 		
-		if SettingsManager.data.combo_ui and playstate.ui:
-			if playstate.ui.rating_marker:
+		if SettingsManager.data.combo_ui and ui:
+			if ui.rating_marker:
 				playstate.ui.rating_marker.add_child(rating_instance)
 			
-			if playstate.ui.combo_marker:
-				add_numbers.call(playstate.ui.combo_marker)
+			if ui.combo_marker:
+				add_numbers.call(ui.combo_marker)
 		else:
 			if rating_marker:
 				rating_marker.add_child(rating_instance)
@@ -237,6 +262,8 @@ func pause():
 	if not pause_preload:
 		printerr("Could not pause as pause_preload is null")
 		return
+	
+	Global.manual_pause = true
 	var pause_scene_instance = pause_preload.instantiate()
 	
 	Signals.play_paused.emit()
