@@ -6,8 +6,6 @@ const COMPENSATION: float = 1.0 / 30.0
 const DELTA_LENIENCY: float = 0.01
 
 @export_group("Nodes")
-## The host song script. Usually the parent of this node.
-@export var host: Node
 
 @export_group("Resources")
 @export var ui_skin: UISkin
@@ -110,8 +108,9 @@ func _ready() -> void:
 	if !camera:
 		printerr("(%s):" % name,' There was no CameraController within the camera group.')
 	
-	if !host:
-		printerr("(%s):" % name,'A Host was not assigned.')
+	if !ui_skin:
+		printerr("(%s):" % name,' There was no UI Skin set. falling back to dev')
+		ui_skin = load('uid://bvphmxy3ecutv')
 	
 	assert(song_data, "A song was not set correctly.")
 	
@@ -287,7 +286,7 @@ func play_song(time: float):
 	if time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
-		if !ui_skin.countdown.is_empty() and ui:
+		if ui_skin and ui and !ui_skin.countdown.is_empty():
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
 			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
@@ -377,10 +376,6 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 					camera.target_zoom = new_zoom
 				else:
 					camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease)
-		
-		&"bop_rate", &"bop_delay":
-			if host:
-				host.bop_rate = int(event_parameters[0])
 		
 		&"bop_strength":
 			camera_bop_strength = Vector2.ONE * float(event_parameters[0])

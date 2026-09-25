@@ -1,7 +1,7 @@
 extends Node
 class_name BasicSong
 
-var camera_positions: Array = []
+
 
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
@@ -11,6 +11,10 @@ var camera_positions: Array = []
 
 @onready var rating_node = load("uid://0l7bo1bqcbcj")
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
+
+
+var camera_positions: Array = []
+var strums: Array = []
 
 var camera: CameraController 
 var ui: BasicUI
@@ -30,6 +34,11 @@ func _ready() -> void:
 	ui = get_tree().get_first_node_in_group(&"ui")
 	
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
+	strums = get_tree().get_nodes_in_group(&"strums")
+	
+	if not playstate:
+		printerr("(Song): There was no playstate instance in the playstate group.")
+	
 	
 	if ui:
 		if player:
@@ -37,7 +46,7 @@ func _ready() -> void:
 		if enemy:
 			ui.update_enemy(enemy)
 	
-	if playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
+	if playstate and playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
 		pause_preload = load(playstate.ui_skin.pause_scene)
 
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
@@ -76,29 +85,31 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
-	if playstate:
-		if current_step % (bop_rate - bop_rate_offset) == 0:
-			var cam_bop_strength: Vector2 = playstate.camera_bop_strength
-			var ui_bop_strength: Vector2 = playstate.ui_bop_strength
-			
-			if camera:
-				if camera.parent_3d:
-					var bump: float = cam_bop_strength.x * camera.zoom
-					camera.bump(bump)
-				else:
-					camera.bump(cam_bop_strength)
-			
-			if ui and SettingsManager.data.ui_bops:
-				ui.bump(ui_bop_strength)
+	if current_step % (bop_rate - bop_rate_offset) == 0:
+		var cam_bop_strength: Vector2 = Vector2(0.03, 0.03)
+		var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
+		
+		if playstate:
+			cam_bop_strength = playstate.camera_bop_strength
+			ui_bop_strength = playstate.ui_bop_strength
+		
+		if camera:
+			if camera.parent_3d:
+				var bump: float = cam_bop_strength.x * camera.zoom
+				camera.bump(bump)
+			else:
+				camera.bump(cam_bop_strength)
+		
+		if ui and SettingsManager.data.ui_bops:
+			ui.bump(ui_bop_strength)
 
 
 func update_bop_rate(_i: int) -> void:
 	bop_rate = GameManager.conductor.numerator * GameManager.conductor.denominator
 
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
-	if playstate and not playstate.strums.is_empty():
-		playstate.strums[lane / 4 % playstate.strums.size()].create_note(time, lane % 4, note_length, note_type, tempo)
-
+	if not strums.is_empty():
+		strums[lane / 4 % strums.size()].create_note(time, lane % 4, note_length, note_type, tempo)
 
 func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
@@ -110,15 +121,14 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 		
 		get_tree().call_group(group, &"set_sing_timer")
 	
-	if group == &"player":
-		show_combo(NoahStats.get_hit_rating(hit_time), playstate.song_stats.combo)
+	if playstate and group == &"player":
 		
-		if playstate:
-			if playstate.song_stats.combo > 0:
-				if (playstate.song_stats.combo % 200 == 0):
-					get_tree().call_group(&"metronome", &"play_animation", &"cheer_200")
-				elif (playstate.song_stats.combo % 50 == 0):
-					get_tree().call_group(&"metronome", &"play_animation", &"cheer")
+		show_combo(NoahStats.get_hit_rating(hit_time), playstate.song_stats.combo)
+		if playstate.song_stats.combo > 0:
+			if (playstate.song_stats.combo % 200 == 0):
+				get_tree().call_group(&"metronome", &"play_animation", &"cheer_200")
+			elif (playstate.song_stats.combo % 50 == 0):
+				get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 
 
 func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
@@ -186,6 +196,8 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 			event_parameters[1])
 		&"set_bop_offset":
 			bop_rate_offset = int(event_parameters[0])
+		&"bop_rate", &"bop_delay":
+			bop_rate = int(event_parameters[0])
 
 
 func _on_combo_break():
