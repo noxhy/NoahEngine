@@ -770,20 +770,21 @@ func load_dividers() -> void:
 	var times: Array = [instrumental.stream.get_length()]
 	times.append_array(ChartManager.chart.get_tempos_data().keys())
 	times.erase(0.0)
-	for i in times:
-		var rect = ColorRect.new()
-		var size: float = 2
-		
-		rect.size = Vector2(grid.get_size().x, size)
-		rect.position = grid.position
-		rect.position.x -= grid.get_size().x / 2
-		rect.position.y = time_to_y_position(i)
-		rect.position.y -= rect.size.y / 2
-		rect.position += grid.position + grid_layer.offset
-		rect.color = time_change_color
-		
-		self.add_child(rect)
-		rect.add_to_group(&"dividers")
+	if not ChartManager.chart.tempos.is_empty():
+		for i in times:
+			var rect = ColorRect.new()
+			var size: float = 2
+			
+			rect.size = Vector2(grid.get_size().x, size)
+			rect.position = grid.position
+			rect.position.x -= grid.get_size().x / 2
+			rect.position.y = time_to_y_position(i)
+			rect.position.y -= rect.size.y / 2
+			rect.position += grid.position + grid_layer.offset
+			rect.color = time_change_color
+			
+			self.add_child(rect)
+			rect.add_to_group(&"dividers")
 
 
 func new_file(path: String, song: Song) -> void:

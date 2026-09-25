@@ -36,9 +36,9 @@ static var DEFAULT_FILE_TYPE:String = '.tres'
 ## All the events within the chart. Stored as [code][TIME, EVENT_NAME, [EVENT_PARAMETERS]][/code]
 @export var events: Array = []
 ## All the tempos/bpms within the chart. Stored as [code]TIME => TEMPO[/code]
-@export var tempos: Dictionary = {}
+@export var tempos: Dictionary = { 0.0: 60 }
 ## All of the time signature changes within the chart. Stored as [code]TIME => [NUMERATOR, DENOMINATOR][/code]
-@export var time_signatures: Dictionary = {}
+@export var time_signatures: Dictionary = { 0.0: [4, 4] }
 ## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
 
@@ -293,7 +293,7 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 	if not v1:
 		data = data.get('song')
 	
-	var current_bpm:int = data.get('bpm')
+	var current_bpm: int = data.get('bpm')
 	
 	chart.scroll_speed = data.get('speed')
 	
