@@ -70,6 +70,7 @@ camera_positions="Camera positions for playstate"
 strums="Strumlines on UIs"
 ui=""
 cameras="CameraControllers in a scene"
+playstate=""
 
 [input]
 

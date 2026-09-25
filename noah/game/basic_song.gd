@@ -3,8 +3,6 @@ class_name BasicSong
 
 var camera_positions: Array = []
 
-@onready var playstate: PlayState = $"PlayState"
-
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
 
@@ -16,6 +14,7 @@ var camera_positions: Array = []
 
 var camera: CameraController 
 var ui: BasicUI
+var playstate: PlayState
 
 ## How often the camera bops in steps.
 var bop_rate: int = 16
@@ -25,23 +24,18 @@ var pause_preload: PackedScene = null
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if not playstate:
-		playstate = $"PlayState Host"
 	
-	if not playstate:
-		printerr("Playstate host not found")
-	
+	playstate = get_tree().get_first_node_in_group(&"playstate")
 	camera = get_tree().get_first_node_in_group(&"cameras")
 	ui = get_tree().get_first_node_in_group(&"ui")
 	
 	camera_positions = get_tree().get_nodes_in_group(&"camera_positions")
 	
-	if playstate and playstate.ui:
+	if ui:
 		if player:
-			playstate.ui.update_player(player)
-		
+			ui.update_player(player)
 		if enemy:
-			playstate.ui.update_enemy(enemy)
+			ui.update_enemy(enemy)
 	
 	if playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
 		pause_preload = load(playstate.ui_skin.pause_scene)
