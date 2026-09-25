@@ -93,7 +93,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 					var bump: float = cam_bop_strength.x * camera.zoom
 					camera.bump(bump)
 				else:
-					playstate.camera.bump(cam_bop_strength)
+					camera.bump(cam_bop_strength)
 			
 			if ui and SettingsManager.data.ui_bops:
 				ui.bump(ui_bop_strength)
@@ -104,10 +104,7 @@ func update_bop_rate(_i: int) -> void:
 
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if playstate and not playstate.strums.is_empty():
-		if (lane > 3):
-			playstate.strums[1].create_note(time, lane % 4, note_length, note_type, tempo)
-		else:
-			playstate.strums[0].create_note(time, lane % 4, note_length, note_type, tempo)
+		playstate.strums[lane / 4 % playstate.strums.size()].create_note(time, lane % 4, note_length, note_type, tempo)
 
 
 func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
