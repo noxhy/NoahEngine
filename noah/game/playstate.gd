@@ -115,9 +115,7 @@ func _ready() -> void:
 	
 	assert(song_data, "A song was not set correctly.")
 	
-	# This delay is so variables initialize
-	if host:
-		await host.ready
+	GameManager.reset_conductor()
 	
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
@@ -137,7 +135,6 @@ func _ready() -> void:
 	
 	vocals.play()
 	
-	GameManager.reset_conductor()
 	
 	strums = get_tree().get_nodes_in_group(&"strums")
 	
@@ -187,8 +184,6 @@ func _ready() -> void:
 	Signals.play_note_hit.connect(note_hit)
 	Signals.play_note_holding.connect(note_holding)
 	Signals.play_note_miss.connect(note_miss)
-	
-	Signals.play_setup_finished.emit()
 
 func _process(delta) -> void:
 	if health <= health_min and !died:

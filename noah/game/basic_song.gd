@@ -39,11 +39,10 @@ func _ready() -> void:
 	
 	if playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
 		pause_preload = load(playstate.ui_skin.pause_scene)
-	
-	await Signals.play_setup_finished
-	
+
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
+	
 	GameManager.conductor.new_numerator.connect(update_bop_rate)
 	GameManager.conductor.new_denominator.connect(update_bop_rate)
 	
@@ -54,9 +53,9 @@ func _ready() -> void:
 	Signals.play_note_holding.connect(note_holding)
 	Signals.play_note_miss.connect(note_miss)
 	
-	Signals.play_song_ready_to_start.emit()
 	Signals.play_died.connect(died)
-
+	
+	Signals.play_song_ready_to_start.emit()
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"pause"):
