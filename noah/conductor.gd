@@ -79,13 +79,12 @@ var latency: float = AudioServer.get_output_latency()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
-	if stream_player:
-		if stream_player.playing:
-			time = stream_player.get_playback_position()
-			time -= latency
-			# time += AudioServer.get_time_since_last_mix()
-		current_beat = get_beat_at(time)
-		current_step = get_step_at(time)
+	if stream_player and stream_player.playing:
+		time = stream_player.get_playback_position()
+		time -= latency
+		# time += AudioServer.get_time_since_last_mix()
+	current_beat = get_beat_at(time)
+	current_step = get_step_at(time)
 
 
 func get_beat_at(_time: float) -> int:
