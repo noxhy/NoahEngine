@@ -1,8 +1,6 @@
 extends Node
 class_name BasicSong
 
-
-
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
 
@@ -12,6 +10,8 @@ class_name BasicSong
 @onready var rating_node = load("uid://0l7bo1bqcbcj")
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
 
+const DIRECTIONS: int = 4
+const SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
 var camera_positions: Array = []
 var strums: Array = []
@@ -38,7 +38,6 @@ func _ready() -> void:
 	
 	if not playstate:
 		printerr("(Song): There was no playstate instance in the playstate group.")
-	
 	
 	if ui:
 		if player:
@@ -109,11 +108,11 @@ func update_bop_rate(_i: int) -> void:
 
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if not strums.is_empty():
-		strums[lane / 4 % strums.size()].create_note(time, lane % 4, note_length, note_type, tempo)
+		strums[lane / DIRECTIONS % strums.size()].create_note(time, lane % DIRECTIONS, note_length, note_type, tempo)
 
 func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
-	var anim_to_play: String = note.anim_prefix + get_direction(lane % 4)
+	var anim_to_play: String = note.anim_prefix + get_direction(lane % DIRECTIONS)
 	
 	if not note.no_animation:
 		get_tree().call_group(group, &"play_animation", anim_to_play,
@@ -146,14 +145,14 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	
 	get_tree().call_group(
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		&"miss_" + get_direction(lane % 4), Character.AnimContext.SING, true)
+		&"miss_" + get_direction(lane % DIRECTIONS), Character.AnimContext.SING, true)
 
 
 func get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
 
 func get_direction(direction: int) -> StringName:
-	return [&"left", &"down", &"up", &"right"][direction]
+	return SING_DIRECTIONS[direction]
 
 func _on_new_event(time: float, event_name: String, event_parameters: Array):
 	match event_name:
