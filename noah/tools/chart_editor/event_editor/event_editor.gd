@@ -168,8 +168,8 @@ func _process(delta: float) -> void:
 			for i in range(max(lane_a, 0), min(lane_b + 1, ChartManager.event_tracks.size())):
 				events.append(ChartManager.event_tracks[i])
 			
-			var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time_a)
-			var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time_b)
+			var L: int = bsearch_left_range(ChartManager.chart.events, time_a)
+			var R: int = bsearch_right_range(ChartManager.chart.events, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -271,7 +271,7 @@ func view_button_item_pressed(id):
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float, forced: bool = false):
-	if not ChartManager.chart or ChartManager.chart.get_events_data().is_empty():
+	if not ChartManager.chart or ChartManager.chart.events.is_empty():
 		return
 	
 	if forced:
@@ -282,8 +282,8 @@ func load_section(time: float, forced: bool = false):
 		current_visible_events_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
+	var L: int = bsearch_left_range(ChartManager.chart.events, time - _range)
+	var R: int = bsearch_right_range(ChartManager.chart.events, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -337,7 +337,7 @@ func load_dividers() -> void:
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(ChartManager.chart.get_tempos_data().keys())
+	times.append_array(ChartManager.chart.tempos.keys())
 	times.erase(0.0)
 	for i in times:
 		var rect = ColorRect.new()
@@ -357,7 +357,7 @@ func load_dividers() -> void:
 func load_chart(file: Chart, ghost: bool = false) -> void:
 	super(file, ghost)
 	ChartManager.event_tracks = []
-	for event in file.get_events_data():
+	for event in file.events:
 		if !ChartManager.event_tracks.has(event[1]):
 			ChartManager.event_tracks.append(event[1])
 	
@@ -409,7 +409,7 @@ func remove_track(node) -> void:
 	SoundManager.tool_mouse_click.play()
 	
 	if minimap:
-		minimap.refresh(ChartManager.chart.get_notes_data(), ChartManager.chart.get_events_data())
+		minimap.refresh(ChartManager.chart.notes, ChartManager.chart.events)
 
 
 func _on_event_tracks_ready() -> void:
@@ -420,7 +420,7 @@ func _on_event_tracks_ready() -> void:
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var tempo_data: Dictionary = ChartManager.chart.tempos
 	var _offset: float = -ChartManager.chart.offset
 	var y_offset: float = 0
 	
@@ -461,7 +461,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	if factor_in_snap:
 		yR *= meter[0] * meter[1] / chart_snap
 	
-	var seconds_per_beat: float = 60.0 / ChartManager.chart.get_tempos_data()[L]
+	var seconds_per_beat: float = 60.0 / ChartManager.chart.tempos[L]
 	var output: float = yR / (grid.grid_size.x * grid.zoom.x * meter[0]) * seconds_per_beat
 	
 	return output
@@ -472,8 +472,8 @@ func is_event_at(_name: String, time: float) -> bool:
 
 ## Returns the index of the given event in the events list.
 func find_event(_name: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + EPSILON)
+	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -483,7 +483,7 @@ func find_event(_name: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var event: Array = ChartManager.chart.get_events_data()[i]
+		var event: Array = ChartManager.chart.events[i]
 		if (event[1] == _name):
 			if is_equal_approx(event[0], time):
 				return i
@@ -519,7 +519,7 @@ func remove_note(_name, time: float = -1) -> void:
 ## In the event editor, lane_a is a list of event names
 func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
-		var event: String = ChartManager.chart.get_events_data()[i][1]
+		var event: String = ChartManager.chart.events[i][1]
 		return lane_a.has(event)
 		)
 	
@@ -562,7 +562,7 @@ func place_notes(events: Array) -> Array:
 func remove_notes(events: Array) -> void:
 	var i: int = 0
 	for event in events:
-		var _event = ChartManager.chart.get_events_data()[event - i]
+		var _event = ChartManager.chart.events[event - i]
 		remove_note(_event[1], _event[0])
 		i += 1
 
@@ -572,7 +572,7 @@ func cut() -> void:
 		undo_redo.create_action("Cut Event(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var event = ChartManager.chart.get_events_data()[i]
+			var event = ChartManager.chart.events[i]
 			temp.append([event[0], event[1], event[2]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -592,7 +592,7 @@ func delete() -> void:
 		undo_redo.create_action("Delete Event(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var event = ChartManager.chart.get_events_data()[i]
+			var event = ChartManager.chart.events[i]
 			temp.append([event[0], event[1], event[2]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -608,20 +608,20 @@ func delete() -> void:
 func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
-		clipboard.append(ChartManager.chart.get_events_data()[note])
+		clipboard.append(ChartManager.chart.events[note])
 	
 	SoundManager.tool_note_place.play()
 
 
 func delete_stacked_notes() -> void:
-	if ChartManager.chart.get_events_data().size() > 1:
+	if ChartManager.chart.events.size() > 1:
 		var i: int = 0
 		var deleted: bool = false
 		selected_notes = []
 		selected_note_nodes = []
-		for index in range(ChartManager.chart.get_events_data().size() - 1):
-			var note_a = ChartManager.chart.get_events_data()[index - i]
-			var note_b = ChartManager.chart.get_events_data()[index - i + 1]
+		for index in range(ChartManager.chart.events.size() - 1):
+			var note_a = ChartManager.chart.events[index - i]
+			var note_b = ChartManager.chart.events[index - i + 1]
 			
 			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
 				deleted = true
@@ -633,7 +633,7 @@ func delete_stacked_notes() -> void:
 
 
 func select_all() -> void:
-	selected_notes = range(ChartManager.chart.get_events_data().size())
+	selected_notes = range(ChartManager.chart.events.size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"events")
 	if selected_notes.size() > 0:
 		SoundManager.tool_note_place.play()

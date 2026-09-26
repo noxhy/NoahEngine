@@ -138,7 +138,7 @@ func _process(delta: float) -> void:
 		song_position = instrumental.get_playback_position() - start_offset
 		song_slider.value = song_position
 		
-		var notes_list = ChartManager.chart.get_notes_data()
+		var notes_list = ChartManager.chart.notes
 		
 		if notes_list.size() > 0:
 			if current_note < notes_list.size():
@@ -201,7 +201,7 @@ func _process(delta: float) -> void:
 							min_lane = ChartManager.strum_count
 							max_lane = 0
 							for j in selected_notes:
-								var note = ChartManager.chart.get_notes_data()[j]
+								var note = ChartManager.chart.notes[j]
 								min_lane = min(min_lane, note[1])
 								max_lane = max(max_lane, note[1])
 							
@@ -257,7 +257,7 @@ func _process(delta: float) -> void:
 				cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
 				
 				for i in selected_notes:
-					var note: Array = ChartManager.chart.get_notes_data()[i]
+					var note: Array = ChartManager.chart.notes[i]
 					
 					var time: float = note[0]
 					var lane: int = note[1]
@@ -332,8 +332,8 @@ func _process(delta: float) -> void:
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
 			
-			var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time_a)
-			var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time_b)
+			var L: int = bsearch_left_range(ChartManager.chart.notes, time_a)
+			var R: int = bsearch_right_range(ChartManager.chart.notes, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -624,7 +624,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.get_notes_data(), file.get_events_data())
+		minimap.refresh(file.notes, file.events)
 	
 	load_dividers()
 	update_camera_song_position(true)
@@ -632,7 +632,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 ## Loads all the notes and waveforms for the next two waveforms.
 ## [br]The [code]forced[/code] parameter will determine if all visible notes on screen should be cleared and replaced.
 func load_section(time: float, forced: bool = false) -> void:
-	if not ChartManager.chart or ChartManager.chart.get_notes_data().is_empty():
+	if not ChartManager.chart or ChartManager.chart.notes.is_empty():
 		return
 	
 	if forced:
@@ -645,8 +645,8 @@ func load_section(time: float, forced: bool = false) -> void:
 		current_visible_notes_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - _range)
-	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + _range)
+	var L: int = bsearch_left_range(ChartManager.chart.notes, time - _range)
+	var R: int = bsearch_right_range(ChartManager.chart.notes, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -657,8 +657,8 @@ func load_section(time: float, forced: bool = false) -> void:
 	
 	load_notes(L, R)
 	
-	L = bsearch_left_range(ChartManager.chart.get_events_data(), time - _range)
-	R = bsearch_right_range(ChartManager.chart.get_events_data(), time + _range)
+	L = bsearch_left_range(ChartManager.chart.events, time - _range)
+	R = bsearch_right_range(ChartManager.chart.events, time + _range)
 	
 	load_events(L, R)
 	update_selected_notes()
@@ -671,8 +671,8 @@ func load_notes(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(note_nodes.size()):
 				var note = note_nodes[i]
-				if (note.time < ChartManager.chart.get_notes_data()[L][0]
-				or note.time > ChartManager.chart.get_notes_data()[R][0]):
+				if (note.time < ChartManager.chart.notes[L][0]
+				or note.time > ChartManager.chart.notes[R][0]):
 					note.queue_free()
 					note_nodes.remove_at(i)
 					i -= 1
@@ -685,7 +685,7 @@ func load_notes(L: int, R: int) -> void:
 					update_note_position(note_nodes[i - L])
 				continue
 			
-			var note = ChartManager.chart.get_notes_data()[i]
+			var note = ChartManager.chart.notes[i]
 			place_note(note[0], note[1], note[2], note[3], false, false, true, i - L)
 		
 		current_visible_notes_L = L
@@ -699,8 +699,8 @@ func load_events(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(event_nodes.size()):
 				var event = event_nodes[i]
-				if (event.time < ChartManager.chart.get_events_data()[L][0]
-				or event.time > ChartManager.chart.get_events_data()[R][0]):
+				if (event.time < ChartManager.chart.events[L][0]
+				or event.time > ChartManager.chart.events[R][0]):
 					event.queue_free()
 					event_nodes.remove_at(i)
 					i -= 1
@@ -713,7 +713,7 @@ func load_events(L: int, R: int) -> void:
 					update_note_position(event_nodes[i - L])
 				continue
 			
-			var event = ChartManager.chart.get_events_data()[i]
+			var event = ChartManager.chart.events[i]
 			place_event(event[0], event[1], event[2], false, false, true, i - L)
 		
 		current_visible_events_L = L
@@ -768,7 +768,7 @@ func load_dividers() -> void:
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(ChartManager.chart.get_tempos_data().keys())
+	times.append_array(ChartManager.chart.tempos.keys())
 	times.erase(0.0)
 	if not ChartManager.chart.tempos.is_empty():
 		for i in times:
@@ -823,7 +823,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	if placed:
 		var packet: Array = [time, lane, length, type]
-		var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time)
+		var L: int = bsearch_left_range(ChartManager.chart.notes, time)
 		if L != -1:
 			ChartManager.chart.notes.insert(L, packet)
 			
@@ -846,7 +846,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		else:
 			ChartManager.chart.notes.append(packet)
 			note_nodes.append(note_instance)
-			L = ChartManager.chart.get_notes_data().size() - 1
+			L = ChartManager.chart.notes.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [note_instance]
 			min_lane = 0
@@ -891,7 +891,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time)
+		var L: int = bsearch_left_range(ChartManager.chart.events, time)
 		if L != -1:
 			ChartManager.chart.events.insert(L, [time, event, parameters])
 			
@@ -914,7 +914,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 		else:
 			event_nodes.append(event_instance)
 			ChartManager.chart.events.append([time, event, parameters])
-			L = ChartManager.chart.get_events_data().size() - 1
+			L = ChartManager.chart.events.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [event_instance]
 			min_lane = 0
@@ -984,14 +984,14 @@ func remove_note(lane, time: float = -1):
 func remove_notes(indices: Array):
 	var offset: int = 0
 	for i in indices:
-		var note = ChartManager.chart.get_notes_data()[i - offset]
+		var note = ChartManager.chart.notes[i - offset]
 		remove_note(note[1], note[0])
 		offset += 1
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_notes_data(), time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.get_notes_data(), time + EPSILON)
+	var L: int = bsearch_left_range(ChartManager.chart.notes, time - EPSILON)
+	var R: int = bsearch_right_range(ChartManager.chart.notes, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -1001,15 +1001,15 @@ func find_note(lane: int, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var note: Array = ChartManager.chart.get_notes_data()[i]
+		var note: Array = ChartManager.chart.notes[i]
 		if note[1] == lane and is_equal_approx(note[0], time):
 			return i
 	
 	return -1
 
 func find_events_at(time: float) -> Array[int]:
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + EPSILON)
+	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1018,7 +1018,7 @@ func find_events_at(time: float) -> Array[int]:
 	var ret: Array[int] = []
 	
 	for i in range(L, R + 1):
-		var _event: Array = ChartManager.chart.get_events_data()[i]
+		var _event: Array = ChartManager.chart.events[i]
 		if is_equal_approx(_event[0], time):
 			ret.append(i)
 	return ret
@@ -1026,8 +1026,8 @@ func find_events_at(time: float) -> Array[int]:
 func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 	if epsilon == -1.0:
 		epsilon = EPSILON
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - epsilon)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + epsilon)
+	var L: int = bsearch_left_range(ChartManager.chart.events, time - epsilon)
+	var R: int = bsearch_right_range(ChartManager.chart.events, time + epsilon)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1041,8 +1041,8 @@ func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.get_events_data(), time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.get_events_data(), time + EPSILON)
+	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
 	
 	#print(find_events_at(time))
 	
@@ -1054,7 +1054,7 @@ func find_event(event: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var _event: Array = ChartManager.chart.get_events_data()[i]
+		var _event: Array = ChartManager.chart.events[i]
 		if (_event[1] == event):
 			if is_equal_approx(_event[0], time):
 				return i
@@ -1080,15 +1080,15 @@ func play_audios(time: float):
 	instrumental.pitch_scale = song_speed
 	song_position = time + start_offset
 	
-	current_note = bsearch_left_range(ChartManager.chart.get_notes_data(), song_position)
+	current_note = bsearch_left_range(ChartManager.chart.notes, song_position)
 	
-	if ChartManager.chart.get_notes_data().size() > 0:
-		if song_position > ChartManager.chart.get_notes_data()[ChartManager.chart.get_notes_data().size() - 1][0]:
-			current_note = ChartManager.chart.get_notes_data().size() - 1
+	if ChartManager.chart.notes.size() > 0:
+		if song_position > ChartManager.chart.notes[ChartManager.chart.notes.size() - 1][0]:
+			current_note = ChartManager.chart.notes.size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.get_tempos_data()
+	var tempo_data: Dictionary = ChartManager.chart.tempos
 	var _offset: float = 0# -ChartManager.chart.offset
 	var y_offset: float = 0
 	
@@ -1154,7 +1154,7 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	if factor_in_snap:
 		yR *= meter[0] * meter[1] / chart_snap
 	
-	var spb: float = (60.0 / ChartManager.chart.get_tempos_data()[L]) * (4.0 / meter[1])
+	var spb: float = (60.0 / ChartManager.chart.tempos[L]) * (4.0 / meter[1])
 	return yR * (spb / meter[1])
 
 ## Binary searches for both notes and events
@@ -1284,7 +1284,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		update_waveforms(song_position)
 		
 		lower_ui.get_node("%Beat").text = str("Beat: ", Conductor.get_accumulated_beat_at(
-			song_position, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1)
+			song_position, ChartManager.chart.tempos, ChartManager.chart.time_signatures) + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
@@ -1293,7 +1293,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	
 	if ChartManager.chart:
 		lower_ui.get_node("%Step").text = str("Step: ", Conductor.get_accumulated_step_at(
-			song_position, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1)
+			song_position, ChartManager.chart.tempos, ChartManager.chart.time_signatures) + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1766,7 +1766,7 @@ func cut() -> void:
 		undo_redo.create_action("Cut Note(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.get_notes_data()[i]
+			var note = ChartManager.chart.notes[i]
 			temp.append([note[0], note[1], note[2], note[3]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -1786,7 +1786,7 @@ func delete() -> void:
 		undo_redo.create_action("Deleted Note(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.get_notes_data()[i]
+			var note = ChartManager.chart.notes[i]
 			temp.append([note[0], note[1], note[2], note[3]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -1802,7 +1802,7 @@ func delete() -> void:
 func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
-		clipboard.append(ChartManager.chart.get_notes_data()[note])
+		clipboard.append(ChartManager.chart.notes[note])
 	
 	SoundManager.tool_note_place.play()
 
@@ -1827,14 +1827,14 @@ func paste() -> void:
 
 
 func delete_stacked_notes() -> void:
-	if ChartManager.chart.get_notes_data().size() > 1:
+	if ChartManager.chart.notes.size() > 1:
 		var i: int = 0
 		var deleted: bool = false
 		selected_notes = []
 		selected_note_nodes = []
-		for index in range(ChartManager.chart.get_notes_data().size() - 1):
-			var note_a = ChartManager.chart.get_notes_data()[index - i]
-			var note_b = ChartManager.chart.get_notes_data()[index - i + 1]
+		for index in range(ChartManager.chart.notes.size() - 1):
+			var note_a = ChartManager.chart.notes[index - i]
+			var note_b = ChartManager.chart.notes[index - i + 1]
 			
 			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
 				var idx_to_delete = index - i if note_b[2] > note_a[2] else index - i + 1
@@ -1852,11 +1852,11 @@ func do_flip() -> void:
 
 func flip() -> void:
 	if selected_notes.size() > 1:
-		var _min_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
-		var _max_lane: int = ChartManager.chart.get_notes_data()[selected_notes[0]][1]
+		var _min_lane: int = ChartManager.chart.notes[selected_notes[0]][1]
+		var _max_lane: int = ChartManager.chart.notes[selected_notes[0]][1]
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.get_notes_data()[i]
+			var note = ChartManager.chart.notes[i]
 			_min_lane = min(_min_lane, note[1])
 			_max_lane = max(_max_lane, note[1])
 			temp.append(note)
@@ -1901,7 +1901,7 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 	var action: String = "Changed Note Length(s)"
 	undo_redo.create_action(action)
 	for i in notes:
-		var length: float = ChartManager.chart.get_notes_data()[i][2]
+		var length: float = ChartManager.chart.notes[i][2]
 		undo_redo.add_do_method(change_length.bind(i, length + delta))
 		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length + delta)
 		undo_redo.add_do_method(SoundManager.tool_note_stretch.play)
@@ -1921,7 +1921,7 @@ func change_note_type(i: int, note_type: String) -> void:
 
 func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
-		var lane: int = ChartManager.chart.get_notes_data()[i][1]
+		var lane: int = ChartManager.chart.notes[i][1]
 		return (lane >= lane_a and lane <= lane_b))
 	
 	update_selected_notes()
@@ -1945,7 +1945,7 @@ func brush_note_type() -> void:
 	undo_redo.create_action(action)
 	for i in selected_notes:
 		var node: ChartNote = note_nodes[i - current_visible_notes_L]
-		var note_type: String = ChartManager.chart.get_notes_data()[i][3]
+		var note_type: String = ChartManager.chart.notes[i][3]
 		undo_redo.add_do_method(change_note_type.bind(i, current_note_type))
 		undo_redo.add_do_property(node, "note_type", current_note_type)
 		undo_redo.add_do_method(node.update)
@@ -1959,10 +1959,10 @@ func brush_note_type() -> void:
 
 
 func select_all() -> void:
-	if ChartManager.chart.get_notes_data().is_empty():
+	if ChartManager.chart.notes.is_empty():
 		return
 	
-	selected_notes = range(ChartManager.chart.get_notes_data().size())
+	selected_notes = range(ChartManager.chart.notes.size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
 	SoundManager.tool_mouse_click.play()
 

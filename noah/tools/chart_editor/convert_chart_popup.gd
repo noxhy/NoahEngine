@@ -25,7 +25,7 @@ func new_file(files: Array[String]):
 	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
 	
 	var save_chart = func(chart:Chart, dir:String, diff:String):
-		song_file.tempo = chart.get_tempos_data().get(chart.get_tempos_data().keys()[0])
+		song_file.tempo = chart.tempos.get(chart.tempos.keys()[0])
 		
 		var path = str(dir.path_join(song_file.title), '-', diff, '.tres')
 		

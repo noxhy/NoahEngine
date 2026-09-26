@@ -231,7 +231,7 @@ func _process(delta) -> void:
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
-	var notes_list = chart.get_notes_data()
+	var notes_list = chart.notes
 	
 	if notes_list.size() > 0:
 		if current_note < notes_list.size():
@@ -251,7 +251,7 @@ func _process(delta) -> void:
 				current_note += 1
 	
 	if instrumental.playing:
-		var events_list = chart.get_events_data()
+		var events_list = chart.events
 		if events_list.size() > 0:
 			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
 				var event = events_list[current_event]
@@ -294,7 +294,7 @@ func play_song(time: float):
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)
 	
-	var notes_list: Array = chart.get_notes_data()
+	var notes_list: Array = chart.notes
 	current_note = bsearch_left_range(notes_list, time)
 	current_event = 0
 

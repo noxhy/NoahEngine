@@ -467,7 +467,7 @@ func file_button_item_pressed(id):
 			
 			var on_save = func(path:String):
 				var event = ChartEvents.new()
-				event.data = ChartManager.chart.get_events_data()
+				event.data = ChartManager.chart.events
 				ResourceSaver.save(event, path)
 				export_window.hide()
 			
