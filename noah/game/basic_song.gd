@@ -108,7 +108,9 @@ func update_bop_rate(_i: int) -> void:
 
 func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
 	if not strums.is_empty():
-		strums[lane / DIRECTIONS % strums.size()].create_note(time, lane % DIRECTIONS, note_length, note_type, tempo)
+		var strumline_idx = lane / DIRECTIONS
+		if strumline_idx < strums.size():
+			strums[strumline_idx].create_note(time, lane % DIRECTIONS, note_length, note_type, tempo)
 
 func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
 	var group: StringName = get_group_from_manager(strum_manager)
