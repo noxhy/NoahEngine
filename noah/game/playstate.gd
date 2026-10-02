@@ -135,7 +135,7 @@ func _ready() -> void:
 	vocals.play()
 	
 	
-	strums = get_tree().get_nodes_in_group(&"strums")
+	strums = StrumManager.get_strum_group(get_tree())
 	
 	GameManager.song_scene = LoadingScreen.scene
 	

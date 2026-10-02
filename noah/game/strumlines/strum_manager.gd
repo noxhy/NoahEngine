@@ -1,6 +1,6 @@
 @icon("uid://yl4giaklgpx0")
 @tool
-extends Node2D
+extends Node
 class_name StrumManager
 
 @warning_ignore("unused_private_class_variable")
@@ -9,7 +9,8 @@ class_name StrumManager
 @export var note_skin: NoteSkin: set = set_skin
 ## List of Nodes of the strumlines.
 @export var strums: Array[Strum] : set = set_strums
-## Vocal track ID.
+## ID of this strumline. Used for determining what vocal track this strumline will affect. Also decides where notes will go
+## [br][br][code]0[/code] Should be player!
 @export var id: int = 0
 
 ## If [code]true[/code], the strumlines will read the player's input.
@@ -24,8 +25,22 @@ class_name StrumManager
 ## affect player stats.
 @export var enemy_slot: bool
 
+## custom_sort function for sorting [StrumManager]'s by [member id].
+static func _sort_strums_by_id(a, b) -> bool:
+	if a.id < b.id:
+		return true
+	return false
+
+## Gets all strumlines within the [code]strums[/code] group. However they will be sorted based on their [member id]
+static func get_strum_group(tree: SceneTree) -> Array[Node]:
+	var nodes = tree.get_nodes_in_group(&"strums")
+	nodes.sort_custom(_sort_strums_by_id)
+	
+	return nodes
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	can_press = can_press
 	auto_play = auto_play
 	can_splash = can_splash
@@ -65,7 +80,7 @@ func set_skin_editor(v: NoteSkin) -> void:
 		spr.offsets = v.offsets
 		
 		if v.pixel_texture:
-			spr.texture_filter = TEXTURE_FILTER_NEAREST
+			spr.texture_filter = Node2D.TEXTURE_FILTER_NEAREST
 		
 
 func set_skin(v: NoteSkin) -> void:
