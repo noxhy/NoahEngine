@@ -192,9 +192,9 @@ func _process(delta) -> void:
 		Signals.play_died.emit()
 		died = true
 	
-	# Why is this a thing I have to do
-	if is_inside_tree():
-		get_tree().call_group(&"note", &"update")
+	## Why is this a thing I have to do
+	#if is_inside_tree():
+		#get_tree().call_group(&"note", &"update")
 	
 	if !song_started and song_starting:
 		song_start_offset += delta

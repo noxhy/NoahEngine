@@ -74,6 +74,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	time_difference = time - GameManager.song_position
+	update()
 
 
 func update() -> void:
