@@ -390,8 +390,17 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 				j[0] = EVENT_NAMES.get(j[0])
 			
 			# Creates the event
-			## j[1] is the event name, j[2] is the event parameters
-			event_data.append([time / 1000.0, j[0], [j[1], j[2]]])
+			# j[0] is the event name, j[1]/j[2] is the event parameters
+			
+			var _v1: String = ''
+			if j.size() > 1:
+				_v1 = j[1]
+				
+			var _v2: String = ''
+			if j.size() > 2:
+				_v2 = j[2]     
+
+			event_data.append([time / 1000.0, j[0], [_v1, _v2]])
 	
 	event_data.sort_custom(sort_notes)
 	
