@@ -1,8 +1,15 @@
 @tool
 extends Marker2D
 class_name NoahMarker2D
+## Marker2D but with camera bounds preview. Also has [member id] for more consistent behavior with [code]camera_positions[/code] group.
 
+## id used for [code]camera_positions[/code] group.
+@export var id: int = 0
+
+## The colour of the camera bounds of this marker
 @export var _bounds_colour: Color = Color.RED
+
+## Whether the camera bounds should be visible
 @export var _bounds_visible: bool = true 
 
 var window_size: Vector2

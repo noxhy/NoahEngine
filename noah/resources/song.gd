@@ -28,6 +28,8 @@ class_name Song
 @export var artist: String
 ## The displayed charter for this Song
 @export var charter: String
+
+
 @export_file('*.res', '*.tres') var icons: String
 @export var locked: bool = false
 
