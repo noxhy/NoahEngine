@@ -25,19 +25,6 @@ class_name StrumManager
 ## affect player stats.
 @export var enemy_slot: bool
 
-## custom_sort function for sorting [StrumManager]'s by [member id].
-static func _sort_strums_by_id(a, b) -> bool:
-	if a.id < b.id:
-		return true
-	return false
-
-## Gets all strumlines within the [code]strums[/code] group. However they will be sorted based on their [member id]
-static func get_strum_group(tree: SceneTree) -> Array[Node]:
-	var nodes = tree.get_nodes_in_group(&"strums")
-	nodes.sort_custom(_sort_strums_by_id)
-	
-	return nodes
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	

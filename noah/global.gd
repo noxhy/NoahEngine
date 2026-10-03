@@ -9,20 +9,16 @@ var fullscreen: bool = false
 var transitioning: bool = false
 var current_controller: int = -1
 
-## Gets all markers within the [code]camera_positions[/code] group.
-## [br][br]If the markers are [NoahMarker2D], they will be sorted based on [member NoahMarker2D.id]
-func get_camera_positions_group() -> Array[Node]:
-	var nodes = get_tree().get_nodes_in_group(&"camera_positions")
+## Sorts an array of nodes by their [code]id[/code]. If the nodes do not contain an [code]id[/code] var, sorting will not occur.
+func sort_array_by_id(arr: Array[Node]) -> Array[Node]:
 	var sorter:Callable = func(a, b):
-		if a is NoahMarker2D and b is NoahMarker2D:
+		if 'id' in a and 'id' in b:
 			if a.id < b.id:
 				return true
-		
 		return false
+	arr.sort_custom(sorter)
 	
-	nodes.sort_custom(sorter)
-	
-	return nodes
+	return arr
 
 func _ready() -> void:
 	_correct_window_size()

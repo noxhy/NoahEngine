@@ -135,7 +135,7 @@ func _ready() -> void:
 	vocals.play()
 	
 	
-	strums = StrumManager.get_strum_group(get_tree())
+	strums = Global.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 	
 	GameManager.song_scene = LoadingScreen.scene
 	
