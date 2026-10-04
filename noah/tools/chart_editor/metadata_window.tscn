@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_n6ac0"]
 [ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/metadata_window.gd" id="2_bkkpl"]
+[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_ksfet"]
 
 [node name="Metadata Window" type="Window" unique_id=1340846673 groups=["windows"]]
 transparent_bg = true
@@ -86,7 +87,10 @@ editable = false
 [node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1557321340]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select Scene"
+text = "       "
+icon = ExtResource("3_ksfet")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" unique_id=308569808 groups=["windows"]]
 unique_name_in_owner = true
@@ -97,40 +101,6 @@ size = Vector2i(640, 480)
 file_mode = 0
 root_subfolder = "res://scenes/game/songs/"
 filters = PackedStringArray("*.tscn")
-
-[node name="Icons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=248525620]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Icons" unique_id=1040357070]
-layout_mode = 2
-size_flags_horizontal = 0
-text = "Icon Texture:"
-
-[node name="Icon" type="TextureRect" parent="HBoxContainer/VBoxContainer/Icons" unique_id=74823753]
-unique_name_in_owner = true
-layout_mode = 2
-expand_mode = 3
-
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/Icons" unique_id=1852332401]
-layout_mode = 2
-size_flags_horizontal = 3
-editable = false
-
-[node name="Icon Button" type="Button" parent="HBoxContainer/VBoxContainer/Icons" unique_id=156520241]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-text = "Select File"
-
-[node name="Icon FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Icons/Icon Button" unique_id=1902699967 groups=["windows"]]
-unique_name_in_owner = true
-oversampling_override = 1.0
-title = "Open a File"
-initial_position = 1
-size = Vector2i(640, 480)
-file_mode = 0
-root_subfolder = "res://assets/sprites/playstate/icons/"
-filters = PackedStringArray("*.tres")
 
 [node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1200860892]
 layout_mode = 2
@@ -251,9 +221,6 @@ text = "Remove Current Time Change"
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
 [connection signal="file_selected" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
 [connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]
-[connection signal="pressed" from="HBoxContainer/VBoxContainer/Icons/Icon Button" to="." method="_on_icon_button_pressed"]
-[connection signal="file_selected" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="_on_icon_file_dailog_file_selected"]
-[connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Icons/Icon Button/Icon FileDailog" to="." method="file_dailog_gui_focus_changed"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer/HBoxContainer2/Scroll Speed" to="." method="_on_scroll_speed_value_changed"]
 [connection signal="item_selected" from="HBoxContainer/VBoxContainer2/Time Changes" to="." method="_on_time_changes_item_selected"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer2/Tempo Change/Tempo" to="." method="_on_tempo_value_changed"]

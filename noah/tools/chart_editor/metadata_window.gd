@@ -3,7 +3,6 @@ extends Window
 signal updated_song_name(text: String)
 signal updated_song_artist(text: String)
 signal updated_song_charter(text: String)
-signal updated_icon_texture(path: String)
 signal updated_starting_tempo(tempo: float)
 signal updated_song_scene(path: String)
 signal updated_scroll_speed(speed: float)
@@ -20,12 +19,6 @@ func update_stats():
 	%"Song Artist".text = ChartManager.song.artist
 	%"Song Charter".text = ChartManager.song.charter
 	
-	var path: String = ""
-	
-	if ChartManager.song.icons:
-		path = ChartManager.song.icons
-	
-	_on_icon_file_dailog_file_selected(path)
 	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
 	
 	%Difficulty.text = ChartManager.difficulty
@@ -42,26 +35,6 @@ func update_stats():
 		%"Time Changes".add_item(format_time_change(i))
 		i += 1
 	_on_time_changes_item_selected(0, false)
-
-func _on_icon_file_dailog_file_selected(path: String) -> void:
-	path = ResourceUID.path_to_uid(path)
-	if !ResourceLoader.exists(path):
-		printerr("Icon file doesn't exist.")
-		return
-	
-	var sprite_frames = load(path)
-	if sprite_frames is not SpriteFrames:
-		printerr("Icon file is not a SpriteFrames")
-		return
-	
-	if not sprite_frames.has_animation('default'):
-		printerr("Icon file is missing a default animation")
-		return
-	
-	var texture: Texture = sprite_frames.get_frame_texture("default", 0)
-	%Icon.texture = texture
-	$HBoxContainer/VBoxContainer/Icons/LineEdit.text = path
-	updated_icon_texture.emit(path)
 
 func _on_icon_button_pressed() -> void:
 	%"Icon FileDailog".popup()
