@@ -1,17 +1,18 @@
 extends Node
+class_name ChartManager
 
 ## Reference of the last song loaded in the charteditor.
-var song: Song
+static var song: Song
 ## Reference to the last chart loaded in the charteditor
-var chart: Chart
-var difficulty: String = ""
+static var chart: Chart
+static var difficulty: String = ""
 
-var difficulties: Dictionary = {}
-var strum_count: int = 8
-var event_editor: bool = false
+static var difficulties: Dictionary = {}
+static var strum_count: int = 8
+static var event_editor: bool = false
 
 ## Settings per strum, each key is it's label
-var strum_data: Array = [
+static var strum_data: Array = [
 	{
 		"name": "Player",
 		"strums": [0, 3],
@@ -36,4 +37,4 @@ var strum_data: Array = [
 	#},
 ]
 
-var event_tracks: Array = []
+static var event_tracks: Array = []

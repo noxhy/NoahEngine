@@ -1,4 +1,5 @@
 extends Node
+## Singleton that contains utilities and other misc behavior
 
 @onready var performance_label: Label = $"Performance Label"
 @onready var volume_display: VolumeDisplay = $"Volume Display"
@@ -26,6 +27,8 @@ func _ready() -> void:
 	
 	if not OS.is_debug_build():
 		RenderingServer.set_default_clear_color(Color.BLACK)
+	
+	SaveManager.load()
 
 func changed_contoller(device: int, connected: bool):
 	if connected or !Input.get_connected_joypads().front():

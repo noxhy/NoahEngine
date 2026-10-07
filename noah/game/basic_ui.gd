@@ -1,5 +1,6 @@
 extends CanvasLayer
 class_name BasicUI
+## Custom [CanvasLayer] with ui bumping support and and screen dimming (for [member NoahSettings.underlay_opacity])
 
 @export_custom(PROPERTY_HINT_LINK, 'x') var target_zoom:Vector2 = Vector2.ONE
 
@@ -13,7 +14,7 @@ class_name BasicUI
 @onready var combo_marker: Node = $"Combo Marker"
 
 func _ready() -> void:
-	if SettingsManager.data.downscroll: 
+	if SettingsManager.data.downscroll: ## TODO: this kinda makes no sense to be here anymore
 		for strum_line in get_tree().get_nodes_in_group(&"strums"):
 			strum_line.position.y *= -1
 	

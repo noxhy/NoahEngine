@@ -1,7 +1,8 @@
 extends Node
+## Handler for loading and getting settings. Access the preferences in [member data]
 
+## The location this save file will write/read from
 const LOAD_PATH: String = 'user://settings.cfg'
-
 
 ## The actual save instance. Access save values through this
 var data: NoahSettings

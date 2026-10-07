@@ -1,4 +1,5 @@
 extends Node
+## Singleton that holds global references to a bunch of common data for easy access and readability.
 
 #scene ids
 var CHART_EDITOR_SCENE: String = "uid://c3lux2ajoe1g6"

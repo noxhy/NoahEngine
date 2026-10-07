@@ -1,5 +1,4 @@
 @icon("uid://ij1ectsa31bd")
-
 extends Node
 class_name Conductor
 
