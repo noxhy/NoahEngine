@@ -1,25 +1,25 @@
 [gd_scene format=3 uid="uid://c56g0k7u2k6wo"]
 
-[ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://noah/tools/chart_editor/chart_tester.gd" id="1_ep6vc"]
-[ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_k5lrj"]
-[ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="2_srd2m"]
-[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="5_fjxhx"]
-[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="5_g7go4"]
-[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="9_gdhuo"]
-[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="12_chcqi"]
+[ext_resource type="Script" uid="uid://dcpna0cpia0dx" path="res://noah/tools/chart_editor/chart_tester/chart_tester.gd" id="1_2bt7f"]
+[ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_brp4o"]
+[ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="3_354bb"]
+[ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="4_n6sro"]
+[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="5_qbwxp"]
+[ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="6_bu4or"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="7_4m34j"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
-font = ExtResource("12_chcqi")
+font = ExtResource("6_bu4or")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Chart Tester" type="Node2D" unique_id=732337204]
-script = ExtResource("1_ep6vc")
+script = ExtResource("1_2bt7f")
 metadata/_edit_vertical_guides_ = []
 
 [node name="PlayState" type="Node" parent="." unique_id=395419338 groups=["playstate"]]
-script = ExtResource("2_k5lrj")
-ui_skin = ExtResource("2_srd2m")
+script = ExtResource("2_brp4o")
+ui_skin = ExtResource("3_354bb")
 next_scene = "uid://c3lux2ajoe1g6"
 metadata/_custom_type_script = "uid://cmgmd88pfh7dd"
 
@@ -53,16 +53,16 @@ unique_name_in_owner = true
 position = Vector2(992.3, 296)
 gizmo_extents = 20.0
 
-[node name="UI" parent="." unique_id=174843182 instance=ExtResource("5_g7go4")]
+[node name="UI" parent="." unique_id=174843182 instance=ExtResource("4_n6sro")]
 
-[node name="Player Strum" parent="UI" unique_id=1619773465 instance=ExtResource("5_fjxhx")]
+[node name="Player Strum" parent="UI" unique_id=1619773465 instance=ExtResource("5_qbwxp")]
 position = Vector2(288, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
 can_press = true
 can_splash = true
 
-[node name="Enemy Strum" parent="UI" unique_id=1854694357 instance=ExtResource("5_fjxhx")]
+[node name="Enemy Strum" parent="UI" unique_id=1854694357 instance=ExtResource("5_qbwxp")]
 position = Vector2(-352, -256)
 rotation = -0.00021224
 scale = Vector2(0.85, 0.85)
@@ -80,6 +80,6 @@ label_settings = SubResource("LabelSettings_xphcd")
 autowrap_mode = 3
 
 [node name="CameraController" type="Node" parent="." unique_id=890983513 node_paths=PackedStringArray("parent_2d") groups=["cameras"]]
-script = ExtResource("9_gdhuo")
+script = ExtResource("7_4m34j")
 parent_2d = NodePath("../Camera")
 metadata/_custom_type_script = "uid://b4lmffueni5k"

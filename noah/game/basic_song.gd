@@ -75,7 +75,7 @@ func _process(delta: float) -> void:
 	
 	if Input.is_action_just_pressed(&"chart_editor") and OS.is_debug_build():
 		ChartManager.event_editor = false
-		ChartManager.song = playstate.song_data
+		ChartManager.song = GameManager.current_song
 		ChartManager.difficulty = GameManager.difficulty
 		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 
