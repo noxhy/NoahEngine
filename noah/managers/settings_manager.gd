@@ -1,13 +1,14 @@
 extends Node
+class_name SettingsManager
 ## Handler for loading and getting settings. Access the preferences in [member data]
 
 ## The location this save file will write/read from
 const LOAD_PATH: String = 'user://settings.cfg'
 
 ## The actual save instance. Access save values through this
-var data: NoahSettings
+static var data: NoahSettings = NoahSettings.new()
 
-var _default_data: NoahSettings = NoahSettings.new()
+static var _default_data: NoahSettings = NoahSettings.new()
 
 ## categories (this is our way of doing text enums
 const SEC_PREFERENCES: String = 'preferences'
@@ -20,22 +21,16 @@ const SEC_CONTROLLER_BINDS: String = 'controller_binds'
 
 ## @deprecated: Access directly from [member data] instead.
 ## Grabs a save value from instance
-func get_value(section: String, key: String, fallback: Variant = null) -> Variant:
+static func get_value(section: String, key: String, fallback: Variant = null) -> Variant:
 	return data.get(key)
 
 ## @deprecated: Access directly from [member data] instead.
 ## Sets a save value in instance
-func set_value(section: String, key: String, value: Variant) -> void:
+static func set_value(section: String, key: String, value: Variant) -> void:
 	data.set(key, value)
 
-func _ready() -> void:
-	data = NoahSettings.new()
-	
-	load_values()
-	load_keybinds()
-
 ## Saves [member data] to disk.
-func flush() -> void:
+static func flush() -> void:
 	var conf: ConfigFile = ConfigFile.new()
 	
 	var save_vars: Array = data.get_script().get_script_property_list()
@@ -49,7 +44,7 @@ func flush() -> void:
 	print('(SettingsManager): Saved preferences')
 
 ## Loads player settings and applies it to [member data]
-func load_values() -> void:
+static func load_values() -> void:
 	
 	if not FileAccess.file_exists(LOAD_PATH):
 		print('(SettingsManager): Preferences not detected. Using defaults')
@@ -76,27 +71,27 @@ func load_values() -> void:
 	print("(SettingsManager): Preferences loaded")
 	
 ## Returns an array of key binds from a key
-func get_keybind(keybind_name: String) -> Array:
+static func get_keybind(keybind_name: String) -> Array:
 	return data.key_binds.get(keybind_name, [])
 
 ## Returns an array of controller binds from a key
-func get_controller_bind(bind_name: String) -> Array:
+static func get_controller_bind(bind_name: String) -> Array:
 	return data.joy_binds.get(bind_name, [])
 
-func set_keybind(keybind_name: String, keycode: int, index: int) -> void:
+static func set_keybind(keybind_name: String, keycode: int, index: int) -> void:
 	var new_keycodes = data.key_binds.get(keybind_name)
 	new_keycodes[index] = keycode
 	
 	data.key_binds.set(keybind_name, new_keycodes)
 
-func set_controller_bind(bind_name: String, button_index: int, index: int) -> void:
+static func set_controller_bind(bind_name: String, button_index: int, index: int) -> void:
 	var new_keycodes = data.joy_binds.get(bind_name)
 	new_keycodes[index] = button_index
 	
 	data.joy_binds.set(bind_name, new_keycodes)
 
 ## Updates [InputMap] to use the player defined keybinds
-func load_keybinds() -> void:
+static func load_keybinds() -> void:
 	for key in data.key_binds.keys():
 		InputMap.action_erase_events(key)
 		
@@ -150,7 +145,7 @@ func load_keybinds() -> void:
 
 
 #region Controller Button Names
-func translate_joy_bind(device: int, bind: int) -> String:
+static func translate_joy_bind(device: int, bind: int) -> String:
 	var device_name: String = Input.get_joy_name(device)
 	var device_lower: String = device_name.to_lower()
 	

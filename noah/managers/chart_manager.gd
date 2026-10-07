@@ -1,9 +1,9 @@
 extends Node
 class_name ChartManager
 
-## Reference of the last song loaded in the charteditor.
+## Reference of the last song loaded in [ChartEditor].
 static var song: Song
-## Reference to the last chart loaded in the charteditor
+## Reference to the last chart loaded in the [ChartEditor]
 static var chart: Chart
 static var difficulty: String = ""
 

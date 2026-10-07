@@ -28,6 +28,8 @@ func _ready() -> void:
 	if not OS.is_debug_build():
 		RenderingServer.set_default_clear_color(Color.BLACK)
 	
+	SettingsManager.load_values()
+	SettingsManager.load_keybinds()
 	SaveManager.load()
 
 func changed_contoller(device: int, connected: bool):
