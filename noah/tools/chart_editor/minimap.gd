@@ -13,7 +13,7 @@ const EVENT_COLOR: Color = Color.GRAY
 var chart_editor: ChartEditor
 var point_width: float:
 	get():
-		return size.x / (ChartManager.strum_count + 1)
+		return size.x / (ChartEditorManifest.strum_count + 1)
 
 var source_texture: Texture
 
@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step / chart_editor.grid.zoom.y
 		var point_a: Vector2i = map_to_image_position(Vector2(0, chart_editor.song_position))
 		var point_b: Vector2i = map_to_image_position(Vector2(0,
@@ -61,12 +61,12 @@ func refresh(data: Array, events:Array = []):
 
 func map_event_to_image(event_time: float): 
 	@warning_ignore("narrowing_conversion")
-	var pos: Vector2i = Vector2i(ChartManager.strum_count, event_time)
+	var pos: Vector2i = Vector2i(ChartEditorManifest.strum_count, event_time)
 	draw_rect_on_image(map_to_image_position(pos), point_size, EVENT_COLOR)
 
 func unmap_event_from_image(event_time: float):
 	@warning_ignore("narrowing_conversion")
-	var pos: Vector2i = Vector2i(ChartManager.strum_count, event_time)
+	var pos: Vector2i = Vector2i(ChartEditorManifest.strum_count, event_time)
 	draw_rect_on_image(map_to_image_position(pos), point_size, background_color)
 
 ## Draws the note color at a point on the image.

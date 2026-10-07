@@ -18,15 +18,15 @@ func _process(delta: float) -> void:
 	
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartManager.chart
+	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartEditorManifest.chart
 	
-	if ChartManager.song:
+	if ChartEditorManifest.song:
 		if instrumental.playing:
 			song_position = instrumental.get_playback_position() - start_offset
 			song_slider.value = song_position
 			
-			for strum in ChartManager.strum_data.size():
-				var track = ChartManager.strum_data[strum]["track"]
+			for strum in ChartEditorManifest.strum_data.size():
+				var track = ChartEditorManifest.strum_data[strum]["track"]
 				if track < vocal_tracks.size():
 					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	
@@ -34,9 +34,9 @@ func _process(delta: float) -> void:
 	if axis and can_interact_with_chart:
 		scrub(axis)
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		update_conductor()
-		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position(conductor.offset - ChartManager.chart.offset)
+		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position(conductor.offset - ChartEditorManifest.chart.offset)
 		update_camera_song_position(instrumental.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
@@ -52,9 +52,9 @@ func _process(delta: float) -> void:
 		if !Input.is_action_pressed(&"control"):
 			if is_mouse_over_grid() and can_interact_with_chart:
 				if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < grid.rows)):
-					var event: String = ChartManager.event_tracks[snapped_position.y - 1]
+					var event: String = ChartEditorManifest.event_tracks[snapped_position.y - 1]
 					var time: float = grid_position_to_time(snapped_position, true)
-					time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+					time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
 					
 					if time <= instrumental.stream.get_length():
 						if !is_event_at(event, time):
@@ -84,8 +84,8 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed(&"mouse_middle") and is_mouse_over_grid() and can_chart:
 		if (((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < grid.rows)):
 				if hovered_event != -1:
-					var event: String = ChartManager.chart.events[hovered_event][1]
-					var time: float = ChartManager.chart.events[hovered_event][0]
+					var event: String = ChartEditorManifest.chart.events[hovered_event][1]
+					var time: float = ChartEditorManifest.chart.events[hovered_event][0]
 					
 					if (Constants.EVENT_DATA.has(event)
 					and Constants.EVENT_DATA.get(event).has("parameters")):
@@ -97,7 +97,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_mouse_over_grid():
 		if can_chart and hovered_event != -1:
 			var i: int = hovered_event
-			var event = ChartManager.chart.events[i]
+			var event = ChartEditorManifest.chart.events[i]
 			var event_name: String = event[1]
 			var parameters = event[2]
 			
@@ -134,7 +134,7 @@ func _process(delta: float) -> void:
 				elif ((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < grid.rows):
 					if moving_notes:
 						var cursor_time: float = grid_position_to_time(snapped_position, true)
-						cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+						cursor_time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
 						
 						var time_distance: float = cursor_time - start_time
 						changed_length = true
@@ -165,11 +165,11 @@ func _process(delta: float) -> void:
 			
 			var events: Array = []
 			
-			for i in range(max(lane_a, 0), min(lane_b + 1, ChartManager.event_tracks.size())):
-				events.append(ChartManager.event_tracks[i])
+			for i in range(max(lane_a, 0), min(lane_b + 1, ChartEditorManifest.event_tracks.size())):
+				events.append(ChartEditorManifest.event_tracks[i])
 			
-			var L: int = bsearch_left_range(ChartManager.chart.events, time_a)
-			var R: int = bsearch_right_range(ChartManager.chart.events, time_b)
+			var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time_a)
+			var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -207,7 +207,7 @@ func _draw() -> void:
 		draw_rect(rect, box_color)
 		draw_rect(rect, Color.LIME, false, 1)
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		## The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = grid.position + $"Grid Layer".offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -218,13 +218,13 @@ func _draw() -> void:
 		
 		## Song Start Offset Marker
 		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset +
-		+ Vector2(time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2, grid.get_real_position(Vector2(0, 0)).y), \
+		+ Vector2(time_to_y_position(song_position - ChartEditorManifest.chart.offset + start_offset) - 2, grid.get_real_position(Vector2(0, 0)).y), \
 		grid.get_real_position(Vector2(0, grid.rows)) - grid.get_real_position(Vector2(0, 0)) + Vector2(4, 0))
 		draw_rect(rect, current_time_color)
 		
 		# The box at the start of the marker
 		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset
-		+ Vector2(time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 4, grid.get_real_position(Vector2(0, 0)).y), \
+		+ Vector2(time_to_y_position(song_position - ChartEditorManifest.chart.offset + start_offset) - 4, grid.get_real_position(Vector2(0, 0)).y), \
 		grid.get_real_position(Vector2(0, 1)) - grid.get_real_position(Vector2(0, 0)) + Vector2(8, 0))
 		draw_rect(rect, current_time_color)
 		
@@ -245,7 +245,7 @@ func _draw() -> void:
 func view_button_item_pressed(id):
 	match id:
 		0:
-			ChartManager.event_editor = false
+			ChartEditorManifest.event_editor = false
 			get_tree().change_scene_to_file(Constants.CHART_EDITOR_SCENE)
 		
 		1:
@@ -271,7 +271,7 @@ func view_button_item_pressed(id):
 
 ## Loads all the notes and waveforms for the next two waveforms.
 func load_section(time: float, forced: bool = false):
-	if not ChartManager.chart or ChartManager.chart.events.is_empty():
+	if not ChartEditorManifest.chart or ChartEditorManifest.chart.events.is_empty():
 		return
 	
 	if forced:
@@ -282,8 +282,8 @@ func load_section(time: float, forced: bool = false):
 		current_visible_events_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(ChartManager.chart.events, time - _range)
-	var R: int = bsearch_right_range(ChartManager.chart.events, time + _range)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time - _range)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -299,7 +299,7 @@ func load_section(time: float, forced: bool = false):
 func update_note_position(node: Node2D) -> void:
 	if node is ChartEvent:
 		node.position = Vector2(time_to_y_position(node.time) + grid.grid_size.x * grid.zoom.x / 2,
-		grid.get_real_position(Vector2(0, 1.5 + ChartManager.event_tracks.find(node.event))).y)
+		grid.get_real_position(Vector2(0, 1.5 + ChartEditorManifest.event_tracks.find(node.event))).y)
 		node.position += $"Grid Layer".offset
 		node.grid_size = (grid.grid_size * grid.zoom)
 		node.update()
@@ -337,7 +337,7 @@ func load_dividers() -> void:
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(ChartManager.chart.tempos.keys())
+	times.append_array(ChartEditorManifest.chart.tempos.keys())
 	times.erase(0.0)
 	for i in times:
 		var rect = ColorRect.new()
@@ -356,17 +356,17 @@ func load_dividers() -> void:
 
 func load_chart(file: Chart, ghost: bool = false) -> void:
 	super(file, ghost)
-	ChartManager.event_tracks = []
+	ChartEditorManifest.event_tracks = []
 	for event in file.events:
-		if !ChartManager.event_tracks.has(event[1]):
-			ChartManager.event_tracks.append(event[1])
+		if !ChartEditorManifest.event_tracks.has(event[1]):
+			ChartEditorManifest.event_tracks.append(event[1])
 	
 	update_grid()
 	_on_event_tracks_ready()
 
 func update_grid() -> void:
 	grid.columns = conductor.numerator * conductor.denominator
-	grid.rows = 1 + ChartManager.event_tracks.size()
+	grid.rows = 1 + ChartEditorManifest.event_tracks.size()
 	
 	$"UI/Event Tracks/Add Track".custom_maximum_size.y = grid.grid_size.y * grid.zoom.y
 	
@@ -374,7 +374,7 @@ func update_grid() -> void:
 	$"UI/Event Tracks".size.y = 0
 	
 	get_tree().call_group(&"tracks",  &"queue_free")
-	for track in ChartManager.event_tracks:
+	for track in ChartEditorManifest.event_tracks:
 		var track_instance = TRACK_BUTTON.instantiate()
 		
 		track_instance.event = track
@@ -393,8 +393,8 @@ func remove_track(node) -> void:
 	var event: String = node.event
 	node.queue_free()
 	
-	ChartManager.event_tracks.erase(event)
-	ChartManager.chart.events = ChartManager.chart.events.filter(
+	ChartEditorManifest.event_tracks.erase(event)
+	ChartEditorManifest.chart.events = ChartEditorManifest.chart.events.filter(
 		func(_event): return _event[1] != event
 	)
 	
@@ -409,19 +409,19 @@ func remove_track(node) -> void:
 	SoundManager.tool_mouse_click.play()
 	
 	if minimap:
-		minimap.refresh(ChartManager.chart.notes, ChartManager.chart.events)
+		minimap.refresh(ChartEditorManifest.chart.notes, ChartEditorManifest.chart.events)
 
 
 func _on_event_tracks_ready() -> void:
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		await Engine.get_main_loop().process_frame
 		update_grid()
 		load_dividers()
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
-	var _offset: float = -ChartManager.chart.offset
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
+	var _offset: float = -ChartEditorManifest.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
@@ -442,7 +442,7 @@ func time_to_y_position(time: float) -> float:
 			R = time
 		
 		tempo = tempo_data.get(L)
-		meter = ChartManager.chart.get_meter_at(L)
+		meter = ChartEditorManifest.chart.get_meter_at(L)
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * meter[0], 0)).x
@@ -455,13 +455,13 @@ func time_to_y_position(time: float) -> float:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Array = ChartManager.chart.get_meter_at(time)
-	var L: float = ChartManager.chart.get_tempo_time_at(time)
+	var meter: Array = ChartEditorManifest.chart.get_meter_at(time)
+	var L: float = ChartEditorManifest.chart.get_tempo_time_at(time)
 	var yR: float = p.x * grid.grid_size.x * grid.zoom.x
 	if factor_in_snap:
 		yR *= meter[0] * meter[1] / chart_snap
 	
-	var seconds_per_beat: float = 60.0 / ChartManager.chart.tempos[L]
+	var seconds_per_beat: float = 60.0 / ChartEditorManifest.chart.tempos[L]
 	var output: float = yR / (grid.grid_size.x * grid.zoom.x * meter[0]) * seconds_per_beat
 	
 	return output
@@ -472,8 +472,8 @@ func is_event_at(_name: String, time: float) -> bool:
 
 ## Returns the index of the given event in the events list.
 func find_event(_name: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -483,7 +483,7 @@ func find_event(_name: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var event: Array = ChartManager.chart.events[i]
+		var event: Array = ChartEditorManifest.chart.events[i]
 		if (event[1] == _name):
 			if is_equal_approx(event[0], time):
 				return i
@@ -507,19 +507,19 @@ func remove_note(_name, time: float = -1) -> void:
 		event_nodes.remove_at(index)
 		current_visible_events_R -= 1
 	
-	var ev = ChartManager.chart.events.get(i)
+	var ev = ChartEditorManifest.chart.events.get(i)
 	if minimap and ev:
 		if find_events_within_time(ev[0], conductor.seconds_per_step).size() <= 1: # TODO this still removes events in cases it shouldnt maybe make a custom epsilon or just refresh the entire texture
 			minimap.unmap_event_from_image(ev[0])
 	
-	ChartManager.chart.events.remove_at(i)
+	ChartEditorManifest.chart.events.remove_at(i)
 	
 
 
 ## In the event editor, lane_a is a list of event names
 func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
-		var event: String = ChartManager.chart.events[i][1]
+		var event: String = ChartEditorManifest.chart.events[i][1]
 		return lane_a.has(event)
 		)
 	
@@ -562,7 +562,7 @@ func place_notes(events: Array) -> Array:
 func remove_notes(events: Array) -> void:
 	var i: int = 0
 	for event in events:
-		var _event = ChartManager.chart.events[event - i]
+		var _event = ChartEditorManifest.chart.events[event - i]
 		remove_note(_event[1], _event[0])
 		i += 1
 
@@ -572,7 +572,7 @@ func cut() -> void:
 		undo_redo.create_action("Cut Event(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var event = ChartManager.chart.events[i]
+			var event = ChartEditorManifest.chart.events[i]
 			temp.append([event[0], event[1], event[2]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -592,7 +592,7 @@ func delete() -> void:
 		undo_redo.create_action("Delete Event(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var event = ChartManager.chart.events[i]
+			var event = ChartEditorManifest.chart.events[i]
 			temp.append([event[0], event[1], event[2]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -608,20 +608,20 @@ func delete() -> void:
 func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
-		clipboard.append(ChartManager.chart.events[note])
+		clipboard.append(ChartEditorManifest.chart.events[note])
 	
 	SoundManager.tool_note_place.play()
 
 
 func delete_stacked_notes() -> void:
-	if ChartManager.chart.events.size() > 1:
+	if ChartEditorManifest.chart.events.size() > 1:
 		var i: int = 0
 		var deleted: bool = false
 		selected_notes = []
 		selected_note_nodes = []
-		for index in range(ChartManager.chart.events.size() - 1):
-			var note_a = ChartManager.chart.events[index - i]
-			var note_b = ChartManager.chart.events[index - i + 1]
+		for index in range(ChartEditorManifest.chart.events.size() - 1):
+			var note_a = ChartEditorManifest.chart.events[index - i]
+			var note_b = ChartEditorManifest.chart.events[index - i + 1]
 			
 			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
 				deleted = true
@@ -633,7 +633,7 @@ func delete_stacked_notes() -> void:
 
 
 func select_all() -> void:
-	selected_notes = range(ChartManager.chart.events.size())
+	selected_notes = range(ChartEditorManifest.chart.events.size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"events")
 	if selected_notes.size() > 0:
 		SoundManager.tool_note_place.play()
@@ -647,7 +647,7 @@ func _on_event_parameters_about_to_popup() -> void:
 	var parameters: Array = []
 	
 	if hovered_event != -1:
-		parameters = ChartManager.chart.events[hovered_event][2]
+		parameters = ChartEditorManifest.chart.events[hovered_event][2]
 		%"Place Event".text = "Edit Event"
 	else:
 		%"Place Event".text = "Place Event"
@@ -704,7 +704,7 @@ func _on_place_event_pressed() -> void:
 
 
 func change_parameters(i: int, parameters: Array) -> void:
-	ChartManager.chart.events[i][2] = parameters
+	ChartEditorManifest.chart.events[i][2] = parameters
 
 
 func _on_add_track_pressed() -> void:
@@ -716,7 +716,7 @@ func _on_window_about_to_popup() -> void:
 	can_chart = false
 	%"Event Option".clear()
 	var events: Array = Constants.EVENT_DATA.keys()
-	events = events.filter(func(_name): return !ChartManager.event_tracks.has(_name))
+	events = events.filter(func(_name): return !ChartEditorManifest.event_tracks.has(_name))
 	
 	for event in events:
 		%"Event Option".add_item(event)
@@ -733,7 +733,7 @@ func _on_window_about_to_popup() -> void:
 func _on_add_event_track_pressed() -> void:
 	if %"Event Option".selected != -1:
 		var event: String = %"Event Option".get_item_text(%"Event Option".get_selected_id())
-		ChartManager.event_tracks.append(event)
+		ChartEditorManifest.event_tracks.append(event)
 		
 		update_grid()
 		load_dividers()

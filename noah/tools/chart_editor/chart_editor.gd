@@ -100,7 +100,7 @@ var current_visible_events_R: int = -1
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if name == "Chart Editor":
-		if ChartManager.event_editor:
+		if ChartEditorManifest.event_editor:
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 			return
 	
@@ -108,11 +108,11 @@ func _ready() -> void:
 	Global.set_window_title("Chart Editor")
 	song_speed = SettingsManager.data.song_speed
 	
-	$"UI/LoadedSong error".visible = not ChartManager.song
+	$"UI/LoadedSong error".visible = not ChartEditorManifest.song
 	
-	if ChartManager.song:
-		var song = ChartManager.song
-		load_song(song, ChartManager.difficulty)
+	if ChartEditorManifest.song:
+		var song = ChartEditorManifest.song
+		load_song(song, ChartEditorManifest.difficulty)
 		var action: String = "Loaded Song"
 		undo_redo.create_action(action)
 		undo_redo.add_do_property(self, "song", song)
@@ -132,26 +132,26 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	
-	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartManager.chart
+	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartEditorManifest.chart
 	
-	if ChartManager.song and instrumental.playing:
+	if ChartEditorManifest.song and instrumental.playing:
 		song_position = instrumental.get_playback_position() - start_offset
 		song_slider.value = song_position
 		
-		var notes_list = ChartManager.chart.notes
+		var notes_list = ChartEditorManifest.chart.notes
 		
 		if notes_list.size() > 0:
 			if current_note < notes_list.size():
 				var note = notes_list[current_note]
 				if note[0] <= (song_position + start_offset):
 					var lane: float = note[1]
-					if vocal_tracks.size() == 1 and ChartManager.strum_data.size() > 0:
-						if ChartManager.strum_data[0].get('hit_sounds', true):
+					if vocal_tracks.size() == 1 and ChartEditorManifest.strum_data.size() > 0:
+						if ChartEditorManifest.strum_data[0].get('hit_sounds', true):
 							SoundManager.tool_hit.play()
 					else:
-						for id in ChartManager.strum_data.size():
-							if ((lane >= ChartManager.strum_data[id]["strums"][0]) and (lane <= ChartManager.strum_data[id]["strums"][1])):
-								if ChartManager.strum_data[id].get('hit_sounds', true):
+						for id in ChartEditorManifest.strum_data.size():
+							if ((lane >= ChartEditorManifest.strum_data[id]["strums"][0]) and (lane <= ChartEditorManifest.strum_data[id]["strums"][1])):
+								if ChartEditorManifest.strum_data[id].get('hit_sounds', true):
 									SoundManager.tool_hit.play()
 					
 					current_note += 1
@@ -162,9 +162,9 @@ func _process(delta: float) -> void:
 	if axis and can_interact_with_chart:
 		scrub(axis)
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		update_conductor()
-		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartManager.chart.offset)
+		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - ChartEditorManifest.chart.offset)
 		update_camera_song_position(instrumental.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
@@ -180,10 +180,10 @@ func _process(delta: float) -> void:
 			bounding_box = true
 			start_box = get_global_mouse_position()
 		elif is_mouse_over_grid() and not is_mouse_over_any_ui():
-			if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartManager.strum_count)):
+			if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartEditorManifest.strum_count)):
 				var lane: int = snapped_position.x - 1
 				var time: float = grid_position_to_time(snapped_position, true)
-				time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+				time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
 				
 				if time <= instrumental.stream.get_length():
 					if !is_note_at(lane, time):
@@ -198,21 +198,21 @@ func _process(delta: float) -> void:
 							moving_notes = true
 							start_lane = lane
 							start_time = time
-							min_lane = ChartManager.strum_count
+							min_lane = ChartEditorManifest.strum_count
 							max_lane = 0
 							for j in selected_notes:
-								var note = ChartManager.chart.notes[j]
+								var note = ChartEditorManifest.chart.notes[j]
 								min_lane = min(min_lane, note[1])
 								max_lane = max(max_lane, note[1])
 							
 							min_lane = 0 + (start_lane - min_lane)
-							max_lane = ChartManager.strum_count - 1 - (max_lane - start_lane)
+							max_lane = ChartEditorManifest.strum_count - 1 - (max_lane - start_lane)
 						else:
 							var index: int = find_note(lane, time)
 							selected_notes = [index]
 							selected_note_nodes = [note_nodes[index - current_visible_notes_L]]
 							min_lane = 0
-							max_lane = ChartManager.strum_count - 1
+							max_lane = ChartEditorManifest.strum_count - 1
 						
 						SoundManager.tool_mouse_click.play()
 	
@@ -220,7 +220,7 @@ func _process(delta: float) -> void:
 		var lane: int = snapped_position.x - 1
 		if hovered_note != -1:
 			var i: int = hovered_note
-			var note = ChartManager.chart.notes[i]
+			var note = ChartEditorManifest.chart.notes[i]
 			var length: float = note[2]
 			var note_type = note[3]
 			
@@ -251,20 +251,20 @@ func _process(delta: float) -> void:
 		if snapped_position.x == 0:
 			@warning_ignore("incompatible_ternary")
 			set_start_offset(snapped_position if Input.is_action_pressed(&"shift") else grid_position)
-		elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartManager.strum_count):
+		elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartEditorManifest.strum_count):
 			if placing_note:
 				var cursor_time = grid_position_to_time(snapped_position, true)
-				cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
 				
 				for i in selected_notes:
-					var note: Array = ChartManager.chart.notes[i]
+					var note: Array = ChartEditorManifest.chart.notes[i]
 					
 					var time: float = note[0]
 					var lane: int = note[1]
 					var note_type: String = note[3]
 					
 					var distance = snappedf(max(cursor_time - time, 0.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
-					ChartManager.chart.notes[i] = [time, lane, distance, note_type]
+					ChartEditorManifest.chart.notes[i] = [time, lane, distance, note_type]
 					
 					changed_length = (distance > 0)
 					if changed_length:
@@ -275,10 +275,10 @@ func _process(delta: float) -> void:
 					
 					auto_save()
 		
-		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartManager.strum_count):
+		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < ChartEditorManifest.strum_count):
 			if moving_notes:
 				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
 				var cursor_lane: int = snapped_position.x - 1
 				
 				var lane_distance: int = cursor_lane - start_lane
@@ -332,8 +332,8 @@ func _process(delta: float) -> void:
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
 			
-			var L: int = bsearch_left_range(ChartManager.chart.notes, time_a)
-			var R: int = bsearch_right_range(ChartManager.chart.notes, time_b)
+			var L: int = bsearch_left_range(ChartEditorManifest.chart.notes, time_a)
+			var R: int = bsearch_right_range(ChartEditorManifest.chart.notes, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -368,27 +368,27 @@ func scrub(axis: int) -> void:
 func update_conductor():
 	var time: float = song_position + start_offset
 	conductor.time = time
-	conductor.tempo = ChartManager.chart.get_tempo_at(time)
-	var meter = ChartManager.chart.get_meter_at(time)
+	conductor.tempo = ChartEditorManifest.chart.get_tempo_at(time)
+	var meter = ChartEditorManifest.chart.get_meter_at(time)
 	conductor.numerator = meter[0]
 	conductor.denominator = meter[1]
-	conductor.offset = ChartManager.chart.get_tempo_time_at(time) + ChartManager.chart.offset
+	conductor.offset = ChartEditorManifest.chart.get_tempo_time_at(time) + ChartEditorManifest.chart.offset
 
 
 func set_start_offset(grid_position: Vector2):
 	var time: float = grid_position_to_time(grid_position)
-	time += ChartManager.chart.get_tempo_time_at(song_position + start_offset)
-	time += ChartManager.chart.offset
+	time += ChartEditorManifest.chart.get_tempo_time_at(song_position + start_offset)
+	time += ChartEditorManifest.chart.offset
 	start_offset = time - song_position
 
 # Updates the audios
 func refresh_audios():
 	instrumental.volume_linear = instrumental_volume
 	
-	for strum in ChartManager.strum_data.size():
-		var track = ChartManager.strum_data[strum]["track"]
+	for strum in ChartEditorManifest.strum_data.size():
+		var track = ChartEditorManifest.strum_data[strum]["track"]
 		if track < vocal_tracks.size():
-			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(ChartManager.strum_data[track]['volume']))
+			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(ChartEditorManifest.strum_data[track]['volume']))
 
 
 func is_mouse_over_any_ui() -> bool:
@@ -449,7 +449,7 @@ func _draw() -> void:
 		draw_rect(rect, box_color)
 		draw_rect(rect, Color.LIME, false, 1)
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		# The offset the grid has from the normal canvas layer
 		var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -460,13 +460,13 @@ func _draw() -> void:
 		
 		# Song Start Offset Marker
 		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
-		time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 2), \
+		time_to_y_position(song_position - ChartEditorManifest.chart.offset + start_offset) - 2), \
 		grid.get_real_position(Vector2(grid.columns, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		
 		# The box at the start of the marker
 		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
-		time_to_y_position(song_position - ChartManager.chart.offset + start_offset) - 4), \
+		time_to_y_position(song_position - ChartEditorManifest.chart.offset + start_offset) - 4), \
 		grid.get_real_position(Vector2(1, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
 		
@@ -502,29 +502,29 @@ func on_files_dropped(files: PackedStringArray):
 
 
 func update_grid():
-	grid.columns = 2 + ChartManager.strum_count
+	grid.columns = 2 + ChartEditorManifest.strum_count
 	grid.rows = conductor.numerator * conductor.denominator
 	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
 	%"Strum Labels".size.x = 0
-	%"Strum Labels".custom_minimum_size.x = ChartManager.strum_count * (grid.grid_size.x * grid.zoom.x)
+	%"Strum Labels".custom_minimum_size.x = ChartEditorManifest.strum_count * (grid.grid_size.x * grid.zoom.x)
 	
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
 	
-	for id in ChartManager.strum_data.size():
+	for id in ChartEditorManifest.strum_data.size():
 		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
 		
 		strum_label_instance.id = id
 		
 		%"Strum Labels".add_child(strum_label_instance)
 		strum_label_instance.custom_minimum_size.x = (
-			ChartManager.strum_data[id]["strums"][1] + 1 - ChartManager.strum_data[id]["strums"][0]
+			ChartEditorManifest.strum_data[id]["strums"][1] + 1 - ChartEditorManifest.strum_data[id]["strums"][0]
 			) * grid.grid_size.x * grid.zoom.x
 		strum_label_instance.size.y = 32
 		
-		if ChartManager.strum_data[id]["strums"][0] == 0:
+		if ChartEditorManifest.strum_data[id]["strums"][0] == 0:
 			strum_label_instance.get_node("Move Lane Left").visible = false
-		if ChartManager.strum_data[id]["strums"][1] == ChartManager.strum_count - 1:
+		if ChartEditorManifest.strum_data[id]["strums"][1] == ChartEditorManifest.strum_count - 1:
 			strum_label_instance.get_node("Move Lane Right").visible = false
 		
 		strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
@@ -538,44 +538,44 @@ func update_grid():
 
 
 func load_song(song: Song, difficulty: Variant = null):
-	if ChartManager.song != song:
+	if ChartEditorManifest.song != song:
 		song_position = 0.0
 	else:
 		song_position -= start_offset
 	
 	$"UI/LoadedSong error".visible = false
-	ChartManager.song = song
+	ChartEditorManifest.song = song
 	if difficulty == null:
-		difficulty = ChartManager.song.difficulties.keys()[0]
+		difficulty = ChartEditorManifest.song.difficulties.keys()[0]
 	
 	var difficulty_data: SongDifficultyData = song.difficulties.get(difficulty)
-	ChartManager.chart = Chart.load(difficulty_data.chart)
-	ChartManager.difficulty = difficulty
+	ChartEditorManifest.chart = Chart.load(difficulty_data.chart)
+	ChartEditorManifest.difficulty = difficulty
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"queue_free")
-	instrumental.stream = SoundManager.get_stream(ChartManager.song.instrumental)
+	instrumental.stream = SoundManager.get_stream(ChartEditorManifest.song.instrumental)
 	play_audios(song_position)
 	
 	toggle_audios()
 	
 	song_slider.max_value = instrumental.stream.get_length()
 	song_slider.value = song_position
-	conductor.tempo = ChartManager.chart.get_tempo_at(song_position)
-	var meter = ChartManager.chart.get_meter_at(song_position)
+	conductor.tempo = ChartEditorManifest.chart.get_tempo_at(song_position)
+	var meter = ChartEditorManifest.chart.get_meter_at(song_position)
 	conductor.numerator = meter[0]
 	conductor.denominator = meter[1]
-	conductor.offset = ChartManager.chart.offset
+	conductor.offset = ChartEditorManifest.chart.offset
 	
 	lower_ui.get_node("%Difficulty Button").get_popup().clear()
-	for d in ChartManager.song.difficulties.keys():
+	for d in ChartEditorManifest.song.difficulties.keys():
 		lower_ui.get_node("%Difficulty Button").get_popup().add_item(d)
 	
-	lower_ui.get_node("%Difficulty Button").select(ChartManager.song.difficulties.keys().find(difficulty))
+	lower_ui.get_node("%Difficulty Button").select(ChartEditorManifest.song.difficulties.keys().find(difficulty))
 	upper_ui.get_node("%Metadata Window").update_stats()
 	
 	upper_ui.song_name_label.text = song.title
 	
-	load_chart(ChartManager.chart)
+	load_chart(ChartEditorManifest.chart)
 	current_snap = conductor.denominator
 	
 	waveform_dirty = true
@@ -632,7 +632,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 ## Loads all the notes and waveforms for the next two waveforms.
 ## [br]The [code]forced[/code] parameter will determine if all visible notes on screen should be cleared and replaced.
 func load_section(time: float, forced: bool = false) -> void:
-	if not ChartManager.chart or ChartManager.chart.notes.is_empty():
+	if not ChartEditorManifest.chart or ChartEditorManifest.chart.notes.is_empty():
 		return
 	
 	if forced:
@@ -645,8 +645,8 @@ func load_section(time: float, forced: bool = false) -> void:
 		current_visible_notes_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(ChartManager.chart.notes, time - _range)
-	var R: int = bsearch_right_range(ChartManager.chart.notes, time + _range)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.notes, time - _range)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.notes, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -657,8 +657,8 @@ func load_section(time: float, forced: bool = false) -> void:
 	
 	load_notes(L, R)
 	
-	L = bsearch_left_range(ChartManager.chart.events, time - _range)
-	R = bsearch_right_range(ChartManager.chart.events, time + _range)
+	L = bsearch_left_range(ChartEditorManifest.chart.events, time - _range)
+	R = bsearch_right_range(ChartEditorManifest.chart.events, time + _range)
 	
 	load_events(L, R)
 	update_selected_notes()
@@ -671,8 +671,8 @@ func load_notes(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(note_nodes.size()):
 				var note = note_nodes[i]
-				if (note.time < ChartManager.chart.notes[L][0]
-				or note.time > ChartManager.chart.notes[R][0]):
+				if (note.time < ChartEditorManifest.chart.notes[L][0]
+				or note.time > ChartEditorManifest.chart.notes[R][0]):
 					note.queue_free()
 					note_nodes.remove_at(i)
 					i -= 1
@@ -685,7 +685,7 @@ func load_notes(L: int, R: int) -> void:
 					update_note_position(note_nodes[i - L])
 				continue
 			
-			var note = ChartManager.chart.notes[i]
+			var note = ChartEditorManifest.chart.notes[i]
 			place_note(note[0], note[1], note[2], note[3], false, false, true, i - L)
 		
 		current_visible_notes_L = L
@@ -699,8 +699,8 @@ func load_events(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(event_nodes.size()):
 				var event = event_nodes[i]
-				if (event.time < ChartManager.chart.events[L][0]
-				or event.time > ChartManager.chart.events[R][0]):
+				if (event.time < ChartEditorManifest.chart.events[L][0]
+				or event.time > ChartEditorManifest.chart.events[R][0]):
 					event.queue_free()
 					event_nodes.remove_at(i)
 					i -= 1
@@ -713,7 +713,7 @@ func load_events(L: int, R: int) -> void:
 					update_note_position(event_nodes[i - L])
 				continue
 			
-			var event = ChartManager.chart.events[i]
+			var event = ChartEditorManifest.chart.events[i]
 			place_event(event[0], event[1], event[2], false, false, true, i - L)
 		
 		current_visible_events_L = L
@@ -753,7 +753,7 @@ func load_dividers() -> void:
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for packet in ChartManager.strum_data:
+	for packet in ChartEditorManifest.strum_data:
 		var rect = ColorRect.new()
 		var size: float = 2
 		
@@ -768,9 +768,9 @@ func load_dividers() -> void:
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(ChartManager.chart.tempos.keys())
+	times.append_array(ChartEditorManifest.chart.tempos.keys())
 	times.erase(0.0)
-	if not ChartManager.chart.tempos.is_empty():
+	if not ChartEditorManifest.chart.tempos.is_empty():
 		for i in times:
 			var rect = ColorRect.new()
 			var size: float = 2
@@ -788,7 +788,7 @@ func load_dividers() -> void:
 
 
 func new_file(path: String, song: Song) -> void:
-	var old_song = ChartManager.song
+	var old_song = ChartEditorManifest.song
 	load_song(song)
 	var action: String = "Created New Song"
 	undo_redo.create_action(action)
@@ -804,7 +804,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 sorted: bool = false, sort_index: int = -1) -> int:
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter: Array = ChartManager.chart.get_meter_at(time)
+	var meter: Array = ChartEditorManifest.chart.get_meter_at(time)
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -823,9 +823,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	if placed:
 		var packet: Array = [time, lane, length, type]
-		var L: int = bsearch_left_range(ChartManager.chart.notes, time)
+		var L: int = bsearch_left_range(ChartEditorManifest.chart.notes, time)
 		if L != -1:
-			ChartManager.chart.notes.insert(L, packet)
+			ChartEditorManifest.chart.notes.insert(L, packet)
 			
 			if note_nodes.is_empty():
 				note_nodes.append(note_instance)
@@ -840,17 +840,17 @@ sorted: bool = false, sort_index: int = -1) -> int:
 				selected_notes = [L]
 				selected_note_nodes = [note_instance]
 				min_lane = 0
-				max_lane = ChartManager.strum_count - 1
+				max_lane = ChartEditorManifest.strum_count - 1
 			
 			output = L
 		else:
-			ChartManager.chart.notes.append(packet)
+			ChartEditorManifest.chart.notes.append(packet)
 			note_nodes.append(note_instance)
-			L = ChartManager.chart.notes.size() - 1
+			L = ChartEditorManifest.chart.notes.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [note_instance]
 			min_lane = 0
-			max_lane = ChartManager.strum_count - 1
+			max_lane = ChartEditorManifest.strum_count - 1
 			output = L
 		
 		minimap.map_to_image(packet)
@@ -891,9 +891,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(ChartManager.chart.events, time)
+		var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time)
 		if L != -1:
-			ChartManager.chart.events.insert(L, [time, event, parameters])
+			ChartEditorManifest.chart.events.insert(L, [time, event, parameters])
 			
 			if event_nodes.is_empty():
 				event_nodes.append(event_instance)
@@ -908,17 +908,17 @@ sorted: bool = false, sort_index: int = -1) -> int:
 				selected_notes = [L]
 				selected_note_nodes = [event_instance]
 				min_lane = 0
-				max_lane = ChartManager.strum_count - 1
+				max_lane = ChartEditorManifest.strum_count - 1
 			
 			output = L
 		else:
 			event_nodes.append(event_instance)
-			ChartManager.chart.events.append([time, event, parameters])
-			L = ChartManager.chart.events.size() - 1
+			ChartEditorManifest.chart.events.append([time, event, parameters])
+			L = ChartEditorManifest.chart.events.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [event_instance]
 			min_lane = 0
-			max_lane = ChartManager.strum_count - 1
+			max_lane = ChartEditorManifest.strum_count - 1
 			output = L
 		
 		# Preventing fake events
@@ -977,21 +977,21 @@ func remove_note(lane, time: float = -1):
 		note_nodes.remove_at(index)
 		current_visible_notes_R -= 1
 	if minimap:
-		minimap.unmap_from_image(ChartManager.chart.notes[i])
-	ChartManager.chart.notes.remove_at(i)
+		minimap.unmap_from_image(ChartEditorManifest.chart.notes[i])
+	ChartEditorManifest.chart.notes.remove_at(i)
 
 ## Removes the notes in the given indices
 func remove_notes(indices: Array):
 	var offset: int = 0
 	for i in indices:
-		var note = ChartManager.chart.notes[i - offset]
+		var note = ChartEditorManifest.chart.notes[i - offset]
 		remove_note(note[1], note[0])
 		offset += 1
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.notes, time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.notes, time + EPSILON)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.notes, time - EPSILON)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.notes, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -1001,15 +1001,15 @@ func find_note(lane: int, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var note: Array = ChartManager.chart.notes[i]
+		var note: Array = ChartEditorManifest.chart.notes[i]
 		if note[1] == lane and is_equal_approx(note[0], time):
 			return i
 	
 	return -1
 
 func find_events_at(time: float) -> Array[int]:
-	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time + EPSILON)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1018,7 +1018,7 @@ func find_events_at(time: float) -> Array[int]:
 	var ret: Array[int] = []
 	
 	for i in range(L, R + 1):
-		var _event: Array = ChartManager.chart.events[i]
+		var _event: Array = ChartEditorManifest.chart.events[i]
 		if is_equal_approx(_event[0], time):
 			ret.append(i)
 	return ret
@@ -1026,8 +1026,8 @@ func find_events_at(time: float) -> Array[int]:
 func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 	if epsilon == -1.0:
 		epsilon = EPSILON
-	var L: int = bsearch_left_range(ChartManager.chart.events, time - epsilon)
-	var R: int = bsearch_right_range(ChartManager.chart.events, time + epsilon)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time - epsilon)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time + epsilon)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1041,8 +1041,8 @@ func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
-	var L: int = bsearch_left_range(ChartManager.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(ChartManager.chart.events, time + EPSILON)
+	var L: int = bsearch_left_range(ChartEditorManifest.chart.events, time - EPSILON)
+	var R: int = bsearch_right_range(ChartEditorManifest.chart.events, time + EPSILON)
 	
 	#print(find_events_at(time))
 	
@@ -1054,7 +1054,7 @@ func find_event(event: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var _event: Array = ChartManager.chart.events[i]
+		var _event: Array = ChartEditorManifest.chart.events[i]
 		if (_event[1] == event):
 			if is_equal_approx(_event[0], time):
 				return i
@@ -1065,13 +1065,13 @@ func play_audios(time: float):
 	vocals.stream = AudioStreamPolyphonic.new()
 	# This is to prevent null references
 	vocals.play()
-	if not ChartManager.song:
+	if not ChartEditorManifest.song:
 		return
-	vocals.stream.polyphony = ChartManager.song.vocals.size()
+	vocals.stream.polyphony = ChartEditorManifest.song.vocals.size()
 	
 	var playback = vocals.get_stream_playback()
 	vocal_tracks = []
-	for stream in ChartManager.song.vocals:
+	for stream in ChartEditorManifest.song.vocals:
 		vocal_tracks.append(playback.play_stream(SoundManager.get_stream(stream),
 		time + start_offset, 0.0, song_speed))
 	
@@ -1080,16 +1080,16 @@ func play_audios(time: float):
 	instrumental.pitch_scale = song_speed
 	song_position = time + start_offset
 	
-	current_note = bsearch_left_range(ChartManager.chart.notes, song_position)
+	current_note = bsearch_left_range(ChartEditorManifest.chart.notes, song_position)
 	
-	if ChartManager.chart.notes.size() > 0:
-		if song_position > ChartManager.chart.notes[ChartManager.chart.notes.size() - 1][0]:
-			current_note = ChartManager.chart.notes.size() - 1
+	if ChartEditorManifest.chart.notes.size() > 0:
+		if song_position > ChartEditorManifest.chart.notes[ChartEditorManifest.chart.notes.size() - 1][0]:
+			current_note = ChartEditorManifest.chart.notes.size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
-	var _offset: float = 0# -ChartManager.chart.offset
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
+	var _offset: float = 0# -ChartEditorManifest.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
@@ -1113,7 +1113,7 @@ func time_to_y_position(time: float) -> float:
 			R = time
 		
 		tempo = tempo_data.get(L)
-		meter = ChartManager.chart.get_meter_at(L)
+		meter = ChartEditorManifest.chart.get_meter_at(L)
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2(0,
@@ -1148,13 +1148,13 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Array = ChartManager.chart.get_meter_at(time)
-	var L: float = ChartManager.chart.get_tempo_time_at(time)
+	var meter: Array = ChartEditorManifest.chart.get_meter_at(time)
+	var L: float = ChartEditorManifest.chart.get_tempo_time_at(time)
 	var yR: float = p.y
 	if factor_in_snap:
 		yR *= meter[0] * meter[1] / chart_snap
 	
-	var spb: float = (60.0 / ChartManager.chart.tempos[L]) * (4.0 / meter[1])
+	var spb: float = (60.0 / ChartEditorManifest.chart.tempos[L]) * (4.0 / meter[1])
 	return yR * (spb / meter[1])
 
 ## Binary searches for both notes and events
@@ -1212,30 +1212,30 @@ func toggle_audios(paused: bool = true) -> void:
 
 
 func move_bound_left(strum_id: int) -> void:
-	var strum_data = ChartManager.strum_data[strum_id]
-	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartManager.strum_count - 1)
+	var strum_data = ChartEditorManifest.strum_data[strum_id]
+	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, ChartEditorManifest.strum_count - 1)
 	
-	for id in ChartManager.strum_data.size():
-		if ChartManager.strum_data[id]["strums"][1] == strum_data["strums"][0]:
-			ChartManager.strum_data[id]["strums"][1] = clamp(ChartManager.strum_data[id]["strums"][1] - 1, 0, ChartManager.strum_count - 1)
+	for id in ChartEditorManifest.strum_data.size():
+		if ChartEditorManifest.strum_data[id]["strums"][1] == strum_data["strums"][0]:
+			ChartEditorManifest.strum_data[id]["strums"][1] = clamp(ChartEditorManifest.strum_data[id]["strums"][1] - 1, 0, ChartEditorManifest.strum_count - 1)
 	
 	update_grid()
 	load_dividers()
 
 func move_bound_right(strum_id: int) -> void:
-	var strum_data = ChartManager.strum_data[strum_id]
-	strum_data["strums"][1] = clamp(strum_data["strums"][1] + 1, 0, ChartManager.strum_count - 1)
+	var strum_data = ChartEditorManifest.strum_data[strum_id]
+	strum_data["strums"][1] = clamp(strum_data["strums"][1] + 1, 0, ChartEditorManifest.strum_count - 1)
 	
-	for id in ChartManager.strum_data.size():
-		if ChartManager.strum_data[id]["strums"][0] ==  strum_data["strums"][1]:
-			ChartManager.strum_data[id]["strums"][0] = clamp(ChartManager.strum_data[id]["strums"][0] + 1, 0, ChartManager.strum_count - 1)
+	for id in ChartEditorManifest.strum_data.size():
+		if ChartEditorManifest.strum_data[id]["strums"][0] ==  strum_data["strums"][1]:
+			ChartEditorManifest.strum_data[id]["strums"][0] = clamp(ChartEditorManifest.strum_data[id]["strums"][0] + 1, 0, ChartEditorManifest.strum_count - 1)
 	
 	update_grid()
 	load_dividers()
 
 func find_strum_id(strum_name: String) -> int:
-	for id in ChartManager.strum_data.size():
-		var strum_data = ChartManager.strum_data[id]
+	for id in ChartEditorManifest.strum_data.size():
+		var strum_data = ChartEditorManifest.strum_data[id]
 		if strum_data["name"] == strum_name:
 			return id
 	return -1
@@ -1279,21 +1279,21 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		else:
 			SoundManager.conductor_off_beat.play()
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		load_section(song_position)
 		update_waveforms(song_position)
 		
 		lower_ui.get_node("%Beat").text = str("Beat: ", Conductor.get_accumulated_beat_at(
-			song_position, ChartManager.chart.tempos, ChartManager.chart.time_signatures) + 1)
+			song_position, ChartEditorManifest.chart.tempos, ChartEditorManifest.chart.time_signatures) + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	if SettingsManager.data.chart_hit_sound_on_step:
 		SoundManager.conductor_step.play()
 	
-	if ChartManager.chart:
+	if ChartEditorManifest.chart:
 		lower_ui.get_node("%Step").text = str("Step: ", Conductor.get_accumulated_step_at(
-			song_position, ChartManager.chart.tempos, ChartManager.chart.time_signatures) + 1)
+			song_position, ChartEditorManifest.chart.tempos, ChartEditorManifest.chart.time_signatures) + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1304,7 +1304,7 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
-		var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartManager.chart
+		var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and ChartEditorManifest.chart
 		
 		if can_interact_with_chart: #song scrubbing
 			if not instrumental.stream_paused:
@@ -1393,7 +1393,7 @@ func audio_button_item_pressed(id) -> void:
 
 
 func update_ui_usable_state() -> void:
-	var cant_use: bool = not ChartManager.song
+	var cant_use: bool = not ChartEditorManifest.song
 	
 	lower_ui.play_button.disabled = cant_use
 	lower_ui.difficulty_button.disabled = cant_use
@@ -1410,7 +1410,7 @@ func update_ui_usable_state() -> void:
 func view_button_item_pressed(id):
 	match id:
 		0:
-			ChartManager.event_editor = true
+			ChartEditorManifest.event_editor = true
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 		
 		1:
@@ -1466,16 +1466,16 @@ func test_button_item_pressed(id) -> void:
 		_: print("id: ", id)
 
 func test_current_song(minimal: bool) -> void:
-	if not ChartManager.song:
+	if not ChartEditorManifest.song:
 		printerr("(Chart Editor) Cannot test chart as there is no Song")
 		return
-	if not ResourceLoader.exists(ChartManager.song.scene) and not minimal:
-		printerr('(Chart Editor) Cannot test chart as (%s) could not be found' % ChartManager.song.scene)
+	if not ResourceLoader.exists(ChartEditorManifest.song.scene) and not minimal:
+		printerr('(Chart Editor) Cannot test chart as (%s) could not be found' % ChartEditorManifest.song.scene)
 		return
 	
-	var scene_to_load: String = "uid://c56g0k7u2k6wo" if minimal else ChartManager.song.scene
+	var scene_to_load: String = "uid://c56g0k7u2k6wo" if minimal else ChartEditorManifest.song.scene
 	
-	GameManager.load_songs([ChartManager.song], ChartManager.difficulty, GameManager.PLAY_MODE.CHARTING)
+	GameManager.load_songs([ChartEditorManifest.song], ChartEditorManifest.difficulty, GameManager.PLAY_MODE.CHARTING)
 	Global.change_scene_to(scene_to_load)
 
 
@@ -1526,21 +1526,21 @@ func auto_save() -> void:
 
 func save() -> void:
 	# Checks if it's a json
-	if (ChartManager.chart.resource_path.is_empty()):
-		var path: String = ChartManager.song.difficulties.get(ChartManager.difficulty).get("chart")
+	if (ChartEditorManifest.chart.resource_path.is_empty()):
+		var path: String = ChartEditorManifest.song.difficulties.get(ChartEditorManifest.difficulty).get("chart")
 		
 		if (path.get_extension() == "json"):
-			ChartManager.chart.resource_path = str(
-				path.get_base_dir(), "/", ChartManager.song.title, "-", ChartManager.difficulty, Chart.DEFAULT_FILE_TYPE
+			ChartEditorManifest.chart.resource_path = str(
+				path.get_base_dir(), "/", ChartEditorManifest.song.title, "-", ChartEditorManifest.difficulty, Chart.DEFAULT_FILE_TYPE
 				)
 			
-			ChartManager.song.difficulties[ChartManager.difficulty]["chart"] = ChartManager.chart.resource_path
+			ChartEditorManifest.song.difficulties[ChartEditorManifest.difficulty]["chart"] = ChartEditorManifest.chart.resource_path
 			
-			print("Chart is json, converting to resource at: ", ChartManager.chart.resource_path)
+			print("Chart is json, converting to resource at: ", ChartEditorManifest.chart.resource_path)
 	
-	ResourceSaver.save(ChartManager.song, ChartManager.song.resource_path)
-	ResourceSaver.save(ChartManager.chart, ChartManager.chart.resource_path)
-	backup_chart = ChartManager.chart
+	ResourceSaver.save(ChartEditorManifest.song, ChartEditorManifest.song.resource_path)
+	ResourceSaver.save(ChartEditorManifest.chart, ChartEditorManifest.chart.resource_path)
+	backup_chart = ChartEditorManifest.chart
 
 
 func move_selection(time_distance: float, lane_distance: float) -> void:
@@ -1566,13 +1566,13 @@ func load_waveforms() -> void:
 	get_tree().call_group(&"waveforms", &"queue_free")
 	waveform_nodes.clear()
 	
-	if not ChartManager.song:
+	if not ChartEditorManifest.song:
 		return
 	
-	for id in ChartManager.strum_data.size():
-		var track: int = ChartManager.strum_data[id]["track"]
-		if track < ChartManager.song.vocals.size() and vocal_tracks.get(track):
-			var waveform_data = WaveformDataParser.interpretSound(ChartManager.song.vocals[id])
+	for id in ChartEditorManifest.strum_data.size():
+		var track: int = ChartEditorManifest.strum_data[id]["track"]
+		if track < ChartEditorManifest.song.vocals.size() and vocal_tracks.get(track):
+			var waveform_data = WaveformDataParser.interpretSound(ChartEditorManifest.song.vocals[id])
 			if waveform_data:
 				@warning_ignore("confusable_local_declaration")
 				var waveform: WaveformRenderer = WaveformRenderer.new(waveform_data, 0, Color.MEDIUM_PURPLE, Color.TRANSPARENT)
@@ -1587,7 +1587,7 @@ func load_waveforms() -> void:
 			printerr("(load_waveforms) Track ", track, " does not exist.")
 	
 	
-	var waveform: WaveformRenderer = WaveformRenderer.new(WaveformDataParser.interpretSound(ChartManager.song.instrumental), 0, Color.MEDIUM_SEA_GREEN, Color.TRANSPARENT)
+	var waveform: WaveformRenderer = WaveformRenderer.new(WaveformDataParser.interpretSound(ChartEditorManifest.song.instrumental), 0, Color.MEDIUM_SEA_GREEN, Color.TRANSPARENT)
 	
 	waveform.visible = false
 	$"Waveform Layer".add_child(waveform)
@@ -1637,11 +1637,11 @@ func update_waveforms(time: float = 0) -> void:
 			waveform.height = grid.grid_size.x * 1 * grid.zoom.x
 		else:
 			waveform.position = grid.get_real_position(Vector2(
-				(ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
-				) / 2.0 + ChartManager.strum_data[id]["strums"][0],
+				(ChartEditorManifest.strum_data[id]["strums"][1] - ChartEditorManifest.strum_data[id]["strums"][0]
+				) / 2.0 + ChartEditorManifest.strum_data[id]["strums"][0],
 				0))
 			waveform.height = grid.grid_size.x * (
-				ChartManager.strum_data[id]["strums"][1] - ChartManager.strum_data[id]["strums"][0]
+				ChartEditorManifest.strum_data[id]["strums"][1] - ChartEditorManifest.strum_data[id]["strums"][0]
 				) * grid.zoom.x
 		
 		waveform.position.y += time_to_y_position(L)
@@ -1659,10 +1659,10 @@ func decrease_snap() -> void:
 
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var _difficulty = lower_ui.get_node("%Difficulty Button").get_popup().get_item_text(index)
-	if ChartManager.song.difficulties.keys().has(_difficulty):
-		ChartManager.chart = Chart.load(ChartManager.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
-		ChartManager.difficulty = _difficulty
-		load_chart(ChartManager.chart)
+	if ChartEditorManifest.song.difficulties.keys().has(_difficulty):
+		ChartEditorManifest.chart = Chart.load(ChartEditorManifest.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
+		ChartEditorManifest.difficulty = _difficulty
+		load_chart(ChartEditorManifest.chart)
 
 func _on_history_window_close_requested() -> void:
 	upper_ui.get_node("%Window Button").get_popup().set_item_checked(0, false)
@@ -1673,31 +1673,31 @@ func _on_metadata_window_close_requested() -> void:
 	SoundManager.tool_close_window.play()
 
 func _on_metadata_window_updated_icon_texture(path: String) -> void:
-	ChartManager.song.icons = path
+	ChartEditorManifest.song.icons = path
 	auto_save()
 
 func _on_metadata_window_updated_song_artist(text: String) -> void:
-	ChartManager.song.artist = text
+	ChartEditorManifest.song.artist = text
 	auto_save()
 
 func _on_metadata_window_updated_song_charter(text: String) -> void:
-	ChartManager.song.charter = text
+	ChartEditorManifest.song.charter = text
 	auto_save()
 
 func _on_metadata_window_updated_song_name(text: String) -> void:
-	ChartManager.song.title = text
+	ChartEditorManifest.song.title = text
 	auto_save()
 
 func _on_metadata_window_updated_song_scene(path: String) -> void:
-	ChartManager.song.scene = path
+	ChartEditorManifest.song.scene = path
 	auto_save()
 
 func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
-	ChartManager.song.tempo = tempo
+	ChartEditorManifest.song.tempo = tempo
 	auto_save()
 
 func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
-	ChartManager.chart.scroll_speed = speed
+	ChartEditorManifest.chart.scroll_speed = speed
 	auto_save()
 
 func _on_metadata_window_selected_time_change(time: float) -> void:
@@ -1707,13 +1707,13 @@ func _on_metadata_window_selected_time_change(time: float) -> void:
 
 func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
-	ChartManager.chart.tempos[time] = conductor.tempo
-	ChartManager.chart.time_signatures[time] = [
+	ChartEditorManifest.chart.tempos[time] = conductor.tempo
+	ChartEditorManifest.chart.time_signatures[time] = [
 		conductor.numerator, conductor.denominator
 	]
 	
-	ChartManager.chart.tempos.sort()
-	ChartManager.chart.time_signatures.sort()
+	ChartEditorManifest.chart.tempos.sort()
+	ChartEditorManifest.chart.time_signatures.sort()
 	upper_ui.get_node("%Metadata Window").update_stats()
 	auto_save()
 
@@ -1733,16 +1733,16 @@ func update_event(event) -> void:
 		hovered_event = -1
 
 func _on_export_external_popup_file_selected(path: String) -> void:
-	ResourceSaver.save(ChartManager.chart, path)
+	ResourceSaver.save(ChartEditorManifest.chart, path)
 	upper_ui.get_node("%Export External Popup").hide()
 
 func set_chart_from_chart(_chart: Chart) -> void:
 	if !_chart:
 		return
 	
-	ChartManager.chart.chart_data = backup_chart.chart_data
-	ChartManager.chart.scroll_speed = backup_chart.scroll_speed
-	ChartManager.chart.offset = backup_chart.offset
+	ChartEditorManifest.chart.chart_data = backup_chart.chart_data
+	ChartEditorManifest.chart.scroll_speed = backup_chart.scroll_speed
+	ChartEditorManifest.chart.offset = backup_chart.offset
 
 
 func _on_note_skin_window_file_selected(path: String) -> void:
@@ -1766,7 +1766,7 @@ func cut() -> void:
 		undo_redo.create_action("Cut Note(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.notes[i]
+			var note = ChartEditorManifest.chart.notes[i]
 			temp.append([note[0], note[1], note[2], note[3]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -1786,7 +1786,7 @@ func delete() -> void:
 		undo_redo.create_action("Deleted Note(s)")
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.notes[i]
+			var note = ChartEditorManifest.chart.notes[i]
 			temp.append([note[0], note[1], note[2], note[3]])
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
@@ -1802,7 +1802,7 @@ func delete() -> void:
 func copy() -> void:
 	clipboard = []
 	for note in selected_notes:
-		clipboard.append(ChartManager.chart.notes[note])
+		clipboard.append(ChartEditorManifest.chart.notes[note])
 	
 	SoundManager.tool_note_place.play()
 
@@ -1817,8 +1817,8 @@ func paste() -> void:
 	undo_redo.add_do_method(update_selected_notes)
 	undo_redo.add_do_method(move_selection.bind(offset, 0))
 	undo_redo.add_do_method(SoundManager.tool_note_place.play)
-	undo_redo.add_undo_property(ChartManager.chart, &"notes", ChartManager.chart.notes.duplicate(true))
-	undo_redo.add_undo_property(ChartManager.chart, &"events", ChartManager.chart.events.duplicate(true))
+	undo_redo.add_undo_property(ChartEditorManifest.chart, &"notes", ChartEditorManifest.chart.notes.duplicate(true))
+	undo_redo.add_undo_property(ChartEditorManifest.chart, &"events", ChartEditorManifest.chart.events.duplicate(true))
 	undo_redo.add_undo_property(self, &"selected_notes", selected_notes.duplicate())
 	undo_redo.add_undo_method(load_section.bind(song_position, true))
 	undo_redo.add_undo_method(update_selected_notes)
@@ -1827,14 +1827,14 @@ func paste() -> void:
 
 
 func delete_stacked_notes() -> void:
-	if ChartManager.chart.notes.size() > 1:
+	if ChartEditorManifest.chart.notes.size() > 1:
 		var i: int = 0
 		var deleted: bool = false
 		selected_notes = []
 		selected_note_nodes = []
-		for index in range(ChartManager.chart.notes.size() - 1):
-			var note_a = ChartManager.chart.notes[index - i]
-			var note_b = ChartManager.chart.notes[index - i + 1]
+		for index in range(ChartEditorManifest.chart.notes.size() - 1):
+			var note_a = ChartEditorManifest.chart.notes[index - i]
+			var note_b = ChartEditorManifest.chart.notes[index - i + 1]
 			
 			if (is_equal_approx(note_a[0], note_b[0]) and note_a[1] == note_b[1]):
 				var idx_to_delete = index - i if note_b[2] > note_a[2] else index - i + 1
@@ -1852,11 +1852,11 @@ func do_flip() -> void:
 
 func flip() -> void:
 	if selected_notes.size() > 1:
-		var _min_lane: int = ChartManager.chart.notes[selected_notes[0]][1]
-		var _max_lane: int = ChartManager.chart.notes[selected_notes[0]][1]
+		var _min_lane: int = ChartEditorManifest.chart.notes[selected_notes[0]][1]
+		var _max_lane: int = ChartEditorManifest.chart.notes[selected_notes[0]][1]
 		var temp: Array = []
 		for i in selected_notes:
-			var note = ChartManager.chart.notes[i]
+			var note = ChartEditorManifest.chart.notes[i]
 			_min_lane = min(_min_lane, note[1])
 			_max_lane = max(_max_lane, note[1])
 			temp.append(note)
@@ -1901,7 +1901,7 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 	var action: String = "Changed Note Length(s)"
 	undo_redo.create_action(action)
 	for i in notes:
-		var length: float = ChartManager.chart.notes[i][2]
+		var length: float = ChartEditorManifest.chart.notes[i][2]
 		undo_redo.add_do_method(change_length.bind(i, length + delta))
 		undo_redo.add_do_property(note_nodes[i - current_visible_notes_L], "length", length + delta)
 		undo_redo.add_do_method(SoundManager.tool_note_stretch.play)
@@ -1913,15 +1913,15 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 
 
 func change_length(i: int, length: float) -> void:
-	ChartManager.chart.notes[i][2] = max(length, 0)
+	ChartEditorManifest.chart.notes[i][2] = max(length, 0)
 
 func change_note_type(i: int, note_type: String) -> void:
-	ChartManager.chart.notes[i][3] = note_type
+	ChartEditorManifest.chart.notes[i][3] = note_type
 
 
 func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
-		var lane: int = ChartManager.chart.notes[i][1]
+		var lane: int = ChartEditorManifest.chart.notes[i][1]
 		return (lane >= lane_a and lane <= lane_b))
 	
 	update_selected_notes()
@@ -1945,7 +1945,7 @@ func brush_note_type() -> void:
 	undo_redo.create_action(action)
 	for i in selected_notes:
 		var node: ChartNote = note_nodes[i - current_visible_notes_L]
-		var note_type: String = ChartManager.chart.notes[i][3]
+		var note_type: String = ChartEditorManifest.chart.notes[i][3]
 		undo_redo.add_do_method(change_note_type.bind(i, current_note_type))
 		undo_redo.add_do_property(node, "note_type", current_note_type)
 		undo_redo.add_do_method(node.update)
@@ -1959,10 +1959,10 @@ func brush_note_type() -> void:
 
 
 func select_all() -> void:
-	if ChartManager.chart.notes.is_empty():
+	if ChartEditorManifest.chart.notes.is_empty():
 		return
 	
-	selected_notes = range(ChartManager.chart.notes.size())
+	selected_notes = range(ChartEditorManifest.chart.notes.size())
 	selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
 	SoundManager.tool_mouse_click.play()
 
@@ -2014,7 +2014,7 @@ func _on_note_type_window_close_requested() -> void:
 
 
 func _on_minimap_gui_input(event: InputEvent) -> void:
-	if !ChartManager.chart:
+	if !ChartEditorManifest.chart:
 		return
 	
 	if event is InputEventMouseMotion:

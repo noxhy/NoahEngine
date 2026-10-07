@@ -13,13 +13,13 @@ func _ready() -> void:
 
 func update():
 	var path: String
-	if ChartManager.song:
+	if ChartEditorManifest.song:
 		if track != -1:
 			%Label.text = str(track + 1)
-			if track < ChartManager.song.vocals.size():
-				path = ChartManager.song.vocals[track]
+			if track < ChartEditorManifest.song.vocals.size():
+				path = ChartEditorManifest.song.vocals[track]
 		else:
-			path = ChartManager.song.instrumental
+			path = ChartEditorManifest.song.instrumental
 			%"Remove Track".visible = false
 			%Label.visible = false
 	

@@ -1,5 +1,5 @@
 extends Node
-class_name ChartManager
+class_name ChartEditorManifest
 
 ## Reference of the last song loaded in [ChartEditor].
 static var song: Song

@@ -60,7 +60,7 @@ func new_file(dir: String, notify_editor: bool = true):
 	if notify_editor:
 		emit_signal("file_created", song_path, song_file)
 	else:
-		ChartManager.song = song_file
+		ChartEditorManifest.song = song_file
 
 
 # "Select File Location" button pressed

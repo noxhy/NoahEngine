@@ -15,21 +15,21 @@ var has_updated_scroll_speed: bool = false
 var current_time_change: int = -1
 
 func update_stats():
-	%"Song Name".text = ChartManager.song.title
-	%"Song Artist".text = ChartManager.song.artist
-	%"Song Charter".text = ChartManager.song.charter
+	%"Song Name".text = ChartEditorManifest.song.title
+	%"Song Artist".text = ChartEditorManifest.song.artist
+	%"Song Charter".text = ChartEditorManifest.song.charter
 	
-	_on_scene_file_dailog_file_selected(ChartManager.song.scene)
+	_on_scene_file_dailog_file_selected(ChartEditorManifest.song.scene)
 	
-	%Difficulty.text = ChartManager.difficulty
+	%Difficulty.text = ChartEditorManifest.difficulty
 	if has_updated_scroll_speed:
-		%"Scroll Speed".value = ChartManager.chart.scroll_speed
+		%"Scroll Speed".value = ChartEditorManifest.chart.scroll_speed
 	else:
-		%"Scroll Speed".set_value_no_signal(ChartManager.chart.scroll_speed)
-		%"Scroll Speed Label".text = str("Scroll Speed: ", ChartManager.chart.scroll_speed, "x")
+		%"Scroll Speed".set_value_no_signal(ChartEditorManifest.chart.scroll_speed)
+		%"Scroll Speed Label".text = str("Scroll Speed: ", ChartEditorManifest.chart.scroll_speed, "x")
 	
 	%"Time Changes".clear()
-	var chart: Chart = ChartManager.chart
+	var chart: Chart = ChartEditorManifest.chart
 	var i: int = 0
 	for time in chart.tempos:
 		%"Time Changes".add_item(format_time_change(i))
@@ -76,10 +76,10 @@ func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	%"Remove Time Change".disabled = (index == 0)
 	current_time_change = index
 	
-	var tempo_data: Dictionary = ChartManager.chart.tempos
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
 	var time: float = tempo_data.keys()[index]
 	%Tempo.value = tempo_data.get(time, 60)
-	var meter_data: Dictionary = ChartManager.chart.time_signatures
+	var meter_data: Dictionary = ChartEditorManifest.chart.time_signatures
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	%Numerator.value = meter[0]
 	%Denominator.value = meter[1]
@@ -90,11 +90,11 @@ func _on_add_time_change_pressed() -> void:
 	emit_signal(&"add_time_change")
 
 func _on_remove_time_change_pressed() -> void:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.tempos.erase(time)
-	ChartManager.chart.time_signatures.erase(time)
+	ChartEditorManifest.chart.tempos.erase(time)
+	ChartEditorManifest.chart.time_signatures.erase(time)
 	%"Time Changes".remove_item(current_time_change)
 	%"Time Changes".select(current_time_change - 1)
 	_on_time_changes_item_selected(current_time_change - 1)
@@ -102,32 +102,32 @@ func _on_remove_time_change_pressed() -> void:
 	emit_signal(&"remove_time_change")
 
 func _on_tempo_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.song.tempo = tempo_data.get(0.0)
-	ChartManager.chart.tempos[time] = value
+	ChartEditorManifest.song.tempo = tempo_data.get(0.0)
+	ChartEditorManifest.chart.tempos[time] = value
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func format_time_change(index: int) -> String:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
-	var meter_data: Dictionary = ChartManager.chart.time_signatures
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
+	var meter_data: Dictionary = ChartEditorManifest.chart.time_signatures
 	var time: float = tempo_data.keys()[index]
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
 	return str(Global.format_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1])
 
 func _on_numerator_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.time_signatures[time] = [int(value), int(%Denominator.value)]
+	ChartEditorManifest.chart.time_signatures[time] = [int(value), int(%Denominator.value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func _on_denominator_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = ChartManager.chart.tempos
+	var tempo_data: Dictionary = ChartEditorManifest.chart.tempos
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	ChartManager.chart.time_signatures[time] = [int(%Numerator.value), int(value)]
+	ChartEditorManifest.chart.time_signatures[time] = [int(%Numerator.value), int(value)]
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 
