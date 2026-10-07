@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_ndjvb"]
 [ext_resource type="PackedScene" uid="uid://bc4d7j7ifsf86" path="res://noah/tools/chart_editor/audio_panel.tscn" id="2_7t3tj"]
-[ext_resource type="Script" uid="uid://dw1amqwmw7xjr" path="res://noah/tools/chart_editor/new_audio_window.gd" id="2_pb1mr"]
+[ext_resource type="Script" uid="uid://dw1amqwmw7xjr" path="res://noah/tools/chart_editor/windows/new_audio_window.gd" id="2_pb1mr"]
 
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_jm5px"]
 content_margin_right = 0.0

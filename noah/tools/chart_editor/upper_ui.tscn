@@ -2,10 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_y1a63"]
 [ext_resource type="Script" uid="uid://ci5vocm58ajmg" path="res://noah/tools/chart_editor/upper_ui.gd" id="2_pkb6e"]
-[ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/history_window.tscn" id="3_xi38a"]
-[ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/metadata_window.tscn" id="4_ax5pr"]
-[ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/new_audio_window.tscn" id="4_pmg4i"]
-[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/note_type_window.tscn" id="5_c03gx"]
+[ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/windows/history_window.tscn" id="3_xi38a"]
+[ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
+[ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/new_audio_window.tscn" id="4_pmg4i"]
+[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="5_c03gx"]
 
 [node name="Upper UI" type="HBoxContainer" unique_id=415464568]
 clip_children = 1

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bflvolhan5xvh"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_n6ac0"]
-[ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/metadata_window.gd" id="2_bkkpl"]
-[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_ksfet"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_rnfoh"]
+[ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/windows/metadata_window.gd" id="2_44rw1"]
+[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_lsluv"]
 
 [node name="Metadata Window" type="Window" unique_id=1340846673 groups=["windows"]]
 transparent_bg = true
@@ -13,8 +13,8 @@ size = Vector2i(640, 240)
 unresizable = true
 transparent = true
 popup_window = true
-theme = ExtResource("1_n6ac0")
-script = ExtResource("2_bkkpl")
+theme = ExtResource("1_rnfoh")
+script = ExtResource("2_44rw1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2058411482]
 anchors_preset = 15
@@ -90,7 +90,7 @@ editable = false
 layout_mode = 2
 size_flags_horizontal = 8
 text = "       "
-icon = ExtResource("3_ksfet")
+icon = ExtResource("3_lsluv")
 icon_alignment = 1
 expand_icon = true
 
