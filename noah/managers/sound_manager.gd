@@ -123,7 +123,7 @@ func get_stream(stream: Variant) -> AudioStream:
 		
 		var loaded_sound = load(stream)
 		
-		if loaded_sound is not AudioStream or stream is not AudioStreamOggVorbis:
+		if loaded_sound is not AudioStream and stream is not AudioStreamOggVorbis:
 			printerr("(Snd Manager): %s was not a valid audio stream." % stream)
 			return null
 		
