@@ -18,7 +18,7 @@ func _ready() -> void:
 	
 
 func prepare_tracks():
-	if not ChartEditorManifest.song:
+	if not EditorResources.song:
 		return
 	
 	inst_panel.set_id(-1)
@@ -31,7 +31,7 @@ func prepare_tracks():
 	
 	var idx: int = 0
 	
-	for vocals in ChartEditorManifest.song.vocals:
+	for vocals in EditorResources.song.vocals:
 		add_track(idx)
 		idx += 1
 
@@ -62,10 +62,10 @@ func _on_add_track_pressed() -> void:
 	add_track(vbox.get_child_count())
 
 func _on_save_button_pressed() -> void:
-	ChartEditorManifest.song.instrumental = ResourceUID.path_to_uid(inst_panel.song_path.text)
-	ChartEditorManifest.song.vocals.clear()
+	EditorResources.song.instrumental = ResourceUID.path_to_uid(inst_panel.song_path.text)
+	EditorResources.song.vocals.clear()
 	for node in vbox.get_children():
-		ChartEditorManifest.song.vocals.append(ResourceUID.path_to_uid(node.song_path.text))
+		EditorResources.song.vocals.append(ResourceUID.path_to_uid(node.song_path.text))
 		
 	updated_current_song.emit()
 	close_requested.emit()

@@ -99,7 +99,7 @@ func play_sound_once(stream: Variant, volume_linear: float = 1) -> void:
 	remove_child(player)
 	player.queue_free()
 
-## attempts to retrieve a stream more thoroughly and asserts when failure.
+## Attempts to retrieve a stream more thoroughly and asserts when failure.
 ## [br][br]If the given file is a [code]String[/code], the func will attempt to load it (supports absolute paths)
 func get_stream(stream: Variant) -> AudioStream:
 	if stream is AudioStream or stream is AudioStreamOggVorbis:
@@ -123,7 +123,7 @@ func get_stream(stream: Variant) -> AudioStream:
 		
 		var loaded_sound = load(stream)
 		
-		if (loaded_sound is not AudioStream and stream is not AudioStreamOggVorbis):
+		if loaded_sound is not AudioStream or stream is not AudioStreamOggVorbis:
 			printerr("(Snd Manager): %s was not a valid audio stream." % stream)
 			return null
 		

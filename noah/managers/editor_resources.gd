@@ -1,5 +1,6 @@
 extends Node
-class_name ChartEditorManifest
+class_name EditorResources
+## Class containing data used within [ChartEditor] and [EventEditor]
 
 ## Reference of the last song loaded in [ChartEditor].
 static var song: Song

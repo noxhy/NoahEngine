@@ -21,7 +21,7 @@ func _enter_tree() -> void:
 	if not Engine.is_editor_hint():
 		GameManager.load_songs([song], difficulty, mode)
 	 # chart manager is a bit confusing it sounds like more important but its just a in between to hold some chart editor values
-	#ChartEditorManifest.song = song
+	#EditorResources.song = song
 
 
 

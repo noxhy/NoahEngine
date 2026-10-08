@@ -20,9 +20,9 @@ func _on_button_pressed() -> void:
 
 
 func _on_save_button_pressed() -> void:
-	ChartEditorManifest.strum_data[id]["name"] = %"Strum ID".text
+	EditorResources.strum_data[id]["name"] = %"Strum ID".text
 	track = %"Vocal Track".value
-	ChartEditorManifest.strum_data[id]["track"] = track
+	EditorResources.strum_data[id]["track"] = track
 	
 	$Window.hide()
 	emit_signal("updated")
@@ -40,12 +40,12 @@ func _on_move_lane_right_pressed() -> void:
 
 
 func _on_window_about_to_popup() -> void:
-	$Button.text = ChartEditorManifest.strum_data[id].get("name", "")
+	$Button.text = EditorResources.strum_data[id].get("name", "")
 	%"Vocal Track".min_value = 0
-	if ChartEditorManifest.song != null:
-		%"Vocal Track".max_value = ChartEditorManifest.song.vocals.size() - 1
-	%"Vocal Track".value = ChartEditorManifest.strum_data[id]["track"]
-	%"Strum ID".text = ChartEditorManifest.strum_data[id].get("name", "")
+	if EditorResources.song != null:
+		%"Vocal Track".max_value = EditorResources.song.vocals.size() - 1
+	%"Vocal Track".value = EditorResources.strum_data[id]["track"]
+	%"Strum ID".text = EditorResources.strum_data[id].get("name", "")
 	emit_signal("opened")
 
 func file_dailog_gui_focus_changed(node: Control) -> void:

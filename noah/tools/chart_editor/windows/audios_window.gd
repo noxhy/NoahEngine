@@ -18,7 +18,7 @@ func _on_about_to_popup() -> void:
 		node.queue_free()
 	
 	var i: int = 0
-	for path in ChartEditorManifest.song.vocals:
+	for path in EditorResources.song.vocals:
 		create_track_node(i)
 		i += 1
 	
@@ -26,11 +26,11 @@ func _on_about_to_popup() -> void:
 
 
 func _on_save_button_pressed() -> void:
-	ChartEditorManifest.song.instrumental = %"Instrumental Track".selected_audio
+	EditorResources.song.instrumental = %"Instrumental Track".selected_audio
 	
-	ChartEditorManifest.song.vocals = []
+	EditorResources.song.vocals = []
 	for node in %Audios.get_children():
-		ChartEditorManifest.song.vocals.append(node.selected_audio)
+		EditorResources.song.vocals.append(node.selected_audio)
 	
 	emit_signal(&"updated")
 	hide()
