@@ -87,7 +87,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
-	if current_step % (bop_rate - bop_rate_offset) == 0:
+	if (current_step + bop_rate_offset) % bop_rate == 0:
 		var cam_bop_strength: Vector2 = Vector2(0.03, 0.03)
 		var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 		
