@@ -132,8 +132,8 @@ func exit_menu() -> void:
 	Global.change_scene_to(exit_scene)
 
 func open_chart_editor() -> void:
+	process_mode = Node.PROCESS_MODE_DISABLED
 	GameManager.reset_stats()
-	self.process_mode = Node.PROCESS_MODE_DISABLED
 	Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 
 func change_difficulty(difficulty: String):
