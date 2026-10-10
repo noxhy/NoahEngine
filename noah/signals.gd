@@ -24,7 +24,7 @@ signal play_note_hit(note: BasicNote, lane: int, hit_time_difference: float, str
 signal play_note_miss(note: BasicNote, lane: int, strum_manager: StrumManager)
 
 ## Signal that is emitted whenever a note is being held.
-signal play_note_holding(note: BasicNote, lane: int, hold_difference: float, strum_manager: StrumManager)
+signal play_note_holding(note: BasicNote, lane: int, hold_delta: float, strum_manager: StrumManager)
 
 ## Signal that provides the raw data of the note to be created.
 signal play_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float)

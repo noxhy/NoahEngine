@@ -90,9 +90,16 @@ var position_lerp: float = 0.0
 ## A timer that checks every [code]0.5[/code] if [member position_lerp] has desynced and to resync.
 var sync_timer: float = 0.0
 
+## Is true when the song is starting and playing the [b]Countdown[b]
 var song_starting:bool = false
+
+## Is true after the song has begun
 var song_started: bool = false
+
+## Used when the song is starting. A negative offset of 4 beats before the song actually begins
 var song_start_offset: float = -4.0
+
+## The time that the song starts at. Set by [member play_song]
 var song_start_time: float = 0.0
 
 ## @deprecated: Use [method song_stats.score].
@@ -273,7 +280,7 @@ func _process(delta) -> void:
 				basic_event(time, event_name, event_parameters)
 				current_event += 1
 
-
+## Starts the song at a given time.
 func play_song(time: float) -> void:
 	await Signals.play_song_ready_to_start ## TODO: dont do it like this maybe ?
 	
@@ -412,6 +419,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 
+## Called when the song is finished. Saves scoring and changes scene to [member next_scene]
 func finished_song() -> void:
 	Signals.play_song_finished.emit()
 	var scene_to_enter: String = next_scene
@@ -432,7 +440,7 @@ func finished_song() -> void:
 	
 	Global.change_scene_to(scene_to_enter)
 
-# Strum Util
+## Called whenever a notes has been hit. in [PlayState], this updates scoring.
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() == 1:
@@ -477,19 +485,20 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 			_:
 				note_miss(note, lane, strum_manager)
 
-func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager) -> void:
+## Called whenever a notes tail is being held. in [PlayState], this updates scoring.
+func note_holding(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
-		health += hold_difference * Constants.HOLD_HEALTH_GAIN_PER_SECOND
+		health += hold_delta * Constants.HOLD_HEALTH_GAIN_PER_SECOND
 		
 		if note.scoreable:
-			song_stats.score += hold_difference * Constants.HOLD_SCORE_GAIN_PER_SECOND
+			song_stats.score += hold_delta * Constants.HOLD_SCORE_GAIN_PER_SECOND
 			Signals.play_stats_changed.emit(song_stats)
 
-
+## Called whenever a note is missed. in [PlayState], this updates scoring.
 func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
@@ -519,6 +528,7 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
 			Signals.play_stats_changed.emit(song_stats)
 			Signals.play_combo_break.emit()
 
+## Adds 1 to the players combo in [member song_stats]
 func add_combo() -> void:
 	song_stats.combo += 1
 	
@@ -526,6 +536,7 @@ func add_combo() -> void:
 		song_stats.max_combo = song_stats.combo
 	Signals.play_stats_changed.emit(song_stats)
 
+## Resets [member song_stats.combo] back to 0. Called whenever the player misses.
 func reset_combo() -> void:
 	song_stats.combo = 0
 	Signals.play_stats_changed.emit(song_stats)
