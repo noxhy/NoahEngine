@@ -108,9 +108,9 @@ func get_tempo_at(time: float) -> float:
 func get_time_signature_at(time: float) -> Array:
 	time = max(0, time)
 	var output: Array = []
-	for point in get_time_signature_data():
+	for point in time_signatures:
 		if time >= point:
-			output = get_time_signature_data().get(point)
+			output = time_signatures.get(point)
 		else:
 			continue
 	

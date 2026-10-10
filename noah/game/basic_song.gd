@@ -10,11 +10,14 @@ class_name BasicSong
 @onready var rating_node = load("uid://0l7bo1bqcbcj")
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
 
+## The amount of lanes per strumline (usually)
 const DIRECTIONS: int = 4
+
+## The animations for the characters to play in order of [member Strum.lane]
 const SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
-var camera_positions: Array = []
-var strums: Array = []
+var camera_positions: Array[Node] = []
+var strums: Array[Node] = []
 
 var camera: CameraController 
 var ui: BasicUI

@@ -369,7 +369,7 @@ func update_conductor():
 	var time: float = song_position + start_offset
 	conductor.time = time
 	conductor.tempo = EditorResources.chart.get_tempo_at(time)
-	var meter = EditorResources.chart.get_meter_at(time)
+	var meter = EditorResources.chart.get_time_signature_at(time)
 	conductor.numerator = meter[0]
 	conductor.denominator = meter[1]
 	conductor.offset = EditorResources.chart.get_tempo_time_at(time) + EditorResources.chart.offset
@@ -561,7 +561,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	song_slider.max_value = instrumental.stream.get_length()
 	song_slider.value = song_position
 	conductor.tempo = EditorResources.chart.get_tempo_at(song_position)
-	var meter = EditorResources.chart.get_meter_at(song_position)
+	var meter = EditorResources.chart.get_time_signature_at(song_position)
 	conductor.numerator = meter[0]
 	conductor.denominator = meter[1]
 	conductor.offset = EditorResources.chart.offset
@@ -804,7 +804,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 sorted: bool = false, sort_index: int = -1) -> int:
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter: Array = EditorResources.chart.get_meter_at(time)
+	var meter: Array = EditorResources.chart.get_time_signature_at(time)
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -1113,7 +1113,7 @@ func time_to_y_position(time: float) -> float:
 			R = time
 		
 		tempo = tempo_data.get(L)
-		meter = EditorResources.chart.get_meter_at(L)
+		meter = EditorResources.chart.get_time_signature_at(L)
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2(0,
@@ -1148,7 +1148,7 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Array = EditorResources.chart.get_meter_at(time)
+	var meter: Array = EditorResources.chart.get_time_signature_at(time)
 	var L: float = EditorResources.chart.get_tempo_time_at(time)
 	var yR: float = p.y
 	if factor_in_snap:

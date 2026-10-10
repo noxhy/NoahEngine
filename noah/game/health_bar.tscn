@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cgawo31pletyg"]
 
 [ext_resource type="Texture2D" uid="uid://cycblrpqahhln" path="res://noah/assets/game/developer/healthBar.png" id="1_r0228"]
-[ext_resource type="Script" uid="uid://cbv1u8j14drje" path="res://noah/game/basic_health_bar.gd" id="2_l7ubq"]
+[ext_resource type="Script" uid="uid://cbv1u8j14drje" path="res://noah/game/health_bar.gd" id="2_l7ubq"]
 [ext_resource type="FontFile" uid="uid://8cxhkah8id6n" path="res://noah/assets/fonts/tertiary_font.ttf" id="2_mfs1y"]
 
 [sub_resource type="FontVariation" id="FontVariation_u0077"]
@@ -17,7 +17,6 @@ shadow_size = 0
 
 [node name="Health Bar" type="TextureProgressBar" unique_id=830584313]
 z_index = -2
-anchors_preset = -1
 anchor_left = -0.23400001
 anchor_top = 0.40300003
 anchor_right = 0.23400001

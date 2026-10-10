@@ -442,7 +442,7 @@ func time_to_y_position(time: float) -> float:
 			R = time
 		
 		tempo = tempo_data.get(L)
-		meter = EditorResources.chart.get_meter_at(L)
+		meter = EditorResources.chart.get_time_signature_at(L)
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * meter[0], 0)).x
@@ -455,7 +455,7 @@ func time_to_y_position(time: float) -> float:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Array = EditorResources.chart.get_meter_at(time)
+	var meter: Array = EditorResources.chart.get_time_signature_at(time)
 	var L: float = EditorResources.chart.get_tempo_time_at(time)
 	var yR: float = p.x * grid.grid_size.x * grid.zoom.x
 	if factor_in_snap:
