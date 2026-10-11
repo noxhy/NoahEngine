@@ -199,7 +199,7 @@ func _on_hold_cover_animation_finished() -> void:
 
 
 func create_splash(animation_name: StringName = strum_name + &"_splash") -> void:
-	if can_splash and SettingsManager.data.note_splashes:
+	if can_splash and SettingsManager.data.note_splashes and note_skin.splashes_texture:
 		var splash_instance = SPLASH_PRELOAD.instantiate()
 		
 		splash_instance.note_skin = note_skin
