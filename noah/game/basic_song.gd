@@ -29,6 +29,8 @@ var bop_rate_offset: int = 0
 ## The scene to use when the Pause input is pressed.
 var pause_preload: PackedScene = null
 
+var can_pause: bool = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -69,8 +71,7 @@ func _ready() -> void:
 	Signals.play_song_ready_to_start.emit()
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed(&"pause"):
-		
+	if can_pause and Input.is_action_just_pressed(&"pause"):
 		pause()
 	
 	if playstate and Input.is_action_just_pressed(&"kill"):
@@ -168,14 +169,15 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 			
 			if camera:
 				var index: int = int(event_parameters[0])
-				var marker = camera_positions[index]
-				if !marker:
+				
+				if camera_positions.size() < index:
 					printerr("(Song): Marker does not exist at index: ", index)
 					return
-				
-				var easing = 'classic'
+					
+				var marker: Node = camera_positions[index]
+				var easing: String = 'classic'
 				if event_parameters.size() > 2:
-					easing = event_parameters.get(2)
+					easing = event_parameters[2]
 					
 				if easing.is_empty():
 					easing = "classic"
@@ -183,7 +185,7 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 				if easing.to_lower() == "classic":
 					camera.go_to_marker(marker)
 				else:
-					var rate: float = 1
+					var rate: float = 1.0
 					if playstate:
 						rate = playstate.song_speed
 					camera.tween_to_marker(marker,
@@ -214,20 +216,11 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 		var hit_rating: String
 		
 		match rating:
-			NoahStats.HIT_RATING.SICK:
-				hit_rating = "sick"
-			
-			NoahStats.HIT_RATING.GOOD:
-				hit_rating = "good"
-			
-			NoahStats.HIT_RATING.BAD:
-				hit_rating = "bad"
-			
-			NoahStats.HIT_RATING.SHIT:
-				hit_rating = "shit"
-			
-			_:
-				hit_rating = "miss"
+			NoahStats.HIT_RATING.SICK: hit_rating = "sick"
+			NoahStats.HIT_RATING.GOOD: hit_rating = "good"
+			NoahStats.HIT_RATING.BAD: hit_rating = "bad"
+			NoahStats.HIT_RATING.SHIT: hit_rating = "shit"
+			_: hit_rating = "miss"
 		
 		if rating != NoahStats.HIT_RATING.MISS:
 			if playstate.song_stats.sicks == playstate.song_stats.total_notes:
