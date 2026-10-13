@@ -47,7 +47,7 @@ func _on_delete_track_pressed() -> void:
 func _on_waveform_toggled(toggled_on: bool) -> void:
 	EditorResources.strum_data[strum_id]['waveform'] = toggled_on
 
-func is_valid_id():
+func is_valid_id() -> bool:
 	return strum_id == -1 or EditorResources.strum_data.size() > strum_id
 
 func load_current_song():
