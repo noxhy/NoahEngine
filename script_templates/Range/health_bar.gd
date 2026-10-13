@@ -1,4 +1,6 @@
 extends Range
+# meta-name: Health Bar
+# meta-description: Script that updates "value" based on playstates health
 
 ## Whether the bar should be smooth
 var smooth: bool = true
@@ -11,6 +13,14 @@ var intended_value: float = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Signals.play_health_changed.connect(on_health_change)
+	
+	if is_inside_tree():
+		var ps: PlayState = get_tree().get_first_node_in_group(&"playstate")
+		if ps:
+			min_value = ps.health_min
+			max_value = ps.health_max
+			value = ps.health
+	
 	intended_value = value
 
 func on_health_change(v: float, d: float):

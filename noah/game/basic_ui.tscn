@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cigsmwajnw2jq"]
 
 [ext_resource type="Script" uid="uid://b8vidbqkywlax" path="res://noah/game/basic_ui.gd" id="1_pm5h1"]
-[ext_resource type="PackedScene" uid="uid://cgawo31pletyg" path="res://noah/game/health_bar.tscn" id="3_uat68"]
+[ext_resource type="PackedScene" uid="uid://cgawo31pletyg" path="res://noah/tools/chart_editor/chart_tester/chart_tester_health_bar.tscn" id="3_uat68"]
 
 [node name="UI" type="CanvasLayer" unique_id=359206 groups=["ui"]]
 offset = Vector2(640, 360)

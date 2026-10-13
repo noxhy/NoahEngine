@@ -1,4 +1,6 @@
 extends Label
+# meta-name: Stats Display
+# meta-description: Script that updates this label to show the playstate stats
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
