@@ -5,6 +5,15 @@ extends Node
 ## The main class for characters in a song, such as the player, enemy, or metronome.
 class_name Character
 
+static func anim_context_from_string(_str: String) -> AnimContext:
+	match _str.to_lower().strip_edges():
+		"sing": return AnimContext.SING
+		"dance": return AnimContext.DANCE
+		"locked": return AnimContext.LOCKED
+		"special": return AnimContext.SPECIAL
+	
+	return AnimContext.NONE
+
 ## When calling an animation, it is important to also call context with it:
 enum AnimContext {
 	## Sing poses (ex: left, down, up, right)

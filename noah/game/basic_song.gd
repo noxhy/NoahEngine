@@ -195,8 +195,13 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 			if event_parameters.get(2) and !event_parameters[2].is_empty():
 				duration = Global.string_to_time(event_parameters[2])
 			
+			var context: Character.AnimContext = Character.AnimContext.SPECIAL
+			
+			if event_parameters.size() > 3 and not event_parameters[3].is_empty():
+				context = Character.anim_context_from_string(event_parameters[3])
+			
 			get_tree().call_group(event_parameters[0], &"play_animation",
-			event_parameters[1], Character.AnimContext.SPECIAL, true, duration)
+			event_parameters[1], context, true, duration)
 		&"set_prefix":
 			get_tree().set_group(event_parameters[0], &"animation_prefix",
 			event_parameters[1])

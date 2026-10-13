@@ -15,7 +15,7 @@ var EVENT_DATA: Dictionary = {
 		"description": "Moves a camera towards a marker, copying its positon and rotation."
 	},
 	"play_animation": {
-		"parameters": ["Group Name", "Animation ID", "(Optional = Duration of Animation) Duration"],
+		"parameters": ["Group Name", "Animation ID", "(Optional = Duration of Animation) Duration", "(Optional = SPECIAL) Anim Context"],
 		"texture": "res://addons/at-icons/animation/film.svg",
 		"description": "Makes all characters in a group play an animation."
 	},
