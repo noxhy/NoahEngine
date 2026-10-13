@@ -54,6 +54,7 @@ folder_colors={
 "res://noah/game/": "red",
 "res://noah/managers/": "pink",
 "res://noah/resources/": "green",
+"res://noah/templates/": "yellow",
 "res://noah/tools/": "gray"
 }
 

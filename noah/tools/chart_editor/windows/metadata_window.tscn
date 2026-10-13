@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bflvolhan5xvh"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_rnfoh"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_rnfoh"]
 [ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/windows/metadata_window.gd" id="2_44rw1"]
 [ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_lsluv"]
 
