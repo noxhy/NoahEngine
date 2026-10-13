@@ -4,14 +4,21 @@
 [ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_brp4o"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="3_354bb"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="4_n6sro"]
-[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/game/strumlines/4key_strums.tscn" id="5_qbwxp"]
+[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/templates/4key_strums.tscn" id="5_qbwxp"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="6_bu4or"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="7_4m34j"]
+[ext_resource type="Script" uid="uid://cx0svpbe60a3c" path="res://noah/tools/chart_editor/chart_tester/chart_tester_health_bar.gd" id="7_brp4o"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_xphcd"]
 font = ExtResource("6_bu4or")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8qav3"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wlakc"]
+bg_color = Color(0, 1, 0, 1)
 
 [node name="Chart Tester" type="Node2D" unique_id=732337204]
 script = ExtResource("1_2bt7f")
@@ -78,6 +85,18 @@ offset_right = 128.0
 offset_bottom = 152.0
 label_settings = SubResource("LabelSettings_xphcd")
 autowrap_mode = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="UI" unique_id=474413891]
+offset_left = -260.0
+offset_top = 293.0
+offset_right = 260.0
+offset_bottom = 311.0
+theme_override_styles/background = SubResource("StyleBoxFlat_8qav3")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wlakc")
+value = 50.0
+fill_mode = 1
+show_percentage = false
+script = ExtResource("7_brp4o")
 
 [node name="CameraController" type="Node" parent="." unique_id=890983513 node_paths=PackedStringArray("parent_2d") groups=["cameras"]]
 script = ExtResource("7_4m34j")

@@ -1,18 +1,11 @@
 [gd_scene format=3 uid="uid://cigsmwajnw2jq"]
 
 [ext_resource type="Script" uid="uid://b8vidbqkywlax" path="res://noah/game/basic_ui.gd" id="1_pm5h1"]
-[ext_resource type="PackedScene" uid="uid://cgawo31pletyg" path="res://noah/tools/chart_editor/chart_tester/chart_tester_health_bar.tscn" id="3_uat68"]
 
 [node name="UI" type="CanvasLayer" unique_id=359206 groups=["ui"]]
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 script = ExtResource("1_pm5h1")
-
-[node name="Health Bar" parent="." unique_id=830584313 instance=ExtResource("3_uat68")]
-offset_left = -0.47998047
-offset_top = -0.16003418
-offset_right = 0.47998047
-offset_bottom = -1.7600098
 
 [node name="Rating Marker" type="Marker2D" parent="." unique_id=509594647]
 position = Vector2(-32, 182)
