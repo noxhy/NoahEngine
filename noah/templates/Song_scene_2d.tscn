@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://by6thl7d7hn44"]
 
-[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_3dh6j"]
-[ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_7d6t3"]
-[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="3_ffn4g"]
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_5doo8"]
+[ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_0cbty"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="3_bv3ab"]
 
-[node name="SongScene2d" type="Node" unique_id=1879031563]
-script = ExtResource("1_3dh6j")
+[node name="SongScene2d" type="Node2D" unique_id=749912918]
+script = ExtResource("1_5doo8")
 
 [node name="PlayState" type="Node" parent="." unique_id=151161563 groups=["playstate"]]
-script = ExtResource("2_7d6t3")
+script = ExtResource("2_0cbty")
 metadata/_custom_type_script = "uid://cmgmd88pfh7dd"
 
 [node name="CameraController" type="Node" parent="." unique_id=2030657135 node_paths=PackedStringArray("parent_2d") groups=["cameras"]]
-script = ExtResource("3_ffn4g")
+script = ExtResource("3_bv3ab")
 parent_2d = NodePath("../Camera2D")
 metadata/_custom_type_script = "uid://b4lmffueni5k"
 

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d3oba028kb74e"]
+
+[ext_resource type="Script" uid="uid://b0vmqp1rjpt6n" path="res://noah/game/basic_song.gd" id="1_0gvej"]
+[ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="1_27i76"]
+[ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="2_0gvej"]
+
+[node name="SongScene3d" type="Node3D" unique_id=194516995]
+script = ExtResource("1_0gvej")
+
+[node name="PlayState" type="Node" parent="." unique_id=1124493702 groups=["player"]]
+script = ExtResource("1_27i76")
+metadata/_custom_type_script = "uid://cmgmd88pfh7dd"
+
+[node name="CameraController" type="Node" parent="." unique_id=1886223245 node_paths=PackedStringArray("parent_3d") groups=["cameras"]]
+script = ExtResource("2_0gvej")
+parent_3d = NodePath("../Camera3D")
+metadata/_custom_type_script = "uid://b4lmffueni5k"
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1062296881]
