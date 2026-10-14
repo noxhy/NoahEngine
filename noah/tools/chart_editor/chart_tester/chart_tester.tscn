@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cmgmd88pfh7dd" path="res://noah/game/playstate.gd" id="2_brp4o"]
 [ext_resource type="Resource" uid="uid://bvphmxy3ecutv" path="res://noah/assets/game/developer/developer_ui_skin.tres" id="3_354bb"]
 [ext_resource type="PackedScene" uid="uid://cigsmwajnw2jq" path="res://noah/game/basic_ui.tscn" id="4_n6sro"]
-[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/templates/4key_strums.tscn" id="5_qbwxp"]
+[ext_resource type="PackedScene" uid="uid://ce3dgr61438sa" path="res://noah/templates/4key_strums_template.tscn" id="5_qbwxp"]
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="6_bu4or"]
 [ext_resource type="Script" uid="uid://b4lmffueni5k" path="res://noah/game/camera_controller.gd" id="7_4m34j"]
 [ext_resource type="Script" uid="uid://cx0svpbe60a3c" path="res://noah/tools/chart_editor/chart_tester/chart_tester_health_bar.gd" id="7_brp4o"]

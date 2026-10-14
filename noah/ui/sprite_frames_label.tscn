@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://omlxuqle6pbi"]
+
+[ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://noah/ui/sprite_frames_label.gd" id="1_nwye1"]
+
+[node name="Alphabet" type="Node2D" unique_id=195551509]
+script = ExtResource("1_nwye1")

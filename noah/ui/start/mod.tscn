@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dquulk3yl1u8e"]
 
-[ext_resource type="StyleBox" uid="uid://d0f8qx5ndub6d" path="res://noah/menus/start/style_box_idle.tres" id="1_grbt0"]
-[ext_resource type="Script" uid="uid://c8tr3rtd2c85t" path="res://noah/menus/start/mod.gd" id="1_hvgl0"]
+[ext_resource type="StyleBox" uid="uid://d0f8qx5ndub6d" path="res://noah/ui/start/style_box_idle.tres" id="1_grbt0"]
+[ext_resource type="Script" uid="uid://c8tr3rtd2c85t" path="res://noah/ui/start/mod.gd" id="1_hvgl0"]
 
 [node name="Mod" type="PanelContainer" unique_id=1539448589 groups=["mods"]]
 show_behind_parent = true

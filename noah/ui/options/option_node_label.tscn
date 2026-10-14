@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://7leho7yp6nrt"]
 
-[ext_resource type="Script" uid="uid://fyndmf80kdkg" path="res://noah/menus/options/option_node_label.gd" id="2_ghwhd"]
+[ext_resource type="Script" uid="uid://fyndmf80kdkg" path="res://noah/ui/options/option_node_label.gd" id="2_ghwhd"]
 
 [node name="Options Node" type="MarginContainer" unique_id=535076503]
 custom_minimum_size = Vector2(0, 48)
