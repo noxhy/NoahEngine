@@ -154,12 +154,15 @@ func format_number(num:float) -> String:
 	return string
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
-func format_time(time: float) -> String:
+func format_time(time: float, show_mili: bool = true) -> String:
 	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
 	var seconds: int = floor(fmod(time, 60.0))
 	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
 	
-	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
+	if show_mili:
+		return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
+	else:
+		return "%02d:%02d" % [minutes, seconds]
 
 func get_bind_string(action: StringName):
 	var strings: PackedStringArray
