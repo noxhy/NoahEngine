@@ -1,11 +1,16 @@
 @icon("uid://yl4giaklgpx0")
-extends Node2D
+@tool
+extends Node
 class_name StrumManager
 
-var note_skin: NoteSkin: set = set_skin
+@warning_ignore("unused_private_class_variable")
+@export_tool_button("Refresh Skin", "ArrowUp") var _force_skin_update = _refresh_skin
+## skin
+@export var note_skin: NoteSkin: set = set_skin
 ## List of Nodes of the strumlines.
-@export var strums: Array[Strum]
-## Vocal track ID.
+@export var strums: Array[Strum] : set = set_strums
+## ID of this strumline. Used for determining what vocal track this strumline will affect. Also decides where notes will go
+## [br][br][code]0[/code] Should be player!
 @export var id: int = 0
 
 ## If [code]true[/code], the strumlines will read the player's input.
@@ -18,86 +23,130 @@ var note_skin: NoteSkin: set = set_skin
 @export var can_splash: bool: set = set_can_splash
 ## If [code]true[/code], the strumlines will count as a enemy strumline. Enemy strumlines do not
 ## affect player stats.
-@export var enemy_slot: bool: set = set_enemy_slot
+@export var enemy_slot: bool
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	
 	can_press = can_press
 	auto_play = auto_play
 	can_splash = can_splash
-	enemy_slot = enemy_slot
+	note_skin = note_skin
 	
-	var i: int = 0
+	if not Engine.is_editor_hint():
+		var i: int = 0
+		for strum in strums:
+			strum.lane = i
+			i += 1
+
+func _refresh_skin():
+	note_skin = note_skin
+
+#region Setters
+func set_strums(v: Array[Strum]) -> void:
+	strums = v
+	if Engine.is_editor_hint():
+		note_skin = note_skin
+
+func set_skin_editor(v: NoteSkin) -> void:
+	if not v:
+		v = load("uid://buly8rgmgrrnm")
+	
 	for strum in strums:
-		strum.lane = i
-		i += 1
+		var spr = strum.get_node("OffsetSprite") #this isnt ideal but i do not want to make strums themselves tool . . . 
+		if not spr:
+			return
+		
+		var anim = strum.strum_name + '_strum'
+		if not v.strums_texture.has_animation(anim):
+			anim = 'left_strum'
+		
+		spr.sprite_frames = v.strums_texture
+		spr.animation = anim
+		spr.scale = Vector2.ONE * v.notes_scale
+		spr.offsets = v.offsets
+		
+		if v.pixel_texture:
+			spr.texture_filter = Node2D.TEXTURE_FILTER_NEAREST
+		
 
+func set_skin(v: NoteSkin) -> void:
+	if not is_node_ready():
+		note_skin = v
+		return
+	
+	note_skin = v
+	if Engine.is_editor_hint():
+		set_skin_editor(v)
+	else:
+		for strum in strums:
+			strum.set_skin(v)
+		
 
-func set_skin(new_skin: NoteSkin) -> void:
-	note_skin = new_skin
+func set_press(v: bool) -> void:
+	if not is_node_ready() or Engine.is_editor_hint():
+		can_press = v
+		return
+	
+	can_press = v
 	for strum in strums:
-		strum.set_skin(new_skin)
+		strum.can_press = v
 
-
-func set_scroll_speed(new_scroll_speed: float) -> void:
+func set_auto_play(v: bool) -> void:
+	if not is_node_ready() or Engine.is_editor_hint():
+		auto_play = v
+		return
+	
+	auto_play = v
 	for strum in strums:
-		strum.scroll_speed = new_scroll_speed
+		strum.auto_play = v
 
-
-func set_scroll(new_scroll: float) -> void:
+func set_can_splash(v: bool) -> void:
+	if not is_node_ready() or Engine.is_editor_hint():
+		can_splash = v
+		return
+	
+	can_splash = v
 	for strum in strums:
-		strum.scroll = new_scroll
+		strum.can_splash = v
+#region
 
-
-func set_press(toggle: bool) -> void:
-	can_press = toggle
+func set_offset(v: float) -> void:
 	for strum in strums:
-		strum.can_press = toggle
+		strum.offset = v
 
-
-func set_auto_play(toggle: bool) -> void:
-	auto_play = toggle
+func set_ignored_note_types(v: Array) -> void:
 	for strum in strums:
-		strum.auto_play = toggle
+		strum.ignored_note_types = v
 
-
-func set_offset(offset: float) -> void:
+func set_scroll_speed(v: float) -> void:
 	for strum in strums:
-		strum.offset = offset
+		strum.scroll_speed = v
 
-
-func set_can_splash(toggle: bool) -> void:
-	can_splash = toggle
+func set_scroll(v: float) -> void:
 	for strum in strums:
-		strum.can_splash = toggle
+		strum.scroll = v
 
-
-func set_enemy_slot(toggle: bool) -> void:
-	enemy_slot = toggle
-	for strum in strums:
-		strum.enemy_slot = toggle
-
-
-func set_ignored_note_types(_note_types: Array) -> void:
-	for strum in strums:
-		strum.ignored_note_types = _note_types
-
-
+## @deprecated: Use [member get_strum] instead.
 func get_strumline(lane: int) -> Strum:
+	return get_strum(lane)
+
+## Gets a strum from lane
+func get_strum(lane: int) -> Strum:
 	return strums[lane]
 
-
+## Gets the scroll speed of a specific strum by lane
 func get_scroll_speed(lane: int) -> float:
-	return get_strumline(lane).scroll_speed
+	return get_strum(lane).scroll_speed
+	
+## Creates a new [BasicNote] for a lane
+func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> BasicNote:
+	return get_strum(lane).create_note(time, length, note_type, tempo)
 
-
-func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> void:
-	get_strumline(lane).create_note(time, length, note_type, tempo)
-
-
+## Spawns a notes splash onto a strum
 func create_splash(lane: int, animation_name: StringName) -> void:
 	var anim_to_play: StringName = animation_name + &"_splash"
 	if animation_name.is_empty():
-		anim_to_play = get_strumline(lane).strum_name + &"_splash"
+		anim_to_play = get_strum(lane).strum_name + &"_splash"
 	
-	get_strumline(lane).create_splash(anim_to_play)
+	get_strum(lane).create_splash(anim_to_play)

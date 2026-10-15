@@ -16,7 +16,7 @@ func show_volume() -> void:
 	tween.tween_property(self, "position:y", 0, 0.5)
 	SoundManager.scroll.play()
 	
-	var master_volume = SettingsManager.get_value(SettingsManager.SEC_AUDIO, "master_volume")
+	var master_volume = SettingsManager.data.master_volume
 	if AudioServer.is_bus_mute(0):
 		$Label.text = "Muted"
 	else:

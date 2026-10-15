@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ddohksqocyhnx"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_4c1on"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_4c1on"]
 [ext_resource type="Script" uid="uid://ydtsb8wn2g1u" path="res://noah/tools/chart_editor/strum_button.gd" id="2_yyjwr"]
 
 [node name="Strum Button" type="HFlowContainer" unique_id=865871887]
@@ -15,6 +15,7 @@ size_flags_horizontal = 2
 size_flags_vertical = 3
 focus_behavior_recursive = 1
 theme = ExtResource("1_4c1on")
+theme_override_constants/h_separation = 0
 script = ExtResource("2_yyjwr")
 
 [node name="Move Lane Left" type="Button" parent="." unique_id=1554626627]

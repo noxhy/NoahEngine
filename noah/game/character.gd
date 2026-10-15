@@ -5,6 +5,15 @@ extends Node
 ## The main class for characters in a song, such as the player, enemy, or metronome.
 class_name Character
 
+static func anim_context_from_string(_str: String) -> AnimContext:
+	match _str.to_lower().strip_edges():
+		"sing": return AnimContext.SING
+		"dance": return AnimContext.DANCE
+		"locked": return AnimContext.LOCKED
+		"special": return AnimContext.SPECIAL
+	
+	return AnimContext.NONE
+
 ## When calling an animation, it is important to also call context with it:
 enum AnimContext {
 	## Sing poses (ex: left, down, up, right)
@@ -21,7 +30,7 @@ enum AnimContext {
 
 ##The actual sprite node that will be used to play the anims. If not assigned, it will fallback to
 ##[AnimatedSprite2D] or [AnimateSymbol2D]
-@export var animation_player: Node = null:
+@export_custom(PROPERTY_HINT_NODE_TYPE, "AnimationPlayer,AnimatedSprite2D,AnimatedSprite3D,AnimateSymbol2D") var animation_player: Node = null:
 	set(v):
 		animation_player = verify_animation_player(v)
 		update_configuration_warnings()
@@ -64,7 +73,6 @@ enum AnimContext {
 ## How many steps an animation can play before being able to revert to idle.
 @export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6
 
-
 @export_group("UI")
 ## Icons that are displayed in the ui. Can include [code]default[/code], [code]winning[/code] or [code]losing[/code].
 @export_file("*.tres", "*.res") var icons: String
@@ -93,6 +101,8 @@ var holding: bool = false
 var sing_time: float = 0
 
 var _ghost_sprite = null
+
+var _warned_anims:Array[StringName] = []
 
 func _ready() -> void:
 	animation_player = verify_animation_player(animation_player)
@@ -128,11 +138,13 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	anim_id = correct_anim_id(StringName(animation_prefix + anim_id))
 	var animation_name: StringName = get_animation_name(anim_id)
 	
-	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id):
+	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id) and not _warned_anims.has(anim_id):
 		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
+		_warned_anims.append(anim_id)
 		return
-	elif animation_name.is_empty():
+	elif animation_name.is_empty() and not _warned_anims.has(anim_id):
 		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
+		_warned_anims.append(anim_id)
 		return
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and !holding:

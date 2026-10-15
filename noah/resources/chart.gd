@@ -3,8 +3,10 @@
 extends Resource
 class_name Chart
 
+## The current latest version of the chart format.
 const CURRENT_VERSION: int = 2
 
+## The Json formats supported by the engine. Used for conversion
 enum ChartFormat {
 	VSLICE = 0,
 	PSYCH = 1,
@@ -12,7 +14,7 @@ enum ChartFormat {
 	CODENAME = 3,
 	UNDEFINED = -1
 }
-
+## Provides a [enum ChartFormat] represented as a [String]
 static func chart_format_to_str(type:ChartFormat) -> String:
 	match type:
 		ChartFormat.CODENAME: return "Codename"
@@ -21,15 +23,23 @@ static func chart_format_to_str(type:ChartFormat) -> String:
 		ChartFormat.PSYCH_V1: return 'Psych V1'
 		_: return "Undefined"
 
-## Scroll speed of the arrows in gameplay
-@export_range(0.0, 5.0, 0.1) var scroll_speed = 1.0
+## The default file type used whenever saving a new chart. 
+static var DEFAULT_FILE_TYPE:String = '.tres'
+
+## Multiplicative speed applied to the notes during gameplay
+@export_range(0.0, 5.0, 0.1) var scroll_speed: float = 1.0
 
 ## Audio latency.
-@export var offset = 0.0
+@export var offset: float = 0.0
+## All the notes within the chart Stored as [code][TIME, LANE, SUSTAIN_LENGTH, TYPE][/code]
 @export var notes: Array = []
+## All the events within the chart. Stored as [code][TIME, EVENT_NAME, [EVENT_PARAMETERS]][/code]
 @export var events: Array = []
-@export var tempos: Dictionary = {}
-@export var time_signatures: Dictionary = {}
+## All the tempos/bpms within the chart. Stored as [code]TIME => TEMPO[/code]
+@export var tempos: Dictionary = { 0.0: 60 }
+## All of the time signature changes within the chart. Stored as [code]TIME => [NUMERATOR, DENOMINATOR][/code]
+@export var time_signatures: Dictionary = { 0.0: [4, 4] }
+## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
 
 #this isnt a "great" way to handle versions but i cant justify doing anything more elaborate
@@ -39,21 +49,27 @@ var version: int:
 	set(v):
 		chart_data.set('version', v)
 
+## @deprecated: Use [member notes] instead
 func get_notes_data() -> Array:
 	return chart_data.get("notes", notes)
-
+	
+## @deprecated: Use [member events] instead
 func get_events_data() -> Array:
 	return chart_data.get("events", events)
-
+	
+## @deprecated: Use [member tempos] instead
 func get_tempos_data() -> Dictionary:
 	return chart_data.get("tempos", tempos)
-
+	
+## @deprecated: Use [member time_signatures] instead
 func get_meters_data() -> Dictionary:
 	return chart_data.get("meters", time_signatures)
-
+	
+## @deprecated: Use [member time_signatures] instead
 func get_time_signature_data() -> Dictionary:
 	return chart_data.get("time_signatures", time_signatures)
 
+## Loads a external [ChartEvents] and merges them into this charts events.
 func merge_events_into_this(_events: ChartEvents):
 	var chart_events: Array = get_events_data()
 	
@@ -92,15 +108,15 @@ func get_tempo_at(time: float) -> float:
 func get_time_signature_at(time: float) -> Array:
 	time = max(0, time)
 	var output: Array = []
-	for point in get_time_signature_data():
+	for point in time_signatures:
 		if time >= point:
-			output = get_time_signature_data().get(point)
+			output = time_signatures.get(point)
 		else:
 			continue
 	
 	return output
 
-# @deprecated: Refactored to [method get_time_signature_at].
+## @deprecated: Refactored to [method get_time_signature_at].
 func get_meter_at(time: float) -> Array:
 	return get_time_signature_at(time)
 
@@ -114,13 +130,14 @@ func get_tempo_time_at(time: float) -> float:
 	
 	return output
 
-static func load_from_song(_song: Song, _difficulty: String = '-1'):
+## Helper function to get a chart from [Song]
+static func load_from_song(_song: Song, _difficulty: String = '-1') -> Chart:
 	if _difficulty == '-1':
 		_difficulty = GameManager.difficulty
 		
 	return Chart.load(_song.difficulties[_difficulty].chart)
 
-## attempts to load a chart from a given path.
+## Attempts to load a chart from a given path.
 ## This will automatically convert [code]CNE[/code], [code]V-Slice[/code], and [code]Psych[/code] charts to the engines format.
 ## [br][br]If a chart could not be loaded, a empty chart is provided.
 static func load(path: String) -> Chart:
@@ -181,7 +198,7 @@ static func load(path: String) -> Chart:
 							return convert_vslice(json, meta_json)
 					
 					ChartFormat.CODENAME:
-						var meta_path: String = path.get_base_dir() + '/meta.json'
+						var meta_path: String = path.get_base_dir().path_join("meta.json")
 						
 						assert(FileAccess.file_exists(meta_path), 'failed to find cne chart meta.json')
 						
@@ -206,6 +223,7 @@ static func load(path: String) -> Chart:
 	
 	return Chart.new()
 
+## Tries to find a chart format from a dictionary/json
 static func resolve_chart_type(raw_json:Dictionary) -> ChartFormat:
 	if raw_json.has('format'):
 		var format:String = raw_json.get('format')
@@ -275,7 +293,7 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 	if not v1:
 		data = data.get('song')
 	
-	var current_bpm:int = data.get('bpm')
+	var current_bpm: int = data.get('bpm')
 	
 	chart.scroll_speed = data.get('speed')
 	
@@ -372,8 +390,17 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 				j[0] = EVENT_NAMES.get(j[0])
 			
 			# Creates the event
-			## j[1] is the event name, j[2] is the event parameters
-			event_data.append([time / 1000.0, j[0], [j[1], j[2]]])
+			# j[0] is the event name, j[1]/j[2] is the event parameters
+			
+			var _v1: String = ''
+			if j.size() > 1:
+				_v1 = j[1]
+				
+			var _v2: String = ''
+			if j.size() > 2:
+				_v2 = j[2]     
+
+			event_data.append([time / 1000.0, j[0], [_v1, _v2]])
 	
 	event_data.sort_custom(sort_notes)
 	
@@ -461,7 +488,7 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 		if event == "FocusCamera":
 			parameters = [int(i.v.char), str(i.v.get("duration", "0"), 's'), i.v.get("ease", "CLASSIC")]
 		elif event == "ZoomCamera":
-			parameters = [i.v.zoom, str(i.v.duration, 's'), i.v.get("ease", "CLASSIC")]
+			parameters = [i.v.zoom, str(i.v.get("duration", "0"), 's'), i.v.get("ease", "CLASSIC")]
 		elif event == "SetCameraBop":
 			parameters = [i.v.rate * 4]
 		elif event == "PlayAnimation":
@@ -530,10 +557,12 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 		else:
 			event = [event_packet.time / 1000.0, event_packet.name, event_packet.params]
 		
-		event_data.append(event)
+		if !event.is_empty():
+			event_data.append(event)
 	
 	event_data.sort_custom(sort_notes)
 	
+	var lane_offset: int = 0
 	for strumline in data.get('strumLines'):
 		for i in strumline.notes:
 			# Format: time, lane, length in notes, note type
@@ -546,14 +575,15 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 			if i.sLen:
 				ms_to_notes = ((i.sLen / 1000.0) / seconds_per_beat)
 			
-			var lane = i.id
+			var lane: int = i.id + lane_offset
 			
-			if strumline.position == "dad":
-				lane += 4
+			var type: String = "" if i.type == 0 else data.get('noteTypes')[i.type - 1]
 			
 			# Creates the note
-			var note = [time, lane, ms_to_notes, i.type]
+			var note = [time, lane, ms_to_notes, type]
 			note_data.append(note)
+		
+		lane_offset += strumline.keyCount
 	
 	note_data.sort_custom(sort_notes)
 	

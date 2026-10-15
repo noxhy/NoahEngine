@@ -29,7 +29,7 @@ func _ready() -> void:
 	file_button.get_popup().set_hide_on_checkable_item_selection(false)
 	file_button.get_popup().set_item_checked(
 		file_button.get_popup().get_item_index(3),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+		SettingsManager.data.chart_auto_save)
 	
 	edit_button.get_popup().id_pressed.connect(chart_editor.edit_button_item_pressed)
 	edit_button.get_popup().set_hide_on_checkable_item_selection(false)
@@ -38,11 +38,11 @@ func _ready() -> void:
 	audio_button.get_popup().connect(&"id_pressed", chart_editor.audio_button_item_pressed)
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(7),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_beat"))
+		SettingsManager.data.chart_hit_sound_on_beat)
 	
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(8),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "conductor_step"))
+		SettingsManager.data.chart_hit_sound_on_step)
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	audio_button.get_popup().set_item_checked(
@@ -64,7 +64,7 @@ func _ready() -> void:
 	test_button.get_popup().connect(&"id_pressed", chart_editor.test_button_item_pressed)
 	test_button.get_popup().set_item_checked(
 		test_button.get_popup().get_item_index(3),
-		SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"))
+		SettingsManager.data.chart_start_at_current_position)
 	test_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	
@@ -82,7 +82,7 @@ func _ready() -> void:
 	audios_window.updated_current_song.connect(func():
 		if not chart_editor.instrumental.stream_paused:
 			chart_editor.toggle_audios()
-		chart_editor.instrumental.stream = SoundManager.get_stream(ChartManager.song.instrumental)
+		chart_editor.instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
 		chart_editor.waveform_dirty = true
 		chart_editor.auto_save()
 		)
@@ -353,7 +353,7 @@ func file_button_item_pressed(id):
 			file_dialog.popup()
 			
 			var export_zip = func(path: String) -> void:
-				if not ChartManager.song:
+				if not EditorResources.song:
 					return
 				
 				var vocal_keys:Array = []
@@ -363,7 +363,7 @@ func file_button_item_pressed(id):
 				var zip = ZIPPacker.new()
 				zip.open(path)
 				
-				var inst_path: String = ChartManager.song.instrumental
+				var inst_path: String = EditorResources.song.instrumental
 				if not inst_path.is_empty():
 					if inst_path.begins_with('uid'):
 						inst_path = ResourceUID.uid_to_path(inst_path)
@@ -371,7 +371,7 @@ func file_button_item_pressed(id):
 					ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
 				
 				var idx: int = 0
-				for vocal_path: String in ChartManager.song.vocals:
+				for vocal_path: String in EditorResources.song.vocals:
 					if vocal_path.begins_with('uid'):
 						vocal_path = ResourceUID.uid_to_path(vocal_path)
 					
@@ -379,17 +379,17 @@ func file_button_item_pressed(id):
 					ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
 					idx += 1
 				
-				for diff in ChartManager.song.difficulties:
-					var chart = ChartManager.song.difficulties.get(diff).get('chart')
+				for diff in EditorResources.song.difficulties:
+					var chart = EditorResources.song.difficulties.get(diff).get('chart')
 					if chart:
 						chart_keys.append(diff)
 						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
 				
 				
-				misc_data.set('artist', ChartManager.song.artist)
-				misc_data.set('charter', ChartManager.song.charter)
-				misc_data.set('title', ChartManager.song.title)
-				misc_data.set('tempo', ChartManager.song.tempo)
+				misc_data.set('artist', EditorResources.song.artist)
+				misc_data.set('charter', EditorResources.song.charter)
+				misc_data.set('title', EditorResources.song.title)
+				misc_data.set('tempo', EditorResources.song.tempo)
 				misc_data.set('vocal_keys', vocal_keys)
 				misc_data.set('chart_keys', chart_keys)
 				misc_data.set('inst_key', inst_path.get_extension())
@@ -413,7 +413,7 @@ func file_button_item_pressed(id):
 			open_open_file_window()
 		
 		2: # Save Song
-			if ChartManager.song and ChartManager.chart:
+			if EditorResources.song and EditorResources.chart:
 				SoundManager.tool_note_place.play()
 				chart_editor.save()
 		
@@ -430,11 +430,11 @@ func file_button_item_pressed(id):
 			SoundManager.tool_open_window.play()
 		
 		3: #Autosave
-			SettingsManager.set_value(SettingsManager.SEC_CHART, "auto_save",
-			!SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+			SettingsManager.data.chart_auto_save = !SettingsManager.data.chart_auto_save
+			
 			SettingsManager.flush()
 			file_button.get_popup().set_item_checked(
-				file_button.get_popup().get_item_index(id), SettingsManager.get_value(SettingsManager.SEC_CHART, "auto_save"))
+				file_button.get_popup().get_item_index(id), SettingsManager.data.chart_auto_save)
 			SoundManager.tool_mouse_click.play()
 		
 		6: #Exit
@@ -461,13 +461,13 @@ func file_button_item_pressed(id):
 			
 			export_window.popup_centered()
 			
-			if ChartManager.song and !ChartManager.song.events.is_empty():
-				if ResourceLoader.exists(ChartManager.song.events):
-					export_window.current_path = ResourceUID.uid_to_path(ChartManager.song.events)
+			if EditorResources.song and !EditorResources.song.events.is_empty():
+				if ResourceLoader.exists(EditorResources.song.events):
+					export_window.current_path = ResourceUID.uid_to_path(EditorResources.song.events)
 			
 			var on_save = func(path:String):
 				var event = ChartEvents.new()
-				event.data = ChartManager.chart.get_events_data()
+				event.data = EditorResources.chart.events
 				ResourceSaver.save(event, path)
 				export_window.hide()
 			
@@ -489,14 +489,14 @@ func file_button_item_pressed(id):
 			add_child(export_window)
 			
 			export_window.popup_centered()
-			if ChartManager.song and !ChartManager.song.events.is_empty():
-				if ResourceLoader.exists(ChartManager.song.events):
-					export_window.current_path = ResourceUID.uid_to_path(ChartManager.song.events)
+			if EditorResources.song and !EditorResources.song.events.is_empty():
+				if ResourceLoader.exists(EditorResources.song.events):
+					export_window.current_path = ResourceUID.uid_to_path(EditorResources.song.events)
 			
 			var on_open = func(path:String):
 				if path.is_empty() and not ResourceLoader.exists(path): 
 					printerr('File does not exist! [' + path + ']')
-				if not ChartManager.chart:
+				if not EditorResources.chart:
 					printerr("No chart is currenty loaded! Can't load events")
 					export_window.hide()
 					return
@@ -505,7 +505,7 @@ func file_button_item_pressed(id):
 				if events_data is not ChartEvents:
 					printerr("Provided resource was not a chart event file!")
 				
-				ChartManager.chart.merge_events_into_this(events_data)
+				EditorResources.chart.merge_events_into_this(events_data)
 				chart_editor.load_section(chart_editor.song_position)
 				export_window.hide()
 			

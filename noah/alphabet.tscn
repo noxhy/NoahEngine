@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://omlxuqle6pbi"]
-
-[ext_resource type="Script" uid="uid://c1fn0acbfjb1u" path="res://noah/alphabet.gd" id="1_w7uy1"]
-
-[node name="Alphabet" type="Node2D" unique_id=195551509]
-script = ExtResource("1_w7uy1")

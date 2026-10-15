@@ -137,13 +137,13 @@ func reset_stats():
 
 ## Checks preferences to see if scoring should be saved.
 func can_save_score() -> bool:
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
+	if SettingsManager.data.botplay:
 		return false
 	
 	if play_mode == PLAY_MODE.CHARTING:
 		return false
 	
-	if !is_equal_approx(SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed"), 1):
+	if !is_equal_approx(SettingsManager.data.song_speed, 1):
 		return false
 	
 	return true

@@ -1,0 +1,126 @@
+extends Window
+
+signal file_created(path: String, song: Song)
+
+var selected_vocals: PackedStringArray
+var selected_instrumental: String
+var save_dir: String = 'res://'
+
+# Creates a new file that will send out a signal to the chart editor
+func new_file(dir: String, notify_editor: bool = true):
+	# Creates the file base properties
+	var song_file = Song.new()
+	song_file.artist = %"Song Credits".text
+	song_file.title = %"Song Title".text
+	song_file.tempo = %"Starting Tempo".value
+	
+	song_file.instrumental = selected_instrumental
+	var streams: Array[String] = []
+	for stream in selected_vocals:
+		streams.append(stream)
+	song_file.vocals = streams
+	
+	var difficulties: Array[String] = []
+	
+	var selected = %"Difficulty Options".get_selected_items()[0]
+	match selected:
+		0:
+			difficulties = ["easy", "normal", "hard"]
+		
+		1:
+			difficulties = ["erect", "nightmare"]
+		
+		2:
+			difficulties = ["hard"]
+		
+		_:
+			difficulties = []
+	
+	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
+	for difficulty in difficulties:
+		var chart: Chart = Chart.new()
+		
+		# Barebones chart data
+		chart.notes = []
+		chart.events = []
+		chart.tempos = {0.0: song_file.tempo}
+		chart.time_signatures = {0.0: [4, 4]}
+		
+		var chart_path: String = str(dir.path_join(song_file.title), "-", difficulty, Chart.DEFAULT_FILE_TYPE)
+		ResourceSaver.save(chart, chart_path)
+		var difficulty_data: SongDifficultyData = SongDifficultyData.new()
+		difficulty_data.chart = chart_path
+		difficulty_dict[difficulty] = difficulty_data
+	
+	song_file.difficulties = difficulty_dict
+	var song_path: String = dir + "/" + song_file.title + Chart.DEFAULT_FILE_TYPE
+	ResourceSaver.save(song_file, song_path)
+	
+	# Emits signal to return to the chart editor
+	if notify_editor:
+		emit_signal("file_created", song_path, song_file)
+	else:
+		EditorResources.song = song_file
+
+
+# "Select File Location" button pressed
+func _on_vocals_button_pressed(): %"Vocals File Dialog".popup()
+
+# "Select File Location" button pressed
+func _on_inst_button_pressed(): %"Inst File Dialog".popup()
+
+# When the vocals file is selected
+func _on_vocals_file_dialog_files_selected(paths: PackedStringArray) -> void:
+	selected_vocals = paths
+	%"Vocals File Location".text = str(selected_vocals)
+
+# When the Inst file is selected
+func _on_inst_file_dialog_file_selected(path):
+	selected_instrumental = path
+	%"Inst File Location".text = selected_instrumental
+
+# When the directory of the folder the chart will save in is selected
+func _on_save_folder_dialog_dir_selected(dir):
+	save_dir = dir
+	%"Export File Location".text = dir
+
+func _on_close_requested():
+	self.queue_free()
+
+# "Select File Location" button pressed
+func _on_export_button_pressed() -> void:
+	%SaveFolderDialog.popup()
+
+# "Create New Song" button pressed
+func _on_create_button_pressed() -> void:
+	if %"Difficulty Options".get_selected_items().size() == 0:
+		printerr("Difficulties not selected")
+		return
+	
+	if !FileAccess.file_exists(selected_instrumental):
+		printerr("Instrumental file does not exist")
+		return
+	
+	if !DirAccess.dir_exists_absolute(save_dir):
+		printerr("Save Directory does not exist")
+		return
+	
+	new_file(save_dir)
+	_on_close_requested()
+
+
+func file_dailog_gui_focus_changed(node: Control) -> void:
+	emit_signal(&"gui_focus_changed", node)
+
+
+func _on_dummy_button_pressed() -> void:
+	if %"Difficulty Options".get_selected_items().size() == 0:
+		printerr("Difficulties not selected")
+		return
+	
+	if !DirAccess.dir_exists_absolute(save_dir):
+		printerr("Save Directory does not exist")
+		return
+	
+	new_file(save_dir, false)
+	_on_close_requested()

@@ -1,21 +1,16 @@
 @icon("uid://cn3dcg1gr2oo4")
 extends Node
 class_name PlayState
+## Core Node that handles creating the Music and handling gameplay elements.
 
 const COMPENSATION: float = 1.0 / 30.0
 const DELTA_LENIENCY: float = 0.01
 
-@onready var song_data: Song
-@onready var vocals: AudioStreamPlayer
-@onready var instrumental: AudioStreamPlayer
-@onready var strums: Array = []
-
 @export_group("Nodes")
-## The host song script. Usually the parent of this node.
-@export var host: Node
 
 @export_group("Resources")
-@export var note_skin: NoteSkin
+## The skin that decides the [b]Countdown, Pause Menu, and Combo Sprites[/b]
+## [br][br]If [code]null[/code], dev skin will be used.
 @export var ui_skin: UISkin
 
 @export_group("Scenes")
@@ -29,68 +24,110 @@ const DELTA_LENIENCY: float = 0.01
 ## The maximum amount of health the player can have.
 @export var health_max: float = 100.0
 
-## The default "bop" strength to be applied to the main camera.
+## The default [b]bop[/b] strength to be applied to the main camera.
 @export_custom(PROPERTY_HINT_LINK, 'x') var camera_bop_strength: Vector2 = Vector2(0.03, 0.03)
-## The default "bop" strength to be applied to the ui instance.
+## The default [b]bop[/b] strength to be applied to the ui instance.
 @export_custom(PROPERTY_HINT_LINK, 'x') var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 
-var song_starting:bool = false
-var song_started: bool = false
-var song_start_offset: float = -4.0
-var song_start_time: float = 0.0
-# So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
-var vocal_tracks: Array = []
-var vocal_streams: Array = []
+## Helper var to get [member GameManager.current_song]
+var song_data: Song :
+	get(): return GameManager.current_song
 
-var position_delta: float = 0.0
-var position_lerp: float = 0.0
-var sync_timer: float = 0.0
-var song_speed: float = 1.0
-var scroll_speed: float = 1.0 : set = set_scroll_speed
-# The index of the latest loaded note
-var current_note: int = -1
-# The index of the latest loaded event
-var current_event: int = -1
-var output_latency: float = AudioServer.get_output_latency()
-
+## The actual chart file to be played
 var chart: Chart
 
-## Flag enabled whenever the player has "died"
+## The player used for the vocals. The used stream is a [AudioStreamPolyphonic]
+var vocals: AudioStreamPlayer
+
+## The player for the inst.
+var instrumental: AudioStreamPlayer
+
+## The ids of the streams within [member vocals]. [AudioStreamPolyphonic] track ID's are not sequential so this is used to keep track of them.
+var vocal_track_ids: Array[int] = []
+
+## The streams of all vocal files in the song.
+var vocal_streams: Array[AudioStream] = []
+
+## The scroll speed that applies to all strums.
+var scroll_speed: float = 1.0 : set = set_scroll_speed
+
+## Multiplier of the game speed
+var song_speed: float = SettingsManager.data.song_speed
+
+## The index of the latest loaded note
+var current_note: int = -1
+
+## The index of the latest loaded event
+var current_event: int = -1
+
+## Flag enabled whenever the player has [b]died[/b]
 var died: bool = false
 
-## The UI node that requires a list: [code]strums[/code].
-@onready var ui: BasicUI
-## Camera with built-in functions.
-@onready var camera: CameraController
+## Reference to the first [BasicUI] in the [code]ui[/code] group. Be careful when accessing as this may be null
+var ui: BasicUI = null
 
+## Reference to the first [CameraController] in the [code]cameras[/code] group. Be careful when accessing as this may be null
+var camera: CameraController = null
+
+## Reference to all [StrumManager]'s in the [code]strums[/code] group.
+var strums: Array = []
+
+## The players current health. Ranges from [member health_min] to [member health_max]
 var health: float = health_max * 0.5 : set = set_health
 
-func set_health(v: float):
+## The players current information related to how they are playing.
+var song_stats: NoahStats = NoahStats.new()
+
+## Cached value of the users audio driver latency. Used for music syncing.
+var output_latency: float = AudioServer.get_output_latency()
+
+## The delta between the current song position of now and the previous frame
+var position_delta: float = 0.0
+
+## The song position by accumulated deltatime
+var position_lerp: float = 0.0
+
+## A timer that checks every [code]0.5[/code] if [member position_lerp] has desynced and to resync.
+var sync_timer: float = 0.0
+
+## Is true when the song is starting and playing the [b]Countdown[b]
+var song_starting:bool = false
+
+## Is true after the song has begun
+var song_started: bool = false
+
+## Used when the song is starting. A negative offset of 4 beats before the song actually begins
+var song_start_offset: float = -4.0
+
+## The time that the song starts at. Set by [member play_song]
+var song_start_time: float = 0.0
+
+## @deprecated: Use [method song_stats.score].
+var score: float : 
+	get(): return song_stats.score
+
+## @deprecated: Use [method song_stats.misses].
+var misses: int :
+	get(): return song_stats.misses
+
+#region setters
+func set_health(v: float) -> void:
 	v = clampf(v, health_min, health_max)
 	
 	Signals.play_health_changed.emit(v, v - health)
 	health = v
 
-func set_scroll_speed(v: float):
-	get_tree().call_group(&"strums", "set_scroll_speed", v)
+func set_scroll_speed(v: float) -> void:
+	get_tree().call_group(&"strums", &"set_scroll_speed", v)
 	scroll_speed = v
-
-var song_stats: NoahStats = NoahStats.new()
-
-var score: float : 
-	get():
-		return song_stats.score
-
-var misses: int :
-	get():
-		return song_stats.misses
+#endregion
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	song_data = GameManager.current_song
 	
 	ui = get_tree().get_first_node_in_group(&"ui")
 	camera = get_tree().get_first_node_in_group(&"cameras")
+	strums = Global.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 	
 	if !ui:
 		printerr("(%s):" % name, " There was no ui within the ui group.")
@@ -98,14 +135,18 @@ func _ready() -> void:
 	if !camera:
 		printerr("(%s):" % name,' There was no CameraController within the camera group.')
 	
-	if !host:
-		printerr("(%s):" % name,'A Host was not assigned.')
+	if !ui_skin:
+		printerr("(%s):" % name,' There was no UI Skin set. falling back to dev')
+		ui_skin = load('uid://bvphmxy3ecutv')
 	
 	assert(song_data, "A song was not set correctly.")
 	
-	# This delay is so variables initialize
-	if host:
-		await host.ready
+	GameManager.reset_conductor()
+	GameManager.song_scene = LoadingScreen.scene
+	
+	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
+	
+	Global.set_window_title("Playing: " + song_data.title)
 	
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
@@ -125,54 +166,44 @@ func _ready() -> void:
 	
 	vocals.play()
 	
-	GameManager.reset_conductor()
-	
-	strums = get_tree().get_nodes_in_group(&"strums")
-	
-	GameManager.song_scene = LoadingScreen.scene
-	
-	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
-	
-	if not song_data.events.is_empty() and ResourceLoader.exists(song_data.events):
-		var ext_events = load(song_data.events)
+	if ResourceLoader.exists(song_data.difficulties[GameManager.difficulty].events):
+		var ext_events: Resource = load(song_data.difficulties[GameManager.difficulty].events)
 		if ext_events is ChartEvents:
 			chart.merge_events_into_this(ext_events)
 		else:
 			ext_events.free()
 	
-	song_speed = SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "song_speed")
+	if ResourceLoader.exists(song_data.events):
+		var ext_events: Resource = load(song_data.events)
+		if ext_events is ChartEvents:
+			chart.merge_events_into_this(ext_events)
+		else:
+			ext_events.free()
 	
 	match GameManager.play_mode:
 		GameManager.PLAY_MODE.CHARTING:
-			if SettingsManager.get_value(SettingsManager.SEC_CHART, "start_at_current_position"):
+			if SettingsManager.data.chart_start_at_current_position:
 				play_song(ChartEditor.song_position)
 			else:
 				play_song(0)
-		
 		_:
 			play_song(0)
 	
-	Global.set_window_title("Playing: " + song_data.title)
 	
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "botplay"):
-		if OS.is_debug_build():
-			get_tree().call_group(&"strums", "set_auto_play", true)
-			get_tree().call_group(&"strums", "set_press", false)
+	if SettingsManager.data.botplay and OS.is_debug_build():
+		get_tree().call_group(&"strums", &"set_auto_play", true)
+		get_tree().call_group(&"strums", &"set_press", false)
 	
-	scroll_speed = chart.scroll_speed * SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
+	scroll_speed = chart.scroll_speed * SettingsManager.data.scroll_speed_scale
 	
-	get_tree().call_group(&"strums", "set_skin", note_skin)
-	get_tree().call_group(&"strums", "set_offset",
-	SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset"))
+	get_tree().call_group(&"strums", &"set_offset", SettingsManager.data.offset)
 	
-	if SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "downscroll"):
-		get_tree().call_group(&"strums", "set_scroll", -1)
+	if SettingsManager.data.downscroll:
+		get_tree().call_group(&"strums", &"set_scroll", -1)
 	
 	Signals.play_note_hit.connect(note_hit)
 	Signals.play_note_holding.connect(note_holding)
 	Signals.play_note_miss.connect(note_miss)
-	
-	Signals.play_setup_finished.emit()
 
 func _process(delta) -> void:
 	if health <= health_min and !died:
@@ -181,10 +212,6 @@ func _process(delta) -> void:
 		GameManager.song_scene = get_tree().current_scene.scene_file_path
 		Signals.play_died.emit()
 		died = true
-	
-	# Why is this a thing I have to do
-	if is_inside_tree():
-		get_tree().call_group(&"note", &"update")
 	
 	if !song_started and song_starting:
 		song_start_offset += delta
@@ -214,14 +241,14 @@ func _process(delta) -> void:
 		sync_timer -= delta
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
-	var meter: Array = chart.get_meter_at(GameManager.song_position)
+	var meter: Array = chart.get_time_signature_at(GameManager.song_position)
 	if not meter.is_empty():
 		GameManager.conductor.numerator = meter[0]
 		GameManager.conductor.denominator = meter[1]
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
-	var notes_list = chart.get_notes_data()
+	var notes_list: Array = chart.notes
 	
 	if notes_list.size() > 0:
 		if current_note < notes_list.size():
@@ -241,22 +268,21 @@ func _process(delta) -> void:
 				current_note += 1
 	
 	if instrumental.playing:
-		var events_list = chart.get_events_data()
+		var events_list = chart.events
 		if events_list.size() > 0:
-			if current_event < events_list.size():
-				while events_list[current_event][0] <= GameManager.song_position:
-					var event = events_list[current_event]
-					var time: float = event[0]
-					var event_name: String = event[1]
-					var event_parameters: Array = event[2]
-					
-					print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
-					basic_event(time, event_name, event_parameters)
-					current_event += 1
+			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+				var event = events_list[current_event]
+				var time: float = event[0]
+				var event_name: String = event[1]
+				var event_parameters: Array = event[2]
+				
+				print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
+				basic_event(time, event_name, event_parameters)
+				current_event += 1
 
-
-func play_song(time: float):
-	await Signals.play_song_ready_to_start
+## Starts the song at a given time.
+func play_song(time: float) -> void:
+	await Signals.play_song_ready_to_start ## TODO: dont do it like this maybe ?
 	
 	song_starting = true
 	
@@ -266,7 +292,7 @@ func play_song(time: float):
 	GameManager.conductor.tempo = chart.get_tempo_at(-chart.offset + time)
 	GameManager.conductor.seconds_per_beat = 60.0 / GameManager.conductor.tempo
 	
-	GameManager.conductor.offset = chart.offset + SettingsManager.get_value(SettingsManager.SEC_GAMEPLAY, "offset")
+	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
 	
 	song_started = false
 	song_start_time = time + chart.offset
@@ -277,7 +303,7 @@ func play_song(time: float):
 	if time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
-		if !ui_skin.countdown.is_empty() and ui:
+		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
 			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
@@ -285,17 +311,16 @@ func play_song(time: float):
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)
 	
-	var notes_list = chart.get_notes_data()
-	current_note = bsearch_left_range(notes_list, time)
+	current_note = bsearch_left_range(chart.notes, time)
 	current_event = 0
 
 # This if for actually playing the audio tracks, the reason this is a function is because
 # I also call it in the process function for when the song starts before 4 beats are possible.
-func play_audios(time: float):
-	var playback = vocals.get_stream_playback()
+func play_audios(time: float) -> void:
+	var playback: AudioStreamPlaybackPolyphonic = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
-		vocal_tracks.append(playback.play_stream(stream, time, \
+		vocal_track_ids.append(playback.play_stream(stream, time, \
 		0.0, song_speed))
 	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
@@ -303,7 +328,7 @@ func play_audios(time: float):
 		Signals.play_song_start.emit()
 	song_started = true
 
-# Binary Search of notes and events, gives the index of the note nearest to the given time
+## Binary Search of notes and events, gives the index of the note nearest to the given time
 func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	var length = value_set.size()
 	if (length == 0):
@@ -324,42 +349,18 @@ func bsearch_left_range(value_set: Array, left_range: float) -> int:
 	
 	return high + 1
 
-
-func score_note(hit_time: float):
+## Handles adding score based off the time the player hit a note
+func score_note(hit_time: float) -> void:
 	var factor: float = 1.0 - (1.0 / (1.0 + exp(-Constants.SCORING_SLOPE * ((abs(hit_time) - Constants.SCORING_OFFSET) * 1000))))
 	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
 	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	song_stats.score += add
 	Signals.play_stats_changed.emit(song_stats)
 
-
-func basic_event(time: float, event_name: String, event_parameters: Array):
+## Triggers built in event behavior and dispatches [member Signals.play_new_event]
+func basic_event(time: float, event_name: String, event_parameters: Array) -> void:
 	match event_name:
-		"camera_position":
-			if host:
-				if host.camera_positions.size() == 0:
-					printerr('(PlayState): no camera_positions exist')
-					return
-				
-				if camera:
-					var index: int = int(event_parameters[0])
-					var marker = host.camera_positions[index]
-					if !marker:
-						printerr("(PlayState): Marker does not exist at index: ", index)
-						return
-					
-					var easing = event_parameters.get(2)
-					if !easing or easing.is_empty():
-						easing = "classic"
-					
-					if easing.to_lower() == "classic":
-						camera.go_to_marker(marker)
-					else:
-						camera.tween_to_marker(marker,
-						Global.string_to_time(event_parameters.get(1)) / song_speed,
-						event_parameters.get(2))
-		
-		"camera_bop":
+		&"camera_bop":
 			if camera:
 				var camera_bop: float = camera_bop_strength.x
 				if not event_parameters[0].is_empty():
@@ -374,10 +375,10 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				
 				ui.bump(Vector2.ONE * ui_bop)
 		
-		"psych_camera_zoom":
+		&"psych_camera_zoom":
 			basic_event(time, "camera_zoom", [event_parameters[0], ""])
 		
-		"camera_zoom":
+		&"camera_zoom":
 			if camera:
 				var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
 				var zoom_time = Global.string_to_time(event_parameters[1])
@@ -392,15 +393,11 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 				else:
 					camera.tween_zoom(new_zoom, zoom_time / song_speed, _ease)
 		
-		"bop_rate", "bop_delay":
-			if host:
-				host.bop_rate = int(event_parameters[0])
-		
-		"bop_strength":
+		&"bop_strength":
 			camera_bop_strength = Vector2.ONE * float(event_parameters[0])
 			ui_bop_strength = Vector2.ONE * float(event_parameters[1])
 		
-		"set_smoothing", 'lerping':
+		&"set_smoothing", &'lerping':
 			var smoothing: bool = event_parameters[0] == "true"
 			
 			if camera:
@@ -409,21 +406,21 @@ func basic_event(time: float, event_name: String, event_parameters: Array):
 			if ui:
 				ui.zoom_smoothing = smoothing
 		
-		"scroll_speed":
+		&"scroll_speed":
 			var tween_time: float = Global.string_to_time(event_parameters[1])
 			
-			var new_speed = float(event_parameters[0]) * SettingsManager.get_value(
-				SettingsManager.SEC_GAMEPLAY, "scroll_speed_scale")
+			var new_speed = float(event_parameters[0]) * SettingsManager.data.scroll_speed_scale
 			
 			create_tween().tween_property(self, "scroll_speed", new_speed, tween_time / song_speed)
 		
-		"camera_shake":
+		&"camera_shake":
 			if camera:
 				camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]) / song_speed)
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 
-func finished_song():
+## Called when the song is finished. Saves scoring and changes scene to [member next_scene]
+func finished_song() -> void:
 	Signals.play_song_finished.emit()
 	var scene_to_enter: String = next_scene
 	
@@ -437,22 +434,22 @@ func finished_song():
 		GameManager.PLAY_MODE.CHARTING:
 			scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
-	if scene_to_enter.is_empty() or not ResourceLoader.exists(scene_to_enter):
+	if not ResourceLoader.exists(scene_to_enter):
 		printerr("(PlayState): next_scene at %s was not found. falling back to ChartEditor." % scene_to_enter)
 		scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
 	Global.change_scene_to(scene_to_enter)
 
-# Strum Util
-func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager):
+## Called whenever a notes has been hit. in [PlayState], this updates scoring.
+func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() == 1:
-		playback.set_stream_volume(vocal_tracks[0], linear_to_db(1.0))
-	elif vocal_tracks.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(1.0))
+	if vocal_track_ids.size() == 1:
+		playback.set_stream_volume(vocal_track_ids[0], linear_to_db(1.0))
+	elif vocal_track_ids.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
-		if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "hit_sounds"):
+		if SettingsManager.data.hit_sounds:
 			SoundManager.hit.play()
 		
 		if note.mine:
@@ -488,25 +485,25 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 			_:
 				note_miss(note, lane, strum_manager)
 
-
-func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+## Called whenever a notes tail is being held. in [PlayState], this updates scoring.
+func note_holding(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_tracks[strum_manager.id],  linear_to_db(1.0))
+	if vocal_track_ids.size() > strum_manager.id:
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  linear_to_db(1.0))
 	
 	if !strum_manager.enemy_slot:
-		health += hold_difference * Constants.HOLD_HEALTH_GAIN_PER_SECOND
+		health += hold_delta * Constants.HOLD_HEALTH_GAIN_PER_SECOND
 		
 		if note.scoreable:
-			song_stats.score += hold_difference * Constants.HOLD_SCORE_GAIN_PER_SECOND
+			song_stats.score += hold_delta * Constants.HOLD_SCORE_GAIN_PER_SECOND
 			Signals.play_stats_changed.emit(song_stats)
 
-
-func note_miss(note: Note, lane: int, strum_manager: StrumManager):
+## Called whenever a note is missed. in [PlayState], this updates scoring.
+func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
-	if vocal_tracks.size() > strum_manager.id:
+	if vocal_track_ids.size() > strum_manager.id:
 		if (note and !note.mine) or !note:
-			playback.set_stream_volume(vocal_tracks[strum_manager.id], linear_to_db(0.0))
+			playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(0.0))
 	
 	if !strum_manager.enemy_slot:
 		# Ghost tapping
@@ -522,7 +519,7 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 			song_stats.score -= Constants.SPAM_SCORE_PENALTY
 			
 			health -= min(Constants.MISS_BASE_HEALTH_PENALTY + (song_stats.combo / Constants.COMBO_SLOPE) + (note.length * Constants.HOLD_HEALTH_GAIN_PER_SECOND),
-			Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
+				Constants.MISS_MAX_HEALTH_PENALTY) * note.damage_mult
 			reset_combo()
 			
 			song_stats.misses += 1
@@ -531,14 +528,15 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 			Signals.play_stats_changed.emit(song_stats)
 			Signals.play_combo_break.emit()
 
-
-func add_combo():
+## Adds 1 to the players combo in [member song_stats]
+func add_combo() -> void:
 	song_stats.combo += 1
 	
 	if song_stats.combo > song_stats.max_combo:
 		song_stats.max_combo = song_stats.combo
 	Signals.play_stats_changed.emit(song_stats)
 
-func reset_combo():
+## Resets [member song_stats.combo] back to 0. Called whenever the player misses.
+func reset_combo() -> void:
 	song_stats.combo = 0
 	Signals.play_stats_changed.emit(song_stats)

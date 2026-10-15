@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_dontb"]
 [ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://noah/tools/chart_editor/grid.tscn" id="2_i6pv1"]
 [ext_resource type="PackedScene" uid="uid://s3uvtxiv1wo4" path="res://noah/tools/chart_editor/minimap.tscn" id="10_kpohl"]
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="17_75w6f"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://bx3kdd0dt1kkw" path="res://noah/tools/chart_editor/lower_ui.tscn" id="17_sxrev"]
 [ext_resource type="PackedScene" uid="uid://b6b2d2kloq60j" path="res://noah/tools/chart_editor/upper_ui.tscn" id="18_dd0y6"]
 [ext_resource type="Texture2D" uid="uid://o8cl6odqirwp" path="res://noah/assets/genericBG.png" id="19_2ab3f"]
@@ -122,6 +122,7 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("18_dd0y6")]
 unique_name_in_owner = true
+offset_left = -472.0
 
 [node name="Strum Labels" type="HFlowContainer" parent="UI" unique_id=1205544976]
 unique_name_in_owner = true
@@ -130,6 +131,7 @@ offset_left = -144.0
 offset_top = -328.0
 offset_right = 144.0
 offset_bottom = -296.0
+theme_override_constants/h_separation = 0
 
 [node name="Tool Tip" type="Label" parent="UI" unique_id=538315361]
 visible = false

@@ -1,4 +1,5 @@
 extends Node
+## Singleton that contains utilities and other misc behavior
 
 @onready var performance_label: Label = $"Performance Label"
 @onready var volume_display: VolumeDisplay = $"Volume Display"
@@ -9,12 +10,27 @@ var fullscreen: bool = false
 var transitioning: bool = false
 var current_controller: int = -1
 
+## Sorts an array of nodes by their [code]id[/code]. If the nodes do not contain an [code]id[/code] var, sorting will not occur.
+func sort_array_by_id(arr: Array[Node]) -> Array[Node]:
+	var sorter:Callable = func(a, b):
+		if 'id' in a and 'id' in b:
+			if a.id < b.id:
+				return true
+		return false
+	arr.sort_custom(sorter)
+	
+	return arr
+
 func _ready() -> void:
 	_correct_window_size()
 	Input.joy_connection_changed.connect(self.changed_contoller)
 	
 	if not OS.is_debug_build():
 		RenderingServer.set_default_clear_color(Color.BLACK)
+	
+	SettingsManager.load_values()
+	SettingsManager.load_keybinds()
+	SaveManager.load()
 
 func changed_contoller(device: int, connected: bool):
 	if connected or !Input.get_connected_joypads().front():
@@ -24,15 +40,15 @@ func changed_contoller(device: int, connected: bool):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	performance_label.visible = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"show_performance")
-	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, "show_performance"):
+	performance_label.visible = SettingsManager.data.show_performance
+	if performance_label.visible:
 		var performance_string: String = str("FPS: ", int(Engine.get_frames_per_second()),
 		" • VMem: ", String.humanize_size(int(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED))))
 		
 		performance_label.text = performance_string
 	
-	if SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"cap_fps"):
-		Engine.max_fps = SettingsManager.get_value(SettingsManager.SEC_DEBUG, &"fps_cap")
+	if SettingsManager.data.cap_fps:
+		Engine.max_fps = SettingsManager.data.fps_cap
 	else:
 		Engine.max_fps = 0
 	
@@ -63,7 +79,8 @@ func _notification(what: int) -> void:
 #endregion
 
 #region Scene Changing
-func change_scene_to(path: String, transition: Variant = Constants.DEFAULT_TRANSITION, show_loading_screen: bool = false) -> void:
+## Changes the main scene to another with a transition
+func change_scene_to(path: String, transition: StringName = Constants.DEFAULT_TRANSITION, show_loading_screen: bool = false) -> void:
 	
 	if not ResourceLoader.exists(path):
 		printerr("Cannot switch to '%s' as it does not exist" % path)
@@ -86,6 +103,7 @@ func change_scene_to(path: String, transition: Variant = Constants.DEFAULT_TRANS
 			TransitionManager.resume()
 #endregion
 
+## Tweens a [Object] property to and back to a value
 func bop_tween(object: Object, property: NodePath, original_val: Variant, final_val: Variant, duration: float, trans: Tween.TransitionType):
 	var tween = create_tween()
 	tween.set_trans(trans)
@@ -136,12 +154,15 @@ func format_number(num:float) -> String:
 	return string
 
 ## Converts a float of seconds into a time format of MM:SS.mmm
-func format_time(time: float) -> String:
+func format_time(time: float, show_mili: bool = true) -> String:
 	var minutes: int = floor(fmod(time, 3600.0) / 60.0)
 	var seconds: int = floor(fmod(time, 60.0))
 	var milliseconds: int = floor(fmod(time, 1.0) * 100.0)
 	
-	return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
+	if show_mili:
+		return "%02d:%02d.%02d" % [minutes, seconds, milliseconds]
+	else:
+		return "%02d:%02d" % [minutes, seconds]
 
 func get_bind_string(action: StringName):
 	var strings: PackedStringArray
@@ -306,9 +327,12 @@ func string_to_ease(tween: String) -> Array:
 			return [Tween.TRANS_LINEAR, Tween.EASE_IN]
 #endregion
 
-func get_input_axis_just_pressed(negative_action: String, positive_action: String) -> int:
-	return int(Input.is_action_just_pressed(negative_action)) - int(Input.is_action_just_pressed(positive_action))
+## Alternative to [member Input.get_axis] that supports [code]just_pressed[/code] actions
+func get_input_axis_just_pressed(negative_action: StringName, positive_action: StringName) -> int:
+	return int(Input.is_action_just_pressed(positive_action)) - int(Input.is_action_just_pressed(negative_action))
 
+## Provides a time from [String]. If the time ends with [code]b[/code] or [code]s[/code], it will be converterd to [code]Beats[/code] or [code]Steps[/code]
+## [br][br] So [code]"4s"[/code] is equivalent to [code]4 Conductor steps[/code] in seconds
 func string_to_time(formatted_time: String) -> float:
 	if formatted_time.ends_with("b"):
 		return float(formatted_time.trim_suffix("b")) * GameManager.conductor.seconds_per_beat
@@ -319,6 +343,7 @@ func string_to_time(formatted_time: String) -> float:
 	
 	return float(formatted_time)
 
+## Updates the window size based on display dpi/scale
 func _correct_window_size() -> void:
 	if OS.get_name().to_lower().contains('windows'): 
 		var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0

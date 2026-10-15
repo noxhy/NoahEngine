@@ -1,5 +1,4 @@
 @icon("uid://ij1ectsa31bd")
-
 extends Node
 class_name Conductor
 
@@ -83,7 +82,6 @@ func _process(_delta):
 		time = stream_player.get_playback_position()
 		time -= latency
 		# time += AudioServer.get_time_since_last_mix()
-	
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)
 

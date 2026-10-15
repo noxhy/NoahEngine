@@ -8,31 +8,39 @@ class_name ChartNote
 
 # Applying Note Skin
 func _ready() -> void:
+	if not note_skin.notes_texture.has_animation(animation):
+		note_skin = load(Constants.DEFAULT_NOTE_SKIN)
+		animation = correct_anim_id(animation)
 	note.texture = note_skin.notes_texture.get_frame_texture(animation, 0)
 	
 	var tail_animation: StringName = animation + &"_tail"
-	if tail_animation:
-		tail.texture = note_skin.notes_texture.get_frame_texture(tail_animation, 0)
-		if !tail.texture:
-			tail.texture = BACKUP_HOLD_TEXTURE
 	
-	if note_skin.pixel_texture: 
+	tail.texture = note_skin.notes_texture.get_frame_texture(tail_animation, 0)
+	if !tail.texture:
+		tail.texture = BACKUP_HOLD_TEXTURE
+	
+	if note_skin.pixel_texture:
 		note.texture_filter = TEXTURE_FILTER_NEAREST
 		tail.texture_filter = TEXTURE_FILTER_NEAREST
 	
 	update()
 
 func update():
+	if not is_node_ready():
+		return
+	
+	screen_enabler.scale = grid_size / Vector2(640, 640)
+	
 	if note:
 		note.size = grid_size
 		note.position = -note.size / 2
 		
-		if tail:
+		if tail and tail.visible:
 			tail.scale = grid_size / note.texture.get_size()
 			if tail.texture:
 				tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 		
-		screen_enabler.scale = grid_size / Vector2(640, 640)
+		
 		
 		if collision_shape:
 			collision_shape.shape = RectangleShape2D.new()
@@ -70,3 +78,12 @@ func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	note.visible = on_screen
 	tail.visible = on_screen
 	label.visible = on_screen
+
+func correct_anim_id(anim_id: StringName) -> StringName: #quick and dirty
+	if anim_id.contains(&"left"):
+		return &"left"
+	if anim_id.contains(&"down"):
+		return &"down"
+	if anim_id.contains(&"right"):
+		return &"right"
+	return &'up'

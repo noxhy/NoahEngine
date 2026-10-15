@@ -1,7 +1,8 @@
 @icon("uid://kdr1a765du27")
 extends Node
 class_name CameraController
-
+## Handles setting camera properties with additional helper functions.
+## [br][br] Provides [Camera3D] some [Camera2D] behavior/features
 
 ## A camera2D node that this will control.
 @export var parent_2d: Camera2D
@@ -257,11 +258,11 @@ func get_noise_offset(delta: float, speed: float, strength: float) -> Vector2:
 
 func bump(strength: Variant) -> void:
 	if parent_3d:
-		zoom *= (1 - strength)
+		zoom *= (1.0 - strength)
 	
 	if parent_2d:
 		if strength is float:
-			zoom *= (1 + strength)
+			zoom *= (1.0 + strength)
 		else:
 			zoom *= Vector2.ONE + strength
 

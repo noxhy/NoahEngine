@@ -1,0 +1,232 @@
+[gd_scene format=3 uid="uid://bflvolhan5xvh"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_rnfoh"]
+[ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/windows/metadata_window.gd" id="2_44rw1"]
+[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_lsluv"]
+
+[node name="Metadata Window" type="Window" unique_id=1340846673 groups=["windows"]]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Song Metadata"
+position = Vector2i(0, 24)
+size = Vector2i(640, 240)
+unresizable = true
+transparent = true
+popup_window = true
+theme = ExtResource("1_rnfoh")
+script = ExtResource("2_44rw1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2058411482]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -12.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=1706111635]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Song Name" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=2062633903]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=53172043]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Title:"
+
+[node name="Song Name" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Name" unique_id=1651112645]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Song Artist" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1940201400]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=1851621022]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Artist(s):"
+
+[node name="Song Artist" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Artist" unique_id=584101658]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Song Charter" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1842267230]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Charter" unique_id=743539655]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Charter(s):"
+
+[node name="Song Charter" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Charter" unique_id=1633594632]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1866714952]
+layout_mode = 2
+
+[node name="Song Scene" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=1461313318]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=484953711]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Song Scene:"
+
+[node name="Song Scene" type="LineEdit" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1114754875]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1557321340]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "       "
+icon = ExtResource("3_lsluv")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Scene FileDailog" type="FileDialog" parent="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" unique_id=308569808 groups=["windows"]]
+unique_name_in_owner = true
+oversampling_override = 1.0
+title = "Open a File"
+initial_position = 1
+size = Vector2i(640, 480)
+file_mode = 0
+root_subfolder = "res://scenes/game/songs/"
+filters = PackedStringArray("*.tscn")
+
+[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1200860892]
+layout_mode = 2
+
+[node name="Hbox" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=92420423]
+layout_mode = 2
+
+[node name="Difficulty Label" type="Label" parent="HBoxContainer/VBoxContainer/Hbox" unique_id=1090648567]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Difficulty:"
+
+[node name="Difficulty" type="LineEdit" parent="HBoxContainer/VBoxContainer/Hbox" unique_id=1597913839]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=439859820]
+layout_mode = 2
+
+[node name="Scroll Speed Label" type="Label" parent="HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1778790191]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Scroll Speed: 1.0x"
+
+[node name="Scroll Speed" type="HSlider" parent="HBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1331755680]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+min_value = 0.1
+max_value = 5.0
+step = 0.1
+value = 1.0
+tick_count = 5
+ticks_on_borders = true
+ticks_position = 3
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=868912484]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=1464290115]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Time Changes" type="OptionButton" parent="HBoxContainer/VBoxContainer2" unique_id=1386784694]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+allow_reselect = true
+item_count = 1
+popup/item_0/text = "00:00.00 - BPM: 60.0 in 4/4"
+popup/item_0/id = 0
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2" unique_id=1471525188]
+layout_mode = 2
+
+[node name="Tempo Change" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1989832697]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/Tempo Change" unique_id=1989583853]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Tempo:"
+
+[node name="Tempo" type="SpinBox" parent="HBoxContainer/VBoxContainer2/Tempo Change" unique_id=147331811]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 30.0
+max_value = 500.0
+step = 0.001
+value = 60.0
+suffix = "BPM"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2" unique_id=1023467581]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1374173854]
+layout_mode = 2
+text = "Time Signature:"
+
+[node name="Numerator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1224926063]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 32.0
+value = 4.0
+rounded = true
+prefix = "N:"
+
+[node name="Denominator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=479747261]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 2.0
+max_value = 16.0
+value = 4.0
+rounded = true
+prefix = "D:"
+
+[node name="Add Time Change" type="Button" parent="HBoxContainer/VBoxContainer2" unique_id=1370153651]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add Time Change"
+
+[node name="Remove Time Change" type="Button" parent="HBoxContainer/VBoxContainer2" unique_id=1219877881]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Remove Current Time Change"
+
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Name/Song Name" to="." method="_on_song_name_text_changed"]
+[connection signal="text_changed" from="HBoxContainer/VBoxContainer/Song Charter/Song Charter" to="." method="_on_song_charter_text_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button" to="." method="_on_song_scene_button_pressed"]
+[connection signal="file_selected" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="_on_scene_file_dailog_file_selected"]
+[connection signal="gui_focus_changed" from="HBoxContainer/VBoxContainer/Song Scene/Song Scene Button/Scene FileDailog" to="." method="file_dailog_gui_focus_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer/HBoxContainer2/Scroll Speed" to="." method="_on_scroll_speed_value_changed"]
+[connection signal="item_selected" from="HBoxContainer/VBoxContainer2/Time Changes" to="." method="_on_time_changes_item_selected"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/Tempo Change/Tempo" to="." method="_on_tempo_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/HBoxContainer/Numerator" to="." method="_on_numerator_value_changed"]
+[connection signal="value_changed" from="HBoxContainer/VBoxContainer2/HBoxContainer/Denominator" to="." method="_on_denominator_value_changed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/Add Time Change" to="." method="_on_add_time_change_pressed"]
+[connection signal="pressed" from="HBoxContainer/VBoxContainer2/Remove Time Change" to="." method="_on_remove_time_change_pressed"]

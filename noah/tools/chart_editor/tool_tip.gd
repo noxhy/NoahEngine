@@ -15,15 +15,15 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-		
-
-	visible = ChartManager.chart and chart_editor and chart_editor.is_mouse_over_grid() and (chart_editor.hovered_event != -1 or chart_editor.hovered_note != -1)
+	
+	
+	visible = EditorResources.chart and chart_editor and chart_editor.is_mouse_over_grid() and (chart_editor.hovered_event != -1 or chart_editor.hovered_note != -1)
 	if not visible:
 		return
 
 	var last_text = text
 	if chart_editor.hovered_note != -1:
-		var note = ChartManager.chart.get_notes_data()[chart_editor.hovered_note]
+		var note = EditorResources.chart.notes[chart_editor.hovered_note]
 		var text_str: String = get_time_str(note[0])
 		
 		if note[2] > 0:
@@ -33,7 +33,7 @@ func _process(delta: float) -> void:
 			
 		text = text_str
 	elif chart_editor.hovered_event != -1:
-		var ev = ChartManager.chart.get_events_data()[chart_editor.hovered_event]
+		var ev = EditorResources.chart.events[chart_editor.hovered_event]
 		
 		text = get_time_str(ev[0]) + '\n' + get_event_str()
 	
@@ -52,21 +52,21 @@ func _process(delta: float) -> void:
 func get_event_str() -> String:
 	
 	if chart_editor.name != 'Chart Editor':
-		var event = ChartManager.chart.get_events_data()[chart_editor.hovered_event]
-		var parameters = ChartManager.chart.get_events_data()[chart_editor.hovered_event][2]
+		var event = EditorResources.chart.events[chart_editor.hovered_event]
+		var parameters = EditorResources.chart.events[chart_editor.hovered_event][2]
 		return event[1] + ': [%s]' % ", ".join(PackedStringArray(parameters))
 	
-	var found_events = chart_editor.find_events_at(ChartManager.chart.get_events_data()[chart_editor.hovered_event][0])
+	var found_events = chart_editor.find_events_at(EditorResources.chart.events[chart_editor.hovered_event][0])
 	
 	var ret: String = ''
 	
 	for ev_idx in found_events:
-		var ev = ChartManager.chart.get_events_data()[ev_idx]
+		var ev = EditorResources.chart.events[ev_idx]
 		var ev_params = ev[2]
 		ret += ev[1] + ': [%s]' % ", ".join(PackedStringArray(ev_params)) + '\n'
 	return ret.strip_edges()
 
 func get_time_str(time: float) -> String:
-	var beat_time = Conductor.get_accumulated_beat_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
-	var step_time = Conductor.get_accumulated_step_at(time, ChartManager.chart.get_tempos_data(), ChartManager.chart.get_meters_data()) + 1
-	return 'Time: ' + "(%s, b: %s, s: %s)" % [str(snappedf(time, 0.01)), str(beat_time), str(step_time)]
+	var beat_time = Conductor.get_accumulated_beat_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1
+	var step_time = Conductor.get_accumulated_step_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1
+	return 'Time: ' + "(%s, b: %s, s: %s)" % [Global.format_time(time), str(beat_time), str(step_time)]

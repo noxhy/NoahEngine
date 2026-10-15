@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dguo6hi3l0pxv"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/themes/tool.res" id="1_mysbr"]
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_mysbr"]
 [ext_resource type="Script" uid="uid://bjk501es4qmnv" path="res://noah/tools/chart_editor/event_editor/event_button.gd" id="2_tjtdw"]
 [ext_resource type="Texture2D" uid="uid://bgaokgo4ivbwr" path="res://addons/at-icons/node/trash_can.svg" id="3_hdi5e"]
 

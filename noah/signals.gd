@@ -6,10 +6,6 @@ extends Node
 ## Emit this at a later point if u have a intro cutscene
 signal play_song_ready_to_start()
 
-## Signal to be emitted whenever the playstate is ready. 
-## necessary (atm) for its host (BasicSong).
-signal play_setup_finished()
-
 ## Signal to emitted whenever a new step has been reached by the conductor.
 signal play_conductor_step_hit(step: int, measure: int)
 
@@ -27,10 +23,13 @@ signal play_note_hit(note: BasicNote, lane: int, hit_time_difference: float, str
 ## Signal to be emitted whenever a note is missed.
 signal play_note_miss(note: BasicNote, lane: int, strum_manager: StrumManager)
 
-signal play_note_holding(note: BasicNote, lane: int, hold_difference: float, strum_manager: StrumManager)
+## Signal that is emitted whenever a note is being held.
+signal play_note_holding(note: BasicNote, lane: int, hold_delta: float, strum_manager: StrumManager)
 
+## Signal that provides the raw data of the note to be created.
 signal play_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float)
 
+## Signal that is emitted after a note was created.
 signal play_note_created(note: BasicNote, strum: Strum)
 
 ## Signal to be emitted whenever an event within a chart is ready to be dispatched
