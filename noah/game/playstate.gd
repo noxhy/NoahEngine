@@ -96,6 +96,9 @@ var song_starting:bool = false
 ## Is true after the song has begun
 var song_started: bool = false
 
+## Whether to skip the 4 beat delay and countdowns
+var song_starts_immediately: bool = true
+
 ## Used when the song is starting. A negative offset of 4 beats before the song actually begins
 var song_start_offset: float = -4.0
 
@@ -296,11 +299,15 @@ func play_song(time: float) -> void:
 	
 	song_started = false
 	song_start_time = time + chart.offset
-	song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 4)
+	if not song_starts_immediately:
+		song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 4)
+	else:
+		song_start_offset = song_start_time
+	
 	GameManager.song_position = song_start_offset
 	GameManager.conductor.time = song_start_time
 	
-	if time >= GameManager.conductor.seconds_per_beat * 4:
+	if song_starts_immediately or time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
 		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
