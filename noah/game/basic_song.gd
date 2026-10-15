@@ -31,6 +31,8 @@ var pause_preload: PackedScene = null
 
 var can_pause: bool = true
 
+var can_show_combo: bool = true
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -217,7 +219,7 @@ func _on_combo_break():
 
 
 func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
-	if playstate:
+	if playstate and can_show_combo:
 		var hit_rating: String
 		
 		match rating:
