@@ -1527,11 +1527,24 @@ func auto_save() -> void:
 
 
 func save() -> void:
-	# Checks if it's a json
-	if (EditorResources.chart.resource_path.is_empty()):
-		var path: String = EditorResources.song.difficulties.get(EditorResources.difficulty).get("chart")
-		
-		if (path.get_extension() == "json"):
+	if EditorResources.chart.resource_path.is_empty():
+		var path: String = EditorResources.song.difficulties.get(EditorResources.difficulty).chart
+		if path.is_empty(): # if its empty lets try making one
+			var song_file_path: String = EditorResources.song.resource_path
+			if song_file_path.begins_with("uid://"):
+				song_file_path = ResourceUID.uid_to_path(song_file_path)
+			
+			var new_path: String = song_file_path.get_base_dir().path_join(
+				EditorResources.song.title
+				+ "-chart-"
+				+ EditorResources.difficulty
+				+ Chart.DEFAULT_FILE_TYPE
+			)
+			
+			EditorResources.chart.take_over_path(new_path)
+			EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
+			
+		elif path.get_extension() == "json": #json
 			EditorResources.chart.resource_path = str(
 				path.get_base_dir(), "/", EditorResources.song.title, "-", EditorResources.difficulty, Chart.DEFAULT_FILE_TYPE
 				)
