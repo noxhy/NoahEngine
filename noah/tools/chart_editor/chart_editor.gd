@@ -1347,7 +1347,7 @@ func audio_button_item_pressed(id) -> void:
 			song_speed = SettingsManager.data.song_speed
 		
 		5:
-			SettingsManager.data.song_speed = max(SettingsManager.data.song_speed - 0.05, 2)
+			SettingsManager.data.song_speed = max(SettingsManager.data.song_speed - 0.05, 0)
 			
 			SettingsManager.flush()
 			song_speed = SettingsManager.data.song_speed
