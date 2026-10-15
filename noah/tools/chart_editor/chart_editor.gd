@@ -586,6 +586,8 @@ func load_song(song: Song, difficulty: Variant = null):
 
 
 func load_song_path(path: String, difficulty: Variant = null) -> void:
+	if path.begins_with('res://'):
+		path = path.trim_suffix(".remap")
 	var song = load(path)
 	if song is not Song:
 		printerr("File: ", path, " is not a song file.")

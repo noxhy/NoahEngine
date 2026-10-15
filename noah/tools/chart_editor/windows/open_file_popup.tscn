@@ -16,7 +16,7 @@ min_size = Vector2i(480, 0)
 theme = ExtResource("1_gikln")
 ok_button_text = "Open"
 file_mode = 0
-filters = PackedStringArray("*.tres", "*.res")
+filters = PackedStringArray("*.tres", "*.res", "*.tres.remap")
 script = ExtResource("1_umk2k")
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
