@@ -438,6 +438,7 @@ func file_button_item_pressed(id):
 			SoundManager.tool_mouse_click.play()
 		
 		6: #Exit
+			ChartEditor.song_position = 0.0
 			chart_editor.set_chart_from_chart(chart_editor.backup_chart)
 			Global.change_scene_to(Constants.START_MENU_SCENE)
 			chart_editor.can_chart = false

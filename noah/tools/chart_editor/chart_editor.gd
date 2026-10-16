@@ -143,7 +143,9 @@ func _process(delta: float) -> void:
 		if notes_list.size() > 0:
 			if current_note < notes_list.size():
 				var note = notes_list[current_note]
-				if note[0] <= (song_position + start_offset):
+				if (song_position + start_offset) > (note[0] + conductor.seconds_per_step):
+					current_note += 1
+				elif note[0] <= (song_position + start_offset):
 					var lane: float = note[1]
 					if vocal_tracks.size() == 1 and EditorResources.strum_data.size() > 0:
 						if EditorResources.strum_data[0].get('hit_sounds', true):
@@ -1525,34 +1527,41 @@ func auto_save() -> void:
 	if SettingsManager.data.chart_auto_save:
 		save()
 
+func _create_chart_path() -> String:
+	var song_file_path: String = EditorResources.song.resource_path
+	if song_file_path.begins_with("uid://"):
+		song_file_path = ResourceUID.uid_to_path(song_file_path)
+	
+	var new_path: String = song_file_path.get_base_dir().path_join(
+		EditorResources.song.title
+		+ "-chart-"
+		+ EditorResources.difficulty
+		+ Chart.DEFAULT_FILE_TYPE
+	)
+	
+	return new_path
 
 func save() -> void:
-	if EditorResources.chart.resource_path.is_empty():
+	var needs_new_path: bool = false
+	
+	if EditorResources.chart.resource_path.begins_with('uid://') and ResourceUID.uid_to_path(EditorResources.chart.resource_path).is_empty():
+		needs_new_path = true
+	elif EditorResources.chart.resource_path.is_empty():
 		var path: String = EditorResources.song.difficulties.get(EditorResources.difficulty).chart
-		if path.is_empty(): # if its empty lets try making one
-			var song_file_path: String = EditorResources.song.resource_path
-			if song_file_path.begins_with("uid://"):
-				song_file_path = ResourceUID.uid_to_path(song_file_path)
-			
-			var new_path: String = song_file_path.get_base_dir().path_join(
-				EditorResources.song.title
-				+ "-chart-"
-				+ EditorResources.difficulty
-				+ Chart.DEFAULT_FILE_TYPE
-			)
-			
-			EditorResources.chart.take_over_path(new_path)
-			EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
-			
+		if path.is_empty() or \
+				(path.begins_with('uid://') and ResourceUID.uid_to_path(path).is_empty()): # if its empty lets try making one
+			needs_new_path = true
 		elif path.get_extension() == "json": #json
-			EditorResources.chart.resource_path = str(
-				path.get_base_dir(), "/", EditorResources.song.title, "-", EditorResources.difficulty, Chart.DEFAULT_FILE_TYPE
-				)
-			
-			EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
+			needs_new_path = true
+			EditorResources.chart.take_over_path(_create_chart_path())
 			
 			print("Chart is json, converting to resource at: ", EditorResources.chart.resource_path)
+		
 	
+	if needs_new_path:
+		EditorResources.chart.take_over_path(_create_chart_path())
+		EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
+		
 	ResourceSaver.save(EditorResources.song, EditorResources.song.resource_path)
 	ResourceSaver.save(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
