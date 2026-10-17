@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if EditorResources.chart:
+	if EditorResources.chart and chart_editor.instrumental and chart_editor.instrumental.stream:
 		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step / chart_editor.grid.zoom.y
 		var point_a: Vector2i = map_to_image_position(Vector2(0, chart_editor.song_position))
 		var point_b: Vector2i = map_to_image_position(Vector2(0,

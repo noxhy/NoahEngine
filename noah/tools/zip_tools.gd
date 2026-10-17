@@ -1,12 +1,12 @@
 extends Node
 class_name ZipTools
 
-
 ## path used to create dummy files for resource serialization
 static var TEMP_RESOURCE: String = 'user://temp-resource.res'
 static var TEMP_TEXT_RESOURCE: String = 'user://temp-resource.tres'
+static var TEMP_SOUND_RESOURCE: String = 'user://temp-sound.res'
 
-static func read_text_resource_from_zip(zip: ZIPReader, file_name: String):
+static func read_text_resource_from_zip(zip: ZIPReader, file_name: String) -> Resource:
 	var buffer: PackedByteArray = zip.read_file(file_name)
 	
 	var file = FileAccess.open(TEMP_TEXT_RESOURCE, FileAccess.WRITE)
@@ -19,7 +19,7 @@ static func read_text_resource_from_zip(zip: ZIPReader, file_name: String):
 	
 	return res
 
-static func read_resource_from_zip(zip: ZIPReader, file_name: String):
+static func read_resource_from_zip(zip: ZIPReader, file_name: String) -> Resource:
 	var buffer = zip.read_file(file_name)
 	
 	var file = FileAccess.open(TEMP_RESOURCE, FileAccess.WRITE)
@@ -45,16 +45,36 @@ static func write_dict_to_zip(zip: ZIPPacker, file_name: String, dict:Dictionary
 	zip.write_file(stringify.to_utf8_buffer())
 	zip.close_file()
 	
-	print('Successfully written to zip')
+	print('(Zip Tools): Successfully written to zip')
 
 static func write_snd_to_zip(zip: ZIPPacker, file_name: String, snd_path: String):
 	
 	if snd_path.begins_with('uid'):
 		snd_path = ResourceUID.uid_to_path(snd_path)
 	
+	if not OS.has_feature("editor"):
+		
+		var snd = load(snd_path)
+		if not snd:
+			printerr("(Zip Tools): failed to open file for path: ", snd_path)
+			return
+		
+		ResourceSaver.save(snd, TEMP_SOUND_RESOURCE)
+		
+		zip.start_file(file_name)
+		zip.write_file(FileAccess.get_file_as_bytes(TEMP_SOUND_RESOURCE))
+		zip.close_file()
+		
+		
+		DirAccess.remove_absolute(TEMP_SOUND_RESOURCE)
+		print('(Zip Tools): Successfully written stream to zip')
+		
+		return
+		
+	
 	var file:FileAccess = FileAccess.open(snd_path, FileAccess.READ)
 	if not file:
-		printerr("failed to open file for path: ", snd_path)
+		printerr("(Zip Tools): failed to open file for path: ", snd_path)
 		return 
 	
 	zip.start_file(file_name)
@@ -63,7 +83,8 @@ static func write_snd_to_zip(zip: ZIPPacker, file_name: String, snd_path: String
 	
 	file.close()
 	
-	print('Successfully written to zip')
+	print('(Zip Tools): Successfully written stream to zip')
+
 
 
 static func write_resource_to_zip(zip: ZIPPacker, file_name: String, resource: Resource):
@@ -78,4 +99,4 @@ static func write_resource_to_zip(zip: ZIPPacker, file_name: String, resource: R
 	
 	DirAccess.remove_absolute(TEMP_RESOURCE)
 	
-	print('Successfully written to zip')
+	print('(Zip Tools): Successfully written to zip')

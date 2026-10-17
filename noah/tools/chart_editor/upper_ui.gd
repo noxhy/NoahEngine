@@ -296,7 +296,12 @@ func file_button_item_pressed(id):
 					temp_song.difficulties.set(key, difficulty_data)
 				
 				var inst_buffer = reader.read_file('Inst.' + misc_data.get('inst_key', 'ogg'))
-				var inst = SoundManager.get_stream_from_buffer(inst_buffer, misc_data.get('inst_key', 'ogg'))
+				var inst: AudioStream
+				
+				if misc_data.get('inst_key', 'ogg') == 'res':
+					inst = ZipTools.read_resource_from_zip(reader, 'Inst.res')
+				else:
+					inst = SoundManager.get_stream_from_buffer(inst_buffer, misc_data.get('inst_key', 'ogg'))
 				
 				if inst:
 					var inst_path = TEMP_PATH.path_join('inst.' + misc_data.get('inst_key', 'ogg'))
@@ -311,7 +316,12 @@ func file_button_item_pressed(id):
 				for key: String in misc_data.get('vocal_keys', []):
 					var buffer = reader.read_file('Voices' + str(idx) + '.' + key)
 					
-					var stream: AudioStream = SoundManager.get_stream_from_buffer(buffer, key)
+					var stream: AudioStream
+					
+					if key == 'res':
+						stream = ZipTools.read_resource_from_zip(reader, 'Voices' + str(idx) + '.' + key)
+					else:
+						stream = SoundManager.get_stream_from_buffer(buffer, key)
 					
 					if stream:
 						var vocals_path = TEMP_PATH.path_join('Voices' + str(idx) + '.' + key)
@@ -353,30 +363,37 @@ func file_button_item_pressed(id):
 			file_dialog.popup()
 			
 			var export_zip = func(path: String) -> void:
+				print('runn')
 				if not EditorResources.song:
 					return
 				
-				var vocal_keys:Array = []
-				var chart_keys:Array = []
+				var vocal_keys: Array = []
+				var chart_keys: Array = []
+				var inst_key: String = ''
 				var misc_data: Dictionary = {}
 				
 				var zip = ZIPPacker.new()
 				zip.open(path)
 				
 				var inst_path: String = EditorResources.song.instrumental
+				print(inst_path)
 				if not inst_path.is_empty():
-					if inst_path.begins_with('uid'):
+					if inst_path.begins_with('uid://'):
 						inst_path = ResourceUID.uid_to_path(inst_path)
 					
-					ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_path.get_extension(), inst_path)
+					var _key = inst_path.get_extension() if OS.has_feature("editor") else 'res'
+					
+					ZipTools.write_snd_to_zip(zip, 'Inst.' + inst_key, inst_path)
 				
 				var idx: int = 0
 				for vocal_path: String in EditorResources.song.vocals:
-					if vocal_path.begins_with('uid'):
+					if vocal_path.begins_with('uid://'):
 						vocal_path = ResourceUID.uid_to_path(vocal_path)
 					
-					vocal_keys.append(vocal_path.get_extension())
-					ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + vocal_path.get_extension(), vocal_path)
+					var _key = vocal_path.get_extension() if OS.has_feature("editor") else 'res'
+					vocal_keys.append(_key)
+					
+					ZipTools.write_snd_to_zip(zip, 'Voices' + str(idx) + '.' + _key, vocal_path)
 					idx += 1
 				
 				for diff in EditorResources.song.difficulties:
@@ -392,7 +409,7 @@ func file_button_item_pressed(id):
 				misc_data.set('tempo', EditorResources.song.tempo)
 				misc_data.set('vocal_keys', vocal_keys)
 				misc_data.set('chart_keys', chart_keys)
-				misc_data.set('inst_key', inst_path.get_extension())
+				misc_data.set('inst_key', inst_key)
 				
 				ZipTools.write_dict_to_zip(zip, 'misc_data.json', misc_data)
 				
