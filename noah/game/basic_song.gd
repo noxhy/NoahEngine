@@ -11,10 +11,10 @@ class_name BasicSong
 @onready var combo_numbers_node = load("uid://b28wu6vajuag3")
 
 ## The amount of lanes per strumline (usually)
-const DIRECTIONS: int = 4
+var DIRECTIONS: int = 4
 
 ## The animations for the characters to play in order of [member Strum.lane]
-const SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
+var SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
 var camera_positions: Array[Node] = []
 var strums: Array[Node] = []
@@ -52,9 +52,6 @@ func _ready() -> void:
 		if enemy:
 			ui.update_enemy(enemy)
 	
-	if playstate and playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
-		pause_preload = load(playstate.ui_skin.pause_scene)
-
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
 	
@@ -70,6 +67,13 @@ func _ready() -> void:
 	
 	Signals.play_died.connect(died)
 	
+	if playstate and playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
+		pause_preload = load(playstate.ui_skin.pause_scene)
+	
+	start_song()
+
+
+func start_song() -> void:
 	Signals.play_song_ready_to_start.emit()
 
 func _process(delta: float) -> void:
@@ -112,15 +116,15 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 func update_bop_rate(_i: int) -> void:
 	bop_rate = GameManager.conductor.numerator * GameManager.conductor.denominator
 
-func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float):
+func _on_create_note(time: float, lane: int, note_length: float, note_type: String, tempo: float) -> void:
 	if not strums.is_empty():
-		var strumline_idx = lane / DIRECTIONS
-		if strumline_idx < strums.size():
-			strums[strumline_idx].create_note(time, lane % DIRECTIONS, note_length, note_type, tempo)
+		var idx: int = lane / DIRECTIONS
+		if idx < strums.size():
+			strums[idx].create_note(time, lane % DIRECTIONS, note_length, note_type, tempo)
 
-func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager):
+func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var group: StringName = get_group_from_manager(strum_manager)
-	var anim_to_play: String = note.anim_prefix + get_direction(lane % DIRECTIONS)
+	var anim_to_play: String = note.anim_prefix + get_direction(lane)
 	
 	if not note.no_animation:
 		get_tree().call_group(group, &"play_animation", anim_to_play,
@@ -138,12 +142,12 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 				get_tree().call_group(&"metronome", &"play_animation", &"cheer")
 
 
-func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager):
+func note_holding(note: Note, lane: int, hold_difference: float, strum_manager: StrumManager) -> void:
 	var group: StringName = get_group_from_manager(strum_manager)
 	get_tree().call_group(group, &"set_sing_timer")
 
 
-func note_miss(note: Note, lane: int, strum_manager: StrumManager):
+func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
 	if !strum_manager.enemy_slot:
 		if not note:
 			SoundManager.anti_spam.play()
@@ -153,16 +157,16 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager):
 	
 	get_tree().call_group(
 		&"enemy" if strum_manager.enemy_slot else &"player", &"play_animation",
-		&"miss_" + get_direction(lane % DIRECTIONS), Character.AnimContext.SING, true)
+		&"miss_" + get_direction(lane), Character.AnimContext.SING, true)
 
 
 func get_group_from_manager(strum_manager: StrumManager) -> StringName:
 	return &"enemy" if strum_manager.enemy_slot else &"player"
 
 func get_direction(direction: int) -> StringName:
-	return SING_DIRECTIONS[direction]
+	return SING_DIRECTIONS[direction % SING_DIRECTIONS.size()]
 
-func _on_new_event(time: float, event_name: String, event_parameters: Array):
+func _on_new_event(time: float, event_name: String, event_parameters: Array) -> void:
 	match event_name:
 		&"camera_position":
 			if camera_positions.is_empty():
@@ -213,12 +217,12 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array):
 			bop_rate = int(event_parameters[0])
 
 
-func _on_combo_break():
+func _on_combo_break() -> void:
 	SoundManager.miss.play()
 	show_combo(NoahStats.HIT_RATING.MISS, 0)
 
 
-func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
+func show_combo(rating: NoahStats.HIT_RATING, _combo: int) -> void:
 	if playstate and can_show_combo:
 		var hit_rating: String
 		
@@ -273,7 +277,7 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int):
 				add_numbers.call(combo_marker)
 
 
-func pause():
+func pause() -> void:
 	if not pause_preload:
 		printerr("Could not pause as pause_preload is null")
 		return
@@ -287,5 +291,5 @@ func pause():
 	get_tree().paused = true
 
 
-func died():
+func died() -> void:
 	pass

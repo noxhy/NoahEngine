@@ -20,6 +20,8 @@ extends Node
 func _enter_tree() -> void:
 	if not Engine.is_editor_hint():
 		GameManager.load_songs([song], difficulty, mode)
+		EditorResources.song = song
+		EditorResources.difficulty = difficulty
 
 func _get_property_list() -> Array[Dictionary]:
 	var props: Array[Dictionary] = []
