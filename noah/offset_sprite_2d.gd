@@ -32,6 +32,8 @@ func _ready() -> void:
 		animation_changed.connect(update_ghost)
 	else:
 		animation_changed.connect(update_offset)
+	
+	update_offset()
 
 ## Updates the offset to the corresponding [member animation]
 func update_offset() -> void:
