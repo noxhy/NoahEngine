@@ -13,6 +13,7 @@ static func flush():
 static func load():
 	if !FileAccess.file_exists(LOAD_PATH):
 		printerr("(SaveManager): Save File does not exist. Creating a new Save File.")
+		instance = Save.new()
 		flush()
 		return
 	
