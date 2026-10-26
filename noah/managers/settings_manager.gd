@@ -69,6 +69,7 @@ static func load_values() -> void:
 	DisplayServer.window_set_vsync_mode(vsync_mode)
 	
 	print("(SettingsManager): Preferences loaded")
+	Signals.settings_loaded.emit()
 	
 ## Returns an array of key binds from a key
 static func get_keybind(keybind_name: String) -> Array:

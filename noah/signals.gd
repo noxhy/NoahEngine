@@ -53,3 +53,5 @@ signal play_died()
 
 ## emitted whenever the players stats change i.e misses,score,combo
 signal play_stats_changed(stats: NoahStats)
+
+signal settings_loaded()
