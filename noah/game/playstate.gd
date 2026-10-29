@@ -51,8 +51,9 @@ var vocal_streams: Array[AudioStream] = []
 ## The scroll speed that applies to all strums.
 var scroll_speed: float = 1.0 : set = set_scroll_speed
 
-## Multiplier of the game speed
-var song_speed: float = SettingsManager.data.song_speed
+## Multiplier of the game speed. This number cannot be negative nor can it be equal to [code]0[/code] due to godot limitations
+## [br][br]The minimum value is [code]0.00001[/code]
+var song_speed: float = SettingsManager.data.song_speed : set = set_song_speed
 
 ## The index of the latest loaded note
 var current_note: int = -1
@@ -123,6 +124,15 @@ func set_health(v: float) -> void:
 func set_scroll_speed(v: float) -> void:
 	get_tree().call_group(&"strums", &"set_scroll_speed", v)
 	scroll_speed = v
+
+func set_song_speed(v: float) -> void:
+	
+	v = maxf(v, 0.00001)
+	var vocals = vocals.get_stream_playback() as AudioStreamPlaybackPolyphonic
+	for id in vocal_track_ids:
+		vocals.set_stream_pitch_scale(id, v)
+	instrumental.pitch_scale = v
+	song_speed = v
 #endregion
 
 # Called when the node enters the scene tree for the first time.
