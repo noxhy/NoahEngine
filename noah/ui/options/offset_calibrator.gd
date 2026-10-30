@@ -43,7 +43,7 @@ func _process(delta):
 				AudioServer.get_time_since_last_mix() - output_latency
 	
 	var distance: float = song_position - next_hit
-	if distance > GameManager.SHIT_RATING_WINDOW:
+	if distance > NoahStats.SHIT_RATING_WINDOW:
 		can_hit = true
 		update_next_hit()
 	
