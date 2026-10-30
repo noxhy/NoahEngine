@@ -211,7 +211,7 @@ func create_splash(animation_name: StringName = strum_name + &"_splash") -> void
 func press_note() -> void:
 	state = STATE.GLOW
 	coyote_timer = 0
-	var hit_time: float = (target_note.time - offset) - (GameManager.song_position) if !auto_play else 0.0
+	var hit_time: float = target_note.time - (GameManager.song_position) if !auto_play else 0.0
 	
 	if target_note.length <= 0:
 		target_note.hit = true
