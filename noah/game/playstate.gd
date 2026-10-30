@@ -114,7 +114,16 @@ var score: float :
 var misses: int :
 	get(): return song_stats.misses
 
+## Pauses the playstate. This differs from setting [member process_mode] to [code]PROCESS_MODE_DISABLED[/code] as it only pauses conductor updating and
+## [br][br]pauses the music as well.
+var paused: bool = false : set = set_paused
+
 #region setters
+func set_paused(v: bool) -> void:
+	instrumental.stream_paused = v
+	vocals.stream_paused = v
+	
+	paused = v
 func set_health(v: float) -> void:
 	v = clampf(v, health_min, health_max)
 	
@@ -226,32 +235,33 @@ func _process(delta) -> void:
 		Signals.play_died.emit()
 		died = true
 	
-	if !song_started and song_starting:
-		song_start_offset += delta
-		GameManager.song_position = song_start_offset
-		GameManager.conductor.time = GameManager.song_position
-		
-		if song_start_offset >= max(chart.offset, song_start_time):
-			play_audios(song_start_time)
-			song_starting = false
-	else:
-		GameManager.song_position = instrumental.get_playback_position() + \
-				AudioServer.get_time_since_last_mix() - output_latency
-		
-		GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
-		GameManager.conductor.offset += chart.offset
-		
-		# Idk how exactly this works I stole this code from sqirradotdev
-		position_delta = abs(position_lerp - GameManager.song_position)
-		position_lerp += delta * instrumental.pitch_scale
-		
-		if delta > COMPENSATION or sync_timer <= 0.0 or position_delta >= DELTA_LENIENCY * instrumental.pitch_scale:
-			if position_delta >= 0.025 * instrumental.pitch_scale:
-				position_lerp = GameManager.song_position
-			sync_timer = 0.5
-		
-		GameManager.song_position = position_lerp
-		sync_timer -= delta
+	if not paused:
+		if !song_started and song_starting:
+			song_start_offset += delta
+			GameManager.song_position = song_start_offset
+			GameManager.conductor.time = GameManager.song_position
+			
+			if song_start_offset >= max(chart.offset, song_start_time):
+				play_audios(song_start_time)
+				song_starting = false
+		else:
+			GameManager.song_position = instrumental.get_playback_position() + \
+					AudioServer.get_time_since_last_mix() - output_latency
+			
+			GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
+			GameManager.conductor.offset += chart.offset
+			
+			# Idk how exactly this works I stole this code from sqirradotdev
+			position_delta = abs(position_lerp - GameManager.song_position)
+			position_lerp += delta * instrumental.pitch_scale
+			
+			if delta > COMPENSATION or sync_timer <= 0.0 or position_delta >= DELTA_LENIENCY * instrumental.pitch_scale:
+				if position_delta >= 0.025 * instrumental.pitch_scale:
+					position_lerp = GameManager.song_position
+				sync_timer = 0.5
+			
+			GameManager.song_position = position_lerp
+			sync_timer -= delta
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
 	var meter: Array = chart.get_time_signature_at(GameManager.song_position)
