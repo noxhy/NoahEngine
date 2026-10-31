@@ -90,7 +90,7 @@ func _input(event):
 			
 			print("Hit: ", next_hit, " at ", song_position, " rel: ", distance)
 			
-			previous_offsets[index % entries_required] = distance
+			previous_offsets[index % entries_required] = -distance
 			can_hit = false
 			
 			index += 1
