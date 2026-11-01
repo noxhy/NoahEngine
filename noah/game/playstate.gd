@@ -98,7 +98,7 @@ var song_starting:bool = false
 var song_started: bool = false
 
 ## Whether to skip the 4 beat delay and countdowns
-var song_starts_immediately: bool = true
+var song_starts_immediately: bool = false
 
 ## Used when the song is starting. A negative offset of 4 beats before the song actually begins
 var song_start_offset: float = -4.0
