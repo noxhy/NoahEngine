@@ -71,7 +71,7 @@ enum AnimContext {
 		animation_prefix = v
 		update_ghost()
 ## How many steps an animation can play before being able to revert to idle.
-@export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6
+@export_custom(PROPERTY_HINT_NONE, 'suffix:steps') var sing_duration: float = 6.0
 
 @export_group("UI")
 ## Icons that are displayed in the ui. Can include [code]default[/code], [code]winning[/code] or [code]losing[/code].
@@ -98,9 +98,9 @@ var can_dance: bool = true
 ## Used to make an animation loop at the given [code]hold_frame[/code] until given another animation.
 var holding: bool = false
 ## Time elapsed since the character has started singing.
-var sing_time: float = 0
+var sing_time: float = 0.0
 
-var _ghost_sprite = null
+var _ghost_sprite: Node = null
 
 var _warned_anims:Array[StringName] = []
 
@@ -305,7 +305,7 @@ func set_sing_timer(time: float = -1):
 
 ## Helper function for [code]basic_song.gd[/code] to call idle whenever possible
 func on_beat_hit(current_beat: int, measure_relative: int): 
-	var beats: Array = []
+	var beats: Array[int] = []
 	if dance_rate > 0:
 		for i in range(dance_rate):
 			if GameManager.conductor and (GameManager.conductor.numerator * i % 2 == 0):
@@ -462,7 +462,7 @@ func __get_editor_undo_redo() -> Object:
 	var undo_redo: Object = ei.get_editor_undo_redo()
 	return undo_redo
 
-func verify_animation_player(node: Node):
+func verify_animation_player(node: Node) -> Node:
 	if !node:
 		node = $AnimatedSprite2D
 		if !node:

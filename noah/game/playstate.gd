@@ -161,7 +161,7 @@ func _ready() -> void:
 		printerr("(%s):" % name,' There was no UI Skin set. falling back to dev')
 		ui_skin = load('uid://bvphmxy3ecutv')
 	
-	assert(song_data, "A song was not set correctly.")
+	assert(song_data, "GameManager.current_song was not set correctly.")
 	
 	GameManager.reset_conductor()
 	GameManager.song_scene = LoadingScreen.scene
