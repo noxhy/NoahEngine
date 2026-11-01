@@ -135,16 +135,19 @@ func play_animation(anim_id: StringName = &"", context: AnimContext = AnimContex
 	if process_mode == Node.PROCESS_MODE_DISABLED or current_context == AnimContext.LOCKED or !animation_player:
 		return
 	
-	anim_id = correct_anim_id(StringName(animation_prefix + anim_id))
+	var orignal_anim_id: StringName = StringName(animation_prefix + anim_id)
+	anim_id = correct_anim_id(orignal_anim_id)
 	var animation_name: StringName = get_animation_name(anim_id)
 	
-	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id) and not _warned_anims.has(anim_id):
-		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
-		_warned_anims.append(anim_id)
+	if animation_player is AnimationPlayer and not animation_player.has_animation(anim_id):
+		if not _warned_anims.has(anim_id):
+			printerr("(Character[", self.name, "]) ",'does not have "', orignal_anim_id, '" animation')
+			_warned_anims.append(anim_id)
 		return
-	elif animation_name.is_empty() and not _warned_anims.has(anim_id):
-		printerr("(Character[", self.name, "]) ",'does not have "', anim_id, '" animation')
-		_warned_anims.append(anim_id)
+	elif animation_name.is_empty():
+		if not _warned_anims.has(anim_id):
+			printerr("(Character[", self.name, "]) ",'does not have "', orignal_anim_id, '" animation')
+			_warned_anims.append(anim_id)
 		return
 	
 	if context != AnimContext.SPECIAL and current_context == AnimContext.SPECIAL and !holding:
