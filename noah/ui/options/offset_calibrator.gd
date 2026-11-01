@@ -83,7 +83,7 @@ func _input(event):
 		Global.change_scene_to(Constants.OPTIONS_MENU_SCENE, "down")
 	elif event.is_action_pressed(&"menu_accept"):
 		if can_hit:
-			$"Audio/Hit Sound".play()
+			#$"Audio/Hit Sound".play()
 			var distance: float = song_position - next_hit
 			if next_hit == 0 and distance > GameManager.SHIT_RATING_WINDOW:
 				distance -= stream_player.stream.get_length()
