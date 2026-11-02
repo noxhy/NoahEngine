@@ -303,8 +303,8 @@ func tween_to_marker(marker: Variant, duration: float, ease_type: String = '') -
 	
 	_position_tween = create_tween().set_trans(ease_info[0]).set_ease(ease_info[1]).set_parallel()
 	
-	_position_tween.tween_property(self, 'position', marker.global_position, duration)
-	_position_tween.tween_property(self, 'rotation', marker.global_rotation, duration)
+	_position_tween.tween_property(self, ^'position', marker.global_position, duration)
+	_position_tween.tween_property(self, ^'rotation', marker.global_rotation, duration)
 	_position_tween.finished.connect(_reapply_smoothing_settings)
 
 func tween_to(_position: Variant, _rotation: float, duration: float, ease_type: String = '') -> void:

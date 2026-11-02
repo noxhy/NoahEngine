@@ -47,6 +47,37 @@ tooltip_text = "Saving as binary will provide better filesize at the cost of les
 button_pressed = true
 text = "Save as Binary"
 
+[node name="VSeparator" type="VSeparator" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=177364567]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=2043432047]
+layout_mode = 2
+text = "Default FPS"
+
+[node name="fps" type="SpinBox" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=638817084]
+layout_mode = 2
+value = 24.0
+rounded = true
+suffix = "FPS"
+
+[node name="VSeparator2" type="VSeparator" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1092058967]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=1703390757]
+layout_mode = 2
+text = "Default Loop Mode"
+
+[node name="loop_mode_button" type="OptionButton" parent="VBoxContainer/VBoxContainer/HBoxContainer3" unique_id=29744523]
+layout_mode = 2
+selected = 0
+item_count = 3
+popup/item_0/text = "NONE"
+popup/item_0/id = 0
+popup/item_1/text = "LOOP"
+popup/item_1/id = 1
+popup/item_2/text = "PINGPONG"
+popup/item_2/id = 2
+
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/VBoxContainer" unique_id=1255989321]
 layout_mode = 2
 

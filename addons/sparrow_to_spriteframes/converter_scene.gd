@@ -17,6 +17,8 @@ var save_path: String :
 @onready var load_text: LineEdit = $"VBoxContainer/VBoxContainer/HBoxContainer/xml text"
 @onready var convert: Button = $VBoxContainer/VBoxContainer/Convert
 @onready var xml_find_file: Button = $"VBoxContainer/VBoxContainer/HBoxContainer/xml find file"
+@onready var fps_spinbox: SpinBox = $VBoxContainer/VBoxContainer/HBoxContainer3/fps
+@onready var loop_mode_button: OptionButton = $VBoxContainer/VBoxContainer/HBoxContainer3/loop_mode_button
 
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
@@ -77,8 +79,8 @@ func attempt_conversion():
 					if loaded_anim_name == "default":
 						has_default = true
 					
-					frames.set_animation_loop(loaded_anim_name, false)
-					frames.set_animation_speed(loaded_anim_name, 24)
+					frames.set_animation_loop_mode(loaded_anim_name, get_loop_mode())
+					frames.set_animation_speed(loaded_anim_name, fps_spinbox.value)
 					cur_anim_name = loaded_anim_name
 				
 				var new_region = Rect2(int(xml_parser.get_named_attribute_value("x")), int(xml_parser.get_named_attribute_value("y")),
@@ -196,6 +198,16 @@ func get_save_ext() -> String:
 
 func update_status(txt: String = 'Awaiting response'):
 	status_label.text = "Status: " + txt
+	
+
+func get_loop_mode() -> SpriteFrames.LoopMode:
+	match loop_mode_button.selected:
+		1:
+			return SpriteFrames.LoopMode.LOOP_LINEAR
+		2:
+			return SpriteFrames.LoopMode.LOOP_PINGPONG
+		_:
+			return SpriteFrames.LoopMode.LOOP_NONE
 
 func _on_check_box_pressed() -> void:
 	check_and_warn()
@@ -206,3 +218,4 @@ func set_active(v: bool):
 	load_text.editable = v
 	xml_find_file.disabled = not v
 	binary_checkbox.disabled = not v
+	
