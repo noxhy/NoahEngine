@@ -218,8 +218,6 @@ func _ready() -> void:
 	
 	scroll_speed = chart.scroll_speed * SettingsManager.data.scroll_speed_scale
 	
-	get_tree().call_group(&"strums", &"set_offset", SettingsManager.data.offset)
-	
 	if SettingsManager.data.downscroll:
 		get_tree().call_group(&"strums", &"set_scroll", -1)
 	

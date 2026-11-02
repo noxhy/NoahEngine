@@ -62,10 +62,12 @@ var coyote_timer: float = 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hold_cover_sprite.visible = false
-	Signals.connect(&"play_unpaused", self.release_note)
+	Signals.play_unpaused.connect(release_note)
+	
+	offset = SettingsManager.data.offset
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta) -> void:
+func _process(delta: float) -> void:
 	target_note = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
 	
 	if target_note:
