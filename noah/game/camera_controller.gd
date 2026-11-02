@@ -266,17 +266,6 @@ func bump(strength: Variant) -> void:
 		else:
 			zoom *= Vector2.ONE + strength
 
-## Moves the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code]
-## [br][br]This method abides by the [member position_smoothing] and [member rotation_smoothing] settings.
-## [br][br]Check [method tween_to_marker] for eased movements
-func go_to_marker(marker: Variant) -> void:
-	if _position_tween:
-		_position_tween.kill()
-		_reapply_smoothing_settings()
-	
-	position = marker.global_position
-	rotation = marker.global_rotation
-
 var _last_position_smoothing: bool = true
 var _last_rotation_smoothing: bool = true
 var _position_tween: Tween = null
@@ -284,11 +273,42 @@ var _position_tween: Tween = null
 func _reapply_smoothing_settings():
 	position_smoothing = _last_position_smoothing
 	rotation_smoothing = _last_rotation_smoothing
+
+## Moves the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code]
+## [br][br]This method abides by the [member position_smoothing] and [member rotation_smoothing] settings.
+## [br][br]Check [method tween_to_marker] for eased movements
+func go_to_marker(marker: Variant) -> void:
+	if not is_valid_marker(marker):
+		printerr("(CameraController): aborting method 'go_to_marker' as provided marker was not valid")
 	
+	go_to(marker.global_position, marker.global_rotation)
+
 ## Tweens the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code] in the span of the [code]duration[/code]
 ## [br][br]See [code]Global.string_to_ease[/code] for ease options
-## [br][br]This method ignores [member position_smoothing] and [member rotation_smoothing] 
+## [br][br]This method ignores [member position_smoothing] and [member rotation_smoothing]
+## [br][br]If duration is [code]0.0[/code] the movement will be instant.
 func tween_to_marker(marker: Variant, duration: float, ease_type: String = '') -> void:
+	if not is_valid_marker(marker):
+		printerr("(CameraController): aborting method 'tween_to_marker' as provided marker was not valid")
+	
+	tween_to(marker.global_position, marker.global_rotation, duration, ease_type)
+
+## Instantly the camera's [member position] and [member rotation] to a [code]Marker2D[/code] or [code]Marker3D[/code]
+func snap_to_marker(marker: Variant) -> void:
+	if not is_valid_marker(marker):
+		printerr("(CameraController): aborting method 'snap_to_marker' as provided marker was not valid")
+	
+	snap_to(marker.global_position, marker.global_rotation)
+
+func go_to(_position: Variant, _rotation: Variant) -> void:
+	if _position_tween:
+		_position_tween.kill()
+		_reapply_smoothing_settings()
+	
+	position = _position
+	rotation = _rotation
+
+func snap_to(_position: Variant, _rotation: float) -> void:
 	if _position_tween:
 		_position_tween.kill()
 		_reapply_smoothing_settings()
@@ -299,16 +319,13 @@ func tween_to_marker(marker: Variant, duration: float, ease_type: String = '') -
 	position_smoothing = false
 	rotation_smoothing = false
 	
-	var ease_info: Array = Global.string_to_ease(ease_type)
+	position = _position
+	rotation = _rotation
 	
-	_position_tween = create_tween().set_trans(ease_info[0]).set_ease(ease_info[1]).set_parallel()
-	
-	_position_tween.tween_property(self, ^'position', marker.global_position, duration)
-	_position_tween.tween_property(self, ^'rotation', marker.global_rotation, duration)
-	_position_tween.finished.connect(_reapply_smoothing_settings)
+	call_deferred(&"_reapply_smoothing_settings")
 
 func tween_to(_position: Variant, _rotation: float, duration: float, ease_type: String = '') -> void:
-	if not _position is Vector2 or not _position is Vector3:
+	if not _position is Vector2 and not _position is Vector3:
 		printerr("(CameraController): method (tween_to) was not provided a Vector2/Vector3. Aborting func")
 		return
 	
@@ -319,6 +336,10 @@ func tween_to(_position: Variant, _rotation: float, duration: float, ease_type: 
 		_position = Vector3(_position.x, _position.y, 0.0)
 		printerr("(CameraController): method (tween_to) was provided a Vector2 in while set to a 3d camera.")
 	
+	if duration <= 0.0:
+		snap_to(_position, _rotation)
+		return
+	
 	if _position_tween:
 		_position_tween.kill()
 		_reapply_smoothing_settings()
@@ -329,13 +350,12 @@ func tween_to(_position: Variant, _rotation: float, duration: float, ease_type: 
 	position_smoothing = false
 	rotation_smoothing = false
 	
-	
 	var ease_info: Array = Global.string_to_ease(ease_type)
 	
 	_position_tween = create_tween().set_trans(ease_info[0]).set_ease(ease_info[1]).set_parallel()
 	
-	_position_tween.tween_property(self, 'position', _position, duration)
-	_position_tween.tween_property(self, 'rotation', _rotation, duration)
+	_position_tween.tween_property(self, ^'position', _position, duration)
+	_position_tween.tween_property(self, ^'rotation', _rotation, duration)
 	_position_tween.finished.connect(_reapply_smoothing_settings)
 
 var _zoom_tween: Tween = null
@@ -349,11 +369,21 @@ func tween_zoom(new_zoom: Vector2, duration: float, ease_type: String = '') -> v
 	
 	_zoom_tween = create_tween().set_parallel().set_trans(ease_info[0]).set_ease(ease_info[1])
 	
-	_zoom_tween.tween_property(self, 'target_zoom', new_zoom, duration)
-	_zoom_tween.tween_property(self, 'zoom', new_zoom, duration)
+	_zoom_tween.tween_property(self, ^'target_zoom', new_zoom, duration)
+	_zoom_tween.tween_property(self, ^'zoom', new_zoom, duration)
 
 ## Recreation of godot's internal method for [code]position_smoothing[/code].
 ## [br][br]Used to give [code]Camera3D[/code] [member position_smoothing]
 func lerp_position(cur: Variant, intended: Variant, delta: float) -> Variant:
 	var c = position_smoothing_speed * delta
 	return ((intended - cur) * c) + cur
+
+func is_valid_marker(_marker: Variant) -> bool:
+	if _marker == null:
+		return false
+	if is_instance_of(_marker, Marker2D):
+		return true
+	if is_instance_of(_marker, Marker3D):
+		return true
+	
+	return false
