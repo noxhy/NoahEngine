@@ -62,7 +62,7 @@ func _ready() -> void:
 	Signals.play_create_note.connect(_on_create_note)
 	Signals.play_new_event.connect(_on_new_event)
 	Signals.play_note_hit.connect(note_hit)
-	Signals.play_note_holding.connect(note_holding)
+	Signals.play_note_held.connect(note_holding)
 	Signals.play_note_miss.connect(note_miss)
 	
 	Signals.play_died.connect(died)

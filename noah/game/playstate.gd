@@ -3,22 +3,22 @@ extends Node
 class_name PlayState
 ## Core Node that handles creating the Music and handling gameplay elements.
 
-const COMPENSATION: float = 1.0 / 30.0
+const LAG_DELTA_COMPENSATION: float = 1.0 / 30.0
 const DELTA_LENIENCY: float = 0.01
 
-@export_group("Nodes")
+#@export_group("Nodes")
 
-@export_group("Resources")
+#@export_group("Resources")
 ## The skin that decides the [b]Countdown, Pause Menu, and Combo Sprites[/b]
 ## [br][br]If [code]null[/code], dev skin will be used.
 @export var ui_skin: UISkin
 
-@export_group("Scenes")
+#@export_group("Scenes")
 ## The next scene to enter after the song/playlist is finished.
 ## [br][br][color=khaki]NOTE[/color] this does not apply when [member GameManager.play_mode] is [constant GameManager.PLAY_MODE.CHARTING_MODE].
 @export_file('*.tscn') var next_scene: String = ""
 
-@export_group("Data")
+@export_group("Config")
 ## The minimum amount of health the player can have before they "die"
 @export var health_min: float = 0.0
 ## The maximum amount of health the player can have.
@@ -98,7 +98,7 @@ var song_starting:bool = false
 var song_started: bool = false
 
 ## Whether to skip the 4 beat delay and countdowns
-var song_starts_immediately: bool = false
+var skip_countdown: bool = false
 
 ## Used when the song is starting. A negative offset of 4 beats before the song actually begins
 var song_start_offset: float = -4.0
@@ -137,9 +137,9 @@ func set_scroll_speed(v: float) -> void:
 func set_song_speed(v: float) -> void:
 	
 	v = maxf(v, 0.00001)
-	var vocals = vocals.get_stream_playback() as AudioStreamPlaybackPolyphonic
+	var playback = vocals.get_stream_playback() as AudioStreamPlaybackPolyphonic
 	for id in vocal_track_ids:
-		vocals.set_stream_pitch_scale(id, v)
+		playback.set_stream_pitch_scale(id, v)
 	instrumental.pitch_scale = v
 	song_speed = v
 #endregion
@@ -170,23 +170,23 @@ func _ready() -> void:
 	
 	Global.set_window_title("Playing: " + song_data.title)
 	
+	for stream in song_data.vocals:
+		vocal_streams.append(SoundManager.get_stream(stream))
+		
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
 	vocals.stream = AudioStreamPolyphonic.new()
 	vocals.stream.polyphony = song_data.vocals.size()
 	vocals.set_bus(&"Music")
-	for v in song_data.vocals:
-		vocal_streams.append(SoundManager.get_stream(v))
 	add_child(vocals)
+	vocals.play()
 	
 	instrumental = AudioStreamPlayer.new()
 	instrumental.stream = SoundManager.get_stream(song_data.instrumental)
-	instrumental.connect("finished", finished_song)
-	instrumental.pitch_scale = song_speed
 	instrumental.set_bus(&"Music")
 	add_child(instrumental)
 	
-	vocals.play()
+	instrumental.finished.connect(finished_song)
 	
 	if ResourceLoader.exists(song_data.difficulties[GameManager.difficulty].events):
 		var ext_events: Resource = load(song_data.difficulties[GameManager.difficulty].events)
@@ -202,16 +202,6 @@ func _ready() -> void:
 		else:
 			ext_events.free()
 	
-	match GameManager.play_mode:
-		GameManager.PLAY_MODE.CHARTING:
-			if SettingsManager.data.chart_start_at_current_position:
-				play_song(ChartEditor.song_position)
-			else:
-				play_song(0)
-		_:
-			play_song(0)
-	
-	
 	if SettingsManager.data.botplay and OS.is_debug_build():
 		get_tree().call_group(&"strums", &"set_auto_play", true)
 		get_tree().call_group(&"strums", &"set_press", false)
@@ -222,10 +212,16 @@ func _ready() -> void:
 		get_tree().call_group(&"strums", &"set_scroll", -1)
 	
 	Signals.play_note_hit.connect(note_hit)
-	Signals.play_note_holding.connect(note_holding)
+	Signals.play_note_held.connect(note_held)
 	Signals.play_note_miss.connect(note_miss)
+	
+	if GameManager.play_mode == GameManager.PLAY_MODE.CHARTING and \
+			SettingsManager.data.chart_start_at_current_position:
+		play_song(ChartEditor.song_position)
+	else:
+		play_song(0.0)
 
-func _process(delta) -> void:
+func _process(delta: float) -> void:
 	if health <= health_min and !died:
 		GameManager.deaths += 1
 		
@@ -253,7 +249,7 @@ func _process(delta) -> void:
 			position_delta = abs(position_lerp - GameManager.song_position)
 			position_lerp += delta * instrumental.pitch_scale
 			
-			if delta > COMPENSATION or sync_timer <= 0.0 or position_delta >= DELTA_LENIENCY * instrumental.pitch_scale:
+			if delta > LAG_DELTA_COMPENSATION or sync_timer <= 0.0 or position_delta >= DELTA_LENIENCY * instrumental.pitch_scale:
 				if position_delta >= 0.025 * instrumental.pitch_scale:
 					position_lerp = GameManager.song_position
 				sync_timer = 0.5
@@ -317,7 +313,7 @@ func play_song(time: float) -> void:
 	
 	song_started = false
 	song_start_time = time + chart.offset
-	if not song_starts_immediately:
+	if not skip_countdown:
 		song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 4)
 	else:
 		song_start_offset = song_start_time
@@ -325,7 +321,7 @@ func play_song(time: float) -> void:
 	GameManager.song_position = song_start_offset
 	GameManager.conductor.time = song_start_time
 	
-	if song_starts_immediately or time >= GameManager.conductor.seconds_per_beat * 4:
+	if skip_countdown or time >= GameManager.conductor.seconds_per_beat * 4:
 		play_audios(song_start_offset)
 	else:
 		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
@@ -345,8 +341,7 @@ func play_audios(time: float) -> void:
 	var playback: AudioStreamPlaybackPolyphonic = vocals.get_stream_playback()
 	
 	for stream in vocal_streams:
-		vocal_track_ids.append(playback.play_stream(stream, time, \
-		0.0, song_speed))
+		vocal_track_ids.append(playback.play_stream(stream, time, 0.0, song_speed))
 	instrumental.play(time)
 	instrumental.pitch_scale = song_speed
 	if not song_started:
@@ -436,7 +431,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 			
 			var new_speed = float(event_parameters[0]) * SettingsManager.data.scroll_speed_scale
 			
-			create_tween().tween_property(self, "scroll_speed", new_speed, tween_time / song_speed)
+			create_tween().tween_property(self, ^"scroll_speed", new_speed, tween_time / song_speed)
 		
 		&"camera_shake":
 			if camera:
@@ -469,9 +464,9 @@ func finished_song() -> void:
 func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() == 1:
-		playback.set_stream_volume(vocal_track_ids[0], linear_to_db(1.0))
+		playback.set_stream_volume(vocal_track_ids[0], 0.0)
 	elif vocal_track_ids.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(1.0))
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id], 0.0)
 	
 	if !strum_manager.enemy_slot:
 		if SettingsManager.data.hit_sounds:
@@ -511,10 +506,10 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 				note_miss(note, lane, strum_manager)
 
 ## Called whenever a notes tail is being held. in [PlayState], this updates scoring.
-func note_holding(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
+func note_held(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
-		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  linear_to_db(1.0))
+		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  0.0)
 	
 	if !strum_manager.enemy_slot:
 		health += hold_delta * Constants.HOLD_HEALTH_GAIN_PER_SECOND
@@ -528,7 +523,7 @@ func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		if (note and !note.mine) or !note:
-			playback.set_stream_volume(vocal_track_ids[strum_manager.id], linear_to_db(0.0))
+			playback.set_stream_volume(vocal_track_ids[strum_manager.id], -INF)
 	
 	if !strum_manager.enemy_slot:
 		# Ghost tapping

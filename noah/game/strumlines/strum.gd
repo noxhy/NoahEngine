@@ -243,7 +243,7 @@ func hold_note() -> void:
 	target_note.length = ((target_note.time - offset) + (target_note.start_length * spb)) - GameManager.song_position
 	target_note.length /= spb
 	target_note.note.visible = false
-	Signals.play_note_holding.emit(target_note, lane, temp - max(0, target_note.length), get_parent())
+	Signals.play_note_held.emit(target_note, lane, temp - max(0, target_note.length), get_parent())
 
 	if target_note.length <= 0:
 		pressing = false
