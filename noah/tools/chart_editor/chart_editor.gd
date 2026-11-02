@@ -51,7 +51,7 @@ var note_nodes: Array = []
 var clipboard: Array = []
 var can_chart: bool = false
 
-var current_snap: int = 4
+static var current_snap: int = 4
 var chart_snap: float:
 	get():
 		return conductor.numerator * current_snap
@@ -540,7 +540,8 @@ func update_grid():
 
 
 func load_song(song: Song, difficulty: Variant = null):
-	if EditorResources.song != song:
+	var same_song: bool = EditorResources.song == song
+	if not same_song:
 		song_position = 0.0
 	else:
 		song_position -= start_offset
@@ -578,7 +579,10 @@ func load_song(song: Song, difficulty: Variant = null):
 	upper_ui.song_name_label.text = song.title
 	
 	load_chart(EditorResources.chart)
-	current_snap = conductor.denominator
+	if not same_song:
+		current_snap = conductor.denominator
+	
+	lower_ui.chart_snap.value = current_snap
 	
 	waveform_dirty = true
 	update_waveforms(song_position)
