@@ -60,7 +60,7 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 0
-root_subfolder = "res://playable_songs/"
+root_subfolder = "res://"
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
 
 [connection signal="pressed" from="HBoxContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

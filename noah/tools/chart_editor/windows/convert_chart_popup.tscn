@@ -126,7 +126,7 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 1
-root_subfolder = "res://playable_songs/"
+root_subfolder = "res://"
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="FlowContainer/Audio Files" unique_id=254292305]
@@ -157,7 +157,7 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Open"
 dialog_hide_on_ok = true
 file_mode = 0
-root_subfolder = "res://playable_songs/"
+root_subfolder = "res://"
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="FlowContainer" unique_id=1442898004]

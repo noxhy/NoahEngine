@@ -101,7 +101,7 @@ title = "Open a File"
 initial_position = 1
 size = Vector2i(640, 480)
 file_mode = 0
-root_subfolder = "res://scenes/game/songs/"
+root_subfolder = "res://"
 filters = PackedStringArray("*.tscn")
 
 [node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer" unique_id=1200860892]

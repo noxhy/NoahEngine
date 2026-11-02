@@ -242,7 +242,9 @@ func correct_anim_id(anim_id: StringName) -> StringName:
 
 ## Gets the [SpriteFrames] animation name of the given [param anim_id] in [member animation_names].
 func get_animation_name(anim_id: StringName = &"") -> StringName:
-	return animation_names.get(anim_id, &"")
+	if animation_names.has(anim_id):
+		return animation_names[anim_id]
+	return &""
 
 
 func set_prefix(prefix: StringName) -> void:
@@ -371,8 +373,9 @@ func update_ghost():
 			if animation_player.sprite_frames:
 				if dance_animations.size() > 0:
 					var animation_name: StringName = get_animation_name(dance_animations[0])
-					_ghost_sprite.texture = animation_player.sprite_frames.get_frame_texture(
-						animation_name, animation_player.sprite_frames.get_frame_count(animation_name) - 1)
+					if animation_player.sprite_frames.has_animation(animation_name):
+						_ghost_sprite.texture = animation_player.sprite_frames.get_frame_texture(
+							animation_name, animation_player.sprite_frames.get_frame_count(animation_name) - 1)
 					_ghost_sprite.position = offsets.get(animation_name, Vector2.ZERO)
 					_ghost_sprite.offset = animation_player.offset
 			
@@ -387,7 +390,8 @@ func update_ghost():
 			
 			if dance_animations.size() > 0:
 				var animation_name: StringName = get_animation_name(dance_animations[0])
-				_ghost_sprite.symbol = animation_name
+				if _ghost_sprite._current_library.has_symbol(animation_name):
+					_ghost_sprite.symbol = animation_name
 				_ghost_sprite.frame = _ghost_sprite.get_symbol_length() - 1
 				_ghost_sprite.position = offsets.get(animation_name, Vector2.ZERO)
 				_ghost_sprite.offset = animation_player.offset
@@ -405,7 +409,7 @@ func update_ghost():
 			1:
 				_ghost_sprite.z_index += 1
 		
-		self.add_child(_ghost_sprite)
+		add_child(_ghost_sprite)
 
 ## [b]Tool Script[/b] - Used for offsetring.
 ## [br][br]Resets the current sprite back to the corresponding offset.
