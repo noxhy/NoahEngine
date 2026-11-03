@@ -9,8 +9,21 @@ class_name NoahMarker2D
 ## The colour of the camera bounds of this marker
 @export var _bounds_colour: Color = Color.RED
 
+@export_enum("Enemy","Misc","Player") var preset_colours: int :
+	set(v):
+		preset_colours = v
+		match v:
+			0:
+				_bounds_colour = Color.RED
+			1:
+				_bounds_colour = Color.YELLOW
+			2:
+				_bounds_colour = Color.GREEN
+
 ## Whether the camera bounds should be visible
 @export var _bounds_visible: bool = true 
+
+@export var border_size: float = 3.0
 
 var window_size: Vector2
 var _draw_helper: Node2D
@@ -69,4 +82,4 @@ func _draw_camera_view() -> void:
 			window_size.y / _camera2d_ref.zoom.y)
 		
 		_draw_helper.draw_set_transform(global_position, global_rotation)
-		_draw_helper.draw_rect(Rect2(-rect.size / 2, rect.size), _bounds_colour, false, 3)
+		_draw_helper.draw_rect(Rect2(-rect.size / 2, rect.size), _bounds_colour, false, border_size)
