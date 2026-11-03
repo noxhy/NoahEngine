@@ -1,5 +1,5 @@
 @abstract
-extends Control
+extends Node2D
 class_name VolumeDisplay
 
 # The default time the tray should be on screen

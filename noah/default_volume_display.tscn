@@ -5,14 +5,11 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ltykl"]
 bg_color = Color(0, 0, 0, 0.2509804)
 
-[node name="Volume Display" type="Control" unique_id=1184424362]
-layout_mode = 3
-anchors_preset = 0
+[node name="Volume Display" type="Node2D" unique_id=2077202191]
 script = ExtResource("1_e5nsi")
 
 [node name="Label" type="Label" parent="." unique_id=392136639]
 process_mode = 3
-layout_mode = 0
 offset_left = -128.0
 offset_right = 128.0
 offset_bottom = 32.0
