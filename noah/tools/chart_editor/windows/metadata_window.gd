@@ -114,7 +114,7 @@ func format_time_change(index: int) -> String:
 	var meter_data: Dictionary = EditorResources.chart.time_signatures
 	var time: float = tempo_data.keys()[index]
 	var meter: Array = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
-	return str(Global.format_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1])
+	return str(NoahTools.format_time(time), " - BPM: ", tempo_data[time], " in ", meter[0], "/", meter[1])
 
 func _on_numerator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = EditorResources.chart.tempos

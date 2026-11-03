@@ -30,7 +30,7 @@ func _process(delta: float) -> void:
 				if track < vocal_tracks.size():
 					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	
-	var axis: int = Global.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
+	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
 	if axis and can_interact_with_chart:
 		scrub(axis)
 	
@@ -191,7 +191,7 @@ func update_camera_song_position(instant: bool = false):
 	if instant:
 		camera_2d.position.x = 640 + time_to_y_position(song_position)
 	else:
-		camera_2d.position.x = Global.frame_independent_lerp(
+		camera_2d.position.x = NoahTools.frame_independent_lerp(
 			camera_2d.position.x, 640 + time_to_y_position(song_position), 20, get_process_delta_time())
 
 func is_mouse_over_grid() -> bool:

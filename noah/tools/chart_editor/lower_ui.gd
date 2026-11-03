@@ -40,11 +40,11 @@ func _process(delta: float) -> void:
 		return
 	
 	if EditorResources.song and chart_editor.instrumental and chart_editor.instrumental.stream:
-		time_left_label.text = "-" + Global.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position - chart_editor.start_offset)
+		time_left_label.text = "-" + NoahTools.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position - chart_editor.start_offset)
 	else:
 		time_left_label.text = "- ??:??"
 	
-	current_time_label.text = Global.format_time(chart_editor.song_position + chart_editor.start_offset)
+	current_time_label.text = NoahTools.format_time(chart_editor.song_position + chart_editor.start_offset)
 	current_time_label.text += str(" (", chart_editor.song_speed, "x)")
 
 func toggle_play_button_state(playing: bool):

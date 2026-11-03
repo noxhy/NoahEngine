@@ -40,8 +40,8 @@ func _ready() -> void:
 	camera = get_tree().get_first_node_in_group(&"cameras")
 	ui = get_tree().get_first_node_in_group(&"ui")
 	
-	camera_positions = Global.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
-	strums = Global.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
+	camera_positions = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
+	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 	
 	if not playstate:
 		printerr("(Song): There was no playstate instance in the playstate group.")
@@ -195,11 +195,11 @@ func _on_new_event(time: float, event_name: String, event_parameters: Array) -> 
 					if playstate:
 						rate = playstate.song_speed
 					camera.tween_to_marker(marker,
-						Global.string_to_time(event_parameters.get(1)) / rate, event_parameters.get(2))
+						NoahTools.string_to_time(event_parameters.get(1)) / rate, event_parameters.get(2))
 		&"play_animation":
 			var duration: float = -1
 			if event_parameters.get(2) and !event_parameters[2].is_empty():
-				duration = Global.string_to_time(event_parameters[2])
+				duration = NoahTools.string_to_time(event_parameters[2])
 			
 			var context: Character.AnimContext = Character.AnimContext.SPECIAL
 			

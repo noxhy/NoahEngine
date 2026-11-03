@@ -14,4 +14,4 @@ func on_stats_change(stats: NoahStats) -> void:
 		text = 'Botplay'
 		return
 	
-	text = "Score: " + Global.format_number(stats.score) + " • " + "Misses: " + str(stats.misses)
+	text = "Score: " + NoahTools.format_number(stats.score) + " • " + "Misses: " + str(stats.misses)

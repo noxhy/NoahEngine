@@ -43,7 +43,7 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta) -> void:
-	var axis = Global.get_input_axis_just_pressed(&"menu_down", &"menu_up")
+	var axis = NoahTools.get_input_axis_just_pressed(&"menu_down", &"menu_up")
 	
 	if axis:
 		change_selection(cur_selected - axis)

@@ -71,7 +71,7 @@ var ui: BasicUI = null
 var camera: CameraController = null
 
 ## Reference to all [StrumManager]'s in the [code]strums[/code] group.
-var strums: Array = []
+var strums: Array[Node] = []
 
 ## The players current health. Ranges from [member health_min] to [member health_max]
 var health: float = health_max * 0.5 : set = set_health
@@ -149,7 +149,7 @@ func _ready() -> void:
 	
 	ui = get_tree().get_first_node_in_group(&"ui")
 	camera = get_tree().get_first_node_in_group(&"cameras")
-	strums = Global.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
+	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 	
 	if !ui:
 		printerr("(%s):" % name, " There was no ui within the ui group.")
@@ -401,7 +401,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 		&"camera_zoom":
 			if camera:
 				var new_zoom = Vector2(float(event_parameters[0]), float(event_parameters[0]))
-				var zoom_time = Global.string_to_time(event_parameters[1])
+				var zoom_time = NoahTools.string_to_time(event_parameters[1])
 				var _ease: String = "CLASSIC"
 				
 				var ease_string = event_parameters.get(2)
@@ -427,7 +427,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 				ui.zoom_smoothing = smoothing
 		
 		&"scroll_speed":
-			var tween_time: float = Global.string_to_time(event_parameters[1])
+			var tween_time: float = NoahTools.string_to_time(event_parameters[1])
 			
 			var new_speed = float(event_parameters[0]) * SettingsManager.data.scroll_speed_scale
 			
@@ -435,7 +435,7 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 		
 		&"camera_shake":
 			if camera:
-				camera.shake(int(event_parameters[0]), Global.string_to_time(event_parameters[1]) / song_speed)
+				camera.shake(int(event_parameters[0]), NoahTools.string_to_time(event_parameters[1]) / song_speed)
 	
 	Signals.play_new_event.emit(time, event_name, event_parameters)
 

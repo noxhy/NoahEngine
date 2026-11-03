@@ -23,7 +23,7 @@ func _ready():
 	for i in entries_required:
 		previous_offsets.append(0.0)
 	
-	$UI/Instructions.text = str("Press ", Global.get_bind_string(&"menu_accept"), " to calibrate your offset")
+	$UI/Instructions.text = str("Press ", NoahTools.get_bind_string(&"menu_accept"), " to calibrate your offset")
 	$UI/Instructions.text += "\n(This may not be entirely accurate)"
 	
 	conductor.tempo = stream_player.stream.get_bpm()
