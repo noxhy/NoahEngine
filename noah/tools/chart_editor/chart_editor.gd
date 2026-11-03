@@ -334,8 +334,8 @@ func _process(delta: float) -> void:
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
 			
-			var L: int = bsearch_left_range(EditorResources.chart.notes, time_a)
-			var R: int = bsearch_right_range(EditorResources.chart.notes, time_b)
+			var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time_a)
+			var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -653,8 +653,8 @@ func load_section(time: float, forced: bool = false) -> void:
 		current_visible_notes_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(EditorResources.chart.notes, time - _range)
-	var R: int = bsearch_right_range(EditorResources.chart.notes, time + _range)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time - _range)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -665,8 +665,8 @@ func load_section(time: float, forced: bool = false) -> void:
 	
 	load_notes(L, R)
 	
-	L = bsearch_left_range(EditorResources.chart.events, time - _range)
-	R = bsearch_right_range(EditorResources.chart.events, time + _range)
+	L = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - _range)
+	R = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + _range)
 	
 	load_events(L, R)
 	update_selected_notes()
@@ -831,7 +831,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	if placed:
 		var packet: Array = [time, lane, length, type]
-		var L: int = bsearch_left_range(EditorResources.chart.notes, time)
+		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time)
 		if L != -1:
 			EditorResources.chart.notes.insert(L, packet)
 			
@@ -899,7 +899,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = bsearch_left_range(EditorResources.chart.events, time)
+		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time)
 		if L != -1:
 			EditorResources.chart.events.insert(L, [time, event, parameters])
 			
@@ -998,8 +998,8 @@ func remove_notes(indices: Array):
 
 ## Returns the index of the given note in the notes list.
 func find_note(lane: int, time: float) -> int:
-	var L: int = bsearch_left_range(EditorResources.chart.notes, time - EPSILON)
-	var R: int = bsearch_right_range(EditorResources.chart.notes, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
@@ -1016,8 +1016,8 @@ func find_note(lane: int, time: float) -> int:
 	return -1
 
 func find_events_at(time: float) -> Array[int]:
-	var L: int = bsearch_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1034,8 +1034,8 @@ func find_events_at(time: float) -> Array[int]:
 func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 	if epsilon == -1.0:
 		epsilon = EPSILON
-	var L: int = bsearch_left_range(EditorResources.chart.events, time - epsilon)
-	var R: int = bsearch_right_range(EditorResources.chart.events, time + epsilon)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - epsilon)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + epsilon)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1049,8 +1049,8 @@ func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
-	var L: int = bsearch_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
 	
 	#print(find_events_at(time))
 	
@@ -1088,7 +1088,7 @@ func play_audios(time: float):
 	instrumental.pitch_scale = song_speed
 	song_position = time + start_offset
 	
-	current_note = bsearch_left_range(EditorResources.chart.notes, song_position)
+	current_note = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, song_position)
 	
 	if EditorResources.chart.notes.size() > 0:
 		if song_position > EditorResources.chart.notes[EditorResources.chart.notes.size() - 1][0]:
@@ -1164,47 +1164,6 @@ func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	
 	var spb: float = (60.0 / EditorResources.chart.tempos[L]) * (4.0 / meter[1])
 	return yR * (spb / meter[1])
-
-## Binary searches for both notes and events
-func bsearch_left_range(value_set: Array, left_range: float) -> int:
-	var length: int = value_set.size()
-	if (length == 0):
-		return -1
-	
-	var low: int = 0
-	var high: int = length - 1
-	var found: int = -1
-	
-	while (low <= high):
-		var mid: int = (low + high) / 2
-		
-		if (value_set[mid][0] >= left_range):
-			found = mid
-			high = mid - 1
-		else:
-			low = mid + 1
-	
-	return found
-
-func bsearch_right_range(value_set: Array, right_range: float) -> int:
-	var length: int = value_set.size()
-	if (length == 0):
-		return -1
-	
-	var low: int = 0
-	var high: int = length - 1
-	var found: int = -1
-	
-	while (low <= high):
-		var mid: int = (low + high) / 2
-		
-		if value_set[mid][0] > right_range:
-			high = mid - 1
-		else:
-			low = mid + 1
-			found = mid
-	
-	return found
 
 func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1

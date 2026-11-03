@@ -332,7 +332,7 @@ func play_song(time: float) -> void:
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)
 	
-	current_note = bsearch_left_range(chart.notes, time)
+	current_note = NoahTools.bsearch_note_data_left_range(chart.notes, time)
 	current_event = 0
 
 # This if for actually playing the audio tracks, the reason this is a function is because
@@ -347,27 +347,6 @@ func play_audios(time: float) -> void:
 	if not song_started:
 		Signals.play_song_start.emit()
 	song_started = true
-
-## Binary Search of notes and events, gives the index of the note nearest to the given time
-func bsearch_left_range(value_set: Array, left_range: float) -> int:
-	var length = value_set.size()
-	if (length == 0):
-		return -1
-	if (value_set[length - 1][0] < left_range):
-		return -1
-	
-	var low: int = 0
-	var high: int = length - 1
-	
-	while (low <= high):
-		var mid: int = (low + high) / 2
-		
-		if (value_set[mid][0] >= left_range):
-			high = mid - 1
-		else:
-			low = mid + 1
-	
-	return high + 1
 
 ## Handles adding score based off the time the player hit a note
 func score_note(hit_time: float) -> void:

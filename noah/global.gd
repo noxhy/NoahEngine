@@ -11,8 +11,8 @@ var transitioning: bool = false
 var current_controller: int = -1
 
 func _ready() -> void:
-	_correct_window_size()
-	Input.joy_connection_changed.connect(self.changed_contoller)
+	rescale_window_by_dpi()
+	Input.joy_connection_changed.connect(changed_contoller)
 	
 	if not OS.is_debug_build():
 		RenderingServer.set_default_clear_color(Color.BLACK)
@@ -48,10 +48,9 @@ func _process(delta: float) -> void:
 		else:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	
-	if OS.is_debug_build():
-		if Input.is_action_just_pressed(&"reload"): 
-			get_tree().reload_current_scene()
-			get_tree().paused = false
+	if Input.is_action_just_pressed(&"reload") and OS.is_debug_build():
+		get_tree().reload_current_scene()
+		get_tree().paused = false
 
 #region Auto Pause
 var manual_pause: bool = false
@@ -123,7 +122,7 @@ func set_volume_display(path: String) -> void:
 #endregion
 
 ## Updates the window size based on display dpi/scale
-func _correct_window_size() -> void:
+func rescale_window_by_dpi() -> void:
 	if OS.get_name().to_lower().contains('windows'): 
 		var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0
 		var new_size = get_window().size * dpi

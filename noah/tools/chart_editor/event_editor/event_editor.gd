@@ -168,8 +168,8 @@ func _process(delta: float) -> void:
 			for i in range(max(lane_a, 0), min(lane_b + 1, EditorResources.event_tracks.size())):
 				events.append(EditorResources.event_tracks[i])
 			
-			var L: int = bsearch_left_range(EditorResources.chart.events, time_a)
-			var R: int = bsearch_right_range(EditorResources.chart.events, time_b)
+			var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time_a)
+			var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time_b)
 			
 			if (L == R + 1):
 				L -= 1
@@ -282,8 +282,8 @@ func load_section(time: float, forced: bool = false):
 		current_visible_events_R = -1
 	
 	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
-	var L: int = bsearch_left_range(EditorResources.chart.events, time - _range)
-	var R: int = bsearch_right_range(EditorResources.chart.events, time + _range)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - _range)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + _range)
 	
 	if selected_notes.size() > 0:
 		L = min(selected_notes.front(), L)
@@ -472,8 +472,8 @@ func is_event_at(_name: String, time: float) -> bool:
 
 ## Returns the index of the given event in the events list.
 func find_event(_name: String, time: float) -> int:
-	var L: int = bsearch_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = bsearch_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
 	
 	if (L == -1 or R == -1):
 		return -1
