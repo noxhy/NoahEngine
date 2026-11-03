@@ -298,7 +298,7 @@ func dance(restart: bool = true, time: float = -1) -> void:
 	current_dance = wrapi(current_dance + 1, 0, dance_animations.size())
 
 ## Sets the sing timer, characters cannot return to idle until this timer is finished.
-func set_sing_timer(time: float = -1):
+func set_sing_timer(time: float = -1) -> void:
 	if time == -1:
 		time = sing_duration * GameManager.conductor.seconds_per_step
 	
@@ -306,17 +306,17 @@ func set_sing_timer(time: float = -1):
 	can_dance = false
 
 ## Helper function for [code]basic_song.gd[/code] to call idle whenever possible
-var _beats_array: PackedInt32Array
 func on_beat_hit(current_beat: int, measure_relative: int) -> void:
-	_beats_array.clear()
-	if dance_rate > 0:
+	var has_measure: bool = false
+	if dance_rate > 0 and GameManager.conductor:
 		for i in range(dance_rate):
-			if GameManager.conductor and (GameManager.conductor.numerator * i % 2 == 0):
-				_beats_array.append(GameManager.conductor.numerator * i / dance_rate)
+			if GameManager.conductor.numerator * i % 2 == 0 and measure_relative == (GameManager.conductor.numerator * i / dance_rate):
+				has_measure = true
+				break
 	else:
-		_beats_array.append(measure_relative)
+		has_measure = true
 	
-	if _beats_array.has(measure_relative):
+	if has_measure:
 		var restart: bool = true
 		var dance_to_play: StringName = get_animation_name(dance_animations[current_dance])
 		
