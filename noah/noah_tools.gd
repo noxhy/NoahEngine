@@ -1,6 +1,51 @@
 extends Node
 class_name NoahTools
 
+static var _tween_options: Dictionary[StringName, Array] = {
+	&"backin": [Tween.TRANS_BACK, Tween.EASE_IN],
+	&"backinout": [Tween.TRANS_BACK, Tween.EASE_IN_OUT],
+	&"backout": [Tween.TRANS_BACK, Tween.EASE_OUT],
+	&"backoutin": [Tween.TRANS_BACK, Tween.EASE_OUT_IN],
+	&"bouncein": [Tween.TRANS_BOUNCE, Tween.EASE_IN],
+	&"bounceinout": [Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT],
+	&"bounceout": [Tween.TRANS_BOUNCE, Tween.EASE_OUT],
+	&"bounceoutin": [Tween.TRANS_BOUNCE, Tween.EASE_OUT_IN],
+	&"circin": [Tween.TRANS_CIRC, Tween.EASE_IN],
+	&"circinout": [Tween.TRANS_CIRC, Tween.EASE_IN_OUT],
+	&"circout": [Tween.TRANS_CIRC, Tween.EASE_OUT],
+	&"circoutin": [Tween.TRANS_CIRC, Tween.EASE_OUT_IN],
+	&"cubein": [Tween.TRANS_CUBIC, Tween.EASE_IN],
+	&"cubeinout": [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT],
+	&"cubeout": [Tween.TRANS_CUBIC, Tween.EASE_OUT],
+	&"cubeoutin": [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN],
+	&"elasticin": [Tween.TRANS_ELASTIC, Tween.EASE_IN],
+	&"elasticinout": [Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT],
+	&"elasticout": [Tween.TRANS_ELASTIC, Tween.EASE_OUT],
+	&"elasticoutin": [Tween.TRANS_ELASTIC, Tween.EASE_OUT_IN],
+	&"expoin": [Tween.TRANS_EXPO, Tween.EASE_IN],
+	&"expoinout": [Tween.TRANS_EXPO, Tween.EASE_IN_OUT],
+	&"expoout": [Tween.TRANS_EXPO, Tween.EASE_OUT],
+	&"expooutin": [Tween.TRANS_EXPO, Tween.EASE_OUT_IN],
+	&"quadin": [Tween.TRANS_QUAD, Tween.EASE_IN],
+	&"quadinout": [Tween.TRANS_QUAD, Tween.EASE_IN_OUT],
+	&"quadout": [Tween.TRANS_QUAD, Tween.EASE_OUT],
+	&"quadoutin": [Tween.TRANS_QUAD, Tween.EASE_OUT_IN],
+	&"quartin": [Tween.TRANS_QUART, Tween.EASE_IN],
+	&"quartinout": [Tween.TRANS_QUART, Tween.EASE_IN_OUT],
+	&"quartout": [Tween.TRANS_QUART, Tween.EASE_OUT],
+	&"quartoutin": [Tween.TRANS_QUART, Tween.EASE_OUT_IN],
+	&"quintin": [Tween.TRANS_QUINT, Tween.EASE_IN],
+	&"quintinout": [Tween.TRANS_QUINT, Tween.EASE_IN_OUT],
+	&"quintout": [Tween.TRANS_QUINT, Tween.EASE_OUT],
+	&"quintoutin": [Tween.TRANS_QUINT, Tween.EASE_OUT_IN],
+	&"sinein": [Tween.TRANS_SINE, Tween.EASE_IN],
+	&"sineinout": [Tween.TRANS_SINE, Tween.EASE_IN_OUT],
+	&"sineout": [Tween.TRANS_SINE, Tween.EASE_OUT],
+	&"sineoutin": [Tween.TRANS_SINE, Tween.EASE_OUT_IN],
+	&"classic": [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT],
+	&"linear": [Tween.TRANS_LINEAR, Tween.EASE_IN]
+}
+
 ## Sorts an array of nodes by their [code]id[/code]. If the nodes do not contain an [code]id[/code] var, sorting will not occur.
 static func sort_array_by_id(arr: Array[Node]) -> Array[Node]:
 	var sorter:Callable = func(a, b):
@@ -44,50 +89,13 @@ static func frame_independent_lerp(a: Variant, b: Variant, decay: float, delta: 
 	return b + (a - b) * exp(-decay * delta)
 
 ## Returns an array containing an transition and ease type formatted as [code][TransType, EaseType][/code]
-static func string_to_ease(tween: String) -> Array:
-	match tween.to_lower():
-		"backin": return [Tween.TRANS_BACK, Tween.EASE_IN]
-		"backinout": return [Tween.TRANS_BACK, Tween.EASE_IN_OUT]
-		"backout": return [Tween.TRANS_BACK, Tween.EASE_OUT]
-		"backoutin": return [Tween.TRANS_BACK, Tween.EASE_OUT_IN]
-		"bouncein": return [Tween.TRANS_BOUNCE, Tween.EASE_IN]
-		"bounceinout": return [Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT]
-		"bounceout": return [Tween.TRANS_BOUNCE, Tween.EASE_OUT]
-		"bounceoutin": return [Tween.TRANS_BOUNCE, Tween.EASE_OUT_IN]
-		"circin": return [Tween.TRANS_CIRC, Tween.EASE_IN]
-		"circinout": return [Tween.TRANS_CIRC, Tween.EASE_IN_OUT]
-		"circout": return [Tween.TRANS_CIRC, Tween.EASE_OUT]
-		"circoutin": return [Tween.TRANS_CIRC, Tween.EASE_OUT_IN]
-		"cubein": return [Tween.TRANS_CUBIC, Tween.EASE_IN]
-		"cubeinout": return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
-		"cubeout": return [Tween.TRANS_CUBIC, Tween.EASE_OUT]
-		"cubeoutin": return [Tween.TRANS_CUBIC, Tween.EASE_OUT_IN]
-		"elasticin": return [Tween.TRANS_ELASTIC, Tween.EASE_IN]
-		"elasticinout": return [Tween.TRANS_ELASTIC, Tween.EASE_IN_OUT]
-		"elasticout": return [Tween.TRANS_ELASTIC, Tween.EASE_OUT]
-		"elasticoutin": return [Tween.TRANS_ELASTIC, Tween.EASE_OUT_IN]
-		"expoin": return [Tween.TRANS_EXPO, Tween.EASE_IN]
-		"expoinout": return [Tween.TRANS_EXPO, Tween.EASE_IN_OUT]
-		"expoout": return [Tween.TRANS_EXPO, Tween.EASE_OUT]
-		"expooutin": return [Tween.TRANS_EXPO, Tween.EASE_OUT_IN]
-		"quadin": return [Tween.TRANS_QUAD, Tween.EASE_IN]
-		"quadinout": return [Tween.TRANS_QUAD, Tween.EASE_IN_OUT]
-		"quadout": return [Tween.TRANS_QUAD, Tween.EASE_OUT]
-		"quadoutin": return [Tween.TRANS_QUAD, Tween.EASE_OUT_IN]
-		"quartin": return [Tween.TRANS_QUART, Tween.EASE_IN]
-		"quartinout": return [Tween.TRANS_QUART, Tween.EASE_IN_OUT]
-		"quartout": return [Tween.TRANS_QUART, Tween.EASE_OUT]
-		"quartoutin": return [Tween.TRANS_QUART, Tween.EASE_OUT_IN]
-		"quintin": return [Tween.TRANS_QUINT, Tween.EASE_IN]
-		"quintinout": return [Tween.TRANS_QUINT, Tween.EASE_IN_OUT]
-		"quintout": return [Tween.TRANS_QUINT, Tween.EASE_OUT]
-		"quintoutin": return [Tween.TRANS_QUINT, Tween.EASE_OUT_IN]
-		"sinein": return [Tween.TRANS_SINE, Tween.EASE_IN]
-		"sineinout": return [Tween.TRANS_SINE, Tween.EASE_IN_OUT]
-		"sineout": return [Tween.TRANS_SINE, Tween.EASE_OUT]
-		"sineoutin": return [Tween.TRANS_SINE, Tween.EASE_OUT_IN]
-		"classic": return [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT]
-		_: return [Tween.TRANS_LINEAR, Tween.EASE_IN]
+## [br][br]Do not modify the returned array as it will create future unexpected results with this function. If necessary duplicate it.
+static func string_to_ease(tween: StringName) -> Array:
+	tween = tween.to_lower()
+	if _tween_options.has(tween):
+		return _tween_options[tween]
+	
+	return _tween_options[&"linear"]
 
 ## Alternative to [member Input.get_axis] that supports [code]just_pressed[/code] actions
 static func get_input_axis_just_pressed(negative_action: StringName, positive_action: StringName) -> int:
