@@ -4,7 +4,7 @@ extends Resource
 class_name Chart
 
 ## The current latest version of the chart format.
-const CURRENT_VERSION: int = 2
+const CURRENT_VERSION: int = 3
 
 ## The Json formats supported by the engine. Used for conversion
 enum ChartFormat {
@@ -32,13 +32,15 @@ static var DEFAULT_FILE_TYPE:String = '.tres'
 ## Audio latency.
 @export var offset: float = 0.0
 ## All the notes within the chart Stored as [code][TIME, LANE, SUSTAIN_LENGTH, TYPE][/code]
-@export var notes: Array = []
+@export var notes: Array[Variant] = []
 ## All the events within the chart. Stored as [code][TIME, EVENT_NAME, [EVENT_PARAMETERS]][/code]
-@export var events: Array = []
+@export var events: Array[Variant] = []
 ## All the tempos/bpms within the chart. Stored as [code]TIME => TEMPO[/code]
-@export var tempos: Dictionary = { 0.0: 60 }
-## All of the time signature changes within the chart. Stored as [code]TIME => [NUMERATOR, DENOMINATOR][/code]
-@export var time_signatures: Dictionary = { 0.0: [4, 4] }
+@export var tempos: Dictionary = { 0.0: 60.0 }
+## @deprecated: Time signatures are now stored as vector2i
+var time_signatures: Dictionary = { 0.0: [4, 4] }
+## All of the time signature changes within the chart. Stored as [code]TIME => Vector2i(NUMERATOR, DENOMINATOR)[/code]
+@export var time_signature_vectors: Dictionary[float, Vector2i] = { 0.0: Vector2i(4, 4) }
 ## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
 
@@ -105,19 +107,19 @@ func get_tempo_at(time: float) -> float:
 	return output
 
 ## Returns the time signature at a given time
-func get_time_signature_at(time: float) -> Array:
+func get_time_signature_at(time: float) -> Vector2i:
 	time = max(0, time)
-	var output: Array = []
-	for point in time_signatures:
+	var output: Vector2i = Vector2i(4, 4)
+	for point in time_signature_vectors:
 		if time >= point:
-			output = time_signatures.get(point)
+			output = time_signature_vectors.get(point)
 		else:
 			continue
 	
 	return output
 
 ## @deprecated: Refactored to [method get_time_signature_at].
-func get_meter_at(time: float) -> Array:
+func get_meter_at(time: float) -> Vector2:
 	return get_time_signature_at(time)
 
 ## Gets the time of a tempo change.
@@ -251,7 +253,7 @@ static func update_chart(chart: Chart) -> Chart:
 		print("updating chart version: ", chart.version)
 		match chart.version:
 			0: #old chart
-				var meters = chart.get_meters_data()
+				var meters = chart.time_signatures
 				
 				for time in meters:
 					var time_signature_data = meters.get(time)
@@ -274,8 +276,16 @@ static func update_chart(chart: Chart) -> Chart:
 				chart.chart_data.erase("tempos")
 				chart.chart_data.erase("meters")
 				
+				chart.version = 2
+				chart = update_chart(chart)
+			2:
+				for time in chart.time_signatures:
+					var sig = chart.time_signatures.get(time)
+					chart.time_signature_vectors.set(time, Vector2i(sig[0], sig[1]))
+				
 				chart.version = CURRENT_VERSION
 				chart = update_chart(chart)
+				
 		
 		ResourceSaver.save(chart, chart.resource_path)
 	

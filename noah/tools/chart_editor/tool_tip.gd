@@ -67,6 +67,6 @@ func get_event_str() -> String:
 	return ret.strip_edges()
 
 func get_time_str(time: float) -> String:
-	var beat_time = Conductor.get_accumulated_beat_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1
-	var step_time = Conductor.get_accumulated_step_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1
+	var beat_time = Conductor.get_accumulated_beat_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1
+	var step_time = Conductor.get_accumulated_step_at(time, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1
 	return 'Time: ' + "(%s, b: %s, s: %s)" % [NoahTools.format_time(time), str(beat_time), str(step_time)]

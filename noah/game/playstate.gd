@@ -258,10 +258,10 @@ func _process(delta: float) -> void:
 			sync_timer -= delta
 	
 	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
-	var meter: Array = chart.get_time_signature_at(GameManager.song_position)
-	if not meter.is_empty():
-		GameManager.conductor.numerator = meter[0]
-		GameManager.conductor.denominator = meter[1]
+	
+	var meter: Vector2i = chart.get_time_signature_at(GameManager.song_position)
+	GameManager.conductor.numerator = meter.x
+	GameManager.conductor.denominator = meter.y
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster

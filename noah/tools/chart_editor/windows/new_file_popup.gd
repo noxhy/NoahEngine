@@ -44,7 +44,7 @@ func new_file(dir: String, notify_editor: bool = true):
 		chart.notes = []
 		chart.events = []
 		chart.tempos = {0.0: song_file.tempo}
-		chart.time_signatures = {0.0: [4, 4]}
+		chart.time_signature_vectors = {0.0: Vector2i(4, 4)}
 		
 		var chart_path: String = str(dir.path_join(song_file.title), "-", difficulty, Chart.DEFAULT_FILE_TYPE)
 		ResourceSaver.save(chart, chart_path)

@@ -372,8 +372,8 @@ func update_conductor():
 	conductor.time = time
 	conductor.tempo = EditorResources.chart.get_tempo_at(time)
 	var meter = EditorResources.chart.get_time_signature_at(time)
-	conductor.numerator = meter[0]
-	conductor.denominator = meter[1]
+	conductor.numerator = meter.x
+	conductor.denominator = meter.y
 	conductor.offset = EditorResources.chart.get_tempo_time_at(time) + EditorResources.chart.offset
 
 
@@ -565,8 +565,8 @@ func load_song(song: Song, difficulty: Variant = null):
 	song_slider.value = song_position
 	conductor.tempo = EditorResources.chart.get_tempo_at(song_position)
 	var meter = EditorResources.chart.get_time_signature_at(song_position)
-	conductor.numerator = meter[0]
-	conductor.denominator = meter[1]
+	conductor.numerator = meter.x
+	conductor.denominator = meter.y
 	conductor.offset = EditorResources.chart.offset
 	
 	lower_ui.get_node("%Difficulty Button").get_popup().clear()
@@ -812,7 +812,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 sorted: bool = false, sort_index: int = -1) -> int:
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter: Array = EditorResources.chart.get_time_signature_at(time)
+	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
 	
 	note_instance.time = time
 	note_instance.length = length
@@ -820,7 +820,7 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	note_instance.note_type = type
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	note_instance.scroll_speed = meter[0]
+	note_instance.scroll_speed = meter.x
 	note_instance.direction = DIRECTIONS[lane % 4]
 	note_instance.animation = str(Constants.NOTE_TYPES.get(type, ""), note_instance.direction)
 	
@@ -1101,7 +1101,7 @@ func time_to_y_position(time: float) -> float:
 	var y_offset: float = 0
 	
 	var i: int = 0
-	var meter: Array = []
+	var meter: Vector2i = Vector2i.ZERO
 	
 	var L: float = tempo_data.keys()[0]
 	var R: float = tempo_data.keys()[0]
@@ -1125,7 +1125,7 @@ func time_to_y_position(time: float) -> float:
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2(0,
-		time_calc.call(R - L, tempo, meter[1]) * meter[1]
+		time_calc.call(R - L, tempo, meter.y) * meter.y
 		)).y
 		
 		L = R
@@ -1156,14 +1156,14 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Array = EditorResources.chart.get_time_signature_at(time)
+	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
 	var L: float = EditorResources.chart.get_tempo_time_at(time)
 	var yR: float = p.y
 	if factor_in_snap:
-		yR *= meter[0] * meter[1] / chart_snap
+		yR *= meter.x * meter.y / chart_snap
 	
-	var spb: float = (60.0 / EditorResources.chart.tempos[L]) * (4.0 / meter[1])
-	return yR * (spb / meter[1])
+	var spb: float = (60.0 / EditorResources.chart.tempos[L]) * (4.0 / meter.y)
+	return yR * (spb / meter.y)
 
 func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1
@@ -1251,7 +1251,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		update_waveforms(song_position)
 		
 		lower_ui.get_node("%Beat").text = str("Beat: ", Conductor.get_accumulated_beat_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1)
+			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
@@ -1260,7 +1260,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 	
 	if EditorResources.chart:
 		lower_ui.get_node("%Step").text = str("Step: ", Conductor.get_accumulated_step_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signatures) + 1)
+			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1695,12 +1695,12 @@ func _on_metadata_window_selected_time_change(time: float) -> void:
 func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
 	EditorResources.chart.tempos[time] = conductor.tempo
-	EditorResources.chart.time_signatures[time] = [
+	EditorResources.chart.time_signature_vectors[time] = Vector2i(
 		conductor.numerator, conductor.denominator
-	]
+	)
 	
 	EditorResources.chart.tempos.sort()
-	EditorResources.chart.time_signatures.sort()
+	EditorResources.chart.time_signature_vectors.sort()
 	upper_ui.get_node("%Metadata Window").update_stats()
 	auto_save()
 
