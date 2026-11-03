@@ -1,5 +1,5 @@
-extends Node2D
-class_name VolumeDisplay
+extends VolumeDisplay
+
 ## The display node for volume.
 
 ## Timer that is commonly connected to [method hide_volume] on [signal Timer.timeout].
@@ -7,20 +7,20 @@ class_name VolumeDisplay
 
 func _ready() -> void:
 	position.y -= 32
+	hide_timer.wait_time = ON_SCREEN_TIME
 
 ## Called when the volume updates, plays the entering animation of the node.
-func show_volume() -> void:
+func show_volume(new_master_volume: float) -> void:
 	var tween = create_tween()
 	tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 	position.x = get_window().content_scale_size.x / 2
 	tween.tween_property(self, "position:y", 0, 0.5)
 	SoundManager.scroll.play()
 	
-	var master_volume = SettingsManager.data.master_volume
 	if AudioServer.is_bus_mute(0):
 		$Label.text = "Muted"
 	else:
-		$Label.text = "Master Volume: " + str(roundi(master_volume * 100)) + "%"
+		$Label.text = "Master Volume: " + str(roundi(new_master_volume * 100)) + "%"
 	
 	hide_timer.start()
 

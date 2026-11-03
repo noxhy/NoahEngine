@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c1xj54jogmqul"]
 
 [ext_resource type="Script" uid="uid://cjdqxjkevt2iw" path="res://noah/global.gd" id="1_swfdr"]
-[ext_resource type="PackedScene" uid="uid://c10lld8ifnbrs" path="res://noah/volume_display.tscn" id="2_aun3h"]
+[ext_resource type="PackedScene" uid="uid://c10lld8ifnbrs" path="res://noah/default_volume_display.tscn" id="2_aun3h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bm3mx"]
 content_margin_left = 4.0

@@ -36,44 +36,32 @@ func _process(delta: float) -> void:
 	AudioServer.set_bus_volume_linear(2, SettingsManager.data.sfx_volume)
 
 func _input(event: InputEvent) -> void:
-	if not event.is_pressed():
-		return
-	if event.is_echo():
-		return
-	if event is not InputEventKey:
-		return
-	var ev:InputEventKey = event
-	
-	if event.shift_pressed or event.ctrl_pressed or event.alt_pressed:
-		return
-	
-	if ev.pressed:
-		if ev.is_action(&'mute'):
-			SettingsManager.data.is_muted = !SettingsManager.data.is_muted
-			
-			_updated_volume()
-		elif ev.is_action(&'volume_up'):
-			SettingsManager.data.is_muted = false
-			
-			var new_vol = clampf(SettingsManager.data.master_volume + 0.05, 0.0, 1.0)
-			SettingsManager.data.master_volume = new_vol
-			
-			_updated_volume()
-		elif ev.is_action(&'volume_down'):
-			SettingsManager.data.is_muted = false
-			
-			var new_vol = clampf(SettingsManager.data.master_volume - 0.05, 0.0, 1.0)
-			SettingsManager.data.master_volume = new_vol
-			
-			_updated_volume()
+	if event.is_action_pressed(&'mute', false, true):
+		SettingsManager.data.is_muted = !SettingsManager.data.is_muted
+		
+		update_master_bus()
+	elif event.is_action_pressed(&'volume_up', false, true):
+		SettingsManager.data.is_muted = false
+		
+		var new_vol = clampf(SettingsManager.data.master_volume + 0.05, 0.0, 1.0)
+		SettingsManager.data.master_volume = new_vol
+		
+		update_master_bus()
+	elif event.is_action_pressed(&'volume_down', false, true):
+		SettingsManager.data.is_muted = false
+		
+		var new_vol = clampf(SettingsManager.data.master_volume - 0.05, 0.0, 1.0)
+		SettingsManager.data.master_volume = new_vol
+		
+		update_master_bus()
 
-func _updated_volume() -> void:
+func update_master_bus() -> void:
 	AudioServer.set_bus_mute(0, SettingsManager.data.is_muted)
 	AudioServer.set_bus_volume_linear(0, SettingsManager.data.master_volume)
 	
 	SettingsManager.flush()
 	if Global.volume_display:
-		Global.volume_display.show_volume()
+		Global.volume_display.show_volume(SettingsManager.data.master_volume)
 
 
 ## plays the global audio track from stream or path
