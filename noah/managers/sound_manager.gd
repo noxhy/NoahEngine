@@ -42,8 +42,6 @@ func _input(event: InputEvent) -> void:
 		return
 	if event is not InputEventKey:
 		return
-	#if Global.lock_keybinds:
-		#return
 	var ev:InputEventKey = event
 	
 	if event.shift_pressed or event.ctrl_pressed or event.alt_pressed:
@@ -69,7 +67,7 @@ func _input(event: InputEvent) -> void:
 			
 			_updated_volume()
 
-func _updated_volume():
+func _updated_volume() -> void:
 	AudioServer.set_bus_mute(0, SettingsManager.data.is_muted)
 	AudioServer.set_bus_volume_linear(0, SettingsManager.data.master_volume)
 	
@@ -86,7 +84,7 @@ func play_music(stream: Variant, start_time: float = 0) -> void:
 	music.play(start_time)
 
 ## Plays a audio once and frees it after its use
-func play_sound_once(stream: Variant, volume_linear: float = 1) -> void:
+func play_sound_once(stream: Variant, volume_linear: float = 1.0) -> void:
 	var player = AudioStreamPlayer.new()
 	add_child(player)
 	player.stream = get_stream(stream)

@@ -6,7 +6,6 @@ extends Node
 
 var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
-var fullscreen: bool = false
 var transitioning: bool = false
 var current_controller: int = -1
 
@@ -21,12 +20,6 @@ func _ready() -> void:
 	SettingsManager.load_keybinds()
 	SaveManager.load()
 
-func changed_contoller(device: int, connected: bool):
-	if connected or !Input.get_connected_joypads().front():
-		current_controller = device
-	else:
-		current_controller = Input.get_connected_joypads().front()
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	performance_label.visible = SettingsManager.data.show_performance
@@ -40,17 +33,21 @@ func _process(delta: float) -> void:
 		Engine.max_fps = SettingsManager.data.fps_cap
 	else:
 		Engine.max_fps = 0
-	
-	if Input.is_action_just_pressed(&"fullscreen"):
-		fullscreen = !fullscreen
-		if fullscreen:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN)
-		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
-	
-	if Input.is_action_just_pressed(&"reload") and OS.is_debug_build():
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"fullscreen", false, true):
+		SettingsManager.data.fullscreen = !SettingsManager.data.fullscreen
+		SettingsManager.load_fullscreen_mode()
+		SettingsManager.flush()
+	elif event.is_action_pressed(&"reload", false, true) and OS.is_debug_build():
 		get_tree().reload_current_scene()
 		get_tree().paused = false
+	
+func changed_contoller(device: int, connected: bool) -> void:
+	if connected or !Input.get_connected_joypads().front():
+		current_controller = device
+	else:
+		current_controller = Input.get_connected_joypads().front()
 
 #region Auto Pause
 var manual_pause: bool = false
@@ -91,19 +88,20 @@ func change_scene_to(path: String, transition: StringName = Constants.DEFAULT_TR
 			TransitionManager.resume()
 #endregion
 
-## appends [code]title[/code] to the application name.
-func set_window_title(title: String = ''):
+## appends a suffix to the application name.
+func set_window_title(suffix: String = '') -> void:
 	var app_title: String = ProjectSettings.get_setting("application/config/name") + \
 		' ' + ProjectSettings.get_setting("application/config/version")
 	
-	if not title.is_empty():
-		app_title += ' | ' + title
+	if not suffix.is_empty():
+		app_title += ' | ' + suffix
 	
 	DisplayServer.window_set_title(app_title)
 
 #region Volume Node
 func set_volume_display(path: String) -> void:
-	if !FileAccess.file_exists(path):
+	if not ResourceLoader.exists(path):
+		push_error("(Global): Volume Node at %s does not exist." % path)
 		return
 	
 	if volume_display:

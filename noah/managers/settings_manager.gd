@@ -62,15 +62,18 @@ static func load_values() -> void:
 		data.set(v["name"], val)
 	
 	# sets fullscreen
-	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if data.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
-	DisplayServer.window_set_mode(mode)
+	load_fullscreen_mode()
 	
 	var vsync_mode = DisplayServer.VSYNC_ENABLED if data.vsync else DisplayServer.VSYNC_DISABLED
 	DisplayServer.window_set_vsync_mode(vsync_mode)
 	
 	print("(SettingsManager): Preferences loaded")
 	Signals.settings_loaded.emit()
-	
+
+static func load_fullscreen_mode() -> void:
+	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if data.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
+	DisplayServer.window_set_mode(mode)
+
 ## Returns an array of key binds from a key
 static func get_keybind(keybind_name: String) -> Array:
 	return data.key_binds.get(keybind_name, [])
