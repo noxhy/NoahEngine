@@ -112,13 +112,13 @@ func _ready() -> void:
 		return
 	
 	if animation_player is AnimateSymbol2D:
-		animation_player.connect(&"animation_finished", self._on_animation_finished)
+		animation_player.connect(&"animation_finished", _on_animation_finished)
 		if Engine.is_editor_hint():
-			animation_player.connect(&"symbol_changed", self.update_ghost)
+			animation_player.connect(&"symbol_changed", update_ghost)
 	else:
-		animation_player.connect(&"animation_finished", self._on_animation_finished)
+		animation_player.connect(&"animation_finished", _on_animation_finished)
 		if Engine.is_editor_hint() and not animation_player is AnimationPlayer:
-			animation_player.connect(&"animation_changed", self.update_ghost)
+			animation_player.connect(&"animation_changed", update_ghost)
 	
 	if not Engine.is_editor_hint():
 		Signals.play_conductor_beat_hit.connect(on_beat_hit)

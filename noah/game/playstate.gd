@@ -267,35 +267,34 @@ func _process(delta: float) -> void:
 	# would just be to iterate through as the song is playing, making it faster
 	var notes_list: Array = chart.notes
 	
-	if notes_list.size() > 0:
-		if current_note < notes_list.size():
-			var note = notes_list[current_note]
+	if notes_list.size() > 0 and current_note < notes_list.size():
+		var note = notes_list[current_note]
+		
+		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
+		if scroll_speed < 1:
+			spawn_time /= scroll_speed 
+		
+		if note[0] <= (spawn_time):
+			var time: float = note[0]
+			var lane: int = note[1]
+			var length: float = note[2]
+			var type: Variant = note[3]
 			
-			var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
-			if scroll_speed < 1:
-				spawn_time /= scroll_speed 
-			
-			if note[0] <= (spawn_time):
-				var time: float = note[0]
-				var lane: int = note[1]
-				var length: float = note[2]
-				var type: Variant = note[3]
-				
-				Signals.play_create_note.emit(time, lane, length, type, chart.get_tempo_at(time))
-				current_note += 1
+			Signals.play_create_note.emit(time, lane, length, type, chart.get_tempo_at(time))
+			current_note += 1
 	
 	if instrumental.playing:
 		var events_list = chart.events
-		if events_list.size() > 0:
-			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
-				var event = events_list[current_event]
-				var time: float = event[0]
-				var event_name: String = event[1]
-				var event_parameters: Array = event[2]
-				
-				print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
-				basic_event(time, event_name, event_parameters)
-				current_event += 1
+		
+		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+			var event = events_list[current_event]
+			var time: float = event[0]
+			var event_name: String = event[1]
+			var event_parameters: Array = event[2]
+			
+			print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
+			basic_event(time, event_name, event_parameters)
+			current_event += 1
 
 ## Starts the song at a given time.
 func play_song(time: float) -> void:
