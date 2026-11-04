@@ -138,6 +138,8 @@ func attempt_conversion():
 	var save_to = save_path.trim_suffix('.png').trim_suffix('.xml')
 	if not save_to.get_extension() in ['tres', 'res']:
 		save_to = save_to + get_save_ext()
+	
+	frames.take_over_path(save_to)
 	ResourceSaver.save(frames, save_to, ResourceSaver.FLAG_COMPRESS)
 	
 	finished.emit()

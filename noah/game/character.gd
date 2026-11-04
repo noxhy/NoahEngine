@@ -305,7 +305,6 @@ func set_sing_timer(time: float = -1) -> void:
 	sing_time = time
 	can_dance = false
 
-## Helper function for [code]basic_song.gd[/code] to call idle whenever possible
 func on_beat_hit(current_beat: int, measure_relative: int) -> void:
 	var has_measure: bool = false
 	if dance_rate > 0 and GameManager.conductor:

@@ -82,10 +82,14 @@ static func get_bind_string(action: StringName, seperator: String = '/') -> Stri
 	
 	return seperator.join(strings)
 
+## @deprecated: use [member fps_lerp]
+static func frame_independent_lerp(a: Variant, b: Variant, decay: float, delta: float) -> Variant:
+	return fps_lerp(a, b, decay, delta)
+
 # referenced via https://youtu.be/LSNQuFEDOyQ
 ## A frame independent lerp. Primary purpose is for the camera
 ## your decay should be around 1 - 25
-static func frame_independent_lerp(a: Variant, b: Variant, decay: float, delta: float) -> Variant: 
+static func fps_lerp(a: Variant, b: Variant, decay: float, delta: float) -> Variant:
 	return b + (a - b) * exp(-decay * delta)
 
 ## Returns an array containing an transition and ease type formatted as [code][TransType, EaseType][/code]

@@ -1,5 +1,6 @@
 @tool
 extends Node
+class_name NoahDebugSongLoader
 ## Tool Node to make testing songs simpler. Allows loading a song scene directly from editor by setting the necessary backend variables
 
 ## The song to load
@@ -18,7 +19,7 @@ extends Node
 @export var mode: GameManager.PLAY_MODE = GameManager.PLAY_MODE.CHARTING
 
 func _enter_tree() -> void:
-	if not Engine.is_editor_hint():
+	if OS.is_debug_build() and not Engine.is_editor_hint():
 		GameManager.load_songs([song], difficulty, mode)
 		EditorResources.song = song
 		EditorResources.difficulty = difficulty
