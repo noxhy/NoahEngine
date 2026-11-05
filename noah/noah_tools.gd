@@ -200,9 +200,9 @@ static func bop_tween(root: Node, object: Object, property: NodePath, start: Var
 	
 
 ## No different to [member ResourceSaver.save] but doesnt gut out uids
-static func save_resource(resource: Resource, path: String, generate_uid_if_fail: bool = true, flags: int = ResourceSaver.FLAG_NONE) -> void:
+static func save_resource(resource: Resource, path: String, flags: int = ResourceSaver.FLAG_NONE) -> void:
 	var uid = ResourceLoader.get_resource_uid(path)
-	if uid == -1 and generate_uid_if_fail:
+	if uid == -1:
 		uid = ResourceUID.create_id()
 		ResourceUID.add_id(uid, path)
 	
