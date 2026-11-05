@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://degdcsx3er4ug"]
 
-[ext_resource type="Script" uid="uid://n32t24yn7vxt" path="res://noah/transitions/transition.gd" id="1_ecikk"]
+[ext_resource type="Script" uid="uid://nxw37he13w3c" path="res://noah/transitions/animation_player_transition.gd" id="1_ecikk"]
 
 [sub_resource type="Gradient" id="Gradient_tdgh5"]
 colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1)
@@ -34,7 +34,7 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
-"method": &"pause"
+"method": &"transition_awaiting"
 }]
 }
 tracks/1/type = "value"

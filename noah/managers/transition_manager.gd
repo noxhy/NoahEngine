@@ -1,32 +1,31 @@
-extends Node2D
+extends CanvasLayer
 
 signal waiting
 
-var current_transition: Transition
+var current_transition: Transition = null
 
-func transition(trans_name: StringName):
+func transition(trans_name: StringName) -> void:
 	if current_transition:
 		current_transition.queue_free()
 	
-	var instance = load(Constants.TRANSITIONS.get(trans_name)).instantiate()
-	$Transitions.add_child(instance)
+	current_transition = load(Constants.TRANSITIONS.get(trans_name)).instantiate()
 	
-	current_transition = instance
-	instance.connect(&"paused", self.pause)
-	instance.connect(&"finished", self.transition_finished)
+	current_transition.reached_middle.connect(pause)
+	current_transition.finished.connect(transition_finished)
+	
+	add_child(current_transition)
 
 
-func pause():
+func pause() -> void:
 	if Global.transitioning:
-		emit_signal(&"waiting")
+		waiting.emit()
 
 
-func resume():
+func resume() -> void:
 	if !current_transition:
 		return
 	
-	if !current_transition.is_playing():
-		current_transition.play()
+	current_transition.resume_transition()
 
 
 func transition_finished() -> void:
