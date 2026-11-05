@@ -29,7 +29,7 @@ func new_file(files: Array[String]):
 		
 		var path = str(dir.path_join(song_file.title), '-', diff, '.tres')
 		
-		ResourceSaver.save(chart, path)
+		NoahTools.save_resource(chart, path)
 		var difficulty_data: SongDifficultyData = SongDifficultyData.new()
 		difficulty_data.chart = path
 		difficulty_dict[diff] = difficulty_data
@@ -150,7 +150,7 @@ func new_file(files: Array[String]):
 	
 	song_file.difficulties = difficulty_dict
 	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
-	ResourceSaver.save(song_file, song_path)
+	NoahTools.save_resource(song_file, song_path)
 	
 	#Emits signal to return to the chart editor
 	emit_signal("file_created", song_path, song_file)

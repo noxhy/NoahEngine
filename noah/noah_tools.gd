@@ -197,3 +197,16 @@ static func bop_tween(root: Node, object: Object, property: NodePath, start: Var
 	
 	tween.tween_property(object, property, end, duration * 0.0625).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(object, property, start, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
+	
+
+## No different to [member ResourceSaver.save] but doesnt gut out uids
+static func save_resource(resource: Resource, path: String, generate_uid_if_fail: bool = true, flags: int = ResourceSaver.FLAG_NONE) -> void:
+	var uid = ResourceLoader.get_resource_uid(path)
+	if uid == -1 and generate_uid_if_fail:
+		uid = ResourceUID.create_id()
+		ResourceUID.add_id(uid, path)
+	
+	ResourceSaver.save(resource, path, flags)
+	
+	if uid != -1:
+		ResourceSaver.set_uid(path, uid)

@@ -287,7 +287,7 @@ static func update_chart(chart: Chart) -> Chart:
 				chart = update_chart(chart)
 				
 		
-		ResourceSaver.save(chart, chart.resource_path)
+		NoahTools.save_resource(chart, chart.resource_path)
 	
 	return chart
 

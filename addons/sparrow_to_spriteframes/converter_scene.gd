@@ -59,7 +59,7 @@ func attempt_conversion():
 	xml_parser.open(load_path + ".xml")
 	
 	var frames = SpriteFrames.new()
-	var texture = load(load_path + ".png")
+	var texture = ResourceLoader.load(load_path + '.png', '', ResourceLoader.CACHE_MODE_IGNORE)
 	var cur_anim_name: String
 	
 	var err = xml_parser.read()

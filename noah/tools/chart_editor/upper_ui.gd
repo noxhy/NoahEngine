@@ -486,7 +486,7 @@ func file_button_item_pressed(id):
 			var on_save = func(path:String):
 				var event = ChartEvents.new()
 				event.data = EditorResources.chart.events
-				ResourceSaver.save(event, path)
+				NoahTools.save_resource(event, path)
 				export_window.hide()
 			
 			var on_close = func():

@@ -1525,8 +1525,8 @@ func save() -> void:
 		EditorResources.chart.take_over_path(_create_chart_path())
 		EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
 		
-	ResourceSaver.save(EditorResources.song, EditorResources.song.resource_path)
-	ResourceSaver.save(EditorResources.chart, EditorResources.chart.resource_path)
+	NoahTools.save_resource(EditorResources.song, EditorResources.song.resource_path)
+	NoahTools.save_resource(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
 
 
@@ -1720,7 +1720,7 @@ func update_event(event) -> void:
 		hovered_event = -1
 
 func _on_export_external_popup_file_selected(path: String) -> void:
-	ResourceSaver.save(EditorResources.chart, path)
+	NoahTools.save_resource(EditorResources.chart, path)
 	upper_ui.get_node("%Export External Popup").hide()
 
 func set_chart_from_chart(_chart: Chart) -> void:
