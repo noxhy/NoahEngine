@@ -115,15 +115,15 @@ static func get_accumulated_beat_at(_time: float, tempo_data: Dictionary, ts_dat
 			else:
 				rel_time = next_time - tempo_time
 			
-			var time_signature: Array = ts_data.get(tempo_time, ts_data.get(0, [4, 4]))
-			beat += time_calc.call(rel_time, tempo_data[tempo_time], time_signature[1])
+			var time_signature: Vector2i = ts_data.get(tempo_time, ts_data.get(0, Vector2i(4, 4)))
+			beat += time_calc.call(rel_time, tempo_data[tempo_time], time_signature.y)
 			
 			if next_time >= _time:
 				break
 		
 		return beat
 	else:
-		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()][1])
+		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()].y)
 
 ## Gets the step counting previous time changes at the given time.
 static func get_accumulated_step_at(_time: float, tempo_data: Dictionary, ts_data: Dictionary) -> int:
@@ -143,12 +143,12 @@ static func get_accumulated_step_at(_time: float, tempo_data: Dictionary, ts_dat
 			else:
 				rel_time = next_time - tempo_time
 			
-			var time_signature: Array = ts_data.get(tempo_time, ts_data.get(0, [4, 4]))
-			step += time_calc.call(rel_time, tempo_data[tempo_time], time_signature[1])
+			var time_signature: Vector2i = ts_data.get(tempo_time, ts_data.get(0, Vector2i(4, 4)))
+			step += time_calc.call(rel_time, tempo_data[tempo_time], time_signature.y)
 			
 			if next_time >= _time:
 				break
 		
 		return step
 	else:
-		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()][1])
+		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()].y)
