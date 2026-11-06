@@ -120,7 +120,7 @@ func _get_grade() -> float:
 	return get_grade_from_stats(self)
 
 ## Gets a [code]Grade[/code] from a [NoahStats] instance.
-static func get_grade_from_stats(_stats: NoahStats):
+static func get_grade_from_stats(_stats: NoahStats) -> float:
 	if _stats.total_notes == 0:
 		return 0.0
 	if _stats.sicks == _stats.total_notes:
@@ -153,16 +153,14 @@ static func get_rank_from_grade(_grade: float) -> String:
 ## Returns the rating of the absolute value of the relative time a note was hit.
 static func get_hit_rating(hit_time: float) -> HIT_RATING:
 	hit_time = abs(hit_time)
-	var ratings: Array = [
-		[hit_time <= SICK_RATING_WINDOW, HIT_RATING.SICK],
-		[hit_time <= GOOD_RATING_WINDOW, HIT_RATING.GOOD],
-		[hit_time <= BAD_RATING_WINDOW, HIT_RATING.BAD],
-		[hit_time <= SHIT_RATING_WINDOW, HIT_RATING.SHIT]
-	]
-	
-	for condition in ratings:
-		if condition[0]:
-			return condition[1]
+	if hit_time <= SICK_RATING_WINDOW:
+		return HIT_RATING.SICK
+	elif hit_time <= GOOD_RATING_WINDOW:
+		return HIT_RATING.GOOD
+	elif hit_time <= BAD_RATING_WINDOW:
+		return HIT_RATING.BAD
+	elif hit_time <= SHIT_RATING_WINDOW:
+		return HIT_RATING.SHIT
 	
 	return HIT_RATING.MISS
 

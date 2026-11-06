@@ -21,7 +21,7 @@ var auto_play: bool  = false
 ## Spawns a note splash when a note is hit within the [member NoahStats.SICK_RATING_WINDOW]
 var can_splash: bool  = false
 ## Note types that will be skipped over in note prioritization.
-@export var ignored_note_types: Array = []
+@export var ignored_note_types: PackedStringArray = PackedStringArray()
 ## TODO: finish modchart mode
 @export_enum("NORMAL", "MODCHART") var node_type: int
 
