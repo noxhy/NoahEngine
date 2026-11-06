@@ -8,6 +8,11 @@ func transition(trans_name: StringName) -> void:
 	if current_transition:
 		current_transition.queue_free()
 	
+	if not Constants.TRANSITIONS.has(trans_name):
+		printerr('TransitionManager: transition "%s" does not exist' % trans_name)
+		call_deferred(&"emit_signal", &"waiting")
+		return
+	
 	current_transition = load(Constants.TRANSITIONS.get(trans_name)).instantiate()
 	
 	current_transition.reached_middle.connect(pause)
