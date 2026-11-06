@@ -87,7 +87,6 @@ func shake(amount: float, time: float) -> void:
 	shake_decay_rate = 1.0 / amount
 	shake_strength = amount
 	shaking = true
-	print("WAAA")
 
 func end_shake() -> void:
 	shaking = false
