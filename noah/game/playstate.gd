@@ -433,7 +433,7 @@ func finished_song() -> void:
 			scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
 	if not ResourceLoader.exists(scene_to_enter):
-		printerr("(PlayState): next_scene at %s was not found. falling back to ChartEditor." % scene_to_enter)
+		printerr("(PlayState): next_scene at \"%s\" was not found. falling back to ChartEditor." % scene_to_enter)
 		scene_to_enter = Constants.CHART_EDITOR_SCENE
 	
 	Global.change_scene_to(scene_to_enter)

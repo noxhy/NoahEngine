@@ -101,7 +101,7 @@ func set_window_title(suffix: String = '') -> void:
 #region Volume Node
 func set_volume_display(path: String) -> void:
 	if not ResourceLoader.exists(path):
-		push_error("(Global): Volume Node at %s does not exist." % path)
+		printerr("(Global): Volume Node at \"%s\" does not exist." % path)
 		return
 	
 	if volume_display:
