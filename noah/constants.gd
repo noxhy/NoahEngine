@@ -65,7 +65,7 @@ var EVENT_DATA: Dictionary = {
 
 #region Transitions
 var DEFAULT_TRANSITION = &"down"
-var TRANSITIONS: Dictionary = {
+var TRANSITIONS: Dictionary[StringName, String] = {
 	&"down": "uid://degdcsx3er4ug",
 	&"fade": "uid://dp5sadsewp7fw"
 }
@@ -107,7 +107,7 @@ var GOOD_RANK_NAME: String = 'good'
 var LOSS_RANK_NAME: String = 'loss'
 #region Note Types
 ## The note type and the corresponding animation prefix.
-var NOTE_TYPES: Dictionary = {
+var NOTE_TYPES: Dictionary[String, String] = {
 	"mom": "",
 	"no_animation": "",
 	"alt_prefix": ""
