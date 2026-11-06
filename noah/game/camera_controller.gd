@@ -192,11 +192,11 @@ func _process(delta) -> void:
 
 func update_2d(delta: float) -> void:
 	if zoom_smoothing:
-		parent_2d.zoom = NoahTools.frame_independent_lerp(parent_2d.zoom, target_zoom, zoom_smoothing_speed, delta)
+		parent_2d.zoom = NoahTools.fps_lerp(parent_2d.zoom, target_zoom, zoom_smoothing_speed, delta)
 
 func update_3d(delta: float) -> void:
 	if zoom_smoothing:
-		parent_3d.fov = NoahTools.frame_independent_lerp(parent_3d.fov, target_zoom.x, zoom_smoothing_speed, delta)
+		parent_3d.fov = NoahTools.fps_lerp(parent_3d.fov, target_zoom.x, zoom_smoothing_speed, delta)
 	
 	if position_smoothing:
 		parent_3d.position = lerp_position(parent_3d.position, _position_3d, delta)

@@ -1588,7 +1588,7 @@ func update_camera_song_position(instant: bool = false) -> void:
 	if instant:
 		camera_2d.position.y = 360 + time_to_y_position(song_position)
 	else:
-		camera_2d.position.y = NoahTools.frame_independent_lerp(
+		camera_2d.position.y = NoahTools.fps_lerp(
 			camera_2d.position.y, 360 + time_to_y_position(song_position), 20, get_process_delta_time())
 
 

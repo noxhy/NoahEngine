@@ -42,7 +42,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if zoom_smoothing:
-		scale = NoahTools.frame_independent_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
+		scale = NoahTools.fps_lerp(scale, target_zoom, zoom_smoothing_speed, delta)
 		
 	if shaking:
 		update_shake(delta)
