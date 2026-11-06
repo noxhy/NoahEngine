@@ -26,7 +26,7 @@ var can_splash: bool  = false
 @export_enum("NORMAL", "MODCHART") var node_type: int
 
 ## The animation states of this strum
-enum STATE {
+enum AnimState {
 	## Default status
 	IDLE,
 	## The strum is pressed when there is no notes
@@ -50,7 +50,8 @@ var pressing: bool = false
 ## The current prioritized note for this strum to hit next.
 var target_note: BasicNote = null
 ## The current Animation State for this strum
-var state: STATE = STATE.IDLE
+var state: AnimState : set = set_anim_state
+
 var lane: int = -1
 
 var reset_timer: float = 0.0
@@ -65,6 +66,7 @@ func _ready() -> void:
 	Signals.play_unpaused.connect(release_note)
 	
 	offset = SettingsManager.data.offset
+	state = AnimState.IDLE
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -104,8 +106,8 @@ func _process(delta: float) -> void:
 			if target_note:
 				if pressing and target_note.length > 0:
 					hold_note()
-			elif state != STATE.GLOW:
-				state = STATE.PRESSED
+			elif state != AnimState.GLOW:
+				state = AnimState.PRESSED
 		
 		if Input.is_action_just_released(input):
 			release_note()
@@ -114,7 +116,7 @@ func _process(delta: float) -> void:
 		reset_timer -= delta
 		if reset_timer <= 0:
 			reset_timer = 0
-			state = STATE.IDLE
+			state = AnimState.IDLE
 	
 	if coyote_timer > 0:
 		coyote_timer -= delta
@@ -122,17 +124,6 @@ func _process(delta: float) -> void:
 			Signals.play_note_miss.emit(target_note, lane, get_parent())
 			target_note.hit = true
 			target_note.apply_miss_effect()
-	
-	if state == STATE.IDLE:
-		sprite.play(strum_name + &"_strum")
-	elif state == STATE.PRESSED:
-		var animation_name: StringName = &"press_" + strum_name + &"_strum"
-		if sprite.animation != animation_name:
-			sprite.play(animation_name)
-	elif state == STATE.GLOW:
-		var animation_name: StringName = &"glow_" + strum_name + &"_strum"
-		if sprite.animation != animation_name:
-			sprite.play(animation_name)
 
 # Util
 func set_skin(new_skin: NoteSkin) -> void:
@@ -150,6 +141,18 @@ func set_skin(new_skin: NoteSkin) -> void:
 		sprite.texture_filter = TEXTURE_FILTER_NEAREST
 		hold_cover_sprite.texture_filter = TEXTURE_FILTER_NEAREST
 
+func set_anim_state(v: AnimState) -> void:
+	state = v
+	if state == AnimState.IDLE:
+		sprite.play(strum_name + &"_strum")
+	elif state == AnimState.PRESSED:
+		var animation_name: StringName = &"press_" + strum_name + &"_strum"
+		if sprite.animation != animation_name:
+			sprite.play(animation_name)
+	elif state == AnimState.GLOW:
+		var animation_name: StringName = &"glow_" + strum_name + &"_strum"
+		if sprite.animation != animation_name:
+			sprite.play(animation_name)
 
 func create_note(time: float, length: float, note_type: String, _tempo: float) -> BasicNote:
 	var note_instance: BasicNote
@@ -182,7 +185,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float) -
 
 # Visuals
 func _on_offset_sprite_animation_finished() -> void:
-	if state == STATE.GLOW:
+	if state == AnimState.GLOW:
 		if !auto_play:
 			if pressing:
 				sprite.set_frame_and_progress(0, 0)
@@ -211,7 +214,7 @@ func create_splash(animation_name: StringName = strum_name + &"_splash") -> void
 
 ## Calls when first pressing the input
 func press_note() -> void:
-	state = STATE.GLOW
+	state = AnimState.GLOW
 	coyote_timer = 0
 	var hit_time: float = target_note.time - (GameManager.song_position) if !auto_play else 0.0
 	
@@ -236,7 +239,7 @@ func press_note() -> void:
 
 ## Calls when holding the input
 func hold_note() -> void:
-	state = STATE.GLOW
+	state = AnimState.GLOW
 	target_note.position.y = 0
 	var temp = target_note.length
 	var spb: float = get_relative_seconds_per_beat(target_note)
@@ -273,7 +276,7 @@ func release_note() -> void:
 					note.time = GameManager.song_position
 					note.start_length = note.length
 		else:
-			state = STATE.IDLE
+			state = AnimState.IDLE
 
 ## Returns the seconds per beat relative to the given note.
 func get_relative_seconds_per_beat(note: Note) -> float:
