@@ -25,13 +25,13 @@ func _ready() -> void:
 	
 	if GameManager.current_song:
 		if GameManager.current_song.difficulties.is_empty():
-			pages.get(&"default").remove_at(pages.get(&"default").find(&"Change Difficulty"))
+			pages.get(&"default").erase(&"Change Difficulty")
 		
 		for difficulty in GameManager.current_song.difficulties:
 			pages.difficulties.append(difficulty)
 	else:
-		pages.get(&"default").remove_at(pages.get(&"default").find(&"Change Difficulty"))
-		
+		pages.get(&"default").erase(&"Change Difficulty")
+	
 	match GameManager.play_mode:
 		GameManager.PLAY_MODE.CHARTING:
 			load_page(&"charting")
