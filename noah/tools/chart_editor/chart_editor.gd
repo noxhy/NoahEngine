@@ -1659,10 +1659,6 @@ func _on_metadata_window_close_requested() -> void:
 	upper_ui.get_node("%Window Button").get_popup().set_item_checked(1, false)
 	SoundManager.tool_close_window.play()
 
-func _on_metadata_window_updated_icon_texture(path: String) -> void:
-	EditorResources.song.icons = path
-	auto_save()
-
 func _on_metadata_window_updated_song_artist(text: String) -> void:
 	EditorResources.song.artist = text
 	auto_save()

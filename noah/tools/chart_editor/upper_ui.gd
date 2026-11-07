@@ -96,7 +96,6 @@ func _ready() -> void:
 	metadata_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
 	metadata_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
 	metadata_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
-	metadata_window.connect(&"updated_icon_texture", chart_editor._on_metadata_window_updated_icon_texture)
 	metadata_window.connect(&"updated_scroll_speed", chart_editor._on_metadata_window_updated_scroll_speed)
 	metadata_window.connect(&"updated_song_artist", chart_editor._on_metadata_window_updated_song_artist)
 	metadata_window.connect(&"updated_song_charter", chart_editor._on_metadata_window_updated_song_charter)
