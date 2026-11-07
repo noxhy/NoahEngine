@@ -33,6 +33,8 @@ var can_pause: bool = true
 
 var can_show_combo: bool = true
 
+var rating_factory = RatingFactory.new()
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	
@@ -51,6 +53,12 @@ func _ready() -> void:
 			ui.update_player(player)
 		if enemy:
 			ui.update_enemy(enemy)
+			
+		
+	if playstate:
+		add_child(rating_factory)
+		rating_factory.z_index = 1000
+		rating_factory.ui_skin = playstate.ui_skin
 	
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
@@ -71,6 +79,7 @@ func _ready() -> void:
 		pause_preload = load(playstate.ui_skin.pause_scene)
 	
 	start_song()
+
 
 
 func start_song() -> void:
@@ -237,44 +246,22 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int) -> void:
 			if playstate.song_stats.sicks == playstate.song_stats.total_notes:
 				hit_rating = str("fc_", hit_rating)
 		
-		var rating_instance: GPUParticles2D = rating_node.instantiate()
+		rating_factory.spawn_combo(combo_marker.position, str(_combo), playstate.song_stats.sicks == playstate.song_stats.total_notes)
+		rating_factory.spawn_rating(rating_marker.position, hit_rating)
 		
-		rating_instance.ui_skin = playstate.ui_skin
-		rating_instance.animation = hit_rating
-		rating_instance.z_index = 1000
-		
-		var add_numbers: Callable = func(parent: Node) -> void:
-			if _combo > 0:
-				var combo_string: String = str(_combo)
-				var digits: int = combo_string.length()
-				for digit in digits:
-					var combo_number_instance: GPUParticles2D = combo_numbers_node.instantiate()
-					
-					combo_number_instance.position.x = playstate.ui_skin.numbers_spacing * (
-						(digits - 1) / -2.0 + digit) * playstate.ui_skin.numbers_scale
-					
-					combo_number_instance.ui_skin = playstate.ui_skin
-					if playstate.song_stats.max_combo == playstate.song_stats.total_notes:
-						combo_number_instance.animation = str("fc_", combo_string[digit])
-					else:
-						combo_number_instance.animation = combo_string[digit]
-					
-					combo_number_instance.z_index = 1000
-					
-					parent.add_child(combo_number_instance)
-		
-		if SettingsManager.data.combo_ui and ui:
-			if ui.rating_marker:
-				playstate.ui.rating_marker.add_child(rating_instance)
-			
-			if ui.combo_marker:
-				add_numbers.call(ui.combo_marker)
-		else:
-			if rating_marker:
-				rating_marker.add_child(rating_instance)
-			
-			if combo_marker:
-				add_numbers.call(combo_marker)
+		#TODO add back ui thing
+		#if SettingsManager.data.combo_ui and ui:
+			#if ui.rating_marker:
+				#playstate.ui.rating_marker.add_child(rating_instance)
+			#
+			#if ui.combo_marker:
+				#add_numbers.call(ui.combo_marker)
+		#else:
+			#if rating_marker:
+				#rating_marker.add_child(rating_instance)
+			#
+			#if combo_marker:
+				#add_numbers.call(combo_marker)
 
 
 func pause() -> void:
