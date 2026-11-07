@@ -30,6 +30,9 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_transform(note_rid, 
 		Transform2D(rotation, vec2_scale, skew, (-note_anim.get_size() / 2.0) * vec2_scale))
 	
+	RenderingServer.canvas_item_set_modulate(tail_rid, Color(1.0, 1.0, 1.0, note_skin.sustain_opacity))
+	RenderingServer.canvas_item_set_modulate(end_rid, Color(1.0, 1.0, 1.0, note_skin.sustain_opacity))
+	
 	load_basic_type()
 
 func set_texture_to_rid(_rid: RID, texture: Texture2D):
