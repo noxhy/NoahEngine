@@ -1,19 +1,19 @@
 [gd_scene format=3 uid="uid://krhxbwnjnr7r"]
 
-[ext_resource type="Script" uid="uid://unxl5ry1ynol" path="res://noah/game/note/basic_note.gd" id="1_2my17"]
-[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://noah/assets/game/developer/arrow/notes.tres" id="2_r4bqa"]
-[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite_2d.gd" id="4_kfabs"]
+[ext_resource type="Script" uid="uid://unxl5ry1ynol" path="res://noah/game/note/basic_note.gd" id="1_662ua"]
+[ext_resource type="SpriteFrames" uid="uid://ccp6adafb85jx" path="res://noah/assets/game/developer/arrow/notes.tres" id="2_cf7yh"]
+[ext_resource type="Script" uid="uid://d17yv6wfgl74w" path="res://noah/offset_sprite_2d.gd" id="3_pkvhf"]
 
 [node name="Note" type="Node2D" unique_id=1794701138 groups=["note"]]
 use_parent_material = true
-script = ExtResource("1_2my17")
+script = ExtResource("1_662ua")
 
 [node name="Note" type="AnimatedSprite2D" parent="." unique_id=1237220574]
 z_index = 1
 use_parent_material = true
-sprite_frames = ExtResource("2_r4bqa")
+sprite_frames = ExtResource("2_cf7yh")
 animation = &"left"
-script = ExtResource("4_kfabs")
+script = ExtResource("3_pkvhf")
 
 [node name="Tail" type="TextureRect" parent="." unique_id=1151387659]
 rotation = 1.5707964
