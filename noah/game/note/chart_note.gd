@@ -3,7 +3,7 @@ class_name ChartNote
 
 @onready var area = $Area2D
 @onready var collision_shape = $Area2D/CollisionShape2D
-@onready var label = %"Special Note Label"
+@onready var label: Label = %"Special Note Label"
 @onready var screen_enabler = $VisibleOnScreenEnabler2D
 
 # Applying Note Skin
@@ -51,6 +51,9 @@ func update():
 			label.size = grid_size
 			label.position = -grid_size / 2
 			label.label_settings.font_size = grid_size.y / 2
+		label.text = abbreviate_type()
+		label.label_settings.font_color = get_type_colour()
+			
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta) -> void:
@@ -78,6 +81,8 @@ func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	note.visible = on_screen
 	tail.visible = on_screen
 	label.visible = on_screen
+	label.text = abbreviate_type()
+	label.label_settings.font_color = get_type_colour()
 
 func correct_anim_id(anim_id: StringName) -> StringName: #quick and dirty
 	if anim_id.contains(&"left"):
@@ -87,3 +92,16 @@ func correct_anim_id(anim_id: StringName) -> StringName: #quick and dirty
 	if anim_id.contains(&"right"):
 		return &"right"
 	return &'up'
+
+func abbreviate_type() -> String:
+	if note_type.is_empty():
+		return ''
+	
+	var words = note_type.split("_")
+	var type = ''
+	for word in words:
+		type += word[0].to_upper()
+	return type
+
+func get_type_colour() -> Color:
+	return Color.from_hsv(float(note_type.hash() % 360) / 360.0, 0.45, 1.0)
