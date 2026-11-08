@@ -25,5 +25,4 @@ func _process(_delta):
 		
 		ResourceLoader.THREAD_LOAD_LOADED:
 			get_tree().change_scene_to_packed(ResourceLoader.load_threaded_get(scene))
-			Global.transitioning = false
 			TransitionManager.resume()

@@ -22,8 +22,7 @@ func transition(trans_name: StringName) -> void:
 
 
 func pause() -> void:
-	if Global.transitioning:
-		waiting.emit()
+	waiting.emit()
 
 
 func resume() -> void:

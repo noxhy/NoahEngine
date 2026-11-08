@@ -6,8 +6,19 @@ extends Node
 
 var loading_screen: PackedScene = load("uid://ld5hyjhtx8wg")
 
-var transitioning: bool = false
 var current_controller: int = -1
+
+var manual_pause: bool = false
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		if !get_tree().paused:
+			if OS.is_debug_build():
+				return
+			manual_pause = false
+			get_tree().paused = true
+	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
+		if !manual_pause:
+			get_tree().paused = false
 
 func _ready() -> void:
 	rescale_window_by_dpi()
@@ -49,29 +60,12 @@ func changed_contoller(device: int, connected: bool) -> void:
 	else:
 		current_controller = Input.get_connected_joypads().front()
 
-#region Auto Pause
-var manual_pause: bool = false
-func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT:
-		if !get_tree().paused:
-			if OS.is_debug_build():
-				return
-			manual_pause = false
-			get_tree().paused = true
-	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
-		if !manual_pause:
-			get_tree().paused = false
-#endregion
-
-#region Scene Changing
 ## Changes the main scene to another with a transition
 func change_scene_to(path: String, transition: StringName = Constants.DEFAULT_TRANSITION, show_loading_screen: bool = false) -> void:
 	
 	if not ResourceLoader.exists(path):
 		printerr("Cannot switch to '%s' as it does not exist" % path)
 		return
-	
-	transitioning = true
 	
 	if transition: 
 		TransitionManager.transition(transition)
@@ -86,7 +80,6 @@ func change_scene_to(path: String, transition: StringName = Constants.DEFAULT_TR
 		get_tree().change_scene_to_file(path)
 		if transition: 
 			TransitionManager.resume()
-#endregion
 
 ## appends a suffix to the application name.
 func set_window_title(suffix: String = '') -> void:
@@ -98,7 +91,6 @@ func set_window_title(suffix: String = '') -> void:
 	
 	DisplayServer.window_set_title(app_title)
 
-#region Volume Node
 func set_volume_display(path: String) -> void:
 	if not ResourceLoader.exists(path):
 		printerr("(Global): Volume Node at \"%s\" does not exist." % path)
@@ -109,14 +101,12 @@ func set_volume_display(path: String) -> void:
 	
 	volume_display = load(path).instantiate()
 	add_child(volume_display)
-#endregion
 
 ## Updates the window size based on display dpi/scale
 func rescale_window_by_dpi() -> void:
 	if OS.get_name().to_lower().contains('windows'): 
 		var dpi = DisplayServer.screen_get_dpi(DisplayServer.window_get_current_screen()) / 96.0
-		var new_size = get_window().size * dpi
-		DisplayServer.window_set_size(new_size)
+		get_window().size *= dpi
 	elif DisplayServer.screen_get_scale() != 1.0:
 		get_window().size *= DisplayServer.screen_get_scale()
 	get_window().move_to_center()
