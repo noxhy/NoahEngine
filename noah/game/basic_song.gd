@@ -4,11 +4,10 @@ class_name BasicSong
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
 
-@onready var rating_marker = %"Rating Marker"
-@onready var combo_marker = %"Combo Marker"
+@onready var rating_marker: Node = %"Rating Marker"
+@onready var combo_marker: Node = %"Combo Marker"
 
-@onready var rating_node = load("uid://0l7bo1bqcbcj")
-@onready var combo_numbers_node = load("uid://b28wu6vajuag3")
+var rating_factory: RatingFactory
 
 ## The amount of lanes per strumline (usually)
 var DIRECTIONS: int = 4
@@ -33,7 +32,6 @@ var can_pause: bool = true
 
 var can_show_combo: bool = true
 
-var rating_factory = RatingFactory.new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -54,11 +52,6 @@ func _ready() -> void:
 		if enemy:
 			ui.update_enemy(enemy)
 			
-		
-	if playstate:
-		add_child(rating_factory)
-		rating_factory.z_index = 1000
-		rating_factory.ui_skin = playstate.ui_skin
 	
 	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
 	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
@@ -75,8 +68,20 @@ func _ready() -> void:
 	
 	Signals.play_died.connect(died)
 	
-	if playstate and playstate.ui_skin and ResourceLoader.exists(playstate.ui_skin.pause_scene):
-		pause_preload = load(playstate.ui_skin.pause_scene)
+	if playstate and playstate.ui_skin:
+		rating_factory = RatingFactory.new()
+		rating_factory.z_index = 1000
+		rating_factory.ui_skin = playstate.ui_skin
+		
+		rating_factory.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST if playstate.ui_skin.pixel_texture else CanvasItem.TEXTURE_FILTER_PARENT_NODE
+		
+		if ui and SettingsManager.data.combo_ui:
+			ui.add_child(rating_factory)
+		else:
+			add_child(rating_factory)
+		
+		if ResourceLoader.exists(playstate.ui_skin.pause_scene):
+			pause_preload = load(playstate.ui_skin.pause_scene)
 	
 	start_song()
 
@@ -246,23 +251,27 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int) -> void:
 			if playstate.song_stats.sicks == playstate.song_stats.total_notes:
 				hit_rating = str("fc_", hit_rating)
 		
-		rating_factory.spawn_combo(combo_marker.position, str(_combo), playstate.song_stats.sicks == playstate.song_stats.total_notes)
-		rating_factory.spawn_rating(rating_marker.position, hit_rating)
-		
-		#TODO add back ui thing
-		#if SettingsManager.data.combo_ui and ui:
-			#if ui.rating_marker:
-				#playstate.ui.rating_marker.add_child(rating_instance)
-			#
-			#if ui.combo_marker:
-				#add_numbers.call(ui.combo_marker)
-		#else:
-			#if rating_marker:
-				#rating_marker.add_child(rating_instance)
-			#
-			#if combo_marker:
-				#add_numbers.call(combo_marker)
-
+		if rating_factory:
+			var rating_position: Vector2
+			var combo_position: Vector2
+			
+			if SettingsManager.data.combo_ui and ui:
+				if ui.rating_marker:
+					rating_position = ui.rating_marker.position
+					
+				if ui.combo_marker:
+					combo_position = ui.combo_marker.position
+			else:
+				if rating_marker:
+					rating_position = rating_marker.position
+				
+				if combo_marker:
+					combo_position = combo_marker.position
+			
+			
+			rating_factory.spawn_rating(rating_position, hit_rating)
+			if _combo > 9:
+				rating_factory.spawn_combo(combo_position, str(_combo), playstate.song_stats.sicks == playstate.song_stats.total_notes)
 
 func pause() -> void:
 	if not pause_preload:
