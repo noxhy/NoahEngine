@@ -4,7 +4,7 @@ extends Resource
 class_name Song
 ## The metadata for a Song. Contains all necessary files for a song to be loaded via playstate
 
-@export_category("Song Data")
+#@export_category("Song Data")
 ## Path to the Vocal tracks of the song. The order of vocals do matter and correspond to a given strumline via [member StrumManager.id]
 @export_file("*.ogg", "*.mp3", "*.wav") var vocals: Array[String] = []
 ## Path to the instrumental of the song
@@ -21,7 +21,7 @@ class_name Song
 ## These events will be loaded regardless of difficulty
 @export_file('*.tres','*.res') var events: String
 
-@export_group("Display Stuff")
+@export_category("Display Config")
 
 ## The display name for the Song
 @export var title: String
