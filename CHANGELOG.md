@@ -1,0 +1,62 @@
+### 3.4.3 (TBD)
+
+#### Additions / Changes
+- Added `NoahTools` and migrated many util funcs from `Global`
+- `NoahTools.format_time` now has a 2nd arg to show miliseconds or not
+- Added V Sync option (fixes screen tearing)
+- Added shaking support to `BasicUI`
+- Added 3rd arg to set the context in `play_animation` event
+- Added template `song_scene2d` and `song_scene3d` to be used as inherited scenes
+- Charts are now by default saved as `.tres` files
+- `Chart` now stores time signatures as a dictionary of `Vec2i` instead of `Array`
+- `Playstate` is now expected to be in a group
+- `PlayState` no longer requires a host to function
+- `PlayState` can now skip the countdown via `skip_countdown`
+- `PlayState.song_speed` is now a setter and can be changed dynamically
+- Replaced `combo_display` Particles for `RatingFactory`
+- Added `RatingFactory`. spawns rating and combos through the `RenderingServer` for performance
+- `ChartEditor` note types are now displayed on the note as abbreviated names
+- Added `PlayState.paused` which pauses the music
+- Most events from `PlayState` have been moved to `BasicSong`
+- `BasicSong` note creation now automatically finds what strum to create the note on (easier setting up additional strumlines)
+- `BasicSong.get_sing_drection` now automatically mods by arrow count (safer)
+- Added `can_pause` to `BasicSong`
+- Added `can_show_combo` to `BasicSong`
+- Added `start_song` func to `BasicSong` for easy overriding song_start behavior
+- `strums` group is now sorted by ID
+- `camera_positions` group is now sorted by ID if markers are `NoahMarker2D`
+- Added `settings_loaded` to `Signals`
+- Renamed `Signals.play_note_holding` to `Signals.play_note_held`
+- Renamed `NoahTools.frame_independent_lerp` to `NoahTools.fps_lerp`
+- Changed `VolumeDisplay` to be a `Abstract` node
+- Changed `Transition` to be a `Abstract` node
+- Added `snap` and `snap_to` methods to `CameraController`
+- Removed `downscroll_ui` func in `BasicUI` in favor of directly setting the values in ready
+- Removed `locked`, `icons`, and `dont_display_until_played` from `Song`
+- Removed `BasicPause` in favor of a script template
+- Removed `BasicHealthBar` in favor of `stats_display` and `health_bar` script templates
+- Removed `Preload`
+
+#### Fixes / Misc Improvements
+- Fix charts `UID` being stripped whenever saving in the `ChartEditor`
+- Changed `Constants` rank names from consts to vars
+- Renamed `ChartManager` to `EditorResources`
+- Swapped `EditorResources`, `SaveManager`, `SettingsManager` from autoloads to static classes 
+- `Character` no longer spams errors whenever invalid anims are played
+- Fixed `Character` playing invalid animations printing error messages with empty animation names
+- `BasicSong` will no longer crash if pausing was attempted with a missing pause menu
+- `BasicSong.get_sing_direction` no longer creates a new array per call
+- Empty chart files no longer crash the `ChartEditor`
+- Fix turning down `song_speed` in `ChartEditor` being stuck at 2
+- CNE chart conversion notetype and lane fixes
+- Psych chart conversion potential crash related to events fixed
+- Fixed `BasicSong.bop_rate_offset` being incorrectly applied
+- Fixed Memory leak when spawning notesplashes with `NoteSkin` that has no `splash_texture`
+- Fixed `OffsetSprite2D` not applying the offset immediately
+- Fixed Offset Calibrator crash
+- Fixed `SettingsManager.data.offset` being applied incorrectly
+- Improved folder structure
+- Improved general performance
+- Improved crash prevention
+- Misc static typing adjustments
+- Misc documentation improvements

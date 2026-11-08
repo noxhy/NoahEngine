@@ -3,6 +3,7 @@ Friday Night Funkin' Engine made in Godot 4.
 
 > [!NOTE]
 > This engine is developed usually on the latest godot version (4.7 atm). Ensure you are working on said version.
+> This engine is extremely volatile with large structural changes occuring frequently
 
 # Credits
 - [Noah](https://www.youtube.com/channel/UCH5BbTqMfiO-Cxhtx3drsqA) - Main Developer
