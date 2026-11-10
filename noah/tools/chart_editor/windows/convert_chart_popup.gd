@@ -23,7 +23,7 @@ func new_file(files: Array[String]):
 	
 	var chart_format = %"Format Options".get_selected_id()
 	
-	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
+	var difficulty_dict: Dictionary[StringName, SongDifficultyData] = {}
 	
 	var save_chart = func(chart:Chart, dir:String, diff:String):
 		var path = str(dir.path_join(song_file.title), '-', diff, '.tres')

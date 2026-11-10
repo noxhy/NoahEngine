@@ -565,8 +565,8 @@ func load_song(song: Song, difficulty: Variant = null):
 		difficulty = EditorResources.song.difficulties.keys()[0]
 	
 	var difficulty_data: SongDifficultyData = song.difficulties.get(difficulty)
-	EditorResources.chart = Chart.load(difficulty_data.chart, song)
 	EditorResources.difficulty = difficulty
+	EditorResources.chart = Chart.load(difficulty_data.chart, song)
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"free")
 	instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
