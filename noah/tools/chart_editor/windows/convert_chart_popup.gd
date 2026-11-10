@@ -16,6 +16,7 @@ func new_file(files: Array[String]):
 	
 	song_file.artist = %"Song Credits".text
 	song_file.title = %"Song Title".text
+	song_file.charter = %"Song Charter".text
 	
 	song_file.instrumental = selected_instrumental
 	song_file.vocals = Array(Array(selected_vocals),TYPE_STRING, '', null)

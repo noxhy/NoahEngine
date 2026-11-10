@@ -32,15 +32,9 @@ static var DEFAULT_FILE_TYPE:String = '.tres'
 ## Audio latency.
 @export var offset: float = 0.0
 ## All the notes within the chart Stored as [code][TIME, LANE, SUSTAIN_LENGTH, TYPE][/code]
-@export var notes: Array[Variant] = []
+@export var notes: Array[Variant] = []: get = get_notes_data
 ## @deprecated: Events are stored separately and referenced in [Song]
 @export var events: Array[Variant] = []
-## @deprecated: Time changes are stored in [Song].
-@export var tempos: Dictionary = { 0.0: 60.0 }
-## @deprecated: Time changes are stored in [Song].
-var time_signatures: Dictionary = { 0.0: [4, 4] }
-## @deprecated: Time changes are stored in [Song].
-@export var time_signature_vectors: Dictionary[float, Vector2i] = { 0.0: Vector2i(4, 4) }
 ## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
 
@@ -54,19 +48,6 @@ var version: int:
 ## @deprecated: Use [member notes] instead
 func get_notes_data() -> Array:
 	return chart_data.get("notes", notes)
-
-
-## @deprecated: Use [member tempos] instead
-func get_tempos_data() -> Dictionary:
-	return chart_data.get("tempos", tempos)
-	
-## @deprecated: Use [member time_signatures] instead
-func get_meters_data() -> Dictionary:
-	return chart_data.get("meters", time_signatures)
-	
-## @deprecated: Use [member time_signatures] instead
-func get_time_signature_data() -> Dictionary:
-	return chart_data.get("time_signatures", time_signatures)
 
 ## Loads a external [ChartEvents] and merges them into this charts events.
 #func merge_events_into_this(_events: ChartEvents):
@@ -91,39 +72,39 @@ func get_time_signature_data() -> Dictionary:
 	#
 	#events = ret_events
 
-## Returns the tempo at a given time
-func get_tempo_at(time: float) -> float:
-	time = max(0, time)
-	var output: float = -1
-	for point in get_tempos_data():
-		if time >= point:
-			output = get_tempos_data().get(point)
-		else:
-			continue
-	
-	return output
-
-## Returns the time signature at a given time
-func get_time_signature_at(time: float) -> Vector2i:
-	time = max(0, time)
-	var output: Vector2i = Vector2i(4, 4)
-	for point in time_signature_vectors:
-		if time >= point:
-			output = time_signature_vectors.get(point)
-		else:
-			continue
-	
-	return output
-
-## Gets the time of a tempo change.
-func get_tempo_time_at(time: float) -> float:
-	time = max(0, time)
-	var output: float = -1
-	for point in get_tempos_data():
-		if time >= point:
-			output = point
-	
-	return output
+### Returns the tempo at a given time
+#func get_tempo_at(time: float) -> float:
+	#time = max(0, time)
+	#var output: float = -1
+	#for point in get_tempos_data():
+		#if time >= point:
+			#output = get_tempos_data().get(point)
+		#else:
+			#continue
+	#
+	#return output
+#
+### Returns the time signature at a given time
+#func get_time_signature_at(time: float) -> Vector2i:
+	#time = max(0, time)
+	#var output: Vector2i = Vector2i(4, 4)
+	#for point in time_signature_vectors:
+		#if time >= point:
+			#output = time_signature_vectors.get(point)
+		#else:
+			#continue
+	#
+	#return output
+#
+### Gets the time of a tempo change.
+#func get_tempo_time_at(time: float) -> float:
+	#time = max(0, time)
+	#var output: float = -1
+	#for point in get_tempos_data():
+		#if time >= point:
+			#output = point
+	#
+	#return output
 
 ## Helper function to get a chart from [Song]
 static func load_from_song(_song: Song, _difficulty: StringName = &'-1') -> Chart:

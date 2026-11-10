@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://drlrm6yoeyvls" path="res://noah/tools/chart_editor/windows/convert_chart_popup.gd" id="1_byst7"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_p6cg2"]
+[ext_resource type="Texture2D" uid="uid://7beex56evt5o" path="res://addons/at-icons/node/file_note.svg" id="3_iss1p"]
+[ext_resource type="Texture2D" uid="uid://bep28eda3goub" path="res://addons/at-icons/node/floppy_disk.svg" id="4_8csor"]
 
 [node name="Convert File Popup" type="Window" unique_id=787528886 groups=["windows"]]
 transparent_bg = true
@@ -9,7 +11,7 @@ msaa_2d = 1
 oversampling_override = 1.0
 title = "Convert Chart Files"
 initial_position = 1
-size = Vector2i(640, 446)
+size = Vector2i(480, 480)
 exclusive = true
 unresizable = true
 min_size = Vector2i(480, 0)
@@ -30,7 +32,7 @@ dialog_hide_on_ok = true
 file_mode = 1
 filters = PackedStringArray("*.json")
 
-[node name="FlowContainer" type="FlowContainer" parent="." unique_id=190444970]
+[node name="FlowContainer" type="VBoxContainer" parent="." unique_id=523746384]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -41,7 +43,6 @@ size_flags_vertical = 3
 metadata/_edit_lock_ = true
 
 [node name="Convert Chart" type="VBoxContainer" parent="FlowContainer" unique_id=1948307872]
-custom_minimum_size = Vector2(320, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -86,8 +87,12 @@ unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "Song Artist"
 
+[node name="Song Charter" type="LineEdit" parent="FlowContainer/Convert Chart" unique_id=1230502914]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Song Charter"
+
 [node name="Audio Files" type="VBoxContainer" parent="FlowContainer" unique_id=2125503342]
-custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -112,7 +117,10 @@ editable = false
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=391732128]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File"
+text = "     "
+icon = ExtResource("3_iss1p")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=250682584 groups=["windows"]]
 unique_name_in_owner = true
@@ -143,7 +151,10 @@ editable = false
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=1298346667]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File"
+text = "     "
+icon = ExtResource("3_iss1p")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=34144751 groups=["windows"]]
 unique_name_in_owner = true
@@ -181,14 +192,16 @@ size_flags_vertical = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "res://assets/songs/playable songs/"
 placeholder_text = "Export Location"
 editable = false
 
 [node name="Button" type="Button" parent="FlowContainer/VBoxContainer/Export Location" unique_id=2028338597]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File"
+text = "     "
+icon = ExtResource("4_8csor")
+icon_alignment = 1
+expand_icon = true
 
 [node name="HSeparator2" type="HSeparator" parent="FlowContainer/VBoxContainer" unique_id=1010212391]
 layout_mode = 2
@@ -199,7 +212,7 @@ alignment = 1
 
 [node name="Create Button" type="Button" parent="FlowContainer/VBoxContainer/HBoxContainer" unique_id=201412011]
 layout_mode = 2
-text = "Create New Song"
+text = "Convert and Create New Song"
 
 [connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="dir_selected" from="SaveFolderDialog" to="." method="_on_save_folder_dialog_dir_selected"]

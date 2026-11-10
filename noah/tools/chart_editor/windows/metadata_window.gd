@@ -29,11 +29,11 @@ func update_stats():
 		%"Scroll Speed Label".text = str("Scroll Speed: ", EditorResources.chart.scroll_speed, "x")
 	
 	%"Time Changes".clear()
-	var chart: Chart = EditorResources.chart
 	var i: int = 0
-	for time in chart.tempos:
+	for time_change in EditorResources.song.time_changes:
 		%"Time Changes".add_item(format_time_change(i))
 		i += 1
+	
 	_on_time_changes_item_selected(0, false)
 
 func _on_icon_button_pressed() -> void:
@@ -76,13 +76,11 @@ func _on_time_changes_item_selected(index: int, emit: bool = true) -> void:
 	%"Remove Time Change".disabled = (index == 0)
 	current_time_change = index
 	
-	var tempo_data: Dictionary = EditorResources.chart.tempos
-	var time: float = tempo_data.keys()[index]
-	%Tempo.value = tempo_data.get(time, 60)
-	var meter_data: Dictionary = EditorResources.chart.time_signature_vectors
-	var meter: Vector2i = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
-	%Numerator.value = meter.x
-	%Denominator.value = meter.y
+	var time_changes: Dictionary[float, Vector3] = EditorResources.song.time_changes
+	var time: float = time_changes.keys()[index]
+	%Tempo.value = time_changes[time].x
+	%Numerator.value = time_changes[time].y
+	%Denominator.value = time_changes[time].z
 	if emit:
 		emit_signal(&"selected_time_change", time)
 
@@ -93,8 +91,7 @@ func _on_remove_time_change_pressed() -> void:
 	var tempo_data: Dictionary = EditorResources.chart.tempos
 	var time: float = tempo_data.keys()[current_time_change]
 	
-	EditorResources.chart.tempos.erase(time)
-	EditorResources.chart.time_signature_vectors.erase(time)
+	EditorResources.song.time_changes.erase(time)
 	%"Time Changes".remove_item(current_time_change)
 	%"Time Changes".select(current_time_change - 1)
 	_on_time_changes_item_selected(current_time_change - 1)
@@ -110,11 +107,10 @@ func _on_tempo_value_changed(value: float) -> void:
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func format_time_change(index: int) -> String:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
-	var meter_data: Dictionary = EditorResources.chart.time_signature_vectors
-	var time: float = tempo_data.keys()[index]
-	var meter: Vector2i = meter_data.get(meter_data.keys()[min(index, meter_data.size() - 1)])
-	return str(NoahTools.format_time(time), " - BPM: ", tempo_data[time], " in ", meter.x, "/", meter.y)
+	var time_changes: Dictionary[float, Vector3] = EditorResources.song.time_changes
+	var time: float = time_changes.keys()[index]
+	var time_change: Vector3 = time_changes[time]
+	return str(NoahTools.format_time(time), " - BPM: ", time_change.x, " in ", time_change.y, "/", time_change.z)
 
 func _on_numerator_value_changed(value: float) -> void:
 	var tempo_data: Dictionary = EditorResources.chart.tempos

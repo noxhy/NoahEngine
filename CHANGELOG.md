@@ -1,4 +1,4 @@
-### 3.4.3 (TBD)
+### 3.5 (TBD)
 
 #### Additions / Changes
 - Added `NoahTools` and migrated many util funcs from `Global`
@@ -38,6 +38,7 @@
 - Removed `Preload`
 - Added `Strumline` resource.
 - Strumlines are now saved per chart rather than a global reference throughout the entire project.
+- Changed the entire `Chart` and `Song` format, Songs now store the events and time changes which `Chart`s will hold only notes.
 
 #### Fixes / Misc Improvements
 - Fix charts `UID` being stripped whenever saving in the `ChartEditor`
