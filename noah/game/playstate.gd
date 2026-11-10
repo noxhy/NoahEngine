@@ -118,6 +118,8 @@ var misses: int :
 ## [br][br]pauses the music as well.
 var paused: bool = false : set = set_paused
 
+var events_list: Array
+
 #region setters
 func set_paused(v: bool) -> void:
 	instrumental.stream_paused = v
@@ -188,19 +190,8 @@ func _ready() -> void:
 	
 	instrumental.finished.connect(finished_song)
 	
-	if ResourceLoader.exists(song.difficulties[GameManager.difficulty].events):
-		var ext_events: Resource = load(song.difficulties[GameManager.difficulty].events)
-		if ext_events is ChartEvents:
-			chart.merge_events_into_this(ext_events)
-		else:
-			ext_events.free()
-	
 	if ResourceLoader.exists(song.events):
-		var ext_events: Resource = load(song.events)
-		if ext_events is ChartEvents:
-			chart.merge_events_into_this(ext_events)
-		else:
-			ext_events.free()
+		events_list = load(song.events).data
 	
 	if SettingsManager.data.botplay and OS.is_debug_build():
 		get_tree().call_group(&"strums", &"set_auto_play", true)
@@ -242,8 +233,7 @@ func _process(delta: float) -> void:
 			GameManager.song_position = instrumental.get_playback_position() + \
 					AudioServer.get_time_since_last_mix() - output_latency
 			
-			GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
-			GameManager.conductor.offset += chart.offset
+			GameManager.conductor.offset = chart.offset
 			
 			# Idk how exactly this works I stole this code from sqirradotdev
 			position_delta = abs(position_lerp - GameManager.song_position)
@@ -256,12 +246,6 @@ func _process(delta: float) -> void:
 			
 			GameManager.song_position = position_lerp
 			sync_timer -= delta
-	
-	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
-	
-	var meter: Vector2i = chart.get_time_signature_at(GameManager.song_position)
-	GameManager.conductor.numerator = meter.x
-	GameManager.conductor.denominator = meter.y
 	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
@@ -280,12 +264,10 @@ func _process(delta: float) -> void:
 			var length: float = note[2]
 			var type: Variant = note[3]
 			
-			Signals.play_create_note.emit(time, lane, length, type, chart.get_tempo_at(time))
+			Signals.play_create_note.emit(time, lane, length, type, GameManager.conductor.tempo)
 			current_note += 1
 	
 	if instrumental.playing:
-		var events_list: Array[Variant] = chart.events
-		
 		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
 			var event = events_list[current_event]
 			var time: float = event[0]
@@ -305,9 +287,7 @@ func play_song(time: float) -> void:
 	GameManager.last_song_stats.reset()
 	
 	GameManager.conductor.stream_player = instrumental
-	GameManager.conductor.tempo = chart.get_tempo_at(-chart.offset + time)
-	GameManager.conductor.seconds_per_beat = 60.0 / GameManager.conductor.tempo
-	
+	GameManager.conductor.time_changes = song.time_changes
 	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
 	
 	song_started = false
@@ -326,7 +306,7 @@ func play_song(time: float) -> void:
 		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
-			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
+			countdown_instance.speed_scale = GameManager.conductor.tempo / 60.0
 			
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)

@@ -72,6 +72,7 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
+var song_events: Array = []
 
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
@@ -552,6 +553,13 @@ func load_song(song: Song, difficulty: Variant = null):
 		song_position -= start_offset
 	
 	$"UI/LoadedSong error".visible = false
+	if !ResourceLoader.exists(song.events):
+		var path: String = song.resource_path.get_base_dir().path_join('events.tres')
+		print("doesn't exist, saving at ", path)
+		NoahTools.save_resource(ChartEvents.new(), path)
+		song.events = path
+	
+	song_events = load(song.events).data
 	EditorResources.song = song
 	if difficulty == null:
 		difficulty = EditorResources.song.difficulties.keys()[0]
@@ -635,7 +643,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.notes, load(EditorResources.song.events).events)
+		minimap.refresh(file.notes, load(EditorResources.song.events).data)
 	
 	load_dividers()
 	update_camera_song_position(true)
@@ -710,8 +718,8 @@ func load_events(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(event_nodes.size()):
 				var event = event_nodes[i]
-				if (event.time < EditorResources.chart.events[L][0]
-				or event.time > EditorResources.chart.events[R][0]):
+				if (event.time < song_events[L][0]
+				or event.time > song_events[R][0]):
 					event.free()
 					event_nodes.remove_at(i)
 					i -= 1
@@ -724,7 +732,7 @@ func load_events(L: int, R: int) -> void:
 					update_note_position(event_nodes[i - L])
 				continue
 			
-			var event = EditorResources.chart.events[i]
+			var event: Array = song_events[i]
 			place_event(event[0], event[1], event[2], false, false, true, i - L)
 		
 		current_visible_events_L = L

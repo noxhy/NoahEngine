@@ -16,7 +16,13 @@ var offset: float = 0
 ## Dictionary of time changes. Time changes are stored as a [Vector3] with the following format:
 ## [br]'x': Tempo, 'y': Numerator, 'z': Denominator
 ## [br][b]Note:[/b] The dictionary must be sorted by time to work properly.
-@export var time_changes: Dictionary[float, Vector3] = {0.0: Vector3(60, 4, 4)}
+@export var time_changes: Dictionary[float, Vector3] = {0.0: Vector3(60, 4, 4)}:
+	set(v):
+		time_changes = v
+		var time_change: Vector3 = get_time_change_at(time)
+		tempo = time_change.x
+		numerator = int(time_change.y)
+		denominator = int(time_change.z)
 
 ## Getter for the current beats per minute.
 var tempo: float = 60.0:
