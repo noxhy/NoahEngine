@@ -72,40 +72,6 @@ func get_notes_data() -> Array:
 	#
 	#events = ret_events
 
-### Returns the tempo at a given time
-#func get_tempo_at(time: float) -> float:
-	#time = max(0, time)
-	#var output: float = -1
-	#for point in get_tempos_data():
-		#if time >= point:
-			#output = get_tempos_data().get(point)
-		#else:
-			#continue
-	#
-	#return output
-#
-### Returns the time signature at a given time
-#func get_time_signature_at(time: float) -> Vector2i:
-	#time = max(0, time)
-	#var output: Vector2i = Vector2i(4, 4)
-	#for point in time_signature_vectors:
-		#if time >= point:
-			#output = time_signature_vectors.get(point)
-		#else:
-			#continue
-	#
-	#return output
-#
-### Gets the time of a tempo change.
-#func get_tempo_time_at(time: float) -> float:
-	#time = max(0, time)
-	#var output: float = -1
-	#for point in get_tempos_data():
-		#if time >= point:
-			#output = point
-	#
-	#return output
-
 ## Helper function to get a chart from [Song]
 static func load_from_song(_song: Song, _difficulty: StringName = &'-1') -> Chart:
 	if _difficulty == &'-1':
@@ -226,39 +192,6 @@ static func update_chart(chart: Chart) -> Chart:
 	if chart.version < CURRENT_VERSION:
 		print("updating chart version: ", chart.version)
 		match chart.version:
-			0: #old chart
-				var meters = chart.time_signatures
-				
-				for time in meters:
-					var time_signature_data = meters.get(time)
-					if int(time_signature_data[1]) == int(time_signature_data[0] * 4):
-						time_signature_data[1] /= time_signature_data[0]
-				
-				for note in chart.get_notes_data():
-					note[3] = str(note[3])
-				
-				chart.version = 1
-				chart = update_chart(chart)
-			1: # v1 formatr
-				chart.notes = chart.get_notes_data()
-				chart.events = chart.get_events_data()
-				chart.tempos = chart.get_tempos_data()
-				chart.time_signatures = chart.get_meters_data()
-				
-				chart.chart_data.erase("notes")
-				chart.chart_data.erase("events")
-				chart.chart_data.erase("tempos")
-				chart.chart_data.erase("meters")
-				
-				chart.version = 2
-				chart = update_chart(chart)
-			2:
-				for time in chart.time_signatures:
-					var sig = chart.time_signatures.get(time)
-					chart.time_signature_vectors.set(time, Vector2i(sig[0], sig[1]))
-				
-				chart.version = CURRENT_VERSION
-				chart = update_chart(chart)
 			3:
 				chart.chart_data["strums"] = Constants.DEFAULT_STRUMLINES.duplicate()
 				chart.version = CURRENT_VERSION

@@ -13,8 +13,12 @@ var offset: float = 0
 ## Node Path to an [AudioStreamPlayer] that the Conductor will conduct.
 ## [br]If there is no [AudioStreamPlayer], or if it isn't playing, you can set [param time] manually.
 @export var stream_player: AudioStreamPlayer
-## Beats per minute.
-@export var tempo: float:
+## Dictionary of time changes. Time changes are stored as a [Vector3] with the following format:
+## [br]'x': Tempo, 'y': Numerator, 'z': Denominator
+@export var time_changes: Dictionary[float, Vector3]
+
+## Current beats per minute.
+var tempo: float:
 	set(v):
 		if tempo != v:
 			emit_signal(&"new_tempo", v)
@@ -23,8 +27,8 @@ var offset: float = 0
 	get():
 		return tempo
 
-
-@export var numerator: int = 4:
+## Current numerator for the current time signature.
+var numerator: int = 4:
 	set(v):
 		var emit: bool = false
 		if numerator != v:
@@ -34,8 +38,8 @@ var offset: float = 0
 		if emit:
 			emit_signal(&"new_numerator", v)
 
-
-@export var denominator: int = 4:
+## Current denominator for the current time signature.
+var denominator: int = 4:
 	set(v):
 		var emit: bool = false
 		if denominator != v:
@@ -45,6 +49,7 @@ var offset: float = 0
 		if emit:
 			emit_signal(&"new_denominator", v)
 
+## How many seconds each beat is, scales based off numerator.
 var seconds_per_beat: float:
 	get():
 		return (60.0 / tempo) * (4.0 / denominator)
@@ -85,70 +90,112 @@ func _process(_delta):
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)
 
-
-func get_beat_at(_time: float) -> int:
-	return floori((_time - offset) / seconds_per_beat)
-
-
-func get_step_at(_time: float) -> int:
-	return floori((_time - offset) / seconds_per_step)
-
-
-func get_measure_at(_time: float) -> int:
-	return floori((_time - offset) / (seconds_per_beat * numerator))
-
 ## Gets the beat counting previous time changes at the given time.
-static func get_accumulated_beat_at(_time: float, tempo_data: Dictionary, ts_data: Dictionary) -> int:
+func get_beat_at(_time: float) -> int:
 	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
 		return floor(t / spb)
 	
-	if tempo_data.size() > 1:
-		for i in range(0, tempo_data.size()):
-			var tempo_time: float = tempo_data.keys()[i]
-			var next_time: float = _time if i == tempo_data.size() - 1 else tempo_data.keys()[i + 1]
-			
+	if time_changes.size() > 1:
+		for i in range(0, time_changes.size()):
+			var cur_time: float = time_changes.keys()[i]
 			var rel_time: float
-			if next_time >= _time:
-				rel_time = _time - tempo_time
-			else:
-				rel_time = next_time - tempo_time
+			var next_time: float = _time if i == time_changes.size() - 1 else time_changes.keys()[i + 1]
 			
-			var time_signature: Vector2i = ts_data.get(tempo_time, ts_data.get(0, Vector2i(4, 4)))
-			beat += time_calc.call(rel_time, tempo_data[tempo_time], time_signature.y)
+			if next_time >= _time:
+				rel_time = _time - cur_time
+			else:
+				rel_time = next_time - cur_time
+			
+			beat += time_calc.call(rel_time, time_changes[cur_time].x, time_changes[cur_time].z)
 			
 			if next_time >= _time:
 				break
 		
 		return beat
 	else:
-		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()].y)
+		var time_change: Vector3 = time_changes[time_changes.keys().front()]
+		return time_calc.call(_time, time_change.x, time_change.z)
 
 ## Gets the step counting previous time changes at the given time.
-static func get_accumulated_step_at(_time: float, tempo_data: Dictionary, ts_data: Dictionary) -> int:
-	var step: int = 0
+func get_step_at(_time: float) -> int:
+	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
 		return floor(t / (spb / d))
 	
-	if tempo_data.size() > 1:
-		for i in range(0, tempo_data.size()):
-			var tempo_time: float = tempo_data.keys()[i]
-			var next_time: float = _time if i == tempo_data.size() - 1 else tempo_data.keys()[i + 1]
+	if time_changes.size() > 1:
+		for i in range(0, time_changes.size()):
+			var cur_time: float = time_changes.keys()[i]
+			var next_time: float = _time if i == time_changes.size() - 1 else time_changes.keys()[i + 1]
 			
 			var rel_time: float
 			if next_time >= _time:
-				rel_time = _time - tempo_time
+				rel_time = _time - cur_time
 			else:
-				rel_time = next_time - tempo_time
+				rel_time = next_time - cur_time
 			
-			var time_signature: Vector2i = ts_data.get(tempo_time, ts_data.get(0, Vector2i(4, 4)))
-			step += time_calc.call(rel_time, tempo_data[tempo_time], time_signature.y)
+			beat += time_calc.call(rel_time, time_changes[cur_time].x, time_changes[cur_time].z)
 			
 			if next_time >= _time:
 				break
 		
-		return step
+		return beat
 	else:
-		return time_calc.call(_time, tempo_data[tempo_data.keys().front()], ts_data[ts_data.keys().front()].y)
+		var time_change: Vector3 = time_changes[time_changes.keys().front()]
+		return time_calc.call(_time, time_change.x, time_change.z)
+
+## Returns the time change at a given time.
+func get_time_change_at(_time: float) -> Vector3:
+	_time = max(0, _time)
+	var output: Vector3 = Vector3(60, 4, 4)
+	for point in time_changes:
+		if _time >= point:
+			output = time_changes[point]
+		else:
+			continue
+	
+	return output
+
+## Gets the time of a time change.
+func get_change_time_at(_time: float) -> float:
+	_time = max(0, _time)
+	var output: float = -1
+	for point in time_changes:
+		if time >= point:
+			output = point
+		else:
+			continue
+	
+	return output
+
+## Returns the time after moving forward X beats. `_time` will be floored to the current beat.
+func step_in_beats(_time: float, beats: int) -> float:
+	var direction: int = 1 if beats > 0 else -1
+	var bpm: float = get_time_change_at(_time).x
+	var spb: float = 60.0 / bpm
+	var output: float = floori((_time - get_change_time_at(_time)) / spb) * spb
+	beats = abs(beats)
+	while beats > 0:
+		bpm = get_time_change_at(output).x
+		spb = 60.0 / bpm
+		output += spb * direction
+		beats -= 1
+	
+	return output
+
+## Returns the time after moving forward X steps. `_time` will be floored to the current step.
+func step_in_steps(_time: float, steps: int) -> float:
+	var direction: int = 1 if steps > 0 else -1
+	var bpm: float = get_time_change_at(_time).x
+	var sps: float = 60.0 / (bpm / get_time_change_at(_time).z)
+	var output: float = floori((_time - get_change_time_at(_time)) / sps) * sps
+	steps = abs(steps)
+	while steps > 0:
+		bpm = get_time_change_at(output).x
+		sps = 60.0 / (bpm / get_time_change_at(output).z)
+		output += sps * direction
+		steps -= 1
+	
+	return output
