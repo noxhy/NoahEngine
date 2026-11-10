@@ -1,3 +1,4 @@
+@icon("res://addons/at-icons/node/arrow_down_to_bracket.svg")
 extends Resource
 class_name Strumline
 
