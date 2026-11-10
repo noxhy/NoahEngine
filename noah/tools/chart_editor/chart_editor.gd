@@ -511,7 +511,7 @@ func update_grid():
 	%"Strum Labels".custom_minimum_size.x = EditorResources.strum_count * (grid.grid_size.x * grid.zoom.x)
 	
 	for n in %"Strum Labels".get_children():
-		n.free()
+		n.queue_free()
 	
 	for id in EditorResources.strumlines.size():
 		var strumline: Strumline = EditorResources.strumlines[id]
@@ -608,6 +608,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 		backup_chart = file.duplicate(true)
 	
 	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate())
+	file.chart_data["strumlines"] = EditorResources.strumlines
 	selected_notes = []
 	selected_note_nodes = []
 	current_visible_notes_L = -1
@@ -1185,9 +1186,9 @@ func move_bound_left(strum_id: int) -> void:
 	strumline.left_lane = clamp(strumline.left_lane - 1, 0, EditorResources.strum_count - 1)
 	
 	for id in EditorResources.strumlines.size():
-		strumline = EditorResources.strumlines[id]
-		if strumline.right_lane == strumline.left_lane:
-			strumline.right_lane = clamp(strumline.right_lane - 1, 0, EditorResources.strum_count - 1)
+		var other_strumline: Strumline = EditorResources.strumlines[id]
+		if other_strumline.right_lane == strumline.left_lane:
+			other_strumline.right_lane = clamp(other_strumline.right_lane - 1, 0, EditorResources.strum_count - 1)
 	
 	update_grid()
 	load_dividers()
@@ -1197,9 +1198,9 @@ func move_bound_right(strum_id: int) -> void:
 	strumline.right_lane = clamp(strumline.right_lane + 1, 0, EditorResources.strum_count - 1)
 	
 	for id in EditorResources.strumlines.size():
-		strumline = EditorResources.strumlines[id]
-		if strumline.left_lane == strumline.right_lane:
-			strumline.left_lane = clamp(strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
+		var other_strumline: Strumline = EditorResources.strumlines[id]
+		if other_strumline.left_lane == strumline.right_lane:
+			other_strumline.left_lane = clamp(other_strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
 	
 	update_grid()
 	load_dividers()

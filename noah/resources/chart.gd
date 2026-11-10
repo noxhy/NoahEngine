@@ -286,10 +286,7 @@ static func update_chart(chart: Chart) -> Chart:
 				chart.version = CURRENT_VERSION
 				chart = update_chart(chart)
 			3:
-				chart.chart_data["strums"] = [
-					Strumline.new(&"Player", 0, 3),
-					Strumline.new(&'Enemy', 4, 7)
-				]
+				chart.chart_data["strums"] = Constants.DEFAULT_STRUMLINES.duplicate()
 				chart.version = CURRENT_VERSION
 				chart = update_chart(chart)
 		

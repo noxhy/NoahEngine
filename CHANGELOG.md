@@ -36,6 +36,8 @@
 - Removed `BasicPause` in favor of a script template
 - Removed `BasicHealthBar` in favor of `stats_display` and `health_bar` script templates
 - Removed `Preload`
+- Added `Strumline` resource.
+- Strumlines are now saved per chart rather than a global reference throughout the entire project.
 
 #### Fixes / Misc Improvements
 - Fix charts `UID` being stripped whenever saving in the `ChartEditor`

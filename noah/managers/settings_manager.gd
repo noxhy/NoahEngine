@@ -68,6 +68,7 @@ static func load_values() -> void:
 	
 	var vsync_mode = DisplayServer.VSYNC_ENABLED if data.vsync else DisplayServer.VSYNC_DISABLED
 	DisplayServer.window_set_vsync_mode(vsync_mode)
+	print(data)
 	
 	print("(SettingsManager): Preferences loaded")
 	Signals.settings_loaded.emit()

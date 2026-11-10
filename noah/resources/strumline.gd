@@ -20,10 +20,11 @@ class_name Strumline
 @export var waveform: bool = false
 
 ## Construtor function, 'L is the left-most lane while 'R' is the right-most.
-func _init(label: StringName, L: int, R: int) -> void:
+func _init(label: StringName, L: int, R: int, track: int) -> void:
 	name = label
 	left_lane = L
 	right_lane = R
+	audio_track = track
 
 ## Resets the editor values
 func reset() -> void:

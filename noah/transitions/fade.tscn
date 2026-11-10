@@ -69,3 +69,5 @@ color = Color(0, 0, 0, 1)
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=584469776]
 libraries/ = SubResource("AnimationLibrary_13px0")
 autoplay = &"transition"
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

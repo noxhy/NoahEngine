@@ -11,11 +11,11 @@ class_name Song
 @export_file("*.ogg", "*.mp3", "*.wav") var instrumental: String
 ## Initial tempo of the song
 @export var tempo: float = 60.0
-## The path to the scene containing the playstate to play.
+## The path to the default scene containing the playstate to play.
 @export_file("*.tscn") var scene: String
 
 ## The charts for this song by difficulty.
-@export var difficulties: Dictionary[String, SongDifficultyData]
+@export var difficulties: Dictionary[StringName, SongDifficultyData]
 
 ## Optional filepath to a an Events Resource.
 ## These events will be loaded regardless of difficulty
@@ -24,8 +24,8 @@ class_name Song
 @export_category("Display Config")
 
 ## The display name for the Song
-@export var title: String
+@export var title: StringName
 ## The displayed artist for this Song
-@export var artist: String
+@export var artist: StringName
 ## The displayed charter for this Song
-@export var charter: String
+@export var charter: StringName
