@@ -511,7 +511,7 @@ func update_grid():
 	%"Strum Labels".custom_minimum_size.x = EditorResources.strum_count * (grid.grid_size.x * grid.zoom.x)
 	
 	for n in %"Strum Labels".get_children():
-		n.queue_free()
+		n.free()
 	
 	for id in EditorResources.strumlines.size():
 		var strumline: Strumline = EditorResources.strumlines[id]
@@ -556,7 +556,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	EditorResources.chart = Chart.load(difficulty_data.chart)
 	EditorResources.difficulty = difficulty
 	undo_redo.clear_history()
-	get_tree().call_group(&"history", &"queue_free")
+	get_tree().call_group(&"history", &"free")
 	instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
 	play_audios(song_position)
 	
@@ -607,20 +607,21 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
 	
+	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate())
 	selected_notes = []
 	selected_note_nodes = []
 	current_visible_notes_L = -1
 	current_visible_notes_R = -1
 	current_visible_events_L = -1
 	current_visible_events_R = -1
-	get_tree().call_group(&"notes", &"queue_free")
+	get_tree().call_group(&"notes", &"free")
 	note_nodes = []
 	
-	get_tree().call_group(&"events", &"queue_free")
+	get_tree().call_group(&"events", &"free")
 	event_nodes = []
 	
 	undo_redo.clear_history()
-	get_tree().call_group(&"history", &"queue_free")
+	get_tree().call_group(&"history", &"free")
 	var action: String = "Loaded Chart"
 	undo_redo.create_action(action)
 	undo_redo.add_do_property(self, SettingsManager.SEC_CHART, file)
@@ -645,9 +646,9 @@ func load_section(time: float, forced: bool = false) -> void:
 		return
 	
 	if forced:
-		get_tree().call_group(&"notes", &"queue_free")
+		get_tree().call_group(&"notes", &"free")
 		note_nodes.clear()
-		get_tree().call_group(&"events", &"queue_free")
+		get_tree().call_group(&"events", &"free")
 		event_nodes.clear()
 		
 		current_visible_notes_L = -1
@@ -682,7 +683,7 @@ func load_notes(L: int, R: int) -> void:
 				var note = note_nodes[i]
 				if (note.time < EditorResources.chart.notes[L][0]
 				or note.time > EditorResources.chart.notes[R][0]):
-					note.queue_free()
+					note.free()
 					note_nodes.remove_at(i)
 					i -= 1
 				
@@ -710,7 +711,7 @@ func load_events(L: int, R: int) -> void:
 				var event = event_nodes[i]
 				if (event.time < EditorResources.chart.events[L][0]
 				or event.time > EditorResources.chart.events[R][0]):
-					event.queue_free()
+					event.free()
 					event_nodes.remove_at(i)
 					i -= 1
 				
@@ -730,7 +731,7 @@ func load_events(L: int, R: int) -> void:
 
 
 func load_dividers() -> void:
-	get_tree().call_group(&"dividers",  &"queue_free")
+	get_tree().call_group(&"dividers",  &"free")
 	for i in range(conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
@@ -982,7 +983,7 @@ func remove_note(lane, time: float = -1):
 	
 	var index: int = i - current_visible_notes_L
 	if index < note_nodes.size() and index >= 0:
-		note_nodes[index].queue_free()
+		note_nodes[index].free()
 		note_nodes.remove_at(index)
 		current_visible_notes_R -= 1
 	if minimap:
@@ -1550,7 +1551,7 @@ func updated_strums() -> void:
 
 
 func load_waveforms() -> void:
-	get_tree().call_group(&"waveforms", &"queue_free")
+	get_tree().call_group(&"waveforms", &"free")
 	waveform_nodes.clear()
 	
 	if not EditorResources.song:
