@@ -25,8 +25,9 @@ func _process(delta: float) -> void:
 			song_position = instrumental.get_playback_position() - start_offset
 			song_slider.value = song_position
 			
-			for strum in EditorResources.strum_data.size():
-				var track = EditorResources.strum_data[strum]["track"]
+			for i in EditorResources.strumlines.size():
+				var strumline: Strumline = EditorResources.strumlines[i]
+				var track: int = strumline.audio_track
 				if track < vocal_tracks.size():
 					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
 	

@@ -18,6 +18,7 @@ func new_file(dir: String, notify_editor: bool = true):
 	var streams: Array[String] = []
 	for stream in selected_vocals:
 		streams.append(stream)
+	
 	song_file.vocals = streams
 	
 	var difficulties: Array[String] = []
@@ -37,6 +38,10 @@ func new_file(dir: String, notify_editor: bool = true):
 			difficulties = []
 	
 	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
+	var strumlines: Array[Strumline] = [
+		Strumline.new(&"Player", 0, 3),
+		Strumline.new(&"Enemy", 4, 7)
+	]
 	for difficulty in difficulties:
 		var chart: Chart = Chart.new()
 		
@@ -45,6 +50,7 @@ func new_file(dir: String, notify_editor: bool = true):
 		chart.events = []
 		chart.tempos = {0.0: song_file.tempo}
 		chart.time_signature_vectors = {0.0: Vector2i(4, 4)}
+		chart.chart_data["strumlines"] = strumlines
 		
 		var chart_path: String = str(dir.path_join(song_file.title), "-", difficulty, Chart.DEFAULT_FILE_TYPE)
 		NoahTools.save_resource(chart, chart_path)

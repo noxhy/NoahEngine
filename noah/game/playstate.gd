@@ -268,7 +268,7 @@ func _process(delta: float) -> void:
 	var notes_list: Array = chart.notes
 	
 	if notes_list.size() > 0 and current_note < notes_list.size():
-		var note = notes_list[current_note]
+		var note: Array[Variant]= notes_list[current_note]
 		
 		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
 		if scroll_speed < 1:
@@ -284,7 +284,7 @@ func _process(delta: float) -> void:
 			current_note += 1
 	
 	if instrumental.playing:
-		var events_list = chart.events
+		var events_list: Array[Variant] = chart.events
 		
 		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
 			var event = events_list[current_event]

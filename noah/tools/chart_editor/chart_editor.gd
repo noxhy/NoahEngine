@@ -146,15 +146,15 @@ func _process(delta: float) -> void:
 				if (song_position + start_offset) > (note[0] + conductor.seconds_per_step):
 					current_note += 1
 				elif note[0] <= (song_position + start_offset):
-					var lane: float = note[1]
-					if vocal_tracks.size() == 1 and EditorResources.strum_data.size() > 0:
-						if EditorResources.strum_data[0].get('hit_sounds', true):
+					var lane: int = note[1]
+					if vocal_tracks.size() == 1 and EditorResources.strumlines.size() > 0:
+						if EditorResources.strumlines[0].hit_sounds:
 							SoundManager.tool_hit.play()
 					else:
-						for id in EditorResources.strum_data.size():
-							if ((lane >= EditorResources.strum_data[id]["strums"][0]) and (lane <= EditorResources.strum_data[id]["strums"][1])):
-								if EditorResources.strum_data[id].get('hit_sounds', true):
-									SoundManager.tool_hit.play()
+						for id in EditorResources.strumlines.size():
+							var strumline: Strumline = EditorResources.strumlines[id]
+							if (strumline.has_lane(lane) and strumline.hit_sounds):
+								SoundManager.tool_hit.play()
 					
 					current_note += 1
 		
@@ -387,10 +387,10 @@ func set_start_offset(grid_position: Vector2):
 func refresh_audios():
 	instrumental.volume_linear = instrumental_volume
 	
-	for strum in EditorResources.strum_data.size():
-		var track = EditorResources.strum_data[strum]["track"]
+	for id in EditorResources.strumlines.size():
+		var track = EditorResources.strumlines[id].audio_track
 		if track < vocal_tracks.size():
-			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(EditorResources.strum_data[track]['volume']))
+			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(EditorResources.strumlines[id].volume))
 
 
 func is_mouse_over_any_ui() -> bool:
@@ -513,20 +513,21 @@ func update_grid():
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
 	
-	for id in EditorResources.strum_data.size():
+	for id in EditorResources.strumlines.size():
+		var strumline: Strumline = EditorResources.strumlines[id]
 		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
 		
 		strum_label_instance.id = id
 		
 		%"Strum Labels".add_child(strum_label_instance)
-		strum_label_instance.custom_minimum_size.x = (
-			EditorResources.strum_data[id]["strums"][1] + 1 - EditorResources.strum_data[id]["strums"][0]
-			) * grid.grid_size.x * grid.zoom.x
+		strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
+		) * grid.grid_size.x * grid.zoom.x
 		strum_label_instance.size.y = 32
 		
-		if EditorResources.strum_data[id]["strums"][0] == 0:
+		if strumline.left_lane == 0:
 			strum_label_instance.get_node("Move Lane Left").visible = false
-		if EditorResources.strum_data[id]["strums"][1] == EditorResources.strum_count - 1:
+		
+		if strumline.right_lane == EditorResources.strum_count - 1:
 			strum_label_instance.get_node("Move Lane Right").visible = false
 		
 		strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
@@ -761,14 +762,14 @@ func load_dividers() -> void:
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for packet in EditorResources.strum_data:
+	for strumline in EditorResources.strumlines:
 		var rect = ColorRect.new()
 		var size: float = 2
 		
 		rect.color = divider_color
 		rect.size = Vector2(size, grid.get_size().y)
 		rect.position = grid.position
-		rect.position.x += (grid.grid_size.x * grid.zoom.x) * (packet.get("strums")[1] + 2)
+		rect.position.x += (grid.grid_size.x * grid.zoom.x) * (strumline.right_lane + 2)
 		rect.position.x -= grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
@@ -1179,33 +1180,32 @@ func toggle_audios(paused: bool = true) -> void:
 
 
 func move_bound_left(strum_id: int) -> void:
-	var strum_data = EditorResources.strum_data[strum_id]
-	strum_data["strums"][0] = clamp(strum_data["strums"][0] - 1, 0, EditorResources.strum_count - 1)
+	var strumline: Strumline = EditorResources.strumlines[strum_id]
+	strumline.left_lane = clamp(strumline.left_lane - 1, 0, EditorResources.strum_count - 1)
 	
-	for id in EditorResources.strum_data.size():
-		if EditorResources.strum_data[id]["strums"][1] == strum_data["strums"][0]:
-			EditorResources.strum_data[id]["strums"][1] = clamp(EditorResources.strum_data[id]["strums"][1] - 1, 0, EditorResources.strum_count - 1)
+	for id in EditorResources.strumlines.size():
+		strumline = EditorResources.strumlines[id]
+		if strumline.right_lane == strumline.left_lane:
+			strumline.right_lane = clamp(strumline.right_lane - 1, 0, EditorResources.strum_count - 1)
 	
 	update_grid()
 	load_dividers()
 
 func move_bound_right(strum_id: int) -> void:
-	var strum_data = EditorResources.strum_data[strum_id]
-	strum_data["strums"][1] = clamp(strum_data["strums"][1] + 1, 0, EditorResources.strum_count - 1)
+	var strumline: Strumline = EditorResources.strumlines[strum_id]
+	strumline.right_lane = clamp(strumline.right_lane + 1, 0, EditorResources.strum_count - 1)
 	
-	for id in EditorResources.strum_data.size():
-		if EditorResources.strum_data[id]["strums"][0] ==  strum_data["strums"][1]:
-			EditorResources.strum_data[id]["strums"][0] = clamp(EditorResources.strum_data[id]["strums"][0] + 1, 0, EditorResources.strum_count - 1)
+	for id in EditorResources.strumlines.size():
+		strumline = EditorResources.strumlines[id]
+		if strumline.left_lane == strumline.right_lane:
+			strumline.left_lane = clamp(strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
 	
 	update_grid()
 	load_dividers()
 
-func find_strum_id(strum_name: String) -> int:
-	for id in EditorResources.strum_data.size():
-		var strum_data = EditorResources.strum_data[id]
-		if strum_data["name"] == strum_name:
-			return id
-	return -1
+func find_strum_id(strum_name: StringName) -> int:
+	return EditorResources.strumlines.find_custom(func(strumline: Strumline) -> bool:
+		return strumline.name == strum_name)
 
 
 func _on_song_slider_value_changed(value: float) -> void:
@@ -1556,8 +1556,9 @@ func load_waveforms() -> void:
 	if not EditorResources.song:
 		return
 	
-	for id in EditorResources.strum_data.size():
-		var track: int = EditorResources.strum_data[id]["track"]
+	for id in EditorResources.strumlines.size():
+		var strumline: Strumline = EditorResources.strumlines[id]
+		var track: int = strumline.audio_track
 		if track < EditorResources.song.vocals.size() and vocal_tracks.get(track):
 			var waveform_data = WaveformDataParser.interpretSound(EditorResources.song.vocals[id])
 			if waveform_data:
@@ -1600,6 +1601,7 @@ func update_waveforms(time: float = 0) -> void:
 		waveform_dirty = false
 	
 	for id in waveform_nodes:
+		var strumline: Strumline = EditorResources.strumlines[id]
 		var waveform = waveform_nodes.get(id)
 		
 		if not waveform:
@@ -1624,12 +1626,8 @@ func update_waveforms(time: float = 0) -> void:
 			waveform.height = grid.grid_size.x * 1 * grid.zoom.x
 		else:
 			waveform.position = grid.get_real_position(Vector2(
-				(EditorResources.strum_data[id]["strums"][1] - EditorResources.strum_data[id]["strums"][0]
-				) / 2.0 + EditorResources.strum_data[id]["strums"][0],
-				0))
-			waveform.height = grid.grid_size.x * (
-				EditorResources.strum_data[id]["strums"][1] - EditorResources.strum_data[id]["strums"][0]
-				) * grid.zoom.x
+				(strumline.right_lane - strumline.left_lane) / 2.0 + strumline.left_lane, 0))
+			waveform.height = grid.grid_size.x * (strumline.right_lane - strumline.left_lane) * grid.zoom.x
 		
 		waveform.position.y += time_to_y_position(L)
 		waveform.dirty = true

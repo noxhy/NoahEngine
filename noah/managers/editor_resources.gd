@@ -6,36 +6,26 @@ class_name EditorResources
 static var song: Song
 ## Reference to the last chart loaded in the [ChartEditor]
 static var chart: Chart
-static var difficulty: String = ""
+static var difficulty: StringName
 
 static var difficulties: Dictionary = {}
-static var strum_count: int = 8
+static var strum_count: int:
+	get():
+		var sum: int = 0
+		for strumline in strumlines:
+			if strumline.left_lane == -1:
+				continue
+			
+			if strumline.right_lane == -1:
+				continue
+			
+			sum += strumline.right_lane - strumline.left_lane + 1
+		
+		return sum
+
 static var event_editor: bool = false
 
 ## Settings per strum, each key is it's label
-static var strum_data: Array = [
-	{
-		"name": "Player",
-		"strums": [0, 3],
-		"track": 0,
-		"volume": 1,
-		"hit_sounds": true,
-	},
-	{
-		"name": "Enemy",
-		"strums": [4, 7],
-		"track": 1,
-		"volume": 1,
-		"hit_sounds": true,
-		
-	},
-	#{
-		#"name": "Third",
-		#"strums": [8, 11],
-		#"muted": false,
-		#"track": 2,
-		#
-	#},
-]
+static var strumlines: Array[Strumline] = []
 
 static var event_tracks: Array = []
