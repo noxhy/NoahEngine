@@ -30,7 +30,7 @@ const DELTA_LENIENCY: float = 0.01
 @export_custom(PROPERTY_HINT_LINK, 'x') var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 
 ## Helper var to get [member GameManager.current_song]
-var song_data: Song :
+var song: Song:
 	get(): return GameManager.current_song
 
 ## The actual chart file to be played
@@ -161,42 +161,42 @@ func _ready() -> void:
 		printerr("(%s):" % name,' There was no UI Skin set. falling back to dev')
 		ui_skin = load('uid://bvphmxy3ecutv')
 	
-	assert(song_data, "GameManager.current_song was not set correctly.")
+	assert(song, "GameManager.current_song was not set correctly.")
 	
 	GameManager.reset_conductor()
 	GameManager.song_scene = LoadingScreen.scene
 	
-	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
+	chart = Chart.load(song.difficulties[GameManager.difficulty].chart, song)
 	
-	Global.set_window_title("Playing: " + song_data.title)
+	Global.set_window_title("Playing: " + song.title)
 	
-	for stream in song_data.vocals:
+	for stream in song.vocals:
 		vocal_streams.append(SoundManager.get_stream(stream))
 		
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
 	vocals.stream = AudioStreamPolyphonic.new()
-	vocals.stream.polyphony = song_data.vocals.size()
+	vocals.stream.polyphony = song.vocals.size()
 	vocals.set_bus(&"Music")
 	add_child(vocals)
 	vocals.play()
 	
 	instrumental = AudioStreamPlayer.new()
-	instrumental.stream = SoundManager.get_stream(song_data.instrumental)
+	instrumental.stream = SoundManager.get_stream(song.instrumental)
 	instrumental.set_bus(&"Music")
 	add_child(instrumental)
 	
 	instrumental.finished.connect(finished_song)
 	
-	if ResourceLoader.exists(song_data.difficulties[GameManager.difficulty].events):
-		var ext_events: Resource = load(song_data.difficulties[GameManager.difficulty].events)
+	if ResourceLoader.exists(song.difficulties[GameManager.difficulty].events):
+		var ext_events: Resource = load(song.difficulties[GameManager.difficulty].events)
 		if ext_events is ChartEvents:
 			chart.merge_events_into_this(ext_events)
 		else:
 			ext_events.free()
 	
-	if ResourceLoader.exists(song_data.events):
-		var ext_events: Resource = load(song_data.events)
+	if ResourceLoader.exists(song.events):
+		var ext_events: Resource = load(song.events)
 		if ext_events is ChartEvents:
 			chart.merge_events_into_this(ext_events)
 		else:

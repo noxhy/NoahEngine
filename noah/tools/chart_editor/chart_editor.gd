@@ -72,9 +72,14 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
+
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
+var time_change_offset: float:
+	get():
+		return EditorResources.chart.get_tempo_time_at(song_position)
+
 var dragging_song_slider: bool = false
 
 ## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
@@ -359,24 +364,20 @@ func scrub(axis: int) -> void:
 	if not instrumental.stream_paused:
 		toggle_audios(true)
 	
-	var rate = conductor.seconds_per_step if Input.is_action_pressed("shift") else conductor.seconds_per_beat
+	if Input.is_action_pressed(&"shift"):
+		song_position = conductor.step_in_beats(song_position, axis)
+	else:
+		song_position = conductor.step_in_steps(song_position, axis)
 	
-	song_position += rate * axis
-	song_position = snapped(song_position - conductor.offset, rate) + conductor.offset
 	song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
 	song_slider.set_value_no_signal(song_position)
 
-
+## Updates the conductor with the current [member song_position] and offset of the chart.
 func update_conductor():
-	var time: float = song_position + start_offset
-	conductor.time = time
-	conductor.tempo = EditorResources.chart.get_tempo_at(time)
-	var meter = EditorResources.chart.get_time_signature_at(time)
-	conductor.numerator = meter.x
-	conductor.denominator = meter.y
-	conductor.offset = EditorResources.chart.get_tempo_time_at(time) + EditorResources.chart.offset
+	conductor.time = song_position + start_offset
+	conductor.offset = EditorResources.chart.offset
 
-
+## Sets the offset of the play marker.
 func set_start_offset(grid_position: Vector2):
 	var time: float = grid_position_to_time(grid_position)
 	time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
@@ -553,7 +554,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		difficulty = EditorResources.song.difficulties.keys()[0]
 	
 	var difficulty_data: SongDifficultyData = song.difficulties.get(difficulty)
-	EditorResources.chart = Chart.load(difficulty_data.chart)
+	EditorResources.chart = Chart.load(difficulty_data.chart, song)
 	EditorResources.difficulty = difficulty
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"free")
@@ -564,11 +565,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	song_slider.max_value = instrumental.stream.get_length()
 	song_slider.value = song_position
-	conductor.tempo = EditorResources.chart.get_tempo_at(song_position)
-	var meter = EditorResources.chart.get_time_signature_at(song_position)
-	conductor.numerator = meter.x
-	conductor.denominator = meter.y
-	conductor.offset = EditorResources.chart.offset
+	update_conductor()
 	
 	lower_ui.get_node("%Difficulty Button").get_popup().clear()
 	for d in EditorResources.song.difficulties.keys():
@@ -1252,8 +1249,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		load_section(song_position)
 		update_waveforms(song_position)
 		
-		lower_ui.get_node("%Beat").text = str("Beat: ", Conductor.get_accumulated_beat_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
+		lower_ui.get_node("%Beat").text = str("Beat: ", conductor.get_beat_at(song_position) + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
@@ -1261,8 +1257,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 		SoundManager.conductor_step.play()
 	
 	if EditorResources.chart:
-		lower_ui.get_node("%Step").text = str("Step: ", Conductor.get_accumulated_step_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
+		lower_ui.get_node("%Step").text = str("Step: ", conductor.get_step_at(song_position) + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1647,7 +1642,7 @@ func decrease_snap() -> void:
 func _on_difficulty_button_item_selected(index: int) -> void:
 	var _difficulty = lower_ui.get_node("%Difficulty Button").get_popup().get_item_text(index)
 	if EditorResources.song.difficulties.keys().has(_difficulty):
-		EditorResources.chart = Chart.load(EditorResources.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
+		EditorResources.chart = Chart.load(EditorResources.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART), EditorResources.song)
 		EditorResources.difficulty = _difficulty
 		load_chart(EditorResources.chart)
 

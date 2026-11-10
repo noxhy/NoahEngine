@@ -15,20 +15,22 @@ var offset: float = 0
 @export var stream_player: AudioStreamPlayer
 ## Dictionary of time changes. Time changes are stored as a [Vector3] with the following format:
 ## [br]'x': Tempo, 'y': Numerator, 'z': Denominator
+## [br][b]Note:[/b] The dictionary must be sorted by time to work properly.
 @export var time_changes: Dictionary[float, Vector3]
 
-## Current beats per minute.
+## Getter for the current beats per minute.
 var tempo: float:
 	set(v):
+		var emit: bool = false
 		if tempo != v:
-			emit_signal(&"new_tempo", v)
+			emit = true
 		
 		tempo = v
-	get():
-		return tempo
+		if emit:
+			emit_signal(&"new_tempo", v)
 
 ## Current numerator for the current time signature.
-var numerator: int = 4:
+var numerator: int:
 	set(v):
 		var emit: bool = false
 		if numerator != v:
@@ -87,11 +89,17 @@ func _process(_delta):
 		time = stream_player.get_playback_position()
 		time -= latency
 		# time += AudioServer.get_time_since_last_mix()
+	
+	var time_change: Vector3 = get_time_change_at(time)
+	tempo = time_change.x
+	numerator = int(time_change.y)
+	denominator = int(time_change.z)
 	current_beat = get_beat_at(time)
 	current_step = get_step_at(time)
 
 ## Gets the beat counting previous time changes at the given time.
 func get_beat_at(_time: float) -> int:
+	_time -= offset
 	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
@@ -120,6 +128,7 @@ func get_beat_at(_time: float) -> int:
 
 ## Gets the step counting previous time changes at the given time.
 func get_step_at(_time: float) -> int:
+	_time -= offset
 	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
@@ -148,7 +157,7 @@ func get_step_at(_time: float) -> int:
 
 ## Returns the time change at a given time.
 func get_time_change_at(_time: float) -> Vector3:
-	_time = max(0, _time)
+	_time = max(0, _time - offset)
 	var output: Vector3 = Vector3(60, 4, 4)
 	for point in time_changes:
 		if _time >= point:
@@ -160,7 +169,7 @@ func get_time_change_at(_time: float) -> Vector3:
 
 ## Gets the time of a time change.
 func get_change_time_at(_time: float) -> float:
-	_time = max(0, _time)
+	_time = max(0, _time - offset)
 	var output: float = -1
 	for point in time_changes:
 		if time >= point:
@@ -172,6 +181,7 @@ func get_change_time_at(_time: float) -> float:
 
 ## Returns the time after moving forward X beats. `_time` will be floored to the current beat.
 func step_in_beats(_time: float, beats: int) -> float:
+	_time -= offset
 	var direction: int = 1 if beats > 0 else -1
 	var bpm: float = get_time_change_at(_time).x
 	var spb: float = 60.0 / bpm
@@ -183,10 +193,11 @@ func step_in_beats(_time: float, beats: int) -> float:
 		output += spb * direction
 		beats -= 1
 	
-	return output
+	return output + offset
 
 ## Returns the time after moving forward X steps. `_time` will be floored to the current step.
 func step_in_steps(_time: float, steps: int) -> float:
+	_time -= offset
 	var direction: int = 1 if steps > 0 else -1
 	var bpm: float = get_time_change_at(_time).x
 	var sps: float = 60.0 / (bpm / get_time_change_at(_time).z)
@@ -198,4 +209,4 @@ func step_in_steps(_time: float, steps: int) -> float:
 		output += sps * direction
 		steps -= 1
 	
-	return output
+	return output + offset
