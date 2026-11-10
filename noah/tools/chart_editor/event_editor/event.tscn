@@ -12,6 +12,7 @@ script = ExtResource("1_c5tis")
 [node name="Sprite2D" type="TextureRect" parent="." unique_id=921164148]
 texture = ExtResource("2_ljrkn")
 expand_mode = 4
+stretch_mode = 5
 
 [node name="VisibleOnScreenEnabler2D" type="VisibleOnScreenEnabler2D" parent="." unique_id=666586302]
 rect = Rect2(-8, -8, 16, 16)

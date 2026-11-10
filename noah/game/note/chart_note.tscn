@@ -19,6 +19,7 @@ script = ExtResource("1_ud7f5")
 z_index = 1
 use_parent_material = true
 expand_mode = 4
+stretch_mode = 5
 
 [node name="Tail" type="TextureRect" parent="." unique_id=968104361]
 rotation = 1.5707964

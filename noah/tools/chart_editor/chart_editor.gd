@@ -1382,13 +1382,13 @@ func view_button_item_pressed(id):
 			SoundManager.tool_open_window.play()
 		
 		3:
-			grid.zoom = clamp(grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
+			grid.zoom.y = clamp(grid.zoom.y + 0.1, 0.5, 1.5)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
 		
 		4:
-			grid.zoom = clamp(grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
+			grid.zoom.y = clamp(grid.zoom.y - 0.1, 0.5, 1.5)
 			update_grid()
 			load_dividers()
 			load_section(song_position)

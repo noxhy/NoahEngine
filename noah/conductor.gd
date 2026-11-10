@@ -108,6 +108,7 @@ func _process(_delta):
 ## Gets the beat counting previous time changes at the given time.
 func get_beat_at(_time: float) -> int:
 	_time -= offset
+	_time += EPSILON
 	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
@@ -137,6 +138,7 @@ func get_beat_at(_time: float) -> int:
 ## Gets the step counting previous time changes at the given time.
 func get_step_at(_time: float) -> int:
 	_time -= offset
+	_time += EPSILON
 	var beat: int = 0
 	var time_calc: Callable = func(t, bpm, d) -> int:
 		var spb: float = (60.0 / bpm) * (4.0 / d)
