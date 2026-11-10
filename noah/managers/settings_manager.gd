@@ -19,6 +19,8 @@ const SEC_DEBUG: String = 'debug'
 const SEC_KEY_BINDS: String = 'keybinds'
 const SEC_CONTROLLER_BINDS: String = 'controller_binds'
 
+static var remembered_window_mode: int
+
 ## @deprecated: Access directly from [member data] instead.
 ## Grabs a save value from instance
 static func get_value(section: String, key: String, fallback: Variant = null) -> Variant:
@@ -71,7 +73,11 @@ static func load_values() -> void:
 	Signals.settings_loaded.emit()
 
 static func load_fullscreen_mode() -> void:
-	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if data.fullscreen else DisplayServer.WINDOW_MODE_WINDOWED
+	if DisplayServer.window_get_mode() != DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN:
+		remembered_window_mode = DisplayServer.window_get_mode()
+	
+	var mode = DisplayServer.WINDOW_MODE_EXCLUSIVE_FULLSCREEN if data.fullscreen else remembered_window_mode
+	
 	DisplayServer.window_set_mode(mode)
 
 ## Returns an array of key binds from a key
