@@ -78,7 +78,7 @@ var current_visible_notes_R: int = -1
 var current_note_type: String = ""
 var time_change_offset: float:
 	get():
-		return EditorResources.chart.get_tempo_time_at(song_position)
+		return conductor.get_change_time_at(song_position)
 
 var dragging_song_slider: bool = false
 
@@ -171,7 +171,7 @@ func _process(delta: float) -> void:
 	
 	if EditorResources.chart:
 		update_conductor()
-		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - EditorResources.chart.offset)
+		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - time_change_offset)
 		update_camera_song_position(instrumental.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
@@ -190,7 +190,7 @@ func _process(delta: float) -> void:
 			if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count)):
 				var lane: int = snapped_position.x - 1
 				var time: float = grid_position_to_time(snapped_position, true)
-				time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				time += conductor.get_change_time_at(song_position + start_offset)
 				
 				if time <= instrumental.stream.get_length():
 					if !is_note_at(lane, time):
@@ -261,7 +261,7 @@ func _process(delta: float) -> void:
 		elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if placing_note:
 				var cursor_time = grid_position_to_time(snapped_position, true)
-				cursor_time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += conductor.get_change_time_at(song_position + start_offset)
 				
 				for i in selected_notes:
 					var note: Array = EditorResources.chart.notes[i]
@@ -285,7 +285,7 @@ func _process(delta: float) -> void:
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
 				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += conductor.get_change_time_at(song_position + start_offset)
 				var cursor_lane: int = snapped_position.x - 1
 				
 				var lane_distance: int = cursor_lane - start_lane
@@ -334,8 +334,8 @@ func _process(delta: float) -> void:
 			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
 			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(-1, 0.5)
 			
-			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset
-			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset
+			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset + time_change_offset
+			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset + time_change_offset
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
 			
@@ -360,13 +360,15 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 # Song scrubbing
-func scrub(axis: int) -> void:
+func scrub(axis: float) -> void:
 	if not instrumental.stream_paused:
 		toggle_audios(true)
 	
 	if Input.is_action_pressed(&"shift"):
+		@warning_ignore("narrowing_conversion")
 		song_position = conductor.step_in_beats(song_position, axis)
 	else:
+		@warning_ignore("narrowing_conversion")
 		song_position = conductor.step_in_steps(song_position, axis)
 	
 	song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
@@ -374,14 +376,15 @@ func scrub(axis: int) -> void:
 
 ## Updates the conductor with the current [member song_position] and offset of the chart.
 func update_conductor():
+	conductor.time_changes = EditorResources.song.time_changes
 	conductor.time = song_position + start_offset
 	conductor.offset = EditorResources.chart.offset
 
 ## Sets the offset of the play marker.
 func set_start_offset(grid_position: Vector2):
 	var time: float = grid_position_to_time(grid_position)
-	time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
-	time += EditorResources.chart.offset
+	time += conductor.get_change_time_at(song_position + start_offset)
+	time += conductor.offset
 	start_offset = time - song_position
 
 # Updates the audios
@@ -604,7 +607,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
 	
-	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate())
+	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate(true))
 	file.chart_data["strumlines"] = EditorResources.strumlines
 	selected_notes = []
 	selected_note_nodes = []
@@ -632,7 +635,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.notes, file.events)
+		minimap.refresh(file.notes, load(EditorResources.song.events).events)
 	
 	load_dividers()
 	update_camera_song_position(true)
@@ -776,9 +779,9 @@ func load_dividers() -> void:
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(EditorResources.chart.tempos.keys())
+	times.append_array(conductor.time_changes.keys())
 	times.erase(0.0)
-	if not EditorResources.chart.tempos.is_empty():
+	if not conductor.time_changes.is_empty():
 		for i in times:
 			var rect = ColorRect.new()
 			var size: float = 2
@@ -812,15 +815,13 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 sorted: bool = false, sort_index: int = -1) -> int:
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
-	
 	note_instance.time = time
 	note_instance.length = length
 	note_instance.lane = lane
 	note_instance.note_type = type
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	note_instance.scroll_speed = meter.x
+	note_instance.scroll_speed = conductor.get_time_change_at(time).y
 	note_instance.direction = DIRECTIONS[lane % 4]
 	note_instance.animation = str(Constants.NOTE_TYPES.get(type, ""), note_instance.direction)
 	
@@ -1096,12 +1097,11 @@ func play_audios(time: float):
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
+	var tempo_data: Dictionary[float, Vector3] = conductor.time_changes
 	var _offset: float = 0# -EditorResources.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
-	var meter: Vector2i = Vector2i.ZERO
 	
 	var L: float = tempo_data.keys()[0]
 	var R: float = tempo_data.keys()[0]
@@ -1120,12 +1120,11 @@ func time_to_y_position(time: float) -> float:
 		if R > time:
 			R = time
 		
-		tempo = tempo_data.get(L)
-		meter = EditorResources.chart.get_time_signature_at(L)
+		tempo = tempo_data[L].x
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2(0,
-		time_calc.call(R - L, tempo, meter.y) * meter.y
+		time_calc.call(R - L, tempo, tempo_data[L].z) * tempo_data[L].z
 		)).y
 		
 		L = R
@@ -1156,14 +1155,13 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
-	var L: float = EditorResources.chart.get_tempo_time_at(time)
+	var L: float = conductor.get_change_time_at(time)
 	var yR: float = p.y
 	if factor_in_snap:
-		yR *= meter.x * meter.y / chart_snap
+		yR *= conductor.time_changes[L].y * conductor.time_changes[L].z / chart_snap
 	
-	var spb: float = (60.0 / EditorResources.chart.tempos[L]) * (4.0 / meter.y)
-	return yR * (spb / meter.y)
+	var spb: float = (60.0 / EditorResources.song.time_changes[L].x) * (4.0 / conductor.time_changes[L].z)
+	return yR * (spb / conductor.time_changes[L].z)
 
 func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1
@@ -1269,15 +1267,8 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
 		var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
-		
-		if can_interact_with_chart: #song scrubbing
-			if not instrumental.stream_paused:
-				toggle_audios(true)
-			
-			song_position += conductor.seconds_per_beat * event.delta.y
-			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-			song_slider.set_value_no_signal(song_position)
+		if can_interact_with_chart:
+			scrub(event.delta.y)
 
 ## Edit button item pressed
 func edit_button_item_pressed(id) -> void:
@@ -1521,7 +1512,7 @@ func save() -> void:
 	if needs_new_path:
 		EditorResources.chart.take_over_path(_create_chart_path())
 		EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
-		
+	
 	NoahTools.save_resource(EditorResources.song, EditorResources.song.resource_path)
 	NoahTools.save_resource(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
@@ -1685,14 +1676,14 @@ func _on_metadata_window_selected_time_change(time: float) -> void:
 
 func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
-	EditorResources.chart.tempos[time] = conductor.tempo
-	EditorResources.chart.time_signature_vectors[time] = Vector2i(
-		conductor.numerator, conductor.denominator
+	conductor.time_changes[time] = Vector3(
+		conductor.tempo,
+		conductor.numerator,
+		conductor.denominator
 	)
 	
-	EditorResources.chart.tempos.sort()
-	EditorResources.chart.time_signature_vectors.sort()
-	upper_ui.get_node("%Metadata Window").update_stats()
+	conductor.time_changes.sort()
+	upper_ui.metadata_window.update_stats()
 	auto_save()
 
 func _on_metadata_window_remove_time_change() -> void:

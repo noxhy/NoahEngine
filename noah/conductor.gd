@@ -16,10 +16,10 @@ var offset: float = 0
 ## Dictionary of time changes. Time changes are stored as a [Vector3] with the following format:
 ## [br]'x': Tempo, 'y': Numerator, 'z': Denominator
 ## [br][b]Note:[/b] The dictionary must be sorted by time to work properly.
-@export var time_changes: Dictionary[float, Vector3]
+@export var time_changes: Dictionary[float, Vector3] = {0.0: Vector3(60, 4, 4)}
 
 ## Getter for the current beats per minute.
-var tempo: float:
+var tempo: float = 60.0:
 	set(v):
 		var emit: bool = false
 		if tempo != v:
@@ -30,7 +30,7 @@ var tempo: float:
 			emit_signal(&"new_tempo", v)
 
 ## Current numerator for the current time signature.
-var numerator: int:
+var numerator: int = 4:
 	set(v):
 		var emit: bool = false
 		if numerator != v:
@@ -158,12 +158,12 @@ func get_step_at(_time: float) -> int:
 ## Returns the time change at a given time.
 func get_time_change_at(_time: float) -> Vector3:
 	_time = max(0, _time - offset)
-	var output: Vector3 = Vector3(60, 4, 4)
+	var output: Vector3
 	for point in time_changes:
 		if _time >= point:
 			output = time_changes[point]
 		else:
-			continue
+			break
 	
 	return output
 

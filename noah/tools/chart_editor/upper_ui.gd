@@ -399,7 +399,7 @@ func file_button_item_pressed(id):
 					var chart = EditorResources.song.difficulties.get(diff).get('chart')
 					if chart:
 						chart_keys.append(diff)
-						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
+						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart, EditorResources.song))
 				
 				
 				misc_data.set('artist', EditorResources.song.artist)

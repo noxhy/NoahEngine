@@ -98,32 +98,29 @@ func _on_remove_time_change_pressed() -> void:
 	
 	emit_signal(&"remove_time_change")
 
-func _on_tempo_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
-	var time: float = tempo_data.keys()[current_time_change]
-	
-	EditorResources.song.tempo = tempo_data.get(0.0)
-	EditorResources.chart.tempos[time] = value
-	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
-
+## Formats the time changes into a readable format
 func format_time_change(index: int) -> String:
 	var time_changes: Dictionary[float, Vector3] = EditorResources.song.time_changes
 	var time: float = time_changes.keys()[index]
 	var time_change: Vector3 = time_changes[time]
 	return str(NoahTools.format_time(time), " - BPM: ", time_change.x, " in ", time_change.y, "/", time_change.z)
 
-func _on_numerator_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
-	var time: float = tempo_data.keys()[current_time_change]
+func _on_tempo_value_changed(value: float) -> void:
+	var time: float = EditorResources.song.time_changes.keys()[current_time_change]
 	
-	EditorResources.chart.time_signature_vectors[time] = Vector2i(int(value), int(%Denominator.value))
+	EditorResources.song.time_changes[time].x = value
+	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+func _on_numerator_value_changed(value: float) -> void:
+	var time: float = EditorResources.song.time_changes.keys()[current_time_change]
+	
+	EditorResources.song.time_changes[time].y = value
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 func _on_denominator_value_changed(value: float) -> void:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
-	var time: float = tempo_data.keys()[current_time_change]
+	var time: float = EditorResources.song.time_changes.keys()[current_time_change]
 	
-	EditorResources.chart.time_signature_vectors[time] = Vector2i(int(%Numerator.value), int(value))
+	EditorResources.song.time_changes[time].z = value
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
 
 
