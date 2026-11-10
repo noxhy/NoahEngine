@@ -10,6 +10,7 @@ class_name Strumline
 @export_group("Edtior Values")
 @export var volume: float = 1
 @export var hit_sounds: bool = true
+@export var waveform: bool = false
 
 ## Construtor function, 'L is the left-most lane while 'R' is the right-most.
 func _init(label: StringName, L: int, R: int) -> void:
@@ -21,6 +22,7 @@ func _init(label: StringName, L: int, R: int) -> void:
 func reset() -> void:
 	volume = 1
 	hit_sounds = true
+	waveform = false
 
 func has_lane(lane: int) -> bool:
 	return (lane >= left_lane and lane <= right_lane)

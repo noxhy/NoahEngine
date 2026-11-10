@@ -32,23 +32,23 @@ func _on_vol_slider_value_changed(value: float) -> void:
 	if strum_id == -1:
 		ChartEditor.instrumental_volume = value
 	elif is_valid_id():
-		EditorResources.strum_data[strum_id]['volume'] = value
+		EditorResources.strumlines[strum_id].volume = value
 
 func _on_hit_sound_box_toggled(toggled_on: bool) -> void:
 	
 	if strum_id == -1:
 		pass
 	elif is_valid_id():
-		EditorResources.strum_data[strum_id]['hit_sounds'] = toggled_on
+		EditorResources.strumlines[strum_id].hit_sounds = toggled_on
 
 func _on_delete_track_pressed() -> void:
 	remove_requested.emit()
 
 func _on_waveform_toggled(toggled_on: bool) -> void:
-	EditorResources.strum_data[strum_id]['waveform'] = toggled_on
+	EditorResources.strumlines[strum_id].waveform = toggled_on
 
 func is_valid_id() -> bool:
-	return strum_id == -1 or EditorResources.strum_data.size() > strum_id
+	return strum_id == -1 or EditorResources.strumlines.size() > strum_id
 
 func load_current_song():
 	if not EditorResources.song:
@@ -64,8 +64,9 @@ func load_current_song():
 	elif is_valid_id():
 		if EditorResources.song.vocals.size() > strum_id:
 			set_path(EditorResources.song.vocals[strum_id])
-		volume = EditorResources.strum_data[strum_id]['volume']
-		hit_sound_box.set_pressed_no_signal(EditorResources.strum_data[strum_id]['hit_sounds'])
+		
+		volume = EditorResources.strumlines[strum_id].volume
+		hit_sound_box.set_pressed_no_signal(EditorResources.strumlines[strum_id].hit_sounds)
 	else:
 		volume = 0
 	
