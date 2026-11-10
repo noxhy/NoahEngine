@@ -70,9 +70,9 @@ func new_file(files: Array[String]):
 		printerr("failed to find any charts")
 	
 	var core_directory = charts[0].get_base_dir() + '/'
-	
+	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
+	song_file.resource_path = song_path
 	for file in charts:
-		
 		match chart_format:
 			Chart.ChartFormat.VSLICE:
 				var dir = file.get_base_dir()
@@ -148,7 +148,6 @@ func new_file(files: Array[String]):
 					
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
 	NoahTools.save_resource(song_file, song_path)
 	
 	#Emits signal to return to the chart editor

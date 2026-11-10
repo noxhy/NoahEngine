@@ -1,6 +1,0 @@
-[gd_resource type="Resource" script_class="ChartEvents" format=3 uid="uid://bu1j05x2ks132"]
-
-[ext_resource type="Script" path="res://noah/resources/events.gd" id="1_rso6a"]
-
-[resource]
-script = ExtResource("1_rso6a")

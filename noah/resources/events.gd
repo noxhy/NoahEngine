@@ -6,4 +6,4 @@ class_name ChartEvents
 @export var data: Array = []
 
 func _init(events: Array = []) -> void:
-	data = []
+	data = events

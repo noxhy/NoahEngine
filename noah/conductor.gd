@@ -2,6 +2,8 @@
 extends Node
 class_name Conductor
 
+const EPSILON: float = 0.00001
+
 signal new_beat(beat: int, measure_relative: int)
 signal new_step(step: int, measure_relative: int)
 signal new_tempo(_tempo: float)
@@ -188,15 +190,17 @@ func get_change_time_at(_time: float) -> float:
 ## Returns the time after moving forward X beats. `_time` will be floored to the current beat.
 func step_in_beats(_time: float, beats: int) -> float:
 	_time -= offset
-	var direction: int = 1 if beats > 0 else -1
+	_time += EPSILON
+	var direction: int = signi(beats)
 	var bpm: float = get_time_change_at(_time).x
 	var spb: float = 60.0 / bpm
 	var output: float = floori((_time - get_change_time_at(_time)) / spb) * spb
 	beats = abs(beats)
 	while beats > 0:
+		print(output, " ", spb * direction)
+		output += spb * direction
 		bpm = get_time_change_at(output).x
 		spb = 60.0 / bpm
-		output += spb * direction
 		beats -= 1
 	
 	return output + offset
@@ -204,15 +208,18 @@ func step_in_beats(_time: float, beats: int) -> float:
 ## Returns the time after moving forward X steps. `_time` will be floored to the current step.
 func step_in_steps(_time: float, steps: int) -> float:
 	_time -= offset
-	var direction: int = 1 if steps > 0 else -1
-	var bpm: float = get_time_change_at(_time).x
-	var sps: float = 60.0 / (bpm / get_time_change_at(_time).z)
+	_time += EPSILON
+	var direction: int = signi(steps)
+	var time_change: Vector3 = get_time_change_at(_time)
+	var bpm: float = time_change.x
+	var sps: float = (60.0 / bpm) / time_change.z
 	var output: float = floori((_time - get_change_time_at(_time)) / sps) * sps
 	steps = abs(steps)
 	while steps > 0:
-		bpm = get_time_change_at(output).x
-		sps = 60.0 / (bpm / get_time_change_at(output).z)
 		output += sps * direction
+		time_change = get_time_change_at(output)
+		bpm = time_change.x
+		sps = (60.0 / bpm) / time_change.z
 		steps -= 1
 	
 	return output + offset

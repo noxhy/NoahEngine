@@ -324,7 +324,7 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 	
 	if song:
 		song.time_changes = time_changes
-		if !song.events:
+		if song.events.is_empty():
 			var events_res: ChartEvents = ChartEvents.new(event_data)
 			var path: String = song.resource_path.get_base_dir().path_join("events.tres")
 			NoahTools.save_resource(events_res, path)
@@ -431,10 +431,12 @@ static func convert_vslice(data:Dictionary, song: Song, meta: Dictionary, diff: 
 	chart.notes = note_data
 	if song:
 		song.time_changes = time_changes
-		if !song.events:
+		if !ResourceLoader.exists(song.events):
 			var events_res: ChartEvents = ChartEvents.new(event_data)
 			var path: String = song.resource_path.get_base_dir().path_join("events.tres")
+			print("Generating events file at: ", path)
 			NoahTools.save_resource(events_res, path)
+			song.events = path
 	
 	chart.version = CURRENT_VERSION
 	return chart
@@ -518,10 +520,11 @@ static func convert_cne(data:Dictionary, song: Song, meta:Dictionary, _events:Ar
 	if song:
 		song.time_changes = time_changes
 		
-		if !song.events:
+		if song.events.is_empty():
 			var events_res: ChartEvents = ChartEvents.new(event_data)
 			var path: String = song.resource_path.get_base_dir().path_join("events.tres")
 			NoahTools.save_resource(events_res, path)
+			song.events = path
 	
 	chart.version = CURRENT_VERSION
 	return chart

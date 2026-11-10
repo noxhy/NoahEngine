@@ -10,8 +10,8 @@ func _ready() -> void:
 	get_tree().call_group(&"strums", &"set_skin", ChartEditor.note_skin)
 
 func update_stats(stats: NoahStats):
-	var string_to_show = "Song: " + str(playstate.song_data.title)
-	string_to_show += "\n" + "Artist: " + str(playstate.song_data.artist)
+	var string_to_show = "Song: " + str(playstate.song.title)
+	string_to_show += "\n" + "Artist: " + str(playstate.song.artist)
 	string_to_show += "\n" + "Difficulty: " + str(GameManager.difficulty)
 	string_to_show += "\n" + "Tempo: " + str(GameManager.conductor.tempo)
 	string_to_show += "\n" + "Scroll Speed: " + str(playstate.scroll_speed)

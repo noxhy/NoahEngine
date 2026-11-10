@@ -40,8 +40,6 @@ func update():
 			if tail.texture:
 				tail.position.x = tail.texture.get_height() / 2.0 * tail.scale.x
 		
-		
-		
 		if collision_shape:
 			collision_shape.shape = RectangleShape2D.new()
 			collision_shape.scale = screen_enabler.scale * 0.9
@@ -50,7 +48,7 @@ func update():
 			label.visible = (note_type != "")
 			label.size = grid_size
 			label.position = -grid_size / 2
-			label.label_settings.font_size = grid_size.y / 2
+			label.label_settings.font_size = floori(grid_size.y / 2)
 		label.text = abbreviate_type()
 		label.label_settings.font_color = get_type_colour()
 			

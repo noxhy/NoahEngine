@@ -361,18 +361,18 @@ func _process(delta: float) -> void:
 	queue_redraw()
 
 # Song scrubbing
-func scrub(axis: float) -> void:
+func scrub(axis: int) -> void:
 	if not instrumental.stream_paused:
 		toggle_audios(true)
 	
-	if Input.is_action_pressed(&"shift"):
-		@warning_ignore("narrowing_conversion")
+	print("before: ", song_position)
+	if !Input.is_action_pressed(&"shift"):
 		song_position = conductor.step_in_beats(song_position, axis)
 	else:
-		@warning_ignore("narrowing_conversion")
 		song_position = conductor.step_in_steps(song_position, axis)
 	
-	song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
+	print("after: ", song_position)
+	song_position = clampf(song_position, start_offset, instrumental.stream.get_length())
 	song_slider.set_value_no_signal(song_position)
 
 ## Updates the conductor with the current [member song_position] and offset of the chart.
@@ -676,8 +676,8 @@ func load_section(time: float, forced: bool = false) -> void:
 	
 	load_notes(L, R)
 	
-	L = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - _range)
-	R = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + _range)
+	L = NoahTools.bsearch_note_data_left_range(song_events, time - _range)
+	R = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	
 	load_events(L, R)
 	update_selected_notes()
@@ -1276,7 +1276,7 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
 		var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 		if can_interact_with_chart:
-			scrub(event.delta.y)
+			scrub(floori(event.delta.y / grid.grid_size.y))
 
 ## Edit button item pressed
 func edit_button_item_pressed(id) -> void:
