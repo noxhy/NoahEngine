@@ -38,10 +38,7 @@ func new_file(dir: String, notify_editor: bool = true):
 			difficulties = []
 	
 	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
-	var strumlines: Array[Strumline] = [
-		Strumline.new(&"Player", 0, 3),
-		Strumline.new(&"Enemy", 4, 7)
-	]
+	var strumlines: Array[Strumline] = Constants.DEFAULT_STRUMLINES.duplicate()
 	for difficulty in difficulties:
 		var chart: Chart = Chart.new()
 		
