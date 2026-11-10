@@ -4,7 +4,7 @@ extends Resource
 class_name Chart
 
 ## The current latest version of the chart format.
-const CURRENT_VERSION: int = 3
+const CURRENT_VERSION: int = 4
 
 ## The Json formats supported by the engine. Used for conversion
 enum ChartFormat {
@@ -285,7 +285,13 @@ static func update_chart(chart: Chart) -> Chart:
 				
 				chart.version = CURRENT_VERSION
 				chart = update_chart(chart)
-				
+			3:
+				chart.chart_data["strums"] = [
+					Strumline.new(&"Player", 0, 3),
+					Strumline.new(&'Enemy', 4, 7)
+				]
+				chart.version = CURRENT_VERSION
+				chart = update_chart(chart)
 		
 		NoahTools.save_resource(chart, chart.resource_path)
 	
