@@ -33,13 +33,13 @@ static var DEFAULT_FILE_TYPE:String = '.tres'
 @export var offset: float = 0.0
 ## All the notes within the chart Stored as [code][TIME, LANE, SUSTAIN_LENGTH, TYPE][/code]
 @export var notes: Array[Variant] = []
-## All the events within the chart. Stored as [code][TIME, EVENT_NAME, [EVENT_PARAMETERS]][/code]
+## @deprecated: Events are stored separately and referenced in [Song]
 @export var events: Array[Variant] = []
-## All the tempos/bpms within the chart. Stored as [code]TIME => TEMPO[/code]
+## @deprecated: Time changes are stored in [Song].
 @export var tempos: Dictionary = { 0.0: 60.0 }
-## @deprecated: Time signatures are now stored as vector2i
+## @deprecated: Time changes are stored in [Song].
 var time_signatures: Dictionary = { 0.0: [4, 4] }
-## All of the time signature changes within the chart. Stored as [code]TIME => Vector2i(NUMERATOR, DENOMINATOR)[/code]
+## @deprecated: Time changes are stored in [Song].
 @export var time_signature_vectors: Dictionary[float, Vector2i] = { 0.0: Vector2i(4, 4) }
 ## A dictionary containing misc data. Anything can be added here.
 @export var chart_data: Dictionary = {}
@@ -54,11 +54,8 @@ var version: int:
 ## @deprecated: Use [member notes] instead
 func get_notes_data() -> Array:
 	return chart_data.get("notes", notes)
-	
-## @deprecated: Use [member events] instead
-func get_events_data() -> Array:
-	return chart_data.get("events", events)
-	
+
+
 ## @deprecated: Use [member tempos] instead
 func get_tempos_data() -> Dictionary:
 	return chart_data.get("tempos", tempos)
@@ -72,27 +69,27 @@ func get_time_signature_data() -> Dictionary:
 	return chart_data.get("time_signatures", time_signatures)
 
 ## Loads a external [ChartEvents] and merges them into this charts events.
-func merge_events_into_this(_events: ChartEvents):
-	var chart_events: Array = get_events_data()
-	
-	chart_events.append_array(_events.data)
-	
-	var ret_events: Array = [] 
-	var push = func(ev:Variant): #clear out dupes
-		for event in ret_events:
-			if is_equal_approx(event[0], ev[0]) \
-			and event[1] == ev[1] \
-			and event[2] == ev[2]: \
-			return
-		
-		ret_events.append(ev)
-	
-	for event in chart_events:
-		push.call(event)
-	
-	ret_events.sort_custom(sort_notes)
-	
-	events = ret_events
+#func merge_events_into_this(_events: ChartEvents):
+	#var chart_events: Array = get_events_data()
+	#
+	#chart_events.append_array(_events.data)
+	#
+	#var ret_events: Array = [] 
+	#var push = func(ev:Variant): #clear out dupes
+		#for event in ret_events:
+			#if is_equal_approx(event[0], ev[0]) \
+			#and event[1] == ev[1] \
+			#and event[2] == ev[2]: \
+			#return
+		#
+		#ret_events.append(ev)
+	#
+	#for event in chart_events:
+		#push.call(event)
+	#
+	#ret_events.sort_custom(sort_notes)
+	#
+	#events = ret_events
 
 ## Returns the tempo at a given time
 func get_tempo_at(time: float) -> float:
@@ -118,10 +115,6 @@ func get_time_signature_at(time: float) -> Vector2i:
 	
 	return output
 
-## @deprecated: Refactored to [method get_time_signature_at].
-func get_meter_at(time: float) -> Vector2:
-	return get_time_signature_at(time)
-
 ## Gets the time of a tempo change.
 func get_tempo_time_at(time: float) -> float:
 	time = max(0, time)
@@ -133,16 +126,16 @@ func get_tempo_time_at(time: float) -> float:
 	return output
 
 ## Helper function to get a chart from [Song]
-static func load_from_song(_song: Song, _difficulty: String = '-1') -> Chart:
-	if _difficulty == '-1':
+static func load_from_song(_song: Song, _difficulty: StringName = &'-1') -> Chart:
+	if _difficulty == &'-1':
 		_difficulty = GameManager.difficulty
-		
-	return Chart.load(_song.difficulties[_difficulty].chart)
+	
+	return Chart.load(_song.difficulties[_difficulty].chart, _song)
 
 ## Attempts to load a chart from a given path.
 ## This will automatically convert [code]CNE[/code], [code]V-Slice[/code], and [code]Psych[/code] charts to the engines format.
 ## [br][br]If a chart could not be loaded, a empty chart is provided.
-static func load(path: String) -> Chart:
+static func load(path: String, song: Song) -> Chart:
 	if path.begins_with('uid'):
 		path = ResourceUID.uid_to_path(path)
 	
@@ -172,7 +165,7 @@ static func load(path: String) -> Chart:
 									events_json = events_json.get('song')
 								
 								_events = events_json.get('events', [])
-						return convert_psych(json, _events, false)
+						return convert_psych(json, song, _events, false)
 					ChartFormat.PSYCH_V1:
 						var _events = []
 						var events_file = FileAccess.open(path.get_base_dir() + '/events.json', FileAccess.READ)
@@ -186,7 +179,7 @@ static func load(path: String) -> Chart:
 								_events = events_json.get('events', [])
 						
 						
-						return convert_psych(json, _events)
+						return convert_psych(json, song, _events)
 						
 					ChartFormat.VSLICE:
 						var meta_path: String = path.get_basename()
@@ -197,7 +190,7 @@ static func load(path: String) -> Chart:
 						var meta_file: FileAccess = FileAccess.open(meta_path, FileAccess.READ)
 						var meta_json = JSON.parse_string(meta_file.get_as_text())
 						if meta_json:
-							return convert_vslice(json, meta_json)
+							return convert_vslice(json, song, meta_json)
 					
 					ChartFormat.CODENAME:
 						var meta_path: String = path.get_base_dir().path_join("meta.json")
@@ -217,7 +210,7 @@ static func load(path: String) -> Chart:
 						var meta_file: FileAccess = FileAccess.open(meta_path, FileAccess.READ)
 						var meta_json = JSON.parse_string(meta_file.get_as_text())
 						if meta_json:
-							return convert_cne(json, meta_json, _events)
+							return convert_cne(json, song, meta_json, _events)
 					_:
 						pass
 	
@@ -294,23 +287,22 @@ static func update_chart(chart: Chart) -> Chart:
 	
 	return chart
 
-static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) -> Chart:
+static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bool = true) -> Chart:
 	var chart = Chart.new()
 	
 	var note_data = []
 	var event_data = []
-	var tempo_data = {}
-	var time_signature_data = {0.0: [4, 4]}
+	var time_changes: Dictionary[float, Vector3]
 	var section_time = 0.0
 	
 	if not v1:
 		data = data.get('song')
 	
-	var current_bpm: int = data.get('bpm')
+	var current_bpm: float = data.get('bpm')
 	
 	chart.scroll_speed = data.get('speed')
 	
-	tempo_data[0.0] = current_bpm
+	time_changes[0.0] = Vector3(current_bpm, 4, 4)
 	
 	for i in data.get("notes"):
 		# Too lazy to make sure for BPM changes so
@@ -321,8 +313,7 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 		# Checks if the tempo changes, then adds it to the tempos dictionary
 		if i.has("changeBPM"):
 			if i.changeBPM:
-				tempo_data[section_time] = i.bpm
-				time_signature_data[section_time] = [section_beats, 4]
+				time_changes[section_time] = Vector3(i.bpm, section_beats, 4)
 				current_bpm = i.bpm
 		
 		# Camera movement conversion
@@ -412,23 +403,27 @@ static func convert_psych(data:Dictionary,_events:Array = [], v1:bool = true) ->
 			var _v2: String = ''
 			if j.size() > 2:
 				_v2 = j[2]     
-
+			
 			event_data.append([time / 1000.0, j[0], [_v1, _v2]])
 	
 	event_data.sort_custom(sort_notes)
 	
+	if song:
+		song.time_changes = time_changes
+		
+		if !song.events:
+			var events_res: ChartEvents = ChartEvents.new(event_data)
+			NoahTools.save_resource(events_res, song.resource_path.get_base_dir().path_join("events.tres"))
+	
 	chart.notes = note_data
-	chart.events = event_data
-	chart.tempos = tempo_data
-	chart.time_signatures = time_signature_data
 	chart.version = CURRENT_VERSION
 	return chart
 
-static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') -> Chart:
+static func convert_vslice(data:Dictionary, song: Song, meta: Dictionary, diff: StringName = &'') -> Chart:
 	if diff.is_empty():
 		diff = GameManager.difficulty
 	if diff.is_empty():
-		diff = 'normal'
+		diff = &'normal'
 	
 	if not data.get('notes').has(diff):
 		diff = meta.get('playData').get('difficulties')[0]
@@ -437,15 +432,14 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	
 	var note_data = []
 	var event_data = []
-	var tempo_data = {}
-	var time_signature_data = {0.0: [4, 4]}
+	var time_changes: Dictionary[float, Vector3]
 	
 	# Get tempo at certain time
-	var get_temp_at_struct = func(time:float, tempo_dict:Dictionary) -> float:
+	var get_tempo_at_struct = func(time:float, tempo_dict:Dictionary[float, Vector3]) -> float:
 		var output: float = -1
-		for point in tempo_dict:
+		for point in time_changes:
 			if time >= point:
-				output = tempo_dict.get(point)
+				output = tempo_dict[point].x
 			else:
 				continue
 		
@@ -458,15 +452,14 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 		if i.t < 0:
 			i.t = 0.0
 		
-		tempo_data[i.t / 1000] = i.bpm
-		time_signature_data[i.t / 1000] = [i.n, i.d]
+		time_changes[i.t / 1000] = Vector3(i.bpm, i.n, i.d)
 	
 	for i in data.get('notes').get(diff):
-		var time = i.t / 1000.0
-		var lane = int(i.d)
+		var time: float = i.t / 1000.0
+		var lane: int = int(i.d)
 		
-		var tempo = get_temp_at_struct.call(time, tempo_data)
-		var seconds_per_beat = 60.0 / tempo
+		var tempo: float = get_tempo_at_struct.call(time, time_changes)
+		var seconds_per_beat: float = 60.0 / tempo
 		
 		var length = 0
 		if i.has("l"):
@@ -481,8 +474,8 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	for i in data.get('events'):
 		var time = i.t / 1000.0
 		
-		var tempo = get_temp_at_struct.call(time, tempo_data)
-		var seconds_per_beat = 60.0 / tempo
+		var tempo: float = get_tempo_at_struct.call(time, time_changes)
+		var seconds_per_beat: float = 60.0 / tempo
 		
 		time = snapped(time, seconds_per_beat)
 		
@@ -521,26 +514,29 @@ static func convert_vslice(data:Dictionary, meta:Dictionary,diff:String = '') ->
 	event_data.sort_custom(sort_notes)
 	
 	chart.notes = note_data
-	chart.events = event_data
-	chart.tempos = tempo_data
-	chart.time_signatures = time_signature_data
+	if song:
+		song.time_changes = time_changes
+		
+		if !song.events:
+			var events_res: ChartEvents = ChartEvents.new(event_data)
+			NoahTools.save_resource(events_res, song.resource_path.get_base_dir().path_join("events.tres"))
+	
 	chart.version = CURRENT_VERSION
 	return chart
 
-static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) -> Chart:
+static func convert_cne(data:Dictionary, song: Song, meta:Dictionary, _events:Array = []) -> Chart:
 	var chart = Chart.new()
 	
 	var note_data = []
 	var event_data = []
-	var tempo_data = {}
-	var time_signature_data = {0.0: [4, 4]}
+	var time_changes: Dictionary[float, Vector3]
 	
 	# Get tempo at certain time
-	var get_temp_at_struct = func(time:float,tempo_dict:Dictionary) -> float:
+	var get_tempo_at_struct = func(time:float, tempo_dict:Dictionary[float, Vector3]) -> float:
 		var output: float = -1
 		for point in tempo_dict:
 			if time >= point:
-				output = tempo_dict.get(point)
+				output = tempo_dict[point].x
 			else:
 				continue
 		
@@ -549,7 +545,7 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 	chart.scroll_speed = data.get('scrollSpeed')
 	
 	var current_bpm = meta.get('bpm')
-	tempo_data[0.0] = current_bpm
+	time_changes[0.0] = Vector3(current_bpm, 4, 4)
 	
 	if data.has('events'):
 		_events.append_array(data.get('events'))
@@ -566,7 +562,10 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 		elif EVENT_NAMES.has(event_packet.name):
 			event = [event_packet.time / 1000.0, EVENT_NAMES[event_packet.name], event_packet.params]
 		elif event_packet.name == "BPM Change":
-			tempo_data[event_packet.time / 1000.0] = event_packet.params[0]
+			time_changes[event_packet.time / 1000.0] = Vector3(event_packet.params[0], 4, 4)
+			current_bpm = event_packet.params[0]
+		elif event_packet.name == "Time Signature Change":
+			time_changes[event_packet.time / 1000.0] = Vector3(current_bpm, event_packet.params[0], event_packet.params[1])
 		else:
 			event = [event_packet.time / 1000.0, event_packet.name, event_packet.params]
 		
@@ -582,7 +581,7 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 			# Converts the ms length to how many beats the hold node lasts
 			
 			var time = i.time / 1000.0
-			current_bpm = get_temp_at_struct.call(time, tempo_data)
+			current_bpm = get_tempo_at_struct.call(time, time_changes)
 			var seconds_per_beat = 60.0 / current_bpm
 			var ms_to_notes = 0
 			if i.sLen:
@@ -601,9 +600,13 @@ static func convert_cne(data:Dictionary, meta:Dictionary, _events:Array = []) ->
 	note_data.sort_custom(sort_notes)
 	
 	chart.notes = note_data
-	chart.events = event_data
-	chart.tempos = tempo_data
-	chart.time_signatures = time_signature_data
+	if song:
+		song.time_changes = time_changes
+		
+		if !song.events:
+			var events_res: ChartEvents = ChartEvents.new(event_data)
+			NoahTools.save_resource(events_res, song.resource_path.get_base_dir().path_join("events.tres"))
+	
 	chart.version = CURRENT_VERSION
 	return chart
 
