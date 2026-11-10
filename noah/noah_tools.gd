@@ -191,13 +191,12 @@ static func bsearch_note_data_right_range(value_set: Array, right_range: float) 
 	return low - 1
 
 ## Tweens a [Object] property to and back to a value
-static func bop_tween(root: Node, object: Object, property: NodePath, start: Variant, end: Variant, duration: float, trans: Tween.TransitionType) -> void:
-	var tween = root.create_tween()
+static func bop_tween(object: Object, property: NodePath, start: Variant, end: Variant, duration: float, trans: Tween.TransitionType, root: Node = Global) -> void:
+	var tween: Tween = root.create_tween()
 	tween.set_trans(trans)
 	
 	tween.tween_property(object, property, end, duration * 0.0625).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(object, property, start, duration).set_ease(Tween.EASE_OUT).set_delay(duration * 0.0625)
-	
 
 ## No different to [member ResourceSaver.save] but doesnt gut out uids
 static func save_resource(resource: Resource, path: String, flags: int = ResourceSaver.FLAG_NONE) -> void:

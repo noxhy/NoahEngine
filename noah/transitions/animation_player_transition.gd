@@ -13,4 +13,3 @@ func transition_awaiting() -> void:
 
 func resume_transition() -> void:
 	animation_player.play()
-	

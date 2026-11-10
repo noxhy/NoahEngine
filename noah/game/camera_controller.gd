@@ -262,9 +262,9 @@ func bump(strength: Variant) -> void:
 	
 	if parent_2d:
 		if strength is float:
-			zoom *= (1.0 + strength)
+			zoom /= (1.0 - strength)
 		else:
-			zoom *= Vector2.ONE + strength
+			zoom /= Vector2.ONE - strength
 
 var _last_position_smoothing: bool = true
 var _last_rotation_smoothing: bool = true

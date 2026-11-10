@@ -221,4 +221,4 @@ func select(i: int):
 
 func _on_conductor_new_beat(current_beat, measure_relative):
 	if SettingsManager.get_value(SettingsManager.SEC_PREFERENCES, "ui_bops"):
-		NoahTools.bop_tween(self, $Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
+		NoahTools.bop_tween($Background/Background, "scale", Vector2(1, 1), Vector2(1.005, 1.005), 0.2, Tween.TRANS_CUBIC)
