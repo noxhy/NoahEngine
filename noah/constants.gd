@@ -2,8 +2,8 @@ extends Node
 ## Singleton that holds global references to a bunch of common data for easy access and readability.
 
 var DEFAULT_STRUMLINES: Array[Strumline] = [
-	Strumline.new(&"Player", 0, 3, 0),
-	Strumline.new(&"Enemy", 4, 7, 1)
+	Strumline.new(&"Player", 0, 4, 0),
+	Strumline.new(&"Enemy", 4, 4, 1)
 ]
 
 #scene ids

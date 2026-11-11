@@ -137,7 +137,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
-	
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
 	if EditorResources.song and instrumental.playing:
@@ -553,6 +552,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		song_position -= start_offset
 	
 	$"UI/LoadedSong error".visible = false
+	print('strumlines: ', song.strumlines)
 	if !ResourceLoader.exists(song.events):
 		var path: String = song.resource_path.get_base_dir().path_join('events.tres')
 		print("doesn't exist, saving at ", path)
@@ -560,6 +560,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		song.events = path
 	
 	song_events = load(song.events).data
+	EditorResources.strumlines = song.strumlines
 	EditorResources.song = song
 	if difficulty == null:
 		difficulty = EditorResources.song.difficulties.keys()[0]
@@ -614,9 +615,6 @@ func load_song_path(path: String, difficulty: Variant = null) -> void:
 func load_chart(file: Chart, ghost: bool = false) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
-	
-	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate(true))
-	file.chart_data["strumlines"] = EditorResources.strumlines
 	selected_notes = []
 	selected_note_nodes = []
 	current_visible_notes_L = -1
@@ -643,7 +641,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.notes, load(EditorResources.song.events).data)
+		minimap.refresh(file.notes, song_events)
 	
 	load_dividers()
 	update_camera_song_position(true)

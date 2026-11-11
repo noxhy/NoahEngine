@@ -26,6 +26,6 @@ static var strum_count: int:
 static var event_editor: bool = false
 
 ## Settings per strum, each key is it's label
-static var strumlines: Array[Strumline] = []
+static var strumlines: Array[Strumline]
 
-static var event_tracks: Array = []
+static var event_tracks: Array

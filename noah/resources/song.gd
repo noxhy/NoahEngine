@@ -22,7 +22,7 @@ class_name Song
 @export_file('*.tres','*.res') var events: String
 
 ## Ordered array of [Strumline]s.
-@export var strumlines: Array[Strumline] = Constants.DEFAULT_STRUMLINES
+@export var strumlines: Array[Strumline] = []
 
 @export_category("Display Config")
 

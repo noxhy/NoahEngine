@@ -193,7 +193,6 @@ static func update_chart(chart: Chart) -> Chart:
 		print("updating chart version: ", chart.version)
 		match chart.version:
 			3:
-				chart.chart_data["strums"] = Constants.DEFAULT_STRUMLINES.duplicate()
 				chart.version = CURRENT_VERSION
 				chart = update_chart(chart)
 		
