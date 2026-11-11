@@ -20,7 +20,9 @@ func new_file(files: Array[String]):
 	
 	song_file.instrumental = selected_instrumental
 	song_file.vocals = Array(Array(selected_vocals), TYPE_STRING, '', null)
-	song_file.strumlines = Constants.DEFAULT_STRUMLINES.duplicate(true)
+	song_file.strumlines = []
+	for strumline in Constants.DEFAULT_STRUMLINES:
+		song_file.strumlines.append(strumline.to_dict())
 	
 	var chart_format = %"Format Options".get_selected_id()
 	

@@ -22,7 +22,7 @@ class_name Song
 @export_file('*.tres','*.res') var events: String
 
 ## Ordered array of [Strumline]s.
-@export var strumlines: Array[Strumline] = []
+@export var strumlines: Array
 
 @export_category("Display Config")
 
@@ -32,3 +32,6 @@ class_name Song
 @export var artist: StringName
 ## The displayed charter for this Song
 @export var charter: StringName
+
+func _to_string() -> String:
+	return str("Song(title: %s)" % title)

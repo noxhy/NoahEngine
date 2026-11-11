@@ -552,7 +552,6 @@ func load_song(song: Song, difficulty: Variant = null):
 		song_position -= start_offset
 	
 	$"UI/LoadedSong error".visible = false
-	print('strumlines: ', song.strumlines)
 	if !ResourceLoader.exists(song.events):
 		var path: String = song.resource_path.get_base_dir().path_join('events.tres')
 		print("doesn't exist, saving at ", path)
@@ -560,7 +559,10 @@ func load_song(song: Song, difficulty: Variant = null):
 		song.events = path
 	
 	song_events = load(song.events).data
-	EditorResources.strumlines = song.strumlines
+	EditorResources.strumlines = []
+	for strumline in song.strumlines:
+		EditorResources.strumlines.append(Strumline.from_dict(strumline))
+	
 	EditorResources.song = song
 	if difficulty == null:
 		difficulty = EditorResources.song.difficulties.keys()[0]
@@ -1499,6 +1501,10 @@ func _create_chart_path() -> String:
 	return new_path
 
 func save() -> void:
+	EditorResources.song.strumlines = []
+	for strumline in EditorResources.strumlines:
+		EditorResources.song.strumlines.append(strumline.to_dict())
+	
 	var needs_new_path: bool = false
 	
 	if EditorResources.chart.resource_path.begins_with('uid://') and ResourceUID.uid_to_path(EditorResources.chart.resource_path).is_empty():

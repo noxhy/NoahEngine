@@ -13,7 +13,9 @@ func new_file(dir: String, notify_editor: bool = true):
 	song_file.artist = %"Song Credits".text
 	song_file.title = %"Song Title".text
 	song_file.tempo = %"Starting Tempo".value
-	song_file.strumlines = Constants.DEFAULT_STRUMLINES.duplicate(true)
+	song_file.strumlines = []
+	for strumline in Constants.DEFAULT_STRUMLINES:
+		song_file.strumlines.append(strumline.to_dict())
 	
 	song_file.instrumental = selected_instrumental
 	var streams: Array[String] = []
