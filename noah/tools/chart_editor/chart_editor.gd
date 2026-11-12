@@ -72,7 +72,11 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
-var song_events: Array = []
+
+var events_file: ChartEvents
+var song_events: Array:
+	get():
+		return events_file.data
 
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
@@ -556,7 +560,7 @@ func load_song(song: Song, difficulty: Variant = null):
 		NoahTools.save_resource(ChartEvents.new(), path)
 		song.events = path
 	
-	song_events = load(song.events).data
+	events_file = load(song.events)
 	EditorResources.strumlines = []
 	for strumline in song.strumlines:
 		EditorResources.strumlines.append(Strumline.from_dict(strumline))
@@ -1524,6 +1528,7 @@ func save() -> void:
 		EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
 	
 	NoahTools.save_resource(EditorResources.song, EditorResources.song.resource_path)
+	NoahTools.save_resource(events_file, events_file.resource_path)
 	NoahTools.save_resource(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
 

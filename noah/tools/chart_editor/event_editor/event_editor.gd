@@ -135,7 +135,7 @@ func _process(delta: float) -> void:
 				elif ((snapped_position.y - 1) >= 0 and (snapped_position.y - 1) < grid.rows):
 					if moving_notes:
 						var cursor_time: float = grid_position_to_time(snapped_position, true)
-						cursor_time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+						cursor_time += conductor.get_change_time_at(song_position + start_offset)
 						
 						var time_distance: float = cursor_time - start_time
 						changed_length = true
