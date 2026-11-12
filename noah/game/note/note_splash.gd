@@ -8,6 +8,8 @@ func _ready() -> void:
 	sprite.sprite_frames = note_skin.splashes_texture
 	if note_skin.pixel_texture:
 		sprite.texture_filter = TEXTURE_FILTER_NEAREST
+		
+	modulate.a = note_skin.splash_opacity
 	
 	scale = Vector2.ONE * note_skin.splash_scale
 
