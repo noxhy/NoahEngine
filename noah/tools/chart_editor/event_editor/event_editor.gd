@@ -255,13 +255,13 @@ func view_button_item_pressed(id):
 			SoundManager.tool_open_window.play()
 		
 		3:
-			grid.zoom = clamp(grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
+			grid.zoom.x = clamp(grid.zoom.x + 0.1, 0.5, 2.0)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
 		
 		4:
-			grid.zoom = clamp(grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
+			grid.zoom.x = clamp(grid.zoom.x - 0.1, 0.5, 2.0)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
@@ -276,13 +276,13 @@ func load_section(time: float, forced: bool = false):
 		return
 	
 	if forced:
-		get_tree().call_group(&"events", &"queue_free")
+		get_tree().call_group(&"events", &"free")
 		event_nodes.clear()
 		
 		current_visible_events_L = -1
 		current_visible_events_R = -1
 	
-	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
+	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.x
 	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - _range)
 	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	

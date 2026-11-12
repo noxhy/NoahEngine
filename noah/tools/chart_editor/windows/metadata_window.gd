@@ -103,7 +103,7 @@ func format_time_change(index: int) -> String:
 	var time_changes: Dictionary[float, Vector3] = EditorResources.song.time_changes
 	var time: float = time_changes.keys()[index]
 	var time_change: Vector3 = time_changes[time]
-	return str(NoahTools.format_time(time), " - BPM: ", time_change.x, " in ", time_change.y, "/", time_change.z)
+	return str(NoahTools.format_time(time), " - BPM: ", time_change.x, " in ", int(time_change.y), "/", int(time_change.z))
 
 func _on_tempo_value_changed(value: float) -> void:
 	var time: float = EditorResources.song.time_changes.keys()[current_time_change]

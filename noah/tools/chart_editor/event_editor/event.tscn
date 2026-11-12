@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://n6k15grja0uh"]
 
 [ext_resource type="Script" uid="uid://on7o5p3nu52t" path="res://noah/tools/chart_editor/event_editor/event.gd" id="1_c5tis"]
-[ext_resource type="Texture2D" uid="uid://btd2ty0asetdb" path="res://addons/at-icons/node/diamond_shape.svg" id="2_ljrkn"]
+[ext_resource type="Texture2D" uid="uid://drt1o51p52s2p" path="res://addons/at-icons/node/help.svg" id="2_ljrkn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c5tis"]
 size = Vector2(16.000006, 16.000006)

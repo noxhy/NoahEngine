@@ -75,6 +75,8 @@ var hovered_event: int = -1
 
 var events_file: ChartEvents
 var song_events: Array:
+	set(v):
+		events_file.data = v
 	get():
 		return events_file.data
 
@@ -1257,7 +1259,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		load_section(song_position)
 		update_waveforms(song_position)
 		
-		lower_ui.get_node("%Beat").text = str("Beat: ", conductor.get_beat_at(song_position) + 1)
+		lower_ui.get_node("%Beat").text = str("Beat: ", conductor.get_beat_at(song_position + start_offset) + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
@@ -1265,7 +1267,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
 		SoundManager.conductor_step.play()
 	
 	if EditorResources.chart:
-		lower_ui.get_node("%Step").text = str("Step: ", conductor.get_step_at(song_position) + 1)
+		lower_ui.get_node("%Step").text = str("Step: ", conductor.get_step_at(song_position + start_offset) + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1802,7 +1804,7 @@ func paste() -> void:
 	undo_redo.add_do_method(move_selection.bind(offset, 0))
 	undo_redo.add_do_method(SoundManager.tool_note_place.play)
 	undo_redo.add_undo_property(EditorResources.chart, &"notes", EditorResources.chart.notes.duplicate(true))
-	undo_redo.add_undo_property(EditorResources.chart, &"events", song_events.duplicate(true))
+	undo_redo.add_undo_property(self, &"song_events", song_events.duplicate(true))
 	undo_redo.add_undo_property(self, &"selected_notes", selected_notes.duplicate())
 	undo_redo.add_undo_method(load_section.bind(song_position, true))
 	undo_redo.add_undo_method(update_selected_notes)

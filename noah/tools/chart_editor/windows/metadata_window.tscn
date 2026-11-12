@@ -2,14 +2,14 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_rnfoh"]
 [ext_resource type="Script" uid="uid://bdhtm4727pnvv" path="res://noah/tools/chart_editor/windows/metadata_window.gd" id="2_44rw1"]
-[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_lsluv"]
+[ext_resource type="Texture2D" uid="uid://buws0djp2ooxj" path="res://addons/at-icons/node/file_magnifying_glass.svg" id="3_qo7nn"]
 
 [node name="Metadata Window" type="Window" unique_id=1340846673 groups=["windows"]]
 transparent_bg = true
 oversampling_override = 1.0
 title = "Song Metadata"
 position = Vector2i(0, 24)
-size = Vector2i(640, 240)
+size = Vector2i(600, 210)
 unresizable = true
 transparent = true
 popup_window = true
@@ -89,8 +89,8 @@ editable = false
 [node name="Song Scene Button" type="Button" parent="HBoxContainer/VBoxContainer/Song Scene" unique_id=1557321340]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "       "
-icon = ExtResource("3_lsluv")
+text = "  "
+icon = ExtResource("3_qo7nn")
 icon_alignment = 1
 expand_icon = true
 

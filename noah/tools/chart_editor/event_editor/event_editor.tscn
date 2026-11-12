@@ -14,10 +14,6 @@
 
 [sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_4188h"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_tjeh3"]
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_64086"]
 font_size = 18
 font_color = Color(1, 0, 0, 1)
@@ -228,8 +224,8 @@ offset_left = -144.0
 offset_top = -328.0
 offset_right = -143.0
 offset_bottom = -305.0
+theme = ExtResource("15_ue8jl")
 text = "hello"
-label_settings = SubResource("LabelSettings_tjeh3")
 script = ExtResource("19_64086")
 
 [node name="LoadedSong error" type="Label" parent="UI" unique_id=346969889]

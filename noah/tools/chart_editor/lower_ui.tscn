@@ -35,7 +35,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Current position of the song"
 mouse_filter = 0
-text = "CURRENT TIME"
+text = "00:00.00"
 vertical_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1160474810]
@@ -153,7 +153,7 @@ size_flags_horizontal = 10
 [node name="Difficulty Button" type="OptionButton" parent="HBoxContainer3" unique_id=1072897757]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Select the difficulty being charted"
 focus_behavior_recursive = 1
@@ -171,7 +171,7 @@ size_flags_horizontal = 10
 [node name="Tempo" type="Label" parent="HBoxContainer3" unique_id=1508383069]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 10
 tooltip_text = "Current tempo/BPM"
 mouse_filter = 0
 text = "tempo: ??"
@@ -183,8 +183,9 @@ size_flags_horizontal = 10
 
 [node name="Chart Snap" type="SpinBox" parent="HBoxContainer3" unique_id=1011476200]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Chart snapping"
 focus_behavior_recursive = 1
@@ -194,7 +195,7 @@ value = 16.0
 rounded = true
 allow_greater = true
 update_on_text_changed = true
-prefix = "1 /"
+prefix = "1/ "
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer3" unique_id=1898549450]
 layout_mode = 2
@@ -206,6 +207,6 @@ layout_mode = 2
 size_flags_horizontal = 10
 tooltip_text = "Time remaining"
 mouse_filter = 0
-text = "TIME LEFT"
+text = "-00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 1
