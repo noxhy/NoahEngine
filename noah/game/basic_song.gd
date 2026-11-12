@@ -4,8 +4,8 @@ class_name BasicSong
 @onready var player: Node = %Player
 @onready var enemy: Node = %Enemy
 
-@onready var rating_marker: Node = %"Rating Marker"
-@onready var combo_marker: Node = %"Combo Marker"
+@onready var rating_marker: Node = get_node_or_null(^"%Rating Marker")
+@onready var combo_marker: Node = get_node_or_null(^"%Combo Marker")
 
 var rating_factory: RatingFactory
 
