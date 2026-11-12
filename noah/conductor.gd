@@ -199,7 +199,6 @@ func step_in_beats(_time: float, beats: int) -> float:
 	var output: float = floori((_time - get_change_time_at(_time)) / spb) * spb
 	beats = abs(beats)
 	while beats > 0:
-		print(output, " ", spb * direction)
 		output += spb * direction
 		bpm = get_time_change_at(output).x
 		spb = 60.0 / bpm

@@ -10,7 +10,7 @@ class_name Song
 ## Path to the instrumental of the song
 @export_file("*.ogg", "*.mp3", "*.wav") var instrumental: String
 ## Time changes of the song. Time changes are stored as a [Vector3], 'x' is tempo, 'y' is numerator, 'z' is denominator
-@export var time_changes: Dictionary[float, Vector3] = {}
+@export var time_changes: Dictionary[float, Vector3] = {0: Vector3(60, 4, 4)}
 ## The path to the default scene containing the playstate to play.
 @export_file("*.tscn") var scene: String
 

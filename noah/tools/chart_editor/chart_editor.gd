@@ -364,13 +364,11 @@ func scrub(axis: int) -> void:
 	if not instrumental.stream_paused:
 		toggle_audios(true)
 	
-	print("before: ", song_position)
 	if !Input.is_action_pressed(&"shift"):
 		song_position = conductor.step_in_beats(song_position, axis)
 	else:
 		song_position = conductor.step_in_steps(song_position, axis)
 	
-	print("after: ", song_position)
 	song_position = clampf(song_position, start_offset, instrumental.stream.get_length())
 	song_slider.set_value_no_signal(song_position)
 
@@ -1163,13 +1161,13 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var L: float = conductor.get_change_time_at(time)
+	var time_change: Vector3 = conductor.get_time_change_at(time)
 	var yR: float = p.y
 	if factor_in_snap:
-		yR *= conductor.time_changes[L].y * conductor.time_changes[L].z / chart_snap
+		yR *= time_change.y * time_change.z / chart_snap
 	
-	var spb: float = (60.0 / EditorResources.song.time_changes[L].x) * (4.0 / conductor.time_changes[L].z)
-	return yR * (spb / conductor.time_changes[L].z)
+	var spb: float = (60.0 / time_change.x) * (4.0 / time_change.z)
+	return yR * (spb / time_change.z)
 
 func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1

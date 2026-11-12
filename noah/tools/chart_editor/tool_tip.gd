@@ -15,8 +15,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	
-	
 	visible = EditorResources.chart and chart_editor and chart_editor.is_mouse_over_grid() and (chart_editor.hovered_event != -1 or chart_editor.hovered_note != -1)
 	if not visible:
 		return
@@ -33,7 +31,7 @@ func _process(delta: float) -> void:
 			
 		text = text_str
 	elif chart_editor.hovered_event != -1:
-		var ev = EditorResources.chart.events[chart_editor.hovered_event]
+		var ev = chart_editor.song_events[chart_editor.hovered_event]
 		
 		text = get_time_str(ev[0]) + '\n' + get_event_str()
 	
@@ -52,16 +50,16 @@ func _process(delta: float) -> void:
 func get_event_str() -> String:
 	
 	if chart_editor.name != 'Chart Editor':
-		var event = EditorResources.chart.events[chart_editor.hovered_event]
-		var parameters = EditorResources.chart.events[chart_editor.hovered_event][2]
+		var event = chart_editor.song_events[chart_editor.hovered_event]
+		var parameters = chart_editor.song_events[chart_editor.hovered_event][2]
 		return event[1] + ': [%s]' % ", ".join(PackedStringArray(parameters))
 	
-	var found_events = chart_editor.find_events_at(EditorResources.chart.events[chart_editor.hovered_event][0])
+	var found_events = chart_editor.find_events_at(chart_editor.song_events[chart_editor.hovered_event][0])
 	
 	var ret: String = ''
 	
 	for ev_idx in found_events:
-		var ev = EditorResources.chart.events[ev_idx]
+		var ev = chart_editor.song_events[ev_idx]
 		var ev_params = ev[2]
 		ret += ev[1] + ': [%s]' % ", ".join(PackedStringArray(ev_params)) + '\n'
 	return ret.strip_edges()

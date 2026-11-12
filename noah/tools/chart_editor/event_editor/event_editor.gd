@@ -55,7 +55,7 @@ func _process(delta: float) -> void:
 				if (((snapped_position.y - 1) >= 0 and (snapped_position.y) < grid.rows)):
 					var event: String = EditorResources.event_tracks[snapped_position.y - 1]
 					var time: float = grid_position_to_time(snapped_position, true)
-					time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+					time += conductor.get_change_time_at(song_position + start_offset)
 					
 					if time <= instrumental.stream.get_length():
 						if !is_event_at(event, time):
@@ -358,9 +358,11 @@ func load_dividers() -> void:
 func load_chart(file: Chart, ghost: bool = false) -> void:
 	super(file, ghost)
 	EditorResources.event_tracks = []
-	for event in file.events:
+	for event in song_events:
 		if !EditorResources.event_tracks.has(event[1]):
 			EditorResources.event_tracks.append(event[1])
+		else:
+			continue
 	
 	update_grid()
 	_on_event_tracks_ready()
@@ -420,51 +422,50 @@ func _on_event_tracks_ready() -> void:
 		load_dividers()
 
 ## This assumes that the tempo and meter dictionaries are sorted
+func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
+	var time: float = song_position + start_offset
+	var time_change: Vector3 = conductor.get_time_change_at(time)
+	var yR: float = p.x
+	if factor_in_snap:
+		yR *= time_change.y * time_change.z / chart_snap
+	
+	var spb: float = (60.0 / time_change.x) * (4.0 / time_change.z)
+	return yR * (spb / time_change.z)
+
+## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var time_changes: Dictionary[float, Vector3] = EditorResources.song.time_changes
-	var _offset: float = -EditorResources.chart.offset
+	var tempo_data: Dictionary[float, Vector3] = conductor.time_changes
+	var _offset: float = 0# -EditorResources.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
 	
-	var L: float = time_changes.keys()[0]
-	var R: float = time_changes.keys()[0]
+	var L: float = tempo_data.keys()[0]
+	var R: float = tempo_data.keys()[0]
 	
 	var tempo: float = 60.0
+	var time_calc: Callable = func(t, bpm, d) -> float:
+		var spb: float = (60.0 / bpm) * (4.0 / d)
+		return t / spb
 	
 	while R < time:
-		if i + 1 >= time_changes.size():
+		if i + 1 >= tempo_data.size():
 			R = time
 		else:
-			R = time_changes.keys()[i + 1]
+			R = tempo_data.keys()[i + 1]
 		
 		if R > time:
 			R = time
 		
-		tempo = time_changes[L].x
+		tempo = tempo_data[L].x
 		
 		_offset += R - L
-		y_offset += grid.get_real_position(Vector2((R - L) / (60.0 / tempo) * time_changes[L].x, 0)).x
+		y_offset += grid.get_real_position(Vector2(time_calc.call(R - L, tempo, tempo_data[L].z) * tempo_data[L].z, 0)).x
 		
 		L = R
 		i += 1
 	
 	return y_offset
-
-## This assumes that the tempo and meter dictionaries are sorted
-func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	var time: float = song_position + start_offset
-	var time_change: Vector3 = conductor.get_time_change_at(time)
-	var L: float = EditorResources.chart.get_tempo_time_at(time)
-	var yR: float = p.x * grid.grid_size.x * grid.zoom.x
-	if factor_in_snap:
-		yR *= time_change.y * time_change.z / chart_snap
-	
-	var seconds_per_beat: float = 60.0 / EditorResources.chart.tempos[L]
-	var output: float = yR / (grid.grid_size.x * grid.zoom.x * time_change.y) * seconds_per_beat
-	
-	return output
-
 
 func is_event_at(_name: String, time: float) -> bool:
 	return (find_event(_name, time) != -1)

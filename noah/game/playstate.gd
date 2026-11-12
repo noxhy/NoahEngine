@@ -148,7 +148,6 @@ func set_song_speed(v: float) -> void:
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	ui = get_tree().get_first_node_in_group(&"ui")
 	camera = get_tree().get_first_node_in_group(&"cameras")
 	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
