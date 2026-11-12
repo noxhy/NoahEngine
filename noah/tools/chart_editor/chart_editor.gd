@@ -906,9 +906,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time)
+		var L: int = NoahTools.bsearch_note_data_left_range(song_events, time)
 		if L != -1:
-			EditorResources.chart.events.insert(L, [time, event, parameters])
+			song_events.insert(L, [time, event, parameters])
 			
 			if event_nodes.is_empty():
 				event_nodes.append(event_instance)
@@ -928,8 +928,8 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			output = L
 		else:
 			event_nodes.append(event_instance)
-			EditorResources.chart.events.append([time, event, parameters])
-			L = EditorResources.chart.events.size() - 1
+			song_events.append([time, event, parameters])
+			L = song_events.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [event_instance]
 			min_lane = 0
@@ -1023,8 +1023,8 @@ func find_note(lane: int, time: float) -> int:
 	return -1
 
 func find_events_at(time: float) -> Array[int]:
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + EPSILON)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1033,7 +1033,7 @@ func find_events_at(time: float) -> Array[int]:
 	var ret: Array[int] = []
 	
 	for i in range(L, R + 1):
-		var _event: Array = EditorResources.chart.events[i]
+		var _event: Array = song_events[i]
 		if is_equal_approx(_event[0], time):
 			ret.append(i)
 	return ret
@@ -1041,8 +1041,8 @@ func find_events_at(time: float) -> Array[int]:
 func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 	if epsilon == -1.0:
 		epsilon = EPSILON
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - epsilon)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + epsilon)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - epsilon)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + epsilon)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1056,8 +1056,8 @@ func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + EPSILON)
 	
 	#print(find_events_at(time))
 	
@@ -1069,7 +1069,7 @@ func find_event(event: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var _event: Array = EditorResources.chart.events[i]
+		var _event: Array = song_events[i]
 		if (_event[1] == event):
 			if is_equal_approx(_event[0], time):
 				return i
@@ -1797,7 +1797,7 @@ func paste() -> void:
 	undo_redo.add_do_method(move_selection.bind(offset, 0))
 	undo_redo.add_do_method(SoundManager.tool_note_place.play)
 	undo_redo.add_undo_property(EditorResources.chart, &"notes", EditorResources.chart.notes.duplicate(true))
-	undo_redo.add_undo_property(EditorResources.chart, &"events", EditorResources.chart.events.duplicate(true))
+	undo_redo.add_undo_property(EditorResources.chart, &"events", song_events.duplicate(true))
 	undo_redo.add_undo_property(self, &"selected_notes", selected_notes.duplicate())
 	undo_redo.add_undo_method(load_section.bind(song_position, true))
 	undo_redo.add_undo_method(update_selected_notes)
