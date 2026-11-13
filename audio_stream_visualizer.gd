@@ -15,9 +15,11 @@ class_name AudioStreamVisualizer
 		duration = v
 		generate_waveform()
 
+## Maximum amount of bars shown in the visualizer
 @export_range(100, 4000) var resolution: int = 1200
-
+## Color of the waveform bars
 @export var waveform_color: Color = Color.WHITE
+## Color of the center line.
 @export var center_color: Color = Color(1, 1, 1, 0.2)
 
 var waveform: PackedVector2Array = []
