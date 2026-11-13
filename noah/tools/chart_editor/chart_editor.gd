@@ -175,7 +175,7 @@ func _process(delta: float) -> void:
 	
 	if EditorResources.chart:
 		update_conductor()
-		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset - time_change_offset)
+		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset + time_change_offset)
 		update_camera_song_position(music.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
