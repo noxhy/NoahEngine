@@ -32,7 +32,6 @@ func _ready() -> void:
 
 func generate_waveform() -> void:
 	waveform.clear()
-	
 	if audio_stream == null or duration <= 0.0:
 		queue_redraw()
 		return
@@ -44,7 +43,7 @@ func generate_waveform() -> void:
 	
 	playback.start(start_time)
 	
-	var sample_rate: float = AudioServer.get_mix_rate()
+	var sample_rate: float = AudioServer.get_mix_rate() / 10
 	var frame_count: int = int(duration * sample_rate)
 	
 	# Mix the requested section only once.

@@ -91,7 +91,6 @@ var dragging_song_slider: bool = false
 
 ## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
 var waveform_nodes: Dictionary[int, AudioStreamVisualizer] = {}
-var waveform_dirty: bool = false
 
 var event_nodes: Array = []
 var current_visible_events_L: int = -1
@@ -601,7 +600,6 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	lower_ui.chart_snap.value = current_snap
 	
-	waveform_dirty = true
 	update_waveforms(song_position)
 	
 	enable_can_chart_on_next_frame()
@@ -1584,7 +1582,7 @@ func update_camera_song_position(instant: bool = false) -> void:
 func update_waveforms(time: float = 0) -> void:
 	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.y
 	
-	if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
+	if waveform_nodes.is_empty() and (instrumental_waveforms or vocal_waveforms):
 		load_waveforms()
 	
 	for id in waveform_nodes:
