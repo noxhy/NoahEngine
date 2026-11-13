@@ -23,6 +23,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_stretch_ratio = 0.5
 text = "<"
+alignment = 0
 
 [node name="Button" type="Button" parent="." unique_id=381543617]
 layout_mode = 2
@@ -35,6 +36,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 size_flags_stretch_ratio = 0.5
 text = ">"
+alignment = 2
 
 [node name="Window" type="Window" parent="." unique_id=247601207]
 transparent_bg = true

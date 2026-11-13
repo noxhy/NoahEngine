@@ -762,37 +762,37 @@ func _on_note_type_window_selected_note_type(type: Variant) -> void:
 	pass # Replace with function body.
 
 
-func update_waveforms(time: float = 0) -> void:
-	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.x
-	
-	if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
-		load_waveforms()
-		waveform_dirty = false
-	
-	for id in waveform_nodes:
-		var waveform = waveform_nodes.get(id)
-		
-		if not waveform:
-			return
-		
-		if id == -1:
-			waveform.visible = instrumental_waveforms
-		else:
-			waveform.visible = vocal_waveforms
-		
-		if not waveform.visible:
-			continue
-		
-		var L: float = max(time, 0)
-		var R: float = min(time + time_range, music.stream.get_length())
-		waveform.time = L
-		waveform.duration = R - L
-		
-		waveform.position = grid.get_real_position(Vector2(0, 0))
-		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
-		waveform.size.y = grid.grid_size.y * 1 * grid.zoom.y
-		
-		waveform.position.x += time_to_y_position(L)
+#func update_waveforms(time: float = 0) -> void:
+	#var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.x
+	#
+	#if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
+		#load_waveforms()
+		#waveform_dirty = false
+	#
+	#for id in waveform_nodes:
+		#var waveform = waveform_nodes.get(id)
+		#
+		#if not waveform:
+			#return
+		#
+		#if id == -1:
+			#waveform.visible = instrumental_waveforms
+		#else:
+			#waveform.visible = vocal_waveforms
+		#
+		#if not waveform.visible:
+			#continue
+		#
+		#var L: float = max(time, 0)
+		#var R: float = min(time + time_range, music.stream.get_length())
+		#waveform.time = L
+		#waveform.duration = R - L
+		#
+		#waveform.position = grid.get_real_position(Vector2(0, 0))
+		#waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
+		#waveform.size.y = grid.grid_size.y * 1 * grid.zoom.y
+		#
+		#waveform.position.x += time_to_y_position(L)
 
 
 func update_selected_notes() -> void:

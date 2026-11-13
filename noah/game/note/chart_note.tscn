@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://yyfqg2jvwcmt"]
 
 [ext_resource type="Script" uid="uid://b2wrl2lit1tus" path="res://noah/game/note/chart_note.gd" id="1_ud7f5"]
+[ext_resource type="FontFile" uid="uid://ddtgfc3a3xn5j" path="res://noah/assets/fonts/coding_font.ttf" id="2_yeh05"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ud7f5"]
 size = Vector2(640.0001, 640.0001)
 
 [sub_resource type="LabelSettings" id="LabelSettings_wqobl"]
 resource_local_to_scene = true
+font = ExtResource("2_yeh05")
 font_color = Color(1, 1, 0, 1)
 outline_size = 6
 outline_color = Color(0, 0, 0, 1)

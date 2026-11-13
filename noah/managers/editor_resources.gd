@@ -19,7 +19,7 @@ static var strum_count: int:
 			if strumline.right_lane == -1:
 				continue
 			
-			sum += strumline.right_lane - strumline.left_lane + 1
+			sum += strumline.lane_count
 		
 		return sum
 

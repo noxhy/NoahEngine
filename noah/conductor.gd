@@ -185,9 +185,21 @@ func get_change_time_at(_time: float) -> float:
 		if time >= point:
 			output = point
 		else:
-			continue
+			break
 	
 	return output
+
+## Returns the index of the time change at a given time.
+func get_time_change_index_at(_time: float) -> int:
+	_time = max(0, _time - offset)
+	var i: int = -1
+	for point in time_changes:
+		if _time < point:
+			break
+		
+		i += 1
+	
+	return i
 
 ## Returns the time after moving forward X beats. `_time` will be floored to the current beat.
 func step_in_beats(_time: float, beats: int) -> float:
@@ -196,7 +208,8 @@ func step_in_beats(_time: float, beats: int) -> float:
 	var direction: int = signi(beats)
 	var bpm: float = get_time_change_at(_time).x
 	var spb: float = 60.0 / bpm
-	var output: float = floori((_time - get_change_time_at(_time)) / spb) * spb
+	var change_time: float = get_change_time_at(_time)
+	var output: float = floori((_time - change_time) / spb) * spb
 	beats = abs(beats)
 	while beats > 0:
 		output += spb * direction
@@ -204,7 +217,7 @@ func step_in_beats(_time: float, beats: int) -> float:
 		spb = 60.0 / bpm
 		beats -= 1
 	
-	return output + offset
+	return output + offset + change_time
 
 ## Returns the time after moving forward X steps. `_time` will be floored to the current step.
 func step_in_steps(_time: float, steps: int) -> float:
@@ -214,7 +227,8 @@ func step_in_steps(_time: float, steps: int) -> float:
 	var time_change: Vector3 = get_time_change_at(_time)
 	var bpm: float = time_change.x
 	var sps: float = (60.0 / bpm) / time_change.z
-	var output: float = floori((_time - get_change_time_at(_time)) / sps) * sps
+	var change_time: float = get_change_time_at(_time)
+	var output: float = floori((_time - change_time) / sps) * sps
 	steps = abs(steps)
 	while steps > 0:
 		output += sps * direction
@@ -223,4 +237,4 @@ func step_in_steps(_time: float, steps: int) -> float:
 		sps = (60.0 / bpm) / time_change.z
 		steps -= 1
 	
-	return output + offset
+	return output + offset + change_time

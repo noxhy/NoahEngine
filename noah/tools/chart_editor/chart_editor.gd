@@ -37,8 +37,6 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 ## Chart Variables
 var backup_chart: Chart = null
-# So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
-var vocal_tracks: Array = []
 
 #some settings
 static var instrumental_volume: float = 1
@@ -106,6 +104,7 @@ var current_visible_events_R: int = -1
 @onready var grid_layer: CanvasLayer = $"Grid Layer"
 @onready var grid: Grid = %Grid
 @onready var minimap: EditorMinimap = %Minimap
+@onready var note_parallax: Parallax2D = $"Grid Layer/Parallax2D"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -157,7 +156,7 @@ func _process(delta: float) -> void:
 					current_note += 1
 				elif note[0] <= (song_position + start_offset):
 					var lane: int = note[1]
-					if vocal_tracks.size() == 1 and EditorResources.strumlines.size() > 0:
+					if EditorResources.strumlines.size() == 1:
 						if EditorResources.strumlines[0].hit_sounds:
 							SoundManager.tool_hit.play()
 					else:
@@ -176,16 +175,16 @@ func _process(delta: float) -> void:
 	
 	if EditorResources.chart:
 		update_conductor()
-		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - time_change_offset)
+		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset - time_change_offset)
 		update_camera_song_position(music.playing)
 	
-	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
+	var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(grid.get_grid_position(
 		mouse_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap)).floor())
 	
-	$"Grid Layer/Parallax2D".repeat_size.y = grid.get_size().y
+	note_parallax.repeat_size.y = grid.get_size().y
 	
 	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
@@ -455,7 +454,7 @@ func _draw() -> void:
 	
 	if EditorResources.chart:
 		# The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
+		var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(grid.get_grid_position(mouse_position).floor())
 		var snapped_position: Vector2i = Vector2i(
@@ -463,13 +462,13 @@ func _draw() -> void:
 			)
 		
 		# Song Start Offset Marker
-		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 2), \
 		grid.get_real_position(Vector2(grid.columns, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		
 		# The box at the start of the marker
-		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 4), \
 		grid.get_real_position(Vector2(1, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
@@ -759,7 +758,7 @@ func load_dividers() -> void:
 		rect.position.y += (grid.grid_size.y * grid.zoom.y) * conductor.denominator * i
 		rect.position.y -= rect.size.y / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
 	for i in [0, 1, grid.columns]:
@@ -773,7 +772,7 @@ func load_dividers() -> void:
 		rect.position.x -= grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
 	for strumline in EditorResources.strumlines:
@@ -787,7 +786,7 @@ func load_dividers() -> void:
 		rect.position.x -= grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
 	var times: Array = [music.stream.get_sync_stream(0).get_length()]
@@ -1176,11 +1175,12 @@ func toggle_audios(paused: bool = true) -> void:
 func move_bound_left(strum_id: int) -> void:
 	var strumline: Strumline = EditorResources.strumlines[strum_id]
 	strumline.left_lane = clamp(strumline.left_lane - 1, 0, EditorResources.strum_count - 1)
+	strumline.lane_count += 1
 	
 	for id in EditorResources.strumlines.size():
 		var other_strumline: Strumline = EditorResources.strumlines[id]
 		if other_strumline.right_lane == strumline.left_lane:
-			other_strumline.right_lane = clamp(other_strumline.right_lane - 1, 0, EditorResources.strum_count - 1)
+			other_strumline.right_lane = clamp(other_strumline.right_lane - 1, 0, EditorResources.strum_count - 1) 
 	
 	update_grid()
 	load_dividers()
@@ -1193,6 +1193,7 @@ func move_bound_right(strum_id: int) -> void:
 		var other_strumline: Strumline = EditorResources.strumlines[id]
 		if other_strumline.left_lane == strumline.right_lane:
 			other_strumline.left_lane = clamp(other_strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
+			other_strumline.lane_count -= 1
 	
 	update_grid()
 	load_dividers()
@@ -1550,10 +1551,11 @@ func load_waveforms() -> void:
 	for id in EditorResources.strumlines.size():
 		var strumline: Strumline = EditorResources.strumlines[id]
 		var track: int = strumline.audio_track
-		if track < EditorResources.song.vocals.size() and vocal_tracks.get(track):
+		if track < EditorResources.song.vocals.size():
 			waveform = AudioStreamVisualizer.new()
 			waveform.visible = false
-			waveform.resolution = 300
+			waveform.resolution = 3200
+			waveform.waveform_color = Color.MEDIUM_PURPLE
 			waveform.audio_stream = stream.get_sync_stream(track + 1)
 			waveform_nodes[track] = waveform
 			$"Waveform Layer".add_child(waveform)
@@ -1561,11 +1563,11 @@ func load_waveforms() -> void:
 		else:
 			printerr("(load_waveforms) Track ", track, " does not exist.")
 	
-	
 	waveform = AudioStreamVisualizer.new()
 	waveform.visible = false
-	waveform.resolution = 300
+	waveform.resolution = 9600
 	waveform.audio_stream = stream.get_sync_stream(0)
+	waveform.waveform_color = Color.MEDIUM_SPRING_GREEN
 	waveform_nodes[-1] = waveform
 	$"Waveform Layer".add_child(waveform)
 	waveform.add_to_group(&"waveforms")
@@ -1601,18 +1603,22 @@ func update_waveforms(time: float = 0) -> void:
 			continue
 		
 		var L: float = max(time, 0)
-		var R: float = min(time + time_range, music.stream.get_sync_stream(0).get_length())
-		waveform.start_time = L
-		waveform.duration = R - L
+		var i: int = conductor.get_time_change_index_at(L)
+		var R_time: float = music.stream.get_sync_stream(0).get_length()
+		if conductor.time_changes.keys().get(i + 1):
+			R_time = conductor.time_changes.keys()[i + 1]
+		
+		var R: float = min(time + time_range, R_time)
+		
+		waveform.set_section(L, R - L)
 		waveform.rotation_degrees = 90
 		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
 		if id == -1:
 			waveform.position = grid.get_real_position(Vector2(1, 0))
 			waveform.size.y = grid.grid_size.x * 1 * grid.zoom.x
 		else:
-			waveform.position = grid.get_real_position(Vector2(
-				(strumline.right_lane - strumline.left_lane) / 2.0 + strumline.left_lane, 0))
-			waveform.size.y = grid.grid_size.x * (strumline.right_lane - strumline.left_lane) * grid.zoom.x
+			waveform.position = grid.get_real_position(Vector2(strumline.right_lane + 2, 0))
+			waveform.size.y = grid.grid_size.x * strumline.lane_count * grid.zoom.x
 		
 		waveform.position.y += time_to_y_position(L)
 

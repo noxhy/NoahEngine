@@ -11,7 +11,7 @@ class_name Strumline
 ## Right-most lane.
 var right_lane: int:
 	set(v):
-		lane_count = v - left_lane
+		lane_count = v - left_lane + 1
 	get():
 		if left_lane == -1:
 			return -1
