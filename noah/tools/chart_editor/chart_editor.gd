@@ -1444,7 +1444,6 @@ func disable_charting() -> void:
 
 
 func open_popup() -> void:
-	can_chart = false
 	SoundManager.tool_open_window.play()
 
 
@@ -1556,6 +1555,7 @@ func load_waveforms() -> void:
 		if track < EditorResources.song.vocals.size() and vocal_tracks.get(track):
 			waveform = AudioStreamVisualizer.new()
 			waveform.visible = false
+			waveform.resolution = 300
 			waveform.audio_stream = stream.get_sync_stream(track + 1)
 			waveform_nodes[track] = waveform
 			$"Waveform Layer".add_child(waveform)
@@ -1566,6 +1566,7 @@ func load_waveforms() -> void:
 	
 	waveform = AudioStreamVisualizer.new()
 	waveform.visible = false
+	waveform.resolution = 300
 	waveform.audio_stream = stream.get_sync_stream(0)
 	waveform_nodes[-1] = waveform
 	$"Waveform Layer".add_child(waveform)
@@ -1588,7 +1589,7 @@ func update_waveforms(time: float = 0) -> void:
 	
 	for id in waveform_nodes:
 		var strumline: Strumline = EditorResources.strumlines[id]
-		var waveform: AudioStreamVisualizer = waveform_nodes.get(id)
+		var waveform: AudioStreamVisualizer = waveform_nodes[id]
 		
 		if not waveform:
 			return
@@ -1605,10 +1606,10 @@ func update_waveforms(time: float = 0) -> void:
 		var R: float = min(time + time_range, music.stream.get_sync_stream(0).get_length())
 		waveform.start_time = L
 		waveform.duration = R - L
-		waveform.rotation = PI / 2
+		waveform.rotation_degrees = 90
 		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
 		if id == -1:
-			waveform.position = grid.get_real_position(Vector2(0, 0))
+			waveform.position = grid.get_real_position(Vector2(1, 0))
 			waveform.size.y = grid.grid_size.x * 1 * grid.zoom.x
 		else:
 			waveform.position = grid.get_real_position(Vector2(
