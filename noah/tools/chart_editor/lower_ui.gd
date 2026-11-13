@@ -39,8 +39,9 @@ func _process(delta: float) -> void:
 	if not chart_editor:
 		return
 	
-	if EditorResources.song and chart_editor.instrumental and chart_editor.instrumental.stream:
-		time_left_label.text = "-" + NoahTools.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position - chart_editor.start_offset)
+	if EditorResources.song and chart_editor.music and chart_editor.music.stream:
+		time_left_label.text = str("-", NoahTools.format_time(
+			chart_editor.music.stream.get_sync_stream(0).get_length() - chart_editor.song_position - chart_editor.start_offset))
 	else:
 		time_left_label.text = "- ??:??"
 	

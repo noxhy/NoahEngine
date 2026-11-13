@@ -90,7 +90,7 @@ var time_change_offset: float:
 var dragging_song_slider: bool = false
 
 ## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
-var waveform_nodes: Dictionary[int, Variant] = {}
+var waveform_nodes: Dictionary[int, AudioStreamVisualizer] = {}
 var waveform_dirty: bool = false
 
 var event_nodes: Array = []
@@ -99,8 +99,7 @@ var current_visible_events_R: int = -1
 
 @onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
 @onready var lower_ui: ChartEditorLowerUI = %"Lower UI"
-@onready var instrumental: AudioStreamPlayer = %Instrumental
-@onready var vocals: AudioStreamPlayer = %Vocals
+@onready var music: AudioStreamPlayer = %Music
 @onready var conductor: Conductor = $Conductor
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var song_slider: HSlider = %"Song Slider"
@@ -111,7 +110,7 @@ var current_visible_events_R: int = -1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if name == "Chart Editor":
+	if name == &"Chart Editor":
 		if EditorResources.event_editor:
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 			return
@@ -145,8 +144,9 @@ func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
-	if EditorResources.song and instrumental.playing:
-		song_position = instrumental.get_playback_position() - start_offset
+	if EditorResources.song and music.playing:
+		music.pitch_scale = song_speed
+		song_position = music.get_playback_position() - start_offset
 		song_slider.value = song_position
 		
 		var notes_list = EditorResources.chart.notes
@@ -178,7 +178,7 @@ func _process(delta: float) -> void:
 	if EditorResources.chart:
 		update_conductor()
 		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - time_change_offset)
-		update_camera_song_position(instrumental.playing)
+		update_camera_song_position(music.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -198,7 +198,7 @@ func _process(delta: float) -> void:
 				var time: float = grid_position_to_time(snapped_position, true)
 				time += conductor.get_change_time_at(song_position + start_offset)
 				
-				if time <= instrumental.stream.get_length():
+				if time <= music.stream.get_sync_stream(0).get_length():
 					if !is_note_at(lane, time):
 						add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
 						self.remove_note.bind(lane, time))
@@ -259,7 +259,7 @@ func _process(delta: float) -> void:
 			auto_save()
 	
 	if can_interact_with_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
-		is_mouse_over_grid() and not instrumental.playing and !dragging_song_slider:
+		is_mouse_over_grid() and not music.playing and !dragging_song_slider:
 		## Song Position Slider
 		if snapped_position.x == 0:
 			@warning_ignore("incompatible_ternary")
@@ -367,7 +367,7 @@ func _process(delta: float) -> void:
 
 # Song scrubbing
 func scrub(axis: int) -> void:
-	if not instrumental.stream_paused:
+	if not music.stream_paused:
 		toggle_audios(true)
 	
 	if !Input.is_action_pressed(&"shift"):
@@ -375,7 +375,7 @@ func scrub(axis: int) -> void:
 	else:
 		song_position = conductor.step_in_steps(song_position, axis)
 	
-	song_position = clampf(song_position, start_offset, instrumental.stream.get_length())
+	song_position = clampf(song_position, start_offset, music.stream.get_sync_stream(0).get_length())
 	song_slider.set_value_no_signal(song_position)
 
 ## Updates the conductor with the current [member song_position] and offset of the chart.
@@ -393,12 +393,7 @@ func set_start_offset(grid_position: Vector2):
 
 # Updates the audios
 func refresh_audios():
-	instrumental.volume_linear = instrumental_volume
-	
-	for id in EditorResources.strumlines.size():
-		var track = EditorResources.strumlines[id].audio_track
-		if track < vocal_tracks.size():
-			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(EditorResources.strumlines[id].volume))
+	music.volume_linear = instrumental_volume
 
 
 func is_mouse_over_any_ui() -> bool:
@@ -576,12 +571,18 @@ func load_song(song: Song, difficulty: Variant = null):
 	EditorResources.chart = Chart.load(difficulty_data.chart, song)
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"free")
-	instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
-	play_audios(song_position)
+	# Setting the audios
+	music.stream = AudioStreamSynchronized.new()
+	music.stop()
+	var stream: AudioStreamSynchronized = music.stream
+	stream.stream_count = EditorResources.song.vocals.size() + 1
+	stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
+	var i: int = 1
+	for path in EditorResources.song.vocals:
+		stream.set_sync_stream(i, SoundManager.get_stream(path))
+		i += 1
 	
-	toggle_audios()
-	
-	song_slider.max_value = instrumental.stream.get_length()
+	song_slider.max_value = stream.get_sync_stream(0).get_length()
 	song_slider.value = song_position
 	update_conductor()
 	
@@ -621,6 +622,7 @@ func load_song_path(path: String, difficulty: Variant = null) -> void:
 func load_chart(file: Chart, ghost: bool = false) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
+	
 	selected_notes = []
 	selected_note_nodes = []
 	current_visible_notes_L = -1
@@ -790,7 +792,7 @@ func load_dividers() -> void:
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	var times: Array = [instrumental.stream.get_length()]
+	var times: Array = [music.stream.get_sync_stream(0).get_length()]
 	times.append_array(conductor.time_changes.keys())
 	times.erase(0.0)
 	if not conductor.time_changes.is_empty():
@@ -1083,22 +1085,8 @@ func find_event(event: String, time: float) -> int:
 	return -1
 
 func play_audios(time: float):
-	vocals.stream = AudioStreamPolyphonic.new()
-	# This is to prevent null references
-	vocals.play()
-	if not EditorResources.song:
-		return
-	vocals.stream.polyphony = EditorResources.song.vocals.size()
-	
-	var playback = vocals.get_stream_playback()
-	vocal_tracks = []
-	for stream in EditorResources.song.vocals:
-		vocal_tracks.append(playback.play_stream(SoundManager.get_stream(stream),
-		time + start_offset, 0.0, song_speed))
-	
-	time = clamp(time, 0, instrumental.stream.get_length() - 0.1)
-	instrumental.play(time + start_offset)
-	instrumental.pitch_scale = song_speed
+	time = clamp(time, 0, music.stream.get_sync_stream(0).get_length() - EPSILON)
+	music.play(time + start_offset)
 	song_position = time + start_offset
 	
 	current_note = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, song_position)
@@ -1179,8 +1167,7 @@ func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1
 
 func toggle_audios(paused: bool = true) -> void:
-	vocals.stream_paused = paused
-	instrumental.stream_paused = paused
+	music.stream_paused = paused
 	
 	if not paused:
 		play_audios(song_position)
@@ -1242,7 +1229,7 @@ func _on_skip_to_beginning_pressed() -> void:
 	toggle_audios(false)
 
 func _on_skip_to_end_pressed() -> void:
-	song_position = instrumental.stream.get_length() - 0.1
+	song_position = music.stream.get_sync_stream(0).get_length() - 0.1
 	toggle_audios(false)
 
 func _on_instrumental_finished() -> void:
@@ -1305,7 +1292,7 @@ func edit_button_item_pressed(id) -> void:
 ## Audio button item pressed
 func audio_button_item_pressed(id) -> void:
 	match id:
-		0: toggle_audios(instrumental.playing)
+		0: toggle_audios(music.playing)
 		4:
 			SettingsManager.data.song_speed = min(SettingsManager.data.song_speed + 0.05, 2)
 			SettingsManager.flush()
@@ -1561,33 +1548,28 @@ func load_waveforms() -> void:
 	if not EditorResources.song:
 		return
 	
+	var waveform: AudioStreamVisualizer
+	var stream: AudioStreamSynchronized = music.stream
 	for id in EditorResources.strumlines.size():
 		var strumline: Strumline = EditorResources.strumlines[id]
 		var track: int = strumline.audio_track
 		if track < EditorResources.song.vocals.size() and vocal_tracks.get(track):
-			var waveform_data = WaveformDataParser.interpretSound(EditorResources.song.vocals[id])
-			if waveform_data:
-				@warning_ignore("confusable_local_declaration")
-				var waveform: WaveformRenderer = WaveformRenderer.new(waveform_data, 0, Color.MEDIUM_PURPLE, Color.TRANSPARENT)
-				
-				waveform.visible = false
-				$"Waveform Layer".add_child(waveform)
-				waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
-				waveform.add_to_group(&"waveforms")
-				
-				waveform_nodes[track] = waveform
+			waveform = AudioStreamVisualizer.new()
+			waveform.visible = false
+			waveform.audio_stream = stream.get_sync_stream(track + 1)
+			waveform_nodes[track] = waveform
+			$"Waveform Layer".add_child(waveform)
+			waveform.add_to_group(&"waveforms")
 		else:
 			printerr("(load_waveforms) Track ", track, " does not exist.")
 	
 	
-	var waveform: WaveformRenderer = WaveformRenderer.new(WaveformDataParser.interpretSound(EditorResources.song.instrumental), 0, Color.MEDIUM_SEA_GREEN, Color.TRANSPARENT)
-	
+	waveform = AudioStreamVisualizer.new()
 	waveform.visible = false
-	$"Waveform Layer".add_child(waveform)
-	waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
-	waveform.add_to_group(&"waveforms")
-	
+	waveform.audio_stream = stream.get_sync_stream(0)
 	waveform_nodes[-1] = waveform
+	$"Waveform Layer".add_child(waveform)
+	waveform.add_to_group(&"waveforms")
 
 
 func update_camera_song_position(instant: bool = false) -> void:
@@ -1603,11 +1585,10 @@ func update_waveforms(time: float = 0) -> void:
 	
 	if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
 		load_waveforms()
-		waveform_dirty = false
 	
 	for id in waveform_nodes:
 		var strumline: Strumline = EditorResources.strumlines[id]
-		var waveform = waveform_nodes.get(id)
+		var waveform: AudioStreamVisualizer = waveform_nodes.get(id)
 		
 		if not waveform:
 			return
@@ -1621,21 +1602,20 @@ func update_waveforms(time: float = 0) -> void:
 			continue
 		
 		var L: float = max(time, 0)
-		var R: float = min(time + time_range, instrumental.stream.get_length())
-		waveform.time = (L * 1000) / 7.8
-		waveform.duration = (R - L) * 128
-		
-		waveform.width = time_to_y_position(R) - time_to_y_position(L)
+		var R: float = min(time + time_range, music.stream.get_sync_stream(0).get_length())
+		waveform.start_time = L
+		waveform.duration = R - L
+		waveform.rotation = PI / 2
+		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
 		if id == -1:
 			waveform.position = grid.get_real_position(Vector2(0, 0))
-			waveform.height = grid.grid_size.x * 1 * grid.zoom.x
+			waveform.size.y = grid.grid_size.x * 1 * grid.zoom.x
 		else:
 			waveform.position = grid.get_real_position(Vector2(
 				(strumline.right_lane - strumline.left_lane) / 2.0 + strumline.left_lane, 0))
-			waveform.height = grid.grid_size.x * (strumline.right_lane - strumline.left_lane) * grid.zoom.x
+			waveform.size.y = grid.grid_size.x * (strumline.right_lane - strumline.left_lane) * grid.zoom.x
 		
 		waveform.position.y += time_to_y_position(L)
-		waveform.dirty = true
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
@@ -2011,15 +1991,15 @@ func _on_minimap_gui_input(event: InputEvent) -> void:
 			scrub_minimap()
 
 func scrub_minimap() -> void:
-	if not instrumental.stream_paused:
+	if not music.stream_paused:
 		toggle_audios(true)
 	
 	var mouse_position: Vector2 = get_corrected_mouse_position()
 	song_position = remap(mouse_position.y - 360,
 	minimap.global_position.y, minimap.global_position.y + minimap.size.y,
-	start_offset, instrumental.stream.get_length() - start_offset)
+	start_offset, music.stream.get_sync_stream(0).get_length() - start_offset)
 	
-	song_position = clamp(song_position, start_offset, instrumental.stream.get_length() - start_offset)
+	song_position = clamp(song_position, start_offset, music.stream.get_sync_stream(0).get_length() - start_offset)
 	update_camera_song_position(true)
 	
 	song_slider.value = song_position

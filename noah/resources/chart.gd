@@ -113,6 +113,7 @@ static func load(path: String, song: Song) -> Chart:
 								
 								_events = events_json.get('events', [])
 						return convert_psych(json, song, _events, false)
+					
 					ChartFormat.PSYCH_V1:
 						var _events = []
 						var events_file = FileAccess.open(path.get_base_dir() + '/events.json', FileAccess.READ)
@@ -125,9 +126,8 @@ static func load(path: String, song: Song) -> Chart:
 								
 								_events = events_json.get('events', [])
 						
-						
 						return convert_psych(json, song, _events)
-						
+					
 					ChartFormat.VSLICE:
 						var meta_path: String = path.get_basename()
 						meta_path = meta_path.replace('-chart', '-metadata') + ".json"
@@ -158,6 +158,7 @@ static func load(path: String, song: Song) -> Chart:
 						var meta_json = JSON.parse_string(meta_file.get_as_text())
 						if meta_json:
 							return convert_cne(json, song, meta_json, _events)
+					
 					_:
 						pass
 	
@@ -323,9 +324,10 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 	
 	if song:
 		song.time_changes = time_changes
-		if song.events.is_empty():
+		if !ResourceLoader.exists(song.events):
 			var events_res: ChartEvents = ChartEvents.new(event_data)
 			var path: String = song.resource_path.get_base_dir().path_join("events.tres")
+			print("Generating events file at: ", path)
 			NoahTools.save_resource(events_res, path)
 			song.events = path
 	
@@ -518,10 +520,10 @@ static func convert_cne(data:Dictionary, song: Song, meta:Dictionary, _events:Ar
 	chart.notes = note_data
 	if song:
 		song.time_changes = time_changes
-		
-		if song.events.is_empty():
+		if !ResourceLoader.exists(song.events):
 			var events_res: ChartEvents = ChartEvents.new(event_data)
 			var path: String = song.resource_path.get_base_dir().path_join("events.tres")
+			print("Generating events file at: ", path)
 			NoahTools.save_resource(events_res, path)
 			song.events = path
 	

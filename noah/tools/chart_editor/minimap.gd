@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if EditorResources.chart and chart_editor.instrumental and chart_editor.instrumental.stream:
+	if EditorResources.chart and chart_editor.music and chart_editor.music.stream:
 		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step
 		if chart_editor.name == &"Event Editor":
 			_range /= chart_editor.grid.zoom.x
@@ -86,7 +86,7 @@ func unmap_from_image(packet):
 
 ## Maps a point to a position on the container
 func map_to_image_position(point: Vector2) -> Vector2i:
-	var y: float = point.y / chart_editor.instrumental.stream.get_length()
+	var y: float = point.y / chart_editor.music.stream.get_sync_stream(0).get_length()
 	y *= size.y
 	return Vector2i(int(point_width * point.x), snappedi(y, precision))
 

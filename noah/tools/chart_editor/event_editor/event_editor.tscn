@@ -25,6 +25,10 @@ script = ExtResource("1_06aqy")
 script = ExtResource("2_mcaef")
 stream_player = NodePath("../Audio/Instrumental")
 
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=256140047]
+unique_name_in_owner = true
+bus = &"Music"
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=490706665]
 position = Vector2(640, 360)
 

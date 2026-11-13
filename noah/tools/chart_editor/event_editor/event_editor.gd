@@ -21,8 +21,8 @@ func _process(delta: float) -> void:
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
 	if EditorResources.song:
-		if instrumental.playing:
-			song_position = instrumental.get_playback_position() - start_offset
+		if music.playing:
+			song_position = music.get_playback_position() - start_offset
 			song_slider.value = song_position
 			
 			for i in EditorResources.strumlines.size():
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 	if EditorResources.chart:
 		update_conductor()
 		$"Grid Layer/Parallax2D".scroll_offset.x = time_to_y_position(conductor.offset - EditorResources.chart.offset)
-		update_camera_song_position(instrumental.playing)
+		update_camera_song_position(music.playing)
 	
 	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
@@ -57,7 +57,7 @@ func _process(delta: float) -> void:
 					var time: float = grid_position_to_time(snapped_position, true)
 					time += conductor.get_change_time_at(song_position + start_offset)
 					
-					if time <= instrumental.stream.get_length():
+					if time <= music.stream.get_length():
 						if !is_event_at(event, time):
 							if Constants.EVENT_DATA.has(event):
 								current_event = event
@@ -126,7 +126,7 @@ func _process(delta: float) -> void:
 	
 	if (Input.is_action_pressed(&"mouse_left") and !Input.is_action_pressed(&"control")
 	and is_mouse_over_grid() and !dragging_song_slider and not is_mouse_over_any_ui()):
-		if !instrumental.playing:
+		if !music.playing:
 			if can_chart:
 				## Song Position Slider
 				if snapped_position.y == 0:
@@ -337,7 +337,7 @@ func load_dividers() -> void:
 		$"Grid Layer/Parallax2D".add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	var times: Array = [instrumental.stream.get_length()]
+	var times: Array = [music.stream.get_length()]
 	times.append_array(EditorResources.song.time_changes.keys())
 	times.erase(0.0)
 	for i in times:
@@ -651,8 +651,6 @@ func _on_event_parameters_about_to_popup() -> void:
 		%"Place Event".text = "Edit Event"
 	else:
 		%"Place Event".text = "Place Event"
-		
-		
 	
 	update_desc(Constants.EVENT_DATA[current_event].get("description", ""))
 	
@@ -720,11 +718,10 @@ func _on_window_about_to_popup() -> void:
 	
 	for event in events:
 		%"Event Option".add_item(event)
-		var icon: String = Constants.EVENT_DATA.get(event, {}).get("texture", "res://addons/at-icons/node/diamond_shape.svg")
+		var icon: String = Constants.EVENT_DATA.get(event, {}).get("texture", "res://addons/at-icons/node/help.svg")
 		if ResourceLoader.exists(icon):
 			%"Event Option".set_item_icon(%"Event Option".item_count - 1, load(icon))
 			%"Event Option".get_popup().set_item_icon_max_width(%"Event Option".item_count - 1, 32)
-			
 	
 	var ev = %"Event Option".get_item_text(%"Event Option".get_selected_id())
 	update_desc(Constants.EVENT_DATA.get(ev,{}).get("description", ""))
@@ -787,18 +784,15 @@ func update_waveforms(time: float = 0) -> void:
 			continue
 		
 		var L: float = max(time, 0)
-		var R: float = min(time + time_range, instrumental.stream.get_length())
-		waveform.time = (L * 1000) / 7.8
-		waveform.duration = (R - L) * 128
-		
-		waveform.width = time_to_y_position(R) - time_to_y_position(L)
+		var R: float = min(time + time_range, music.stream.get_length())
+		waveform.time = L
+		waveform.duration = R - L
 		
 		waveform.position = grid.get_real_position(Vector2(0, 0))
-		waveform.height = grid.grid_size.y * 1 * grid.zoom.y
-		waveform.current_orientation = WaveformRenderer.orientation.HORIZONTAL
+		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
+		waveform.size.y = grid.grid_size.y * 1 * grid.zoom.y
 		
 		waveform.position.x += time_to_y_position(L)
-		waveform.dirty = true
 
 
 func update_selected_notes() -> void:

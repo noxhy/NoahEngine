@@ -192,6 +192,7 @@ text = "Time Signature:"
 [node name="Numerator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=1224926063]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 min_value = 1.0
 max_value = 32.0
 value = 4.0
@@ -201,6 +202,7 @@ prefix = "N:"
 [node name="Denominator" type="SpinBox" parent="HBoxContainer/VBoxContainer2/HBoxContainer" unique_id=479747261]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 min_value = 2.0
 max_value = 16.0
 value = 4.0

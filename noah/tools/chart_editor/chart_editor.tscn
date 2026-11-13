@@ -13,8 +13,6 @@
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="20_4y0c1"]
 [ext_resource type="Script" uid="uid://dn04gjsh1koqp" path="res://noah/tools/chart_editor/loaded_song_error.gd" id="21_et4bh"]
 
-[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_r2tof"]
-
 [sub_resource type="LabelSettings" id="LabelSettings_8qav3"]
 font = ExtResource("20_4y0c1")
 font_size = 24
@@ -32,16 +30,9 @@ time_change_color = Color(0.5526029, 0.5802685, 0.9920456, 1)
 
 [node name="Conductor" type="Node" parent="." unique_id=1602922239 node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_dontb")
-stream_player = NodePath("../Audio/Instrumental")
+stream_player = NodePath("../Music")
 
-[node name="Audio" type="Node" parent="." unique_id=158434399]
-
-[node name="Vocals" type="AudioStreamPlayer" parent="Audio" unique_id=1600138238]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamPolyphonic_r2tof")
-bus = &"Music"
-
-[node name="Instrumental" type="AudioStreamPlayer" parent="Audio" unique_id=1067197915]
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1067197915]
 unique_name_in_owner = true
 bus = &"Music"
 

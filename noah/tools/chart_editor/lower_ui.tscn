@@ -195,7 +195,7 @@ value = 16.0
 rounded = true
 allow_greater = true
 update_on_text_changed = true
-prefix = "1/ "
+prefix = "1 / "
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer3" unique_id=1898549450]
 layout_mode = 2

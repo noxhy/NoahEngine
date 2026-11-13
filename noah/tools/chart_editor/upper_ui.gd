@@ -80,9 +80,9 @@ func _ready() -> void:
 		SoundManager.tool_close_window.play()
 		)
 	audios_window.updated_current_song.connect(func():
-		if not chart_editor.instrumental.stream_paused:
+		if not chart_editor.music.stream_paused:
 			chart_editor.toggle_audios()
-		chart_editor.instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
+		chart_editor.music.stream = SoundManager.get_stream(EditorResources.song.instrumental)
 		chart_editor.waveform_dirty = true
 		chart_editor.auto_save()
 		)
