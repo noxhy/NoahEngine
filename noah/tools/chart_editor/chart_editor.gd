@@ -1572,7 +1572,7 @@ func load_waveforms() -> void:
 	$"Waveform Layer".add_child(waveform)
 	waveform.add_to_group(&"waveforms")
 
-
+## Updates the camera position to the respective song position, 'instant' is a toggle whether the camera should lerp to the location or not.
 func update_camera_song_position(instant: bool = false) -> void:
 	if instant:
 		camera_2d.position.y = 360 + time_to_y_position(song_position)
@@ -1580,7 +1580,7 @@ func update_camera_song_position(instant: bool = false) -> void:
 		camera_2d.position.y = NoahTools.fps_lerp(
 			camera_2d.position.y, 360 + time_to_y_position(song_position), 20, get_process_delta_time())
 
-
+## Updates the duration, position and size of the waveform, Usually called every beat.
 func update_waveforms(time: float = 0) -> void:
 	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.y
 	

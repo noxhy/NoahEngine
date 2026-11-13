@@ -28,8 +28,8 @@ func _process(delta: float) -> void:
 			for i in EditorResources.strumlines.size():
 				var strumline: Strumline = EditorResources.strumlines[i]
 				var track: int = strumline.audio_track
-				if track < vocal_tracks.size():
-					%Vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(1))
+				if track < EditorResources.song.vocals.size():
+					music.stream.set_sync_stream_volume(track + 1, linear_to_db(1))
 	
 	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
 	if axis and can_interact_with_chart:
@@ -391,6 +391,46 @@ func update_grid() -> void:
 	await Engine.get_main_loop().process_frame
 	$"UI/Event Tracks".custom_minimum_size.y = grid.get_size().y
 
+
+func update_waveforms(time: float = 0) -> void:
+	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 3 / grid.zoom.y
+	
+	if waveform_nodes.is_empty() and (instrumental_waveforms or vocal_waveforms):
+		load_waveforms()
+	
+	for id in waveform_nodes:
+		var strumline: Strumline = EditorResources.strumlines[id]
+		var waveform: AudioStreamVisualizer = waveform_nodes[id]
+		
+		if not waveform:
+			return
+		
+		if id == -1:
+			waveform.visible = instrumental_waveforms
+		else:
+			waveform.visible = vocal_waveforms
+		
+		if not waveform.visible:
+			continue
+		
+		var L: float = max(time, 0)
+		var i: int = conductor.get_time_change_index_at(L)
+		var R_time: float = music.stream.get_sync_stream(0).get_length()
+		if conductor.time_changes.keys().get(i + 1):
+			R_time = conductor.time_changes.keys()[i + 1]
+		
+		var R: float = min(time + time_range, R_time)
+		
+		waveform.set_section(L, R - L)
+		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
+		if id == -1:
+			waveform.position = grid.get_real_position(Vector2(0, 0))
+			waveform.size.y = grid.grid_size.y * 1 * grid.zoom.y
+		else:
+			waveform.position = grid.get_real_position(Vector2(0, 0))
+			waveform.size.y = grid.grid_size.y * 1 * grid.zoom.y
+		
+		waveform.position.x += time_to_y_position(L)
 
 func remove_track(node) -> void:
 	var event: String = node.event
