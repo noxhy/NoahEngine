@@ -1537,6 +1537,7 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 func updated_strums() -> void:
 	enable_can_chart_on_next_frame()
 	update_grid()
+	auto_save()
 
 
 func load_waveforms() -> void:
