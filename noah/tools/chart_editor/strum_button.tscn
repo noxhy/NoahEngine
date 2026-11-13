@@ -2,6 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_4c1on"]
 [ext_resource type="Script" uid="uid://ydtsb8wn2g1u" path="res://noah/tools/chart_editor/strum_button.gd" id="2_yyjwr"]
+[ext_resource type="Texture2D" uid="uid://brgu0fvsr832c" path="res://addons/at-icons/node/arrow_left_to_line.svg" id="3_2ufmq"]
+[ext_resource type="Texture2D" uid="uid://bsar3lpdp8enc" path="res://addons/at-icons/node/arrow_right_to_line.svg" id="4_qhgux"]
 
 [node name="Strum Button" type="HFlowContainer" unique_id=865871887]
 anchors_preset = 4
@@ -22,8 +24,11 @@ script = ExtResource("2_yyjwr")
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_stretch_ratio = 0.5
-text = "<"
+text = " "
+icon = ExtResource("3_2ufmq")
 alignment = 0
+icon_alignment = 1
+expand_icon = true
 
 [node name="Button" type="Button" parent="." unique_id=381543617]
 layout_mode = 2
@@ -35,8 +40,11 @@ autowrap_mode = 1
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_stretch_ratio = 0.5
-text = ">"
+text = " "
+icon = ExtResource("4_qhgux")
 alignment = 2
+icon_alignment = 1
+expand_icon = true
 
 [node name="Window" type="Window" parent="." unique_id=247601207]
 transparent_bg = true

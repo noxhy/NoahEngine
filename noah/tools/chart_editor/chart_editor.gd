@@ -1184,6 +1184,8 @@ func move_bound_left(strum_id: int) -> void:
 	
 	update_grid()
 	load_dividers()
+	auto_save()
+
 
 func move_bound_right(strum_id: int) -> void:
 	var strumline: Strumline = EditorResources.strumlines[strum_id]
@@ -1197,6 +1199,8 @@ func move_bound_right(strum_id: int) -> void:
 	
 	update_grid()
 	load_dividers()
+	auto_save()
+
 
 func find_strum_id(strum_name: StringName) -> int:
 	return EditorResources.strumlines.find_custom(func(strumline: Strumline) -> bool:
