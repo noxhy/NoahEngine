@@ -210,13 +210,14 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 	if uid != -1:
 		ResourceSaver.set_uid(path, uid)
 
+
 ## Returns an array of the filepaths of a resource type
 static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
 	var results: PackedStringArray = []
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
 	var file: String = dir.get_next()
-	var blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
+	const blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 	while !file.is_empty():
 		if blacklist.has(file):
 			file = dir.get_next()
@@ -228,33 +229,27 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 		else:
 			full_path = full_path.trim_suffix(".remap").trim_suffix(".import")
 			
-			if full_path.ends_with(".tres") or full_path.ends_with(".res"): 
-				# this wont support things that extend the base which we will likely need
-				# we can make the dep search recursive later.
-				# ok i did it now
-				var deps = ResourceLoader.get_dependencies(full_path)
+			if not full_path.ends_with(".tres") and not full_path.ends_with(".res"):
+				file = dir.get_next()
+				continue
+			
+			var potential_file: bool = false
+			var dependencies: PackedStringArray = ResourceLoader.get_dependencies(full_path)
+			
+			for dep in dependencies:
+				if dep.contains("::"):
+					dep = dep.get_slice("::", 2)
 				
-				var potential_file: bool = false
-				
-				for dep in deps:
-					if dep.contains("::"):
-						dep = dep.get_slice("::", 2)
-					
-					if dep.ends_with(".gd"):
-						if resource_type.resource_path == dep:
-							potential_file = true
-							break
-						elif is_extending_from_base_script(load(dep), resource_type):
-							potential_file = true
-							break
-				
-				if potential_file:
-					
-					var script_file = load(full_path)
-					if is_instance_of(script_file, resource_type):
-						results.append(full_path)
-					
-					
+				if dep.ends_with(".gd"):
+					if resource_type.resource_path == dep or is_extending_from_base_script(load(dep), resource_type):
+						potential_file = true
+						break
+			
+			if potential_file:
+				if is_instance_of(load(full_path), resource_type):
+					results.append(full_path)
+			
+			
 		file = dir.get_next()
 	
 	return results
