@@ -211,7 +211,7 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 		ResourceSaver.set_uid(path, uid)
 
 ## Returns an array of the filepaths of a resource type
-static func get_resource_files(resource_type: Variant, path: String = "res://") -> PackedStringArray:
+static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
 	var results: PackedStringArray = []
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
@@ -231,6 +231,7 @@ static func get_resource_files(resource_type: Variant, path: String = "res://") 
 			if full_path.ends_with(".tres") or full_path.ends_with(".res"): 
 				# this wont support things that extend the base which we will likely need
 				# we can make the dep search recursive later.
+				# ok i did it now
 				for dep in ResourceLoader.get_dependencies(full_path):
 					if dep.contains("::"):
 						dep = dep.get_slice("::", 2)
@@ -239,8 +240,21 @@ static func get_resource_files(resource_type: Variant, path: String = "res://") 
 						if resource_type.resource_path == dep:
 							results.append(full_path)
 							break
+						elif is_extending_from_base_script(load(dep), resource_type):
+							results.append(full_path)
+							break
 					
 		file = dir.get_next()
 	
-	#print(results)
 	return results
+
+static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
+	if a == base:
+		return true
+	
+	var p = a.get_base_script()
+	
+	if not p:
+		return false
+		
+	return is_extending_from_base_script(p, base)
