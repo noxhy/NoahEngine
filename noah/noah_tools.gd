@@ -232,17 +232,29 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 				# this wont support things that extend the base which we will likely need
 				# we can make the dep search recursive later.
 				# ok i did it now
-				for dep in ResourceLoader.get_dependencies(full_path):
+				var deps = ResourceLoader.get_dependencies(full_path)
+				
+				var potential_file: bool = false
+				
+				for dep in deps:
 					if dep.contains("::"):
 						dep = dep.get_slice("::", 2)
 					
 					if dep.ends_with(".gd"):
 						if resource_type.resource_path == dep:
-							results.append(full_path)
+							potential_file = true
 							break
 						elif is_extending_from_base_script(load(dep), resource_type):
-							results.append(full_path)
+							potential_file = true
 							break
+				
+				if potential_file:
+					var script_file: GDScript = load(full_path).get_script()
+					
+					if script_file and is_extending_from_base_script(script_file, resource_type):
+						results.append(full_path)
+					
+					
 					
 		file = dir.get_next()
 	
