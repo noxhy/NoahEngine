@@ -223,14 +223,14 @@ static func get_resource_files(resource_type: Variant, path: String = "res://") 
 		
 		var full_path: String = path.path_join(file)
 		if dir.current_is_dir():
-			results.append_array(get_resource_files(resource_type, file))
+			results.append_array(get_resource_files(resource_type, full_path))
 		else:
 			full_path = full_path.trim_suffix(".remap").trim_suffix(".import")
 			
 			if full_path.ends_with(".tres") or full_path.ends_with(".res"):
 				var res: Variant = ResourceLoader.load(full_path)
 				if is_instance_of(res, resource_type):
-					results.append(resource_type)
+					results.append(full_path)
 		
 		file = dir.get_next()
 	

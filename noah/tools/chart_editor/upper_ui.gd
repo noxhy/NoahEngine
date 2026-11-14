@@ -13,7 +13,7 @@ var chart_editor: ChartEditor
 @onready var help_button: MenuButton = %"Help Button"
 
 @onready var export_external_popup: FileDialog = %"Export External Popup"
-@onready var note_skin_window: FileDialog = %"Note Skin Window"
+@onready var note_skin_window: ResourceFileDialog = %"Note Skin Window"
 @onready var audios_window: Window = %"AudioWindow"
 @onready var metadata_window: Window = %"Metadata Window"
 @onready var note_type_window: Window = %"Note Type Window"
@@ -89,6 +89,7 @@ func _ready() -> void:
 	
 	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
 	
+	note_skin_window.resource_type = load("res://noah/resources/note_skin.gd")
 	note_skin_window.connect(&"file_selected", chart_editor._on_note_skin_window_file_selected)
 	
 	history_window.connect(&"close_requested", chart_editor._on_history_window_close_requested)
@@ -532,7 +533,7 @@ func file_button_item_pressed(id):
 			export_window.connect(&"file_selected", on_open)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
 			export_window.connect(&"close_requested", on_close)
-
+		
 		_:
 			print("id: ", id)
 
@@ -546,7 +547,3 @@ func open_open_file_window():
 	open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
 	open_file_popup_instance.connect("canceled", chart_editor.close_popup)
 	SoundManager.tool_open_window.play()
-
-
-func _on_note_skin_window_about_to_popup() -> void:
-	var note_skins: PackedStringArray = NoahTools.get_resource_files(NoteSkin, "res://")

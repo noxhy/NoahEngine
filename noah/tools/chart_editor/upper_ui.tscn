@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_y1a63"]
 [ext_resource type="Script" uid="uid://ci5vocm58ajmg" path="res://noah/tools/chart_editor/upper_ui.gd" id="2_pkb6e"]
+[ext_resource type="Script" uid="uid://deldtluyogkqr" path="res://noah/tools/chart_editor/note_skin_window.gd" id="3_pmg4i"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/windows/history_window.tscn" id="3_xi38a"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
@@ -125,30 +126,16 @@ popup/item_4/text = "Zoom Out"
 popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Note Skin Window" type="Window" parent="View Button" unique_id=441042382 groups=["windows"]]
+[node name="Note Skin Window" type="Window" parent="View Button" unique_id=1172373414 groups=["windows"]]
 unique_name_in_owner = true
 transparent_bg = true
 oversampling_override = 1.0
-title = "Open a File"
+title = "Select a Noteskin"
 initial_position = 1
-size = Vector2i(480, 360)
-
-[node name="ScrollContainer" type="ScrollContainer" parent="View Button/Note Skin Window" unique_id=1585647453]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="View Button/Note Skin Window/ScrollContainer" unique_id=179403600]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="View Button/Note Skin Window/ScrollContainer/MarginContainer" unique_id=1975147775]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+size = Vector2i(400, 300)
+visible = false
+script = ExtResource("3_pmg4i")
+metadata/_custom_type_script = "uid://cg3p8t4iqade1"
 
 [node name="Audio Button" type="MenuButton" parent="." unique_id=441078833]
 unique_name_in_owner = true
@@ -258,4 +245,4 @@ layout_mode = 2
 size_flags_horizontal = 10
 text = "Song Name"
 
-[connection signal="about_to_popup" from="View Button/Note Skin Window" to="." method="_on_note_skin_window_about_to_popup"]
+[connection signal="close_requested" from="View Button/Note Skin Window" to="View Button/Note Skin Window" method="_on_close_requested"]
