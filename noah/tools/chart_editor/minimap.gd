@@ -1,8 +1,8 @@
 extends TextureRect
 class_name EditorMinimap
 
-const COLORS: Array[Color] = [Color(0.49, 0.078, 1.0), Color(0.086, 0.737, 0.749),
-Color(0.235, 0.769, 0.208), Color(0.757, 0.149, 0.322)]
+const COLORS: Array[Color] = [Color(0.459, 0.078, 1.0, 1.0), Color(0.086, 0.576, 1.0, 1.0),
+Color(0.447, 1.0, 0.0, 1.0), Color(0.757, 0.149, 0.322)]
 
 const EVENT_COLOR: Color = Color.GRAY
 
