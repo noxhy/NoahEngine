@@ -211,8 +211,14 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 		ResourceSaver.set_uid(path, uid)
 
 
+
+static var _cached_reource_dirs: Dictionary[String, Dictionary]
 ## Returns an array of the filepaths of a resource type
 static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
+	if _cached_reource_dirs.has(resource_type.resource_path):
+		if _cached_reource_dirs[resource_type.resource_path].has(path):
+			return _cached_reource_dirs[resource_type.resource_path][path]
+	
 	var results: PackedStringArray = []
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
@@ -249,11 +255,13 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 				if is_instance_of(load(full_path), resource_type):
 					results.append(full_path)
 			
-			
 		file = dir.get_next()
 	
+	if _cached_reource_dirs.has(resource_type.resource_path):
+		_cached_reource_dirs[resource_type.resource_path][path] = results
+	else:
+		_cached_reource_dirs[resource_type.resource_path] = {path: results}
 	return results
-
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:
 		return true
