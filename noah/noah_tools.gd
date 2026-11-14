@@ -258,3 +258,12 @@ static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 		return false
 		
 	return is_extending_from_base_script(p, base)
+
+static func find_lowest_base_script(a: GDScript) -> GDScript:
+	
+	var p = a.get_base_script()
+	
+	if p == null:
+		return a
+	
+	return find_lowest_base_script(p)

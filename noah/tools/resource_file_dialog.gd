@@ -4,11 +4,24 @@ class_name ResourceFileDialog
 
 signal file_selected(path: String)
 
+static var RESOURCE_PATH_TO_ICON: Dictionary[String, String] = _get_icon_dict()
+static func _get_icon_dict() -> Dictionary:
+	var list = ProjectSettings.get_global_class_list()
+
+	var ret: Dictionary[String, String]
+	for cl in list:
+		if cl['icon'].is_empty():
+			continue
+		ret[cl["path"]] = cl["icon"]
+	
+	return ret
+
 ## The [Resource] being searched for.
 @export var resource_type: Variant:
 	set(v):
 		resource_type = v
 		_search()
+
 ## Starting directory to search in.
 @export_dir var starting_directory: String = "res://":
 	set(v):
@@ -55,10 +68,18 @@ func display() -> void:
 			file_item.set_text(0, file.get_file())
 			file_item.set_metadata(0, file)
 			var resource: Resource = load(file)
+			
 			if resource is NoteSkin:
 				file_item.set_icon(0, resource.notes_texture.get_frame_texture(&"up", 0))
 			else:
-				file_item.set_icon(0, load("res://addons/at-icons/node/file.svg"))
+				var script_ref = resource.get_script()
+				if script_ref:
+					script_ref = NoahTools.find_lowest_base_script(script_ref)
+				
+				if script_ref and RESOURCE_PATH_TO_ICON.has(script_ref.resource_path):
+					file_item.set_icon(0, load(RESOURCE_PATH_TO_ICON[script_ref.resource_path]))
+				else:
+					file_item.set_icon(0, load("res://addons/at-icons/node/file.svg"))
 			
 			file_item.set_icon_max_width(0, 16)
 
