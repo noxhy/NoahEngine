@@ -17,7 +17,7 @@ static func _get_icon_dict() -> Dictionary:
 	return ret
 
 ## The [Resource] being searched for.
-@export var resource_type: Variant:
+@export var resource_type: GDScript:
 	set(v):
 		resource_type = v
 		_search()
@@ -74,7 +74,7 @@ func display() -> void:
 			else:
 				var script_ref = resource.get_script()
 				if script_ref:
-					script_ref = NoahTools.find_lowest_base_script(script_ref)
+					script_ref = NoahTools.find_lowest_base_script(script_ref) # this wont account for uhh extended icons but i mean . i dont wanna check.
 				
 				if script_ref and RESOURCE_PATH_TO_ICON.has(script_ref.resource_path):
 					file_item.set_icon(0, load(RESOURCE_PATH_TO_ICON[script_ref.resource_path]))
