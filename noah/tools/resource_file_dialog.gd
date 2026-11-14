@@ -20,11 +20,21 @@ static func _get_icon_dict() -> Dictionary:
 @export var resource_type: GDScript:
 	set(v):
 		resource_type = v
+		if v == null:
+			_clear_files()
+			return
+		
 		_search()
 
 ## Starting directory to search in.
 @export_dir var starting_directory: String = "res://":
 	set(v):
+		if not is_node_ready():
+			starting_directory = v
+			return
+			
+		if starting_directory == v:
+			return
 		starting_directory = v
 		_search()
 
@@ -39,6 +49,7 @@ func _ready() -> void:
 	add_child(tree)
 	connect(&'about_to_popup', display)
 	tree.connect(&"item_activated", item_activated)
+	
 
 ## Removes all children of [member vbox_container].
 func _clear_files() -> void:
