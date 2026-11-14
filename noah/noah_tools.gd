@@ -209,3 +209,29 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 	
 	if uid != -1:
 		ResourceSaver.set_uid(path, uid)
+
+## Returns an array of the filepaths of a resource type
+static func get_resource_files(resource_type: Variant, path: String = "res://") -> PackedStringArray:
+	var results: PackedStringArray = []
+	var dir: DirAccess = DirAccess.open(path)
+	dir.list_dir_begin()
+	var file: String = dir.get_next()
+	while !file.is_empty():
+		if file == "." or file == ".." or file == ".godot" or file == "addons":
+			file = dir.get_next()
+			continue
+		
+		var full_path: String = path.path_join(file)
+		if dir.current_is_dir():
+			results.append_array(get_resource_files(resource_type, file))
+		else:
+			full_path = full_path.trim_suffix(".remap").trim_suffix(".import")
+			
+			if full_path.ends_with(".tres") or full_path.ends_with(".res"):
+				var res: Variant = ResourceLoader.load(full_path)
+				if is_instance_of(res, resource_type):
+					results.append(resource_type)
+		
+		file = dir.get_next()
+	
+	return results

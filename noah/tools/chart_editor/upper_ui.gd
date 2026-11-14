@@ -546,3 +546,7 @@ func open_open_file_window():
 	open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
 	open_file_popup_instance.connect("canceled", chart_editor.close_popup)
 	SoundManager.tool_open_window.play()
+
+
+func _on_note_skin_window_about_to_popup() -> void:
+	var note_skins: PackedStringArray = NoahTools.get_resource_files(NoteSkin, "res://")

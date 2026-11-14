@@ -125,13 +125,30 @@ popup/item_4/text = "Zoom Out"
 popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
-[node name="Note Skin Window" type="FileDialog" parent="View Button" unique_id=833636911 groups=["windows"]]
+[node name="Note Skin Window" type="Window" parent="View Button" unique_id=441042382 groups=["windows"]]
 unique_name_in_owner = true
+transparent_bg = true
+oversampling_override = 1.0
 title = "Open a File"
 initial_position = 1
-size = Vector2i(640, 480)
-file_mode = 0
-filters = PackedStringArray("*.tres", "*.res")
+size = Vector2i(480, 360)
+
+[node name="ScrollContainer" type="ScrollContainer" parent="View Button/Note Skin Window" unique_id=1585647453]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="View Button/Note Skin Window/ScrollContainer" unique_id=179403600]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="View Button/Note Skin Window/ScrollContainer/MarginContainer" unique_id=1975147775]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Audio Button" type="MenuButton" parent="." unique_id=441078833]
 unique_name_in_owner = true
@@ -240,3 +257,5 @@ metadata/_edit_use_anchors_ = true
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Song Name"
+
+[connection signal="about_to_popup" from="View Button/Note Skin Window" to="." method="_on_note_skin_window_about_to_popup"]
