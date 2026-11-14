@@ -97,7 +97,8 @@ func generate_cache() -> void:
 		
 		processed_frames += samples.size()
 		
-		await get_tree().process_frame
+		if get_tree():
+			await get_tree().process_frame
 	
 	playback.stop()
 	if current_id != generation_id:
@@ -187,42 +188,35 @@ func _draw() -> void:
 		return
 	
 	var bar_width: float = size.x / visible_waveform.size()
-	
-	var upper: PackedVector2Array = PackedVector2Array()
-	var lower: PackedVector2Array = PackedVector2Array()
-	
-	upper.resize(visible_waveform.size())
-	lower.resize(visible_waveform.size())
-	
-	# Line display for both the left and right channels
-	#for i in range(visible_waveform.size()):
+	#var points: PackedVector2Array = PackedVector2Array()
+	#points.resize(visible_waveform.size() * 2)
+	#for i in range(0, visible_waveform.size(), 2):
 		#var x: float= (i + 0.5) * bar_width
-		#
-		#upper[i] = Vector2(
+		#points[i] = Vector2(
 			#x,
 			#center - visible_waveform[i].y * half_height
 		#)
 		#
-		#lower[i] = Vector2(
+		#points[i + 1] = Vector2(
 			#x,
 			#center - visible_waveform[i].x * half_height
 		#)
 	#
-	#draw_polyline(upper, waveform_color, 1.5, true)
-	#draw_polyline(lower, waveform_color, 1.5, true)
+	#draw_multiline(points, waveform_color, 1.5, true)\
 	
 	var points: PackedVector2Array = PackedVector2Array()
 	points.resize(visible_waveform.size() * 2)
-	for i in range(0, visible_waveform.size(), 2):
+	for i in range(visible_waveform.size()):
 		var x: float= (i + 0.5) * bar_width
+		
 		points[i] = Vector2(
 			x,
 			center - visible_waveform[i].y * half_height
 		)
 		
-		points[i + 1] = Vector2(
+		points[-i - 1] = Vector2(
 			x,
 			center - visible_waveform[i].x * half_height
 		)
 	
-	draw_multiline(points, waveform_color, 1.5, true)
+	draw_colored_polygon(points, waveform_color)

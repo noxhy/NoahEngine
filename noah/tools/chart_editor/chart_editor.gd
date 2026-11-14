@@ -33,7 +33,7 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 @export var muted_color: Color = Color("29292980")
 @export var box_color: Color = Color("27722c49")
 @export var selected_color: Color = Color("67bf71bb")
-@export var time_change_color: Color = Color.PURPLE
+@export var time_change_color: Color = Color(0.553, 0.58, 0.992)
 
 ## Chart Variables
 var backup_chart: Chart = null
