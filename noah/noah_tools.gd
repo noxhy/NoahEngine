@@ -249,11 +249,10 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 							break
 				
 				if potential_file:
-					var script_file: GDScript = load(full_path).get_script()
 					
-					if script_file and is_extending_from_base_script(script_file, resource_type):
+					var script_file = load(full_path)
+					if is_instance_of(script_file, resource_type):
 						results.append(full_path)
-					
 					
 					
 		file = dir.get_next()
