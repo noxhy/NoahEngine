@@ -557,8 +557,13 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	events_file = load(song.events)
 	EditorResources.strumlines = []
-	for strumline in song.strumlines:
-		EditorResources.strumlines.append(Strumline.from_dict(strumline))
+	# Loads default strumlines if empty
+	if song.strumlines.is_empty():
+		EditorResources.strumlines = Constants.DEFAULT_STRUMLINES.duplicate(true)
+	else:
+		for strumline in song.strumlines:
+			EditorResources.strumlines.append(Strumline.from_dict(strumline))
+	
 	
 	EditorResources.song = song
 	if difficulty == null:
