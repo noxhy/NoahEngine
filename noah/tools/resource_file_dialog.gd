@@ -65,6 +65,8 @@ func display() -> void:
 
 func item_activated() -> void:
 	var item: TreeItem = tree.get_selected()
+	if item.get_metadata(0) == null:
+		return
 	if item:
 		var path: String = item.get_metadata(0)
 		emit_signal(&"file_selected", path)

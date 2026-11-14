@@ -228,11 +228,19 @@ static func get_resource_files(resource_type: Variant, path: String = "res://") 
 		else:
 			full_path = full_path.trim_suffix(".remap").trim_suffix(".import")
 			
-			if full_path.ends_with(".tres") or full_path.ends_with(".res"):
-				var res: Variant = ResourceLoader.load(full_path)
-				if is_instance_of(res, resource_type):
-					results.append(full_path)
-		
+			if full_path.ends_with(".tres") or full_path.ends_with(".res"): 
+				# this wont support things that extend the base which we will likely need
+				# we can make the dep search recursive later.
+				for dep in ResourceLoader.get_dependencies(full_path):
+					if dep.contains("::"):
+						dep = dep.get_slice("::", 2)
+					
+					if dep.ends_with(".gd"):
+						if resource_type.resource_path == dep:
+							results.append(full_path)
+							break
+					
 		file = dir.get_next()
 	
+	#print(results)
 	return results
