@@ -216,8 +216,9 @@ static func get_resource_files(resource_type: Variant, path: String = "res://") 
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
 	var file: String = dir.get_next()
+	var blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 	while !file.is_empty():
-		if file == "." or file == ".." or file == ".godot" or file == "addons" or file == "script_templates":
+		if blacklist.has(file):
 			file = dir.get_next()
 			continue
 		
