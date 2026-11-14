@@ -219,11 +219,15 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 		if _cached_reource_dirs[resource_type.resource_path].has(path):
 			return _cached_reource_dirs[resource_type.resource_path][path]
 	
+	const blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 	var results: PackedStringArray = []
+	var did_find_resource: bool = false
+	
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
+	
 	var file: String = dir.get_next()
-	const blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
+	
 	while !file.is_empty():
 		if blacklist.has(file):
 			file = dir.get_next()
@@ -254,13 +258,15 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 			if potential_file:
 				if is_instance_of(load(full_path), resource_type):
 					results.append(full_path)
+					did_find_resource = true
 			
 		file = dir.get_next()
 	
-	if _cached_reource_dirs.has(resource_type.resource_path):
-		_cached_reource_dirs[resource_type.resource_path][path] = results
-	else:
-		_cached_reource_dirs[resource_type.resource_path] = {path: results}
+	if did_find_resource:
+		if _cached_reource_dirs.has(resource_type.resource_path):
+			_cached_reource_dirs[resource_type.resource_path][path] = results
+		else:
+			_cached_reource_dirs[resource_type.resource_path] = {path: results}
 	return results
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:
