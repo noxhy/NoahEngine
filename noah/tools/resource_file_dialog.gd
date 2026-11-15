@@ -73,6 +73,7 @@ func display() -> void:
 	for dir in found_files:
 		var dir_item: TreeItem = root.create_child()
 		dir_item.set_text(0, dir)
+		dir_item.set_custom_color(0, Color(0.5, 0.5, 0.5))
 		
 		for file in found_files[dir]:
 			var file_item: TreeItem = dir_item.create_child()
