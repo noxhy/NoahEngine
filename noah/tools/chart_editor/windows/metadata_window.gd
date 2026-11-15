@@ -42,7 +42,7 @@ func _on_icon_button_pressed() -> void:
 func _on_scene_file_dailog_file_selected(path: String) -> void:
 	path = ResourceUID.path_to_uid(path)
 	if !ResourceLoader.exists(path):
-		printerr("Scene doesn't exist.")
+		printerr("(Metadata Window): Scene \"%s\" doesn't exist." % path)
 		return
 	
 	%"Song Scene".text = path

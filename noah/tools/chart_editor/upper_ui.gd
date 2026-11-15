@@ -12,6 +12,7 @@ var chart_editor: ChartEditor
 
 @onready var help_button: MenuButton = %"Help Button"
 
+@onready var open_song_window: ResourceFileDialog = $"File Button/Open Song Window"
 @onready var export_external_popup: FileDialog = %"Export External Popup"
 @onready var note_skin_window: ResourceFileDialog = %"Note Skin Window"
 @onready var audios_window: Window = %"AudioWindow"
@@ -24,6 +25,13 @@ var chart_editor: ChartEditor
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	chart_editor = get_parent().get_parent()
+	
+	open_song_window.file_selected.connect(chart_editor.load_song_path)
+	open_song_window.close_requested.connect(func():
+		open_song_window.hide()
+		chart_editor.close_popup()
+	)
+	
 	
 	file_button.get_popup().id_pressed.connect(file_button_item_pressed)
 	file_button.get_popup().set_hide_on_checkable_item_selection(false)
@@ -539,11 +547,6 @@ func file_button_item_pressed(id):
 
 func open_open_file_window():
 	chart_editor.can_chart = false
-	var open_file_popup_instance = chart_editor.OPEN_FILE_POPUP_PRELOAD.instantiate()
 	
-	add_child(open_file_popup_instance)
-	open_file_popup_instance.popup()
-	open_file_popup_instance.connect("file_selected", chart_editor.load_song_path)
-	open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
-	open_file_popup_instance.connect("canceled", chart_editor.close_popup)
+	open_song_window.popup_centered()
 	SoundManager.tool_open_window.play()

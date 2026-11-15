@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
 [ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="5_c03gx"]
+[ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
 
 [node name="Upper UI" type="HBoxContainer" unique_id=415464568]
 clip_children = 1
@@ -57,6 +59,16 @@ initial_position = 4
 size = Vector2i(640, 480)
 display_mode = 1
 access = 2
+
+[node name="Open Song Window" type="Window" parent="File Button" unique_id=1412879232 groups=["windows"]]
+oversampling_override = 1.0
+title = "Open Song"
+position = Vector2i(0, 24)
+size = Vector2i(400, 300)
+visible = false
+script = ExtResource("8_7gmnx")
+resource_type = ExtResource("9_bn4gj")
+metadata/_custom_type_script = "uid://cg3p8t4iqade1"
 
 [node name="Edit Button" type="MenuButton" parent="." unique_id=1489223633]
 unique_name_in_owner = true

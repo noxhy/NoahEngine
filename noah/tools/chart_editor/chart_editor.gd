@@ -23,7 +23,6 @@ var EVENT_PRELOAD = load("uid://n6k15grja0uh")
 var STRUM_BUTTON_PRELOAD: PackedScene = load("uid://ddohksqocyhnx")
 
 var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
-var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
 var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 @export_group("Colors")
