@@ -268,6 +268,7 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 		else:
 			_cached_reource_dirs[resource_type.resource_path] = {path: results}
 	return results
+
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:
 		return true
@@ -287,3 +288,7 @@ static func find_lowest_base_script(a: GDScript) -> GDScript:
 		return a
 	
 	return find_lowest_base_script(p)
+
+
+static func generate_colour_from_string(_str: String) -> Color:
+	return Color.from_hsv(float(_str.hash() % 360) / 360.0, 0.45, 1.0)

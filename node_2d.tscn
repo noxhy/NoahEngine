@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dmw7f2e8ox3c1"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_0e48y"]
+[ext_resource type="Script" uid="uid://byt3fibtjxta1" path="res://noah/tools/chart_editor/windows/note_type_window.gd" id="1_wtcfe"]
+
+[node name="Node2D" type="Node2D" unique_id=1705325623]
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=159123989]
+position = Vector2(251, 132)
+
+[node name="Window" type="Window" parent="." unique_id=2044654669]
+oversampling_override = 1.0
+title = "Note Types"
+position = Vector2i(0, 36)
+size = Vector2i(200, 300)
+theme = ExtResource("1_0e48y")
+script = ExtResource("1_wtcfe")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window" unique_id=822501870]
+offset_right = 40.0
+offset_bottom = 40.0

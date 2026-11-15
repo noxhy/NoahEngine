@@ -50,7 +50,7 @@ func update():
 			label.position = -grid_size / 2
 			label.label_settings.font_size = floori(grid_size.y / 2)
 		label.text = abbreviate_type()
-		label.label_settings.font_color = get_type_colour()
+		label.label_settings.font_color = NoahTools.generate_colour_from_string(note_type)
 			
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -80,7 +80,7 @@ func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
 	tail.visible = on_screen
 	label.visible = on_screen
 	label.text = abbreviate_type()
-	label.label_settings.font_color = get_type_colour()
+	label.label_settings.font_color = NoahTools.generate_colour_from_string(note_type)
 
 func correct_anim_id(anim_id: StringName) -> StringName: #quick and dirty
 	if anim_id.contains(&"left"):
@@ -100,6 +100,3 @@ func abbreviate_type() -> String:
 	for word in words:
 		type += word[0].to_upper()
 	return type
-
-func get_type_colour() -> Color:
-	return Color.from_hsv(float(note_type.hash() % 360) / 360.0, 0.45, 1.0)

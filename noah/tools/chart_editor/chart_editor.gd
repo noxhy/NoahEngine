@@ -1984,7 +1984,7 @@ func _on_conductor_new_denominator(_denominator: int) -> void:
 	load_dividers()
 
 
-func selected_note_type(note_type) -> void:
+func selected_note_type(note_type: String) -> void:
 	current_note_type = note_type
 
 

@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/windows/history_window.tscn" id="3_xi38a"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
-[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="5_c03gx"]
+[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/UNUSED_note_type_window.tscn" id="5_c03gx"]
 [ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
+[ext_resource type="PackedScene" uid="uid://jy1by5plg8fu" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="10_bn4gj"]
 
 [node name="Upper UI" type="HBoxContainer" unique_id=415464568]
 clip_children = 1
@@ -230,14 +231,17 @@ unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Note Type Window" parent="Window Button" unique_id=1644438816 groups=["windows"] instance=ExtResource("5_c03gx")]
-unique_name_in_owner = true
+[node name="Note Type WindowOLD" parent="Window Button" unique_id=1644438816 groups=["windows"] instance=ExtResource("5_c03gx")]
 initial_position = 4
 visible = false
 
 [node name="AudioWindow" parent="Window Button" unique_id=838383365 instance=ExtResource("4_pmg4i")]
 unique_name_in_owner = true
 initial_position = 4
+visible = false
+
+[node name="Note Type Window" parent="Window Button" unique_id=598392119 groups=["windows"] instance=ExtResource("10_bn4gj")]
+unique_name_in_owner = true
 visible = false
 
 [node name="Help Button" type="MenuButton" parent="." unique_id=1457749919]

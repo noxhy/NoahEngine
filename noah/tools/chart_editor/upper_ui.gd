@@ -113,7 +113,7 @@ func _ready() -> void:
 	metadata_window.connect(&"updated_starting_tempo", chart_editor._on_metadata_window_updated_starting_tempo)
 	metadata_window.connect(&"close_requested", chart_editor._on_metadata_window_close_requested)
 	
-	note_type_window.connect(&"selected_note_type", chart_editor.selected_note_type)
+	note_type_window.connect(&"selected_type", chart_editor.selected_note_type)
 	note_type_window.connect(&"close_requested", chart_editor._on_note_type_window_close_requested)
 	
 	
