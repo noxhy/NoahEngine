@@ -3,7 +3,7 @@ extends Window
 signal updated_current_song
 
 @onready var inst_panel: PanelContainer = $"VBoxContainer/inst panel"
-@onready var vbox: VBoxContainer = $VBoxContainer/ScrollContainer/vbox
+@onready var vbox: VBoxContainer = %vbox
 
 @onready var save_button: Button = $"VBoxContainer/HBoxContainer/Save Button"
 @onready var add_track_button: Button = $"VBoxContainer/HBoxContainer/Add Track"
@@ -33,6 +33,10 @@ func prepare_tracks():
 	
 	for vocals in EditorResources.song.vocals:
 		add_track(idx)
+		if idx < EditorResources.song.vocals.size() - 1:
+			vbox.add_child(HSeparator.new())
+		else:
+			vbox.add_spacer(false)
 		idx += 1
 
 func add_track(idx:int):

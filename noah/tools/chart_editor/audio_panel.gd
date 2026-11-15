@@ -1,11 +1,10 @@
 extends PanelContainer
 
-#gibz
-@onready var id_label: LineEdit = $"HBoxContainer/ID Label"
-@onready var delete_track: Button = $"HBoxContainer/VBoxContainer/Delete Track"
-@onready var song_path: TextEdit = $"HBoxContainer/VBoxContainer2/song path"
-@onready var vol_slider: HSlider = $"HBoxContainer/VBoxContainer2/VBoxContainer/vol Slider"
-@onready var hit_sound_box: CheckBox = $"HBoxContainer/hit sound box"
+@onready var id_label: LineEdit = %"ID Label"
+@onready var delete_track: Button = %"Delete Track"
+@onready var song_path: TextEdit = %"song path"
+@onready var vol_slider: HSlider = %"vol Slider"
+@onready var hit_sound_box: CheckBox = %"hit sound box"
 
 @export var strum_id: int = -1
 
@@ -15,7 +14,7 @@ func set_id(id: int):
 	if id == -1:
 		id_label.text = 'Inst'
 	else:
-		id_label.text = 'ID: %s' % id
+		id_label.text = str(id)
 	strum_id = id
 
 func set_path(path: String):
