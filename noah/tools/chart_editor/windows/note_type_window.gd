@@ -4,10 +4,11 @@ signal selected_type(type: String)
 
 const BLACKLISTED: PackedStringArray = ["default"]
 
+var chart_editor: ChartEditor
 # TODO: make this grab the editor skin
 var noteskin : NoteSkin :
 	get():
-		return load("uid://buly8rgmgrrnm")
+		return ChartEditor.note_skin
 
 var tree: Tree
 var chart_root: TreeItem
