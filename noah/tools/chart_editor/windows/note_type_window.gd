@@ -61,7 +61,10 @@ func display() -> void:
 func get_note_texture(type: String) -> Texture2D:
 	
 	var anim = str(Constants.NOTE_TYPES.get(type, ""), "right")
-	return noteskin.notes_texture.get_frame_texture(anim, 0)
+	if noteskin.notes_texture.has_animation(anim):
+		return noteskin.notes_texture.get_frame_texture(anim, 0)
+	
+	return noteskin.notes_texture.get_frame_texture("right", 0)
 
 
 func add_chart_types() -> void:
