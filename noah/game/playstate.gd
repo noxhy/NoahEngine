@@ -146,6 +146,10 @@ func set_song_speed(v: float) -> void:
 	song_speed = v
 #endregion
 
+func _enter_tree() -> void:
+	if not is_in_group(&"playstate"):
+		add_to_group(&"playstate")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	ui = get_tree().get_first_node_in_group(&"ui")
