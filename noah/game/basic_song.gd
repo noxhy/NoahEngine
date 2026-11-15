@@ -96,12 +96,6 @@ func _process(delta: float) -> void:
 	
 	if playstate and Input.is_action_just_pressed(&"kill"):
 		playstate.health = 0
-	
-	if Input.is_action_just_pressed(&"chart_editor") and OS.is_debug_build():
-		EditorResources.event_editor = false
-		EditorResources.song = GameManager.current_song
-		EditorResources.difficulty = GameManager.difficulty
-		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat: int, measure_relative: int):
