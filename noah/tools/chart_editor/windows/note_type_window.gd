@@ -4,8 +4,6 @@ signal selected_type(type: String)
 
 const BLACKLISTED: PackedStringArray = ["default"]
 
-var chart_editor: ChartEditor
-# TODO: make this grab the editor skin
 var noteskin : NoteSkin :
 	get():
 		return ChartEditor.note_skin
