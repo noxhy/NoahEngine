@@ -53,6 +53,21 @@ func _input(event: InputEvent) -> void:
 	elif event.is_action_pressed(&"reload", false, true) and OS.is_debug_build():
 		get_tree().reload_current_scene()
 		get_tree().paused = false
+	elif event.is_action_pressed(&"chart_editor", false, true):
+		if not get_tree():
+			return
+		
+		var cur_scene = ResourceUID.ensure_path(get_tree().current_scene.scene_file_path)
+		var chart_scene = ResourceUID.ensure_path(Constants.CHART_EDITOR_SCENE)
+		
+		if cur_scene == chart_scene:
+			return
+		
+		SoundManager.music.stop()
+		EditorResources.event_editor = false
+		EditorResources.song = GameManager.current_song
+		EditorResources.difficulty = GameManager.difficulty
+		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 	
 func changed_contoller(device: int, connected: bool) -> void:
 	if connected or !Input.get_connected_joypads().front():
