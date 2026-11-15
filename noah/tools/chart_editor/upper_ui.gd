@@ -127,7 +127,13 @@ func _ready() -> void:
 	
 func setup_shortcuts():
 	var shortcut:Shortcut
+
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_O
+	shortcut.events[0].ctrl_pressed = true
 	
+	file_button.get_popup().set_item_shortcut(
+		file_button.get_popup().get_item_index(1), shortcut)
 	# file buttons
 	file_button.get_popup().set_item_shortcut(
 		file_button.get_popup().get_item_index(2), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"save")))
