@@ -34,7 +34,7 @@ expand_icon = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Player"
-autowrap_mode = 1
+text_overrun_behavior = 3
 
 [node name="Move Lane Right" type="Button" parent="." unique_id=891593541]
 layout_mode = 2
@@ -53,6 +53,13 @@ title = "Edit Strum Settings"
 initial_position = 4
 size = Vector2i(300, 128)
 visible = false
+
+[node name="Panel" type="Panel" parent="Window" unique_id=309073287]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="Window" unique_id=1716652347]
 anchors_preset = 15
