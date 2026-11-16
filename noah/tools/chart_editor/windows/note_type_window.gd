@@ -56,8 +56,6 @@ func display() -> void:
 	
 	add_custom_root.set_text(0, "Add new type")
 
-
-#TODO add anim safety here
 func get_note_texture(type: String) -> Texture2D:
 	
 	var anim = str(Constants.NOTE_TYPES.get(type, ""), "right")
@@ -121,11 +119,18 @@ func item_activated() -> void:
 		create_custom_item()
 	
 func item_editted() -> void:
-	if tree.get_selected().get_text(0).is_empty():
-		tree.get_selected().free()
+	var new_item = tree.get_selected()
+	var typed_text = new_item.get_text(0)
+	if typed_text.is_empty():
+		new_item.free()
 		return
 	
-	setup_item(tree.get_selected())
+	for item in chart_root.get_children():
+		if item != new_item and item.get_text(0) == typed_text:
+			new_item.free()
+			return
+	
+	setup_item(new_item)
 	item_selected()
 
 func button_clicked(item: TreeItem, column: int, id: int, mouse_button: int) -> void:
