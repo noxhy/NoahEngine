@@ -127,7 +127,14 @@ func _ready() -> void:
 	
 func setup_shortcuts():
 	var shortcut:Shortcut
-
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_N
+	shortcut.events[0].ctrl_pressed = true
+	
+	file_button.get_popup().set_item_shortcut(
+		file_button.get_popup().get_item_index(0), shortcut)
+		
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
 	shortcut.events[0].keycode = KEY_O
 	shortcut.events[0].ctrl_pressed = true
@@ -246,7 +253,27 @@ func setup_shortcuts():
 	
 	view_button.get_popup().set_item_shortcut(
 		view_button.get_popup().get_item_index(4), shortcut)
-		
+	
+	#region WINDOW_BUTTON
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_M
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(1, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_N
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(2, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_A
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(3, shortcut)
+	#endregion
+	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
 	shortcut.events[0].keycode = KEY_ENTER
 
