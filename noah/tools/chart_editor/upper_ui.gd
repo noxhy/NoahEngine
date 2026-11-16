@@ -208,6 +208,7 @@ func setup_shortcuts():
 		edit_button.get_popup().get_item_index(18), shortcut)
 	
 	#audio button
+	#region AUDIO
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
 	shortcut.events[0].keycode = KEY_SPACE
@@ -229,8 +230,18 @@ func setup_shortcuts():
 		audio_button.get_popup().get_item_index(5), shortcut)
 		
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_TAB
+	shortcut.events[0].keycode = KEY_M
+	shortcut.events[0].shift_pressed = true
 	
+		
+	audio_button.get_popup().set_item_shortcut(
+		audio_button.get_popup().get_item_index(10),
+			shortcut)
+	
+	#endregion
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_TAB
 	#view button
 	view_button.get_popup().set_item_shortcut(
 		view_button.get_popup().get_item_index(0), shortcut)

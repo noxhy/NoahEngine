@@ -1571,8 +1571,7 @@ func load_waveforms() -> void:
 			waveform = AudioStreamVisualizer.new()
 			waveform.visible = false
 			waveform.resolution = 3200
-			waveform.waveform_color = Color.MEDIUM_PURPLE
-			waveform.waveform_color.a = 0.7
+			waveform.waveform_color = Color(0.689, 0.594, 0.921, 0.7)
 			waveform.audio_stream = stream.get_sync_stream(track + 1)
 			waveform_nodes[track] = waveform
 			$"Waveform Layer".add_child(waveform)
@@ -1584,8 +1583,7 @@ func load_waveforms() -> void:
 	waveform.visible = false
 	waveform.resolution = 9600
 	waveform.audio_stream = stream.get_sync_stream(0)
-	waveform.waveform_color = Color.MEDIUM_SPRING_GREEN
-	waveform.waveform_color.a = 0.7
+	waveform.waveform_color = Color(0.479, 1.0, 0.712, 0.7)
 	waveform_nodes[-1] = waveform
 	$"Waveform Layer".add_child(waveform)
 	waveform.add_to_group(&"waveforms")
