@@ -1383,12 +1383,15 @@ func view_button_item_pressed(id):
 			update_grid()
 			load_dividers()
 			load_section(song_position)
+			update_camera_song_position(true)
 		
 		4:
 			grid.zoom.y = clamp(grid.zoom.y - 0.1, 0.5, 1.5)
 			update_grid()
 			load_dividers()
 			load_section(song_position)
+			update_camera_song_position(true)
+			
 		
 		_:
 			print("id: ", id)
