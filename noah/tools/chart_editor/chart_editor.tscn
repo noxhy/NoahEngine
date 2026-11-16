@@ -35,7 +35,7 @@ bus = &"Music"
 position = Vector2(640, 360)
 
 [node name="Grid Layer" type="CanvasLayer" parent="." unique_id=1476007864]
-layer = -2
+layer = -10
 offset = Vector2(640, 80)
 transform = Transform2D(1, 0, 0, 1, 640, 80)
 
@@ -52,7 +52,6 @@ event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
 
 [node name="Waveform Layer" type="CanvasLayer" parent="." unique_id=476894491]
-layer = 2
 offset = Vector2(640, 80)
 transform = Transform2D(1, 0, 0, 1, 640, 80)
 follow_viewport_enabled = true
