@@ -99,6 +99,8 @@ func generate_cache() -> void:
 		
 		if is_inside_tree():
 			await get_tree().process_frame
+		else:
+			return
 	
 	playback.stop()
 	if current_id != generation_id:
