@@ -140,6 +140,9 @@ func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
+	if Input.is_action_just_pressed(&"mouse_left") and not is_mouse_over_any_ui():
+		get_viewport().gui_release_focus()
+	
 	if EditorResources.song and music.playing:
 		music.pitch_scale = song_speed
 		song_position = music.get_playback_position() - start_offset

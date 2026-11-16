@@ -59,10 +59,14 @@ mouse_filter = 0
 text = "STEP"
 vertical_alignment = 1
 
-[node name="Debug" type="Label" parent="HBoxContainer" unique_id=1397328240]
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer" unique_id=89757127]
+layout_mode = 2
+
+[node name="zoom" type="Label" parent="HBoxContainer" unique_id=1397328240]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
+text = "Zoom: "
 vertical_alignment = 1
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1810110037]
@@ -198,14 +202,14 @@ layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Chart snapping"
-focus_behavior_recursive = 1
+focus_behavior_recursive = 2
 min_value = 1.0
 max_value = 192.0
 value = 16.0
 rounded = true
 allow_greater = true
 update_on_text_changed = true
-prefix = "1 / "
+prefix = "1 /"
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer3" unique_id=1898549450]
 layout_mode = 2

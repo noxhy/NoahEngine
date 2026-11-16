@@ -254,7 +254,7 @@ offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="genericBG" type="Sprite2D" parent="Background" unique_id=650173941]
-modulate = Color(0.56078434, 0.6431373, 0.7490196, 1)
+modulate = Color(0.6745098, 0.68235296, 0.6901961, 1)
 material = ExtResource("19_ea7xq")
 texture = ExtResource("19_5evum")
 metadata/_edit_lock_ = true
