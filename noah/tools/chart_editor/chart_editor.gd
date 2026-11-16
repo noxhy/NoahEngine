@@ -86,7 +86,6 @@ var time_change_offset: float:
 
 var dragging_song_slider: bool = false
 
-## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
 var waveform_nodes: Dictionary[int, AudioStreamVisualizer] = {}
 
 var event_nodes: Array = []
@@ -1565,6 +1564,7 @@ func load_waveforms() -> void:
 			waveform.visible = false
 			waveform.resolution = 3200
 			waveform.waveform_color = Color.MEDIUM_PURPLE
+			waveform.waveform_color.a = 0.8
 			waveform.audio_stream = stream.get_sync_stream(track + 1)
 			waveform_nodes[track] = waveform
 			$"Waveform Layer".add_child(waveform)
@@ -1577,6 +1577,7 @@ func load_waveforms() -> void:
 	waveform.resolution = 9600
 	waveform.audio_stream = stream.get_sync_stream(0)
 	waveform.waveform_color = Color.MEDIUM_SPRING_GREEN
+	waveform.waveform_color.a = 0.8
 	waveform_nodes[-1] = waveform
 	$"Waveform Layer".add_child(waveform)
 	waveform.add_to_group(&"waveforms")
@@ -1587,7 +1588,8 @@ func update_camera_song_position(instant: bool = false) -> void:
 		camera_2d.position.y = 360 + time_to_y_position(song_position)
 	else:
 		camera_2d.position.y = NoahTools.fps_lerp(
-			camera_2d.position.y, 360 + time_to_y_position(song_position), 20, get_process_delta_time())
+			camera_2d.position.y, 360 + time_to_y_position(song_position), 12, get_process_delta_time())
+		
 
 ## Updates the duration, position and size of the waveform, Usually called every beat.
 func update_waveforms(time: float = 0) -> void:
