@@ -602,10 +602,11 @@ func load_song(song: Song, difficulty: Variant = null):
 	load_chart(EditorResources.chart)
 	if not same_song:
 		current_snap = conductor.denominator
+		load_waveforms()
+		
 	
 	lower_ui.chart_snap.value = current_snap
 	
-	load_waveforms()
 	update_waveforms(song_position)
 	
 	enable_can_chart_on_next_frame()

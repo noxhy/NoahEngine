@@ -58,6 +58,7 @@ func _clear_files() -> void:
 
 ## Searches and caches the files
 func _search() -> void:
+	
 	var files: PackedStringArray = NoahTools.get_resource_files(resource_type, starting_directory)
 	for file in files:
 		var dir: String = file.get_base_dir()
@@ -65,6 +66,7 @@ func _search() -> void:
 			found_files[dir] = []
 		
 		found_files[dir].append(file)
+
 
 ## Displays all the found files on the tree
 func display() -> void:

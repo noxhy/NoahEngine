@@ -220,12 +220,15 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 
 const DIRECTORY_BLACKLIST: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 
-static var _cached_reource_dirs: Dictionary[String, Dictionary]
+static var _resource_cache: Dictionary[String, PackedStringArray] = {}
+
 ## Returns an array of the filepaths of a resource type
 static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
-	if _cached_reource_dirs.has(resource_type.resource_path):
-		if _cached_reource_dirs[resource_type.resource_path].has(path):
-			return _cached_reource_dirs[resource_type.resource_path][path]
+	
+	var key = resource_type.resource_path + '::' + path
+	
+	if _resource_cache.has(key):
+		return _resource_cache[key]
 	
 	var results: PackedStringArray = []
 	var did_find_resource: bool = false
@@ -269,11 +272,7 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 			
 		file = dir.get_next()
 	
-	if did_find_resource:
-		if _cached_reource_dirs.has(resource_type.resource_path):
-			_cached_reource_dirs[resource_type.resource_path][path] = results
-		else:
-			_cached_reource_dirs[resource_type.resource_path] = {path: results}
+	_resource_cache[key] = results
 	return results
 	
 static func get_files_with_exts(exts: PackedStringArray, path: String = 'res://', excluded_dirs: PackedStringArray = []) -> PackedStringArray:
