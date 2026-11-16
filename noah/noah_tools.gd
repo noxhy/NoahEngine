@@ -218,6 +218,7 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 		ResourceSaver.set_uid(path, uid)
 
 
+const DIRECTORY_BLACKLIST: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 
 static var _cached_reource_dirs: Dictionary[String, Dictionary]
 ## Returns an array of the filepaths of a resource type
@@ -226,7 +227,6 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 		if _cached_reource_dirs[resource_type.resource_path].has(path):
 			return _cached_reource_dirs[resource_type.resource_path][path]
 	
-	const blacklist: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
 	var results: PackedStringArray = []
 	var did_find_resource: bool = false
 	
@@ -236,7 +236,7 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 	var file: String = dir.get_next()
 	
 	while !file.is_empty():
-		if blacklist.has(file):
+		if DIRECTORY_BLACKLIST.has(file):
 			file = dir.get_next()
 			continue
 		
@@ -276,9 +276,27 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 			_cached_reource_dirs[resource_type.resource_path] = {path: results}
 	return results
 	
-static func get_files_with_exts(exts: PackedStringArray, dir: String = 'res://') -> PackedStringArray:
+static func get_files_with_exts(exts: PackedStringArray, path: String = 'res://', excluded_dirs: PackedStringArray = []) -> PackedStringArray:
+	var dir: DirAccess = DirAccess.open(path)
+	dir.list_dir_begin()
 	
-	return []
+	var results: PackedStringArray = []
+	
+	var file: String = dir.get_next()
+	while !file.is_empty():
+		if DIRECTORY_BLACKLIST.has(file) or excluded_dirs.has(file):
+			file = dir.get_next()
+			continue
+		
+		var full_path: String = path.path_join(file)
+		if dir.current_is_dir():
+			results.append_array(get_files_with_exts(exts, full_path))
+		else:
+			if exts.has(full_path.get_extension()):
+				results.append(full_path)
+		
+		file = dir.get_next()
+	return results
 
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:

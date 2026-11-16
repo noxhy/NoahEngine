@@ -6,6 +6,8 @@ extends PanelContainer
 @onready var vol_slider: HSlider = %"vol Slider"
 @onready var hit_sound_box: CheckBox = %"hit sound box"
 
+var parent: Node
+
 @export var strum_id: int = -1
 
 signal remove_requested
@@ -74,6 +76,33 @@ func load_current_song():
 
 func _on_change_track_pressed() -> void:
 	%FileDialog.popup()
+	#$add.popup()
+	#var tree = $add/Tree
+	#tree.clear()
+	#
+	#var files = NoahTools.get_files_with_exts(['ogg', 'wav', 'mp3'], 'res://', ["res://noah"])
+	#
+	#var found_files:Dictionary
+	#for file in files:
+		#var dir: String = file.get_base_dir()
+		#if !found_files.has(dir):
+			#found_files[dir] = []
+		#
+		#found_files[dir].append(file)
+	#
+	#var root: TreeItem = tree.create_item()
+	#for dir in found_files:
+		#var dir_item: TreeItem = root.create_child()
+		#dir_item.set_text(0, dir)
+		#dir_item.set_custom_color(0, Color(0.5, 0.5, 0.5))
+		#
+		#for file in found_files[dir]:
+			#var file_item: TreeItem = dir_item.create_child()
+			#file_item.set_text(0, file.get_file())
+			#file_item.set_metadata(0, file)
+			#file_item.set_icon(0, load("res://addons/at-icons/node/file.svg"))
+			#
+			#file_item.set_icon_max_width(0, 16)
 
 func _on_file_dialog_file_selected(path: String) -> void:
 	set_path(path)

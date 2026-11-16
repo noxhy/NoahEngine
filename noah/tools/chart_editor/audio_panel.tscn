@@ -110,6 +110,20 @@ dialog_hide_on_ok = true
 file_mode = 0
 filters = PackedStringArray("*.mp3", "*.ogg", "*.wav")
 
+[node name="add" type="Window" parent="." unique_id=129667639]
+oversampling_override = 1.0
+position = Vector2i(0, 36)
+size = Vector2i(300, 300)
+visible = false
+
+[node name="Tree" type="Tree" parent="add" unique_id=1422133179]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+hide_root = true
+
 [connection signal="drag_ended" from="HBoxContainer/VBoxContainer2/VBoxContainer/vol Slider" to="." method="_on_vol_slider_drag_ended"]
 [connection signal="value_changed" from="HBoxContainer/VBoxContainer2/VBoxContainer/vol Slider" to="." method="_on_vol_slider_value_changed"]
 [connection signal="pressed" from="HBoxContainer/VBoxContainer2/VBoxContainer/HBoxContainer2/Change Track" to="." method="_on_change_track_pressed"]
