@@ -771,7 +771,6 @@ func _on_window_about_to_popup() -> void:
 
 func update_desc(_str: String) -> void:
 	%"Desc Label".text = _str
-	%"Event Desc Label".text = _str
 	
 	#%"Desc Label".visible = !_str.is_empty()
 	#%"Event Desc Label".visible = !_str.is_empty()
