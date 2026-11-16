@@ -97,7 +97,7 @@ func generate_cache() -> void:
 		
 		processed_frames += samples.size()
 		
-		if get_tree():
+		if is_inside_tree():
 			await get_tree().process_frame
 	
 	playback.stop()

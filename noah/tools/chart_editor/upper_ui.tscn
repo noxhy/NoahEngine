@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
 [ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/UNUSED_note_type_window.tscn" id="5_c03gx"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="6_8c8jl"]
 [ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
 [ext_resource type="PackedScene" uid="uid://jy1by5plg8fu" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="10_bn4gj"]
@@ -148,6 +149,7 @@ initial_position = 1
 size = Vector2i(400, 300)
 visible = false
 script = ExtResource("3_pmg4i")
+resource_type = ExtResource("6_8c8jl")
 metadata/_custom_type_script = "uid://cg3p8t4iqade1"
 
 [node name="Audio Button" type="MenuButton" parent="." unique_id=441078833]
@@ -157,29 +159,32 @@ layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Audio"
-item_count = 9
-popup/item_0/text = "Play/Pause"
+item_count = 10
+popup/item_0/text = "Play / Pause"
 popup/item_0/id = 0
-popup/item_1/text = "Speed Audio Up"
+popup/item_1/text = "Playback rate Up"
 popup/item_1/id = 4
-popup/item_2/text = "Slow Audio Down"
+popup/item_2/text = "Playback rate Down"
 popup/item_2/id = 5
 popup/item_3/id = 6
 popup/item_3/separator = true
-popup/item_4/text = "Conductor Beat"
+popup/item_4/text = "Metronome on Beat"
 popup/item_4/checkable = 1
 popup/item_4/id = 7
-popup/item_5/text = "Conductor Step"
+popup/item_5/text = "Metronome on Step"
 popup/item_5/checkable = 1
 popup/item_5/id = 8
-popup/item_6/id = 6
-popup/item_6/separator = true
-popup/item_7/text = "Vocal Waveforms"
-popup/item_7/checkable = 1
-popup/item_7/id = 11
-popup/item_8/text = "Instrumental Waveforms"
+popup/item_6/text = "Mute all hit sounds"
+popup/item_6/checkable = 1
+popup/item_6/id = 10
+popup/item_7/id = 6
+popup/item_7/separator = true
+popup/item_8/text = "Vocal Waveforms"
 popup/item_8/checkable = 1
-popup/item_8/id = 12
+popup/item_8/id = 11
+popup/item_9/text = "Instrumental Waveforms"
+popup/item_9/checkable = 1
+popup/item_9/id = 12
 metadata/_edit_use_anchors_ = true
 
 [node name="Test Button" type="MenuButton" parent="." unique_id=64458848]
@@ -206,7 +211,7 @@ layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Window"
-item_count = 4
+item_count = 5
 popup/item_0/text = "History"
 popup/item_0/checkable = 1
 popup/item_0/id = 0
@@ -219,6 +224,9 @@ popup/item_2/id = 2
 popup/item_3/text = "Audio"
 popup/item_3/checkable = 1
 popup/item_3/id = 3
+popup/item_4/text = "Time Changes"
+popup/item_4/checkable = 1
+popup/item_4/id = 4
 metadata/_edit_use_anchors_ = true
 
 [node name="History Window" parent="Window Button" unique_id=1289274319 groups=["windows"] instance=ExtResource("3_xi38a")]

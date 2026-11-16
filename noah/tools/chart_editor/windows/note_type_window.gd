@@ -117,6 +117,7 @@ func create_custom_item() -> void:
 func item_activated() -> void:
 	if tree.get_selected() == add_custom_root:
 		create_custom_item()
+		SoundManager.tool_open_window.play()
 	
 func item_editted() -> void:
 	var new_item = tree.get_selected()
@@ -135,6 +136,7 @@ func item_editted() -> void:
 
 func button_clicked(item: TreeItem, column: int, id: int, mouse_button: int) -> void:
 	item.free()
+	SoundManager.tool_close_window.play()
 
 func item_selected() -> void:
 	var ret = tree.get_selected().get_text(0)

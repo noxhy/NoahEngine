@@ -54,6 +54,10 @@ func _ready() -> void:
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	audio_button.get_popup().set_item_checked(
+		audio_button.get_popup().get_item_index(10),
+			!SettingsManager.data.chart_hit_sounds)
+	
+	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(11), ChartEditor.vocal_waveforms)
 		
 	audio_button.get_popup().set_item_checked(
@@ -97,7 +101,6 @@ func _ready() -> void:
 	
 	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
 	
-	note_skin_window.resource_type = load("res://noah/resources/note_skin.gd")
 	note_skin_window.connect(&"file_selected", chart_editor._on_note_skin_window_file_selected)
 	
 	history_window.connect(&"close_requested", chart_editor._on_history_window_close_requested)
@@ -582,4 +585,7 @@ func open_open_file_window():
 	chart_editor.can_chart = false
 	
 	open_song_window.popup_centered()
+	open_song_window.tree.grab_focus(true)
+	if open_song_window.tree.get_root() and open_song_window.tree.get_root().get_first_child():
+		open_song_window.tree.set_selected(open_song_window.tree.get_root().get_first_child(), 0)
 	SoundManager.tool_open_window.play()

@@ -150,7 +150,7 @@ func _process(delta: float) -> void:
 		
 		var notes_list = EditorResources.chart.notes
 		
-		if notes_list.size() > 0:
+		if notes_list.size() > 0 and SettingsManager.data.chart_hit_sounds:
 			if current_note < notes_list.size():
 				var note = notes_list[current_note]
 				if (song_position + start_offset) > (note[0] + conductor.seconds_per_step):
@@ -1350,7 +1350,7 @@ func audio_button_item_pressed(id) -> void:
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
 				upper_ui.get_node("%Audio Button").get_popup().get_item_index(id),
-				SettingsManager.data.chart_hit_sounds)
+				!SettingsManager.data.chart_hit_sounds)
 		
 		_:
 			print("id: ", id)
