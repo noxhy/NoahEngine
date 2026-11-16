@@ -410,7 +410,7 @@ func is_mouse_over_any_ui() -> bool:
 	if Rect2i(song_slider.get_screen_position(), song_slider.size).has_point(mouse):
 		return true
 	
-	if minimap and Rect2i(minimap.global_position + minimap.get_parent().offset, minimap.size).has_point(mouse):
+	if minimap and Rect2i(minimap.get_screen_position(), minimap.size).has_point(mouse):
 		return true
 	
 	for button:HFlowContainer in get_tree().get_nodes_in_group(&"strum_buttons"):

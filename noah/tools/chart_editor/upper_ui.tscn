@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/windows/history_window.tscn" id="3_xi38a"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
 [ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
-[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/UNUSED_note_type_window.tscn" id="5_c03gx"]
 [ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="6_8c8jl"]
 [ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
@@ -236,10 +235,6 @@ visible = false
 
 [node name="Metadata Window" parent="Window Button" unique_id=1340846673 instance=ExtResource("4_ax5pr")]
 unique_name_in_owner = true
-initial_position = 4
-visible = false
-
-[node name="Note Type WindowOLD" parent="Window Button" unique_id=1644438816 groups=["windows"] instance=ExtResource("5_c03gx")]
 initial_position = 4
 visible = false
 

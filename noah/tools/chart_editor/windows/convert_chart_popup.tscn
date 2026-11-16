@@ -32,6 +32,13 @@ dialog_hide_on_ok = true
 file_mode = 1
 filters = PackedStringArray("*.json")
 
+[node name="Panel" type="Panel" parent="." unique_id=683423705]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="FlowContainer" type="VBoxContainer" parent="." unique_id=523746384]
 anchors_preset = 15
 anchor_right = 1.0
