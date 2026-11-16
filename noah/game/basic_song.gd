@@ -251,16 +251,16 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int) -> void:
 			
 			if SettingsManager.data.combo_ui and ui:
 				if ui.rating_marker:
-					rating_position = ui.rating_marker.position
+					rating_position = ui.rating_marker.global_position
 					
 				if ui.combo_marker:
-					combo_position = ui.combo_marker.position
+					combo_position = ui.combo_marker.global_position
 			else:
 				if rating_marker:
-					rating_position = rating_marker.position
+					rating_position = rating_marker.global_position
 				
 				if combo_marker:
-					combo_position = combo_marker.position
+					combo_position = combo_marker.global_position
 			
 			
 			rating_factory.spawn_rating(rating_position, hit_rating)
