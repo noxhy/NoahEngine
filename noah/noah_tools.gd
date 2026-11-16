@@ -43,7 +43,14 @@ static var _tween_options: Dictionary[StringName, Array] = {
 	&"sineout": [Tween.TRANS_SINE, Tween.EASE_OUT],
 	&"sineoutin": [Tween.TRANS_SINE, Tween.EASE_OUT_IN],
 	&"classic": [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT],
-	&"linear": [Tween.TRANS_LINEAR, Tween.EASE_IN]
+	&"linear": [Tween.TRANS_LINEAR, Tween.EASE_IN],
+	# we are gonna fake these
+	&"smoothstepin": [Tween.TRANS_SINE, Tween.EASE_IN],
+	&"smoothstepout": [Tween.TRANS_SINE, Tween.EASE_OUT],
+	&"smoothstepinout": [Tween.TRANS_SINE, Tween.EASE_IN_OUT],
+	&"smootherstepin": [Tween.TRANS_QUAD, Tween.EASE_IN],
+	&"smootherstepout": [Tween.TRANS_QUAD, Tween.EASE_OUT],
+	&"smootherstepinout": [Tween.TRANS_QUAD, Tween.EASE_IN_OUT],
 }
 
 ## Sorts an array of nodes by their [code]id[/code]. If the nodes do not contain an [code]id[/code] var, sorting will not occur.
@@ -268,6 +275,10 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 		else:
 			_cached_reource_dirs[resource_type.resource_path] = {path: results}
 	return results
+	
+static func get_files_with_exts(exts: PackedStringArray, dir: String = 'res://') -> PackedStringArray:
+	
+	return []
 
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:
@@ -290,5 +301,6 @@ static func find_lowest_base_script(a: GDScript) -> GDScript:
 	return find_lowest_base_script(p)
 
 
+# golden hue ratio or whatever
 static func generate_colour_from_string(_str: String) -> Color:
-	return Color.from_hsv(float(_str.hash() % 360) / 360.0, 0.45, 1.0)
+	return Color.from_hsv(fposmod(float(hash(_str)) * 0.618, 1.0), 0.45, 1.0)

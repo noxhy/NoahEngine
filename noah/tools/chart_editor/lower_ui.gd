@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 	current_time_label.text = NoahTools.format_time(chart_editor.song_position + chart_editor.start_offset)
 	current_time_label.text += str(" (", chart_editor.song_speed, "x)")
 	
-	zoom.text = 'Zoom: ' + str(snappedf(chart_editor.grid.zoom.y, 0.01)) + 'x'
+	zoom.text = 'Gz: ' + str(snappedf(chart_editor.grid.zoom.y, 0.01)) + 'x'
 
 func toggle_play_button_state(playing: bool) -> void:
 
