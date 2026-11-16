@@ -605,6 +605,7 @@ func load_song(song: Song, difficulty: Variant = null):
 	
 	lower_ui.chart_snap.value = current_snap
 	
+	load_waveforms()
 	update_waveforms(song_position)
 	
 	enable_can_chart_on_next_frame()
@@ -1570,7 +1571,7 @@ func load_waveforms() -> void:
 			waveform.visible = false
 			waveform.resolution = 3200
 			waveform.waveform_color = Color.MEDIUM_PURPLE
-			waveform.waveform_color.a = 0.8
+			waveform.waveform_color.a = 0.7
 			waveform.audio_stream = stream.get_sync_stream(track + 1)
 			waveform_nodes[track] = waveform
 			$"Waveform Layer".add_child(waveform)
@@ -1583,7 +1584,7 @@ func load_waveforms() -> void:
 	waveform.resolution = 9600
 	waveform.audio_stream = stream.get_sync_stream(0)
 	waveform.waveform_color = Color.MEDIUM_SPRING_GREEN
-	waveform.waveform_color.a = 0.8
+	waveform.waveform_color.a = 0.7
 	waveform_nodes[-1] = waveform
 	$"Waveform Layer".add_child(waveform)
 	waveform.add_to_group(&"waveforms")
