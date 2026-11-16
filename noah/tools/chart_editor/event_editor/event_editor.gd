@@ -749,35 +749,25 @@ func _on_add_track_pressed() -> void:
 	%"Add Track Window".popup()
 	SoundManager.tool_open_window.play()
 
-
 func _on_window_about_to_popup() -> void:
 	can_chart = false
-	%"Event Option".clear()
 	var events: Array = Constants.EVENT_DATA.keys()
 	events = events.filter(func(_name): return !EditorResources.event_tracks.has(_name))
 	
+	%add_event_tree.clear()
+	%add_event_tree.create_item()
+	
 	for event in events:
-		%"Event Option".add_item(event)
+		var item: TreeItem = %add_event_tree.create_item()
+		item.set_text(0, event)
+		var desc = Constants.EVENT_DATA.get(event,{}).get("description", "")
+		if not desc.is_empty():
+			item.set_tooltip_text(0, desc)
+		
 		var icon: String = Constants.EVENT_DATA.get(event, {}).get("texture", "res://addons/at-icons/node/help.svg")
 		if ResourceLoader.exists(icon):
-			%"Event Option".set_item_icon(%"Event Option".item_count - 1, load(icon))
-			%"Event Option".get_popup().set_item_icon_max_width(%"Event Option".item_count - 1, 32)
-	
-	var ev = %"Event Option".get_item_text(%"Event Option".get_selected_id())
-	update_desc(Constants.EVENT_DATA.get(ev,{}).get("description", ""))
-
-
-func _on_add_event_track_pressed() -> void:
-	if %"Event Option".selected != -1:
-		var event: String = %"Event Option".get_item_text(%"Event Option".get_selected_id())
-		EditorResources.event_tracks.append(event)
-		
-		update_grid()
-		load_dividers()
-	
-	%"Add Track Window".hide()
-	close_popup()
-	load_section(song_position, true)
+			item.set_icon(0, load(icon))
+			item.set_icon_max_width(0, 16)
 
 func update_desc(_str: String) -> void:
 	%"Desc Label".text = _str
@@ -877,3 +867,15 @@ func is_mouse_over_any_ui() -> bool:
 			return true
 	
 	return ret
+
+# add a event track now
+func tree_event_activated() -> void:
+	var item: TreeItem = %add_event_tree.get_selected()
+	EditorResources.event_tracks.append(item.get_text(0))
+	
+	update_grid()
+	load_dividers()
+	
+	%"Add Track Window".hide()
+	close_popup()
+	load_section(song_position, true)
