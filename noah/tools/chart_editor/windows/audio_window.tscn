@@ -22,7 +22,7 @@ transparent_bg = true
 oversampling_override = 1.0
 title = "Audio Controls"
 position = Vector2i(0, 36)
-size = Vector2i(380, 390)
+size = Vector2i(375, 390)
 unresizable = true
 transparent = true
 popup_window = true
@@ -42,14 +42,6 @@ offset_top = 5.0
 offset_right = 369.0
 offset_bottom = 389.0
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=687633761]
-layout_mode = 2
-theme_override_font_sizes/font_size = 12
-text = "Instrumental Settings"
-
-[node name="HSeparator3" type="HSeparator" parent="VBoxContainer" unique_id=530391841]
-layout_mode = 2
-
 [node name="inst panel" parent="VBoxContainer" unique_id=952900637 instance=ExtResource("2_7t3tj")]
 layout_mode = 2
 
@@ -62,15 +54,18 @@ theme_override_font_sizes/font_size = 12
 text = "Vocal Settings"
 
 [node name="Panel" type="Panel" parent="VBoxContainer" unique_id=1255846741]
-custom_minimum_size = Vector2(0, 170)
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5u6wb")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel" unique_id=1155183781]
 custom_minimum_size = Vector2(0, 170)
-layout_mode = 0
-offset_right = 363.0
-offset_bottom = 170.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 

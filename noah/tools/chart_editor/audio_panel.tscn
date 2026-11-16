@@ -6,7 +6,8 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wlakc"]
 
 [node name="Panel" type="PanelContainer" unique_id=952900637]
-offset_transform_enabled = true
+offset_right = 314.0
+offset_bottom = 95.0
 script = ExtResource("1_io1j1")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1441601867]
@@ -83,7 +84,7 @@ unique_name_in_owner = true
 layout_mode = 2
 mouse_default_cursor_shape = 2
 button_pressed = true
-text = "Hit sounds"
+text = "Hit SFX"
 
 [node name="Delete Track" type="Button" parent="HBoxContainer/VBoxContainer2/VBoxContainer/HBoxContainer2" unique_id=1923903596]
 unique_name_in_owner = true

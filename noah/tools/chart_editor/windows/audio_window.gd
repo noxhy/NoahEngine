@@ -35,8 +35,7 @@ func prepare_tracks():
 		add_track(idx)
 		if idx < EditorResources.song.vocals.size() - 1:
 			vbox.add_child(HSeparator.new())
-		else:
-			vbox.add_spacer(false)
+		
 		idx += 1
 
 func add_track(idx:int):
