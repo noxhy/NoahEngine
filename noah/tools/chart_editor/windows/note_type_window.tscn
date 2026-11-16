@@ -6,7 +6,7 @@
 [node name="Note Type Window" type="Window" unique_id=598392119]
 oversampling_override = 1.0
 title = "Note Types"
-position = Vector2i(0, 36)
+initial_position = 1
 size = Vector2i(200, 300)
 theme = ExtResource("1_6m7g3")
 script = ExtResource("2_uah0j")
