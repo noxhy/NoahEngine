@@ -77,8 +77,7 @@ func add_chart_types() -> void:
 			var type = str(i[3])
 			if not type.is_empty() and not Constants.NOTE_TYPES.has(type) and not BLACKLISTED.has(type) and not spotted_types.has(type):
 				spotted_types.append(type)
-			
-		
+	
 	for type in spotted_types:
 		add_tree_item(type, chart_root)
 

@@ -37,6 +37,9 @@ func new_file(files: Array[String]):
 		difficulty_dict[diff] = difficulty_data
 	
 	var charts:Array[String] = files.duplicate()
+	var core_directory = charts[0].get_base_dir() + '/'
+	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
+	song_file.resource_path = song_path
 	match chart_format:
 		999: # whatever.
 			#filter out all metas or events
@@ -72,9 +75,6 @@ func new_file(files: Array[String]):
 	if charts.is_empty():
 		printerr("failed to find any charts")
 	
-	var core_directory = charts[0].get_base_dir() + '/'
-	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
-	song_file.resource_path = song_path
 	for file in charts:
 		match chart_format:
 			Chart.ChartFormat.VSLICE:

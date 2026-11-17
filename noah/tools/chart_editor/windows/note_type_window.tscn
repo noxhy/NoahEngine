@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://byt3fibtjxta1" path="res://noah/tools/chart_editor/windows/note_type_window.gd" id="2_uah0j"]
 
 [node name="Note Type Window" type="Window" unique_id=598392119]
+transparent_bg = true
 oversampling_override = 1.0
 title = "Note Types"
 initial_position = 1

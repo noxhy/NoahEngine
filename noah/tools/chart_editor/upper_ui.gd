@@ -20,7 +20,7 @@ var chart_editor: ChartEditor
 @onready var note_type_window: Window = %"Note Type Window"
 @onready var history_window: Window = %"History Window"
 @onready var song_name_label: Label = $"HBoxContainer/Song Name Label"
-
+@onready var time_change_window: Window = %"Time Change Editor"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -79,14 +79,10 @@ func _ready() -> void:
 		SettingsManager.data.chart_start_at_current_position)
 	test_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
-	
 	window_button.get_popup().connect(&"id_pressed", chart_editor.window_button_item_pressed)
 	window_button.get_popup().set_hide_on_checkable_item_selection(false)
-
-	
 	
 	#setup windows
-	
 	audios_window.close_requested.connect(func():
 		window_button.get_popup().set_item_checked(3, false)
 		SoundManager.tool_close_window.play()
@@ -105,21 +101,19 @@ func _ready() -> void:
 	
 	history_window.connect(&"close_requested", chart_editor._on_history_window_close_requested)
 	
-	metadata_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
-	metadata_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
-	metadata_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
 	metadata_window.connect(&"updated_scroll_speed", chart_editor._on_metadata_window_updated_scroll_speed)
 	metadata_window.connect(&"updated_song_artist", chart_editor._on_metadata_window_updated_song_artist)
 	metadata_window.connect(&"updated_song_charter", chart_editor._on_metadata_window_updated_song_charter)
 	metadata_window.connect(&"updated_song_name", chart_editor._on_metadata_window_updated_song_name)
 	metadata_window.connect(&"updated_song_scene", chart_editor._on_metadata_window_updated_song_scene)
-	metadata_window.connect(&"updated_starting_tempo", chart_editor._on_metadata_window_updated_starting_tempo)
 	metadata_window.connect(&"close_requested", chart_editor._on_metadata_window_close_requested)
+	
+	time_change_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
+	time_change_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
+	time_change_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
 	
 	note_type_window.connect(&"selected_type", chart_editor.selected_note_type)
 	note_type_window.connect(&"close_requested", chart_editor._on_note_type_window_close_requested)
-	
-	
 	
 	setup_shortcuts()
 	

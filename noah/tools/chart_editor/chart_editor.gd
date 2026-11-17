@@ -508,7 +508,7 @@ func on_files_dropped(files: PackedStringArray):
 func update_grid():
 	grid.columns = 2 + EditorResources.strum_count
 	grid.rows = conductor.numerator * conductor.denominator
-	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
+	%"Strum Labels".position = grid.get_real_position(Vector2(1, 0)) - Vector2(0, 322)
 	%"Strum Labels".custom_minimum_size.x = (EditorResources.strum_count + 1) * (grid.grid_size.x * grid.zoom.x)
 	%"Strum Labels".custom_maximum_size.x = %"Strum Labels".custom_minimum_size.x
 	
@@ -578,7 +578,6 @@ func load_song(song: Song, difficulty: Variant = null):
 		for strumline in song.strumlines:
 			EditorResources.strumlines.append(Strumline.from_dict(strumline))
 	
-	
 	EditorResources.song = song
 	if difficulty == null:
 		difficulty = EditorResources.song.difficulties.keys()[0]
@@ -603,12 +602,13 @@ func load_song(song: Song, difficulty: Variant = null):
 	song_slider.value = song_position
 	update_conductor()
 	
-	lower_ui.get_node("%Difficulty Button").get_popup().clear()
+	lower_ui.difficulty_button.get_popup().clear()
 	for d in EditorResources.song.difficulties.keys():
-		lower_ui.get_node("%Difficulty Button").get_popup().add_item(d)
+		lower_ui.difficulty_button.get_popup().add_item(d)
 	
-	lower_ui.get_node("%Difficulty Button").select(EditorResources.song.difficulties.keys().find(difficulty))
-	upper_ui.get_node("%Metadata Window").update_stats()
+	lower_ui.difficulty_button.select(EditorResources.song.difficulties.keys().find(difficulty))
+	upper_ui.metadata_window.update_stats()
+	upper_ui.time_change_window.update_stats()
 	
 	upper_ui.song_name_label.text = song.title
 	
@@ -637,7 +637,7 @@ func load_song_path(path: String, difficulty: Variant = null) -> void:
 	load_song(song, difficulty)
 
 
-func load_chart(file: Chart, ghost: bool = false) -> void:
+func load_chart(file: Chart) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
 	
@@ -662,6 +662,7 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	undo_redo.commit_action()
 	
 	upper_ui.metadata_window.update_stats()
+	
 	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
@@ -1274,7 +1275,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
-	if SettingsManager.data.chart_hit_sound_on_beat and music.playing:
+	if SettingsManager.data.chart_hit_sound_on_step and music.playing:
 		SoundManager.conductor_step.play()
 	
 	if EditorResources.chart:
@@ -1421,6 +1422,7 @@ func window_button_item_pressed(id) -> void:
 		1: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.metadata_window))
 		2: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.note_type_window))
 		3: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.audios_window))
+		4: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.time_change_window))
 
 func toggle_window_visibility(window: Window) -> bool:
 	var ret = not window.visible
@@ -1669,7 +1671,7 @@ func decrease_snap() -> void:
 	lower_ui.chart_snap.value -= 1
 
 func _on_difficulty_button_item_selected(index: int) -> void:
-	var _difficulty = lower_ui.get_node("%Difficulty Button").get_popup().get_item_text(index)
+	var _difficulty = lower_ui.difficulty_button.get_popup().get_item_text(index)
 	if EditorResources.song.difficulties.keys().has(_difficulty):
 		EditorResources.chart = Chart.load(EditorResources.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART), EditorResources.song)
 		EditorResources.difficulty = _difficulty
@@ -1699,10 +1701,6 @@ func _on_metadata_window_updated_song_scene(path: String) -> void:
 	EditorResources.song.scene = path
 	auto_save()
 
-func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
-	EditorResources.song.tempo = tempo
-	auto_save()
-
 func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
 	EditorResources.chart.scroll_speed = speed
 	auto_save()
@@ -1721,7 +1719,7 @@ func _on_metadata_window_add_time_change() -> void:
 	)
 	
 	conductor.time_changes.sort()
-	upper_ui.metadata_window.update_stats()
+	upper_ui.time_change_window.update_stats()
 	auto_save()
 
 func _on_metadata_window_remove_time_change() -> void:

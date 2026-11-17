@@ -1,4 +1,4 @@
-extends HFlowContainer
+extends HBoxContainer
 
 signal move_bound_left(strum_id: int)
 signal move_bound_right(strum_id: int)

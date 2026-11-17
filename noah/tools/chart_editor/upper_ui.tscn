@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
 [ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
 [ext_resource type="PackedScene" uid="uid://jy1by5plg8fu" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="10_bn4gj"]
+[ext_resource type="PackedScene" uid="uid://dnvmjq282p3no" path="res://noah/tools/chart_editor/windows/time_changes_window.tscn" id="11_8c8jl"]
 
 [node name="Upper UI" type="PanelContainer" unique_id=1243191260]
 anchors_preset = -1
@@ -245,6 +246,12 @@ visible = false
 
 [node name="Note Type Window" parent="HBoxContainer/Window Button" unique_id=598392119 groups=["windows"] instance=ExtResource("10_bn4gj")]
 unique_name_in_owner = true
+initial_position = 4
+visible = false
+
+[node name="Time Change Editor" parent="HBoxContainer/Window Button" unique_id=291733897 groups=["windows"] instance=ExtResource("11_8c8jl")]
+unique_name_in_owner = true
+initial_position = 4
 visible = false
 
 [node name="Help Button" type="MenuButton" parent="HBoxContainer" unique_id=1457749919]
