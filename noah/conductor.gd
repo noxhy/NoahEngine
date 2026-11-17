@@ -72,15 +72,15 @@ var seconds_per_step: float:
 # These variables only exist for the purpose of grabbing info
 var current_beat: int = -1:
 	set(v):
-		measure_relative_beat = v % numerator
 		if current_beat != v:
+			measure_relative_beat = (v - get_beat_at(get_change_time_at(time))) % numerator
 			emit_signal(&"new_beat", v, measure_relative_beat)
 		
 		current_beat = v
 
 var current_step: int = -1:
 	set(v):
-		measure_relative_step = v % (numerator * denominator)
+		measure_relative_step = (v - get_beat_at(get_change_time_at(time))) % (numerator * denominator)
 		if current_step != v:
 			emit_signal(&"new_step", v, measure_relative_step)
 		
