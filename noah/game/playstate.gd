@@ -422,7 +422,7 @@ func finished_song() -> void:
 	Global.change_scene_to(scene_to_enter)
 
 ## Called whenever a notes has been hit. in [PlayState], this updates scoring.
-func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
+func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() == 1:
 		playback.set_stream_volume(vocal_track_ids[0], 0.0)
@@ -437,11 +437,11 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 			Signals.play_note_miss.emit(note, lane, strum_manager)
 			return
 		
-		if note.hit:
-			return
-		
-		if note.scoreable:
+		if note.scoreable and !note.regrabbed:
 			score_note(hit_time)
+		
+		if note.regrabbed:
+			return
 		
 		song_stats.total_notes += 1
 		match NoahStats.get_hit_rating(hit_time):
@@ -470,7 +470,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 				note_miss(note, lane, strum_manager)
 
 ## Called whenever a notes tail is being held. in [PlayState], this updates scoring.
-func note_held(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
+func note_held(note: BasicNote, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  0.0)
@@ -483,7 +483,7 @@ func note_held(note: Note, lane: int, hold_delta: float, strum_manager: StrumMan
 			Signals.play_stats_changed.emit(song_stats)
 
 ## Called whenever a note is missed. in [PlayState], this updates scoring.
-func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
+func note_miss(note: BasicNote, lane: int, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		if (note and !note.mine) or !note:

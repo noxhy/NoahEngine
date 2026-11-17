@@ -48,7 +48,7 @@ var note_list: Array[BasicNote] = []
 
 var pressing: bool = false
 ## The current prioritized note for this strum to hit next.
-var target_note: BasicNote = null
+var target_note: BasicNote
 ## The current Animation State for this strum
 var state: AnimState : set = set_anim_state
 
@@ -228,6 +228,9 @@ func press_note() -> void:
 			note_list.erase(target_note)
 			target_note.queue_free()
 	else:
+		if !target_note.note.visible:
+			target_note.regrabbed = true
+		
 		if note_skin and note_skin.hold_covers_texture:
 			hold_cover_sprite.play(&"start_" + strum_name + &"_cover")
 			hold_cover_sprite.visible = true
@@ -247,7 +250,7 @@ func hold_note() -> void:
 	target_note.length /= spb
 	target_note.note.visible = false
 	Signals.play_note_held.emit(target_note, lane, temp - max(0, target_note.length), get_parent())
-
+ 	
 	if target_note.length <= 0:
 		pressing = false
 		if can_splash and note_skin and note_skin.hold_covers_texture:
@@ -267,7 +270,7 @@ func release_note() -> void:
 			if hold_cover_sprite.animation != &"cover " + strum_name + &" end":
 				hold_cover_sprite.visible = false
 			
-			var note = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
+			var note: BasicNote = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
 			if note:
 				# Checks if you were holding a note before releasing
 				if target_note and note.length > 0:

@@ -29,6 +29,8 @@ var scoreable: bool = true
 var mine: bool = false
 ## If the note was hit already
 var hit: bool = false
+## If the note was regrabbed after letting go
+var regrabbed: bool = false
 
 # Applying Note Skin
 func _ready() -> void: 
