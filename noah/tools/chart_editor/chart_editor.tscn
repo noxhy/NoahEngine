@@ -82,7 +82,6 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("18_dd0y6")]
 unique_name_in_owner = true
-anchors_preset = 10
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 1.0

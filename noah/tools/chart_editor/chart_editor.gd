@@ -515,38 +515,42 @@ func update_grid():
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
 	
-	for id in EditorResources.strumlines.size():
-		var strumline: Strumline = EditorResources.strumlines[id]
-		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
+	if EditorResources.song:
+		for id in EditorResources.strumlines.size():
+			var strumline: Strumline = EditorResources.strumlines[id]
+			var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
+			
+			strum_label_instance.id = id
+			
+			%"Strum Labels".add_child(strum_label_instance)
+			strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
+			) * grid.grid_size.x * grid.zoom.x
+			strum_label_instance.size.y = 32
+			
+			if strumline.left_lane == 0:
+				strum_label_instance.get_node("Move Lane Left").visible = false
+			
+			if strumline.right_lane == EditorResources.strum_count - 1:
+				strum_label_instance.get_node("Move Lane Right").visible = false
+			
+			strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
+			strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
+			strum_label_instance.connect(&"opened", self.disable_charting)
+			strum_label_instance.connect(&"closed", self.close_popup)
+			strum_label_instance.connect(&"updated", self.updated_strums)
+			strum_label_instance.add_to_group(&"strum_buttons")
 		
-		strum_label_instance.id = id
 		
-		%"Strum Labels".add_child(strum_label_instance)
-		strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
-		) * grid.grid_size.x * grid.zoom.x
-		strum_label_instance.size.y = 32
-		
-		if strumline.left_lane == 0:
-			strum_label_instance.get_node("Move Lane Left").visible = false
-		
-		if strumline.right_lane == EditorResources.strum_count - 1:
-			strum_label_instance.get_node("Move Lane Right").visible = false
-		
-		strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
-		strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
-		strum_label_instance.connect(&"opened", self.disable_charting)
-		strum_label_instance.connect(&"closed", self.close_popup)
-		strum_label_instance.connect(&"updated", self.updated_strums)
-		strum_label_instance.add_to_group(&"strum_buttons")
-	
-	var create_button: Button = Button.new()
-	create_button.icon = load("res://addons/at-icons/node/plus_sign_in_square.svg")
-	create_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	create_button.custom_minium_size = grid.grid_size.x * grid.zoom.x
-	create_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	create_button.tooltip_text = "Creates a new strumline"
-	create_button.pressed.connect(create_new_strumline)
-	%"Strum Labels".add_child(create_button)
+		var create_button: Button = Button.new()
+		create_button.icon = load("res://addons/at-icons/node/plus_sign_in_square.svg")
+		create_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		create_button.custom_minimum_size.x = grid.grid_size.x * grid.zoom.x
+		create_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		create_button.tooltip_text = "Creates a new strumline"
+		create_button.expand_icon = true
+		create_button.pressed.connect(create_new_strumline)
+		%"Strum Labels".add_child(create_button)
+		create_button.add_to_group(&"strum_buttons")
 	
 	%"Strum Labels".size.y = 32
 
