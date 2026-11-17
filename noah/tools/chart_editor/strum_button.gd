@@ -60,3 +60,7 @@ func _on_confirmation_dialog_confirmed() -> void:
 
 func _on_delete_button_pressed() -> void:
 	$Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/Button/ConfirmationDialog.popup()
+
+
+func _on_confirmation_dialog_about_to_popup() -> void:
+	SoundManager.tool_open_window.play()

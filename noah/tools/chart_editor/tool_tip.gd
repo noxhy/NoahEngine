@@ -48,7 +48,6 @@ func _process(delta: float) -> void:
 		position.y -= size.y + mouse_offset.y
 
 func get_event_str() -> String:
-	
 	if chart_editor.name != 'Chart Editor':
 		var event = chart_editor.song_events[chart_editor.hovered_event]
 		var parameters = chart_editor.song_events[chart_editor.hovered_event][2]

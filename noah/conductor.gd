@@ -90,6 +90,7 @@ var measure_relative_beat: int = 0
 var measure_relative_step: int = 0
 var time: float = 0
 var latency: float = AudioServer.get_output_latency()
+var change_time_offset: float
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
@@ -98,7 +99,8 @@ func _process(_delta):
 		time -= latency
 		# time += AudioServer.get_time_since_last_mix()
 	
-	var time_change: Vector3 = get_time_change_at(time)
+	change_time_offset = get_change_time_at(time)
+	var time_change: Vector3 = time_changes[change_time_offset]
 	tempo = time_change.x
 	numerator = int(time_change.y)
 	denominator = int(time_change.z)
@@ -167,7 +169,7 @@ func get_step_at(_time: float) -> int:
 
 ## Returns the time change at a given time.
 func get_time_change_at(_time: float) -> Vector3:
-	_time = max(0, _time - offset)
+	_time = maxf(0.0, _time - offset)
 	var output: Vector3
 	for point in time_changes:
 		if _time >= point:
@@ -179,10 +181,10 @@ func get_time_change_at(_time: float) -> Vector3:
 
 ## Gets the time of a time change.
 func get_change_time_at(_time: float) -> float:
-	_time = max(0, _time - offset)
+	_time = maxf(0.0, _time - offset)
 	var output: float = -1
 	for point in time_changes:
-		if time >= point:
+		if _time >= point:
 			output = point
 		else:
 			break
