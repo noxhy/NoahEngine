@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://jy1by5plg8fu" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="10_bn4gj"]
 
 [node name="Upper UI" type="PanelContainer" unique_id=1243191260]
-clip_children = 1
 anchors_preset = -1
 anchor_left = -0.5
 anchor_top = -0.022000002

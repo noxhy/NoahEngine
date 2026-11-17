@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://b6w6xjwy4h2wh" path="res://addons/at-icons/node/next.svg" id="7_7n1a3"]
 
 [node name="Lower UI" type="PanelContainer" unique_id=1378036966]
-clip_children = 1
 custom_minimum_size = Vector2(1280, 48)
 anchors_preset = 15
 anchor_right = 1.0
