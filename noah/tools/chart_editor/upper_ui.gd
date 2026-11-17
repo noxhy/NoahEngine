@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends PanelContainer
 class_name ChartEditorUpperUI
 
 var chart_editor: ChartEditor
@@ -12,14 +12,14 @@ var chart_editor: ChartEditor
 
 @onready var help_button: MenuButton = %"Help Button"
 
-@onready var open_song_window: ResourceFileDialog = $"File Button/Open Song Window"
+@onready var open_song_window: ResourceFileDialog = $"HBoxContainer/File Button/Open Song Window"
 @onready var export_external_popup: FileDialog = %"Export External Popup"
 @onready var note_skin_window: ResourceFileDialog = %"Note Skin Window"
 @onready var audios_window: Window = %"AudioWindow"
 @onready var metadata_window: Window = %"Metadata Window"
 @onready var note_type_window: Window = %"Note Type Window"
 @onready var history_window: Window = %"History Window"
-@onready var song_name_label: Label = $"Song Name Label"
+@onready var song_name_label: Label = $"HBoxContainer/Song Name Label"
 
 
 # Called when the node enters the scene tree for the first time.

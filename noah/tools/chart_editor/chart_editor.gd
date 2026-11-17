@@ -413,7 +413,7 @@ func is_mouse_over_any_ui() -> bool:
 	if minimap and Rect2i(minimap.get_screen_position(), minimap.size).has_point(mouse):
 		return true
 	
-	for button:HFlowContainer in get_tree().get_nodes_in_group(&"strum_buttons"):
+	for button: Control in get_tree().get_nodes_in_group(&"strum_buttons"):
 		if Rect2i(button.get_screen_position(), button.size).has_point(mouse):
 			return true
 	
@@ -510,7 +510,7 @@ func update_grid():
 	grid.rows = conductor.numerator * conductor.denominator
 	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
 	%"Strum Labels".size.x = 0
-	%"Strum Labels".custom_minimum_size.x = EditorResources.strum_count * (grid.grid_size.x * grid.zoom.x)
+	%"Strum Labels".custom_minimum_size.x = (EditorResources.strum_count + 1) * (grid.grid_size.x * grid.zoom.x)
 	
 	for n in %"Strum Labels".get_children():
 		n.queue_free()
@@ -538,6 +538,15 @@ func update_grid():
 		strum_label_instance.connect(&"closed", self.close_popup)
 		strum_label_instance.connect(&"updated", self.updated_strums)
 		strum_label_instance.add_to_group(&"strum_buttons")
+	
+	var create_button: Button = Button.new()
+	create_button.icon = load("res://addons/at-icons/node/plus_sign_in_square.svg")
+	create_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	create_button.custom_minium_size = grid.grid_size.x * grid.zoom.x
+	create_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	create_button.tooltip_text = "Creates a new strumline"
+	create_button.pressed.connect(create_new_strumline)
+	%"Strum Labels".add_child(create_button)
 	
 	%"Strum Labels".size.y = 32
 
@@ -2025,3 +2034,9 @@ func scrub_minimap() -> void:
 	update_camera_song_position(true)
 	
 	song_slider.value = song_position
+
+
+func create_new_strumline() -> void:
+	EditorResources.strumlines.append(
+		Strumline.new(&"New Strumline", EditorResources.strum_count, 4, 0))
+	update_grid()

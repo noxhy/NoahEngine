@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://rdxsgf0dpa1x" path="res://addons/at-icons/node/fast_forward.svg" id="6_6ggy7"]
 [ext_resource type="Texture2D" uid="uid://b6w6xjwy4h2wh" path="res://addons/at-icons/node/next.svg" id="7_7n1a3"]
 
-[node name="Lower UI" type="HBoxContainer" unique_id=1056915829]
+[node name="Lower UI" type="PanelContainer" unique_id=1378036966]
 clip_children = 1
 custom_minimum_size = Vector2(1280, 48)
 anchors_preset = 15
@@ -168,6 +168,7 @@ size_flags_horizontal = 2
 [node name="HBoxContainer3" type="HBoxContainer" parent="." unique_id=1386921721]
 layout_mode = 2
 size_flags_horizontal = 10
+alignment = 2
 
 [node name="Difficulty Button" type="OptionButton" parent="HBoxContainer3" unique_id=1072897757]
 unique_name_in_owner = true

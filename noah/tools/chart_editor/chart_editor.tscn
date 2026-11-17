@@ -65,22 +65,6 @@ layer = 10
 offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
-[node name="Upper Border" type="ColorRect" parent="UI" unique_id=1209370372]
-offset_left = -640.0
-offset_top = -360.0
-offset_right = 640.0
-offset_bottom = -328.0
-color = Color(0.14509805, 0.16862746, 0.20392157, 1)
-metadata/_edit_lock_ = true
-
-[node name="Lower Border" type="ColorRect" parent="UI" unique_id=234193942]
-offset_left = -640.0
-offset_top = 312.0
-offset_right = 640.0
-offset_bottom = 360.0
-color = Color(0.14509805, 0.16862746, 0.20392157, 1)
-metadata/_edit_lock_ = true
-
 [node name="Song Slider" type="HSlider" parent="UI" unique_id=729164226]
 unique_name_in_owner = true
 offset_left = -640.0
@@ -98,7 +82,15 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("18_dd0y6")]
 unique_name_in_owner = true
-offset_left = -472.0
+anchors_preset = 10
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = -640.0
+offset_bottom = -322.0
 
 [node name="Strum Labels" type="HFlowContainer" parent="UI" unique_id=1205544976]
 unique_name_in_owner = true
