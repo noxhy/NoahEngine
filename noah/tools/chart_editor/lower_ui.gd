@@ -9,10 +9,10 @@ class_name ChartEditorLowerUI
 @onready var difficulty_button: OptionButton = %"Difficulty Button"
 @onready var chart_snap: SpinBox = %"Chart Snap"
 @onready var zoom: Label = %zoom
-
 @onready var current_time_label: Label = %"Current Time Label"
-
 @onready var time_left_label: Label = %"Time Left Label"
+@onready var beat_label: Label = %Beat
+@onready var step_label: Label = %Step
 
 var chart_editor: ChartEditor
 
