@@ -140,8 +140,7 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 		
 		get_tree().call_group(group, &"set_sing_timer")
 	
-	if playstate and group == &"player":
-		
+	if playstate and group == &"player" and !note.regrabbed:
 		show_combo(NoahStats.get_hit_rating(hit_time), playstate.song_stats.combo)
 		if playstate.song_stats.combo > 0:
 			if (playstate.song_stats.combo % 200 == 0):
