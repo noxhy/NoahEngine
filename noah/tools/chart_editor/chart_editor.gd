@@ -1260,7 +1260,7 @@ func _on_instrumental_finished() -> void:
 	toggle_audios(true)
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
-	if SettingsManager.data.chart_hit_sound_on_beat:
+	if SettingsManager.data.chart_hit_sound_on_beat and music.playing:
 		if measure_relative == 0:
 			SoundManager.conductor_beat.play()
 		else:
@@ -1274,7 +1274,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
-	if SettingsManager.data.chart_hit_sound_on_step:
+	if SettingsManager.data.chart_hit_sound_on_beat and music.playing:
 		SoundManager.conductor_step.play()
 	
 	if EditorResources.chart:
