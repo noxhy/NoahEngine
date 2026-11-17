@@ -355,8 +355,8 @@ func load_dividers() -> void:
 		self.add_child(rect)
 		rect.add_to_group(&"dividers")
 
-func load_chart(file: Chart, ghost: bool = false) -> void:
-	super(file, ghost)
+func load_chart(file: Chart) -> void:
+	super(file)
 	EditorResources.event_tracks = []
 	for event in song_events:
 		if !EditorResources.event_tracks.has(event[1]):

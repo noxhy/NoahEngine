@@ -42,7 +42,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer2/Tempo Change" unique_id=273743390]
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_horizontal = 2
 text = "Tempo:"
 
 [node name="Tempo" type="SpinBox" parent="PanelContainer/VBoxContainer2/Tempo Change" unique_id=600124809]
@@ -60,6 +60,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer2/HBoxContainer" unique_id=584728614]
 layout_mode = 2
+size_flags_horizontal = 2
 text = "Time Signature:"
 
 [node name="Numerator" type="SpinBox" parent="PanelContainer/VBoxContainer2/HBoxContainer" unique_id=415943722]
