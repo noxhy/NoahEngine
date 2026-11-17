@@ -27,6 +27,10 @@ script = ExtResource("2_pkb6e")
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1140889178]
 layout_mode = 2
 
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=1485033977]
+custom_minimum_size = Vector2(167.66, 0)
+layout_mode = 2
+
 [node name="File Button" type="MenuButton" parent="HBoxContainer" unique_id=1228980765]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)

@@ -2,6 +2,8 @@ extends PanelContainer
 class_name ChartEditorUpperUI
 
 var chart_editor: ChartEditor
+@onready var h_box_container: HBoxContainer = $HBoxContainer
+
 
 @onready var file_button: MenuButton = %"File Button"
 @onready var edit_button: MenuButton = %"Edit Button"
@@ -118,7 +120,7 @@ func _ready() -> void:
 	setup_shortcuts()
 	
 	#add menupopups to the thing
-	for child in get_children():
+	for child in h_box_container.get_children():
 		if child is MenuButton:
 			child.get_popup().add_to_group(&"windows")
 	
@@ -280,6 +282,12 @@ func setup_shortcuts():
 	shortcut.events[0].alt_pressed = true
 	
 	window_button.get_popup().set_item_shortcut(3, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_T
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(4, shortcut)
 	#endregion
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])

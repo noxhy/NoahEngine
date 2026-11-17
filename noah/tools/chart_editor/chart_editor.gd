@@ -171,7 +171,10 @@ func _process(delta: float) -> void:
 		refresh_audios()
 	
 	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
-	if axis and can_interact_with_chart:
+	
+	if Input.is_key_pressed(KEY_CTRL) and axis:
+		adjust_grid_zoom(axis * 0.1)
+	elif axis and can_interact_with_chart:
 		scrub(axis)
 	
 	if EditorResources.chart:
@@ -1396,24 +1399,20 @@ func view_button_item_pressed(id):
 			upper_ui.get_node("%Note Skin Window").popup()
 			SoundManager.tool_open_window.play()
 		
-		3:
-			grid.zoom.y = clamp(grid.zoom.y + 0.1, 0.5, 1.5)
-			update_grid()
-			load_dividers()
-			load_section(song_position)
-			update_camera_song_position(true)
-		
-		4:
-			grid.zoom.y = clamp(grid.zoom.y - 0.1, 0.5, 1.5)
-			update_grid()
-			load_dividers()
-			load_section(song_position)
-			update_camera_song_position(true)
-			
-		
+		3: #increase zoom
+			adjust_grid_zoom(0.1)
+		4: # reduce zoom
+			adjust_grid_zoom(-0.1)
 		_:
 			print("id: ", id)
 
+func adjust_grid_zoom(delta: float) -> void:
+	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 1.5)
+	update_grid()
+	load_dividers()
+	load_section(song_position)
+	update_camera_song_position(true)
+	
 ## Window button item pressed
 func window_button_item_pressed(id) -> void:
 	match id:
