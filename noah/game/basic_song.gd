@@ -102,7 +102,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
-	if (current_step + bop_rate_offset) % bop_rate == 0:
+	if (measure_relative + bop_rate_offset) % bop_rate == 0:
 		var cam_bop_strength: Vector2 = Vector2(0.03, 0.03)
 		var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 		
@@ -120,7 +120,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 		if ui and SettingsManager.data.ui_bops:
 			ui.bump(ui_bop_strength)
 
-
+## Updates the camera/ui bop rate to the given value.
 func update_bop_rate(_i: int) -> void:
 	bop_rate = GameManager.conductor.numerator * GameManager.conductor.denominator
 
