@@ -509,12 +509,10 @@ func update_grid():
 	grid.columns = 2 + EditorResources.strum_count
 	grid.rows = conductor.numerator * conductor.denominator
 	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
-	%"Strum Labels".size.x = 0
 	%"Strum Labels".custom_minimum_size.x = (EditorResources.strum_count + 1) * (grid.grid_size.x * grid.zoom.x)
+	%"Strum Labels".custom_maximum_size.x = %"Strum Labels".custom_minimum_size.x
 	
-	for n in %"Strum Labels".get_children():
-		n.queue_free()
-	
+	get_tree().call_group(&"strum_buttons", &"free")
 	if EditorResources.song:
 		for id in EditorResources.strumlines.size():
 			var strumline: Strumline = EditorResources.strumlines[id]
@@ -536,8 +534,10 @@ func update_grid():
 			strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
 			strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
 			strum_label_instance.connect(&"opened", self.disable_charting)
+			strum_label_instance.connect(&"opened", self.open_popup)
 			strum_label_instance.connect(&"closed", self.close_popup)
 			strum_label_instance.connect(&"updated", self.updated_strums)
+			strum_label_instance.connect(&"deleted", self.deleted_strumline)
 			strum_label_instance.add_to_group(&"strum_buttons")
 		
 		
@@ -1568,6 +1568,12 @@ func updated_strums() -> void:
 	auto_save()
 
 
+func deleted_strumline() -> void:
+	enable_can_chart_on_next_frame()
+	call_deferred(&'update_grid')
+	call_deferred(&"load_dividers")
+	auto_save()
+
 func load_waveforms() -> void:
 	get_tree().call_group(&"waveforms", &"free")
 	waveform_nodes.clear()
@@ -2039,8 +2045,11 @@ func scrub_minimap() -> void:
 	
 	song_slider.value = song_position
 
-
+## Creates a new 4-key strumline.
 func create_new_strumline() -> void:
 	EditorResources.strumlines.append(
 		Strumline.new(&"New Strumline", EditorResources.strum_count, 4, 0))
-	update_grid()
+	
+	call_deferred(&'update_grid')
+	call_deferred(&'load_dividers')
+	auto_save()

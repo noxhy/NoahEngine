@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://ddohksqocyhnx"]
 
-[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_4c1on"]
 [ext_resource type="Script" uid="uid://ydtsb8wn2g1u" path="res://noah/tools/chart_editor/strum_button.gd" id="2_yyjwr"]
 [ext_resource type="Texture2D" uid="uid://brgu0fvsr832c" path="res://addons/at-icons/node/arrow_left_to_line.svg" id="3_2ufmq"]
 [ext_resource type="Texture2D" uid="uid://bsar3lpdp8enc" path="res://addons/at-icons/node/arrow_right_to_line.svg" id="4_qhgux"]
@@ -16,7 +15,6 @@ grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 focus_behavior_recursive = 1
-theme = ExtResource("1_4c1on")
 theme_override_constants/h_separation = 0
 script = ExtResource("2_yyjwr")
 
@@ -49,75 +47,79 @@ expand_icon = true
 [node name="Window" type="Window" parent="." unique_id=247601207]
 transparent_bg = true
 oversampling_override = 1.0
-title = "Edit Strum Settings"
+title = "Edit Strumline Settings"
 initial_position = 4
-size = Vector2i(300, 128)
+size = Vector2i(300, 200)
 visible = false
+popup_window = true
 
-[node name="Panel" type="Panel" parent="Window" unique_id=309073287]
+[node name="Panel" type="PanelContainer" parent="Window" unique_id=1294363608]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="MarginContainer" type="MarginContainer" parent="Window" unique_id=1716652347]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -4.0
-offset_top = 5.0
-offset_right = 4.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer" unique_id=1509225409]
+[node name="MarginContainer" type="MarginContainer" parent="Window/Panel" unique_id=1716652347]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Window/MarginContainer/VBoxContainer" unique_id=160499164]
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/Panel/MarginContainer" unique_id=1509225409]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Window/Panel/MarginContainer/VBoxContainer" unique_id=160499164]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer/VBoxContainer" unique_id=2023436758]
+[node name="HBoxContainer" type="HBoxContainer" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer" unique_id=2023436758]
 custom_minimum_size = Vector2(300, 16)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Window/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=681434192]
+[node name="Label" type="Label" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=681434192]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "Strum Name:"
 
-[node name="Strum ID" type="LineEdit" parent="Window/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=354814603]
+[node name="Strum ID" type="LineEdit" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=354814603]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer/VBoxContainer" unique_id=2091309806]
+[node name="HBoxContainer2" type="HBoxContainer" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer" unique_id=2091309806]
 custom_minimum_size = Vector2(300, 16)
 layout_mode = 2
 
-[node name="Label" type="Label" parent="Window/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=680192948]
+[node name="Label" type="Label" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=680192948]
 layout_mode = 2
 size_flags_horizontal = 2
 text = "Vocal Track:"
 
-[node name="Vocal Track" type="SpinBox" parent="Window/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1581660247]
+[node name="Vocal Track" type="SpinBox" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer2" unique_id=1581660247]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 
-[node name="HSeparator" type="HSeparator" parent="Window/MarginContainer/VBoxContainer" unique_id=12133084]
+[node name="Button" type="Button" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1049695038]
+layout_mode = 2
+size_flags_vertical = 10
+text = "Delete Strumlines"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/Button" unique_id=1963246566]
+oversampling_override = 1.0
+initial_position = 4
+ok_button_text = "Yes"
+dialog_text = "Delete this strumline?"
+
+[node name="HSeparator" type="HSeparator" parent="Window/Panel/MarginContainer/VBoxContainer" unique_id=12133084]
 layout_mode = 2
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="Window/MarginContainer/VBoxContainer" unique_id=2142744680]
+[node name="HBoxContainer3" type="HBoxContainer" parent="Window/Panel/MarginContainer/VBoxContainer" unique_id=2142744680]
 custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 alignment = 1
 
-[node name="Button" type="Button" parent="Window/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1689414730]
+[node name="Button" type="Button" parent="Window/Panel/MarginContainer/VBoxContainer/HBoxContainer3" unique_id=1689414730]
 layout_mode = 2
 text = "Save Settings"
 
@@ -127,4 +129,6 @@ text = "Save Settings"
 [connection signal="about_to_popup" from="Window" to="." method="_on_window_about_to_popup"]
 [connection signal="close_requested" from="Window" to="." method="_on_window_close_requested"]
 [connection signal="gui_focus_changed" from="Window" to="." method="file_dailog_gui_focus_changed"]
-[connection signal="pressed" from="Window/MarginContainer/VBoxContainer/HBoxContainer3/Button" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/Button" to="." method="_on_delete_button_pressed"]
+[connection signal="confirmed" from="Window/Panel/MarginContainer/VBoxContainer/VBoxContainer/Button/ConfirmationDialog" to="." method="_on_confirmation_dialog_confirmed"]
+[connection signal="pressed" from="Window/Panel/MarginContainer/VBoxContainer/HBoxContainer3/Button" to="." method="_on_save_button_pressed"]
