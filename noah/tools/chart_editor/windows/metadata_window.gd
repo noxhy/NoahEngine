@@ -27,13 +27,15 @@ func _on_icon_button_pressed() -> void:
 	%"Icon FileDailog".popup()
 
 func _on_scene_file_dailog_file_selected(path: String) -> void:
-	%"Song Scene".tooltip_text = path
-	path = ResourceUID.uid_to_path(path)
 	if !ResourceLoader.exists(path):
 		printerr("(Metadata Window): Scene \"%s\" doesn't exist." % path)
+		%"Song Scene".text = ""
+		%"Song Scene".tooltip_text = ""
 		return
 	
+	path = ResourceUID.path_to_uid(path)
 	%"Song Scene".text = path
+	%"Song Scene".tooltip_text = path
 	updated_song_scene.emit(path)
 
 func _on_song_name_text_changed(new_text: String) -> void:
