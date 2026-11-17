@@ -95,9 +95,9 @@ offset_bottom = -322.0
 unique_name_in_owner = true
 custom_minimum_size = Vector2(144, 40)
 offset_left = -144.0
-offset_top = -328.0
+offset_top = -322.0
 offset_right = 144.0
-offset_bottom = -288.0
+offset_bottom = -282.0
 theme = ExtResource("17_75w6f")
 theme_override_constants/separation = 0
 
