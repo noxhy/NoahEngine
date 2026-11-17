@@ -5,19 +5,16 @@
 [ext_resource type="Texture2D" uid="uid://bsar3lpdp8enc" path="res://addons/at-icons/node/arrow_right_to_line.svg" id="4_qhgux"]
 
 [node name="Strum Button" type="HBoxContainer" unique_id=849643026]
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -360.0
-offset_right = 144.0
-offset_bottom = -304.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 2
 size_flags_vertical = 3
 focus_behavior_recursive = 1
 theme_override_constants/separation = 0
 script = ExtResource("2_yyjwr")
-metadata/_edit_use_anchors_ = true
 
 [node name="Move Lane Left" type="Button" parent="." unique_id=1554626627]
 layout_mode = 2

@@ -523,7 +523,6 @@ func update_grid():
 			%"Strum Labels".add_child(strum_label_instance)
 			strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
 			) * grid.grid_size.x * grid.zoom.x
-			strum_label_instance.size.y = 32
 			
 			if strumline.left_lane == 0:
 				strum_label_instance.get_node("Move Lane Left").visible = false
