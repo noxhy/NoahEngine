@@ -397,11 +397,9 @@ func set_start_offset(grid_position: Vector2):
 func refresh_audios():
 	var stream: AudioStreamSynchronized = music.stream
 	stream.set_sync_stream_volume(0, linear_to_db(instrumental_volume))
-	var i: int = 1
-	for strumline in EditorResources.strumlines:
-		if EditorResources.song.vocals.size() > i:
-			stream.set_sync_stream_volume(i, linear_to_db(strumline.volume))
-		i += 1
+	for i in EditorResources.song.vocals.size():
+		if EditorResources.strumlines.size() > i:
+			stream.set_sync_stream_volume(i + 1, linear_to_db(EditorResources.strumlines[i].volume))
 
 
 func is_mouse_over_any_ui() -> bool:

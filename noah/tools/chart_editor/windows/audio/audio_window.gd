@@ -27,7 +27,7 @@ func prepare_tracks():
 	
 	add_track(-1)
 	
-	var idx: int = 1
+	var idx: int = 0
 	
 	for vocals in EditorResources.song.vocals:
 		add_track(idx)
@@ -55,7 +55,7 @@ func remove_track(id: int):
 	track_container.remove_child(track)
 	track.queue_free()
 	
-	var idx: int = 1
+	var idx: int = 0
 	for node in track_container.get_children():
 		if node.strum_id > -1:
 			node.set_id(idx)

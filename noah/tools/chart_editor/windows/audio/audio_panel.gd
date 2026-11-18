@@ -2,6 +2,8 @@ extends PanelContainer
 
 @onready var id_label: Label = %"ID Label"
 @onready var delete_track: Button = %"Delete Track"
+@onready var load_song_button: Button = %"Load Song Button"
+
 #@onready var song_path: TextEdit = %"song path"
 @onready var vol_slider: VSlider = %"vol Slider"
 @onready var hit_sound_box: CheckBox = %"hit sound box"
@@ -24,7 +26,6 @@ func set_path(path: String):
 		path = ResourceUID.uid_to_path(path)
 	
 	self.path = path
-	#song_path.text = path
 
 func _on_vol_slider_value_changed(value: float) -> void:
 	if not EditorResources.song:
@@ -56,9 +57,6 @@ func load_current_song():
 	if not EditorResources.song:
 		return
 	
-	delete_track.disabled = strum_id == -1
-	hit_sound_box.disabled = strum_id == -1
-	
 	var volume: float = ChartEditor.instrumental_volume
 	
 	if strum_id == -1:
@@ -73,6 +71,27 @@ func load_current_song():
 		volume = 0
 	
 	vol_slider.set_value_no_signal(volume)
+	
+	
+	load_song_button.tooltip_text = path
+	
+	if strum_id == -1:
+		delete_track.disabled = true
+		hit_sound_box.disabled = true
+		delete_track.mouse_default_cursor_shape = Control.CURSOR_ARROW
+		hit_sound_box.mouse_default_cursor_shape = Control.CURSOR_ARROW
+	else:
+		delete_track.disabled = false
+		hit_sound_box.disabled = false
+		delete_track.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+		hit_sound_box.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	
+	if is_valid_id():
+		vol_slider.editable = true
+		vol_slider.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	else:
+		vol_slider.editable = false
+		vol_slider.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 
 func _on_change_track_pressed() -> void:

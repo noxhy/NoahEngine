@@ -5,12 +5,27 @@
 [ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_mwbqs"]
 [ext_resource type="Texture2D" uid="uid://bgaokgo4ivbwr" path="res://addons/at-icons/node/trash_can.svg" id="4_1ueoo"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f4bmq"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1654877, 0.18992928, 0.23066455, 1)
+border_color = Color(0.115499996, 0.132, 0.15949999, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 3
+anti_aliasing = false
+
 [node name="audio panel" type="PanelContainer" unique_id=1936076325]
 offset_right = 48.0
 offset_bottom = 192.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme = ExtResource("1_w3mtg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_f4bmq")
 script = ExtResource("2_ns831")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1678120151]
@@ -23,6 +38,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
 max_value = 1.0
 step = 0.01
 
@@ -30,12 +46,14 @@ step = 0.01
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_default_cursor_shape = 2
 
 [node name="Load Song Button" type="Button" parent="VBoxContainer" unique_id=588609568]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_vertical = 4
+mouse_default_cursor_shape = 2
 icon = ExtResource("3_mwbqs")
 icon_alignment = 1
 expand_icon = true
@@ -47,6 +65,8 @@ layout_mode = 2
 size_flags_vertical = 4
 offset_transform_enabled = true
 offset_transform_visual_only = false
+tooltip_text = "Delete Track?"
+mouse_default_cursor_shape = 2
 icon = ExtResource("4_1ueoo")
 icon_alignment = 1
 expand_icon = true
@@ -55,6 +75,8 @@ expand_icon = true
 unique_name_in_owner = true
 custom_minimum_size = Vector2(42, 0)
 layout_mode = 2
+tooltip_text = "the ID of the track"
+mouse_filter = 1
 text = "Inst"
 horizontal_alignment = 1
 
