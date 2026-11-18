@@ -9,25 +9,18 @@ transparent_bg = true
 oversampling_override = 1.0
 title = "Audio Controls"
 position = Vector2i(0, 36)
-size = Vector2i(240, 310)
+size = Vector2i(183, 310)
 unresizable = true
 transparent = true
 popup_window = true
 theme = ExtResource("1_rwilv")
 script = ExtResource("2_ayadm")
 
-[node name="Panel" type="Panel" parent="." unique_id=314826869]
-visible = false
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1152470305]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = -1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -49,10 +42,14 @@ layout_mode = 2
 [node name="InstPanel" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1936076325 instance=ExtResource("4_ayadm")]
 layout_mode = 2
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=368860982]
-custom_minimum_size = Vector2(227, 0)
+[node name="InstPanel2" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1749624370 instance=ExtResource("4_ayadm")]
 layout_mode = 2
-size_flags_horizontal = 4
+
+[node name="InstPanel3" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1529873145 instance=ExtResource("4_ayadm")]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=368860982]
+layout_mode = 2
 size_flags_vertical = 8
 size_flags_stretch_ratio = 0.0
 alignment = 2
@@ -61,7 +58,7 @@ alignment = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Add Track"
+text = "Add"
 
 [node name="Save Button" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer2" unique_id=1945608291]
 unique_name_in_owner = true
