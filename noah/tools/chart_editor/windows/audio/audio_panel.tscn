@@ -80,6 +80,13 @@ mouse_filter = 1
 text = "Inst"
 horizontal_alignment = 1
 
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1303984095 groups=["windows"]]
+title = "Open a File"
+file_mode = 0
+filters = PackedStringArray("*.wav", "*.ogg", "*.mp3")
+
 [connection signal="value_changed" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/hit sound box" to="." method="_on_hit_sound_box_toggled"]
+[connection signal="pressed" from="VBoxContainer/Load Song Button" to="." method="_on_load_song_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/Delete Track" to="." method="_on_delete_track_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

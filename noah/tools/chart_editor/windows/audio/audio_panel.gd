@@ -3,10 +3,11 @@ extends PanelContainer
 @onready var id_label: Label = %"ID Label"
 @onready var delete_track: Button = %"Delete Track"
 @onready var load_song_button: Button = %"Load Song Button"
-
-#@onready var song_path: TextEdit = %"song path"
 @onready var vol_slider: VSlider = %"vol Slider"
 @onready var hit_sound_box: CheckBox = %"hit sound box"
+@onready var file_dialog: FileDialog = $FileDialog
+
+
 var path: String = ''
 var parent: Node
 
@@ -26,6 +27,7 @@ func set_path(path: String):
 		path = ResourceUID.uid_to_path(path)
 	
 	self.path = path
+	load_song_button.tooltip_text = path
 
 func _on_vol_slider_value_changed(value: float) -> void:
 	if not EditorResources.song:
@@ -72,9 +74,6 @@ func load_current_song():
 	
 	vol_slider.set_value_no_signal(volume)
 	
-	
-	load_song_button.tooltip_text = path
-	
 	if strum_id == -1:
 		delete_track.disabled = true
 		hit_sound_box.disabled = true
@@ -93,36 +92,15 @@ func load_current_song():
 		vol_slider.editable = false
 		vol_slider.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
-
-func _on_change_track_pressed() -> void:
-	%FileDialog.popup()
-	#$add.popup()
-	#var tree = $add/Tree
-	#tree.clear()
-	#
-	#var files = NoahTools.get_files_with_exts(['ogg', 'wav', 'mp3'], 'res://', ["res://noah"])
-	#
-	#var found_files:Dictionary
-	#for file in files:
-		#var dir: String = file.get_base_dir()
-		#if !found_files.has(dir):
-			#found_files[dir] = []
-		#
-		#found_files[dir].append(file)
-	#
-	#var root: TreeItem = tree.create_item()
-	#for dir in found_files:
-		#var dir_item: TreeItem = root.create_child()
-		#dir_item.set_text(0, dir)
-		#dir_item.set_custom_color(0, Color(0.5, 0.5, 0.5))
-		#
-		#for file in found_files[dir]:
-			#var file_item: TreeItem = dir_item.create_child()
-			#file_item.set_text(0, file.get_file())
-			#file_item.set_metadata(0, file)
-			#file_item.set_icon(0, load("res://addons/at-icons/node/file.svg"))
-			#
-			#file_item.set_icon_max_width(0, 16)
-
 func _on_file_dialog_file_selected(path: String) -> void:
 	set_path(path)
+
+
+func _on_load_song_button_pressed() -> void:
+	if path.is_empty() and EditorResources.song:
+		var maybe_path = ResourceUID.ensure_path(EditorResources.song.resource_path)
+		if maybe_path:
+			file_dialog.current_dir = maybe_path.get_base_dir()
+	else:
+		file_dialog.current_dir = path.get_base_dir()
+	file_dialog.popup()

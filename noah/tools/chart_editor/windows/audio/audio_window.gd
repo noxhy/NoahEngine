@@ -71,7 +71,7 @@ func _on_add_track_pressed() -> void:
 func _on_save_button_pressed() -> void:
 	EditorResources.song.vocals.clear()
 	for node in track_container.get_children():
-		if node.id == -1:
+		if node.strum_id == -1:
 			EditorResources.song.instrumental = ResourceUID.path_to_uid(node.path)
 		else:
 			EditorResources.song.vocals.append(ResourceUID.path_to_uid(node.path))

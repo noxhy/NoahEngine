@@ -88,14 +88,19 @@ func _ready() -> void:
 	audios_window.close_requested.connect(func():
 		window_button.get_popup().set_item_checked(3, false)
 		SoundManager.tool_close_window.play()
-		)
+	)
+	
 	audios_window.updated_current_song.connect(func():
 		if not chart_editor.music.stream_paused:
 			chart_editor.toggle_audios()
-		chart_editor.music.stream = SoundManager.get_stream(EditorResources.song.instrumental)
-		chart_editor.waveform_dirty = true
+		chart_editor.music.stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
+		var idx = 1
+		for path in EditorResources.song.vocals:
+			chart_editor.music.stream.set_sync_stream(idx, SoundManager.get_stream(path))
+			idx += 1
+			
 		chart_editor.auto_save()
-		)
+	)
 	
 	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
 	
