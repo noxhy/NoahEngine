@@ -1,11 +1,11 @@
 extends PanelContainer
 
-@onready var id_label: LineEdit = %"ID Label"
+@onready var id_label: Label = %"ID Label"
 @onready var delete_track: Button = %"Delete Track"
-@onready var song_path: TextEdit = %"song path"
-@onready var vol_slider: HSlider = %"vol Slider"
+#@onready var song_path: TextEdit = %"song path"
+@onready var vol_slider: VSlider = %"vol Slider"
 @onready var hit_sound_box: CheckBox = %"hit sound box"
-
+var path: String = ''
 var parent: Node
 
 @export var strum_id: int = -1
@@ -23,7 +23,8 @@ func set_path(path: String):
 	if path.begins_with("uid"):
 		path = ResourceUID.uid_to_path(path)
 	
-	song_path.text = path
+	self.path = path
+	#song_path.text = path
 
 func _on_vol_slider_value_changed(value: float) -> void:
 	if not EditorResources.song:
@@ -55,7 +56,7 @@ func load_current_song():
 	if not EditorResources.song:
 		return
 	
-	delete_track.visible = strum_id != -1
+	delete_track.disabled = strum_id == -1
 	hit_sound_box.disabled = strum_id == -1
 	
 	var volume: float = ChartEditor.instrumental_volume

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bc4d7j7ifsf86"]
 
-[ext_resource type="Script" uid="uid://cjnphso8gmi5n" path="res://noah/tools/chart_editor/audio_panel.gd" id="1_io1j1"]
+[ext_resource type="Script" uid="uid://cjnphso8gmi5n" path="res://noah/tools/chart_editor/windows/audio/audio_panel.gd" id="1_io1j1"]
 [ext_resource type="Texture2D" uid="uid://dvfofr7yda00b" path="res://addons/at-icons/node/shopping_basket.svg" id="2_dvm7l"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wlakc"]
