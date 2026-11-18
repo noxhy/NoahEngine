@@ -42,12 +42,6 @@ layout_mode = 2
 [node name="InstPanel" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1936076325 instance=ExtResource("4_ayadm")]
 layout_mode = 2
 
-[node name="InstPanel2" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1749624370 instance=ExtResource("4_ayadm")]
-layout_mode = 2
-
-[node name="InstPanel3" parent="PanelContainer/VBoxContainer/ScrollContainer/VBoxContainer/Track Container" unique_id=1529873145 instance=ExtResource("4_ayadm")]
-layout_mode = 2
-
 [node name="HBoxContainer2" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=368860982]
 layout_mode = 2
 size_flags_vertical = 8
