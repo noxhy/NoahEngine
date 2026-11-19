@@ -1,5 +1,9 @@
 extends PanelContainer
 
+signal remove_requested
+
+@export var strum_id: int = -1
+
 @onready var id_label: Label = %"ID Label"
 @onready var delete_track: Button = %"Delete Track"
 @onready var load_song_button: Button = %"Load Song Button"
@@ -7,13 +11,16 @@ extends PanelContainer
 @onready var hit_sound_box: CheckBox = %"hit sound box"
 @onready var file_dialog: FileDialog = $FileDialog
 
-
 var path: String = ''
 var parent: Node
 
-@export var strum_id: int = -1
-
-signal remove_requested
+var dirty: bool :
+	set(v):
+		dirty = v
+		if dirty:
+			self_modulate = Color(1.0, 0.5, 0.5)
+		else:
+			self_modulate = Color.WHITE
 
 func set_id(id: int):
 	if id == -1:
@@ -22,11 +29,12 @@ func set_id(id: int):
 		id_label.text = str(id)
 	strum_id = id
 
-func set_path(path: String):
-	if path.begins_with("uid"):
-		path = ResourceUID.uid_to_path(path)
+func set_path(_path: String) -> void:
+
+	if _path.begins_with("uid"):
+		_path = ResourceUID.uid_to_path(_path)
 	
-	self.path = path
+	path = _path
 	load_song_button.tooltip_text = path
 
 func _on_vol_slider_value_changed(value: float) -> void:
@@ -38,8 +46,12 @@ func _on_vol_slider_value_changed(value: float) -> void:
 		ChartEditor.instrumental_volume = value
 	elif is_valid_id():
 		EditorResources.strumlines[strum_id].volume = value
+	
+	vol_slider.tooltip_text = str(value * 100) + '%'
 
 func _on_hit_sound_box_toggled(toggled_on: bool) -> void:
+	
+	SoundManager.tool_mouse_click.play()
 	
 	if strum_id == -1:
 		pass
@@ -47,6 +59,8 @@ func _on_hit_sound_box_toggled(toggled_on: bool) -> void:
 		EditorResources.strumlines[strum_id].hit_sounds = toggled_on
 
 func _on_delete_track_pressed() -> void:
+	SoundManager.tool_note_remove.play()
+	
 	remove_requested.emit()
 
 func _on_waveform_toggled(toggled_on: bool) -> void:
@@ -92,9 +106,10 @@ func load_current_song():
 		vol_slider.editable = false
 		vol_slider.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
-func _on_file_dialog_file_selected(path: String) -> void:
-	set_path(path)
-
+func _on_file_dialog_file_selected(_path: String) -> void:
+	if path != _path:
+		dirty = true
+	set_path(_path)
 
 func _on_load_song_button_pressed() -> void:
 	if path.is_empty() and EditorResources.song:
@@ -103,4 +118,12 @@ func _on_load_song_button_pressed() -> void:
 			file_dialog.current_dir = maybe_path.get_base_dir()
 	else:
 		file_dialog.current_dir = path.get_base_dir()
+	SoundManager.tool_open_window.play()
 	file_dialog.popup()
+
+
+func _on_vol_slider_drag_started() -> void:
+	SoundManager.tool_mouse_click.play()
+
+func _on_vol_slider_drag_ended(value_changed: bool) -> void:
+	SoundManager.tool_mouse_click.play()

@@ -1555,8 +1555,9 @@ func save() -> void:
 func move_selection(time_distance: float, lane_distance: float) -> void:
 	var notes: Array = []
 	for note in selected_note_nodes:
-		notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
-		remove_note(note.lane, note.time)
+		if is_instance_valid(note):
+			notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
+			remove_note(note.lane, note.time)
 	
 	var temp = place_notes(notes)
 	selected_notes = temp

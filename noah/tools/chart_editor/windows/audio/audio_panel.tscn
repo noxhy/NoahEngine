@@ -38,6 +38,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 125)
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "Change Volume"
 mouse_default_cursor_shape = 2
 max_value = 1.0
 step = 0.01
@@ -46,6 +47,7 @@ step = 0.01
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
+tooltip_text = "Play hit sounds?"
 mouse_default_cursor_shape = 2
 
 [node name="Load Song Button" type="Button" parent="VBoxContainer" unique_id=588609568]
@@ -82,9 +84,12 @@ horizontal_alignment = 1
 
 [node name="FileDialog" type="FileDialog" parent="." unique_id=1303984095 groups=["windows"]]
 title = "Open a File"
+initial_position = 1
 file_mode = 0
 filters = PackedStringArray("*.wav", "*.ogg", "*.mp3")
 
+[connection signal="drag_ended" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_drag_ended"]
+[connection signal="drag_started" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_drag_started"]
 [connection signal="value_changed" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_value_changed"]
 [connection signal="toggled" from="VBoxContainer/hit sound box" to="." method="_on_hit_sound_box_toggled"]
 [connection signal="pressed" from="VBoxContainer/Load Song Button" to="." method="_on_load_song_button_pressed"]

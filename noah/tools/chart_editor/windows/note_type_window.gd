@@ -104,7 +104,7 @@ func create_custom_item() -> void:
 	tree.call_deferred(&"edit_selected")
 	
 	if not TRASH_ICON:
-		var texture: Image = load("res://addons/at-icons/node/shopping_basket.svg").get_image()
+		var texture: Image = load("res://addons/at-icons/node/trash_can.svg").get_image()
 		var ratio = 16.0 / texture.get_width()
 		texture.resize(16, int(texture.get_height() * ratio))
 		TRASH_ICON = ImageTexture.create_from_image(texture)
@@ -112,7 +112,7 @@ func create_custom_item() -> void:
 	item.add_button(0, TRASH_ICON, -1, false, "Delete this type?")
 	
 	chart_root.visible = true
-	
+
 func item_activated() -> void:
 	if tree.get_selected() == add_custom_root:
 		create_custom_item()
