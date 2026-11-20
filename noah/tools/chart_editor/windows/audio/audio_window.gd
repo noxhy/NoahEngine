@@ -76,6 +76,7 @@ func _on_save_button_pressed() -> void:
 	for node in track_container.get_children():
 		EditorResources.song.vocals.append(ResourceUID.path_to_uid(node.path))
 		node.dirty = false
+		node.first_load = true
 		
 	updated_current_song.emit()
 

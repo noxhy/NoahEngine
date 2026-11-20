@@ -11,8 +11,11 @@ signal remove_requested
 @onready var hit_sound_box: CheckBox = %"hit sound box"
 @onready var file_dialog: FileDialog = $FileDialog
 
+var original_path: String = ''
 var path: String = ''
 var parent: Node
+
+var first_load: bool = true
 
 var dirty: bool :
 	set(v):
@@ -26,16 +29,24 @@ func set_id(id: int):
 	if id == -1:
 		id_label.text = 'Inst'
 	else:
-		id_label.text = str(id)
+		if EditorResources.song and EditorResources.strumlines.size() > id:
+			id_label.text = EditorResources.strumlines[id].name
+		else:
+			id_label.text = str(id)
+		
+		id_label.tooltip_text = "ID: " + id_label.text
 	strum_id = id
 
 func set_path(_path: String) -> void:
-
 	if _path.begins_with("uid"):
 		_path = ResourceUID.uid_to_path(_path)
 	
 	path = _path
 	load_song_button.tooltip_text = path
+	
+	if first_load:
+		original_path = path
+		first_load = false
 
 func _on_vol_slider_value_changed(value: float) -> void:
 	if not EditorResources.song:
@@ -107,7 +118,9 @@ func load_current_song():
 		vol_slider.mouse_default_cursor_shape = Control.CURSOR_ARROW
 
 func _on_file_dialog_file_selected(_path: String) -> void:
-	if path != _path:
+	if path == original_path:
+		dirty = false
+	elif path != _path:
 		dirty = true
 	set_path(_path)
 

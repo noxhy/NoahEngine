@@ -76,11 +76,13 @@ expand_icon = true
 [node name="ID Label" type="Label" parent="VBoxContainer" unique_id=1912804557]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(42, 0)
+custom_maximum_size = Vector2(42, -1)
 layout_mode = 2
 tooltip_text = "the ID of the track"
 mouse_filter = 1
 text = "Inst"
 horizontal_alignment = 1
+text_overrun_behavior = 5
 
 [node name="FileDialog" type="FileDialog" parent="." unique_id=1303984095 groups=["windows"]]
 title = "Open a File"
