@@ -2,57 +2,67 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_y1a63"]
 [ext_resource type="Script" uid="uid://ci5vocm58ajmg" path="res://noah/tools/chart_editor/upper_ui.gd" id="2_pkb6e"]
+[ext_resource type="Script" uid="uid://deldtluyogkqr" path="res://noah/tools/chart_editor/note_skin_window.gd" id="3_pmg4i"]
 [ext_resource type="PackedScene" uid="uid://d20lksrt6bgar" path="res://noah/tools/chart_editor/windows/history_window.tscn" id="3_xi38a"]
 [ext_resource type="PackedScene" uid="uid://bflvolhan5xvh" path="res://noah/tools/chart_editor/windows/metadata_window.tscn" id="4_ax5pr"]
-[ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio_window.tscn" id="4_pmg4i"]
-[ext_resource type="PackedScene" uid="uid://b1ei656025t8s" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="5_c03gx"]
+[ext_resource type="PackedScene" uid="uid://cnl3v75g6wec6" path="res://noah/tools/chart_editor/windows/audio/audio_window.tscn" id="4_pmg4i"]
+[ext_resource type="Script" uid="uid://rwa2lqwuhfdc" path="res://noah/resources/note_skin.gd" id="6_8c8jl"]
+[ext_resource type="Script" uid="uid://cg3p8t4iqade1" path="res://noah/tools/resource_file_dialog.gd" id="8_7gmnx"]
+[ext_resource type="Script" uid="uid://watdarflaprc" path="res://noah/resources/song.gd" id="9_bn4gj"]
+[ext_resource type="PackedScene" uid="uid://jy1by5plg8fu" path="res://noah/tools/chart_editor/windows/note_type_window.tscn" id="10_bn4gj"]
+[ext_resource type="PackedScene" uid="uid://dnvmjq282p3no" path="res://noah/tools/chart_editor/windows/time_changes_window.tscn" id="11_8c8jl"]
 
-[node name="Upper UI" type="HBoxContainer" unique_id=415464568]
-clip_children = 1
-offset_left = -576.0
-offset_top = -360.0
-offset_right = 640.0
-offset_bottom = -327.0
+[node name="Upper UI" type="PanelContainer" unique_id=1243191260]
+anchors_preset = -1
+anchor_left = -0.5
+anchor_top = -0.022000002
+anchor_right = 0.5
+anchor_bottom = 0.031000001
+offset_top = -0.1599989
+offset_bottom = -0.3200016
+grow_horizontal = 2
 theme = ExtResource("1_y1a63")
 script = ExtResource("2_pkb6e")
 
-[node name="File Button" type="MenuButton" parent="." unique_id=1228980765]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1140889178]
+layout_mode = 2
+
+[node name="Control" type="Control" parent="HBoxContainer" unique_id=1485033977]
+custom_minimum_size = Vector2(167.66, 0)
+layout_mode = 2
+
+[node name="File Button" type="MenuButton" parent="HBoxContainer" unique_id=1228980765]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "File"
-item_count = 12
+item_count = 10
 popup/item_0/text = "Create New Song"
 popup/item_0/id = 0
 popup/item_1/text = "Open Song"
 popup/item_1/id = 1
 popup/item_2/text = "Convert Chart"
 popup/item_2/id = 7
-popup/item_3/text = "Load Events"
-popup/item_3/id = 10
-popup/item_4/text = "Load from ZIP"
-popup/item_4/id = 21
-popup/item_5/id = 4
-popup/item_5/separator = true
-popup/item_6/text = "Save Song"
-popup/item_6/id = 2
-popup/item_7/text = "Save Events As"
-popup/item_7/id = 9
-popup/item_8/text = "Export to ZIP"
-popup/item_8/id = 20
-popup/item_9/id = 5
-popup/item_9/separator = true
-popup/item_10/text = "Autosave"
-popup/item_10/checkable = 1
-popup/item_10/checked = true
-popup/item_10/id = 3
-popup/item_11/text = "Exit"
-popup/item_11/id = 6
-metadata/_edit_use_anchors_ = true
+popup/item_3/text = "Load from ZIP"
+popup/item_3/id = 21
+popup/item_4/id = 4
+popup/item_4/separator = true
+popup/item_5/text = "Save Song"
+popup/item_5/id = 2
+popup/item_6/text = "Export to ZIP"
+popup/item_6/id = 20
+popup/item_7/id = 5
+popup/item_7/separator = true
+popup/item_8/text = "Autosave"
+popup/item_8/checkable = 1
+popup/item_8/checked = true
+popup/item_8/id = 3
+popup/item_9/text = "Exit"
+popup/item_9/id = 6
 
-[node name="Export External Popup" type="FileDialog" parent="File Button" unique_id=1942631382 groups=["windows"]]
+[node name="Export External Popup" type="FileDialog" parent="HBoxContainer/File Button" unique_id=1942631382 groups=["windows"]]
 unique_name_in_owner = true
 oversampling_override = 1.0
 title = "Save Events"
@@ -61,7 +71,17 @@ size = Vector2i(640, 480)
 display_mode = 1
 access = 2
 
-[node name="Edit Button" type="MenuButton" parent="." unique_id=1489223633]
+[node name="Open Song Window" type="Window" parent="HBoxContainer/File Button" unique_id=1412879232 groups=["windows"]]
+oversampling_override = 1.0
+title = "Open Song"
+position = Vector2i(0, 24)
+size = Vector2i(400, 300)
+visible = false
+script = ExtResource("8_7gmnx")
+resource_type = ExtResource("9_bn4gj")
+metadata/_custom_type_script = "uid://cg3p8t4iqade1"
+
+[node name="Edit Button" type="MenuButton" parent="HBoxContainer" unique_id=1489223633]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -107,9 +127,8 @@ popup/item_17/text = "Increase Note Snap"
 popup/item_17/id = 17
 popup/item_18/text = "Decrease Note Snap"
 popup/item_18/id = 18
-metadata/_edit_use_anchors_ = true
 
-[node name="View Button" type="MenuButton" parent="." unique_id=331440346]
+[node name="View Button" type="MenuButton" parent="HBoxContainer" unique_id=331440346]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -127,49 +146,54 @@ popup/item_3/text = "Zoom In"
 popup/item_3/id = 3
 popup/item_4/text = "Zoom Out"
 popup/item_4/id = 4
-metadata/_edit_use_anchors_ = true
 
-[node name="Note Skin Window" type="FileDialog" parent="View Button" unique_id=833636911 groups=["windows"]]
+[node name="Note Skin Window" type="Window" parent="HBoxContainer/View Button" unique_id=1172373414 groups=["windows"]]
 unique_name_in_owner = true
-title = "Open a File"
+transparent_bg = true
+oversampling_override = 1.0
+title = "Select a Noteskin"
 initial_position = 1
-size = Vector2i(640, 480)
-file_mode = 0
-filters = PackedStringArray("*.tres", "*.res")
+size = Vector2i(400, 300)
+visible = false
+script = ExtResource("3_pmg4i")
+resource_type = ExtResource("6_8c8jl")
+metadata/_custom_type_script = "uid://cg3p8t4iqade1"
 
-[node name="Audio Button" type="MenuButton" parent="." unique_id=441078833]
+[node name="Audio Button" type="MenuButton" parent="HBoxContainer" unique_id=441078833]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Audio"
-item_count = 9
-popup/item_0/text = "Play/Pause"
+item_count = 10
+popup/item_0/text = "Play / Pause"
 popup/item_0/id = 0
-popup/item_1/text = "Speed Audio Up"
+popup/item_1/text = "Playback rate Up"
 popup/item_1/id = 4
-popup/item_2/text = "Slow Audio Down"
+popup/item_2/text = "Playback rate Down"
 popup/item_2/id = 5
 popup/item_3/id = 6
 popup/item_3/separator = true
-popup/item_4/text = "Conductor Beat"
+popup/item_4/text = "Metronome on Beat"
 popup/item_4/checkable = 1
 popup/item_4/id = 7
-popup/item_5/text = "Conductor Step"
+popup/item_5/text = "Metronome on Step"
 popup/item_5/checkable = 1
 popup/item_5/id = 8
-popup/item_6/id = 6
-popup/item_6/separator = true
-popup/item_7/text = "Vocal Waveforms"
-popup/item_7/checkable = 1
-popup/item_7/id = 11
-popup/item_8/text = "Instrumental Waveforms"
+popup/item_6/text = "Mute all hit sounds"
+popup/item_6/checkable = 1
+popup/item_6/id = 10
+popup/item_7/id = 6
+popup/item_7/separator = true
+popup/item_8/text = "Vocal Waveforms"
 popup/item_8/checkable = 1
-popup/item_8/id = 12
-metadata/_edit_use_anchors_ = true
+popup/item_8/id = 11
+popup/item_9/text = "Instrumental Waveforms"
+popup/item_9/checkable = 1
+popup/item_9/id = 12
 
-[node name="Test Button" type="MenuButton" parent="." unique_id=64458848]
+[node name="Test Button" type="MenuButton" parent="HBoxContainer" unique_id=64458848]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
@@ -184,51 +208,57 @@ popup/item_1/id = 1
 popup/item_2/text = "Start at Current Position"
 popup/item_2/checkable = 1
 popup/item_2/id = 2
-metadata/_edit_use_anchors_ = true
 
-[node name="Window Button" type="MenuButton" parent="." unique_id=752310352]
+[node name="Window Button" type="MenuButton" parent="HBoxContainer" unique_id=752310352]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(64, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 mouse_default_cursor_shape = 2
 text = "Window"
-item_count = 4
+item_count = 5
 popup/item_0/text = "History"
 popup/item_0/checkable = 1
 popup/item_0/id = 0
 popup/item_1/text = "Metadata"
 popup/item_1/checkable = 1
 popup/item_1/id = 1
-popup/item_2/text = "Notes"
+popup/item_2/text = "Notetypes"
 popup/item_2/checkable = 1
 popup/item_2/id = 2
 popup/item_3/text = "Audio"
 popup/item_3/checkable = 1
 popup/item_3/id = 3
-metadata/_edit_use_anchors_ = true
+popup/item_4/text = "Time Changes"
+popup/item_4/checkable = 1
+popup/item_4/id = 4
 
-[node name="History Window" parent="Window Button" unique_id=1289274319 groups=["windows"] instance=ExtResource("3_xi38a")]
+[node name="History Window" parent="HBoxContainer/Window Button" unique_id=1289274319 groups=["windows"] instance=ExtResource("3_xi38a")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Metadata Window" parent="Window Button" unique_id=1340846673 instance=ExtResource("4_ax5pr")]
+[node name="Metadata Window" parent="HBoxContainer/Window Button" unique_id=1340846673 instance=ExtResource("4_ax5pr")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Note Type Window" parent="Window Button" unique_id=1644438816 groups=["windows"] instance=ExtResource("5_c03gx")]
+[node name="AudioWindow" parent="HBoxContainer/Window Button" unique_id=838383365 instance=ExtResource("4_pmg4i")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="AudioWindow" parent="Window Button" unique_id=838383365 instance=ExtResource("4_pmg4i")]
+[node name="Note Type Window" parent="HBoxContainer/Window Button" unique_id=598392119 groups=["windows"] instance=ExtResource("10_bn4gj")]
 unique_name_in_owner = true
 initial_position = 4
 visible = false
 
-[node name="Help Button" type="MenuButton" parent="." unique_id=1457749919]
+[node name="Time Change Editor" parent="HBoxContainer/Window Button" unique_id=291733897 groups=["windows"] instance=ExtResource("11_8c8jl")]
+unique_name_in_owner = true
+initial_position = 4
+visible = false
+
+[node name="Help Button" type="MenuButton" parent="HBoxContainer" unique_id=1457749919]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(64, 0)
@@ -240,7 +270,9 @@ item_count = 1
 popup/item_0/id = 0
 metadata/_edit_use_anchors_ = true
 
-[node name="Song Name Label" type="Label" parent="." unique_id=1658353722]
+[node name="Song Name Label" type="Label" parent="HBoxContainer" unique_id=1658353722]
 layout_mode = 2
 size_flags_horizontal = 10
 text = "Song Name"
+
+[connection signal="close_requested" from="HBoxContainer/View Button/Note Skin Window" to="HBoxContainer/View Button/Note Skin Window" method="_on_close_requested"]

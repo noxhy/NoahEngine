@@ -19,13 +19,13 @@ static var strum_count: int:
 			if strumline.right_lane == -1:
 				continue
 			
-			sum += strumline.right_lane - strumline.left_lane + 1
+			sum += strumline.lane_count
 		
 		return sum
 
 static var event_editor: bool = false
 
 ## Settings per strum, each key is it's label
-static var strumlines: Array[Strumline] = []
+static var strumlines: Array[Strumline]
 
-static var event_tracks: Array = []
+static var event_tracks: Array

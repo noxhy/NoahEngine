@@ -13,12 +13,6 @@
 [ext_resource type="FontFile" uid="uid://ede277aql5vu" path="res://noah/assets/fonts/primary_font.ttf" id="20_4y0c1"]
 [ext_resource type="Script" uid="uid://dn04gjsh1koqp" path="res://noah/tools/chart_editor/loaded_song_error.gd" id="21_et4bh"]
 
-[sub_resource type="AudioStreamPolyphonic" id="AudioStreamPolyphonic_r2tof"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_ym35o"]
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
-
 [sub_resource type="LabelSettings" id="LabelSettings_8qav3"]
 font = ExtResource("20_4y0c1")
 font_size = 24
@@ -28,24 +22,12 @@ outline_color = Color(0.22450125, 1.8349849e-07, 8.4228816e-08, 1)
 
 [node name="Chart Editor" type="Node2D" unique_id=373963802]
 script = ExtResource("1_ugmsy")
-divider_color = Color(0.71484375, 0.71484375, 0.71484375, 1)
-current_time_color = Color(0.75668746, 0, 1, 0.8)
-muted_color = Color(0.16, 0.16, 0.16, 0.502)
-box_color = Color(0.151337, 0.445313, 0.17072, 0.287)
-time_change_color = Color(0.5526029, 0.5802685, 0.9920456, 1)
 
 [node name="Conductor" type="Node" parent="." unique_id=1602922239 node_paths=PackedStringArray("stream_player")]
 script = ExtResource("2_dontb")
-stream_player = NodePath("../Audio/Instrumental")
+stream_player = NodePath("../Music")
 
-[node name="Audio" type="Node" parent="." unique_id=158434399]
-
-[node name="Vocals" type="AudioStreamPlayer" parent="Audio" unique_id=1600138238]
-unique_name_in_owner = true
-stream = SubResource("AudioStreamPolyphonic_r2tof")
-bus = &"Music"
-
-[node name="Instrumental" type="AudioStreamPlayer" parent="Audio" unique_id=1067197915]
+[node name="Music" type="AudioStreamPlayer" parent="." unique_id=1067197915]
 unique_name_in_owner = true
 bus = &"Music"
 
@@ -53,7 +35,7 @@ bus = &"Music"
 position = Vector2(640, 360)
 
 [node name="Grid Layer" type="CanvasLayer" parent="." unique_id=1476007864]
-layer = -2
+layer = -10
 offset = Vector2(640, 80)
 transform = Transform2D(1, 0, 0, 1, 640, 80)
 
@@ -70,7 +52,6 @@ event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
 
 [node name="Waveform Layer" type="CanvasLayer" parent="." unique_id=476894491]
-layer = 2
 offset = Vector2(640, 80)
 transform = Transform2D(1, 0, 0, 1, 640, 80)
 follow_viewport_enabled = true
@@ -78,27 +59,6 @@ follow_viewport_enabled = true
 [node name="Notes Layer" type="CanvasLayer" parent="." unique_id=1790758764]
 layer = 2
 follow_viewport_enabled = true
-
-[node name="UI Borders" type="CanvasLayer" parent="." unique_id=1532861694]
-layer = 9
-offset = Vector2(640, 360)
-transform = Transform2D(1, 0, 0, 1, 640, 360)
-
-[node name="Upper Border" type="ColorRect" parent="UI Borders" unique_id=1209370372]
-offset_left = -640.0
-offset_top = -360.0
-offset_right = 640.0
-offset_bottom = -328.0
-color = Color(0.14509805, 0.16862746, 0.20392157, 1)
-metadata/_edit_lock_ = true
-
-[node name="Lower Border" type="ColorRect" parent="UI Borders" unique_id=234193942]
-offset_left = -640.0
-offset_top = 312.0
-offset_right = 640.0
-offset_bottom = 360.0
-color = Color(0.14509805, 0.16862746, 0.20392157, 1)
-metadata/_edit_lock_ = true
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=876802818]
 layer = 10
@@ -122,16 +82,24 @@ unique_name_in_owner = true
 
 [node name="Upper UI" parent="UI" unique_id=415464568 instance=ExtResource("18_dd0y6")]
 unique_name_in_owner = true
-offset_left = -472.0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -640.0
+offset_top = -360.0
+offset_right = -640.0
+offset_bottom = -322.0
 
-[node name="Strum Labels" type="HFlowContainer" parent="UI" unique_id=1205544976]
+[node name="Strum Labels" type="HBoxContainer" parent="UI" unique_id=1135101650]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(144, 32)
+custom_minimum_size = Vector2(144, 40)
 offset_left = -144.0
-offset_top = -328.0
+offset_top = -322.0
 offset_right = 144.0
-offset_bottom = -296.0
-theme_override_constants/h_separation = 0
+offset_bottom = -282.0
+theme = ExtResource("17_75w6f")
+theme_override_constants/separation = 0
 
 [node name="Tool Tip" type="Label" parent="UI" unique_id=538315361]
 visible = false
@@ -143,7 +111,6 @@ offset_right = -143.0
 offset_bottom = -305.0
 theme = ExtResource("17_75w6f")
 text = "hello"
-label_settings = SubResource("LabelSettings_ym35o")
 script = ExtResource("19_ym35o")
 
 [node name="LoadedSong error" type="Label" parent="UI" unique_id=1634400954]
@@ -173,7 +140,7 @@ offset = Vector2(640, 360)
 transform = Transform2D(1, 0, 0, 1, 640, 360)
 
 [node name="genericBG" type="Sprite2D" parent="Background" unique_id=1878471884]
-modulate = Color(0.56078434, 0.6431373, 0.7490196, 1)
+modulate = Color(0.67401683, 0.681111, 0.69175404, 1)
 material = ExtResource("19_almg3")
 texture = ExtResource("19_2ab3f")
 metadata/_edit_lock_ = true

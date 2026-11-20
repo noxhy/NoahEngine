@@ -4,8 +4,8 @@ signal removed
 
 var event: String:
 	set(v):
-		%"Track Name".text = v
-		var icon: String = Constants.EVENT_DATA.get(v, {}).get("texture", "res://addons/at-icons/node/diamond_shape.svg")
+		%"Track Name".text = v.capitalize()
+		var icon: String = Constants.EVENT_DATA.get(v, {}).get("texture", "res://addons/at-icons/node/help.svg")
 		%"Track Name".right_icon = load(icon)
 		
 		var tip: String = str("event: ", v)

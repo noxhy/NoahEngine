@@ -16,17 +16,19 @@ func new_file(files: Array[String]):
 	
 	song_file.artist = %"Song Credits".text
 	song_file.title = %"Song Title".text
+	song_file.charter = %"Song Charter".text
 	
 	song_file.instrumental = selected_instrumental
-	song_file.vocals = Array(Array(selected_vocals),TYPE_STRING, '', null)
+	song_file.vocals = Array(Array(selected_vocals), TYPE_STRING, '', null)
+	song_file.strumlines = []
+	for strumline in Constants.DEFAULT_STRUMLINES:
+		song_file.strumlines.append(strumline.to_dict())
 	
 	var chart_format = %"Format Options".get_selected_id()
 	
-	var difficulty_dict: Dictionary[String, SongDifficultyData] = {}
+	var difficulty_dict: Dictionary[StringName, SongDifficultyData] = {}
 	
 	var save_chart = func(chart:Chart, dir:String, diff:String):
-		song_file.tempo = chart.tempos.get(chart.tempos.keys()[0])
-		
 		var path = str(dir.path_join(song_file.title), '-', diff, '.tres')
 		
 		NoahTools.save_resource(chart, path)
@@ -35,6 +37,9 @@ func new_file(files: Array[String]):
 		difficulty_dict[diff] = difficulty_data
 	
 	var charts:Array[String] = files.duplicate()
+	var core_directory = charts[0].get_base_dir() + '/'
+	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
+	song_file.resource_path = song_path
 	match chart_format:
 		999: # whatever.
 			#filter out all metas or events
@@ -70,10 +75,7 @@ func new_file(files: Array[String]):
 	if charts.is_empty():
 		printerr("failed to find any charts")
 	
-	var core_directory = charts[0].get_base_dir() + '/'
-	
 	for file in charts:
-		
 		match chart_format:
 			Chart.ChartFormat.VSLICE:
 				var dir = file.get_base_dir()
@@ -91,7 +93,7 @@ func new_file(files: Array[String]):
 				
 				if chart_json and meta_json:
 					for diff in meta_json.get('playData').get('difficulties'):
-						save_chart.call(Chart.convert_vslice(chart_json, meta_json, diff), core_directory, diff)
+						save_chart.call(Chart.convert_vslice(chart_json, song_file, meta_json, diff), core_directory, diff)
 				
 				
 			Chart.ChartFormat.CODENAME:
@@ -119,7 +121,7 @@ func new_file(files: Array[String]):
 					var assumed_diff = file.substr(file.get_base_dir().length() + 1)
 					assumed_diff = assumed_diff.substr(0,assumed_diff.length() - (assumed_diff.get_extension().length() + 1))
 					
-					var chart = Chart.convert_cne(JSON.parse_string(raw_file.get_as_text()), JSON.parse_string(raw_meta.get_as_text()), events)
+					var chart = Chart.convert_cne(JSON.parse_string(raw_file.get_as_text()), song_file, JSON.parse_string(raw_meta.get_as_text()), events)
 					save_chart.call(chart, core_directory, assumed_diff)
 				
 			Chart.ChartFormat.PSYCH_V1, Chart.ChartFormat.PSYCH:
@@ -143,13 +145,12 @@ func new_file(files: Array[String]):
 						assumed_diff = split_name[split_name.size() - 1]
 						assumed_diff = assumed_diff.substr(0,assumed_diff.length() - 5)
 					
-					var chart = Chart.convert_psych(JSON.parse_string(raw_file.get_as_text()), events, chart_format == Chart.ChartFormat.PSYCH_V1)
+					var chart = Chart.convert_psych(JSON.parse_string(raw_file.get_as_text()), song_file, events, chart_format == Chart.ChartFormat.PSYCH_V1)
 					
 					save_chart.call(chart, core_directory, assumed_diff)
 					
 	
 	song_file.difficulties = difficulty_dict
-	var song_path: String = core_directory + song_file.title + Chart.DEFAULT_FILE_TYPE
 	NoahTools.save_resource(song_file, song_path)
 	
 	#Emits signal to return to the chart editor

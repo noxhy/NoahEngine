@@ -1,26 +1,28 @@
 extends Node2D
 
+const LOOP_EPSILON: float = 0.2
+const ENTRIES_REQUIRED: int = 4
+
 var previous_offsets: Array[float]
 var index: int = 0
 
-var entries_required: int = 4
-
 var next_hit: float = 0.0
 var song_position: float = 0.0
+var song_loops: int = 0
 var output_latency: float = AudioServer.get_output_latency()
 var can_hit: bool = true
 
 var max_range: float = 1
 var max_length: float = 850
 
-@onready var stream_player = $Audio/Base
-@onready var conductor = $Conductor
+@onready var stream_player: Conductor = $Audio/Base
+@onready var conductor: Conductor = $Conductor
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	Global.set_window_title("Calibrating Offset")
 	
-	for i in entries_required:
+	for i in ENTRIES_REQUIRED:
 		previous_offsets.append(0.0)
 	
 	$UI/Instructions.text = str("Press ", NoahTools.get_bind_string(&"menu_accept"), " to calibrate your offset")
@@ -65,7 +67,7 @@ func _draw():
 	draw_rect(rect, Color.WHITE, true)
 	
 	rect = Rect2(offset_position * (max_length / 2) - 2 + rect_base_position.x, top, 4, rect_size)
-	draw_rect(rect, Color(0.54509806632996, 0.61960786581039, 1), true)
+	draw_rect(rect, Color(0.545, 0.62, 1.0, 0.675), true)
 	
 	var distance: float = (song_position - next_hit) / max_range
 	rect = Rect2(distance * (max_length / 2) - 2 + rect_base_position.x, top, 4, rect_size)
@@ -73,7 +75,7 @@ func _draw():
 	
 	for i in previous_offsets:
 		rect = Rect2((i / max_range) * (max_length / 2) - 2 + rect_base_position.x, top, 4, rect_size)
-		draw_rect(rect, Color.SLATE_GRAY, true)
+		draw_rect(rect, Color(0.439, 0.502, 0.565, 0.675), true)
 
 
 # Input Manager
@@ -85,16 +87,16 @@ func _input(event):
 		if can_hit:
 			#$"Audio/Hit Sound".play()
 			var distance: float = song_position - next_hit
-			if next_hit == 0 and distance > GameManager.SHIT_RATING_WINDOW:
+			if next_hit == 0 and distance > NoahStats.SHIT_RATING_WINDOW:
 				distance -= stream_player.stream.get_length()
 			
 			print("Hit: ", next_hit, " at ", song_position, " rel: ", distance)
 			
-			previous_offsets[index % entries_required] = -distance
+			previous_offsets[index % ENTRIES_REQUIRED] = -distance
 			can_hit = false
 			
 			index += 1
-			if index >= entries_required:
+			if index >= ENTRIES_REQUIRED:
 				var sum: float = 0.0
 				for i in previous_offsets:
 					sum += i

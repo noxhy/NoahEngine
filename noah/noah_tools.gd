@@ -43,7 +43,14 @@ static var _tween_options: Dictionary[StringName, Array] = {
 	&"sineout": [Tween.TRANS_SINE, Tween.EASE_OUT],
 	&"sineoutin": [Tween.TRANS_SINE, Tween.EASE_OUT_IN],
 	&"classic": [Tween.TRANS_CUBIC, Tween.EASE_IN_OUT],
-	&"linear": [Tween.TRANS_LINEAR, Tween.EASE_IN]
+	&"linear": [Tween.TRANS_LINEAR, Tween.EASE_IN],
+	# we are gonna fake these
+	&"smoothstepin": [Tween.TRANS_SINE, Tween.EASE_IN],
+	&"smoothstepout": [Tween.TRANS_SINE, Tween.EASE_OUT],
+	&"smoothstepinout": [Tween.TRANS_SINE, Tween.EASE_IN_OUT],
+	&"smootherstepin": [Tween.TRANS_QUAD, Tween.EASE_IN],
+	&"smootherstepout": [Tween.TRANS_QUAD, Tween.EASE_OUT],
+	&"smootherstepinout": [Tween.TRANS_QUAD, Tween.EASE_IN_OUT],
 }
 
 ## Sorts an array of nodes by their [code]id[/code]. If the nodes do not contain an [code]id[/code] var, sorting will not occur.
@@ -209,3 +216,120 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 	
 	if uid != -1:
 		ResourceSaver.set_uid(path, uid)
+
+
+const DIRECTORY_BLACKLIST: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
+
+static var _resource_cache: Dictionary[String, PackedStringArray] = {}
+
+## Returns an array of the filepaths of a resource type
+static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
+	
+	var key = resource_type.resource_path + '::' + path
+	
+	if _resource_cache.has(key):
+		return _resource_cache[key]
+	
+	var results: PackedStringArray = []
+	var did_find_resource: bool = false
+	
+	var dir: DirAccess = DirAccess.open(path)
+	dir.list_dir_begin()
+	
+	var file: String = dir.get_next()
+	
+	while !file.is_empty():
+		if DIRECTORY_BLACKLIST.has(file):
+			file = dir.get_next()
+			continue
+		
+		var full_path: String = path.path_join(file)
+		if dir.current_is_dir():
+			results.append_array(get_resource_files(resource_type, full_path))
+		else:
+			full_path = full_path.trim_suffix(".remap").trim_suffix(".import")
+			
+			if not full_path.ends_with(".tres") and not full_path.ends_with(".res"):
+				file = dir.get_next()
+				continue
+			
+			var potential_file: bool = false
+			var dependencies: PackedStringArray = ResourceLoader.get_dependencies(full_path)
+			
+			for dep in dependencies:
+				if dep.contains("::"):
+					dep = dep.get_slice("::", 2)
+				
+				if dep.ends_with(".gd"):
+					if resource_type.resource_path == dep or is_extending_from_base_script(load(dep), resource_type):
+						potential_file = true
+						break
+			
+			if potential_file:
+				if is_instance_of(load(full_path), resource_type):
+					results.append(full_path)
+					did_find_resource = true
+			
+		file = dir.get_next()
+	
+	_resource_cache[key] = results
+	return results
+	
+static func get_files_with_exts(exts: PackedStringArray, path: String = 'res://', excluded_dirs: PackedStringArray = []) -> PackedStringArray:
+	var dir: DirAccess = DirAccess.open(path)
+	dir.list_dir_begin()
+	
+	var results: PackedStringArray = []
+	
+	var file: String = dir.get_next()
+	while !file.is_empty():
+		if DIRECTORY_BLACKLIST.has(file) or excluded_dirs.has(file):
+			file = dir.get_next()
+			continue
+		
+		var full_path: String = path.path_join(file)
+		if dir.current_is_dir():
+			results.append_array(get_files_with_exts(exts, full_path))
+		else:
+			if exts.has(full_path.get_extension()):
+				results.append(full_path)
+		
+		file = dir.get_next()
+	return results
+
+static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
+	if a == base:
+		return true
+	
+	var p = a.get_base_script()
+	
+	if not p:
+		return false
+		
+	return is_extending_from_base_script(p, base)
+
+static func find_lowest_base_script(a: GDScript) -> GDScript:
+	
+	var p = a.get_base_script()
+	
+	if p == null:
+		return a
+	
+	return find_lowest_base_script(p)
+
+
+# golden hue ratio or whatever
+static func generate_colour_from_string(_str: String) -> Color:
+	return Color.from_hsv(fposmod(float(hash(_str)) * 0.618, 1.0), 0.45, 1.0)
+
+static func load_original_resource(res: Resource) -> Resource:
+	
+	if not res:
+		printerr('(NoahTools): cannot load unique copy of a null file.')
+		return res
+	
+	if res.resource_path.is_empty():
+		printerr('(NoahTools): cannot load unique copy of a file that has no path.')
+		return res
+	
+	return ResourceLoader.load(res.resource_path, "", ResourceLoader.CACHE_MODE_IGNORE_DEEP)

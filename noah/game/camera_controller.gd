@@ -78,11 +78,13 @@ var rotation: Variant : set = set_rotation, get = get_rotation
 var position: Variant : set = set_position, get = get_position
 var zoom: Variant : set = set_zoom, get = get_zoom
 
+func _enter_tree() -> void:
+	if not is_in_group(&"cameras"):
+		add_to_group(&"cameras")
+
 func _ready() -> void:
 	if not parent_2d and not parent_3d:
 		printerr('(Camera Controller): No parent was assigned.')
-	
-	add_to_group(&"cameras")
 	
 	if parent_2d:
 		default_offset = parent_2d.offset

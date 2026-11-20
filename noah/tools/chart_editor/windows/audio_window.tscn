@@ -1,59 +1,81 @@
-[gd_scene format=3 uid="uid://cnl3v75g6wec6"]
+[gd_scene format=3 uid="uid://bavrlujegjpo7"]
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_ndjvb"]
-[ext_resource type="PackedScene" uid="uid://bc4d7j7ifsf86" path="res://noah/tools/chart_editor/audio_panel.tscn" id="2_7t3tj"]
-[ext_resource type="Script" uid="uid://dw1amqwmw7xjr" path="res://noah/tools/chart_editor/windows/audio_window.gd" id="2_pb1mr"]
+[ext_resource type="PackedScene" uid="uid://c3w2xmw47elm3" path="res://noah/tools/chart_editor/windows/audio/audio_panel.tscn" id="2_7t3tj"]
+[ext_resource type="Script" uid="uid://dw1amqwmw7xjr" path="res://noah/tools/chart_editor/windows/audio/audio_window.gd" id="2_pb1mr"]
 
-[sub_resource type="StyleBoxLine" id="StyleBoxLine_jm5px"]
-content_margin_right = 0.0
-color = Color(1, 1, 1, 0.5882353)
-grow_begin = -4.0
-grow_end = -4.0
-thickness = 2
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5u6wb"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1048392, 0.1283499, 0.15774, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 3
+anti_aliasing = false
 
 [node name="Window" type="Window" unique_id=838383365 groups=["windows"]]
 transparent_bg = true
 oversampling_override = 1.0
 title = "Audio Controls"
 position = Vector2i(0, 36)
-size = Vector2i(607, 383)
+size = Vector2i(375, 390)
 unresizable = true
 transparent = true
 popup_window = true
 theme = ExtResource("1_ndjvb")
 script = ExtResource("2_pb1mr")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1038355757]
-offset_right = 597.0
-offset_bottom = 400.0
+[node name="Panel" type="Panel" parent="." unique_id=314826869]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=687633761]
-layout_mode = 2
-text = "Instrumental Settings"
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1038355757]
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 369.0
+offset_bottom = 389.0
 
 [node name="inst panel" parent="VBoxContainer" unique_id=952900637 instance=ExtResource("2_7t3tj")]
 layout_mode = 2
 
 [node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=1435775829]
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_jm5px")
 
 [node name="Label2" type="Label" parent="VBoxContainer" unique_id=122753152]
 layout_mode = 2
+theme_override_font_sizes/font_size = 12
 text = "Vocal Settings"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1155183781]
-custom_minimum_size = Vector2(0, 170)
+[node name="Panel" type="Panel" parent="VBoxContainer" unique_id=1255846741]
+custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5u6wb")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/Panel" unique_id=1155183781]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
-[node name="vbox" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1784337024]
+[node name="vbox" type="VBoxContainer" parent="VBoxContainer/Panel/ScrollContainer" unique_id=1784337024]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1899319082]
+visible = false
 layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxLine_jm5px")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=368860982]
 layout_mode = 2

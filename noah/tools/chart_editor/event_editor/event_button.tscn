@@ -35,7 +35,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Deletes this event track from the chart
 WARNING this will remove all events of this type from the chart"
-text = "      "
+text = "  "
 icon = ExtResource("3_hdi5e")
 icon_alignment = 1
 expand_icon = true

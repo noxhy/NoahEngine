@@ -7,6 +7,6 @@
 [resource]
 shader = ExtResource("1_j2j8c")
 shader_parameter/scale = Vector2(60, 60)
-shader_parameter/strength = 0.15
+shader_parameter/strength = 0.05
 shader_parameter/fps = 2.0
 shader_parameter/noise = SubResource("NoiseTexture2D_1ni40")

@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_pptwc"]
 [ext_resource type="Script" uid="uid://dsec7v7be3ekg" path="res://noah/tools/chart_editor/windows/new_file_popup.gd" id="1_qca52"]
+[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_sxd5l"]
 
 [node name="New File Popup" type="Window" unique_id=1776972529 groups=["windows"]]
 transparent_bg = true
@@ -9,7 +10,7 @@ msaa_2d = 1
 oversampling_override = 1.0
 title = "Create New Song"
 initial_position = 1
-size = Vector2i(640, 400)
+size = Vector2i(640, 350)
 exclusive = true
 unresizable = true
 always_on_top = true
@@ -30,6 +31,13 @@ min_size = Vector2i(320, 320)
 ok_button_text = "Select Current Folder"
 dialog_hide_on_ok = true
 file_mode = 2
+
+[node name="Panel" type="Panel" parent="." unique_id=982293444]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="FlowContainer" type="FlowContainer" parent="." unique_id=810239821]
 anchors_preset = 15
@@ -145,9 +153,12 @@ placeholder_text = "Vocals File Location(s)"
 editable = false
 
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=925595055]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+icon = ExtResource("3_sxd5l")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Vocals File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer" unique_id=381986006 groups=["windows"]]
 unique_name_in_owner = true
@@ -177,9 +188,12 @@ placeholder_text = "Instrumental File Location"
 editable = false
 
 [node name="Button" type="Button" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=59429029]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+icon = ExtResource("3_sxd5l")
+icon_alignment = 1
+expand_icon = true
 
 [node name="Inst File Dialog" type="FileDialog" parent="FlowContainer/Audio Files/HBoxContainer3" unique_id=812938838 groups=["windows"]]
 unique_name_in_owner = true
@@ -222,11 +236,15 @@ placeholder_text = "Export Location"
 editable = false
 
 [node name="Button" type="Button" parent="FlowContainer/VBoxContainer/Export Location" unique_id=2041692344]
+custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Select File Location"
+icon = ExtResource("3_sxd5l")
+icon_alignment = 1
+expand_icon = true
 
 [node name="HSeparator2" type="HSeparator" parent="FlowContainer/VBoxContainer" unique_id=259468177]
+visible = false
 layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="FlowContainer/VBoxContainer" unique_id=711109371]

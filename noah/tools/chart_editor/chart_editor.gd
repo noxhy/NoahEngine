@@ -23,7 +23,6 @@ var EVENT_PRELOAD = load("uid://n6k15grja0uh")
 var STRUM_BUTTON_PRELOAD: PackedScene = load("uid://ddohksqocyhnx")
 
 var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
-var OPEN_FILE_POPUP_PRELOAD = load("uid://388mdmn1mwun")
 var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 
 @export_group("Colors")
@@ -33,12 +32,10 @@ var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
 @export var muted_color: Color = Color("29292980")
 @export var box_color: Color = Color("27722c49")
 @export var selected_color: Color = Color("67bf71bb")
-@export var time_change_color: Color = Color.PURPLE
+@export var time_change_color: Color = Color(0.553, 0.58, 0.992)
 
 ## Chart Variables
 var backup_chart: Chart = null
-# So it turns out that the track ID's are not sequential and can be whatever number they want, I did this so it'd be easier
-var vocal_tracks: Array = []
 
 #some settings
 static var instrumental_volume: float = 1
@@ -72,14 +69,24 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
+
+var events_file: ChartEvents
+var song_events: Array:
+	set(v):
+		events_file.data = v
+	get():
+		return events_file.data
+
 var current_visible_notes_L: int = -1
 var current_visible_notes_R: int = -1
 var current_note_type: String = ""
+var time_change_offset: float:
+	get():
+		return conductor.get_change_time_at(song_position)
+
 var dragging_song_slider: bool = false
 
-## Values are supposed to be [WaveformRenderer]s but for safety it is written as a Variant
-var waveform_nodes: Dictionary[int, Variant] = {}
-var waveform_dirty: bool = false
+var waveform_nodes: Dictionary[int, AudioStreamVisualizer] = {}
 
 var event_nodes: Array = []
 var current_visible_events_L: int = -1
@@ -87,8 +94,7 @@ var current_visible_events_R: int = -1
 
 @onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
 @onready var lower_ui: ChartEditorLowerUI = %"Lower UI"
-@onready var instrumental: AudioStreamPlayer = %Instrumental
-@onready var vocals: AudioStreamPlayer = %Vocals
+@onready var music: AudioStreamPlayer = %Music
 @onready var conductor: Conductor = $Conductor
 @onready var camera_2d: Camera2D = $Camera2D
 @onready var song_slider: HSlider = %"Song Slider"
@@ -96,10 +102,11 @@ var current_visible_events_R: int = -1
 @onready var grid_layer: CanvasLayer = $"Grid Layer"
 @onready var grid: Grid = %Grid
 @onready var minimap: EditorMinimap = %Minimap
+@onready var note_parallax: Parallax2D = $"Grid Layer/Parallax2D"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	if name == "Chart Editor":
+	if name == &"Chart Editor":
 		if EditorResources.event_editor:
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 			return
@@ -131,23 +138,24 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	start_offset = clampf(start_offset, 0, start_offset)
-	
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
-	if EditorResources.song and instrumental.playing:
-		song_position = instrumental.get_playback_position() - start_offset
+	if Input.is_action_just_pressed(&"mouse_left") and not is_mouse_over_any_ui():
+		get_viewport().gui_release_focus()
+	
+	if EditorResources.song and music.playing:
+		music.pitch_scale = song_speed
+		song_position = music.get_playback_position() - start_offset
 		song_slider.value = song_position
 		
 		var notes_list = EditorResources.chart.notes
-		
-		if notes_list.size() > 0:
-			if current_note < notes_list.size():
-				var note = notes_list[current_note]
-				if (song_position + start_offset) > (note[0] + conductor.seconds_per_step):
-					current_note += 1
-				elif note[0] <= (song_position + start_offset):
+		if notes_list.size() > 0 and SettingsManager.data.chart_hit_sounds:
+			while (current_note < notes_list.size() and (notes_list[current_note][0] <= (song_position + start_offset))):
+				var note: Array = notes_list[current_note]
+				var song_time: float = song_position + start_offset
+				if song_time + conductor.seconds_per_step >= note[0] and song_time - conductor.seconds_per_step <= note[0]:
 					var lane: int = note[1]
-					if vocal_tracks.size() == 1 and EditorResources.strumlines.size() > 0:
+					if EditorResources.strumlines.size() == 1:
 						if EditorResources.strumlines[0].hit_sounds:
 							SoundManager.tool_hit.play()
 					else:
@@ -155,27 +163,30 @@ func _process(delta: float) -> void:
 							var strumline: Strumline = EditorResources.strumlines[id]
 							if (strumline.has_lane(lane) and strumline.hit_sounds):
 								SoundManager.tool_hit.play()
-					
-					current_note += 1
+				
+				current_note += 1
 		
 		refresh_audios()
 	
 	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
-	if axis and can_interact_with_chart:
+	
+	if Input.is_key_pressed(KEY_CTRL) and axis:
+		adjust_grid_zoom(axis * 0.1)
+	elif axis and can_interact_with_chart:
 		scrub(axis)
 	
 	if EditorResources.chart:
 		update_conductor()
-		$"Grid Layer/Parallax2D".scroll_offset.y = time_to_y_position(conductor.offset - EditorResources.chart.offset)
-		update_camera_song_position(instrumental.playing)
+		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset + time_change_offset)
+		update_camera_song_position(music.playing)
 	
-	var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
+	var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
 	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 	var grid_position: Vector2 = grid.get_grid_position(mouse_position)
 	var snapped_position: Vector2i = Vector2i(grid.get_grid_position(
 		mouse_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap)).floor())
 	
-	$"Grid Layer/Parallax2D".repeat_size.y = grid.get_size().y
+	note_parallax.repeat_size.y = grid.get_size().y
 	
 	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
@@ -185,9 +196,9 @@ func _process(delta: float) -> void:
 			if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count)):
 				var lane: int = snapped_position.x - 1
 				var time: float = grid_position_to_time(snapped_position, true)
-				time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				time += conductor.get_change_time_at(song_position + start_offset)
 				
-				if time <= instrumental.stream.get_length():
+				if time <= music.stream.get_sync_stream(0).get_length():
 					if !is_note_at(lane, time):
 						add_action("Placed Note", self.place_note.bind(time, lane, 0, current_note_type, true),
 						self.remove_note.bind(lane, time))
@@ -248,7 +259,7 @@ func _process(delta: float) -> void:
 			auto_save()
 	
 	if can_interact_with_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
-		is_mouse_over_grid() and not instrumental.playing and !dragging_song_slider:
+		is_mouse_over_grid() and not music.playing and !dragging_song_slider:
 		## Song Position Slider
 		if snapped_position.x == 0:
 			@warning_ignore("incompatible_ternary")
@@ -256,7 +267,7 @@ func _process(delta: float) -> void:
 		elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if placing_note:
 				var cursor_time = grid_position_to_time(snapped_position, true)
-				cursor_time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += conductor.get_change_time_at(song_position + start_offset)
 				
 				for i in selected_notes:
 					var note: Array = EditorResources.chart.notes[i]
@@ -280,7 +291,7 @@ func _process(delta: float) -> void:
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
 				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
+				cursor_time += conductor.get_change_time_at(song_position + start_offset)
 				var cursor_lane: int = snapped_position.x - 1
 				
 				var lane_distance: int = cursor_lane - start_lane
@@ -329,8 +340,8 @@ func _process(delta: float) -> void:
 			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
 			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(-1, 0.5)
 			
-			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset
-			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset
+			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset + time_change_offset
+			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset + time_change_offset
 			var lane_a: int = floor(pos_1.x)
 			var lane_b: int = floor(pos_2.x)
 			
@@ -356,41 +367,37 @@ func _process(delta: float) -> void:
 
 # Song scrubbing
 func scrub(axis: int) -> void:
-	if not instrumental.stream_paused:
+	if not music.stream_paused:
 		toggle_audios(true)
 	
-	var rate = conductor.seconds_per_step if Input.is_action_pressed("shift") else conductor.seconds_per_beat
+	if !Input.is_action_pressed(&"shift"):
+		song_position = conductor.step_in_beats(song_position, axis)
+	else:
+		song_position = conductor.step_in_steps(song_position, axis)
 	
-	song_position += rate * axis
-	song_position = snapped(song_position - conductor.offset, rate) + conductor.offset
-	song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
+	song_position = clampf(song_position, start_offset, music.stream.get_sync_stream(0).get_length())
 	song_slider.set_value_no_signal(song_position)
 
-
+## Updates the conductor with the current [member song_position] and offset of the chart.
 func update_conductor():
-	var time: float = song_position + start_offset
-	conductor.time = time
-	conductor.tempo = EditorResources.chart.get_tempo_at(time)
-	var meter = EditorResources.chart.get_time_signature_at(time)
-	conductor.numerator = meter.x
-	conductor.denominator = meter.y
-	conductor.offset = EditorResources.chart.get_tempo_time_at(time) + EditorResources.chart.offset
+	conductor.time_changes = EditorResources.song.time_changes
+	conductor.time = song_position + start_offset
+	conductor.offset = EditorResources.chart.offset
 
-
+## Sets the offset of the play marker.
 func set_start_offset(grid_position: Vector2):
 	var time: float = grid_position_to_time(grid_position)
-	time += EditorResources.chart.get_tempo_time_at(song_position + start_offset)
-	time += EditorResources.chart.offset
+	time += conductor.get_change_time_at(song_position + start_offset)
+	time += conductor.offset
 	start_offset = time - song_position
 
 # Updates the audios
 func refresh_audios():
-	instrumental.volume_linear = instrumental_volume
-	
-	for id in EditorResources.strumlines.size():
-		var track = EditorResources.strumlines[id].audio_track
-		if track < vocal_tracks.size():
-			vocals.get_stream_playback().set_stream_volume(vocal_tracks[track], linear_to_db(EditorResources.strumlines[id].volume))
+	var stream: AudioStreamSynchronized = music.stream
+	stream.set_sync_stream_volume(0, linear_to_db(instrumental_volume))
+	for i in EditorResources.song.vocals.size():
+		if EditorResources.strumlines.size() > i:
+			stream.set_sync_stream_volume(i + 1, linear_to_db(EditorResources.strumlines[i].volume))
 
 
 func is_mouse_over_any_ui() -> bool:
@@ -408,10 +415,10 @@ func is_mouse_over_any_ui() -> bool:
 	if Rect2i(song_slider.get_screen_position(), song_slider.size).has_point(mouse):
 		return true
 	
-	if minimap and Rect2i(minimap.global_position + minimap.get_parent().offset, minimap.size).has_point(mouse):
+	if minimap and Rect2i(minimap.get_screen_position(), minimap.size).has_point(mouse):
 		return true
 	
-	for button:HFlowContainer in get_tree().get_nodes_in_group(&"strum_buttons"):
+	for button: Control in get_tree().get_nodes_in_group(&"strum_buttons"):
 		if Rect2i(button.get_screen_position(), button.size).has_point(mouse):
 			return true
 	
@@ -453,7 +460,7 @@ func _draw() -> void:
 	
 	if EditorResources.chart:
 		# The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = grid.position + grid_layer.offset + $"Grid Layer/Parallax2D".scroll_offset
+		var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
 		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
 		var grid_position: Vector2i = Vector2i(grid.get_grid_position(mouse_position).floor())
 		var snapped_position: Vector2i = Vector2i(
@@ -461,13 +468,13 @@ func _draw() -> void:
 			)
 		
 		# Song Start Offset Marker
-		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 2), \
 		grid.get_real_position(Vector2(grid.columns, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 4))
 		draw_rect(rect, current_time_color)
 		
 		# The box at the start of the marker
-		rect = Rect2(grid_offset - $"Grid Layer/Parallax2D".scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 4), \
 		grid.get_real_position(Vector2(1, 0)) - grid.get_real_position(Vector2(0, 0)) + Vector2(0, 8))
 		draw_rect(rect, current_time_color)
@@ -506,36 +513,48 @@ func on_files_dropped(files: PackedStringArray):
 func update_grid():
 	grid.columns = 2 + EditorResources.strum_count
 	grid.rows = conductor.numerator * conductor.denominator
-	%"Strum Labels".position = grid.get_real_position(Vector2(1, -1)) - Vector2(0, 296)
-	%"Strum Labels".size.x = 0
-	%"Strum Labels".custom_minimum_size.x = EditorResources.strum_count * (grid.grid_size.x * grid.zoom.x)
+	%"Strum Labels".position = grid.get_real_position(Vector2(1, 0)) - Vector2(0, 322)
+	%"Strum Labels".custom_minimum_size.x = (EditorResources.strum_count + 1) * (grid.grid_size.x * grid.zoom.x)
+	%"Strum Labels".custom_maximum_size.x = %"Strum Labels".custom_minimum_size.x
 	
-	for n in %"Strum Labels".get_children():
-		n.free()
-	
-	for id in EditorResources.strumlines.size():
-		var strumline: Strumline = EditorResources.strumlines[id]
-		var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
+	get_tree().call_group(&"strum_buttons", &"free")
+	if EditorResources.song:
+		for id in EditorResources.strumlines.size():
+			var strumline: Strumline = EditorResources.strumlines[id]
+			var strum_label_instance = STRUM_BUTTON_PRELOAD.instantiate()
+			
+			strum_label_instance.id = id
+			
+			%"Strum Labels".add_child(strum_label_instance)
+			strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
+			) * grid.grid_size.x * grid.zoom.x
+			
+			if strumline.left_lane == 0:
+				strum_label_instance.get_node("Move Lane Left").visible = false
+			
+			if strumline.right_lane == EditorResources.strum_count - 1:
+				strum_label_instance.get_node("Move Lane Right").visible = false
+			
+			strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
+			strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
+			strum_label_instance.connect(&"opened", self.disable_charting)
+			strum_label_instance.connect(&"opened", self.open_popup)
+			strum_label_instance.connect(&"closed", self.close_popup)
+			strum_label_instance.connect(&"updated", self.updated_strums)
+			strum_label_instance.connect(&"deleted", self.deleted_strumline)
+			strum_label_instance.add_to_group(&"strum_buttons")
 		
-		strum_label_instance.id = id
 		
-		%"Strum Labels".add_child(strum_label_instance)
-		strum_label_instance.custom_minimum_size.x = (strumline.right_lane - strumline.left_lane + 1
-		) * grid.grid_size.x * grid.zoom.x
-		strum_label_instance.size.y = 32
-		
-		if strumline.left_lane == 0:
-			strum_label_instance.get_node("Move Lane Left").visible = false
-		
-		if strumline.right_lane == EditorResources.strum_count - 1:
-			strum_label_instance.get_node("Move Lane Right").visible = false
-		
-		strum_label_instance.connect(&"move_bound_left", self.move_bound_left)
-		strum_label_instance.connect(&"move_bound_right", self.move_bound_right)
-		strum_label_instance.connect(&"opened", self.disable_charting)
-		strum_label_instance.connect(&"closed", self.close_popup)
-		strum_label_instance.connect(&"updated", self.updated_strums)
-		strum_label_instance.add_to_group(&"strum_buttons")
+		var create_button: Button = Button.new()
+		create_button.icon = load("res://addons/at-icons/node/plus_sign_in_square.svg")
+		create_button.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		create_button.custom_minimum_size.x = grid.grid_size.x * grid.zoom.x
+		create_button.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		create_button.tooltip_text = "Creates a new strumline"
+		create_button.expand_icon = true
+		create_button.pressed.connect(create_new_strumline)
+		%"Strum Labels".add_child(create_button)
+		create_button.add_to_group(&"strum_buttons")
 	
 	%"Strum Labels".size.y = 32
 
@@ -548,44 +567,63 @@ func load_song(song: Song, difficulty: Variant = null):
 		song_position -= start_offset
 	
 	$"UI/LoadedSong error".visible = false
+	if !ResourceLoader.exists(song.events):
+		var path: String = song.resource_path.get_base_dir().path_join('events.tres')
+		print("doesn't exist, saving at ", path)
+		NoahTools.save_resource(ChartEvents.new(), path)
+		song.events = path
+	
+	events_file = load(song.events)
+	EditorResources.strumlines = []
+	# Loads default strumlines if empty
+	if song.strumlines.is_empty():
+		EditorResources.strumlines = Constants.DEFAULT_STRUMLINES.duplicate(true)
+	else:
+		for strumline in song.strumlines:
+			EditorResources.strumlines.append(Strumline.from_dict(strumline))
+	
 	EditorResources.song = song
 	if difficulty == null:
 		difficulty = EditorResources.song.difficulties.keys()[0]
 	
 	var difficulty_data: SongDifficultyData = song.difficulties.get(difficulty)
-	EditorResources.chart = Chart.load(difficulty_data.chart)
 	EditorResources.difficulty = difficulty
+	EditorResources.chart = Chart.load(difficulty_data.chart, song)
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"free")
-	instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
-	play_audios(song_position)
+	# Setting the audios
+	music.stream = AudioStreamSynchronized.new()
+	music.stop()
+	var stream: AudioStreamSynchronized = music.stream
+	stream.stream_count = EditorResources.song.vocals.size() + 1
+	stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
+	var i: int = 1
+	for path in EditorResources.song.vocals:
+		stream.set_sync_stream(i, SoundManager.get_stream(path))
+		i += 1
 	
-	toggle_audios()
-	
-	song_slider.max_value = instrumental.stream.get_length()
+	song_slider.max_value = stream.get_sync_stream(0).get_length()
 	song_slider.value = song_position
-	conductor.tempo = EditorResources.chart.get_tempo_at(song_position)
-	var meter = EditorResources.chart.get_time_signature_at(song_position)
-	conductor.numerator = meter.x
-	conductor.denominator = meter.y
-	conductor.offset = EditorResources.chart.offset
+	update_conductor()
 	
-	lower_ui.get_node("%Difficulty Button").get_popup().clear()
+	lower_ui.difficulty_button.get_popup().clear()
 	for d in EditorResources.song.difficulties.keys():
-		lower_ui.get_node("%Difficulty Button").get_popup().add_item(d)
+		lower_ui.difficulty_button.get_popup().add_item(d)
 	
-	lower_ui.get_node("%Difficulty Button").select(EditorResources.song.difficulties.keys().find(difficulty))
-	upper_ui.get_node("%Metadata Window").update_stats()
+	lower_ui.difficulty_button.select(EditorResources.song.difficulties.keys().find(difficulty))
+	upper_ui.metadata_window.update_stats()
+	upper_ui.time_change_window.update_stats()
 	
 	upper_ui.song_name_label.text = song.title
 	
 	load_chart(EditorResources.chart)
 	if not same_song:
 		current_snap = conductor.denominator
+		load_waveforms()
+		
 	
 	lower_ui.chart_snap.value = current_snap
 	
-	waveform_dirty = true
 	update_waveforms(song_position)
 	
 	enable_can_chart_on_next_frame()
@@ -603,11 +641,10 @@ func load_song_path(path: String, difficulty: Variant = null) -> void:
 	load_song(song, difficulty)
 
 
-func load_chart(file: Chart, ghost: bool = false) -> void:
+func load_chart(file: Chart) -> void:
 	if file:
 		backup_chart = file.duplicate(true)
 	
-	EditorResources.strumlines = file.chart_data.get("strumlines", Constants.DEFAULT_STRUMLINES.duplicate())
 	selected_notes = []
 	selected_note_nodes = []
 	current_visible_notes_L = -1
@@ -629,12 +666,13 @@ func load_chart(file: Chart, ghost: bool = false) -> void:
 	undo_redo.commit_action()
 	
 	upper_ui.metadata_window.update_stats()
+	
 	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
 	if minimap:
 		minimap.visible = true
-		minimap.refresh(file.notes, file.events)
+		minimap.refresh(file.notes, song_events)
 	
 	load_dividers()
 	update_camera_song_position(true)
@@ -667,8 +705,8 @@ func load_section(time: float, forced: bool = false) -> void:
 	
 	load_notes(L, R)
 	
-	L = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - _range)
-	R = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + _range)
+	L = NoahTools.bsearch_note_data_left_range(song_events, time - _range)
+	R = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	
 	load_events(L, R)
 	update_selected_notes()
@@ -709,8 +747,8 @@ func load_events(L: int, R: int) -> void:
 			var i: int = 0
 			for _i in range(event_nodes.size()):
 				var event = event_nodes[i]
-				if (event.time < EditorResources.chart.events[L][0]
-				or event.time > EditorResources.chart.events[R][0]):
+				if (event.time < song_events[L][0]
+				or event.time > song_events[R][0]):
 					event.free()
 					event_nodes.remove_at(i)
 					i -= 1
@@ -723,7 +761,7 @@ func load_events(L: int, R: int) -> void:
 					update_note_position(event_nodes[i - L])
 				continue
 			
-			var event = EditorResources.chart.events[i]
+			var event: Array = song_events[i]
 			place_event(event[0], event[1], event[2], false, false, true, i - L)
 		
 		current_visible_events_L = L
@@ -746,7 +784,7 @@ func load_dividers() -> void:
 		rect.position.y += (grid.grid_size.y * grid.zoom.y) * conductor.denominator * i
 		rect.position.y -= rect.size.y / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
 	for i in [0, 1, grid.columns]:
@@ -760,7 +798,7 @@ func load_dividers() -> void:
 		rect.position.x -= grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
 	for strumline in EditorResources.strumlines:
@@ -774,13 +812,13 @@ func load_dividers() -> void:
 		rect.position.x -= grid.get_size().x / 2
 		rect.position.x -= rect.size.x / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	var times: Array = [instrumental.stream.get_length()]
-	times.append_array(EditorResources.chart.tempos.keys())
+	var times: Array = [music.stream.get_sync_stream(0).get_length()]
+	times.append_array(conductor.time_changes.keys())
 	times.erase(0.0)
-	if not EditorResources.chart.tempos.is_empty():
+	if not conductor.time_changes.is_empty():
 		for i in times:
 			var rect = ColorRect.new()
 			var size: float = 2
@@ -814,15 +852,13 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 sorted: bool = false, sort_index: int = -1) -> int:
 	var note_instance = NOTE_PRELOAD.instantiate()
 	
-	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
-	
 	note_instance.time = time
 	note_instance.length = length
 	note_instance.lane = lane
 	note_instance.note_type = type
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	note_instance.scroll_speed = meter.x
+	note_instance.scroll_speed = conductor.get_time_change_at(time).y
 	note_instance.direction = DIRECTIONS[lane % 4]
 	note_instance.animation = str(Constants.NOTE_TYPES.get(type, ""), note_instance.direction)
 	
@@ -901,9 +937,9 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	var output: int
 	
 	if placed:
-		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time)
+		var L: int = NoahTools.bsearch_note_data_left_range(song_events, time)
 		if L != -1:
-			EditorResources.chart.events.insert(L, [time, event, parameters])
+			song_events.insert(L, [time, event, parameters])
 			
 			if event_nodes.is_empty():
 				event_nodes.append(event_instance)
@@ -923,8 +959,8 @@ sorted: bool = false, sort_index: int = -1) -> int:
 			output = L
 		else:
 			event_nodes.append(event_instance)
-			EditorResources.chart.events.append([time, event, parameters])
-			L = EditorResources.chart.events.size() - 1
+			song_events.append([time, event, parameters])
+			L = song_events.size() - 1
 			selected_notes = [L]
 			selected_note_nodes = [event_instance]
 			min_lane = 0
@@ -1018,8 +1054,8 @@ func find_note(lane: int, time: float) -> int:
 	return -1
 
 func find_events_at(time: float) -> Array[int]:
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + EPSILON)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1028,7 +1064,7 @@ func find_events_at(time: float) -> Array[int]:
 	var ret: Array[int] = []
 	
 	for i in range(L, R + 1):
-		var _event: Array = EditorResources.chart.events[i]
+		var _event: Array = song_events[i]
 		if is_equal_approx(_event[0], time):
 			ret.append(i)
 	return ret
@@ -1036,8 +1072,8 @@ func find_events_at(time: float) -> Array[int]:
 func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 	if epsilon == -1.0:
 		epsilon = EPSILON
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - epsilon)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + epsilon)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - epsilon)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + epsilon)
 	if L == -1 or R == -1:
 		return []
 	if L == (R + 1):
@@ -1051,8 +1087,8 @@ func find_events_within_time(time: float, epsilon: float = -1.0) -> Array[int]:
 
 ## Returns the index of the given note in the events list.
 func find_event(event: String, time: float) -> int:
-	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.events, time - EPSILON)
-	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.events, time + EPSILON)
+	var L: int = NoahTools.bsearch_note_data_left_range(song_events, time - EPSILON)
+	var R: int = NoahTools.bsearch_note_data_right_range(song_events, time + EPSILON)
 	
 	#print(find_events_at(time))
 	
@@ -1064,7 +1100,7 @@ func find_event(event: String, time: float) -> int:
 		L -= 1
 	
 	for i in range(L, R + 1):
-		var _event: Array = EditorResources.chart.events[i]
+		var _event: Array = song_events[i]
 		if (_event[1] == event):
 			if is_equal_approx(_event[0], time):
 				return i
@@ -1072,38 +1108,22 @@ func find_event(event: String, time: float) -> int:
 	return -1
 
 func play_audios(time: float):
-	vocals.stream = AudioStreamPolyphonic.new()
-	# This is to prevent null references
-	vocals.play()
-	if not EditorResources.song:
-		return
-	vocals.stream.polyphony = EditorResources.song.vocals.size()
-	
-	var playback = vocals.get_stream_playback()
-	vocal_tracks = []
-	for stream in EditorResources.song.vocals:
-		vocal_tracks.append(playback.play_stream(SoundManager.get_stream(stream),
-		time + start_offset, 0.0, song_speed))
-	
-	time = clamp(time, 0, instrumental.stream.get_length() - 0.1)
-	instrumental.play(time + start_offset)
-	instrumental.pitch_scale = song_speed
+	time = clamp(time, 0, music.stream.get_sync_stream(0).get_length() - EPSILON)
+	music.play(time + start_offset)
 	song_position = time + start_offset
 	
 	current_note = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, song_position)
-	
-	if EditorResources.chart.notes.size() > 0:
-		if song_position > EditorResources.chart.notes[EditorResources.chart.notes.size() - 1][0]:
+	if !EditorResources.chart.notes.is_empty():
+		if song_position > EditorResources.chart.notes.back()[0]:
 			current_note = EditorResources.chart.notes.size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func time_to_y_position(time: float) -> float:
-	var tempo_data: Dictionary = EditorResources.chart.tempos
+	var tempo_data: Dictionary[float, Vector3] = conductor.time_changes
 	var _offset: float = 0# -EditorResources.chart.offset
 	var y_offset: float = 0
 	
 	var i: int = 0
-	var meter: Vector2i = Vector2i.ZERO
 	
 	var L: float = tempo_data.keys()[0]
 	var R: float = tempo_data.keys()[0]
@@ -1122,12 +1142,11 @@ func time_to_y_position(time: float) -> float:
 		if R > time:
 			R = time
 		
-		tempo = tempo_data.get(L)
-		meter = EditorResources.chart.get_time_signature_at(L)
+		tempo = tempo_data[L].x
 		
 		_offset += R - L
 		y_offset += grid.get_real_position(Vector2(0,
-		time_calc.call(R - L, tempo, meter.y) * meter.y
+		time_calc.call(R - L, tempo, tempo_data[L].z) * tempo_data[L].z
 		)).y
 		
 		L = R
@@ -1158,21 +1177,19 @@ func update_note_position(node: Node2D) -> void:
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
 	var time: float = song_position + start_offset
-	var meter: Vector2i = EditorResources.chart.get_time_signature_at(time)
-	var L: float = EditorResources.chart.get_tempo_time_at(time)
+	var time_change: Vector3 = conductor.get_time_change_at(time)
 	var yR: float = p.y
 	if factor_in_snap:
-		yR *= meter.x * meter.y / chart_snap
+		yR *= time_change.y * time_change.z / chart_snap
 	
-	var spb: float = (60.0 / EditorResources.chart.tempos[L]) * (4.0 / meter.y)
-	return yR * (spb / meter.y)
+	var spb: float = (60.0 / time_change.x) * (4.0 / time_change.z)
+	return yR * (spb / time_change.z)
 
 func is_note_at(lane: int, time: float) -> bool:
 	return find_note(lane, time) != -1
 
 func toggle_audios(paused: bool = true) -> void:
-	vocals.stream_paused = paused
-	instrumental.stream_paused = paused
+	music.stream_paused = paused
 	
 	if not paused:
 		play_audios(song_position)
@@ -1183,26 +1200,32 @@ func toggle_audios(paused: bool = true) -> void:
 func move_bound_left(strum_id: int) -> void:
 	var strumline: Strumline = EditorResources.strumlines[strum_id]
 	strumline.left_lane = clamp(strumline.left_lane - 1, 0, EditorResources.strum_count - 1)
+	strumline.lane_count += 1
 	
 	for id in EditorResources.strumlines.size():
-		strumline = EditorResources.strumlines[id]
-		if strumline.right_lane == strumline.left_lane:
-			strumline.right_lane = clamp(strumline.right_lane - 1, 0, EditorResources.strum_count - 1)
+		var other_strumline: Strumline = EditorResources.strumlines[id]
+		if other_strumline.right_lane == strumline.left_lane:
+			other_strumline.right_lane = clamp(other_strumline.right_lane - 1, 0, EditorResources.strum_count - 1) 
 	
 	update_grid()
 	load_dividers()
+	auto_save()
+
 
 func move_bound_right(strum_id: int) -> void:
 	var strumline: Strumline = EditorResources.strumlines[strum_id]
 	strumline.right_lane = clamp(strumline.right_lane + 1, 0, EditorResources.strum_count - 1)
 	
 	for id in EditorResources.strumlines.size():
-		strumline = EditorResources.strumlines[id]
-		if strumline.left_lane == strumline.right_lane:
-			strumline.left_lane = clamp(strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
+		var other_strumline: Strumline = EditorResources.strumlines[id]
+		if other_strumline.left_lane == strumline.right_lane:
+			other_strumline.left_lane = clamp(other_strumline.left_lane + 1, 0, EditorResources.strum_count - 1)
+			other_strumline.lane_count -= 1
 	
 	update_grid()
 	load_dividers()
+	auto_save()
+
 
 func find_strum_id(strum_name: StringName) -> int:
 	return EditorResources.strumlines.find_custom(func(strumline: Strumline) -> bool:
@@ -1234,14 +1257,14 @@ func _on_skip_to_beginning_pressed() -> void:
 	toggle_audios(false)
 
 func _on_skip_to_end_pressed() -> void:
-	song_position = instrumental.stream.get_length() - 0.1
+	song_position = music.stream.get_sync_stream(0).get_length() - 0.1
 	toggle_audios(false)
 
 func _on_instrumental_finished() -> void:
 	toggle_audios(true)
 
 func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
-	if SettingsManager.data.chart_hit_sound_on_beat:
+	if SettingsManager.data.chart_hit_sound_on_beat and music.playing:
 		if measure_relative == 0:
 			SoundManager.conductor_beat.play()
 		else:
@@ -1251,17 +1274,15 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 		load_section(song_position)
 		update_waveforms(song_position)
 		
-		lower_ui.get_node("%Beat").text = str("Beat: ", Conductor.get_accumulated_beat_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
+		lower_ui.beat_label.text = str("Beat: ", current_beat + 1)
 
 
 func _on_conductor_new_step(current_step: int, measure_relative: int) -> void:
-	if SettingsManager.data.chart_hit_sound_on_step:
+	if SettingsManager.data.chart_hit_sound_on_step and music.playing:
 		SoundManager.conductor_step.play()
 	
 	if EditorResources.chart:
-		lower_ui.get_node("%Step").text = str("Step: ", Conductor.get_accumulated_step_at(
-			song_position, EditorResources.chart.tempos, EditorResources.chart.time_signature_vectors) + 1)
+		lower_ui.step_label.text = str("Step: ", current_step + 1)
 
 
 func _on_conductor_new_tempo(_tempo: float) -> void:
@@ -1273,15 +1294,8 @@ func _on_conductor_new_tempo(_tempo: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventPanGesture:
 		var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
-		
-		if can_interact_with_chart: #song scrubbing
-			if not instrumental.stream_paused:
-				toggle_audios(true)
-			
-			song_position += conductor.seconds_per_beat * event.delta.y
-			song_position = snapped(song_position - conductor.offset, conductor.seconds_per_beat) + conductor.offset
-			song_position = clamp(song_position, start_offset, instrumental.stream.get_length())
-			song_slider.set_value_no_signal(song_position)
+		if can_interact_with_chart:
+			scrub(floori(event.delta.y / grid.grid_size.y))
 
 ## Edit button item pressed
 func edit_button_item_pressed(id) -> void:
@@ -1306,7 +1320,7 @@ func edit_button_item_pressed(id) -> void:
 ## Audio button item pressed
 func audio_button_item_pressed(id) -> void:
 	match id:
-		0: toggle_audios(instrumental.playing)
+		0: toggle_audios(music.playing)
 		4:
 			SettingsManager.data.song_speed = min(SettingsManager.data.song_speed + 0.05, 2)
 			SettingsManager.flush()
@@ -1354,7 +1368,7 @@ func audio_button_item_pressed(id) -> void:
 			SoundManager.tool_mouse_click.play()
 			upper_ui.get_node("%Audio Button").get_popup().set_item_checked(
 				upper_ui.get_node("%Audio Button").get_popup().get_item_index(id),
-				SettingsManager.data.chart_hit_sounds)
+				!SettingsManager.data.chart_hit_sounds)
 		
 		_:
 			print("id: ", id)
@@ -1386,21 +1400,20 @@ func view_button_item_pressed(id):
 			upper_ui.get_node("%Note Skin Window").popup()
 			SoundManager.tool_open_window.play()
 		
-		3:
-			grid.zoom = clamp(grid.zoom + Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
-			update_grid()
-			load_dividers()
-			load_section(song_position)
-		
-		4:
-			grid.zoom = clamp(grid.zoom - Vector2.ONE * 0.1, Vector2.ONE * 0.5, Vector2.ONE * 1.5)
-			update_grid()
-			load_dividers()
-			load_section(song_position)
-		
+		3: #increase zoom
+			adjust_grid_zoom(0.1)
+		4: # reduce zoom
+			adjust_grid_zoom(-0.1)
 		_:
 			print("id: ", id)
 
+func adjust_grid_zoom(delta: float) -> void:
+	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 1.5)
+	update_grid()
+	load_dividers()
+	load_section(song_position)
+	update_camera_song_position(true)
+	
 ## Window button item pressed
 func window_button_item_pressed(id) -> void:
 	match id:
@@ -1408,6 +1421,7 @@ func window_button_item_pressed(id) -> void:
 		1: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.metadata_window))
 		2: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.note_type_window))
 		3: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.audios_window))
+		4: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.time_change_window))
 
 func toggle_window_visibility(window: Window) -> bool:
 	var ret = not window.visible
@@ -1458,7 +1472,6 @@ func disable_charting() -> void:
 
 
 func open_popup() -> void:
-	can_chart = false
 	SoundManager.tool_open_window.play()
 
 
@@ -1506,6 +1519,10 @@ func _create_chart_path() -> String:
 	return new_path
 
 func save() -> void:
+	EditorResources.song.strumlines = []
+	for strumline in EditorResources.strumlines:
+		EditorResources.song.strumlines.append(strumline.to_dict())
+	
 	var needs_new_path: bool = false
 	
 	if EditorResources.chart.resource_path.begins_with('uid://') and ResourceUID.uid_to_path(EditorResources.chart.resource_path).is_empty():
@@ -1525,8 +1542,9 @@ func save() -> void:
 	if needs_new_path:
 		EditorResources.chart.take_over_path(_create_chart_path())
 		EditorResources.song.difficulties[EditorResources.difficulty]["chart"] = EditorResources.chart.resource_path
-		
+	
 	NoahTools.save_resource(EditorResources.song, EditorResources.song.resource_path)
+	NoahTools.save_resource(events_file, events_file.resource_path)
 	NoahTools.save_resource(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
 
@@ -1534,8 +1552,9 @@ func save() -> void:
 func move_selection(time_distance: float, lane_distance: float) -> void:
 	var notes: Array = []
 	for note in selected_note_nodes:
-		notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
-		remove_note(note.lane, note.time)
+		if is_instance_valid(note):
+			notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
+			remove_note(note.lane, note.time)
 	
 	var temp = place_notes(notes)
 	selected_notes = temp
@@ -1548,7 +1567,14 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 func updated_strums() -> void:
 	enable_can_chart_on_next_frame()
 	update_grid()
+	auto_save()
 
+
+func deleted_strumline() -> void:
+	enable_can_chart_on_next_frame()
+	call_deferred(&'update_grid')
+	call_deferred(&"load_dividers")
+	auto_save()
 
 func load_waveforms() -> void:
 	get_tree().call_group(&"waveforms", &"free")
@@ -1557,53 +1583,51 @@ func load_waveforms() -> void:
 	if not EditorResources.song:
 		return
 	
+	var waveform: AudioStreamVisualizer
+	var stream: AudioStreamSynchronized = music.stream
 	for id in EditorResources.strumlines.size():
 		var strumline: Strumline = EditorResources.strumlines[id]
 		var track: int = strumline.audio_track
-		if track < EditorResources.song.vocals.size() and vocal_tracks.get(track):
-			var waveform_data = WaveformDataParser.interpretSound(EditorResources.song.vocals[id])
-			if waveform_data:
-				@warning_ignore("confusable_local_declaration")
-				var waveform: WaveformRenderer = WaveformRenderer.new(waveform_data, 0, Color.MEDIUM_PURPLE, Color.TRANSPARENT)
-				
-				waveform.visible = false
-				$"Waveform Layer".add_child(waveform)
-				waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
-				waveform.add_to_group(&"waveforms")
-				
-				waveform_nodes[track] = waveform
+		if track < EditorResources.song.vocals.size():
+			waveform = AudioStreamVisualizer.new()
+			waveform.visible = false
+			waveform.resolution = 3200
+			waveform.waveform_color = Color(0.689, 0.594, 0.921, 0.7)
+			waveform.audio_stream = stream.get_sync_stream(track + 1)
+			waveform_nodes[track] = waveform
+			$"Waveform Layer".add_child(waveform)
+			waveform.add_to_group(&"waveforms")
 		else:
 			printerr("(load_waveforms) Track ", track, " does not exist.")
 	
-	
-	var waveform: WaveformRenderer = WaveformRenderer.new(WaveformDataParser.interpretSound(EditorResources.song.instrumental), 0, Color.MEDIUM_SEA_GREEN, Color.TRANSPARENT)
-	
+	waveform = AudioStreamVisualizer.new()
 	waveform.visible = false
-	$"Waveform Layer".add_child(waveform)
-	waveform.current_orientation = WaveformRenderer.orientation.VERTICAL
-	waveform.add_to_group(&"waveforms")
-	
+	waveform.resolution = 9600
+	waveform.audio_stream = stream.get_sync_stream(0)
+	waveform.waveform_color = Color(0.479, 1.0, 0.712, 0.7)
 	waveform_nodes[-1] = waveform
+	$"Waveform Layer".add_child(waveform)
+	waveform.add_to_group(&"waveforms")
 
-
+## Updates the camera position to the respective song position, 'instant' is a toggle whether the camera should lerp to the location or not.
 func update_camera_song_position(instant: bool = false) -> void:
 	if instant:
 		camera_2d.position.y = 360 + time_to_y_position(song_position)
 	else:
 		camera_2d.position.y = NoahTools.fps_lerp(
-			camera_2d.position.y, 360 + time_to_y_position(song_position), 20, get_process_delta_time())
+			camera_2d.position.y, 360 + time_to_y_position(song_position), 12, get_process_delta_time())
+		
 
-
+## Updates the duration, position and size of the waveform, Usually called every beat.
 func update_waveforms(time: float = 0) -> void:
 	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.y
 	
-	if (waveform_nodes.is_empty() or waveform_dirty) and (instrumental_waveforms or vocal_waveforms):
+	if waveform_nodes.is_empty() and (instrumental_waveforms or vocal_waveforms):
 		load_waveforms()
-		waveform_dirty = false
 	
 	for id in waveform_nodes:
 		var strumline: Strumline = EditorResources.strumlines[id]
-		var waveform = waveform_nodes.get(id)
+		var waveform: AudioStreamVisualizer = waveform_nodes[id]
 		
 		if not waveform:
 			return
@@ -1617,21 +1641,24 @@ func update_waveforms(time: float = 0) -> void:
 			continue
 		
 		var L: float = max(time, 0)
-		var R: float = min(time + time_range, instrumental.stream.get_length())
-		waveform.time = (L * 1000) / 7.8
-		waveform.duration = (R - L) * 128
+		var i: int = conductor.get_time_change_index_at(L)
+		var R_time: float = music.stream.get_sync_stream(0).get_length()
+		if conductor.time_changes.keys().get(i + 1):
+			R_time = conductor.time_changes.keys()[i + 1]
 		
-		waveform.width = time_to_y_position(R) - time_to_y_position(L)
+		var R: float = min(time + time_range, R_time)
+		
+		waveform.set_section(L, R - L)
+		waveform.rotation_degrees = 90
+		waveform.size.x = time_to_y_position(R) - time_to_y_position(L)
 		if id == -1:
-			waveform.position = grid.get_real_position(Vector2(0, 0))
-			waveform.height = grid.grid_size.x * 1 * grid.zoom.x
+			waveform.position = grid.get_real_position(Vector2(1, 0))
+			waveform.size.y = grid.grid_size.x * 1 * grid.zoom.x
 		else:
-			waveform.position = grid.get_real_position(Vector2(
-				(strumline.right_lane - strumline.left_lane) / 2.0 + strumline.left_lane, 0))
-			waveform.height = grid.grid_size.x * (strumline.right_lane - strumline.left_lane) * grid.zoom.x
+			waveform.position = grid.get_real_position(Vector2(strumline.right_lane + 2, 0))
+			waveform.size.y = grid.grid_size.x * strumline.lane_count * grid.zoom.x
 		
 		waveform.position.y += time_to_y_position(L)
-		waveform.dirty = true
 
 
 func _on_chart_snap_value_changed(value: float) -> void:
@@ -1644,9 +1671,9 @@ func decrease_snap() -> void:
 	lower_ui.chart_snap.value -= 1
 
 func _on_difficulty_button_item_selected(index: int) -> void:
-	var _difficulty = lower_ui.get_node("%Difficulty Button").get_popup().get_item_text(index)
+	var _difficulty = lower_ui.difficulty_button.get_popup().get_item_text(index)
 	if EditorResources.song.difficulties.keys().has(_difficulty):
-		EditorResources.chart = Chart.load(EditorResources.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART))
+		EditorResources.chart = Chart.load(EditorResources.song.difficulties.get(_difficulty).get(SettingsManager.SEC_CHART), EditorResources.song)
 		EditorResources.difficulty = _difficulty
 		load_chart(EditorResources.chart)
 
@@ -1674,10 +1701,6 @@ func _on_metadata_window_updated_song_scene(path: String) -> void:
 	EditorResources.song.scene = path
 	auto_save()
 
-func _on_metadata_window_updated_starting_tempo(tempo: float) -> void:
-	EditorResources.song.tempo = tempo
-	auto_save()
-
 func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
 	EditorResources.chart.scroll_speed = speed
 	auto_save()
@@ -1689,14 +1712,14 @@ func _on_metadata_window_selected_time_change(time: float) -> void:
 
 func _on_metadata_window_add_time_change() -> void:
 	var time: float = song_position + start_offset
-	EditorResources.chart.tempos[time] = conductor.tempo
-	EditorResources.chart.time_signature_vectors[time] = Vector2i(
-		conductor.numerator, conductor.denominator
+	conductor.time_changes[time] = Vector3(
+		conductor.tempo,
+		conductor.numerator,
+		conductor.denominator
 	)
 	
-	EditorResources.chart.tempos.sort()
-	EditorResources.chart.time_signature_vectors.sort()
-	upper_ui.get_node("%Metadata Window").update_stats()
+	conductor.time_changes.sort()
+	upper_ui.time_change_window.update_stats()
 	auto_save()
 
 func _on_metadata_window_remove_time_change() -> void:
@@ -1800,7 +1823,7 @@ func paste() -> void:
 	undo_redo.add_do_method(move_selection.bind(offset, 0))
 	undo_redo.add_do_method(SoundManager.tool_note_place.play)
 	undo_redo.add_undo_property(EditorResources.chart, &"notes", EditorResources.chart.notes.duplicate(true))
-	undo_redo.add_undo_property(EditorResources.chart, &"events", EditorResources.chart.events.duplicate(true))
+	undo_redo.add_undo_property(self, &"song_events", song_events.duplicate(true))
 	undo_redo.add_undo_property(self, &"selected_notes", selected_notes.duplicate())
 	undo_redo.add_undo_method(load_section.bind(song_position, true))
 	undo_redo.add_undo_method(update_selected_notes)
@@ -1986,7 +2009,7 @@ func _on_conductor_new_denominator(_denominator: int) -> void:
 	load_dividers()
 
 
-func selected_note_type(note_type) -> void:
+func selected_note_type(note_type: String) -> void:
 	current_note_type = note_type
 
 
@@ -2007,15 +2030,24 @@ func _on_minimap_gui_input(event: InputEvent) -> void:
 			scrub_minimap()
 
 func scrub_minimap() -> void:
-	if not instrumental.stream_paused:
+	if not music.stream_paused:
 		toggle_audios(true)
 	
 	var mouse_position: Vector2 = get_corrected_mouse_position()
 	song_position = remap(mouse_position.y - 360,
 	minimap.global_position.y, minimap.global_position.y + minimap.size.y,
-	start_offset, instrumental.stream.get_length() - start_offset)
+	start_offset, music.stream.get_sync_stream(0).get_length() - start_offset)
 	
-	song_position = clamp(song_position, start_offset, instrumental.stream.get_length() - start_offset)
+	song_position = clamp(song_position, start_offset, music.stream.get_sync_stream(0).get_length() - start_offset)
 	update_camera_song_position(true)
 	
 	song_slider.value = song_position
+
+## Creates a new 4-key strumline.
+func create_new_strumline() -> void:
+	EditorResources.strumlines.append(
+		Strumline.new(&"New Strumline", EditorResources.strum_count, 4, 0))
+	
+	call_deferred(&'update_grid')
+	call_deferred(&'load_dividers')
+	auto_save()

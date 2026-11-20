@@ -96,19 +96,13 @@ func _process(delta: float) -> void:
 	
 	if playstate and Input.is_action_just_pressed(&"kill"):
 		playstate.health = 0
-	
-	if Input.is_action_just_pressed(&"chart_editor") and OS.is_debug_build():
-		EditorResources.event_editor = false
-		EditorResources.song = GameManager.current_song
-		EditorResources.difficulty = GameManager.difficulty
-		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 
 # Conductor Util
 func _on_conductor_new_beat(current_beat: int, measure_relative: int):
 	pass
 
 func _on_conductor_new_step(current_step: int, measure_relative: int):
-	if (current_step + bop_rate_offset) % bop_rate == 0:
+	if (measure_relative + bop_rate_offset) % bop_rate == 0:
 		var cam_bop_strength: Vector2 = Vector2(0.03, 0.03)
 		var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 		
@@ -126,7 +120,7 @@ func _on_conductor_new_step(current_step: int, measure_relative: int):
 		if ui and SettingsManager.data.ui_bops:
 			ui.bump(ui_bop_strength)
 
-
+## Updates the camera/ui bop rate to the given value.
 func update_bop_rate(_i: int) -> void:
 	bop_rate = GameManager.conductor.numerator * GameManager.conductor.denominator
 
@@ -146,8 +140,7 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 		
 		get_tree().call_group(group, &"set_sing_timer")
 	
-	if playstate and group == &"player":
-		
+	if playstate and group == &"player" and !note.regrabbed:
 		show_combo(NoahStats.get_hit_rating(hit_time), playstate.song_stats.combo)
 		if playstate.song_stats.combo > 0:
 			if (playstate.song_stats.combo % 200 == 0):
@@ -257,16 +250,16 @@ func show_combo(rating: NoahStats.HIT_RATING, _combo: int) -> void:
 			
 			if SettingsManager.data.combo_ui and ui:
 				if ui.rating_marker:
-					rating_position = ui.rating_marker.position
+					rating_position = ui.rating_marker.global_position
 					
 				if ui.combo_marker:
-					combo_position = ui.combo_marker.position
+					combo_position = ui.combo_marker.global_position
 			else:
 				if rating_marker:
-					rating_position = rating_marker.position
+					rating_position = rating_marker.global_position
 				
 				if combo_marker:
-					combo_position = combo_marker.position
+					combo_position = combo_marker.global_position
 			
 			
 			rating_factory.spawn_rating(rating_position, hit_rating)

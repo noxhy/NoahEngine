@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://c3w2xmw47elm3"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_w3mtg"]
+[ext_resource type="Script" uid="uid://cjnphso8gmi5n" path="res://noah/tools/chart_editor/windows/audio/audio_panel.gd" id="2_ns831"]
+[ext_resource type="Texture2D" uid="uid://buws0djp2ooxj" path="res://addons/at-icons/node/file_magnifying_glass.svg" id="3_f4bmq"]
+[ext_resource type="Texture2D" uid="uid://bgaokgo4ivbwr" path="res://addons/at-icons/node/trash_can.svg" id="4_1ueoo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f4bmq"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+bg_color = Color(0.1654877, 0.18992928, 0.23066455, 1)
+border_color = Color(0.115499996, 0.132, 0.15949999, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 3
+anti_aliasing = false
+
+[node name="audio panel" type="PanelContainer" unique_id=1936076325]
+offset_right = 48.0
+offset_bottom = 192.0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_w3mtg")
+theme_override_styles/panel = SubResource("StyleBoxFlat_f4bmq")
+script = ExtResource("2_ns831")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1678120151]
+layout_mode = 2
+accessibility_region = true
+alignment = 1
+
+[node name="vol Slider" type="VSlider" parent="VBoxContainer" unique_id=1256788241]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 125)
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "Change Volume"
+mouse_default_cursor_shape = 2
+max_value = 1.0
+step = 0.01
+
+[node name="hit sound box" type="CheckBox" parent="VBoxContainer" unique_id=1534118914]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+tooltip_text = "Play hit sounds?"
+mouse_default_cursor_shape = 2
+
+[node name="Load Song Button" type="Button" parent="VBoxContainer" unique_id=588609568]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27)
+layout_mode = 2
+size_flags_vertical = 4
+mouse_default_cursor_shape = 2
+icon = ExtResource("3_f4bmq")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Delete Track" type="Button" parent="VBoxContainer" unique_id=161446642]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 27.005)
+layout_mode = 2
+size_flags_vertical = 4
+offset_transform_enabled = true
+offset_transform_visual_only = false
+tooltip_text = "Delete Track?"
+mouse_default_cursor_shape = 2
+icon = ExtResource("4_1ueoo")
+icon_alignment = 1
+expand_icon = true
+
+[node name="ID Label" type="Label" parent="VBoxContainer" unique_id=1912804557]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(42, 0)
+custom_maximum_size = Vector2(42, -1)
+layout_mode = 2
+tooltip_text = "the ID of the track"
+mouse_filter = 1
+text = "Inst"
+horizontal_alignment = 1
+text_overrun_behavior = 5
+
+[node name="FileDialog" type="FileDialog" parent="." unique_id=1303984095 groups=["windows"]]
+title = "Open a File"
+initial_position = 1
+file_mode = 0
+filters = PackedStringArray("*.wav", "*.ogg", "*.mp3")
+
+[connection signal="drag_ended" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_drag_ended"]
+[connection signal="drag_started" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_drag_started"]
+[connection signal="value_changed" from="VBoxContainer/vol Slider" to="." method="_on_vol_slider_value_changed"]
+[connection signal="toggled" from="VBoxContainer/hit sound box" to="." method="_on_hit_sound_box_toggled"]
+[connection signal="pressed" from="VBoxContainer/Load Song Button" to="." method="_on_load_song_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/Delete Track" to="." method="_on_delete_track_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

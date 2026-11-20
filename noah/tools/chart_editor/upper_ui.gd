@@ -1,7 +1,9 @@
-extends HBoxContainer
+extends PanelContainer
 class_name ChartEditorUpperUI
 
 var chart_editor: ChartEditor
+@onready var h_box_container: HBoxContainer = $HBoxContainer
+
 
 @onready var file_button: MenuButton = %"File Button"
 @onready var edit_button: MenuButton = %"Edit Button"
@@ -12,18 +14,26 @@ var chart_editor: ChartEditor
 
 @onready var help_button: MenuButton = %"Help Button"
 
+@onready var open_song_window: ResourceFileDialog = $"HBoxContainer/File Button/Open Song Window"
 @onready var export_external_popup: FileDialog = %"Export External Popup"
-@onready var note_skin_window: FileDialog = %"Note Skin Window"
+@onready var note_skin_window: ResourceFileDialog = %"Note Skin Window"
 @onready var audios_window: Window = %"AudioWindow"
 @onready var metadata_window: Window = %"Metadata Window"
 @onready var note_type_window: Window = %"Note Type Window"
 @onready var history_window: Window = %"History Window"
-@onready var song_name_label: Label = $"Song Name Label"
-
+@onready var song_name_label: Label = $"HBoxContainer/Song Name Label"
+@onready var time_change_window: Window = %"Time Change Editor"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	chart_editor = get_parent().get_parent()
+	
+	open_song_window.file_selected.connect(chart_editor.load_song_path)
+	open_song_window.close_requested.connect(func():
+		open_song_window.hide()
+		chart_editor.close_popup()
+	)
+	
 	
 	file_button.get_popup().id_pressed.connect(file_button_item_pressed)
 	file_button.get_popup().set_hide_on_checkable_item_selection(false)
@@ -44,6 +54,10 @@ func _ready() -> void:
 		audio_button.get_popup().get_item_index(8),
 		SettingsManager.data.chart_hit_sound_on_step)
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
+	
+	audio_button.get_popup().set_item_checked(
+		audio_button.get_popup().get_item_index(10),
+			!SettingsManager.data.chart_hit_sounds)
 	
 	audio_button.get_popup().set_item_checked(
 		audio_button.get_popup().get_item_index(11), ChartEditor.vocal_waveforms)
@@ -67,25 +81,31 @@ func _ready() -> void:
 		SettingsManager.data.chart_start_at_current_position)
 	test_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
-	
 	window_button.get_popup().connect(&"id_pressed", chart_editor.window_button_item_pressed)
 	window_button.get_popup().set_hide_on_checkable_item_selection(false)
-
-	
 	
 	#setup windows
-	
 	audios_window.close_requested.connect(func():
 		window_button.get_popup().set_item_checked(3, false)
 		SoundManager.tool_close_window.play()
-		)
+	)
+	
 	audios_window.updated_current_song.connect(func():
-		if not chart_editor.instrumental.stream_paused:
+		if not chart_editor.music.stream_paused:
 			chart_editor.toggle_audios()
-		chart_editor.instrumental.stream = SoundManager.get_stream(EditorResources.song.instrumental)
-		chart_editor.waveform_dirty = true
+		chart_editor.music.stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
+		var idx = 1
+		for path in EditorResources.song.vocals:
+			chart_editor.music.stream.set_sync_stream(idx, SoundManager.get_stream(path))
+			idx += 1
+			
 		chart_editor.auto_save()
-		)
+	)
+	
+	time_change_window.close_requested.connect(func():
+		window_button.get_popup().set_item_checked(4, false)
+		SoundManager.tool_close_window.play()
+	)
 	
 	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
 	
@@ -93,32 +113,43 @@ func _ready() -> void:
 	
 	history_window.connect(&"close_requested", chart_editor._on_history_window_close_requested)
 	
-	metadata_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
-	metadata_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
-	metadata_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
 	metadata_window.connect(&"updated_scroll_speed", chart_editor._on_metadata_window_updated_scroll_speed)
 	metadata_window.connect(&"updated_song_artist", chart_editor._on_metadata_window_updated_song_artist)
 	metadata_window.connect(&"updated_song_charter", chart_editor._on_metadata_window_updated_song_charter)
 	metadata_window.connect(&"updated_song_name", chart_editor._on_metadata_window_updated_song_name)
 	metadata_window.connect(&"updated_song_scene", chart_editor._on_metadata_window_updated_song_scene)
-	metadata_window.connect(&"updated_starting_tempo", chart_editor._on_metadata_window_updated_starting_tempo)
 	metadata_window.connect(&"close_requested", chart_editor._on_metadata_window_close_requested)
 	
-	note_type_window.connect(&"selected_note_type", chart_editor.selected_note_type)
+	time_change_window.connect(&"add_time_change", chart_editor._on_metadata_window_add_time_change)
+	time_change_window.connect(&"remove_time_change", chart_editor._on_metadata_window_remove_time_change)
+	time_change_window.connect(&"selected_time_change", chart_editor._on_metadata_window_selected_time_change)
+	
+	note_type_window.connect(&"selected_type", chart_editor.selected_note_type)
 	note_type_window.connect(&"close_requested", chart_editor._on_note_type_window_close_requested)
-	
-	
 	
 	setup_shortcuts()
 	
 	#add menupopups to the thing
-	for child in get_children():
+	for child in h_box_container.get_children():
 		if child is MenuButton:
 			child.get_popup().add_to_group(&"windows")
 	
 func setup_shortcuts():
 	var shortcut:Shortcut
 	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_N
+	shortcut.events[0].ctrl_pressed = true
+	
+	file_button.get_popup().set_item_shortcut(
+		file_button.get_popup().get_item_index(0), shortcut)
+		
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_O
+	shortcut.events[0].ctrl_pressed = true
+	
+	file_button.get_popup().set_item_shortcut(
+		file_button.get_popup().get_item_index(1), shortcut)
 	# file buttons
 	file_button.get_popup().set_item_shortcut(
 		file_button.get_popup().get_item_index(2), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"save")))
@@ -183,6 +214,7 @@ func setup_shortcuts():
 		edit_button.get_popup().get_item_index(18), shortcut)
 	
 	#audio button
+	#region AUDIO
 	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
 	shortcut.events[0].keycode = KEY_SPACE
@@ -204,8 +236,18 @@ func setup_shortcuts():
 		audio_button.get_popup().get_item_index(5), shortcut)
 		
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_TAB
+	shortcut.events[0].keycode = KEY_M
+	shortcut.events[0].shift_pressed = true
 	
+		
+	audio_button.get_popup().set_item_shortcut(
+		audio_button.get_popup().get_item_index(10),
+			shortcut)
+	
+	#endregion
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_TAB
 	#view button
 	view_button.get_popup().set_item_shortcut(
 		view_button.get_popup().get_item_index(0), shortcut)
@@ -231,7 +273,33 @@ func setup_shortcuts():
 	
 	view_button.get_popup().set_item_shortcut(
 		view_button.get_popup().get_item_index(4), shortcut)
-		
+	
+	#region WINDOW_BUTTON
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_M
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(1, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_N
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(2, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_A
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(3, shortcut)
+	
+	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
+	shortcut.events[0].keycode = KEY_T
+	shortcut.events[0].alt_pressed = true
+	
+	window_button.get_popup().set_item_shortcut(4, shortcut)
+	#endregion
+	
 	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
 	shortcut.events[0].keycode = KEY_ENTER
 
@@ -399,7 +467,7 @@ func file_button_item_pressed(id):
 					var chart = EditorResources.song.difficulties.get(diff).get('chart')
 					if chart:
 						chart_keys.append(diff)
-						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart))
+						ZipTools.write_resource_to_zip(zip, 'charts/' + diff, Chart.load(chart, EditorResources.song))
 				
 				
 				misc_data.set('artist', EditorResources.song.artist)
@@ -532,17 +600,15 @@ func file_button_item_pressed(id):
 			export_window.connect(&"file_selected", on_open)
 			export_window.connect(&"close_requested", chart_editor.close_popup)
 			export_window.connect(&"close_requested", on_close)
-
+		
 		_:
 			print("id: ", id)
 
 func open_open_file_window():
 	chart_editor.can_chart = false
-	var open_file_popup_instance = chart_editor.OPEN_FILE_POPUP_PRELOAD.instantiate()
 	
-	add_child(open_file_popup_instance)
-	open_file_popup_instance.popup()
-	open_file_popup_instance.connect("file_selected", chart_editor.load_song_path)
-	open_file_popup_instance.connect("close_requested", chart_editor.close_popup)
-	open_file_popup_instance.connect("canceled", chart_editor.close_popup)
+	open_song_window.popup_centered()
+	open_song_window.tree.grab_focus(true)
+	if open_song_window.tree.get_root() and open_song_window.tree.get_root().get_first_child():
+		open_song_window.tree.set_selected(open_song_window.tree.get_root().get_first_child(), 0)
 	SoundManager.tool_open_window.play()

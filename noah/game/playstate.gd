@@ -30,7 +30,7 @@ const DELTA_LENIENCY: float = 0.01
 @export_custom(PROPERTY_HINT_LINK, 'x') var ui_bop_strength: Vector2 = Vector2(0.015, 0.015)
 
 ## Helper var to get [member GameManager.current_song]
-var song_data: Song :
+var song: Song:
 	get(): return GameManager.current_song
 
 ## The actual chart file to be played
@@ -101,7 +101,7 @@ var song_started: bool = false
 var skip_countdown: bool = false
 
 ## Used when the song is starting. A negative offset of 4 beats before the song actually begins
-var song_start_offset: float = -4.0
+var song_start_offset: float = -5.0
 
 ## The time that the song starts at. Set by [member play_song]
 var song_start_time: float = 0.0
@@ -117,6 +117,8 @@ var misses: int :
 ## Pauses the playstate. This differs from setting [member process_mode] to [code]PROCESS_MODE_DISABLED[/code] as it only pauses conductor updating and
 ## [br][br]pauses the music as well.
 var paused: bool = false : set = set_paused
+
+var events_list: Array
 
 #region setters
 func set_paused(v: bool) -> void:
@@ -144,9 +146,12 @@ func set_song_speed(v: float) -> void:
 	song_speed = v
 #endregion
 
+func _enter_tree() -> void:
+	if not is_in_group(&"playstate"):
+		add_to_group(&"playstate")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	ui = get_tree().get_first_node_in_group(&"ui")
 	camera = get_tree().get_first_node_in_group(&"cameras")
 	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
@@ -161,46 +166,35 @@ func _ready() -> void:
 		printerr("(%s):" % name,' There was no UI Skin set. falling back to dev')
 		ui_skin = load('uid://bvphmxy3ecutv')
 	
-	assert(song_data, "GameManager.current_song was not set correctly.")
+	assert(song, "GameManager.current_song was not set correctly.")
 	
 	GameManager.reset_conductor()
 	GameManager.song_scene = LoadingScreen.scene
 	
-	chart = Chart.load(song_data.difficulties[GameManager.difficulty].chart)
+	chart = Chart.load(song.difficulties[GameManager.difficulty].chart, song)
 	
-	Global.set_window_title("Playing: " + song_data.title)
+	Global.set_window_title("Playing: " + song.title)
 	
-	for stream in song_data.vocals:
+	for stream in song.vocals:
 		vocal_streams.append(SoundManager.get_stream(stream))
 		
 	# Creating the Audio Tracks
 	vocals = AudioStreamPlayer.new()
 	vocals.stream = AudioStreamPolyphonic.new()
-	vocals.stream.polyphony = song_data.vocals.size()
+	vocals.stream.polyphony = song.vocals.size()
 	vocals.set_bus(&"Music")
 	add_child(vocals)
 	vocals.play()
 	
 	instrumental = AudioStreamPlayer.new()
-	instrumental.stream = SoundManager.get_stream(song_data.instrumental)
+	instrumental.stream = SoundManager.get_stream(song.instrumental)
 	instrumental.set_bus(&"Music")
 	add_child(instrumental)
 	
 	instrumental.finished.connect(finished_song)
 	
-	if ResourceLoader.exists(song_data.difficulties[GameManager.difficulty].events):
-		var ext_events: Resource = load(song_data.difficulties[GameManager.difficulty].events)
-		if ext_events is ChartEvents:
-			chart.merge_events_into_this(ext_events)
-		else:
-			ext_events.free()
-	
-	if ResourceLoader.exists(song_data.events):
-		var ext_events: Resource = load(song_data.events)
-		if ext_events is ChartEvents:
-			chart.merge_events_into_this(ext_events)
-		else:
-			ext_events.free()
+	if ResourceLoader.exists(song.events):
+		events_list = load(song.events).data
 	
 	if SettingsManager.data.botplay and OS.is_debug_build():
 		get_tree().call_group(&"strums", &"set_auto_play", true)
@@ -217,9 +211,10 @@ func _ready() -> void:
 	
 	if GameManager.play_mode == GameManager.PLAY_MODE.CHARTING and \
 			SettingsManager.data.chart_start_at_current_position:
-		play_song(ChartEditor.song_position)
+		
+		Signals.play_song_ready_to_start.connect(play_song.bind(ChartEditor.song_position))
 	else:
-		play_song(0.0)
+		Signals.play_song_ready_to_start.connect(play_song)
 
 func _process(delta: float) -> void:
 	if health <= health_min and !died:
@@ -242,8 +237,7 @@ func _process(delta: float) -> void:
 			GameManager.song_position = instrumental.get_playback_position() + \
 					AudioServer.get_time_since_last_mix() - output_latency
 			
-			GameManager.conductor.offset = chart.get_tempo_time_at(GameManager.song_position)
-			GameManager.conductor.offset += chart.offset
+			GameManager.conductor.offset = chart.offset
 			
 			# Idk how exactly this works I stole this code from sqirradotdev
 			position_delta = abs(position_lerp - GameManager.song_position)
@@ -257,76 +251,62 @@ func _process(delta: float) -> void:
 			GameManager.song_position = position_lerp
 			sync_timer -= delta
 	
-	GameManager.conductor.tempo = chart.get_tempo_at(GameManager.song_position)
-	
-	var meter: Vector2i = chart.get_time_signature_at(GameManager.song_position)
-	GameManager.conductor.numerator = meter.x
-	GameManager.conductor.denominator = meter.y
-	
 	# Instead of before where I would do a linear search per section, a faster method
 	# would just be to iterate through as the song is playing, making it faster
 	var notes_list: Array = chart.notes
 	
-	if notes_list.size() > 0 and current_note < notes_list.size():
-		var note: Array[Variant]= notes_list[current_note]
-		
+	if !notes_list.is_empty() and current_note < notes_list.size():
 		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
 		if scroll_speed < 1:
 			spawn_time /= scroll_speed 
 		
-		if note[0] <= (spawn_time):
+		while current_note < notes_list.size() and notes_list[current_note][0] <= (spawn_time):
+			var note: Array = notes_list[current_note]
 			var time: float = note[0]
 			var lane: int = note[1]
 			var length: float = note[2]
 			var type: Variant = note[3]
 			
-			Signals.play_create_note.emit(time, lane, length, type, chart.get_tempo_at(time))
+			Signals.play_create_note.emit(time, lane, length, type, GameManager.conductor.tempo)
 			current_note += 1
 	
 	if instrumental.playing:
-		var events_list: Array[Variant] = chart.events
-		
-		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
-			var event = events_list[current_event]
-			var time: float = event[0]
-			var event_name: String = event[1]
-			var event_parameters: Array = event[2]
-			
-			print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
-			basic_event(time, event_name, event_parameters)
-			current_event += 1
+		if !events_list.is_empty():
+			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+				var event = events_list[current_event]
+				var time: float = event[0]
+				var event_name: String = event[1]
+				var event_parameters: Array = event[2]
+				
+				print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
+				basic_event(time, event_name, event_parameters)
+				current_event += 1
 
 ## Starts the song at a given time.
-func play_song(time: float) -> void:
-	await Signals.play_song_ready_to_start ## TODO: dont do it like this maybe ?
-	
+func play_song(time: float = 0.0) -> void:
 	song_starting = true
-	
 	GameManager.last_song_stats.reset()
-	
 	GameManager.conductor.stream_player = instrumental
-	GameManager.conductor.tempo = chart.get_tempo_at(-chart.offset + time)
-	GameManager.conductor.seconds_per_beat = 60.0 / GameManager.conductor.tempo
-	
+	GameManager.conductor.time_changes = song.time_changes
 	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
 	
 	song_started = false
 	song_start_time = time + chart.offset
 	if not skip_countdown:
-		song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 4)
+		song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 5)
 	else:
 		song_start_offset = song_start_time
 	
 	GameManager.song_position = song_start_offset
 	GameManager.conductor.time = song_start_time
 	
-	if skip_countdown or time >= GameManager.conductor.seconds_per_beat * 4:
+	if skip_countdown or time >= GameManager.conductor.seconds_per_beat * 5:
 		play_audios(song_start_offset)
 	else:
 		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
-			countdown_instance.speed_scale = chart.get_tempo_at(time - chart.offset) / 60.0
+			countdown_instance.speed_scale = GameManager.conductor.tempo / 60.0
 			
 			ui.add_child(countdown_instance)
 			countdown_instance.seek(time)
@@ -439,7 +419,7 @@ func finished_song() -> void:
 	Global.change_scene_to(scene_to_enter)
 
 ## Called whenever a notes has been hit. in [PlayState], this updates scoring.
-func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
+func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() == 1:
 		playback.set_stream_volume(vocal_track_ids[0], 0.0)
@@ -454,8 +434,11 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 			Signals.play_note_miss.emit(note, lane, strum_manager)
 			return
 		
-		if note.scoreable:
+		if note.scoreable and !note.regrabbed:
 			score_note(hit_time)
+		
+		if note.regrabbed:
+			return
 		
 		song_stats.total_notes += 1
 		match NoahStats.get_hit_rating(hit_time):
@@ -484,7 +467,7 @@ func note_hit(note: Note, lane: int, hit_time: float, strum_manager: StrumManage
 				note_miss(note, lane, strum_manager)
 
 ## Called whenever a notes tail is being held. in [PlayState], this updates scoring.
-func note_held(note: Note, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
+func note_held(note: BasicNote, lane: int, hold_delta: float, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		playback.set_stream_volume(vocal_track_ids[strum_manager.id],  0.0)
@@ -497,7 +480,7 @@ func note_held(note: Note, lane: int, hold_delta: float, strum_manager: StrumMan
 			Signals.play_stats_changed.emit(song_stats)
 
 ## Called whenever a note is missed. in [PlayState], this updates scoring.
-func note_miss(note: Note, lane: int, strum_manager: StrumManager) -> void:
+func note_miss(note: BasicNote, lane: int, strum_manager: StrumManager) -> void:
 	var playback: AudioStreamPlayback = vocals.get_stream_playback()
 	if vocal_track_ids.size() > strum_manager.id:
 		if (note and !note.mine) or !note:

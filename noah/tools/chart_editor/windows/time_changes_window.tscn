@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://dnvmjq282p3no"]
+
+[ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_77tlp"]
+[ext_resource type="Script" uid="uid://cja6ccl26jy2w" path="res://noah/tools/chart_editor/windows/time_changes_window.gd" id="2_dr7ay"]
+
+[node name="Time Changes Window" type="Window" unique_id=291733897]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Time Change Editor"
+position = Vector2i(0, 36)
+size = Vector2i(320, 180)
+transparent = true
+popup_window = true
+theme = ExtResource("1_77tlp")
+script = ExtResource("2_dr7ay")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1687161325]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="PanelContainer" unique_id=360294435]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Time Changes" type="OptionButton" parent="PanelContainer/VBoxContainer2" unique_id=352539277]
+unique_name_in_owner = true
+layout_mode = 2
+selected = 0
+allow_reselect = true
+item_count = 1
+popup/item_0/text = "00:00.00 - BPM: 60.0 in 4/4"
+popup/item_0/id = 0
+
+[node name="HSeparator" type="HSeparator" parent="PanelContainer/VBoxContainer2" unique_id=1558016999]
+layout_mode = 2
+
+[node name="Tempo Change" type="HBoxContainer" parent="PanelContainer/VBoxContainer2" unique_id=1283656978]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer2/Tempo Change" unique_id=273743390]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Tempo:"
+
+[node name="Tempo" type="SpinBox" parent="PanelContainer/VBoxContainer2/Tempo Change" unique_id=600124809]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 30.0
+max_value = 500.0
+step = 0.001
+value = 60.0
+suffix = "BPM"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer2" unique_id=998726067]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer2/HBoxContainer" unique_id=584728614]
+layout_mode = 2
+size_flags_horizontal = 2
+text = "Time Signature:"
+
+[node name="Numerator" type="SpinBox" parent="PanelContainer/VBoxContainer2/HBoxContainer" unique_id=415943722]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 32.0
+value = 4.0
+rounded = true
+prefix = "N:"
+
+[node name="Denominator" type="SpinBox" parent="PanelContainer/VBoxContainer2/HBoxContainer" unique_id=936770417]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = 2.0
+max_value = 16.0
+value = 4.0
+rounded = true
+prefix = "D:"
+
+[node name="Add Time Change" type="Button" parent="PanelContainer/VBoxContainer2" unique_id=1836378143]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Add Time Change at Play Marker"
+
+[node name="Remove Time Change" type="Button" parent="PanelContainer/VBoxContainer2" unique_id=2049733300]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Remove Current Time Change"
+
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
+[connection signal="item_selected" from="PanelContainer/VBoxContainer2/Time Changes" to="." method="_on_time_changes_item_selected"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer2/Tempo Change/Tempo" to="." method="_on_tempo_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer2/HBoxContainer/Numerator" to="." method="_on_numerator_value_changed"]
+[connection signal="value_changed" from="PanelContainer/VBoxContainer2/HBoxContainer/Denominator" to="." method="_on_denominator_value_changed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer2/Add Time Change" to="." method="_on_add_time_change_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer2/Remove Time Change" to="." method="_on_remove_time_change_pressed"]

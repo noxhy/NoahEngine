@@ -22,7 +22,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_ear4y"]
 resource_name = "countdown"
-length = 4.0
+length = 5.0
 step = 0.1
 tracks/0/type = "method"
 tracks/0/imported = false
@@ -31,7 +31,7 @@ tracks/0/path = NodePath("Countdown")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(4),
+"times": PackedFloat32Array(5),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -45,7 +45,7 @@ tracks/1/path = NodePath("Countdown/AnimatedSprite2D:animation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 2, 3),
+"times": PackedFloat32Array(1, 2, 3, 4),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [&"3", &"2", &"1", &"go"]
@@ -57,7 +57,7 @@ tracks/2/path = NodePath("Countdown/AnimatedSprite2D:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.9, 1, 1.5, 1.9, 2, 2.4, 2.5, 2.9, 3, 3.4, 3.5),
+"times": PackedFloat32Array(1, 1.5, 1.9, 2, 2.5, 2.9, 3, 3.4, 3.5, 3.9, 4, 4.4, 4.5),
 "transitions": PackedFloat32Array(0.366022, 1, 1, 0.366022, 1, 1, 0.366022, 1, 1, 1, 0.366022, 1, 1),
 "update": 0,
 "values": [Vector2(1.2, 1.2), Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1), Vector2(1, 1), Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1), Vector2(1, 1)]

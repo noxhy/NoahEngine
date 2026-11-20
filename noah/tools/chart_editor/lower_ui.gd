@@ -1,4 +1,4 @@
-extends HBoxContainer
+extends PanelContainer
 class_name ChartEditorLowerUI
 
 @onready var play_button: Button = %"Play Button"
@@ -8,10 +8,11 @@ class_name ChartEditorLowerUI
 @onready var skip_forward: Button = %"Skip Forward"
 @onready var difficulty_button: OptionButton = %"Difficulty Button"
 @onready var chart_snap: SpinBox = %"Chart Snap"
-
+@onready var zoom: Label = %zoom
 @onready var current_time_label: Label = %"Current Time Label"
-
 @onready var time_left_label: Label = %"Time Left Label"
+@onready var beat_label: Label = %Beat
+@onready var step_label: Label = %Step
 
 var chart_editor: ChartEditor
 
@@ -39,14 +40,18 @@ func _process(delta: float) -> void:
 	if not chart_editor:
 		return
 	
-	if EditorResources.song and chart_editor.instrumental and chart_editor.instrumental.stream:
-		time_left_label.text = "-" + NoahTools.format_time(chart_editor.instrumental.stream.get_length() - chart_editor.song_position - chart_editor.start_offset)
+	if EditorResources.song and chart_editor.music and chart_editor.music.stream:
+		time_left_label.text = str("-", NoahTools.format_time(
+			chart_editor.music.stream.get_sync_stream(0).get_length() - chart_editor.song_position - chart_editor.start_offset))
 	else:
 		time_left_label.text = "- ??:??"
 	
 	current_time_label.text = NoahTools.format_time(chart_editor.song_position + chart_editor.start_offset)
 	current_time_label.text += str(" (", chart_editor.song_speed, "x)")
+	
+	zoom.text = 'GZ: ' + str(snappedf(chart_editor.grid.zoom.y, 0.01)) + 'x'
 
-func toggle_play_button_state(playing: bool):
-	play_button.icon = load("uid://c1mgxe0dqdbgh") if playing else load("uid://byl3boevtc02p")
+func toggle_play_button_state(playing: bool) -> void:
+
+	play_button.icon = load("res://addons/at-icons/node/pause.svg") if playing else load("res://addons/at-icons/node/play.svg")
 	play_button.set_pressed_no_signal(playing)

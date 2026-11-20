@@ -1,8 +1,8 @@
 extends TextureRect
 class_name EditorMinimap
 
-const COLORS: Array[Color] = [Color(0.49, 0.078, 1.0), Color(0.086, 0.737, 0.749),
-Color(0.235, 0.769, 0.208), Color(0.757, 0.149, 0.322)]
+const COLORS: Array[Color] = [Color(0.459, 0.078, 1.0, 1.0), Color(0.086, 0.576, 1.0, 1.0),
+Color(0.447, 1.0, 0.0, 1.0), Color(0.757, 0.149, 0.322)]
 
 const EVENT_COLOR: Color = Color.GRAY
 
@@ -34,8 +34,13 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if EditorResources.chart and chart_editor.instrumental and chart_editor.instrumental.stream:
-		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step / chart_editor.grid.zoom.y
+	if EditorResources.chart and chart_editor.music and chart_editor.music.stream:
+		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step
+		if chart_editor.name == &"Event Editor":
+			_range /= chart_editor.grid.zoom.x
+		else:
+			_range /= chart_editor.grid.zoom.y
+		
 		var point_a: Vector2i = map_to_image_position(Vector2(0, chart_editor.song_position))
 		var point_b: Vector2i = map_to_image_position(Vector2(0,
 		chart_editor.song_position + _range))
@@ -81,7 +86,7 @@ func unmap_from_image(packet):
 
 ## Maps a point to a position on the container
 func map_to_image_position(point: Vector2) -> Vector2i:
-	var y: float = point.y / chart_editor.instrumental.stream.get_length()
+	var y: float = point.y / chart_editor.music.stream.get_sync_stream(0).get_length()
 	y *= size.y
 	return Vector2i(int(point_width * point.x), snappedi(y, precision))
 

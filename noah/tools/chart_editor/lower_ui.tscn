@@ -2,14 +2,13 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_ylsds"]
 [ext_resource type="Script" uid="uid://ckp4s4km6xmb7" path="res://noah/tools/chart_editor/lower_ui.gd" id="2_1ni40"]
-[ext_resource type="Texture2D" uid="uid://dpb5afc48uqvb" path="res://noah/tools/chart_editor/restart_button.png" id="2_yqqn8"]
-[ext_resource type="Texture2D" uid="uid://c7ka0o15iv6a3" path="res://noah/tools/chart_editor/rewind_button.png" id="3_mcg17"]
-[ext_resource type="Texture2D" uid="uid://byl3boevtc02p" path="res://noah/tools/chart_editor/play_button.png" id="4_i5g03"]
-[ext_resource type="Texture2D" uid="uid://hf58qhc23n5c" path="res://noah/tools/chart_editor/fast_forward_button.png" id="5_8je4r"]
-[ext_resource type="Texture2D" uid="uid://dwtgyv6xf866j" path="res://noah/tools/chart_editor/skip_button.png" id="6_hdy24"]
+[ext_resource type="Texture2D" uid="uid://b15fwfewp0gct" path="res://addons/at-icons/node/previous.svg" id="3_1ni40"]
+[ext_resource type="Texture2D" uid="uid://ba2l3d4v3s2vn" path="res://addons/at-icons/node/rewind.svg" id="4_6lveb"]
+[ext_resource type="Texture2D" uid="uid://bbpkipddteorw" path="res://addons/at-icons/node/play.svg" id="5_dcpgl"]
+[ext_resource type="Texture2D" uid="uid://rdxsgf0dpa1x" path="res://addons/at-icons/node/fast_forward.svg" id="6_6ggy7"]
+[ext_resource type="Texture2D" uid="uid://b6w6xjwy4h2wh" path="res://addons/at-icons/node/next.svg" id="7_7n1a3"]
 
-[node name="Lower UI" type="HBoxContainer" unique_id=1056915829]
-clip_children = 1
+[node name="Lower UI" type="PanelContainer" unique_id=1378036966]
 custom_minimum_size = Vector2(1280, 48)
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,11 +30,12 @@ size_flags_horizontal = 2
 
 [node name="Current Time Label" type="Label" parent="HBoxContainer" unique_id=402981625]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(145, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Current position of the song"
 mouse_filter = 0
-text = "CURRENT TIME"
+text = "00:00.00"
 vertical_alignment = 1
 
 [node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1160474810]
@@ -43,6 +43,7 @@ layout_mode = 2
 
 [node name="Beat" type="Label" parent="HBoxContainer" unique_id=602479764]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Current Beat"
@@ -52,6 +53,7 @@ vertical_alignment = 1
 
 [node name="Step" type="Label" parent="HBoxContainer" unique_id=1763471797]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(90, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 tooltip_text = "Current Step"
@@ -59,10 +61,16 @@ mouse_filter = 0
 text = "STEP"
 vertical_alignment = 1
 
-[node name="Debug" type="Label" parent="HBoxContainer" unique_id=1397328240]
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer" unique_id=89757127]
+layout_mode = 2
+
+[node name="zoom" type="Label" parent="HBoxContainer" unique_id=1397328240]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
+tooltip_text = "The current zoom in the grid"
+mouse_filter = 1
+text = "Gz: "
 vertical_alignment = 1
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="." unique_id=1810110037]
@@ -76,6 +84,7 @@ size_flags_horizontal = 10
 
 [node name="Skip to Beginning" type="Button" parent="HBoxContainer2" unique_id=1564061140]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -84,11 +93,13 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/icon_normal_color = Color(0.84705883, 0.84705883, 0.84705883, 1)
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
-icon = ExtResource("2_yqqn8")
+icon = ExtResource("3_1ni40")
 flat = true
+expand_icon = true
 
 [node name="Skip Backward" type="Button" parent="HBoxContainer2" unique_id=457072584]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
 layout_mode = 2
 size_flags_horizontal = 10
 size_flags_vertical = 4
@@ -97,11 +108,13 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/icon_normal_color = Color(0.84705883, 0.84705883, 0.84705883, 1)
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
-icon = ExtResource("3_mcg17")
+icon = ExtResource("4_6lveb")
 flat = true
+expand_icon = true
 
 [node name="Play Button" type="Button" parent="HBoxContainer2" unique_id=1060814314]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
@@ -113,11 +126,13 @@ theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
 theme_override_colors/icon_pressed_color = Color(0.84705883, 0.84705883, 0.84705883, 1)
 theme_override_colors/icon_hover_color = Color(1, 1, 1, 1)
 toggle_mode = true
-icon = ExtResource("4_i5g03")
+icon = ExtResource("5_dcpgl")
 flat = true
+expand_icon = true
 
 [node name="Skip Forward" type="Button" parent="HBoxContainer2" unique_id=461682808]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
@@ -126,11 +141,13 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/icon_normal_color = Color(0.84705883, 0.84705883, 0.84705883, 1)
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
-icon = ExtResource("5_8je4r")
+icon = ExtResource("6_6ggy7")
 flat = true
+expand_icon = true
 
 [node name="Skip to End" type="Button" parent="HBoxContainer2" unique_id=1168969896]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(35, 35)
 layout_mode = 2
 size_flags_horizontal = 2
 size_flags_vertical = 4
@@ -139,8 +156,9 @@ focus_mode = 0
 mouse_default_cursor_shape = 2
 theme_override_colors/icon_normal_color = Color(0.84705883, 0.84705883, 0.84705883, 1)
 theme_override_colors/icon_focus_color = Color(1, 1, 1, 1)
-icon = ExtResource("6_hdy24")
+icon = ExtResource("7_7n1a3")
 flat = true
+expand_icon = true
 
 [node name="VSeparator3" type="VSeparator" parent="HBoxContainer2" unique_id=1120154517]
 layout_mode = 2
@@ -149,11 +167,12 @@ size_flags_horizontal = 2
 [node name="HBoxContainer3" type="HBoxContainer" parent="." unique_id=1386921721]
 layout_mode = 2
 size_flags_horizontal = 10
+alignment = 2
 
 [node name="Difficulty Button" type="OptionButton" parent="HBoxContainer3" unique_id=1072897757]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Select the difficulty being charted"
 focus_behavior_recursive = 1
@@ -171,7 +190,7 @@ size_flags_horizontal = 10
 [node name="Tempo" type="Label" parent="HBoxContainer3" unique_id=1508383069]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 10
 tooltip_text = "Current tempo/BPM"
 mouse_filter = 0
 text = "tempo: ??"
@@ -183,11 +202,12 @@ size_flags_horizontal = 10
 
 [node name="Chart Snap" type="SpinBox" parent="HBoxContainer3" unique_id=1011476200]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
-size_flags_horizontal = 3
+size_flags_horizontal = 10
 size_flags_vertical = 4
 tooltip_text = "Chart snapping"
-focus_behavior_recursive = 1
+focus_behavior_recursive = 2
 min_value = 1.0
 max_value = 192.0
 value = 16.0
@@ -206,6 +226,6 @@ layout_mode = 2
 size_flags_horizontal = 10
 tooltip_text = "Time remaining"
 mouse_filter = 0
-text = "TIME LEFT"
+text = "-00:00.00"
 horizontal_alignment = 2
 vertical_alignment = 1
