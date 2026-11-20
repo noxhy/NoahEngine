@@ -1112,9 +1112,8 @@ func play_audios(time: float):
 	song_position = time + start_offset
 	
 	current_note = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, song_position)
-	
-	if EditorResources.chart.notes.size() > 0:
-		if song_position > EditorResources.chart.notes[EditorResources.chart.notes.size() - 1][0]:
+	if !EditorResources.chart.notes.is_empty():
+		if song_position > EditorResources.chart.notes.back()[0]:
 			current_note = EditorResources.chart.notes.size() - 1
 
 ## This assumes that the tempo and meter dictionaries are sorted
