@@ -285,7 +285,7 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 					
 					var anim = j[1]
 					var char_group:String = j[2].to_lower()
-					match char:
+					match char_group:
 						'bf', 'boyfriend':
 							char_group = 'player'
 						'gf', 'girlfriend':
@@ -309,6 +309,9 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 			
 			# Creates the event
 			# j[0] is the event name, j[1]/j[2] is the event parameters
+			
+			if j[0].is_empty():
+				j[0] = "comment"
 			
 			var _v1: String = ''
 			if j.size() > 1:
