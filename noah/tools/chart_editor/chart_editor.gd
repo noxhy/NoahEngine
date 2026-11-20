@@ -151,23 +151,19 @@ func _process(delta: float) -> void:
 		var notes_list = EditorResources.chart.notes
 		
 		if notes_list.size() > 0 and SettingsManager.data.chart_hit_sounds:
-			if current_note < notes_list.size():
-				var note: Array = notes_list[current_note]
-				while ((song_position + start_offset) > (note[0] + conductor.seconds_per_step) or (note[0] <= (song_position + start_offset))):
-					if note[0] <= (song_position + start_offset):
-						var lane: int = note[1]
-						if EditorResources.strumlines.size() == 1:
-							if EditorResources.strumlines[0].hit_sounds:
+				while (current_note < notes_list.size() and (notes_list[current_note][0] <= (song_position + start_offset))):
+					var note: Array = notes_list[current_note]
+					var lane: int = note[1]
+					if EditorResources.strumlines.size() == 1:
+						if EditorResources.strumlines[0].hit_sounds:
+							SoundManager.tool_hit.play()
+					else:
+						for id in EditorResources.strumlines.size():
+							var strumline: Strumline = EditorResources.strumlines[id]
+							if (strumline.has_lane(lane) and strumline.hit_sounds):
 								SoundManager.tool_hit.play()
-						else:
-							for id in EditorResources.strumlines.size():
-								var strumline: Strumline = EditorResources.strumlines[id]
-								if (strumline.has_lane(lane) and strumline.hit_sounds):
-									SoundManager.tool_hit.play()
 					
 					current_note += 1
-					if current_note < notes_list.size():
-						note = notes_list[current_note]
 		
 		refresh_audios()
 	
