@@ -256,7 +256,6 @@ func _process(delta: float) -> void:
 	
 	if notes_list.size() > 0 and current_note < notes_list.size():
 		var note: Array[Variant]= notes_list[current_note]
-		
 		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
 		if scroll_speed < 1:
 			spawn_time /= scroll_speed 
