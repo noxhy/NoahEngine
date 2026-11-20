@@ -211,9 +211,10 @@ func _ready() -> void:
 	
 	if GameManager.play_mode == GameManager.PLAY_MODE.CHARTING and \
 			SettingsManager.data.chart_start_at_current_position:
-		play_song(ChartEditor.song_position)
+		
+		Signals.play_song_ready_to_start.connect(play_song.bind(ChartEditor.song_position))
 	else:
-		play_song(0.0)
+		Signals.play_song_ready_to_start.connect(play_song)
 
 func _process(delta: float) -> void:
 	if health <= health_min and !died:
@@ -254,13 +255,13 @@ func _process(delta: float) -> void:
 	# would just be to iterate through as the song is playing, making it faster
 	var notes_list: Array = chart.notes
 	
-	if notes_list.size() > 0 and current_note < notes_list.size():
-		var note: Array[Variant]= notes_list[current_note]
+	if !notes_list.is_empty() and current_note < notes_list.size():
+		var note: Array = notes_list[current_note]
 		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
 		if scroll_speed < 1:
 			spawn_time /= scroll_speed 
 		
-		if note[0] <= (spawn_time):
+		while current_note < notes_list.size() and note[0] <= (spawn_time):
 			var time: float = note[0]
 			var lane: int = note[1]
 			var length: float = note[2]
@@ -268,6 +269,7 @@ func _process(delta: float) -> void:
 			
 			Signals.play_create_note.emit(time, lane, length, type, GameManager.conductor.tempo)
 			current_note += 1
+			note = notes_list[current_note]
 	
 	if instrumental.playing:
 		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
@@ -282,12 +284,8 @@ func _process(delta: float) -> void:
 
 ## Starts the song at a given time.
 func play_song(time: float) -> void:
-	await Signals.play_song_ready_to_start ## TODO: dont do it like this maybe ?
-	
 	song_starting = true
-	
 	GameManager.last_song_stats.reset()
-	
 	GameManager.conductor.stream_player = instrumental
 	GameManager.conductor.time_changes = song.time_changes
 	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
