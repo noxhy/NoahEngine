@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="1_w3mtg"]
 [ext_resource type="Script" uid="uid://cjnphso8gmi5n" path="res://noah/tools/chart_editor/windows/audio/audio_panel.gd" id="2_ns831"]
-[ext_resource type="Texture2D" uid="uid://dntfscxowms7a" path="res://addons/at-icons/node/file_arrow_up.svg" id="3_mwbqs"]
+[ext_resource type="Texture2D" uid="uid://buws0djp2ooxj" path="res://addons/at-icons/node/file_magnifying_glass.svg" id="3_f4bmq"]
 [ext_resource type="Texture2D" uid="uid://bgaokgo4ivbwr" path="res://addons/at-icons/node/trash_can.svg" id="4_1ueoo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f4bmq"]
@@ -56,7 +56,7 @@ custom_minimum_size = Vector2(0, 27)
 layout_mode = 2
 size_flags_vertical = 4
 mouse_default_cursor_shape = 2
-icon = ExtResource("3_mwbqs")
+icon = ExtResource("3_f4bmq")
 icon_alignment = 1
 expand_icon = true
 
