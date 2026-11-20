@@ -10,8 +10,8 @@ class_name BasicUI
 ## The asymptotic speed of the camera's zoom smoothing effect when [member zoom_smoothing] is true.
 @export_custom(PROPERTY_HINT_RANGE, '1, 64, suffix:weight') var zoom_smoothing_speed: float = 5
 
-@onready var rating_marker: Node = $"Rating Marker"
-@onready var combo_marker: Node = $"Combo Marker"
+@onready var rating_marker: Node = get_node_or_null(^"$Rating Marker")
+@onready var combo_marker: Node = get_node_or_null(^"$Combo Marker")
 
 ## How quickly to move through the noise
 var shake_speed: float = 30.0

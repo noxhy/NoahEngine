@@ -22,6 +22,8 @@ func transition(trans_name: StringName) -> void:
 	current_transition.finished.connect(transition_finished)
 	
 	add_child(current_transition)
+	
+	current_transition.begin_transition()
 
 ## Emits [signal waiting].
 func pause() -> void:

@@ -27,6 +27,9 @@ class_name NoteSkin
 ## The opacity/alpha/transparency set to all notes tails.
 @export_range(0, 1) var sustain_opacity: float = 0.6 # shouldnt this be called tail_opacity ?
 
+## The opacity/alpha/transparency set to all note splash.
+@export_range(0, 1) var splash_opacity: float = 1.0
+
 ## Multiplicative scaling applied to the notes and strums.
 @export var notes_scale: float = 1.0
 
