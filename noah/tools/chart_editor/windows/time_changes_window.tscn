@@ -93,6 +93,8 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Remove Current Time Change"
 
+[connection signal="about_to_popup" from="." to="." method="_on_about_to_popup"]
+[connection signal="close_requested" from="." to="." method="_on_close_requested"]
 [connection signal="item_selected" from="PanelContainer/VBoxContainer2/Time Changes" to="." method="_on_time_changes_item_selected"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer2/Tempo Change/Tempo" to="." method="_on_tempo_value_changed"]
 [connection signal="value_changed" from="PanelContainer/VBoxContainer2/HBoxContainer/Numerator" to="." method="_on_numerator_value_changed"]

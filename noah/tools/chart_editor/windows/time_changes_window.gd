@@ -66,3 +66,12 @@ func _on_denominator_value_changed(value: float) -> void:
 	
 	EditorResources.song.time_changes[time].z = value
 	%"Time Changes".set_item_text(current_time_change, format_time_change(current_time_change))
+
+
+func _on_about_to_popup() -> void:
+	update_stats()
+
+
+func _on_close_requested() -> void:
+	SoundManager.tool_close_window.play()
+	visible = false
