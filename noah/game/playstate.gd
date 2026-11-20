@@ -272,7 +272,7 @@ func _process(delta: float) -> void:
 			note = notes_list[current_note]
 	
 	if instrumental.playing:
-		if events_list.size() > 0 and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+		while !events_list.is_empty() and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
 			var event = events_list[current_event]
 			var time: float = event[0]
 			var event_name: String = event[1]
@@ -283,7 +283,7 @@ func _process(delta: float) -> void:
 			current_event += 1
 
 ## Starts the song at a given time.
-func play_song(time: float) -> void:
+func play_song(time: float = 0.0) -> void:
 	song_starting = true
 	GameManager.last_song_stats.reset()
 	GameManager.conductor.stream_player = instrumental
