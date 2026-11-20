@@ -166,7 +166,8 @@ func _process(delta: float) -> void:
 									SoundManager.tool_hit.play()
 					
 					current_note += 1
-					note = notes_list[current_note]
+					if current_note < notes_list.size():
+						note = notes_list[current_note]
 		
 		refresh_audios()
 	

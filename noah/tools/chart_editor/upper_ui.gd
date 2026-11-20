@@ -102,6 +102,11 @@ func _ready() -> void:
 		chart_editor.auto_save()
 	)
 	
+	time_change_window.close_requested.connect(func():
+		window_button.get_popup().set_item_checked(4, false)
+		SoundManager.tool_close_window.play()
+	)
+	
 	export_external_popup.connect(&"file_selected", chart_editor._on_export_external_popup_file_selected)
 	
 	note_skin_window.connect(&"file_selected", chart_editor._on_note_skin_window_file_selected)

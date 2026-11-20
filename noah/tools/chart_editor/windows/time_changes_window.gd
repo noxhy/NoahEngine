@@ -73,5 +73,5 @@ func _on_about_to_popup() -> void:
 
 
 func _on_close_requested() -> void:
-	SoundManager.tool_close_window.play()
-	visible = false
+	hide()
+	gui_release_focus()
