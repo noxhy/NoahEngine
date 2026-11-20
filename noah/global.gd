@@ -65,7 +65,7 @@ func _input(event: InputEvent) -> void:
 		
 		SoundManager.music.stop()
 		EditorResources.event_editor = false
-		EditorResources.song = GameManager.current_song
+		EditorResources.song = NoahTools.load_unique_copy_of(GameManager.current_song)
 		EditorResources.difficulty = GameManager.difficulty
 		Global.change_scene_to(Constants.CHART_EDITOR_SCENE)
 	

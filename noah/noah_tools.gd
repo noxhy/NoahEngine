@@ -321,3 +321,15 @@ static func find_lowest_base_script(a: GDScript) -> GDScript:
 # golden hue ratio or whatever
 static func generate_colour_from_string(_str: String) -> Color:
 	return Color.from_hsv(fposmod(float(hash(_str)) * 0.618, 1.0), 0.45, 1.0)
+
+static func load_unique_copy_of(res: Resource) -> Resource:
+	
+	if not res:
+		printerr('(NoahTools): cannot load unique copy of a null file.')
+		return res
+	
+	if res.resource_path.is_empty():
+		printerr('(NoahTools): cannot load unique copy of a file that has no path.')
+		return res
+	
+	return ResourceLoader.load(res.resource_path, "", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
