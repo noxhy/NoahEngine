@@ -322,7 +322,7 @@ static func find_lowest_base_script(a: GDScript) -> GDScript:
 static func generate_colour_from_string(_str: String) -> Color:
 	return Color.from_hsv(fposmod(float(hash(_str)) * 0.618, 1.0), 0.45, 1.0)
 
-static func load_unique_copy_of(res: Resource) -> Resource:
+static func load_original_resource(res: Resource) -> Resource:
 	
 	if not res:
 		printerr('(NoahTools): cannot load unique copy of a null file.')
