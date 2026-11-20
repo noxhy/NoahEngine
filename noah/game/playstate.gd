@@ -256,13 +256,12 @@ func _process(delta: float) -> void:
 	var notes_list: Array = chart.notes
 	
 	if !notes_list.is_empty() and current_note < notes_list.size():
-		var note: Array = notes_list[current_note]
 		var spawn_time = GameManager.song_position + GameManager.conductor.seconds_per_beat * 4
 		if scroll_speed < 1:
 			spawn_time /= scroll_speed 
 		
-		while current_note < notes_list.size() and note[0] <= (spawn_time):
-			note = notes_list[current_note]
+		while current_note < notes_list.size() and notes_list[current_note][0] <= (spawn_time):
+			var note: Array = notes_list[current_note]
 			var time: float = note[0]
 			var lane: int = note[1]
 			var length: float = note[2]
@@ -272,15 +271,16 @@ func _process(delta: float) -> void:
 			current_note += 1
 	
 	if instrumental.playing:
-		while !events_list.is_empty() and current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
-			var event = events_list[current_event]
-			var time: float = event[0]
-			var event_name: String = event[1]
-			var event_parameters: Array = event[2]
-			
-			print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
-			basic_event(time, event_name, event_parameters)
-			current_event += 1
+		if !events_list.is_empty():
+			while current_event < events_list.size() and events_list[current_event][0] <= GameManager.song_position:
+				var event = events_list[current_event]
+				var time: float = event[0]
+				var event_name: String = event[1]
+				var event_parameters: Array = event[2]
+				
+				print("(PlayState): Song Event: \"", event_name, "\" ", str(event_parameters))
+				basic_event(time, event_name, event_parameters)
+				current_event += 1
 
 ## Starts the song at a given time.
 func play_song(time: float = 0.0) -> void:
