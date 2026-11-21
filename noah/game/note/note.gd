@@ -16,7 +16,9 @@ var tempo: float = 0
 var note_type: String
 
 var scroll_speed: float
-var grid_size: Vector2 = Vector2(128, 128)
+var grid_size: Vector2: get = get_grid_size
+func get_grid_size() -> Vector2:
+	return grid_size
 
 var scroll: float = 1.0
 

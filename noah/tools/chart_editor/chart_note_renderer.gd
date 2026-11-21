@@ -81,18 +81,18 @@ class NoteRender extends Note:
 		
 		update_transform()
 	
-	func _process(delta: float) -> void:
-		grid_size = chart_editor.grid.get_gridspace_size()
+	func get_grid_size() -> Vector2:
+		return chart_editor.grid.get_gridspace_size()
 	
 	func get_chart_position() -> Vector2:
 		var new_pos = Vector2(chart_editor.grid.get_real_position(Vector2(1.5 + lane, 0)).x,
-		chart_editor.time_to_y_position(time) + chart_editor.grid.get_gridspace_size().y / 2)
+		chart_editor.time_to_y_position(time) + grid_size.y / 2)
 		new_pos += chart_editor.grid_layer.offset
 		return new_pos
 	
 	## Updates the transform of all the RIDS.
 	func update_transform() -> void:
-		var symbol_scale: Vector2 = grid_size / symbol_texture.get_size()
+		var symbol_scale: Vector2 = grid_size.x / symbol_texture.get_width() * Vector2.ONE
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
 		# Tile tail rendering
