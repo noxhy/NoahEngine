@@ -27,6 +27,7 @@ func draw_note(packet: Array) -> void:
 	# sizing purposes
 	render.scroll_speed = chart_editor.conductor.get_time_change_at(render.time).y
 	render.direction = chart_editor.DIRECTIONS[render.lane % 4]
+	render.animation = str(Constants.NOTE_TYPES.get(render.note_type, ""), render.direction)
 	render.note_skin = chart_editor.note_skin
 	drawn.append(render)
 
@@ -47,9 +48,8 @@ class NoteRender extends Note:
 	var symbol_rid: RID
 	var tail_rids: Array[RID]
 	
-	var symbol_texture: Texture
-	var tail_texture: Texture
-	var end_texture: Texture
+	var symbol_texture: Texture2D
+	var tail_texture: Texture2D
 	
 	func _init(editor: ChartEditor, parent: RID) -> void:
 		chart_editor = editor
@@ -60,11 +60,19 @@ class NoteRender extends Note:
 	## Sets the skin to the given
 	func set_note_skin(v: NoteSkin) -> void:
 		note_skin = v
-		symbol_texture = v.notes_texture.get_frame_texture(
-			str(Constants.NOTE_TYPES.get(note_type, ""), direction), 0)
+		symbol_texture = v.notes_texture.get_frame_texture(animation, 0)
+		tail_texture = v.notes_texture.get_frame_texture(animation + &"_tail", 0)
 		NoahTools.set_texture_to_rid(symbol_rid, symbol_texture)
 		if note_skin.pixel_texture:
 			RenderingServer.canvas_item_set_default_texture_filter(symbol_rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
+		else:
+			RenderingServer.canvas_item_set_default_texture_filter(symbol_rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_DEFAULT)
+		
+		for rid in tail_rids:
+			if note_skin.pixel_texture:
+				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
+			else:
+				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_DEFAULT)
 		
 		update_transform()
 	
@@ -79,9 +87,34 @@ class NoteRender extends Note:
 	
 	## Updates the transform of all the RIDS.
 	func update_transform() -> void:
-		var scaler: Vector2 = grid_size / symbol_texture.get_size()
-		var symbol_scale: Vector2 = Vector2.ONE * minf(scaler.x, scaler.y)
-		RenderingServer.canvas_item_set_transform(symbol_rid, Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2))
+		var symbol_scale: Vector2 = Vector2.ONE * grid_size.x / symbol_texture.get_width()
+		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
+		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
+		# Tile tail rendering
+		for rid in tail_rids:
+			RenderingServer.free_rid(rid)
+		
+		tail_rids.clear()
+		var total_length: float = grid_size.y * length * scroll_speed / symbol_scale.y
+		var tail_height: int = tail_texture.get_width()
+		var tail_transform: Transform2D = Transform2D(PI / -2, Vector2.ONE, 0,
+		grid_size / 2 / symbol_scale - Vector2(tail_texture.get_height() / 2, 0))
+		while total_length > 0:
+			var chunk_height: float = min(total_length, tail_height)
+			var rid: RID = RenderingServer.canvas_item_create()
+			RenderingServer.canvas_item_set_parent(rid, symbol_rid)
+			RenderingServer.canvas_item_set_draw_behind_parent(rid, true)
+			RenderingServer.canvas_item_set_transform(rid, tail_transform)
+			RenderingServer.canvas_item_add_texture_rect_region(rid, Rect2(Vector2.ZERO, tail_texture.get_size()),
+			tail_texture.get_rid(), Rect2(Vector2.ZERO, Vector2(chunk_height, tail_texture.get_height())))
+			if note_skin.pixel_texture:
+				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
+			else:
+				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_DEFAULT)
+			
+			tail_rids.append(rid)
+			total_length -= chunk_height
+			tail_transform.origin.y += chunk_height
 	
 	## Erases all RIDS
 	func erase() -> void:

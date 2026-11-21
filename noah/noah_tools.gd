@@ -75,6 +75,7 @@ static func format_time(time: float, show_mili: bool = true) -> String:
 	else:
 		return "%02d:%02d" % [minutes, seconds]
 
+## Formats a string of the list of the display names for the binds of [code]action[/code]
 static func get_bind_string(action: StringName, seperator: String = '/') -> String:
 	var strings: PackedStringArray
 	
@@ -124,7 +125,7 @@ static func string_to_time(formatted_time: String) -> float:
 	
 	return float(formatted_time)
 
-
+## Formats a number with the proper ',' separators.
 static func format_number(num: float) -> String: 
 	var isNegative: bool = num < 0.0
 	
@@ -217,11 +218,8 @@ static func save_resource(resource: Resource, path: String, flags: int = Resourc
 	if uid != -1:
 		ResourceSaver.set_uid(path, uid)
 
-
 const DIRECTORY_BLACKLIST: PackedStringArray = [".", "..", ".godot", "addons", "script_templates"]
-
 static var _resource_cache: Dictionary[String, PackedStringArray] = {}
-
 ## Returns an array of the filepaths of a resource type
 static func get_resource_files(resource_type: GDScript, path: String = "res://") -> PackedStringArray:
 	
@@ -274,7 +272,8 @@ static func get_resource_files(resource_type: GDScript, path: String = "res://")
 	
 	_resource_cache[key] = results
 	return results
-	
+
+
 static func get_files_with_exts(exts: PackedStringArray, path: String = 'res://', excluded_dirs: PackedStringArray = []) -> PackedStringArray:
 	var dir: DirAccess = DirAccess.open(path)
 	dir.list_dir_begin()
@@ -297,6 +296,7 @@ static func get_files_with_exts(exts: PackedStringArray, path: String = 'res://'
 		file = dir.get_next()
 	return results
 
+
 static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 	if a == base:
 		return true
@@ -308,8 +308,8 @@ static func is_extending_from_base_script(a: GDScript, base: GDScript) -> bool:
 		
 	return is_extending_from_base_script(p, base)
 
+
 static func find_lowest_base_script(a: GDScript) -> GDScript:
-	
 	var p = a.get_base_script()
 	
 	if p == null:
@@ -317,13 +317,12 @@ static func find_lowest_base_script(a: GDScript) -> GDScript:
 	
 	return find_lowest_base_script(p)
 
-
 # golden hue ratio or whatever
 static func generate_colour_from_string(_str: String) -> Color:
 	return Color.from_hsv(fposmod(float(hash(_str)) * 0.618, 1.0), 0.45, 1.0)
 
+
 static func load_original_resource(res: Resource) -> Resource:
-	
 	if not res:
 		printerr('(NoahTools): cannot load unique copy of a null file.')
 		return res
@@ -335,7 +334,7 @@ static func load_original_resource(res: Resource) -> Resource:
 	return ResourceLoader.load(res.resource_path, "", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
 
 ## Sets the texture of an [RID].
-static func set_texture_to_rid(_rid: RID, texture: Texture2D):
+static func set_texture_to_rid(_rid: RID, texture: Texture2D) -> void:
 	if texture is AtlasTexture:
 		RenderingServer.canvas_item_add_texture_rect_region(_rid, 
 			Rect2(Vector2.ZERO, texture.get_size()), 

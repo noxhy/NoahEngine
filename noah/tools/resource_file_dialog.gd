@@ -58,7 +58,6 @@ func _clear_files() -> void:
 
 ## Searches and caches the files
 func _search() -> void:
-	
 	var files: PackedStringArray = NoahTools.get_resource_files(resource_type, starting_directory)
 	for file in files:
 		var dir: String = file.get_base_dir()
@@ -84,7 +83,7 @@ func display() -> void:
 			var resource: Resource = load(file)
 			
 			if resource is NoteSkin:
-				file_item.set_icon(0, resource.notes_texture.get_frame_texture(&"up", 0))
+				file_item.set_icon(0, resource.notes_texture.get_frame_texture(&"right", 0))
 			else:
 				var script_ref = resource.get_script()
 				if script_ref:

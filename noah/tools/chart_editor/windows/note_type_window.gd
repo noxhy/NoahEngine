@@ -57,7 +57,6 @@ func display() -> void:
 	add_custom_root.set_text(0, "Add new type")
 
 func get_note_texture(type: String) -> Texture2D:
-	
 	var anim = str(Constants.NOTE_TYPES.get(type, ""), "right")
 	if noteskin.notes_texture.has_animation(anim):
 		return noteskin.notes_texture.get_frame_texture(anim, 0)
