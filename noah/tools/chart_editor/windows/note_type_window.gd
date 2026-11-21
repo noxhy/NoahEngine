@@ -134,7 +134,8 @@ func item_editted() -> void:
 
 func button_clicked(item: TreeItem, column: int, id: int, mouse_button: int) -> void:
 	item.free()
-	SoundManager.tool_close_window.play()
+	SoundManager.play_sound_once("uid://pf0s6po5fbhh") #todo make proper handler
+	#SoundManager.tool_close_window.play()
 
 func item_selected() -> void:
 	var ret = tree.get_selected().get_text(0)

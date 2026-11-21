@@ -1,9 +1,7 @@
 extends PanelContainer
 class_name ChartEditorUpperUI
 
-var chart_editor: ChartEditor
-@onready var h_box_container: HBoxContainer = $HBoxContainer
-
+@onready var chart_editor: ChartEditor = get_tree().get_first_node_in_group(&"chart_editor")
 
 @onready var file_button: MenuButton = %"File Button"
 @onready var edit_button: MenuButton = %"Edit Button"
@@ -11,7 +9,6 @@ var chart_editor: ChartEditor
 @onready var audio_button: MenuButton = %"Audio Button"
 @onready var test_button: MenuButton = %"Test Button"
 @onready var window_button: MenuButton = %"Window Button"
-
 @onready var help_button: MenuButton = %"Help Button"
 
 @onready var open_song_window: ResourceFileDialog = $"HBoxContainer/File Button/Open Song Window"
@@ -24,9 +21,9 @@ var chart_editor: ChartEditor
 @onready var song_name_label: Label = $"HBoxContainer/Song Name Label"
 @onready var time_change_window: Window = %"Time Change Editor"
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	chart_editor = get_parent().get_parent()
 	
 	open_song_window.file_selected.connect(chart_editor.load_song_path)
 	open_song_window.close_requested.connect(func():
@@ -34,71 +31,46 @@ func _ready() -> void:
 		chart_editor.close_popup()
 	)
 	
-	
 	file_button.get_popup().id_pressed.connect(file_button_item_pressed)
 	file_button.get_popup().set_hide_on_checkable_item_selection(false)
-	file_button.get_popup().set_item_checked(
-		file_button.get_popup().get_item_index(3),
-		SettingsManager.data.chart_auto_save)
+	set_popup_checked(file_button, 3, SettingsManager.data.chart_auto_save)
 	
 	edit_button.get_popup().id_pressed.connect(chart_editor.edit_button_item_pressed)
 	edit_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	#audio button
-	audio_button.get_popup().connect(&"id_pressed", chart_editor.audio_button_item_pressed)
-	audio_button.get_popup().set_item_checked(
-		audio_button.get_popup().get_item_index(7),
-		SettingsManager.data.chart_hit_sound_on_beat)
+	audio_button.get_popup().id_pressed.connect(chart_editor.audio_button_item_pressed)
+	set_popup_checked(audio_button, 7, SettingsManager.data.chart_hit_sound_on_beat)
+	set_popup_checked(audio_button, 8, SettingsManager.data.chart_hit_sound_on_step)
+	set_popup_checked(audio_button, 10, !SettingsManager.data.chart_hit_sounds)
+	set_popup_checked(audio_button, 11, ChartEditor.vocal_waveforms)
+	set_popup_checked(audio_button, 12, ChartEditor.instrumental_waveforms)
 	
-	audio_button.get_popup().set_item_checked(
-		audio_button.get_popup().get_item_index(8),
-		SettingsManager.data.chart_hit_sound_on_step)
 	audio_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
-	audio_button.get_popup().set_item_checked(
-		audio_button.get_popup().get_item_index(10),
-			!SettingsManager.data.chart_hit_sounds)
-	
-	audio_button.get_popup().set_item_checked(
-		audio_button.get_popup().get_item_index(11), ChartEditor.vocal_waveforms)
-		
-	audio_button.get_popup().set_item_checked(
-		audio_button.get_popup().get_item_index(12), ChartEditor.instrumental_waveforms)
-	
-	
-	#audio_button.get_popup().set_item_checked(
-		#audio_button.get_popup().get_item_index(10),
-		#SettingsManager.get_value(SettingsManager.SEC_CHART, "hit_sounds"))
-	
 	#view button
-	view_button.get_popup().connect(&"id_pressed", chart_editor.view_button_item_pressed)
+	view_button.get_popup().id_pressed.connect(chart_editor.view_button_item_pressed)
 	view_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	
-	test_button.get_popup().connect(&"id_pressed", chart_editor.test_button_item_pressed)
-	test_button.get_popup().set_item_checked(
-		test_button.get_popup().get_item_index(3),
-		SettingsManager.data.chart_start_at_current_position)
+	test_button.get_popup().id_pressed.connect(chart_editor.test_button_item_pressed)
+	set_popup_checked(test_button, 3, SettingsManager.data.chart_start_at_current_position)
+	
 	test_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
-	window_button.get_popup().connect(&"id_pressed", chart_editor.window_button_item_pressed)
+	window_button.get_popup().id_pressed.connect(chart_editor.window_button_item_pressed)
 	window_button.get_popup().set_hide_on_checkable_item_selection(false)
 	
 	#setup windows
 	audios_window.close_requested.connect(func():
 		window_button.get_popup().set_item_checked(3, false)
-		SoundManager.tool_close_window.play()
 	)
 	
 	audios_window.updated_current_song.connect(func():
 		if not chart_editor.music.stream_paused:
 			chart_editor.toggle_audios()
-		chart_editor.music.stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
-		var idx = 1
-		for path in EditorResources.song.vocals:
-			chart_editor.music.stream.set_sync_stream(idx, SoundManager.get_stream(path))
-			idx += 1
-			
+		
+		chart_editor.playback_manager.update_song_streams()
 		chart_editor.auto_save()
 	)
 	
@@ -129,189 +101,118 @@ func _ready() -> void:
 	
 	setup_shortcuts()
 	
-	#add menupopups to the thing
-	for child in h_box_container.get_children():
+	for child in find_children("*"):
 		if child is MenuButton:
 			child.get_popup().add_to_group(&"windows")
 	
 func setup_shortcuts():
 	var shortcut:Shortcut
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_N
+	#region file button
+	shortcut = shortcut_from_keys([KEY_N])
 	shortcut.events[0].ctrl_pressed = true
+	set_popup_shortcut(file_button, 0, shortcut)
 	
-	file_button.get_popup().set_item_shortcut(
-		file_button.get_popup().get_item_index(0), shortcut)
-		
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_O
+	shortcut = shortcut_from_keys([KEY_O])
 	shortcut.events[0].ctrl_pressed = true
+	set_popup_shortcut(file_button, 1, shortcut)
 	
-	file_button.get_popup().set_item_shortcut(
-		file_button.get_popup().get_item_index(1), shortcut)
-	# file buttons
-	file_button.get_popup().set_item_shortcut(
-		file_button.get_popup().get_item_index(2), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"save")))
+	set_popup_shortcut(file_button, 2, shortcut_from_events(InputMap.action_get_events(&"save")))
+	#endregion
 	
-	# edit button
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(0), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_undo")))
+	#region edit button
+	set_popup_shortcut(edit_button, 0, shortcut_from_events(InputMap.action_get_events(&"ui_undo")))
+	set_popup_shortcut(edit_button, 1, shortcut_from_events(InputMap.action_get_events(&"ui_redo")))
+	set_popup_shortcut(edit_button, 3, shortcut_from_events(InputMap.action_get_events(&"ui_cut")))
+	set_popup_shortcut(edit_button, 15, shortcut_from_events(InputMap.action_get_events(&"ui_text_delete")))
+	set_popup_shortcut(edit_button, 4, shortcut_from_events(InputMap.action_get_events(&"ui_copy")))
+	set_popup_shortcut(edit_button, 5, shortcut_from_events(InputMap.action_get_events(&"ui_paste")))
+	set_popup_shortcut(edit_button, 6, shortcut_from_events(InputMap.action_get_events(&"ui_text_delete_word")))
+	set_popup_shortcut(edit_button, 8, shortcut_from_events(InputMap.action_get_events(&"flip_notes")))
+	set_popup_shortcut(edit_button, 10, shortcut_from_events(InputMap.action_get_events(&"ui_text_select_all")))
+	set_popup_shortcut(edit_button, 11, shortcut_from_events(InputMap.action_get_events(&"deselect")))
 	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(1), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_redo")))
+	shortcut = shortcut_from_keys([KEY_E])
+	set_popup_shortcut(edit_button, 12, shortcut)
 	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(3), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_cut")))
+	shortcut = shortcut_from_keys([KEY_Q])
+	set_popup_shortcut(edit_button, 13, shortcut)
 	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(15), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_text_delete")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(4), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_copy")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(5), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_paste")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(6), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_text_delete_word")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(8), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"flip_notes")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(10), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"ui_text_select_all")))
-	
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(11), chart_editor.make_shortcut_quick(InputMap.action_get_events(&"deselect")))
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_E
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(12), shortcut)
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_Q
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(13), shortcut)
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_C
+	shortcut = shortcut_from_keys([KEY_C])
 	shortcut.events[0].alt_pressed = true
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(14), shortcut)
+	set_popup_shortcut(edit_button, 14, shortcut)
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_EQUAL
+	shortcut = shortcut_from_keys([KEY_EQUAL])
 	shortcut.events[0].alt_pressed = true
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(17), shortcut)
+	set_popup_shortcut(edit_button, 17, shortcut)
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_MINUS
+	shortcut = shortcut_from_keys([KEY_MINUS])
 	shortcut.events[0].alt_pressed = true
-	edit_button.get_popup().set_item_shortcut(
-		edit_button.get_popup().get_item_index(18), shortcut)
+	set_popup_shortcut(edit_button, 18, shortcut)
+	#endregion
 	
 	#audio button
-	#region AUDIO
+	#region audio button
+	shortcut = shortcut_from_keys([KEY_SPACE])
+	set_popup_shortcut(audio_button, 0, shortcut)
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_SPACE
-	audio_button.get_popup().set_item_shortcut(
-		audio_button.get_popup().get_item_index(0), shortcut)
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_EQUAL
+	shortcut = shortcut_from_keys([KEY_EQUAL])
 	shortcut.events[0].shift_pressed = true
+	set_popup_shortcut(audio_button, 4, shortcut)
 	
-	audio_button.get_popup().set_item_shortcut(
-		audio_button.get_popup().get_item_index(4), shortcut)
-		
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_MINUS
+	shortcut = shortcut_from_keys([KEY_MINUS])
 	shortcut.events[0].shift_pressed = true
+	set_popup_shortcut(audio_button, 5, shortcut)
 	
-	audio_button.get_popup().set_item_shortcut(
-		audio_button.get_popup().get_item_index(5), shortcut)
-		
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_M
+	shortcut = shortcut_from_keys([KEY_M])
 	shortcut.events[0].shift_pressed = true
-	
-		
-	audio_button.get_popup().set_item_shortcut(
-		audio_button.get_popup().get_item_index(10),
-			shortcut)
-	
+	set_popup_shortcut(audio_button, 10, shortcut)
 	#endregion
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_TAB
-	#view button
-	view_button.get_popup().set_item_shortcut(
-		view_button.get_popup().get_item_index(0), shortcut)
-		
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_EQUAL
+	#region view button
+	shortcut = shortcut_from_keys([KEY_TAB])
+	set_popup_shortcut(view_button, 0, shortcut)
+	
+	shortcut = shortcut_from_keys([KEY_EQUAL, KEY_Z])
 	shortcut.events[0].ctrl_pressed = true
 	shortcut.events[0].command_or_control_autoremap = true
 	
-	shortcut.events[1].keycode = KEY_Z
+	set_popup_shortcut(view_button, 3, shortcut)
 	
-	view_button.get_popup().set_item_shortcut(
-		view_button.get_popup().get_item_index(3), shortcut)
-		
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
-	
-	shortcut.events[0].keycode = KEY_MINUS
+	shortcut = shortcut_from_keys([KEY_MINUS, KEY_X])
 	shortcut.events[0].ctrl_pressed = true
 	shortcut.events[0].command_or_control_autoremap = true
 	
-	shortcut.events[1].keycode = KEY_X
-	
-	view_button.get_popup().set_item_shortcut(
-		view_button.get_popup().get_item_index(4), shortcut)
+	set_popup_shortcut(view_button, 4, shortcut)
+	#endregion
 	
 	#region WINDOW_BUTTON
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_M
+	shortcut = shortcut_from_keys([KEY_M])
 	shortcut.events[0].alt_pressed = true
+	set_popup_shortcut(window_button, 1, shortcut)
 	
-	window_button.get_popup().set_item_shortcut(1, shortcut)
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_N
+	shortcut = shortcut_from_keys([KEY_N])
 	shortcut.events[0].alt_pressed = true
+	set_popup_shortcut(window_button, 2, shortcut)
 	
-	window_button.get_popup().set_item_shortcut(2, shortcut)
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_A
+	shortcut = shortcut_from_keys([KEY_A])
 	shortcut.events[0].alt_pressed = true
+	set_popup_shortcut(window_button, 3, shortcut)
 	
-	window_button.get_popup().set_item_shortcut(3, shortcut)
-	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_T
+	shortcut = shortcut_from_keys([KEY_T])
 	shortcut.events[0].alt_pressed = true
-	
-	window_button.get_popup().set_item_shortcut(4, shortcut)
+	set_popup_shortcut(window_button, 4, shortcut)
 	#endregion
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_ENTER
-
-	#test button
-	test_button.get_popup().set_item_shortcut(
-		test_button.get_popup().get_item_index(0), shortcut)
+	#region test button
+	shortcut = shortcut_from_keys([KEY_ENTER])
+	set_popup_shortcut(test_button, 0, shortcut)
 	
-	shortcut = chart_editor.make_shortcut_quick([InputEventKey.new(), InputEventKey.new()])
-	shortcut.events[0].keycode = KEY_ENTER
+	shortcut = shortcut_from_keys([KEY_ENTER])
 	shortcut.events[0].shift_pressed = true
-	test_button.get_popup().set_item_shortcut(
-		test_button.get_popup().get_item_index(1), shortcut)
+	set_popup_shortcut(test_button, 1, shortcut)
+	#endregion
 	
 
 func file_button_item_pressed(id):
@@ -430,7 +331,6 @@ func file_button_item_pressed(id):
 			file_dialog.popup()
 			
 			var export_zip = func(path: String) -> void:
-				print('runn')
 				if not EditorResources.song:
 					return
 				
@@ -497,10 +397,7 @@ func file_button_item_pressed(id):
 			open_open_file_window()
 		
 		2: # Save Song
-			if EditorResources.song and EditorResources.chart:
-				SoundManager.tool_note_place.play()
-				chart_editor.save()
-		
+			chart_editor.save(true)
 		7:
 			chart_editor.can_chart = false
 			
@@ -612,3 +509,27 @@ func open_open_file_window():
 	if open_song_window.tree.get_root() and open_song_window.tree.get_root().get_first_child():
 		open_song_window.tree.set_selected(open_song_window.tree.get_root().get_first_child(), 0)
 	SoundManager.tool_open_window.play()
+
+
+func set_popup_checked(button: MenuButton, id: int, checked: bool) -> void:
+	button.get_popup().set_item_checked(button.get_popup().get_item_index(id), checked)
+
+func set_popup_shortcut(button: MenuButton, id: int, shortcut: Shortcut) -> void:
+	button.get_popup().set_item_shortcut(button.get_popup().get_item_index(id), shortcut)
+
+func shortcut_from_keys(keys: Array[Key]) -> Shortcut:
+	var shortcut: Shortcut = Shortcut.new()
+	shortcut.events = []
+	for key in keys:
+		var ev = InputEventKey.new()
+		ev.keycode = key
+		shortcut.events.append(ev)
+	
+	return shortcut
+
+func shortcut_from_events(events: Array[InputEvent]) -> Shortcut:
+	var shortcut: Shortcut = Shortcut.new()
+	shortcut.events = events
+	
+	return shortcut
+	

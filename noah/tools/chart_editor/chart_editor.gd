@@ -104,6 +104,14 @@ var current_visible_events_R: int = -1
 @onready var minimap: EditorMinimap = %Minimap
 @onready var note_parallax: Parallax2D = $"Grid Layer/Parallax2D"
 
+
+var playback_manager: ChartEditorPlaybackManager
+var window_manager: ChartEditorWindowManager
+
+func _enter_tree() -> void:
+	if not is_in_group(&"chart_editor"):
+		add_to_group(&"chart_editor")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if name == &"Chart Editor":
@@ -113,6 +121,12 @@ func _ready() -> void:
 	
 	get_window().content_scale_size = Vector2(1280, 720)
 	Global.set_window_title("Chart Editor")
+	
+	playback_manager = ChartEditorPlaybackManager.new(self)
+	add_child(playback_manager)
+	window_manager = ChartEditorWindowManager.new(self)
+	add_child(window_manager)
+	
 	song_speed = SettingsManager.data.song_speed
 	
 	$"UI/LoadedSong error".visible = not EditorResources.song
@@ -137,6 +151,9 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	
+	playback_manager.update(delta)
+	
 	start_offset = clampf(start_offset, 0, start_offset)
 	var can_interact_with_chart: bool = can_chart and not is_mouse_over_any_ui() and EditorResources.chart
 	
@@ -403,7 +420,7 @@ func refresh_audios():
 func is_mouse_over_any_ui() -> bool:
 	var mouse: Vector2 = get_corrected_mouse_position()
 	
-	if is_point_in_any_window(mouse):
+	if window_manager.is_point_in_any_window(mouse):
 		return true
 	
 	if Rect2i(upper_ui.get_screen_position(), upper_ui.size).has_point(mouse):
@@ -594,15 +611,10 @@ func load_song(song: Song, difficulty: Variant = null):
 	# Setting the audios
 	music.stream = AudioStreamSynchronized.new()
 	music.stop()
-	var stream: AudioStreamSynchronized = music.stream
-	stream.stream_count = EditorResources.song.vocals.size() + 1
-	stream.set_sync_stream(0, SoundManager.get_stream(EditorResources.song.instrumental))
-	var i: int = 1
-	for path in EditorResources.song.vocals:
-		stream.set_sync_stream(i, SoundManager.get_stream(path))
-		i += 1
 	
-	song_slider.max_value = stream.get_sync_stream(0).get_length()
+	playback_manager.update_song_streams()
+	
+	song_slider.max_value = music.stream.get_sync_stream(0).get_length()
 	song_slider.value = song_position
 	update_conductor()
 	
@@ -1326,17 +1338,8 @@ func edit_button_item_pressed(id) -> void:
 func audio_button_item_pressed(id) -> void:
 	match id:
 		0: toggle_audios(music.playing)
-		4:
-			SettingsManager.data.song_speed = min(SettingsManager.data.song_speed + 0.05, 2)
-			SettingsManager.flush()
-			song_speed = SettingsManager.data.song_speed
-		
-		5:
-			SettingsManager.data.song_speed = max(SettingsManager.data.song_speed - 0.05, 0)
-			
-			SettingsManager.flush()
-			song_speed = SettingsManager.data.song_speed
-		
+		4: playback_manager.change_playback_speed(0.05)
+		5: playback_manager.change_playback_speed(-0.05)
 		7: #Toggle Beat Sound
 			SettingsManager.data.chart_hit_sound_on_beat = !SettingsManager.data.chart_hit_sound_on_beat
 			SettingsManager.flush()
@@ -1429,14 +1432,13 @@ func window_button_item_pressed(id) -> void:
 		4: upper_ui.window_button.get_popup().set_item_checked(id, toggle_window_visibility(upper_ui.time_change_window))
 
 func toggle_window_visibility(window: Window) -> bool:
-	var ret = not window.visible
-	if window.visible:
-		window.hide()
-		SoundManager.tool_close_window.play()
-	else:
-		window.popup()
-		SoundManager.tool_open_window.play()
-	return ret
+	
+	window_manager.init_window(window, false)
+	
+	if window.visible: window.hide()
+	else: window.popup()
+	
+	return window.visible
 
 ## Edit button item pressed
 func test_button_item_pressed(id) -> void:
@@ -1465,13 +1467,6 @@ func test_current_song(minimal: bool) -> void:
 	GameManager.load_songs([EditorResources.song], EditorResources.difficulty, GameManager.PLAY_MODE.CHARTING)
 	Global.change_scene_to(scene_to_load)
 
-
-func make_shortcut_quick(events: Array) -> Shortcut:
-	var shortcut: Shortcut = Shortcut.new()
-	shortcut.events = events
-	return shortcut
-
-
 func disable_charting() -> void:
 	can_chart = false
 
@@ -1482,8 +1477,7 @@ func open_popup() -> void:
 
 func close_popup() -> void:
 	enable_can_chart_on_next_frame()
-	SoundManager.tool_close_window.play()
-
+	#SoundManager.tool_close_window.play()
 
 func undo() -> void:
 	if undo_redo.has_undo():
@@ -1523,7 +1517,10 @@ func _create_chart_path() -> String:
 	
 	return new_path
 
-func save() -> void:
+func save(play_sound: bool = false) -> void:
+	if not EditorResources.song or not EditorResources.chart:
+		return
+	
 	EditorResources.song.strumlines = []
 	for strumline in EditorResources.strumlines:
 		EditorResources.song.strumlines.append(strumline.to_dict())
@@ -1552,6 +1549,9 @@ func save() -> void:
 	NoahTools.save_resource(events_file, events_file.resource_path)
 	NoahTools.save_resource(EditorResources.chart, EditorResources.chart.resource_path)
 	backup_chart = EditorResources.chart
+	
+	if play_sound:
+		SoundManager.play_sound_once("uid://caejyneseangk")
 
 
 func move_selection(time_distance: float, lane_distance: float) -> void:
@@ -2020,7 +2020,6 @@ func selected_note_type(note_type: String) -> void:
 
 func _on_note_type_window_close_requested() -> void:
 	upper_ui.get_node("%Window Button").get_popup().set_item_checked(2, false)
-	SoundManager.tool_close_window.play()
 
 
 func _on_minimap_gui_input(event: InputEvent) -> void:
