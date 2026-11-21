@@ -1416,9 +1416,9 @@ func adjust_grid_zoom(delta: float) -> void:
 	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 1.5)
 	update_grid()
 	load_dividers()
-	load_section(song_position)
+	$"Notes Layer/ChartNoteRenderer".update_render_transforms()
 	update_camera_song_position(true)
-	
+
 ## Window button item pressed
 func window_button_item_pressed(id) -> void:
 	match id:
@@ -1762,12 +1762,12 @@ func _on_note_skin_window_file_selected(path: String) -> void:
 		return
 	
 	var skin = load(path)
-	
 	if skin is not NoteSkin:
 		printerr("File is not a noteskin.")
 		return
 	
 	note_skin = skin
+	$"Notes Layer/ChartNoteRenderer".set_render_skin(skin)
 	SoundManager.tool_open_window.play()
 
 

@@ -15,6 +15,16 @@ func refresh() -> void:
 	drawn.clear()
 	draw_notes(data)
 
+## Sets the note skin of each render in [member drawn].
+func set_render_skin(note_skin: NoteSkin) -> void:
+	for render in drawn:
+		render.note_skin = note_skin
+
+## Updates the position of each render in [member drawn].
+func update_render_transforms() -> void:
+	for render in drawn:
+		render.update_transform()
+
 ## Draws a note packet and adds it to [member drawn]
 func draw_note(packet: Array) -> void:
 	var render: NoteRender = NoteRender.new(chart_editor, get_canvas_item())
@@ -46,7 +56,7 @@ func _process(delta: float) -> void:
 class NoteRender extends Note:
 	var chart_editor: ChartEditor
 	var symbol_rid: RID
-	var tail_rids: Array[RID]
+	var tail_rids: Array[RID] = []
 	
 	var symbol_texture: Texture2D
 	var tail_texture: Texture2D
@@ -62,17 +72,12 @@ class NoteRender extends Note:
 		note_skin = v
 		symbol_texture = v.notes_texture.get_frame_texture(animation, 0)
 		tail_texture = v.notes_texture.get_frame_texture(animation + &"_tail", 0)
+		RenderingServer.canvas_item_clear(symbol_rid)
 		NoahTools.set_texture_to_rid(symbol_rid, symbol_texture)
 		if note_skin.pixel_texture:
 			RenderingServer.canvas_item_set_default_texture_filter(symbol_rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
 		else:
 			RenderingServer.canvas_item_set_default_texture_filter(symbol_rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_DEFAULT)
-		
-		for rid in tail_rids:
-			if note_skin.pixel_texture:
-				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
-			else:
-				RenderingServer.canvas_item_set_default_texture_filter(rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_DEFAULT)
 		
 		update_transform()
 	
@@ -87,7 +92,7 @@ class NoteRender extends Note:
 	
 	## Updates the transform of all the RIDS.
 	func update_transform() -> void:
-		var symbol_scale: Vector2 = Vector2.ONE * grid_size.x / symbol_texture.get_width()
+		var symbol_scale: Vector2 = grid_size / symbol_texture.get_size()
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
 		# Tile tail rendering
