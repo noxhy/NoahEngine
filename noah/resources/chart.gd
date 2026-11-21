@@ -218,6 +218,8 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 	
 	time_changes[0.0] = Vector3(current_bpm, 4, 4)
 	
+	var last_camera_position: int = -1
+	
 	for i in data.get("notes"):
 		# Too lazy to make sure for BPM changes so
 		var seconds_per_beat: float = 60.0 / current_bpm
@@ -235,7 +237,9 @@ static func convert_psych(data:Dictionary, song: Song, _events:Array = [], v1:bo
 		if i.get("gfSection", false):
 			camera_position = 2
 		
-		event_data.append([section_time, "camera_position", [camera_position]])
+		if camera_position != last_camera_position:
+			event_data.append([section_time, "camera_position", [camera_position]])
+			last_camera_position = camera_position
 		
 		for j in i.sectionNotes:
 			# Format: time, lane, length in notes, note type
