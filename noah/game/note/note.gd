@@ -2,10 +2,15 @@
 @abstract
 class_name Note extends Node2D
 
-var length: float = 0.0
+var length: float = 0.0: set = set_length
+func set_length(v: float) -> void:
+	length = v
 
 var time: float = 0.0
-var note_skin: NoteSkin
+var note_skin: NoteSkin: set = set_note_skin
+func set_note_skin(v: NoteSkin) -> void:
+	note_skin = v
+
 var lane: int = 0
 var tempo: float = 0
 var note_type: String

@@ -102,3 +102,7 @@ func get_grid_position(location: Vector2, snap: Vector2 = grid_size) -> Vector2:
 ## Returns the size of the grid
 func get_size() -> Vector2:
 	return texture_rect.size * texture_rect.scale
+
+## Returns the grid_size with scale.
+func get_gridspace_size() -> Vector2:
+	return grid_size * zoom

@@ -667,6 +667,10 @@ func load_chart(file: Chart) -> void:
 	
 	upper_ui.metadata_window.update_stats()
 	
+	$"Notes Layer/ChartNoteRenderer".chart_editor = self
+	$"Notes Layer/ChartNoteRenderer".data = file.notes
+	$"Notes Layer/ChartNoteRenderer".refresh()
+	
 	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
@@ -682,6 +686,7 @@ func load_chart(file: Chart) -> void:
 func load_section(time: float, forced: bool = false) -> void:
 	if not EditorResources.chart or EditorResources.chart.notes.is_empty():
 		return
+	return
 	
 	if forced:
 		get_tree().call_group(&"notes", &"free")
@@ -850,7 +855,7 @@ func new_file(path: String, song: Song) -> void:
 ## Reset the select notes and note nodes list before calling moved
 func place_note(time: float, lane: int, length: float, type: String, placed: bool = false, moved: bool = false,
 sorted: bool = false, sort_index: int = -1) -> int:
-	var note_instance = NOTE_PRELOAD.instantiate()
+	var note_instance: ChartNote = NOTE_PRELOAD.instantiate()
 	
 	note_instance.time = time
 	note_instance.length = length

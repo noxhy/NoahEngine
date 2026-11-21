@@ -333,3 +333,14 @@ static func load_original_resource(res: Resource) -> Resource:
 		return res
 	
 	return ResourceLoader.load(res.resource_path, "", ResourceLoader.CACHE_MODE_IGNORE_DEEP)
+
+## Sets the texture of an [RID].
+static func set_texture_to_rid(_rid: RID, texture: Texture2D):
+	if texture is AtlasTexture:
+		RenderingServer.canvas_item_add_texture_rect_region(_rid, 
+			Rect2(Vector2.ZERO, texture.get_size()), 
+				texture.get_rid(),
+				texture.region
+		)
+	else:
+		RenderingServer.canvas_item_add_texture_rect(_rid, Rect2(Vector2.ZERO, texture.get_size()), texture.get_rid())

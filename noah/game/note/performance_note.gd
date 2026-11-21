@@ -15,16 +15,15 @@ func _ready() -> void:
 	RenderingServer.canvas_item_set_parent(tail_rid, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(end_rid, get_canvas_item())
 	RenderingServer.canvas_item_set_parent(note_rid, get_canvas_item())
-
 	
 	var note_anim = note_skin.notes_texture.get_frame_texture(animation, 0)
-	set_texture_to_rid(note_rid, note_anim)
+	NoahTools.set_texture_to_rid(note_rid, note_anim)
 	
 	var tail_anim = note_skin.notes_texture.get_frame_texture(animation + &"_tail", 0)
-	set_texture_to_rid(tail_rid, tail_anim)
+	NoahTools.set_texture_to_rid(tail_rid, tail_anim)
 	
 	var end_anim = note_skin.notes_texture.get_frame_texture(animation + &"_end", 0)
-	set_texture_to_rid(end_rid, end_anim)
+	NoahTools.set_texture_to_rid(end_rid, end_anim)
 	
 	var vec2_scale = note_skin.notes_scale * Vector2.ONE
 	RenderingServer.canvas_item_set_transform(note_rid, 
@@ -35,16 +34,6 @@ func _ready() -> void:
 	
 	load_basic_type()
 
-func set_texture_to_rid(_rid: RID, texture: Texture2D):
-	if texture is AtlasTexture:
-		RenderingServer.canvas_item_add_texture_rect_region(_rid, 
-			Rect2(Vector2.ZERO, texture.get_size()), 
-				texture.get_rid(),
-				texture.region
-		)
-	else:
-		RenderingServer.canvas_item_add_texture_rect(_rid, Rect2(Vector2.ZERO, texture.get_size()), texture.get_rid())
-		
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	time_difference = time - GameManager.song_position
