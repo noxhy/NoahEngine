@@ -63,6 +63,9 @@ class NoteRender extends Note:
 		symbol_texture = v.notes_texture.get_frame_texture(
 			str(Constants.NOTE_TYPES.get(note_type, ""), direction), 0)
 		NoahTools.set_texture_to_rid(symbol_rid, symbol_texture)
+		if note_skin.pixel_texture:
+			RenderingServer.canvas_item_set_default_texture_filter(symbol_rid, RenderingServer.CANVAS_ITEM_TEXTURE_FILTER_NEAREST)
+		
 		update_transform()
 	
 	func _process(delta: float) -> void:
