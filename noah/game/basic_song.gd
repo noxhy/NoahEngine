@@ -15,12 +15,11 @@ var DIRECTIONS: int = 4
 ## The animations for the characters to play in order of [member Strum.lane]
 var SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
-var camera_positions: Array[Node] = []
-var strums: Array[Node] = []
-
-var camera: CameraController 
-var ui: BasicUI
-var playstate: PlayState
+@onready var camera: CameraController = get_tree().get_first_node_in_group(&"cameras")
+@onready var ui: BasicUI = get_tree().get_first_node_in_group(&"ui")
+@onready var playstate: PlayState = get_tree().get_first_node_in_group(&"playstate")
+@onready var camera_positions: Array[Node] = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
+@onready var strums: Array[Node] = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 
 ## How often the camera bops in steps.
 var bop_rate: int = 16
@@ -35,13 +34,6 @@ var can_show_combo: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
-	playstate = get_tree().get_first_node_in_group(&"playstate")
-	camera = get_tree().get_first_node_in_group(&"cameras")
-	ui = get_tree().get_first_node_in_group(&"ui")
-	
-	camera_positions = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
-	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
 	
 	if not playstate:
 		printerr("(Song): There was no playstate instance in the playstate group.")
