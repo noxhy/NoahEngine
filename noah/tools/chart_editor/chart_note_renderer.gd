@@ -32,12 +32,12 @@ func draw_note(packet: Array) -> void:
 	render.time = packet[0]
 	render.length = packet[2]
 	render.lane = packet[1]
-	render.note_type = packet[3]
+	render.type = packet[3]
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
-	render.scroll_speed = chart_editor.conductor.get_time_change_at(render.time).y
+	render.numerator = int(chart_editor.conductor.get_time_change_at(render.time).y)
 	render.direction = chart_editor.DIRECTIONS[render.lane % 4]
-	render.animation = str(Constants.NOTE_TYPES.get(render.note_type, ""), render.direction)
+	render.animation = str(Constants.NOTE_TYPES.get(render.type, ""), render.direction)
 	render.note_skin = chart_editor.note_skin
 	drawn.append(render)
 
@@ -53,13 +53,24 @@ func _process(delta: float) -> void:
 	
 	garbage.clear()
 
-class NoteRender extends Note:
+class NoteRender extends Node:
 	var chart_editor: ChartEditor
 	var symbol_rid: RID
 	var tail_rids: Array[RID] = []
 	
 	var symbol_texture: Texture2D
 	var tail_texture: Texture2D
+	
+	var position: Vector2
+	var time: float
+	var lane: int
+	var length: float
+	var type: String
+	var numerator: int
+	var grid_size: Vector2
+	var note_skin: NoteSkin: set = set_note_skin
+	var animation: StringName
+	var direction: String
 	
 	func _init(editor: ChartEditor, parent: RID) -> void:
 		chart_editor = editor
@@ -100,7 +111,7 @@ class NoteRender extends Note:
 			RenderingServer.free_rid(rid)
 		
 		tail_rids.clear()
-		var total_length: float = grid_size.y * length * scroll_speed / symbol_scale.y
+		var total_length: float = grid_size.y * length * numerator / symbol_scale.y
 		var tail_height: int = tail_texture.get_width()
 		var tail_transform: Transform2D = Transform2D(PI / -2, Vector2.ONE, 0,
 		grid_size / 2 / symbol_scale - Vector2(tail_texture.get_height() / 2, 0))
