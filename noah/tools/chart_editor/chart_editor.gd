@@ -103,7 +103,7 @@ var current_visible_events_R: int = -1
 @onready var grid: Grid = %Grid
 @onready var minimap: EditorMinimap = %Minimap
 @onready var note_parallax: Parallax2D = $"Grid Layer/Parallax2D"
-
+@onready var note_renderer: ChartNoteRenderer = $"Notes Layer/ChartNoteRenderer"
 
 var playback_manager: ChartEditorPlaybackManager
 var window_manager: ChartEditorWindowManager
@@ -679,10 +679,7 @@ func load_chart(file: Chart) -> void:
 	
 	upper_ui.metadata_window.update_stats()
 	
-	$"Notes Layer/ChartNoteRenderer".chart_editor = self
-	$"Notes Layer/ChartNoteRenderer".data = file.notes
-	$"Notes Layer/ChartNoteRenderer".refresh()
-	
+	note_renderer.chart_editor = self
 	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
@@ -698,14 +695,8 @@ func load_chart(file: Chart) -> void:
 func load_section(time: float, forced: bool = false) -> void:
 	if not EditorResources.chart or EditorResources.chart.notes.is_empty():
 		return
-	return
 	
 	if forced:
-		get_tree().call_group(&"notes", &"free")
-		note_nodes.clear()
-		get_tree().call_group(&"events", &"free")
-		event_nodes.clear()
-		
 		current_visible_notes_L = -1
 		current_visible_notes_R = -1
 	
@@ -721,7 +712,7 @@ func load_section(time: float, forced: bool = false) -> void:
 		R = max(R, current_visible_notes_R)
 	
 	load_notes(L, R)
-	
+	return
 	L = NoahTools.bsearch_note_data_left_range(song_events, time - _range)
 	R = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	
@@ -731,27 +722,9 @@ func load_section(time: float, forced: bool = false) -> void:
 
 func load_notes(L: int, R: int) -> void:
 	if L > -1 and R > -1:
-		## Clearing any invisible notes
-		if current_visible_notes_L != L or current_visible_notes_R != R:
-			var i: int = 0
-			for _i in range(note_nodes.size()):
-				var note = note_nodes[i]
-				if (note.time < EditorResources.chart.notes[L][0]
-				or note.time > EditorResources.chart.notes[R][0]):
-					note.free()
-					note_nodes.remove_at(i)
-					i -= 1
-				
-				i += 1
-		
-		for i in range(L, R + 1):
-			if i >= current_visible_notes_L and i <= current_visible_notes_R:
-				if (i - L) >= 0 and (i - L) < note_nodes.size():
-					update_note_position(note_nodes[i - L])
-				continue
-			
-			var note = EditorResources.chart.notes[i]
-			place_note(note[0], note[1], note[2], note[3], false, false, true, i - L)
+		if current_visible_notes_L != L or current_visible_events_R != R:
+			note_renderer.data = EditorResources.chart.notes.slice(L, R + 1)
+			note_renderer.refresh()
 		
 		current_visible_notes_L = L
 		current_visible_notes_R = R
@@ -1419,7 +1392,7 @@ func adjust_grid_zoom(delta: float) -> void:
 	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 1.5)
 	update_grid()
 	load_dividers()
-	$"Notes Layer/ChartNoteRenderer".update_render_transforms()
+	note_renderer.update_render_transforms()
 	update_camera_song_position(true)
 
 ## Window button item pressed
@@ -1767,7 +1740,7 @@ func _on_note_skin_window_file_selected(path: String) -> void:
 		return
 	
 	note_skin = skin
-	$"Notes Layer/ChartNoteRenderer".set_render_skin(skin)
+	note_renderer.set_render_skin(skin)
 	SoundManager.tool_open_window.play()
 
 

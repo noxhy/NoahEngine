@@ -46,6 +46,24 @@ func draw_notes(packets: Array) -> void:
 	for packet in packets:
 		draw_note(packet)
 
+## Erases the first note with equal parameters.
+func erase_note(packet: Array) -> void:
+	if drawn.is_empty():
+		return
+	
+	var i: int = drawn.find_custom(func(render: NoteRender) -> bool:
+		return (is_equal_approx(render.time, packet[0]) and render.lane == packet[1] and is_equal_approx(render.length, packet[2]) and render.type == packet[3]))
+	
+	if i != -1:
+		erase_at(i)
+
+## Erases the note at the given index in [member drawn]
+func erase_at(index: int) -> void:
+	if drawn.is_empty():
+		return
+	
+	garbage.append(drawn.pop_at(index))
+
 func _process(delta: float) -> void:
 	for i in garbage.size():
 		var trash: NoteRender = garbage[i]
