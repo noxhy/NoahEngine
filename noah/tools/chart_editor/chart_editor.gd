@@ -2038,8 +2038,8 @@ func create_new_strumline() -> void:
 
 ## Updates the grid_size of [member grid] based off the viewport size
 func _on_viewport_size_changed() -> void:
-	var width: float = max(720, get_window().size.y)
-	grid.grid_size = Vector2.ONE * 36 * (720 / width)
+	var width: float = max(MINIMUM_WINDOW_SIZE.y, get_window().size.y)
+	grid.grid_size = Vector2.ONE * 36 * (MINIMUM_WINDOW_SIZE.y / width)
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()
