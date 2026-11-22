@@ -67,7 +67,7 @@ class NoteRender extends Node:
 	var length: float
 	var type: String
 	var numerator: int
-	var grid_size: Vector2
+	var grid_size: Vector2: get = get_grid_size
 	var note_skin: NoteSkin: set = set_note_skin
 	var animation: StringName
 	var direction: String
@@ -126,7 +126,6 @@ class NoteRender extends Node:
 			tail_texture.get_rid(), Rect2(Vector2.ZERO, Vector2(chunk_height, tail_texture.get_height())))
 			
 			total_length -= chunk_height
-			print(segment_rect)
 			segment_rect.position.x -= chunk_height
 	
 	## Erases all RIDS
