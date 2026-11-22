@@ -1,22 +1,28 @@
+@icon("res://addons/at-icons/node2d/wrench.svg")
 extends Node2D
 class_name ChartEditor
 
+## Epsilon valeu for time related functions
 const EPSILON: float = 0.00001
+## List of direction names
 const DIRECTIONS: Array = ["left", "down", "up", "right"]
-
+## Minimum window/content size for the editor.
+const MINIMUM_WINDOW_SIZE: Vector2i = Vector2i(1280, 720)
+## NoteSkin of the notes in the editor, by default loads [member Constants.DEFAULT_NOTE_SKIN]
 static var note_skin: NoteSkin = load(Constants.DEFAULT_NOTE_SKIN): 
 	get():
 		if !note_skin:
 			note_skin = load(Constants.DEFAULT_NOTE_SKIN)
 		
 		return note_skin
-
+## Current position of the song
 static var song_position: float = 0.0
+## Play offset of the song.
 static var start_offset: float = 0.0
+## Flag for whether the vocal waveforms should be visible
 static var vocal_waveforms: bool = false
+## Flag for whether the instrumental waveform should be visible
 static var instrumental_waveforms: bool = false
-
-var TOOL_THEME = load("uid://b1gv0wfdmojbx")
 
 var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
 var EVENT_PRELOAD = load("uid://n6k15grja0uh")
@@ -119,7 +125,8 @@ func _ready() -> void:
 			get_tree().change_scene_to_file(Constants.EVENT_EDITOR_SCENE)
 			return
 	
-	get_window().content_scale_size = Vector2(1280, 720)
+	get_window().content_scale_size = MINIMUM_WINDOW_SIZE
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	Global.set_window_title("Chart Editor")
 	
 	playback_manager = ChartEditorPlaybackManager.new(self)
@@ -2028,3 +2035,12 @@ func create_new_strumline() -> void:
 	call_deferred(&'update_grid')
 	call_deferred(&'load_dividers')
 	auto_save()
+
+## Updates the grid_size of [member grid] based off the viewport size
+func _on_viewport_size_changed() -> void:
+	var width: float = max(720, get_window().size.y)
+	grid.grid_size = Vector2.ONE * 36 * (720 / width)
+	update_grid()
+	load_dividers()
+	note_renderer.update_render_transforms()
+	update_camera_song_position(true)
