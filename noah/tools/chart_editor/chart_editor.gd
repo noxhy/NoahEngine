@@ -775,6 +775,9 @@ func load_events(L: int, R: int) -> void:
 
 func load_dividers() -> void:
 	get_tree().call_group(&"dividers",  &"free")
+	if !EditorResources.song or !EditorResources.chart:
+		return
+	
 	for i in range(conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
@@ -2048,7 +2051,7 @@ func create_new_strumline() -> void:
 func _on_viewport_size_changed() -> void:
 	var width: float = max(MINIMUM_WINDOW_SIZE.y, get_window().size.y)
 	grid.grid_size = Vector2.ONE * 36 * (MINIMUM_WINDOW_SIZE.y / width)
-	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (MINIMUM_WINDOW_SIZE.y / width))
+	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (width / MINIMUM_WINDOW_SIZE.y))
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()
