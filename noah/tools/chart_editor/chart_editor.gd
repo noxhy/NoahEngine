@@ -126,6 +126,7 @@ func _ready() -> void:
 			return
 	
 	get_window().content_scale_size = MINIMUM_WINDOW_SIZE
+	_on_viewport_size_changed()
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	Global.set_window_title("Chart Editor")
 	
