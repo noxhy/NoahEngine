@@ -8,6 +8,8 @@ const EPSILON: float = 0.00001
 const DIRECTIONS: Array = ["left", "down", "up", "right"]
 ## Minimum window/content size for the editor.
 const MINIMUM_WINDOW_SIZE: Vector2i = Vector2i(1280, 720)
+## Minimum repeat times for the grid parallax.
+const MINIMUM_PARALLAX_REPEAT: int = 3
 ## NoteSkin of the notes in the editor, by default loads [member Constants.DEFAULT_NOTE_SKIN]
 static var note_skin: NoteSkin = load(Constants.DEFAULT_NOTE_SKIN): 
 	get():
@@ -2046,6 +2048,7 @@ func create_new_strumline() -> void:
 func _on_viewport_size_changed() -> void:
 	var width: float = max(MINIMUM_WINDOW_SIZE.y, get_window().size.y)
 	grid.grid_size = Vector2.ONE * 36 * (MINIMUM_WINDOW_SIZE.y / width)
+	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (MINIMUM_WINDOW_SIZE.y / width))
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()

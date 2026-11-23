@@ -3,7 +3,6 @@ class_name EditorMinimap
 
 const COLORS: Array[Color] = [Color(0.459, 0.078, 1.0, 1.0), Color(0.086, 0.576, 1.0, 1.0),
 Color(0.447, 1.0, 0.0, 1.0), Color(0.757, 0.149, 0.322)]
-
 const EVENT_COLOR: Color = Color.GRAY
 
 @export var background_color: Color = Color(0.114, 0.133, 0.161)
