@@ -698,6 +698,11 @@ func load_chart(file: Chart) -> void:
 	load_dividers()
 	update_camera_song_position(true)
 
+## Returns the time equivalent of the visible gridspace on screen.
+func get_visible_time() -> float:
+	var visible_space: float = 560 / grid.get_gridspace_size().y
+	return visible_space * conductor.seconds_per_step
+
 ## Loads all the notes and waveforms for the next two waveforms.
 ## [br]The [code]forced[/code] parameter will determine if all visible notes on screen should be cleared and replaced.
 func load_section(time: float, forced: bool = false) -> void:
@@ -708,7 +713,7 @@ func load_section(time: float, forced: bool = false) -> void:
 		current_visible_notes_L = -1
 		current_visible_notes_R = -1
 	
-	var _range: float = conductor.seconds_per_beat * conductor.numerator * 2 / grid.zoom.y
+	var _range: float = get_visible_time() * 2
 	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time - _range)
 	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time + _range)
 	

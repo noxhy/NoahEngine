@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 
 func _draw() -> void:
 	if EditorResources.chart and chart_editor.music and chart_editor.music.stream:
-		var _range: float = chart_editor.conductor.numerator * chart_editor.conductor.denominator * chart_editor.conductor.seconds_per_step
+		var _range: float = chart_editor.get_visible_time()
 		if chart_editor.name == &"Event Editor":
 			_range /= chart_editor.grid.zoom.x
 		else:
