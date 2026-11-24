@@ -537,15 +537,14 @@ func _draw() -> void:
 			draw_rect(rect, hover_color)
 		
 		## Note Highlighting
-		for note in selected_note_nodes:
-			if note:
-				var length: float = note.length + 1.0 / conductor.numerator
-				length *= grid.grid_size.y * grid.zoom.y
-				length *= conductor.numerator
-				rect = Rect2(note.global_position - (grid.grid_size / 2 * grid.zoom),
-				Vector2(grid.grid_size.x * grid.zoom.x, length))
-				draw_rect(rect, selected_color)
-				draw_rect(rect, Color.LIME, false, 1)
+		for i in selected_notes:
+			var length: float = EditorResources.chart.notes[i][2] + (1.0 / conductor.numerator)
+			length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
+			rect = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
+			Vector2(grid.grid_size.x * grid.zoom.x, length))
+			print(rect)
+			draw_rect(rect, selected_color)
+			draw_rect(rect, Color.LIME, false, 1)
 
 func on_files_dropped(files: PackedStringArray):
 	var file: String = files[0]
@@ -1938,13 +1937,6 @@ func update_selected_notes() -> void:
 	
 	if selected_notes.back() < current_visible_notes_L:
 		return
-	
-	selected_note_nodes = []
-	for i in range(current_visible_notes_L, current_visible_notes_R + 1):
-		if selected_notes.has(i):
-			selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-		else:
-			continue
 
 
 func _on_conductor_new_numerator(_numerator: int) -> void:

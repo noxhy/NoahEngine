@@ -129,6 +129,7 @@ class NoteRender extends Node:
 		var symbol_scale: Vector2 = grid_size.x / symbol_texture.get_width() * Vector2.ONE
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
+		position = symbol_transform.origin
 		
 		var total_length: float = grid_size.y * length * numerator / symbol_scale.y
 		var tail_height: int = tail_texture.get_width()
