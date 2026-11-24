@@ -23,7 +23,18 @@ var can_splash: bool  = false
 ## Note types that will be skipped over in note prioritization.
 @export var ignored_note_types: PackedStringArray = PackedStringArray()
 ## TODO: finish modchart mode
-@export_enum("NORMAL", "MODCHART") var node_type: int
+@export_enum("NORMAL", "MODCHART") var node_type: int : set = set_node_type
+
+func set_node_type(v: int) -> void:
+	node_type = v
+	match v:
+		0:
+			note_preload = NOTE_PRELOAD
+		1:
+			note_preload = MODCHART_NOTE_PRELOAD
+	
+
+var note_preload: PackedScene
 
 ## The animation states of this strum
 enum AnimState {
@@ -67,6 +78,7 @@ func _ready() -> void:
 	
 	offset = SettingsManager.data.offset
 	state = AnimState.IDLE
+	set_node_type(node_type)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -155,11 +167,7 @@ func set_anim_state(v: AnimState) -> void:
 			sprite.play(animation_name)
 
 func create_note(time: float, length: float, note_type: String, _tempo: float) -> BasicNote:
-	var note_instance: BasicNote
-	if node_type == 0:
-		note_instance = NOTE_PRELOAD.instantiate()
-	else:
-		note_instance = MODCHART_NOTE_PRELOAD.instantiate()
+	var note_instance: BasicNote = note_preload.instantiate()
 	
 	note_instance.time = time - offset
 	note_instance.length = length
