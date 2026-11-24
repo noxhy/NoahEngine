@@ -957,8 +957,6 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	
 	notes_layer.add_child(note_instance)
 	note_instance.add_to_group(&"notes")
-	note_instance.area.connect(&"mouse_entered", self.update_note.bind(note_instance))
-	note_instance.area.connect(&"mouse_exited", self.update_note.bind(null))
 	return output
 
 ## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
@@ -1024,8 +1022,6 @@ sorted: bool = false, sort_index: int = -1) -> int:
 	
 	notes_layer.add_child(event_instance)
 	event_instance.add_to_group(&"events")
-	event_instance.area.connect(&"mouse_entered", self.update_event.bind(event_instance))
-	event_instance.area.connect(&"mouse_exited", self.update_event.bind(null))
 	return output
 
 # Returns the indexes of the new notes
@@ -1749,18 +1745,6 @@ func _on_metadata_window_add_time_change() -> void:
 
 func _on_metadata_window_remove_time_change() -> void:
 	auto_save()
-
-func update_note(note) -> void:
-	if note:
-		hovered_note = find_note(note.lane, note.time)
-	else:
-		hovered_note = -1
-
-func update_event(event) -> void:
-	if event:
-		hovered_event = find_event(event.event, event.time)
-	else:
-		hovered_event = -1
 
 func _on_export_external_popup_file_selected(path: String) -> void:
 	NoahTools.save_resource(EditorResources.chart, path)
