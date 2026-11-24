@@ -130,9 +130,6 @@ class NoteRender extends Node:
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
 		
-		if length > 0:
-			print(grid_size.y * length * numerator)
-		
 		var total_length: float = grid_size.y * length * numerator / symbol_scale.y
 		var tail_height: int = tail_texture.get_width()
 		var tail_transform: Transform2D = Transform2D(PI / -2, Vector2.ONE, 0,
