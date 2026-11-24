@@ -226,9 +226,11 @@ func _process(delta: float) -> void:
 			# The notes are aligned from the top so I have to add a half range.
 			var note_time: float = packet[0] + time_range
 			if cursor_time < note_time - time_range or cursor_time > note_time + time_range:
+				i += 1
 				continue
 			
 			if packet[1] != snapped_position.x - 1:
+				i += 1
 				continue
 			
 			var dist: float = abs(packet[0] - cursor_time)
@@ -239,6 +241,8 @@ func _process(delta: float) -> void:
 			i += 1
 		
 		hovered_note = min_i
+	else:
+		hovered_note = -1
 	
 	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
