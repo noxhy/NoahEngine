@@ -130,10 +130,13 @@ class NoteRender extends Node:
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
 		
+		if length > 0:
+			print(grid_size.y * length * numerator)
+		
 		var total_length: float = grid_size.y * length * numerator / symbol_scale.y
 		var tail_height: int = tail_texture.get_width()
 		var tail_transform: Transform2D = Transform2D(PI / -2, Vector2.ONE, 0,
-		grid_size / 2 / symbol_scale - Vector2(tail_texture.get_height() / 2, 0))
+		grid_size / (2 * symbol_scale) - Vector2(tail_texture.get_height() / 2, 0))
 		RenderingServer.canvas_item_clear(tail_rid)
 		RenderingServer.canvas_item_set_transform(tail_rid, tail_transform)
 		
@@ -141,7 +144,7 @@ class NoteRender extends Node:
 		while total_length > 0:
 			var chunk_height: float = min(total_length, tail_height)
 			RenderingServer.canvas_item_add_texture_rect_region(tail_rid, segment_rect,
-			tail_texture.get_rid(), Rect2(Vector2.ZERO, Vector2(chunk_height, tail_texture.get_height())))
+			tail_texture.get_rid(), Rect2(Vector2.ZERO, Vector2(tail_height - chunk_height, tail_texture.get_height())))
 			
 			total_length -= chunk_height
 			segment_rect.position.x -= chunk_height
