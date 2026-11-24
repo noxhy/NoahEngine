@@ -215,6 +215,31 @@ func _process(delta: float) -> void:
 	
 	note_parallax.repeat_size.y = grid.get_size().y
 	
+	if can_interact_with_chart and !note_renderer.data.is_empty():
+		var cursor_time: float = grid_position_to_time(grid_position)
+		var time_range: float = conductor.seconds_per_step / 2
+		
+		var i: int = 0
+		var min_i: int = -1
+		var min_dist: float = INF
+		for packet in note_renderer.data:
+			# The notes are aligned from the top so I have to add a half range.
+			var note_time: float = packet[0] + time_range
+			if cursor_time < note_time - time_range or cursor_time > note_time + time_range:
+				continue
+			
+			if packet[1] != snapped_position.x - 1:
+				continue
+			
+			var dist: float = abs(packet[0] - cursor_time)
+			if dist < min_dist:
+				min_i = i + current_visible_notes_L
+				min_dist = dist
+			
+			i += 1
+		
+		hovered_note = min_i
+	
 	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
 			bounding_box = true
