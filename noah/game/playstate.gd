@@ -161,15 +161,14 @@ func _ready() -> void:
 	
 	music.stream = AudioStreamSynchronized.new()
 	music.stream.stream_count = song.vocals.size() + 1
-	
 	music.stream.set_sync_stream(0, SoundManager.get_stream(song.instrumental))
-	
-	music.finished.connect(finished_song)
 	
 	var idx: int = 1
 	for stream in song.vocals:
 		music.stream.set_sync_stream(idx, SoundManager.get_stream(stream))
 		idx += 1
+	
+	music.finished.connect(finished_song)
 	
 	if ResourceLoader.exists(song.events):
 		events_list = load(song.events).data
@@ -301,6 +300,18 @@ func play_audios(time: float) -> void:
 	if not song_started:
 		Signals.play_song_start.emit()
 	song_started = true
+
+
+func seek(time: float) -> void:
+	for strumline in strums:
+		for strum in strumline.strums:
+			strum.clear_notes()
+	
+	music.seek(time)
+	GameManager.song_position = time
+	current_note = NoahTools.bsearch_note_data_left_range(chart.notes, time)
+	current_event = NoahTools.bsearch_note_data_left_range(events_list, time)
+	
 
 ## Handles adding score based off the time the player hit a note
 func score_note(hit_time: float) -> void:
@@ -448,7 +459,7 @@ func note_held(note: BasicNote, lane: int, hold_delta: float, strum_manager: Str
 		music.stream.set_sync_stream_volume(strum_manager.id + 1,  0.0)
 	
 	if !strum_manager.enemy_slot:
-		health += hold_delta * Constants.HOLD_HEALTH_GAIN_PER_SECOND
+		health += get_process_delta_time() * Constants.HOLD_HEALTH_GAIN_PER_SECOND
 		
 		if note.scoreable:
 			song_stats.score += hold_delta * Constants.HOLD_SCORE_GAIN_PER_SECOND

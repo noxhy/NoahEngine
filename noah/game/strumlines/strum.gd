@@ -320,3 +320,11 @@ func set_scroll(v: float) -> void:
 	
 	for note in note_list:
 		note.scroll = v
+
+# clears all notes from this strum
+func clear_notes() -> void:
+	for note in note_list:
+		if is_instance_valid(note):
+			note.queue_free()
+	
+	note_list.clear()
