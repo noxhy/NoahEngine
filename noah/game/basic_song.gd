@@ -1,26 +1,31 @@
 extends Node
 class_name BasicSong
 
-@onready var player: Node = %Player
-@onready var enemy: Node = %Enemy
-
-@onready var rating_marker: Node = get_node_or_null(^"%Rating Marker")
-@onready var combo_marker: Node = get_node_or_null(^"%Combo Marker")
-
-var rating_factory: RatingFactory
-
 ## The amount of lanes per strumline (usually)
 var DIRECTIONS: int = 4
 
 ## The animations for the characters to play in order of [member Strum.lane]
 var SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
-var camera_positions: Array[Node] = []
-var strums: Array[Node] = []
+@onready var player: Node = get_node_or_null(^"%Player")
 
-var camera: CameraController 
-var ui: BasicUI
-var playstate: PlayState
+@onready var enemy: Node = get_node_or_null(^"%Enemy")
+
+@onready var rating_marker: Node = get_node_or_null(^"%Rating Marker")
+
+@onready var combo_marker: Node = get_node_or_null(^"%Combo Marker")
+
+@onready var camera_positions: Array[Node] = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
+
+@onready var camera: CameraController  = get_tree().get_first_node_in_group(&"cameras")
+
+@onready var ui: BasicUI = get_tree().get_first_node_in_group(&"ui")
+
+@onready var playstate: PlayState = get_tree().get_first_node_in_group(&"playstate")
+
+var strums: Array[StrumManager] = []
+
+var rating_factory: RatingFactory
 
 ## How often the camera bops in steps.
 var bop_rate: int = 16
@@ -32,16 +37,9 @@ var can_pause: bool = true
 
 var can_show_combo: bool = true
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
-	playstate = get_tree().get_first_node_in_group(&"playstate")
-	camera = get_tree().get_first_node_in_group(&"cameras")
-	ui = get_tree().get_first_node_in_group(&"ui")
-	
-	camera_positions = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
-	strums = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
+	strums.assign(NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums")))
 	
 	if not playstate:
 		printerr("(Song): There was no playstate instance in the playstate group.")
