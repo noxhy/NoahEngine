@@ -1857,8 +1857,10 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 	for i in notes:
 		var length: float = EditorResources.chart.notes[i][2]
 		undo_redo.add_do_method(change_length.bind(i, length + delta))
+		undo_redo.add_do_method(load_section.bind(song_position))
 		undo_redo.add_do_method(SoundManager.tool_note_stretch.play)
 		undo_redo.add_undo_method(change_length.bind(i, length))
+		undo_redo.add_undo_method(load_section.bind(song_position))
 	
 	undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 	undo_redo.commit_action()
