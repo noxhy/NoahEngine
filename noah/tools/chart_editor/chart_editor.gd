@@ -32,6 +32,7 @@ var STRUM_BUTTON_PRELOAD: PackedScene = load("uid://ddohksqocyhnx")
 
 var NEW_FILE_POPUP_PRELOAD = load("uid://d05iuopxfqlhj")
 var CONVERT_CHART_POPUP_PRELOAD = load("uid://c6cl2ayvb4ms3")
+var TOOL_THEME: Theme = load("uid://b1gv0wfdmojbx")
 
 @export_group("Colors")
 @export var hover_color: Color = Color("ffffff80")
@@ -188,7 +189,7 @@ func _process(delta: float) -> void:
 						for id in EditorResources.strumlines.size():
 							var strumline: Strumline = EditorResources.strumlines[id]
 							if (strumline.has_lane(lane) and strumline.hit_sounds):
-								SoundManager.tool_hit.play()
+								SoundManager.tool_hit.mplay()
 				
 				current_note += 1
 		
@@ -296,16 +297,9 @@ func _process(delta: float) -> void:
 			
 			if selected_notes.has(i):
 				var j: int = selected_notes.find(i)
-				
 				selected_notes.remove_at(j)
-				
-				# Adjusting any other selected notes
-				if selected_notes.size() > 0:
-					for k in selected_notes.size():
-						if k >= j:
-							selected_notes[k] -= 1
-				
-				update_selected_notes()
+				for k in range(j, selected_notes.size()):
+					selected_notes[k] -= 1
 			
 			load_section(song_position)
 			hovered_note = -1
@@ -344,26 +338,22 @@ func _process(delta: float) -> void:
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
 				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += conductor.get_change_time_at(song_position + start_offset)
+				cursor_time += time_change_offset
 				var cursor_lane: int = snapped_position.x - 1
 				
 				var lane_distance: int = cursor_lane - start_lane
 				var time_distance: float = cursor_time - start_time
-				changed_length = true
+				changed_length = (abs(time_distance) > (conductor.seconds_per_beat / current_snap) or lane_distance != 0)
 				
 				if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
 					if changed_length:
-						for node in selected_note_nodes:
-							if node:
-								var time: float = node.time
-								var lane: int = node.lane
-								
-								node.position = Vector2(
-									grid.get_real_position(Vector2(1.5 + node.lane + lane_distance, 0)).x,
-									time_to_y_position(node.time + time_distance) + grid.grid_size.y * grid.zoom.y / 2) + grid_layer.offset
-						
-						moved_time_distance = time_distance
-						moved_lane_distance = lane_distance
+						for i in selected_notes:
+							note_renderer.drawn[i - current_visible_notes_L].time = EditorResources.chart.notes[i][0] + time_distance
+							note_renderer.drawn[i - current_visible_notes_L].lane = EditorResources.chart.notes[i][1] + lane_distance
+							note_renderer.drawn[i - current_visible_notes_L].update_transform()
+					
+					moved_time_distance = time_distance
+					moved_lane_distance = lane_distance
 	
 	
 	if Input.is_action_just_released(&"mouse_left"):
@@ -403,12 +393,12 @@ func _process(delta: float) -> void:
 				L -= 1
 			
 			L = max(0, L)
-			add_action("Selected Area", self.select_area.bind(L, R, lane_a, lane_b),
-			self.set.bind(&"selected_notes", self.selected_notes.duplicate(true)))
+			add_action("Selected Area", select_area.bind(L, R, lane_a, lane_b),
+			self.set.bind(&"selected_notes", selected_notes.duplicate(true)))
 		
 		if moving_notes:
-			add_action("Moved Note(s)", self.move_selection.bind(moved_time_distance, moved_lane_distance),
-			self.move_selection.bind(-moved_time_distance, -moved_lane_distance))
+			add_action("Moved Note(s)", move_selection.bind(moved_time_distance, moved_lane_distance),
+			move_selection.bind(-moved_time_distance, -moved_lane_distance))
 			auto_save()
 	
 	if Input.is_action_just_released(&"control"):
@@ -542,7 +532,6 @@ func _draw() -> void:
 			length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
 			rect = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
 			Vector2(grid.grid_size.x * grid.zoom.x, length))
-			print(rect)
 			draw_rect(rect, selected_color)
 			draw_rect(rect, Color.LIME, false, 1)
 
@@ -755,7 +744,6 @@ func load_section(time: float, reset: bool = false) -> void:
 	R = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	
 	load_events(L, R)
-	update_selected_notes()
 
 
 func load_notes(L: int, R: int) -> void:
@@ -974,9 +962,9 @@ func place_notes(notes: Array) -> Array:
 		place_note(note[0], note[1], note[2], note[3], true)
 	
 	var indices: Array = []
-	# Surely there's a cleaner way to do this
+	# Surely there's a cleaner way to do thisa
 	for note in notes:
-		var i: int = find_note(note[1], note[0])
+		var i: int = find_note(note[1], note[0], note[3])
 		if i != -1:
 			indices.append(i)
 	
@@ -1008,7 +996,7 @@ func remove_notes(indices: Array):
 		offset += 1
 
 ## Returns the index of the given note in the notes list.
-func find_note(lane: int, time: float) -> int:
+func find_note(lane: int, time: float, type: String = "") -> int:
 	var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time - EPSILON)
 	var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time + EPSILON)
 	
@@ -1022,6 +1010,10 @@ func find_note(lane: int, time: float) -> int:
 	for i in range(L, R + 1):
 		var note: Array = EditorResources.chart.notes[i]
 		if note[1] == lane and is_equal_approx(note[0], time):
+			if !type.is_empty():
+				if note[3] != type:
+					continue
+			
 			return i
 	
 	return -1
@@ -1512,16 +1504,18 @@ func save(play_sound: bool = false) -> void:
 
 func move_selection(time_distance: float, lane_distance: float) -> void:
 	var notes: Array = []
-	for note in selected_note_nodes:
-		if is_instance_valid(note):
-			notes.append([note.time + time_distance, note.lane + lane_distance, note.length, note.note_type])
-			remove_note(note.lane, note.time)
+	var offset: int = 0
+	for i in selected_notes:
+		var note: Array = EditorResources.chart.notes[i]
+		notes.append([note[0] + time_distance, note[1] + lane_distance, note[2], note[3]])
+		remove_note(i - offset)
+		offset += 1
 	
-	var temp = place_notes(notes)
+	var temp: Array = place_notes(notes)
 	selected_notes = temp
-	update_selected_notes()
 	
 	moving_notes = false
+	load_section(song_position)
 	SoundManager.tool_note_place.play()
 
 
@@ -1726,12 +1720,10 @@ func cut() -> void:
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
 		undo_redo.add_do_property(self, &"clipboard", temp)
 		undo_redo.add_do_property(self, &"selected_notes", [])
-		undo_redo.add_do_method(update_selected_notes)
 		undo_redo.add_do_method(SoundManager.tool_note_remove.play)
 		undo_redo.add_undo_method(place_notes.bind(temp))
 		undo_redo.add_undo_property(self, &"clipboard", clipboard)
 		undo_redo.add_undo_property(self, &"selected_notes", selected_notes)
-		undo_redo.add_undo_method(update_selected_notes)
 		undo_redo.commit_action()
 
 
@@ -1745,11 +1737,9 @@ func delete() -> void:
 		
 		undo_redo.add_do_method(remove_notes.bind(selected_notes))
 		undo_redo.add_do_property(self, &"selected_notes", [])
-		undo_redo.add_do_method(update_selected_notes)
 		undo_redo.add_do_method(SoundManager.tool_note_remove.play)
 		undo_redo.add_undo_method(place_notes.bind(temp))
 		undo_redo.add_undo_property(self, &"selected_notes", selected_notes)
-		undo_redo.add_undo_method(update_selected_notes)
 		undo_redo.commit_action()
 
 
@@ -1768,14 +1758,12 @@ func paste() -> void:
 	var offset: float = (song_position + start_offset) - clipboard.front()[0]
 	undo_redo.create_action("Paste Note(s)")
 	undo_redo.add_do_property(self, &"selected_notes", place_notes(clipboard))
-	undo_redo.add_do_method(update_selected_notes)
 	undo_redo.add_do_method(move_selection.bind(offset, 0))
 	undo_redo.add_do_method(SoundManager.tool_note_place.play)
 	undo_redo.add_undo_property(EditorResources.chart, &"notes", EditorResources.chart.notes.duplicate(true))
 	undo_redo.add_undo_property(self, &"song_events", song_events.duplicate(true))
 	undo_redo.add_undo_property(self, &"selected_notes", selected_notes.duplicate())
 	undo_redo.add_undo_method(load_section.bind(song_position, true))
-	undo_redo.add_undo_method(update_selected_notes)
 	undo_redo.add_undo_method(SoundManager.tool_note_remove.play)
 	undo_redo.commit_action()
 
@@ -1844,7 +1832,7 @@ func flip() -> void:
 
 func increase_length() -> void:
 	var delta: float = (conductor.numerator * conductor.denominator / chart_snap) * (1.0 / conductor.numerator)
-	change_note_lengths(selected_notes,delta )
+	change_note_lengths(selected_notes, delta)
 
 func decrease_length() -> void:
 	var delta: float = (conductor.numerator * conductor.denominator / chart_snap) * (1.0 / conductor.numerator)
@@ -1878,7 +1866,6 @@ func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
 		var lane: int = EditorResources.chart.notes[i][1]
 		return (lane >= lane_a and lane <= lane_b))
 	
-	update_selected_notes()
 	if selected_notes.size() > 0:
 		SoundManager.tool_mouse_click.play()
 
@@ -1928,17 +1915,6 @@ func deselect_all() -> void:
 	selected_notes = []
 	selected_note_nodes = []
 	SoundManager.tool_mouse_click.play()
-
-
-func update_selected_notes() -> void:
-	if selected_notes.is_empty():
-		return
-	
-	if selected_notes.front() > current_visible_notes_R:
-		return
-	
-	if selected_notes.back() < current_visible_notes_L:
-		return
 
 
 func _on_conductor_new_numerator(_numerator: int) -> void:
