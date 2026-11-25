@@ -3,7 +3,7 @@ extends Node2D
 class_name ChartEditor
 
 ## Epsilon valeu for time related functions
-const EPSILON: float = 0.00001
+const EPSILON: float = 0.0001
 ## List of direction names
 const DIRECTIONS: Array = ["left", "down", "up", "right"]
 ## Minimum window/content size for the editor.
@@ -336,13 +336,10 @@ func _process(delta: float) -> void:
 						
 						note_renderer.data[i - current_visible_notes_L][2] = distance
 						load_section(song_position)
-					
-					auto_save()
 		
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
-				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += time_change_offset
+				var cursor_time: float = grid_position_to_time(snapped_position, true) + time_change_offset
 				var cursor_lane: int = snapped_position.x - 1
 				
 				var lane_distance: int = cursor_lane - start_lane
@@ -373,6 +370,7 @@ func _process(delta: float) -> void:
 				
 				undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 				undo_redo.commit_action()
+				auto_save()
 			
 			placing_note = false
 			changed_length = false
@@ -1507,6 +1505,7 @@ func save(play_sound: bool = false) -> void:
 
 
 func move_selection(time_distance: float, lane_distance: float) -> void:
+	moving_notes = false
 	var notes: Array = []
 	var offset: int = 0
 	for i in selected_notes:
@@ -1517,9 +1516,6 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 	
 	selected_notes = place_notes(notes)
 	print(selected_notes)
-	
-	moving_notes = false
-	load_section(song_position)
 	SoundManager.tool_note_place.play()
 
 
