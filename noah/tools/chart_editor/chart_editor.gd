@@ -1509,13 +1509,12 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 	var notes: Array = []
 	var offset: int = 0
 	for i in selected_notes:
-		var note: Array = EditorResources.chart.notes[i]
-		notes.append([note[0] + time_distance, note[1] + lane_distance, note[2], note[3]])
-		remove_note(i - offset)
+		notes.insert(0, EditorResources.chart.notes.pop_at(i - offset))
 		offset += 1
 	
-	selected_notes = place_notes(notes)
-	print(selected_notes)
+	for packet in notes:
+		place_note(packet[0], packet[1], packet[2], packet[3], true)
+	
 	SoundManager.tool_note_place.play()
 
 
