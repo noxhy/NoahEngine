@@ -300,6 +300,10 @@ func _process(delta: float) -> void:
 				selected_notes.remove_at(j)
 				for k in range(j, selected_notes.size()):
 					selected_notes[k] -= 1
+			else:
+				if i < selected_notes.front():
+					for j in range(i, selected_notes.size()):
+						selected_notes[j] -= 1
 			
 			load_section(song_position)
 			hovered_note = -1
@@ -871,7 +875,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 	var output: int
 	if placed:
 		var packet: Array = [time, lane, length, type]
-		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time)
+		var L: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time)
 		if L != -1:
 			EditorResources.chart.notes.insert(L, packet)
 			output = L
@@ -1511,8 +1515,8 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 		remove_note(i - offset)
 		offset += 1
 	
-	var temp: Array = place_notes(notes)
-	selected_notes = temp
+	selected_notes = place_notes(notes)
+	print(selected_notes)
 	
 	moving_notes = false
 	load_section(song_position)
