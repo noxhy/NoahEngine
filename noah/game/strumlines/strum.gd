@@ -273,11 +273,15 @@ func release_note() -> void:
 			var note: BasicNote = get_prioritized_note(NoahStats.SHIT_RATING_WINDOW)
 			if note:
 				# Checks if you were holding a note before releasing
-				if target_note and note.length > 0:
-					note.holding = false
-					coyote_timer = GameManager.HOLD_NOTE_LENIENCY
-					note.time = GameManager.song_position
-					note.start_length = note.length
+				if target_note:
+					if note.length > 0.2:
+						note.holding = false
+						coyote_timer = GameManager.HOLD_NOTE_LENIENCY
+						note.time = GameManager.song_position
+						note.start_length = note.length
+					else:
+						note_list.erase(target_note)
+						note.queue_free()
 		else:
 			state = AnimState.IDLE
 
