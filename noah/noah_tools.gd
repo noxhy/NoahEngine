@@ -160,7 +160,7 @@ static func format_number(num: float) -> String:
 
 ## Binary searches for both notes and events. param [code]value_set[/code] 0 index must be its time value
 static func bsearch_note_data_left_range(value_set: Array, left_range: float) -> int:
-	var length = value_set.size()
+	var length: int = value_set.size()
 	if length == 0:
 		return -1
 	if value_set[length - 1][0] < left_range:

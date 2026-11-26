@@ -256,7 +256,7 @@ func _process(delta: float) -> void:
 				time += conductor.get_change_time_at(song_position + start_offset)
 				
 				if time <= music.stream.get_sync_stream(0).get_length():
-					if !is_note_at(lane, time):
+					if hovered_note == -1:
 						add_action("Placed Note", place_note.bind(time, lane, 0, current_note_type, true),
 						remove_note.bind(lane, time))
 						
@@ -296,12 +296,15 @@ func _process(delta: float) -> void:
 			SoundManager.tool_note_remove.play()
 			
 			if selected_notes.has(i):
-				var j: int = selected_notes.find(i)
-				selected_notes.remove_at(j)
-				for k in range(j, selected_notes.size()):
-					selected_notes[k] -= 1
+				if selected_notes.size() == 1:
+					selected_notes.clear()
+				else:
+					var j: int = selected_notes.find(i)
+					selected_notes.remove_at(j)
+					for k in range(j, selected_notes.size()):
+						selected_notes[k] -= 1
 			else:
-				if i < selected_notes.front():
+				if !selected_notes.is_empty() and i < selected_notes.front():
 					for j in range(i, selected_notes.size()):
 						selected_notes[j] -= 1
 			
@@ -530,12 +533,13 @@ func _draw() -> void:
 		
 		## Note Highlighting
 		for i in selected_notes:
-			var length: float = EditorResources.chart.notes[i][2] + (1.0 / conductor.numerator)
-			length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
-			rect = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
-			Vector2(grid.grid_size.x * grid.zoom.x, length))
-			draw_rect(rect, selected_color)
-			draw_rect(rect, Color.LIME, false, 1)
+			if i - current_visible_notes_L >= 0 and i <= current_visible_notes_R:
+				var length: float = EditorResources.chart.notes[i][2] + (1.0 / conductor.numerator)
+				length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
+				rect = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
+				Vector2(grid.grid_size.x * grid.zoom.x, length))
+				draw_rect(rect, selected_color)
+				draw_rect(rect, Color.LIME, false, 1)
 
 func on_files_dropped(files: PackedStringArray):
 	var file: String = files[0]
@@ -873,7 +877,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 	var output: int
 	if placed:
 		var packet: Array = [time, lane, length, type]
-		var L: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time)
+		var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time)
 		if L != -1:
 			EditorResources.chart.notes.insert(L, packet)
 			output = L
@@ -884,8 +888,8 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 			max_lane = EditorResources.strum_count - 1
 			output = L
 		
-		minimap.map_to_image(packet)
 		selected_notes = [L]
+		minimap.map_to_image(packet)
 		# Preventing fake notes
 		current_visible_notes_L = max(min(L, current_visible_notes_L), 0)
 		current_visible_notes_R += 1
@@ -964,13 +968,13 @@ func place_notes(notes: Array) -> Array:
 		place_note(note[0], note[1], note[2], note[3], true)
 	
 	var indices: Array = []
-	# Surely there's a cleaner way to do thisa
 	for note in notes:
 		var i: int = find_note(note[1], note[0], note[3])
 		if i != -1:
 			indices.append(i)
 	
 	indices.sort()
+	print(indices)
 	return indices
 
 ## Giving only 1 parameter removes the note at the given index
@@ -1513,8 +1517,17 @@ func move_selection(time_distance: float, lane_distance: float) -> void:
 		offset += 1
 	
 	for packet in notes:
+		packet[0] += time_distance
+		packet[1] += lane_distance
 		place_note(packet[0], packet[1], packet[2], packet[3], true)
 	
+	selected_notes = []
+	for packet in notes:
+		var i: int = find_note(packet[1], packet[0], packet[3])
+		if i != -1:
+			selected_notes.append(i)
+	
+	selected_notes.sort()
 	SoundManager.tool_note_place.play()
 
 
