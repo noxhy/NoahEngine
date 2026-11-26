@@ -74,7 +74,7 @@ var coyote_timer: float = 0.0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	hold_cover_sprite.visible = false
-	Signals.play_unpaused.connect(release_note)
+	Signals.unpaused.connect(release_note)
 	
 	offset = SettingsManager.data.offset
 	state = AnimState.IDLE
@@ -92,7 +92,7 @@ func _process(delta: float) -> void:
 		var hit_window: float = NoahStats.SHIT_RATING_WINDOW
 		if relative_time <= -hit_window and coyote_timer <= 0:
 			note_list.erase(target_note)
-			Signals.play_note_miss.emit(target_note, lane, get_parent())
+			Signals.note_miss.emit(target_note, lane, get_parent())
 			target_note.queue_free()
 	
 	if auto_play:
@@ -112,7 +112,7 @@ func _process(delta: float) -> void:
 				press_note()
 			else:
 				if not SettingsManager.data.ghost_tapping:
-					Signals.play_note_miss.emit(null, lane, get_parent())
+					Signals.note_miss.emit(null, lane, get_parent())
 		
 		if Input.is_action_pressed(input):
 			if target_note:
@@ -133,7 +133,7 @@ func _process(delta: float) -> void:
 	if coyote_timer > 0:
 		coyote_timer -= delta
 		if coyote_timer <= 0:
-			Signals.play_note_miss.emit(target_note, lane, get_parent())
+			Signals.note_miss.emit(target_note, lane, get_parent())
 			target_note.hit = true
 			target_note.apply_miss_effect()
 
@@ -188,7 +188,7 @@ func create_note(time: float, length: float, note_type: String, _tempo: float) -
 	add_child(note_instance)
 	note_list.append(note_instance)
 	
-	Signals.play_note_created.emit(note_instance, self)
+	Signals.note_created.emit(note_instance, self)
 	return note_instance
 
 # Visuals
@@ -246,7 +246,7 @@ func press_note() -> void:
 		pressing = true
 		target_note.holding = true
 	
-	Signals.play_note_hit.emit(target_note, lane, hit_time, get_parent())
+	Signals.note_hit.emit(target_note, lane, hit_time, get_parent())
 
 ## Calls when holding the input
 func hold_note() -> void:
@@ -257,7 +257,7 @@ func hold_note() -> void:
 	target_note.length = ((target_note.time - offset) + (target_note.start_length * spb)) - GameManager.song_position
 	target_note.length /= spb
 	target_note.note.visible = false
-	Signals.play_note_held.emit(target_note, lane, temp - max(0, target_note.length), get_parent())
+	Signals.note_held.emit(target_note, lane, temp - max(0, target_note.length), get_parent())
  	
 	if target_note.length <= 0:
 		pressing = false

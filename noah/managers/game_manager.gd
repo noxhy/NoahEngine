@@ -98,10 +98,10 @@ func reset_conductor():
 	conductor.new_step.connect(_step_change)
 
 func _step_change(step: int, measure: int):
-	Signals.play_conductor_step_hit.emit(step, measure)
+	Signals.conductor_step_hit.emit(step, measure)
 
 func _beat_change(beat: int, measure: int):
-	Signals.play_conductor_beat_hit.emit(beat, measure)
+	Signals.conductor_beat_hit.emit(beat, measure)
 
 func _ready() -> void:
 	reset_conductor()

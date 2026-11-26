@@ -121,7 +121,7 @@ func _ready() -> void:
 			animation_player.connect(&"animation_changed", update_ghost)
 	
 	if not Engine.is_editor_hint():
-		Signals.play_conductor_beat_hit.connect(on_beat_hit)
+		Signals.conductor_beat_hit.connect(on_beat_hit)
 	
 	dance()
 

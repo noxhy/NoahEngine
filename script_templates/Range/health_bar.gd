@@ -12,7 +12,7 @@ var intended_value: float = 0
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	Signals.play_health_changed.connect(on_health_change)
+	Signals.health_changed.connect(on_health_change)
 	
 	if is_inside_tree():
 		var ps: PlayState = get_tree().get_first_node_in_group(&"playstate")

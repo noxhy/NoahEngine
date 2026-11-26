@@ -51,18 +51,18 @@ func _ready() -> void:
 			ui.update_enemy(enemy)
 			
 	
-	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
-	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
+	Signals.conductor_step_hit.connect(_on_conductor_new_step)
+	Signals.conductor_beat_hit.connect(_on_conductor_new_beat)
 	
 	GameManager.conductor.new_numerator.connect(update_bop_rate)
 	GameManager.conductor.new_denominator.connect(update_bop_rate)
 	
-	Signals.play_combo_break.connect(_on_combo_break)
-	Signals.play_create_note.connect(_on_create_note)
-	Signals.play_new_event.connect(_on_new_event)
-	Signals.play_note_hit.connect(note_hit)
-	Signals.play_note_held.connect(note_holding)
-	Signals.play_note_miss.connect(note_miss)
+	Signals.combo_break.connect(_on_combo_break)
+	Signals.note_creation_requested.connect(_on_create_note)
+	Signals.new_event.connect(_on_new_event)
+	Signals.note_hit.connect(note_hit)
+	Signals.note_held.connect(note_holding)
+	Signals.note_miss.connect(note_miss)
 	
 	Signals.play_died.connect(died)
 	
@@ -86,7 +86,7 @@ func _ready() -> void:
 
 
 func start_song() -> void:
-	Signals.play_song_ready_to_start.emit()
+	Signals.song_ready_to_start.emit()
 
 func _process(delta: float) -> void:
 	if can_pause and Input.is_action_just_pressed(&"pause"):
@@ -272,7 +272,7 @@ func pause() -> void:
 	Global.manual_pause = true
 	var pause_scene_instance = pause_preload.instantiate()
 	
-	Signals.play_paused.emit()
+	Signals.paused.emit()
 	add_child(pause_scene_instance)
 	
 	get_tree().paused = true

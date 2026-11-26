@@ -84,10 +84,7 @@ var song_starting:bool = false
 ## Is true after the song has begun
 var song_started: bool = false
 
-## Whether to skip the 4 beat delay and countdowns
-var skip_countdown: bool = false
-
-## Used when the song is starting. A negative offset of 4 beats before the song actually begins
+## Used when the song is starting. A negative offset of 5 beats before the song actually begins
 var song_start_offset: float = -5.0
 
 ## The time that the song starts at. Set by [member play_song]
@@ -115,7 +112,7 @@ func set_paused(v: bool) -> void:
 func set_health(v: float) -> void:
 	v = clampf(v, health_min, health_max)
 	
-	Signals.play_health_changed.emit(v, v - health)
+	Signals.health_changed.emit(v, v - health)
 	health = v
 
 func set_scroll_speed(v: float) -> void:
@@ -182,16 +179,15 @@ func _ready() -> void:
 	if SettingsManager.data.downscroll:
 		get_tree().call_group(&"strums", &"set_scroll", -1)
 	
-	Signals.play_note_hit.connect(note_hit)
-	Signals.play_note_held.connect(note_held)
-	Signals.play_note_miss.connect(note_miss)
+	Signals.note_hit.connect(note_hit)
+	Signals.note_held.connect(note_held)
+	Signals.note_miss.connect(note_miss)
 	
 	if GameManager.play_mode == GameManager.PLAY_MODE.CHARTING and \
 			SettingsManager.data.chart_start_at_current_position:
-		
-		Signals.play_song_ready_to_start.connect(play_song.bind(ChartEditor.song_position))
+		Signals.song_ready_to_start.connect(start_song.bind(ChartEditor.song_position))
 	else:
-		Signals.play_song_ready_to_start.connect(play_song)
+		Signals.song_ready_to_start.connect(start_song)
 
 func _process(delta: float) -> void:
 	if health <= health_min and !died:
@@ -208,7 +204,7 @@ func _process(delta: float) -> void:
 			GameManager.conductor.time = GameManager.song_position
 			
 			if song_start_offset >= max(chart.offset, song_start_time):
-				play_audios(song_start_time)
+				play(song_start_time)
 				song_starting = false
 		else:
 			GameManager.song_position = music.get_playback_position() + \
@@ -237,14 +233,15 @@ func _process(delta: float) -> void:
 		if scroll_speed < 1:
 			spawn_time /= scroll_speed 
 		
-		while current_note < notes_list.size() and notes_list[current_note][0] <= (spawn_time):
+		while current_note < notes_list.size() and notes_list[current_note][0] <= spawn_time:
 			var note: Array = notes_list[current_note]
 			var time: float = note[0]
 			var lane: int = note[1]
 			var length: float = note[2]
 			var type: Variant = note[3]
 			
-			Signals.play_create_note.emit(time, lane, length, type, GameManager.conductor.tempo)
+			
+			Signals.note_creation_requested.emit(time, lane, length, type, GameManager.conductor.tempo)
 			current_note += 1
 	
 	if music.playing:
@@ -260,27 +257,25 @@ func _process(delta: float) -> void:
 				current_event += 1
 
 ## Starts the song at a given time.
-func play_song(time: float = 0.0) -> void:
+func start_song(time: float = 0.0, skip_countdown: bool = false) -> void:
 	song_starting = true
+	song_started = false
+	
 	GameManager.last_song_stats.reset()
 	GameManager.conductor.stream_player = music
 	GameManager.conductor.time_changes = song.time_changes
 	GameManager.conductor.offset = chart.offset + SettingsManager.data.offset
 	
-	song_started = false
 	song_start_time = time + chart.offset
-	if not skip_countdown:
-		song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 5)
-	else:
-		song_start_offset = song_start_time
+	song_start_offset = song_start_time - (GameManager.conductor.seconds_per_beat * 5)
 	
 	GameManager.song_position = song_start_offset
 	GameManager.conductor.time = song_start_time
 	
-	if skip_countdown or time >= GameManager.conductor.seconds_per_beat * 5:
-		play_audios(song_start_offset)
-	else:
-		if ui_skin and ui and ResourceLoader.exists(ui_skin.countdown):
+	if skip_countdown:
+		song_start_offset = song_start_time
+		play(song_start_time)
+	elif ui_skin and ui and ResourceLoader.exists(ui_skin.countdown, "PackedScene"):
 			var countdown_instance: AnimationPlayer = load(ui_skin.countdown).instantiate()
 			
 			countdown_instance.speed_scale = GameManager.conductor.tempo / 60.0
@@ -291,16 +286,11 @@ func play_song(time: float = 0.0) -> void:
 	current_note = NoahTools.bsearch_note_data_left_range(chart.notes, time)
 	current_event = 0
 
-# This if for actually playing the audio tracks, the reason this is a function is because
-# I also call it in the process function for when the song starts before 4 beats are possible.
-func play_audios(time: float) -> void:
-	
+func play(time: float = 0.0) -> void:
 	music.play(time)
-	music.pitch_scale = song_speed
 	if not song_started:
-		Signals.play_song_start.emit()
+		Signals.song_start.emit()
 	song_started = true
-
 
 func seek(time: float) -> void:
 	for strumline in strums:
@@ -319,9 +309,9 @@ func score_note(hit_time: float) -> void:
 	var add: float = Constants.MAX_SCORE_GAIN * factor + Constants.MIN_SCORE_GAIN
 	add = clamp(add, Constants.MIN_SCORE_GAIN, Constants.MAX_SCORE_GAIN)
 	song_stats.score += add
-	Signals.play_stats_changed.emit(song_stats)
+	Signals.stats_changed.emit(song_stats)
 
-## Triggers built in event behavior and dispatches [member Signals.play_new_event]
+## Triggers built in event behavior and dispatches [member Signals.new_event]
 func basic_event(time: float, event_name: String, event_parameters: Array) -> void:
 	match event_name:
 		&"camera_bop":
@@ -381,11 +371,11 @@ func basic_event(time: float, event_name: String, event_parameters: Array) -> vo
 			if camera:
 				camera.shake(int(event_parameters[0]), NoahTools.string_to_time(event_parameters[1]) / song_speed)
 	
-	Signals.play_new_event.emit(time, event_name, event_parameters)
+	Signals.new_event.emit(time, event_name, event_parameters)
 
 ## Called when the song is finished. Saves scoring and changes scene to [member next_scene]
 func finished_song() -> void:
-	Signals.play_song_finished.emit()
+	Signals.song_finished.emit()
 	var scene_to_enter: String = next_scene
 	
 	match GameManager.play_mode:
@@ -418,7 +408,7 @@ func note_hit(note: BasicNote, lane: int, hit_time: float, strum_manager: StrumM
 			SoundManager.hit.play()
 		
 		if note.mine:
-			Signals.play_note_miss.emit(note, lane, strum_manager)
+			Signals.note_miss.emit(note, lane, strum_manager)
 			return
 		
 		if note.scoreable and !note.regrabbed:
@@ -463,7 +453,7 @@ func note_held(note: BasicNote, lane: int, hold_delta: float, strum_manager: Str
 		
 		if note.scoreable:
 			song_stats.score += hold_delta * Constants.HOLD_SCORE_GAIN_PER_SECOND
-			Signals.play_stats_changed.emit(song_stats)
+			Signals.stats_changed.emit(song_stats)
 
 ## Called whenever a note is missed. in [PlayState], this updates scoring.
 func note_miss(note: BasicNote, lane: int, strum_manager: StrumManager) -> void:
@@ -475,7 +465,7 @@ func note_miss(note: BasicNote, lane: int, strum_manager: StrumManager) -> void:
 		# Ghost tapping
 		if not note:
 			song_stats.score -= Constants.SPAM_SCORE_PENALTY
-			Signals.play_stats_changed.emit(song_stats)
+			Signals.stats_changed.emit(song_stats)
 			
 			health -= Constants.SPAM_HEALTH_PENALTY
 		elif note.scoreable:
@@ -491,8 +481,8 @@ func note_miss(note: BasicNote, lane: int, strum_manager: StrumManager) -> void:
 			song_stats.misses += 1
 			song_stats.total_notes += 1
 			
-			Signals.play_stats_changed.emit(song_stats)
-			Signals.play_combo_break.emit()
+			Signals.stats_changed.emit(song_stats)
+			Signals.combo_break.emit()
 
 ## Adds 1 to the players combo in [member song_stats]
 func add_combo() -> void:
@@ -500,9 +490,9 @@ func add_combo() -> void:
 	
 	if song_stats.combo > song_stats.max_combo:
 		song_stats.max_combo = song_stats.combo
-	Signals.play_stats_changed.emit(song_stats)
+	Signals.stats_changed.emit(song_stats)
 
 ## Resets [member song_stats.combo] back to 0. Called whenever the player misses.
 func reset_combo() -> void:
 	song_stats.combo = 0
-	Signals.play_stats_changed.emit(song_stats)
+	Signals.stats_changed.emit(song_stats)
