@@ -385,7 +385,7 @@ func _process(delta: float) -> void:
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 			# Added leniency since notes are centered from the top
 			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(0.5, 0.5)
-			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(0.5, 0.5)
+			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(0.5, 0)
 			
 			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset + time_change_offset
 			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset + time_change_offset
