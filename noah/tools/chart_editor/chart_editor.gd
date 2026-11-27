@@ -227,7 +227,7 @@ func _process(delta: float) -> void:
 		for packet in note_renderer.data:
 			# The notes are aligned from the top so I have to add a half range.
 			var note_time: float = packet[0] + time_range
-			if cursor_time < note_time - time_range or cursor_time > note_time + time_range:
+			if cursor_time < note_time - time_range or cursor_time > note_time + packet[2] * conductor.seconds_per_beat + time_range:
 				i += 1
 				continue
 			
