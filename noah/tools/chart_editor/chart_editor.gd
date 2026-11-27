@@ -272,7 +272,7 @@ func _process(delta: float) -> void:
 							min_lane = EditorResources.strum_count
 							max_lane = 0
 							for j in selected_notes:
-								var note = EditorResources.chart.notes[j]
+								var note: Array = EditorResources.chart.notes[j]
 								min_lane = min(min_lane, note[1])
 								max_lane = max(max_lane, note[1])
 							
@@ -381,14 +381,13 @@ func _process(delta: float) -> void:
 		
 		if bounding_box:
 			bounding_box = false
-			
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 			# Added leniency since notes are centered from the top
 			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(0.5, 0.5)
 			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(0.5, 0)
 			
-			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset + time_change_offset
-			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset + time_change_offset
+			var time_a: float = grid_position_to_time(pos_1) + conductor.offset + time_change_offset
+			var time_b: float = grid_position_to_time(pos_2) + conductor.offset + time_change_offset
 			var lane_a: int = floori(pos_1.x)
 			var lane_b: int = floori(pos_2.x)
 			var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time_a)
