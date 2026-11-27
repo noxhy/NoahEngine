@@ -218,7 +218,8 @@ func _process(delta: float) -> void:
 	## Hovering over notes
 	if can_interact_with_chart and !note_renderer.data.is_empty():
 		var cursor_time: float = grid_position_to_time(grid_position)
-		var time_range: float = conductor.seconds_per_step / 2
+		var factor: float = conductor.numerator * conductor.denominator / chart_snap
+		var time_range: float = (conductor.seconds_per_step * factor) / 2
 		
 		var i: int = 0
 		var min_i: int = -1
@@ -974,7 +975,6 @@ func place_notes(notes: Array) -> Array:
 			indices.append(i)
 	
 	indices.sort()
-	print(indices)
 	return indices
 
 ## Giving only 1 parameter removes the note at the given index
@@ -1370,7 +1370,7 @@ func view_button_item_pressed(id):
 			print("id: ", id)
 
 func adjust_grid_zoom(delta: float) -> void:
-	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 1.5)
+	grid.zoom.y = clamp(grid.zoom.y + delta, 0.5, 2)
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()

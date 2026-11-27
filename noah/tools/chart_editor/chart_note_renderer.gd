@@ -75,6 +75,7 @@ class NoteRender extends Node:
 	var chart_editor: ChartEditor
 	var symbol_rid: RID
 	var tail_rid: RID
+	var label_rid: RID
 	
 	var symbol_texture: Texture2D
 	var tail_texture: Texture2D
@@ -89,6 +90,7 @@ class NoteRender extends Node:
 	var note_skin: NoteSkin: set = set_note_skin
 	var animation: StringName
 	var direction: String
+	var font: Font = load("uid://ddtgfc3a3xn5j")
 	
 	func _init(editor: ChartEditor, parent: RID) -> void:
 		chart_editor = editor
@@ -98,6 +100,9 @@ class NoteRender extends Node:
 		tail_rid = RenderingServer.canvas_item_create()
 		RenderingServer.canvas_item_set_parent(tail_rid, symbol_rid)
 		RenderingServer.canvas_item_set_draw_behind_parent(tail_rid, true)
+		label_rid = RenderingServer.canvas_item_create()
+		RenderingServer.canvas_item_set_parent(label_rid, symbol_rid)
+		RenderingServer.canvas_item_set_z_index(label_rid, 10)
 	
 	## Sets the skin to the given
 	func set_note_skin(v: NoteSkin) -> void:
@@ -115,9 +120,23 @@ class NoteRender extends Node:
 		
 		update_transform()
 	
+	## Returns the initals of the [member type].
+	func abbreviate_type() -> String:
+		if type.is_empty():
+			return ''
+		
+		var split: PackedStringArray = type.capitalize().split(" ")
+		var output: String = ''
+		for i in range(0, min(2, split.size())):
+			output += split[i][0]
+		
+		return output
+	
+	## Returns the gridspace size from the chart editor
 	func get_grid_size() -> Vector2:
 		return chart_editor.grid.get_gridspace_size()
 	
+	## Returns the proper position of the note in the gridspace.
 	func get_chart_position() -> Vector2:
 		var new_pos = Vector2(chart_editor.grid.get_real_position(Vector2(1.5 + lane, 0)).x,
 		chart_editor.time_to_y_position(time) + grid_size.y / 2)
@@ -130,6 +149,13 @@ class NoteRender extends Node:
 		var symbol_transform: Transform2D = Transform2D(0, symbol_scale, 0, get_chart_position() - grid_size / 2)
 		RenderingServer.canvas_item_set_transform(symbol_rid, symbol_transform)
 		position = symbol_transform.origin
+		
+		RenderingServer.canvas_item_clear(label_rid)
+		var text_pos: Vector2 = Vector2(0, (grid_size.y / 2 + (font.get_ascent() - font.get_descent()) / 2) / symbol_scale.y)
+		var width: float = grid_size.x / symbol_scale.x
+		var font_size: int = floori(16 / symbol_scale.x)
+		font.draw_string_outline(label_rid, text_pos, abbreviate_type(), HORIZONTAL_ALIGNMENT_CENTER, width, font_size, int(4 / symbol_scale.x), Color.BLACK)
+		font.draw_string(label_rid, text_pos, abbreviate_type(), HORIZONTAL_ALIGNMENT_CENTER, width, font_size, NoahTools.generate_colour_from_string(type))
 		
 		var total_length: float = grid_size.y * length * numerator / symbol_scale.y
 		var tail_height: int = tail_texture.get_width()
@@ -151,3 +177,4 @@ class NoteRender extends Node:
 	func erase() -> void:
 		RenderingServer.free_rid(symbol_rid)
 		RenderingServer.free_rid(tail_rid)
+		RenderingServer.free_rid(label_rid)
