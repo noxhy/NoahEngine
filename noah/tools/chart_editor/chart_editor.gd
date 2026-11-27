@@ -84,6 +84,9 @@ var song_events: Array:
 	set(v):
 		events_file.data = v
 	get():
+		if !events_file:
+			return []
+		
 		return events_file.data
 
 var current_visible_notes_L: int = -1
@@ -143,13 +146,10 @@ func _ready() -> void:
 	$"UI/LoadedSong error".visible = not EditorResources.song
 	
 	if EditorResources.song:
-		var song = EditorResources.song
-		load_song(song, EditorResources.difficulty)
+		load_song(EditorResources.song, EditorResources.difficulty)
 		var action: String = "Loaded Song"
 		undo_redo.create_action(action)
-		undo_redo.add_do_property(self, "song", song)
 		undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
-		undo_redo.add_undo_property(self, "song", null)
 		undo_redo.commit_action()
 		enable_can_chart_on_next_frame()
 	
@@ -837,7 +837,10 @@ func load_dividers() -> void:
 		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	var times: Array = [music.stream.get_sync_stream(0).get_length()]
+	var times: Array = []
+	if music.stream:
+		times.append(music.stream.get_sync_stream(0).get_length())
+	
 	times.append_array(conductor.time_changes.keys())
 	times.erase(0.0)
 	if not conductor.time_changes.is_empty():
@@ -988,6 +991,7 @@ func remove_note(lane, time: float = -1):
 		minimap.unmap_from_image(EditorResources.chart.notes[i])
 	
 	EditorResources.chart.notes.remove_at(i)
+	load_section(song_position)
 
 ## Removes the notes in the given indices
 func remove_notes(indices: Array):

@@ -1,5 +1,7 @@
 extends BasicSong
 
+@onready var stats_label: Label = $"UI/Chart Stats"
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super()
@@ -10,11 +12,11 @@ func _ready() -> void:
 	get_tree().call_group(&"strums", &"set_skin", ChartEditor.note_skin)
 
 func update_stats(stats: NoahStats):
-	var string_to_show = "Song: " + str(playstate.song.title)
+	var string_to_show: String = "Song: " + str(playstate.song.title)
 	string_to_show += "\n" + "Artist: " + str(playstate.song.artist)
 	string_to_show += "\n" + "Difficulty: " + str(GameManager.difficulty)
 	string_to_show += "\n" + "Tempo: " + str(GameManager.conductor.tempo)
 	string_to_show += "\n" + "Scroll Speed: " + str(playstate.scroll_speed)
 	string_to_show += "\n" + str(playstate.song_stats)
 	
-	$"UI/Chart Stats".text = string_to_show
+	stats_label.text = string_to_show
