@@ -189,7 +189,7 @@ func _process(delta: float) -> void:
 						for id in EditorResources.strumlines.size():
 							var strumline: Strumline = EditorResources.strumlines[id]
 							if (strumline.has_lane(lane) and strumline.hit_sounds):
-								SoundManager.tool_hit.mplay()
+								SoundManager.tool_hit.play()
 				
 				current_note += 1
 		
@@ -197,7 +197,7 @@ func _process(delta: float) -> void:
 	
 	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
 	
-	if Input.is_key_pressed(KEY_CTRL) and axis:
+	if Input.is_key_pressed(KEY_ALT) and axis:
 		adjust_grid_zoom(axis * 0.1)
 	elif axis and can_interact_with_chart:
 		scrub(axis)
@@ -384,19 +384,15 @@ func _process(delta: float) -> void:
 			
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 			# Added leniency since notes are centered from the top
-			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(1, 0.5)
-			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(-1, 0.5)
+			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(0.5, 0.5)
+			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(0.5, 0.5)
 			
 			var time_a: float = grid_position_to_time(pos_1, true) + conductor.offset + time_change_offset
 			var time_b: float = grid_position_to_time(pos_2, true) + conductor.offset + time_change_offset
 			var lane_a: int = floori(pos_1.x)
 			var lane_b: int = floori(pos_2.x)
-			
 			var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time_a)
 			var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time_b)
-			
-			if (L == R + 1):
-				L -= 1
 			
 			L = max(0, L)
 			add_action("Selected Area", select_area.bind(L, R, lane_a, lane_b),
@@ -1147,8 +1143,7 @@ func update_note_position(node: Node2D) -> void:
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
-	var time: float = song_position + start_offset
-	var time_change: Vector3 = conductor.get_time_change_at(time)
+	var time_change: Vector3 = conductor.get_time_change_at(song_position + start_offset)
 	var yR: float = p.y
 	if factor_in_snap:
 		yR *= time_change.y * time_change.z / chart_snap
@@ -1856,7 +1851,7 @@ func change_note_type(i: int, note_type: String) -> void:
 	load_section(song_position)
 
 
-func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
+func select_area(L: int, R: int, lane_a: int, lane_b: int) -> void:
 	selected_notes = range(L, R + 1).filter(func(i):
 		var lane: int = EditorResources.chart.notes[i][1]
 		return (lane >= lane_a and lane <= lane_b))
@@ -1880,15 +1875,10 @@ func brush_note_type() -> void:
 	var action: String = "Brushed Note Type"
 	undo_redo.create_action(action)
 	for i in selected_notes:
-		var node: ChartNote = note_nodes[i - current_visible_notes_L]
 		var note_type: String = EditorResources.chart.notes[i][3]
 		undo_redo.add_do_method(change_note_type.bind(i, current_note_type))
-		undo_redo.add_do_property(node, "note_type", current_note_type)
-		undo_redo.add_do_method(node.update)
 		undo_redo.add_do_method(SoundManager.tool_mouse_click.play)
 		undo_redo.add_undo_method(change_note_type.bind(i, note_type))
-		undo_redo.add_undo_property(node, "note_type", note_type)
-		undo_redo.add_undo_method(node.update)
 	
 	undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 	undo_redo.commit_action()

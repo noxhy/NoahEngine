@@ -163,12 +163,12 @@ static func bsearch_note_data_left_range(value_set: Array, left_range: float) ->
 	var length: int = value_set.size()
 	if length == 0:
 		return -1
+	
 	if value_set[length - 1][0] < left_range:
 		return -1
 	
 	var low: int = 0
 	var high: int = length - 1
-	
 	while (low <= high):
 		var mid: int = (low + high) / 2
 		
@@ -187,7 +187,6 @@ static func bsearch_note_data_right_range(value_set: Array, right_range: float) 
 	
 	var low: int = 0
 	var high: int = length - 1
-	
 	while (low <= high):
 		var mid: int = (low + high) / 2
 		
