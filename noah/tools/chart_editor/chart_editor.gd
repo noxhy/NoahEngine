@@ -288,7 +288,7 @@ func _process(delta: float) -> void:
 	if can_interact_with_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_mouse_over_grid():
 		if hovered_note != -1:
 			var i: int = hovered_note
-			var note = EditorResources.chart.notes[i]
+			var note: Array = EditorResources.chart.notes[i]
 			var length: float = note[2]
 			var note_type = note[3]
 			
@@ -305,8 +305,8 @@ func _process(delta: float) -> void:
 					for k in range(j, selected_notes.size()):
 						selected_notes[k] -= 1
 			else:
-				if !selected_notes.is_empty() and i < selected_notes.front():
-					for j in range(i, selected_notes.size()):
+				if !selected_notes.is_empty() and i <= selected_notes.front():
+					for j in selected_notes.size():
 						selected_notes[j] -= 1
 			
 			load_section(song_position)
@@ -1808,38 +1808,20 @@ func flip() -> void:
 	if selected_notes.size() > 1:
 		var _min_lane: int = EditorResources.chart.notes[selected_notes[0]][1]
 		var _max_lane: int = EditorResources.chart.notes[selected_notes[0]][1]
-		var temp: Array = []
 		for i in selected_notes:
-			var note = EditorResources.chart.notes[i]
+			var note: Array = EditorResources.chart.notes[i]
 			_min_lane = min(_min_lane, note[1])
 			_max_lane = max(_max_lane, note[1])
-			temp.append(note)
 		
-		remove_notes(selected_notes)
-		
-		selected_notes = []
-		selected_note_nodes = []
 		var length: int = _max_lane - _min_lane
-		var j: int = 0
-		for note in temp:
+		for i in selected_notes:
+			var note: Array = EditorResources.chart.notes[i]
 			var lane: int = -(note[1] - _min_lane)
 			lane += length
 			lane += _min_lane
-			temp[j][1] = lane
-			
-			place_note(note[0], lane, note[2], note[3], true)
-			j += 1
+			note[1] = lane
 		
-		# I need a cleaner and less intensive way of doing this.
-		for note in temp:
-			var i: int = find_note(note[1], note[0])
-			
-			if !selected_notes.has(i):
-				selected_notes.append(i)
-				selected_note_nodes.append(note_nodes[i - current_visible_notes_L])
-		
-		selected_notes.sort()
-		
+		load_section(song_position)
 		SoundManager.tool_note_place.play()
 
 func increase_length() -> void:
@@ -1857,10 +1839,8 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 	for i in notes:
 		var length: float = EditorResources.chart.notes[i][2]
 		undo_redo.add_do_method(change_length.bind(i, length + delta))
-		undo_redo.add_do_method(load_section.bind(song_position))
 		undo_redo.add_do_method(SoundManager.tool_note_stretch.play)
 		undo_redo.add_undo_method(change_length.bind(i, length))
-		undo_redo.add_undo_method(load_section.bind(song_position))
 	
 	undo_redo.add_do_reference(upper_ui.history_window.add_action(action))
 	undo_redo.commit_action()
@@ -1868,9 +1848,12 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 
 func change_length(i: int, length: float) -> void:
 	EditorResources.chart.notes[i][2] = max(length, 0)
+	load_section(song_position)
+
 
 func change_note_type(i: int, note_type: String) -> void:
 	EditorResources.chart.notes[i][3] = note_type
+	load_section(song_position)
 
 
 func select_area(L: int, R: int, lane_a, lane_b = null) -> void:
