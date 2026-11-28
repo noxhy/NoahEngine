@@ -792,10 +792,13 @@ func load_dividers() -> void:
 	if !EditorResources.song or !EditorResources.chart:
 		return
 	
+	var viewport_rect: Vector2 = get_viewport_transform().get_scale()
+	var viewport_scaling: float = minf(viewport_rect.x, viewport_rect.y)
 	# Beat dividers
 	for i in range(conductor.numerator):
-		var rect = ColorRect.new()
+		var rect: ColorRect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
+		size /= viewport_scaling
 		var col = divider_color
 		if i == 0:
 			col *= 1.25
@@ -812,9 +815,9 @@ func load_dividers() -> void:
 	
 	# Vertical dividers
 	for i in [0, 1, grid.columns]:
-		var rect = ColorRect.new()
+		var rect: ColorRect = ColorRect.new()
 		var size: float = 2
-		
+		size /= viewport_scaling
 		rect.color = divider_color
 		rect.size = Vector2(size, grid.get_size().y)
 		rect.position = grid.position
@@ -827,9 +830,9 @@ func load_dividers() -> void:
 	
 	# Strumline dividers
 	for strumline in EditorResources.strumlines:
-		var rect = ColorRect.new()
+		var rect: ColorRect = ColorRect.new()
 		var size: float = 2
-		
+		size /= viewport_scaling
 		rect.color = divider_color
 		rect.size = Vector2(size, grid.get_size().y)
 		rect.position = grid.position
@@ -844,22 +847,45 @@ func load_dividers() -> void:
 	var times: Array = []
 	# BPM Markers
 	times.append_array(conductor.time_changes.keys())
-	times.erase(0.0)
 	if not conductor.time_changes.is_empty():
 		for i in times:
-			var rect = ColorRect.new()
-			var size: float = 2
-			
-			rect.size = Vector2(grid.get_size().x, size)
+			var time_change: Vector3 = conductor.time_changes[i]
+			var rect: ColorRect = ColorRect.new()
+			var size: float = 24
+			rect.size = Vector2(96, size)
 			rect.position = grid.position
-			rect.position.x -= grid.get_size().x / 2
+			rect.position.x -= 96 + grid.get_size().x / 2
 			rect.position.y = time_to_y_position(i)
 			rect.position.y -= rect.size.y / 2
 			rect.position += grid.position + grid_layer.offset
 			rect.color = time_change_color
 			
-			self.add_child(rect)
+			add_child(rect)
 			rect.add_to_group(&"dividers")
+			
+			var rect_bar: ColorRect = ColorRect.new()
+			size = 4.0
+			size /= viewport_scaling
+			rect_bar.color = time_change_color
+			rect_bar.size = Vector2(grid.get_size().x, size)
+			rect_bar.position = grid.position
+			rect_bar.position.x -= grid.get_size().x / 2
+			rect_bar.position.y = time_to_y_position(i)
+			rect_bar.position.y -= size / 2
+			rect_bar.position += grid.position + grid_layer.offset
+			
+			add_child(rect_bar)
+			rect_bar.add_to_group(&"dividers")
+			
+			var label: Label = Label.new()
+			label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.theme = TOOL_THEME
+			label.text = str(snappedf(time_change.x, 0.001), " ", int(time_change.y), "/", int(time_change.z))
+			label.add_theme_font_size_override(&"font_size", 12)
+			
+			rect.add_child(label)
+			label.add_to_group(&"dividers")
 	
 	# End of song void
 	if music.stream:
