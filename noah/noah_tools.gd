@@ -1,4 +1,4 @@
-extends Node
+extends Resource
 class_name NoahTools
 
 static var _tween_options: Dictionary[StringName, Array] = {

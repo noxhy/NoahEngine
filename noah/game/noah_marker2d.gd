@@ -4,7 +4,7 @@ class_name NoahMarker2D
 ## Marker2D but with a camera bounds preview. Also has [member id] for more consistent behavior with [code]camera_positions[/code] group.
 
 ## id used for [code]camera_positions[/code] group.
-@export var id: int = 0
+@export var id: int = -1
 
 ## The colour of the camera bounds of this marker
 @export var _bounds_colour: Color = Color.RED
@@ -23,8 +23,6 @@ class_name NoahMarker2D
 ## Whether the camera bounds should be visible
 @export var _bounds_visible: bool = true 
 
-@export var border_size: float = 3.0
-
 var window_size: Vector2
 var _draw_helper: Node2D
 
@@ -32,6 +30,20 @@ func _notification(what: int) -> void:
 	if what == NOTIFICATION_EXIT_TREE:
 		if _draw_helper:
 			_draw_helper.queue_free()
+	elif what == NOTIFICATION_ENTER_TREE:
+		if Engine.is_editor_hint() and id == -1:
+			var markers: Array = []
+			_find_markers(get_tree().edited_scene_root, markers)
+			id = markers.size() - 1
+			
+			if id < 3:
+				preset_colours = id
+			else:
+				_bounds_colour = NoahTools.generate_colour_from_string(str(id))
+
+func _enter_tree() -> void:
+	if not is_in_group(&'camera_positions'):
+		add_to_group(&"camera_positions", true)
 
 func _gen_camera_view():
 	window_size = Vector2(
@@ -69,6 +81,13 @@ func _find_camera_2d(parent: Node):
 		
 		_find_camera_2d(child)
 
+func _find_markers(parent: Node, markers: Array):
+	for child in parent.get_children():
+		if child is NoahMarker2D:
+			markers.append(child)
+		
+		_find_markers(child, markers)
+
 func _draw_camera_view() -> void:
 	if Engine.is_editor_hint() and _bounds_visible and visible:
 		
@@ -81,5 +100,7 @@ func _draw_camera_view() -> void:
 			window_size.x / _camera2d_ref.zoom.x, \
 			window_size.y / _camera2d_ref.zoom.y)
 		
+		var viewport_rect: Vector2 = EditorInterface.get_editor_viewport_2d().global_canvas_transform.get_scale()
+		
 		_draw_helper.draw_set_transform(global_position, global_rotation)
-		_draw_helper.draw_rect(Rect2(-rect.size / 2, rect.size), _bounds_colour, false, border_size)
+		_draw_helper.draw_rect(Rect2(-rect.size / 2, rect.size), _bounds_colour, false, 1.0 / minf(viewport_rect.x, viewport_rect.y))
