@@ -342,3 +342,13 @@ static func set_texture_to_rid(_rid: RID, texture: Texture2D) -> void:
 		)
 	else:
 		RenderingServer.canvas_item_add_texture_rect(_rid, Rect2(Vector2.ZERO, texture.get_size()), texture.get_rid())
+
+## Gets a value from an array. If the array does not have the index, return 'default'.
+static func array_get(array: Array, index: int, default: Variant = null) -> Variant:
+	if index < 0:
+		index += array.size()
+	
+	if index >= 0 and index < array.size():
+		return array[index]
+	
+	return default

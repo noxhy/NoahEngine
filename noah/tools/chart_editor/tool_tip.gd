@@ -28,7 +28,7 @@ func _process(delta: float) -> void:
 			text_str += '\nLength: %s' % str(note[2])
 		if not note[3].is_empty():
 			text_str += '\nType: %s' % str(note[3])
-			
+		
 		text = text_str
 	elif chart_editor.hovered_event != -1:
 		var ev = chart_editor.song_events[chart_editor.hovered_event]
@@ -49,7 +49,7 @@ func _process(delta: float) -> void:
 
 func get_event_str() -> String:
 	if chart_editor.name != 'Chart Editor':
-		var event = chart_editor.song_events[chart_editor.hovered_event]
+		var event: Array = chart_editor.song_events[chart_editor.hovered_event]
 		var parameters = chart_editor.song_events[chart_editor.hovered_event][2]
 		return event[1] + ': [%s]' % ", ".join(PackedStringArray(parameters))
 	
@@ -66,4 +66,11 @@ func get_event_str() -> String:
 func get_time_str(time: float) -> String:
 	var beat_time = chart_editor.conductor.get_beat_at(time) + 1
 	var step_time = chart_editor.conductor.get_step_at(time) + 1
-	return 'Time: ' + "(%s, b: %s, s: %s)" % [NoahTools.format_time(time), str(beat_time), str(step_time)]
+	
+	var time_format: String
+	if Input.is_key_pressed(KEY_ALT):
+		time_format = str(snappedf(time, 0.01))
+	else:
+		time_format = NoahTools.format_time(time)
+	
+	return 'Time: ' + "(%s, b: %s, s: %s)" % [time_format, str(beat_time), str(step_time)]

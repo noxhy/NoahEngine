@@ -4,9 +4,13 @@ class_name ChartNoteRenderer
 ## Main RenderingServer manager for chart notes.
 ## [br][b]Note:[/b] Does not support animated sprites.
 
+## Main reference for [ChartEdtior] scene
 var chart_editor: ChartEditor
+## Array of note packets.
 var data: Array
+## Array of [NoteRender] that are currently drawn
 var drawn: Array[NoteRender]
+## Collected every frame, frees any [NoteRender]'s in the list
 var garbage: Array[NoteRender]
 
 ## Draws the notes in [member data] and clears everything else.
@@ -94,7 +98,6 @@ class NoteRender extends Node:
 	
 	func _init(editor: ChartEditor, parent: RID) -> void:
 		chart_editor = editor
-		grid_size = chart_editor.grid.get_gridspace_size()
 		symbol_rid = RenderingServer.canvas_item_create()
 		RenderingServer.canvas_item_set_parent(symbol_rid, parent)
 		tail_rid = RenderingServer.canvas_item_create()

@@ -26,7 +26,6 @@ static var vocal_waveforms: bool = false
 ## Flag for whether the instrumental waveform should be visible
 static var instrumental_waveforms: bool = false
 
-var NOTE_PRELOAD = load("uid://yyfqg2jvwcmt")
 var EVENT_PRELOAD = load("uid://n6k15grja0uh")
 var STRUM_BUTTON_PRELOAD: PackedScene = load("uid://ddohksqocyhnx")
 
@@ -63,7 +62,6 @@ var chart_snap: float:
 		return conductor.numerator * current_snap
 
 var selected_notes: Array = []
-var selected_note_nodes: Array = []
 var placing_note: bool = false
 var changed_length: bool = false
 var current_note: int = -1
@@ -116,6 +114,7 @@ var current_visible_events_R: int = -1
 @onready var minimap: EditorMinimap = %Minimap
 @onready var note_parallax: Parallax2D = $"Grid Layer/Parallax2D"
 @onready var note_renderer: ChartNoteRenderer = $"Notes Layer/ChartNoteRenderer"
+@onready var event_renderer: ChartEventRenderer = $"Notes Layer/ChartEventRenderer"
 
 var playback_manager: ChartEditorPlaybackManager
 var window_manager: ChartEditorWindowManager
@@ -142,7 +141,8 @@ func _ready() -> void:
 	add_child(window_manager)
 	
 	song_speed = SettingsManager.data.song_speed
-	
+	note_renderer.chart_editor = self
+	event_renderer.chart_editor = self
 	$"UI/LoadedSong error".visible = not EditorResources.song
 	
 	if EditorResources.song:
@@ -216,33 +216,34 @@ func _process(delta: float) -> void:
 	note_parallax.repeat_size.y = grid.get_size().y
 	
 	## Hovering over notes
-	if can_interact_with_chart and !note_renderer.data.is_empty():
-		var cursor_time: float = grid_position_to_time(grid_position)
-		var factor: float = conductor.numerator * conductor.denominator / chart_snap
-		var time_range: float = (conductor.seconds_per_step * factor) / 2
-		
-		var i: int = 0
-		var min_i: int = -1
-		var min_dist: float = INF
-		for packet in note_renderer.data:
-			# The notes are aligned from the top so I have to add a half range.
-			var note_time: float = packet[0] + time_range
-			if cursor_time < note_time - time_range or cursor_time > note_time + packet[2] * conductor.seconds_per_beat + time_range:
+	if can_interact_with_chart:
+		if !note_renderer.data.is_empty():
+			var cursor_time: float = grid_position_to_time(grid_position)
+			var factor: float = conductor.numerator * conductor.denominator / chart_snap
+			var time_range: float = (conductor.seconds_per_step * factor) / 2
+			
+			var i: int = 0
+			var min_i: int = -1
+			var min_dist: float = INF
+			for packet in note_renderer.data:
+				# The notes are aligned from the top so I have to add a half range.
+				var note_time: float = packet[0] + time_range
+				if cursor_time < note_time - time_range or cursor_time > note_time + packet[2] * conductor.seconds_per_beat + time_range:
+					i += 1
+					continue
+				
+				if packet[1] != snapped_position.x - 1:
+					i += 1
+					continue
+				
+				var dist: float = abs(packet[0] - cursor_time)
+				if dist < min_dist:
+					min_i = i + current_visible_notes_L
+					min_dist = dist
+				
 				i += 1
-				continue
 			
-			if packet[1] != snapped_position.x - 1:
-				i += 1
-				continue
-			
-			var dist: float = abs(packet[0] - cursor_time)
-			if dist < min_dist:
-				min_i = i + current_visible_notes_L
-				min_dist = dist
-			
-			i += 1
-		
-		hovered_note = min_i
+			hovered_note = min_i
 	else:
 		hovered_note = -1
 	
@@ -333,13 +334,10 @@ func _process(delta: float) -> void:
 					var distance: float = snappedf(max(cursor_time - time, 0.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
 					EditorResources.chart.notes[i] = [time, lane, distance, note_type]
 					
-					changed_length = (distance > 0)
-					if changed_length:
-						if (note_renderer.data[i - current_visible_notes_L][2] != distance):
-							SoundManager.tool_note_stretch.play()
-						
+					if (note_renderer.data[i - current_visible_notes_L][2] != distance):
 						note_renderer.data[i - current_visible_notes_L][2] = distance
-						load_section(song_position)
+						SoundManager.tool_note_stretch.play()
+						load_section(song_position, true)
 		
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
@@ -682,7 +680,6 @@ func load_chart(file: Chart) -> void:
 		backup_chart = file.duplicate(true)
 	
 	selected_notes = []
-	selected_note_nodes = []
 	current_visible_notes_L = -1
 	current_visible_notes_R = -1
 	current_visible_events_L = -1
@@ -703,7 +700,6 @@ func load_chart(file: Chart) -> void:
 	
 	upper_ui.metadata_window.update_stats()
 	
-	note_renderer.chart_editor = self
 	enable_can_chart_on_next_frame()
 	load_section(song_position)
 	update_grid()
@@ -721,7 +717,7 @@ func get_visible_time() -> float:
 
 ## Loads all the notes and waveforms for the next two waveforms.
 ## [br]The [code]forced[/code] parameter will determine if all visible notes on screen should be cleared and replaced.
-func load_section(time: float, reset: bool = false) -> void:
+func load_section(time: float = song_position, reset: bool = false) -> void:
 	if not EditorResources.chart or EditorResources.chart.notes.is_empty():
 		return
 	
@@ -741,7 +737,6 @@ func load_section(time: float, reset: bool = false) -> void:
 		R = max(R, current_visible_notes_R)
 	
 	load_notes(L, R)
-	return
 	L = NoahTools.bsearch_note_data_left_range(song_events, time - _range)
 	R = NoahTools.bsearch_note_data_right_range(song_events, time + _range)
 	
@@ -750,7 +745,7 @@ func load_section(time: float, reset: bool = false) -> void:
 
 func load_notes(L: int, R: int) -> void:
 	if L > -1 and R > -1:
-		if current_visible_notes_L != L or current_visible_events_R != R:
+		if current_visible_notes_L != L or current_visible_notes_R != R:
 			note_renderer.data = EditorResources.chart.notes.slice(L, R + 1)
 			note_renderer.refresh()
 		
@@ -760,27 +755,9 @@ func load_notes(L: int, R: int) -> void:
 
 func load_events(L: int, R: int) -> void:
 	if L > -1 and R > -1:
-		## Clearing any invisible notes
 		if current_visible_events_L != L or current_visible_events_R != R:
-			var i: int = 0
-			for _i in range(event_nodes.size()):
-				var event = event_nodes[i]
-				if (event.time < song_events[L][0]
-				or event.time > song_events[R][0]):
-					event.free()
-					event_nodes.remove_at(i)
-					i -= 1
-				
-				i += 1
-		
-		for i in range(L, R + 1):
-			if i >= current_visible_events_L and i <= current_visible_events_R:
-				if (i - L) >= 0 and (i - L) < event_nodes.size():
-					update_note_position(event_nodes[i - L])
-				continue
-			
-			var event: Array = song_events[i]
-			place_event(event[0], event[1], event[2], false, false, true, i - L)
+			event_renderer.data = song_events.slice(L, R + 1)
+			event_renderer.refresh()
 		
 		current_visible_events_L = L
 		current_visible_events_R = R
@@ -893,72 +870,32 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 		current_visible_notes_L = max(min(L, current_visible_notes_L), 0)
 		current_visible_notes_R += 1
 	
-	load_section(song_position)
+	load_section(song_position, true)
 	return output
 
 ## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
-func place_event(time: float, event: String, parameters: Array, placed: bool = false, moved: bool = false,
-sorted: bool = false, sort_index: int = -1) -> int:
-	var event_instance = EVENT_PRELOAD.instantiate()
-	
-	event_instance.time = time
-	event_instance.event = event
-	event_instance.parameters = parameters
-	update_note_position(event_instance)
-	
+func place_event(time: float, event: String, parameters: Array, track: int = 0, placed: bool = false) -> int:
 	var output: int
-	
 	if placed:
+		var packet: Array = [time, event, parameters, track]
 		var L: int = NoahTools.bsearch_note_data_left_range(song_events, time)
 		if L != -1:
-			song_events.insert(L, [time, event, parameters])
-			
-			if event_nodes.is_empty():
-				event_nodes.append(event_instance)
-			elif (L - current_visible_events_L) < 0:
-				event_nodes.insert(0, event_instance)
-			elif (L - current_visible_events_L) >= event_nodes.size():
-				event_nodes.append(event_instance)
-			else:
-				event_nodes.insert((L - current_visible_events_L), event_instance)
-			
-			if !moved:
-				selected_notes = [L]
-				selected_note_nodes = [event_instance]
-				min_lane = 0
-				max_lane = EditorResources.strum_count - 1
-			
+			song_events.insert(L, packet)
 			output = L
 		else:
-			event_nodes.append(event_instance)
-			song_events.append([time, event, parameters])
+			song_events.append(packet)
 			L = song_events.size() - 1
-			selected_notes = [L]
-			selected_note_nodes = [event_instance]
 			min_lane = 0
 			max_lane = EditorResources.strum_count - 1
 			output = L
 		
-		# Preventing fake events
+		selected_notes = [L]
+		minimap.map_to_image(packet)
+		# Preventing fake notes
 		current_visible_events_L = max(min(L, current_visible_events_L), 0)
 		current_visible_events_R += 1
-	else:
-		if sorted:
-			var L: int = sort_index
-			
-			if event_nodes.is_empty():
-				event_nodes.append(event_instance)
-			elif L < 0:
-				event_nodes.insert(0, event_instance)
-			elif L >= event_nodes.size():
-				event_nodes.append(event_instance)
-			else:
-				event_nodes.insert(L, event_instance)
-		else:
-			event_nodes.append(event_instance)
 	
-	notes_layer.add_child(event_instance)
-	event_instance.add_to_group(&"events")
+	load_section(song_position, true)
 	return output
 
 # Returns the indexes of the new notes
@@ -1129,13 +1066,7 @@ func enable_can_chart_on_next_frame() -> void:
 	get_tree().create_timer(0.0).timeout.connect(func(): can_chart = true)
 
 func update_note_position(node: Node2D) -> void:
-	if node is ChartNote:
-		node.position = Vector2(grid.get_real_position(Vector2(1.5 + node.lane, 0)).x,
-		time_to_y_position(node.time) + grid.grid_size.y * grid.zoom.y / 2)
-		node.position += grid_layer.offset
-		node.grid_size = (grid.grid_size * grid.zoom)
-		node.update()
-	elif node is ChartEvent:
+	if node is ChartEvent:
 		node.position = Vector2(grid.get_real_position(Vector2(-0.5 + grid.columns, 0)).x,
 		time_to_y_position(node.time) + grid.grid_size.y * grid.zoom.y / 2)
 		node.position += grid_layer.offset
@@ -1372,6 +1303,7 @@ func adjust_grid_zoom(delta: float) -> void:
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()
+	event_renderer.update_render_transforms()
 	update_camera_song_position(true)
 
 ## Window button item pressed
@@ -1783,7 +1715,6 @@ func delete_stacked_notes() -> void:
 		var i: int = 0
 		var deleted: bool = false
 		selected_notes = []
-		selected_note_nodes = []
 		for index in range(EditorResources.chart.notes.size() - 1):
 			var note_a = EditorResources.chart.notes[index - i]
 			var note_b = EditorResources.chart.notes[index - i + 1]
@@ -1846,12 +1777,12 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 
 func change_length(i: int, length: float) -> void:
 	EditorResources.chart.notes[i][2] = max(length, 0)
-	load_section(song_position)
+	load_section(song_position, true)
 
 
 func change_note_type(i: int, note_type: String) -> void:
 	EditorResources.chart.notes[i][3] = note_type
-	load_section(song_position)
+	load_section(song_position, true)
 
 
 func select_area(L: int, R: int, lane_a: int, lane_b: int) -> void:
@@ -1892,7 +1823,6 @@ func select_all() -> void:
 		return
 	
 	selected_notes = range(EditorResources.chart.notes.size())
-	selected_note_nodes = get_tree().get_nodes_in_group(&"notes")
 	SoundManager.tool_mouse_click.play()
 
 
@@ -1901,7 +1831,6 @@ func deselect_all() -> void:
 		return
 	
 	selected_notes = []
-	selected_note_nodes = []
 	SoundManager.tool_mouse_click.play()
 
 
@@ -1965,4 +1894,5 @@ func _on_viewport_size_changed() -> void:
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()
+	event_renderer.update_render_transforms()
 	update_camera_song_position(true)
