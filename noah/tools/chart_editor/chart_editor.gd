@@ -927,7 +927,7 @@ func remove_note(lane, time: float = -1):
 		minimap.unmap_from_image(EditorResources.chart.notes[i])
 	
 	EditorResources.chart.notes.remove_at(i)
-	current_visible_notes_L -= 1
+	current_visible_notes_R -= 1
 	load_section(song_position)
 
 ## Removes the notes in the given indices
