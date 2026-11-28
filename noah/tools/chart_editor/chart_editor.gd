@@ -217,11 +217,10 @@ func _process(delta: float) -> void:
 	
 	## Hovering over notes
 	if can_interact_with_chart:
+		var cursor_time: float = grid_position_to_time(grid_position)
 		if !note_renderer.data.is_empty():
-			var cursor_time: float = grid_position_to_time(grid_position)
 			var factor: float = conductor.numerator * conductor.denominator / chart_snap
 			var time_range: float = (conductor.seconds_per_step * factor) / 2
-			
 			var i: int = 0
 			var min_i: int = -1
 			var min_dist: float = INF
@@ -244,8 +243,31 @@ func _process(delta: float) -> void:
 				i += 1
 			
 			hovered_note = min_i
-	else:
-		hovered_note = -1
+		else:
+			hovered_note = -1
+		
+		if !event_renderer.data.is_empty() and snapped_position.x == grid.columns - 1:
+			var time_range: float = conductor.seconds_per_step / 2
+			var i: int = 0
+			var min_i: int = -1
+			var min_dist: float = INF
+			for packet in event_renderer.data:
+				# The notes are aligned from the top so I have to add a half range.
+				var event_time: float = packet[0] + time_range
+				if cursor_time < event_time - time_range or cursor_time > event_time + time_range:
+					i += 1
+					continue
+				
+				var dist: float = abs(packet[0] - cursor_time)
+				if dist < min_dist:
+					min_i = i + current_visible_events_L
+					min_dist = dist
+				
+				i += 1
+			
+			hovered_event = min_i
+		else:
+			hovered_event = -1
 	
 	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
 		if Input.is_action_pressed(&"control"):
@@ -310,7 +332,7 @@ func _process(delta: float) -> void:
 					for j in selected_notes.size():
 						selected_notes[j] -= 1
 			
-			load_section(song_position)
+			load_section(song_position, false)
 			hovered_note = -1
 			auto_save()
 	
@@ -337,7 +359,7 @@ func _process(delta: float) -> void:
 					if (note_renderer.data[i - current_visible_notes_L][2] != distance):
 						note_renderer.data[i - current_visible_notes_L][2] = distance
 						SoundManager.tool_note_stretch.play()
-						load_section(song_position, true)
+						load_section(song_position)
 		
 		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
 			if moving_notes:
@@ -701,7 +723,7 @@ func load_chart(file: Chart) -> void:
 	upper_ui.metadata_window.update_stats()
 	
 	enable_can_chart_on_next_frame()
-	load_section(song_position)
+	load_section(song_position, false)
 	update_grid()
 	if minimap:
 		minimap.visible = true
@@ -717,7 +739,7 @@ func get_visible_time() -> float:
 
 ## Loads all the notes and waveforms for the next two waveforms.
 ## [br]The [code]forced[/code] parameter will determine if all visible notes on screen should be cleared and replaced.
-func load_section(time: float = song_position, reset: bool = false) -> void:
+func load_section(time: float = song_position, reset: bool = true) -> void:
 	if not EditorResources.chart or EditorResources.chart.notes.is_empty():
 		return
 	
@@ -870,7 +892,7 @@ func place_note(time: float, lane: int, length: float, type: String, placed: boo
 		current_visible_notes_L = max(min(L, current_visible_notes_L), 0)
 		current_visible_notes_R += 1
 	
-	load_section(song_position, true)
+	load_section(song_position)
 	return output
 
 ## Adds an instance of a event on the chart editor, placed boolean adds it to the chart data.
@@ -895,7 +917,7 @@ func place_event(time: float, event: String, parameters: Array, track: int = 0, 
 		current_visible_events_L = max(min(L, current_visible_events_L), 0)
 		current_visible_events_R += 1
 	
-	load_section(song_position, true)
+	load_section(song_position)
 	return output
 
 # Returns the indexes of the new notes
@@ -927,7 +949,7 @@ func remove_note(lane, time: float = -1):
 		minimap.unmap_from_image(EditorResources.chart.notes[i])
 	
 	EditorResources.chart.notes.remove_at(i)
-	load_section(song_position, true)
+	load_section(song_position)
 
 ## Removes the notes in the given indices
 func remove_notes(indices: Array):
@@ -1171,7 +1193,7 @@ func _on_conductor_new_beat(current_beat: int, measure_relative: int) -> void:
 			SoundManager.conductor_off_beat.play()
 	
 	if EditorResources.chart:
-		load_section(song_position)
+		load_section(song_position, false)
 		update_waveforms(song_position)
 		
 		lower_ui.beat_label.text = str("Beat: ", current_beat + 1)
@@ -1750,7 +1772,7 @@ func flip() -> void:
 			lane += _min_lane
 			note[1] = lane
 		
-		load_section(song_position)
+		load_section(song_position, false)
 		SoundManager.tool_note_place.play()
 
 func increase_length() -> void:
@@ -1777,12 +1799,12 @@ func change_note_lengths(notes: Array, delta: float) -> void:
 
 func change_length(i: int, length: float) -> void:
 	EditorResources.chart.notes[i][2] = max(length, 0)
-	load_section(song_position, true)
+	load_section(song_position)
 
 
 func change_note_type(i: int, note_type: String) -> void:
 	EditorResources.chart.notes[i][3] = note_type
-	load_section(song_position, true)
+	load_section(song_position)
 
 
 func select_area(L: int, R: int, lane_a: int, lane_b: int) -> void:
