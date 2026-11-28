@@ -11,6 +11,36 @@ func _ready() -> void:
 	super()
 	upper_ui.view_button.get_popup().set_item_disabled(1, true)
 
+func _draw() -> void:
+	var rect: Rect2
+	
+	## Box when you're holding control
+	if bounding_box:
+		rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
+		draw_rect(rect, box_color)
+		draw_rect(rect, Color.LIME, false, 1)
+	
+	if EditorResources.chart:
+		# Song Start Offset Marker
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 2, grid.get_real_position(Vector2(0, 0)).y),
+		Vector2(0, grid.get_gridspace_size().y * grid.rows) + Vector2(4, 0))
+		draw_rect(rect, current_time_color)
+		
+		# The box at the start of the marker
+		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 4, grid.get_real_position(Vector2(0, 0)).y),
+		Vector2(0, grid.get_gridspace_size().y) + Vector2(8, 0))
+		draw_rect(rect, current_time_color)
+		
+		# Hover Box
+		if grid_position.x >= 0 and grid_position.x < grid.columns and not is_mouse_over_any_ui():
+			rect = Rect2(grid.get_real_position(snapped_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap)) + grid_offset, \
+			grid.grid_size * grid.zoom * Vector2(1, conductor.numerator * conductor.denominator / chart_snap))
+			draw_rect(rect, hover_color)
+		
+		## Note Highlighting
+		for i in selected_notes:
+			highlight_note(i)
+
 func update_camera_song_position(instant: bool = false):
 	if instant:
 		camera_2d.position.x = 640 + time_to_y_position(song_position)
@@ -45,48 +75,98 @@ func load_section(time: float = song_position, reset: bool = true) -> void:
 	load_events(L, R)
 
 func load_dividers() -> void:
-	get_tree().call_group(&"dividers", &"queue_free")
+	get_tree().call_group(&"dividers",  &"free")
+	if !EditorResources.song or !EditorResources.chart:
+		return
+	
+	var viewport_rect: Vector2 = get_viewport_transform().get_scale()
+	var viewport_scaling: float = minf(viewport_rect.x, viewport_rect.y)
+	# Beat dividers
 	for i in range(conductor.numerator):
-		var rect = ColorRect.new()
+		var rect: ColorRect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
+		size /= viewport_scaling
+		var col = divider_color
+		if i == 0:
+			col *= 1.25
 		
-		rect.color = divider_color
+		rect.color = col
 		rect.size = Vector2(size, grid.get_size().y)
 		rect.position = grid.position
 		rect.position.y -= grid.get_size().y / 2
-		rect.position.x += (grid.grid_size.x * grid.zoom.x) * conductor.numerator * i
+		rect.position.x += (grid.grid_size.x * grid.zoom.x) * conductor.denominator * i
 		rect.position.x -= rect.size.x / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	for i in [0, 1, maxi(grid.rows, 2)]:
-		var rect = ColorRect.new()
+	# Horizontal dividers
+	for i in [0, 1, grid.rows]:
+		var rect: ColorRect = ColorRect.new()
 		var size: float = 2
-		
+		size /= viewport_scaling
 		rect.color = divider_color
 		rect.size = Vector2(grid.get_size().x, size)
 		rect.position = grid.position
-		rect.position.y -= grid.get_size().y / 2
 		rect.position.y += (grid.grid_size.y * grid.zoom.y) * i
+		rect.position.y -= grid.get_size().y / 2
+		rect.position.y -= rect.size.y / 2
 		
-		$"Grid Layer/Parallax2D".add_child(rect)
+		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	var times: Array = [music.stream.get_length()]
-	times.append_array(EditorResources.song.time_changes.keys())
-	times.erase(0.0)
-	for i in times:
+	var times: Array = []
+	# BPM Markers
+	times.append_array(conductor.time_changes.keys())
+	if not conductor.time_changes.is_empty():
+		for i in times:
+			var time_change: Vector3 = conductor.time_changes[i]
+			var rect: ColorRect = ColorRect.new()
+			var size: float = 24
+			rect.size = Vector2(96, size)
+			rect.position = grid.position
+			rect.position.x -= 96 + grid.get_size().x / 2
+			rect.position.y = time_to_y_position(i)
+			rect.position.y -= rect.size.y / 2
+			rect.position += grid.position + grid_layer.offset
+			rect.color = time_change_color
+			
+			add_child(rect)
+			rect.add_to_group(&"dividers")
+			
+			var rect_bar: ColorRect = ColorRect.new()
+			size = 4.0
+			size /= viewport_scaling
+			rect_bar.color = time_change_color
+			rect_bar.size = Vector2(grid.get_size().x, size)
+			rect_bar.position = grid.position
+			rect_bar.position.x -= grid.get_size().x / 2
+			rect_bar.position.y = time_to_y_position(i)
+			rect_bar.position.y -= size / 2
+			rect_bar.position += grid.position + grid_layer.offset
+			
+			add_child(rect_bar)
+			rect_bar.add_to_group(&"dividers")
+			
+			var label: Label = Label.new()
+			label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+			label.theme = TOOL_THEME
+			label.text = str(snappedf(time_change.x, 0.001), " ", int(time_change.y), "/", int(time_change.z))
+			label.add_theme_font_size_override(&"font_size", 12)
+			
+			rect.add_child(label)
+			label.add_to_group(&"dividers")
+	
+	# End of song void
+	if music.stream:
 		var rect = ColorRect.new()
-		var size: float = 2
-		
-		rect.size = Vector2(size, grid.get_size().y)
+		rect.size = Vector2(grid.get_size().x, grid.get_size().y * window_scale_factor * 2)
 		rect.position = grid.position
-		rect.position.y -= grid.get_size().y / 2
-		rect.position.x = time_to_y_position(i)
-		rect.position.x -= rect.size.x / 2
-		rect.position += grid.position + $"Grid Layer".offset
-		rect.color = time_change_color
+		rect.position.x -= grid.get_size().x / 2
+		rect.position.y = time_to_y_position(music.stream.get_sync_stream(0).get_length())
+		rect.position += grid.position + grid_layer.offset
+		rect.color = Color(0.0, 0.0, 0.0, 0.5)
 		
 		self.add_child(rect)
 		rect.add_to_group(&"dividers")
@@ -585,8 +665,39 @@ func tree_event_activated() -> void:
 func _on_viewport_size_changed() -> void:
 	var width: float = clamp(get_window().size.y, MINIMUM_WINDOW_SIZE.y, 1280)
 	
-	grid.grid_size = Vector2(10, 24) * (MINIMUM_WINDOW_SIZE.y / width)
+	grid.grid_size = Vector2(18, 36) * (MINIMUM_WINDOW_SIZE.y / width)
 	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (width / MINIMUM_WINDOW_SIZE.y))
+	update_grid()
+	load_dividers()
+	event_renderer.update_render_transforms()
+	update_camera_song_position(true)
+
+## View button item pressed
+func view_button_item_pressed(id):
+	match id:
+		0:
+			EditorResources.event_editor = false
+			get_tree().change_scene_to_file(Constants.CHART_EDITOR_SCENE)
+		
+		1:
+			can_chart = false
+			upper_ui.note_skin_window.popup()
+			SoundManager.tool_open_window.play()
+		
+		3: #increase zoom
+			adjust_grid_zoom(0.1)
+		4: # reduce zoom
+			adjust_grid_zoom(-0.1)
+		_:
+			print("id: ", id)
+
+## Updates [member note_parallax]'s mirroring properties.
+func update_parallax() -> void:
+	note_parallax.scroll_offset.x = time_to_y_position(conductor.offset + time_change_offset)
+	note_parallax.repeat_size.x = grid.get_size().x
+
+func adjust_grid_zoom(delta: float) -> void:
+	grid.zoom.x = clamp(grid.zoom.x + delta, 0.5, 2)
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()

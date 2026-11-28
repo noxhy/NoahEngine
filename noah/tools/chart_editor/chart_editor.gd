@@ -144,7 +144,7 @@ func _ready() -> void:
 	get_window().content_scale_size = MINIMUM_WINDOW_SIZE
 	_on_viewport_size_changed()
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
-	Global.set_window_title("Chart Editor")
+	Global.set_window_title("Event Editor")
 	
 	playback_manager = ChartEditorPlaybackManager.new(self)
 	add_child(playback_manager)
@@ -198,9 +198,9 @@ func _process(delta: float) -> void:
 	
 	if EditorResources.chart:
 		update_conductor()
-		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset + time_change_offset)
+		update_parallax()
 		update_camera_song_position(music.playing)
-	note_parallax.repeat_size.y = grid.get_size().y
+	
 	
 	## Hovering over notes
 	if can_interact_with_chart:
@@ -627,6 +627,10 @@ func update_grid():
 	
 	%"Strum Labels".size.y = 32
 
+## Updates [member note_parallax]'s mirroring properties.
+func update_parallax() -> void:
+	note_parallax.scroll_offset.y = time_to_y_position(conductor.offset + time_change_offset)
+	note_parallax.repeat_size.y = grid.get_size().y
 
 func load_song(song: Song, difficulty: Variant = null):
 	var same_song: bool = EditorResources.song == song
@@ -843,7 +847,6 @@ func load_dividers() -> void:
 		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
-	# Song end marker
 	var times: Array = []
 	# BPM Markers
 	times.append_array(conductor.time_changes.keys())
@@ -1343,8 +1346,7 @@ func view_button_item_pressed(id):
 		
 		1:
 			can_chart = false
-			upper_ui.get_node("%Note Skin Window").popup()
-			SoundManager.tool_open_window.play()
+			upper_ui.note_skin_window.popup()
 		
 		3: #increase zoom
 			adjust_grid_zoom(0.1)

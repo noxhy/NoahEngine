@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://uso5pge8x5lf" path="res://noah/tools/chart_editor/event_editor/event_editor.gd" id="1_06aqy"]
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_mcaef"]
 [ext_resource type="Script" uid="uid://cvv38kf7dqxs0" path="res://noah/tools/chart_event_renderer.gd" id="4_48osf"]
+[ext_resource type="Script" uid="uid://bhmt3ud8q0te1" path="res://noah/tools/chart_editor/chart_note_renderer.gd" id="4_roa1i"]
 [ext_resource type="Texture2D" uid="uid://cf7m0a2krovb6" path="res://addons/at-icons/node/plus_sign_in_square.svg" id="5_83rqf"]
 [ext_resource type="PackedScene" uid="uid://bx3kdd0dt1kkw" path="res://noah/tools/chart_editor/lower_ui.tscn" id="5_xqtoq"]
 [ext_resource type="PackedScene" uid="uid://b6b2d2kloq60j" path="res://noah/tools/chart_editor/upper_ui.tscn" id="6_ud782"]
@@ -45,7 +46,7 @@ follow_viewport = false
 [node name="Grid" parent="Grid Layer/Parallax2D" unique_id=100409728 instance=ExtResource("14_srmuw")]
 unique_name_in_owner = true
 event_grid = true
-grid_size = Vector2(10, 24)
+grid_size = Vector2(18, 36)
 grid_color = Color(0.11372549, 0.13333334, 0.16078432, 1)
 event_column_color = Color(0.2071459, 0.23626423, 0.2815594, 0.26666668)
 position_column_color = Color(0.20784314, 0.23529412, 0.28235295, 0.26666668)
@@ -59,6 +60,11 @@ follow_viewport_enabled = true
 [node name="Notes Layer" type="CanvasLayer" parent="." unique_id=2024624303]
 layer = 2
 follow_viewport_enabled = true
+
+[node name="ChartNoteRenderer" type="Node2D" parent="Notes Layer" unique_id=1329205135]
+visible = false
+script = ExtResource("4_roa1i")
+metadata/_custom_type_script = "uid://bhmt3ud8q0te1"
 
 [node name="ChartEventRenderer" type="Node2D" parent="Notes Layer" unique_id=1553054286]
 script = ExtResource("4_48osf")
