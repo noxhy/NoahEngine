@@ -1,25 +1,31 @@
 extends Node
 class_name BasicSong
 
-@onready var player: Node = %Player
-@onready var enemy: Node = %Enemy
-
-@onready var rating_marker: Node = get_node_or_null(^"%Rating Marker")
-@onready var combo_marker: Node = get_node_or_null(^"%Combo Marker")
-
-var rating_factory: RatingFactory
-
 ## The amount of lanes per strumline (usually)
 var DIRECTIONS: int = 4
 
 ## The animations for the characters to play in order of [member Strum.lane]
 var SING_DIRECTIONS: Array[StringName] = [&"left", &"down", &"up", &"right"]
 
-@onready var camera: CameraController = get_tree().get_first_node_in_group(&"cameras")
-@onready var ui: BasicUI = get_tree().get_first_node_in_group(&"ui")
-@onready var playstate: PlayState = get_tree().get_first_node_in_group(&"playstate")
+@onready var player: Node = get_node_or_null(^"%Player")
+
+@onready var enemy: Node = get_node_or_null(^"%Enemy")
+
+@onready var rating_marker: Node = get_node_or_null(^"%Rating Marker")
+
+@onready var combo_marker: Node = get_node_or_null(^"%Combo Marker")
+
 @onready var camera_positions: Array[Node] = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"camera_positions"))
-@onready var strums: Array[Node] = NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums"))
+
+@onready var camera: CameraController  = get_tree().get_first_node_in_group(&"cameras")
+
+@onready var ui: BasicUI = get_tree().get_first_node_in_group(&"ui")
+
+@onready var playstate: PlayState = get_tree().get_first_node_in_group(&"playstate")
+
+var strums: Array[StrumManager] = []
+
+var rating_factory: RatingFactory
 
 ## How often the camera bops in steps.
 var bop_rate: int = 16
@@ -31,9 +37,9 @@ var can_pause: bool = true
 
 var can_show_combo: bool = true
 
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	strums.assign(NoahTools.sort_array_by_id(get_tree().get_nodes_in_group(&"strums")))
 	
 	if not playstate:
 		printerr("(Song): There was no playstate instance in the playstate group.")
@@ -45,18 +51,18 @@ func _ready() -> void:
 			ui.update_enemy(enemy)
 			
 	
-	Signals.play_conductor_step_hit.connect(_on_conductor_new_step)
-	Signals.play_conductor_beat_hit.connect(_on_conductor_new_beat)
+	Signals.conductor_step_hit.connect(_on_conductor_new_step)
+	Signals.conductor_beat_hit.connect(_on_conductor_new_beat)
 	
 	GameManager.conductor.new_numerator.connect(update_bop_rate)
 	GameManager.conductor.new_denominator.connect(update_bop_rate)
 	
-	Signals.play_combo_break.connect(_on_combo_break)
-	Signals.play_create_note.connect(_on_create_note)
-	Signals.play_new_event.connect(_on_new_event)
-	Signals.play_note_hit.connect(note_hit)
-	Signals.play_note_held.connect(note_holding)
-	Signals.play_note_miss.connect(note_miss)
+	Signals.combo_break.connect(_on_combo_break)
+	Signals.note_creation_requested.connect(_on_create_note)
+	Signals.new_event.connect(_on_new_event)
+	Signals.note_hit.connect(note_hit)
+	Signals.note_held.connect(note_holding)
+	Signals.note_miss.connect(note_miss)
 	
 	Signals.play_died.connect(died)
 	
@@ -80,7 +86,7 @@ func _ready() -> void:
 
 
 func start_song() -> void:
-	Signals.play_song_ready_to_start.emit()
+	Signals.song_ready_to_start.emit()
 
 func _process(delta: float) -> void:
 	if can_pause and Input.is_action_just_pressed(&"pause"):
@@ -266,7 +272,7 @@ func pause() -> void:
 	Global.manual_pause = true
 	var pause_scene_instance = pause_preload.instantiate()
 	
-	Signals.play_paused.emit()
+	Signals.paused.emit()
 	add_child(pause_scene_instance)
 	
 	get_tree().paused = true

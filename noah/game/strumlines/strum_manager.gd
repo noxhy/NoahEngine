@@ -127,26 +127,24 @@ func set_scroll(v: float) -> void:
 	for strum in strums:
 		strum.scroll = v
 
-## @deprecated: Use [member get_strum] instead.
-func get_strumline(lane: int) -> Strum:
-	return get_strum(lane)
-
-## Gets a strum from lane
+## Gets a strum via lane. Will return null if out of bounds
 func get_strum(lane: int) -> Strum:
-	return strums[lane]
+	if lane == -1 or strums.size() > lane:
+		return strums[lane]
+	return null
 
 ## Gets the scroll speed of a specific strum by lane
 func get_scroll_speed(lane: int) -> float:
-	return get_strum(lane).scroll_speed
+	return strums[lane].scroll_speed
 	
 ## Creates a new [BasicNote] for a lane
 func create_note(time: float, lane: int, length: float, note_type: String, tempo: float) -> BasicNote:
-	return get_strum(lane).create_note(time, length, note_type, tempo)
+	return strums[lane].create_note(time, length, note_type, tempo)
 
 ## Spawns a notes splash onto a strum
 func create_splash(lane: int, animation_name: StringName) -> void:
 	var anim_to_play: StringName = animation_name + &"_splash"
 	if animation_name.is_empty():
-		anim_to_play = get_strum(lane).strum_name + &"_splash"
+		anim_to_play = strums[lane].strum_name + &"_splash"
 	
 	get_strum(lane).create_splash(anim_to_play)

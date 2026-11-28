@@ -8,7 +8,7 @@ func _ready() -> void:
 	
 	playstate.ui.target_zoom = Vector2.ONE * (get_window().content_scale_size.x / 1280.0)
 	playstate.ui.offset = get_window().content_scale_size / 2
-	Signals.play_stats_changed.connect(update_stats)
+	Signals.stats_changed.connect(update_stats)
 	get_tree().call_group(&"strums", &"set_skin", ChartEditor.note_skin)
 
 func update_stats(stats: NoahStats):

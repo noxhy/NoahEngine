@@ -115,7 +115,7 @@ func select_option(i: int):
 
 func resume() -> void:
 	get_tree().paused = false
-	Signals.play_unpaused.emit()
+	Signals.unpaused.emit()
 	queue_free()
 
 func restart() -> void:
