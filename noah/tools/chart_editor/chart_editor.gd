@@ -1889,7 +1889,8 @@ func create_new_strumline() -> void:
 
 ## Updates the grid_size of [member grid] based off the viewport size
 func _on_viewport_size_changed() -> void:
-	var width: float = max(MINIMUM_WINDOW_SIZE.y, get_window().size.y)
+	var width: float = clamp(get_window().size.y, MINIMUM_WINDOW_SIZE.y, 1280)
+	
 	grid.grid_size = Vector2.ONE * 36 * (MINIMUM_WINDOW_SIZE.y / width)
 	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (width / MINIMUM_WINDOW_SIZE.y))
 	update_grid()
