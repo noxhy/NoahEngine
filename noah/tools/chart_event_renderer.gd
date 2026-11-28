@@ -4,6 +4,10 @@ class_name ChartEventRenderer
 ## Main RenderingServer manager for chart events.
 ## [br][b]Note:[/b] Does not support animated sprites.
 
+const DEFAULT_TEXTURE: Texture = preload("res://addons/at-icons/node/help.svg")
+
+@export var event_editor: bool = false
+
 ## Main reference for [ChartEdtior] scene
 var chart_editor: ChartEditor
 ## Array of note packets.
@@ -31,6 +35,7 @@ func draw_event(packet: Array) -> void:
 	render.time = packet[0]
 	render.type = packet[1]
 	render.track = NoahTools.array_get(packet, 3, 0)
+	render.event_editor = event_editor
 	
 	# I am treating scroll speed as a multiplier that would've acted like the grid size for
 	# sizing purposes
@@ -73,7 +78,7 @@ class EventRender extends Node:
 	var label_rid: RID
 	
 	var symbol_texture: Texture2D
-	
+	var event_editor: bool = false
 	var position: Vector2
 	var time: float
 	var type: String: set = set_event_type
@@ -97,7 +102,9 @@ class EventRender extends Node:
 			if Constants.EVENT_DATA[v].has("texture"):
 				symbol_texture = load(Constants.EVENT_DATA[v]["texture"])
 			else:
-				symbol_texture = load("res://addons/at-icons/node/help.svg")
+				symbol_texture = DEFAULT_TEXTURE
+		else:
+			symbol_texture = DEFAULT_TEXTURE
 		
 		RenderingServer.canvas_item_clear(symbol_rid)
 		NoahTools.set_texture_to_rid(symbol_rid, symbol_texture)
@@ -121,10 +128,15 @@ class EventRender extends Node:
 	
 	## Returns the proper position of the note in the gridspace.
 	func get_chart_position() -> Vector2:
-		var new_pos = Vector2(chart_editor.grid.get_real_position(Vector2(chart_editor.grid.columns - 0.5, 0)).x,
-		chart_editor.time_to_y_position(time) + grid_size.y / 2)
-		new_pos += chart_editor.grid_layer.offset
-		return new_pos
+		if event_editor:
+			var new_pos = Vector2(chart_editor.time_to_y_position(time) + grid_size.x / 2, chart_editor.grid.get_real_position(Vector2(0, track + 1.5)).y)
+			new_pos += chart_editor.grid_layer.offset
+			return new_pos
+		else:
+			var new_pos = Vector2(chart_editor.grid.get_real_position(Vector2(chart_editor.grid.columns - 0.5, 0)).x,
+			chart_editor.time_to_y_position(time) + grid_size.y / 2)
+			new_pos += chart_editor.grid_layer.offset
+			return new_pos
 	
 	## Updates the transform of all the RIDS.
 	func update_transform() -> void:

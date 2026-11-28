@@ -76,6 +76,7 @@ var moved_time_distance: float
 var moved_lane_distance: int
 var hovered_note: int = -1
 var hovered_event: int = -1
+var window_scale_factor: float = 1.0
 
 var events_file: ChartEvents
 var song_events: Array:
@@ -95,12 +96,22 @@ var time_change_offset: float:
 		return conductor.get_change_time_at(song_position + start_offset)
 
 var dragging_song_slider: bool = false
-
 var waveform_nodes: Dictionary[int, AudioStreamVisualizer] = {}
-
-var event_nodes: Array = []
 var current_visible_events_L: int = -1
 var current_visible_events_R: int = -1
+
+var grid_offset: Vector2:
+	get():
+		return grid.position + grid_layer.offset + note_parallax.scroll_offset
+var mouse_position: Vector2:
+	get():
+		return get_global_mouse_position() - grid_offset
+var grid_position: Vector2:
+	get():
+		return grid.get_grid_position(mouse_position)
+var snapped_position: Vector2i:
+	get():
+		return  Vector2i(grid.get_grid_position(mouse_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap)).floor())
 
 @onready var upper_ui: ChartEditorUpperUI = %"Upper UI"
 @onready var lower_ui: ChartEditorLowerUI = %"Lower UI"
@@ -175,24 +186,7 @@ func _process(delta: float) -> void:
 		song_position = music.get_playback_position() - start_offset
 		song_slider.value = song_position
 		
-		var notes_list = EditorResources.chart.notes
-		if notes_list.size() > 0 and SettingsManager.data.chart_hit_sounds:
-			while (current_note < notes_list.size() and (notes_list[current_note][0] <= (song_position + start_offset))):
-				var note: Array = notes_list[current_note]
-				var song_time: float = song_position + start_offset
-				if song_time + conductor.seconds_per_step >= note[0] and song_time - conductor.seconds_per_step <= note[0]:
-					var lane: int = note[1]
-					if EditorResources.strumlines.size() == 1:
-						if EditorResources.strumlines[0].hit_sounds:
-							SoundManager.tool_hit.play()
-					else:
-						for id in EditorResources.strumlines.size():
-							var strumline: Strumline = EditorResources.strumlines[id]
-							if (strumline.has_lane(lane) and strumline.hit_sounds):
-								SoundManager.tool_hit.play()
-				
-				current_note += 1
-		
+		note_hits()
 		refresh_audios()
 	
 	var axis: int = NoahTools.get_input_axis_just_pressed(&"mouse_scroll_up", &"mouse_scroll_down")
@@ -206,180 +200,57 @@ func _process(delta: float) -> void:
 		update_conductor()
 		note_parallax.scroll_offset.y = time_to_y_position(conductor.offset + time_change_offset)
 		update_camera_song_position(music.playing)
-	
-	var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
-	var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
-	var grid_position: Vector2 = grid.get_grid_position(mouse_position)
-	var snapped_position: Vector2i = Vector2i(grid.get_grid_position(
-		mouse_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap)).floor())
-	
 	note_parallax.repeat_size.y = grid.get_size().y
 	
 	## Hovering over notes
 	if can_interact_with_chart:
-		var cursor_time: float = grid_position_to_time(grid_position)
-		if !note_renderer.data.is_empty():
-			var factor: float = conductor.numerator * conductor.denominator / chart_snap
-			var time_range: float = (conductor.seconds_per_step * factor) / 2
-			var i: int = 0
-			var min_i: int = -1
-			var min_dist: float = INF
-			for packet in note_renderer.data:
-				# The notes are aligned from the top so I have to add a half range.
-				var note_time: float = packet[0] + time_range
-				if cursor_time < note_time - time_range or cursor_time > note_time + packet[2] * conductor.seconds_per_beat + time_range:
-					i += 1
-					continue
-				
-				if packet[1] != snapped_position.x - 1:
-					i += 1
-					continue
-				
-				var dist: float = abs(packet[0] - cursor_time)
-				if dist < min_dist:
-					min_i = i + current_visible_notes_L
-					min_dist = dist
-				
-				i += 1
-			
-			hovered_note = min_i
-		else:
-			hovered_note = -1
+		hovering_check()
 		
-		if !event_renderer.data.is_empty() and snapped_position.x == grid.columns - 1:
-			var time_range: float = conductor.seconds_per_step / 2
-			var i: int = 0
-			var min_i: int = -1
-			var min_dist: float = INF
-			for packet in event_renderer.data:
-				# The notes are aligned from the top so I have to add a half range.
-				var event_time: float = packet[0] + time_range
-				if cursor_time < event_time - time_range or cursor_time > event_time + time_range:
-					i += 1
-					continue
-				
-				var dist: float = abs(packet[0] - cursor_time)
-				if dist < min_dist:
-					min_i = i + current_visible_events_L
-					min_dist = dist
-				
-				i += 1
-			
-			hovered_event = min_i
-		else:
-			hovered_event = -1
-	
-	if can_interact_with_chart and Input.is_action_just_pressed(&"mouse_left"):
-		if Input.is_action_pressed(&"control"):
-			bounding_box = true
-			start_box = get_global_mouse_position()
-		elif is_mouse_over_grid() and not is_mouse_over_any_ui():
-			if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count)):
-				var lane: int = snapped_position.x - 1
-				var time: float = grid_position_to_time(snapped_position, true)
-				time += conductor.get_change_time_at(song_position + start_offset)
-				
-				if time <= music.stream.get_sync_stream(0).get_length():
-					if hovered_note == -1:
-						add_action("Placed Note", place_note.bind(time, lane, 0, current_note_type, true),
-						remove_note.bind(lane, time))
-						
-						SoundManager.tool_note_place.play()
-						placing_note = true
-					else:
-						var i: int = hovered_note
-						if selected_notes.has(i):
-							moving_notes = true
-							start_lane = lane
-							start_time = time
-							min_lane = EditorResources.strum_count
-							max_lane = 0
-							for j in selected_notes:
-								var note: Array = EditorResources.chart.notes[j]
-								min_lane = min(min_lane, note[1])
-								max_lane = max(max_lane, note[1])
-							
-							min_lane = start_lane - min_lane
-							max_lane = EditorResources.strum_count - 1 - (max_lane - start_lane)
-						else:
-							selected_notes = [i]
-							min_lane = 0
-							max_lane = EditorResources.strum_count - 1
-						
-						SoundManager.tool_mouse_click.play()
-	
-	if can_interact_with_chart and Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_mouse_over_grid():
-		if hovered_note != -1:
-			var i: int = hovered_note
-			var note: Array = EditorResources.chart.notes[i]
-			var length: float = note[2]
-			var note_type = note[3]
-			
-			add_action("Removed Note", remove_note.bind(i),
-			place_note.bind(note[0], snapped_position.x - 1, length, note_type, true))
-			SoundManager.tool_note_remove.play()
-			
-			if selected_notes.has(i):
-				if selected_notes.size() == 1:
-					selected_notes.clear()
-				else:
-					var j: int = selected_notes.find(i)
-					selected_notes.remove_at(j)
-					for k in range(j, selected_notes.size()):
-						selected_notes[k] -= 1
-			else:
-				if !selected_notes.is_empty() and i <= selected_notes.front():
-					for j in selected_notes.size():
-						selected_notes[j] -= 1
-			
-			load_section(song_position, false)
-			hovered_note = -1
-			auto_save()
-	
-	if can_interact_with_chart and Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and \
-		is_mouse_over_grid() and not music.playing and !dragging_song_slider:
-		## Song Position Slider
-		if snapped_position.x == 0:
-			@warning_ignore("incompatible_ternary")
-			set_start_offset(snapped_position if Input.is_action_pressed(&"shift") else grid_position)
-		elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
-			if placing_note:
-				var cursor_time: float = grid_position_to_time(snapped_position, true)
-				cursor_time += time_change_offset
-				for i in selected_notes:
-					var note: Array = EditorResources.chart.notes[i]
-					
-					var time: float = note[0]
-					var lane: int = note[1]
-					var note_type: String = note[3]
-					
-					var distance: float = snappedf(max(cursor_time - time, 0.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
-					EditorResources.chart.notes[i] = [time, lane, distance, note_type]
-					
-					if (note_renderer.data[i - current_visible_notes_L][2] != distance):
-						note_renderer.data[i - current_visible_notes_L][2] = distance
-						SoundManager.tool_note_stretch.play()
-						load_section(song_position)
+		if Input.is_action_just_pressed(&"mouse_left"):
+			just_left_click()
 		
-		if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
-			if moving_notes:
-				var cursor_time: float = grid_position_to_time(snapped_position, true) + time_change_offset
-				var cursor_lane: int = snapped_position.x - 1
-				
-				var lane_distance: int = cursor_lane - start_lane
-				var time_distance: float = cursor_time - start_time
-				changed_length = (abs(time_distance) > (conductor.seconds_per_beat / current_snap) or lane_distance != 0)
-				
-				if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
-					if changed_length:
+		if Input.is_action_pressed(&"mouse_right") and not Input.is_action_pressed(&"control") and is_mouse_over_grid():
+			right_click()
+		
+		if Input.is_action_pressed(&"mouse_left") and not Input.is_action_pressed(&"control") and is_mouse_over_grid() and not music.playing and !dragging_song_slider:
+			## Song Position Slider
+			if snapped_position.x == 0:
+				@warning_ignore("incompatible_ternary")
+				set_start_offset(snapped_position if Input.is_action_pressed(&"shift") else grid_position)
+			elif ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
+				if placing_note:
+					var cursor_time: float = grid_position_to_time(snapped_position, true)
+					cursor_time += time_change_offset
+					for i in selected_notes:
+						var note: Array = EditorResources.chart.notes[i]
+						
+						var time: float = note[0]
+						var lane: int = note[1]
+						var note_type: String = note[3]
+						
+						var distance: float = snappedf(max(cursor_time - time, 0.0) / conductor.seconds_per_beat, 1.0 / chart_snap)
+						EditorResources.chart.notes[i] = [time, lane, distance, note_type]
+						
+						if (note_renderer.data[i - current_visible_notes_L][2] != distance):
+							note_renderer.data[i - current_visible_notes_L][2] = distance
+							SoundManager.tool_note_stretch.play()
+							load_section(song_position)
+			
+			if ((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count):
+				if moving_notes:
+					var cursor_time: float = grid_position_to_time(snapped_position, true) + time_change_offset
+					var cursor_lane: int = snapped_position.x - 1
+					
+					var lane_distance: int = cursor_lane - start_lane
+					var time_distance: float = cursor_time - start_time
+					if ((start_lane + lane_distance) >= min_lane and (start_lane + lane_distance) <= max_lane):
 						for i in selected_notes:
 							note_renderer.drawn[i - current_visible_notes_L].time = EditorResources.chart.notes[i][0] + time_distance
 							note_renderer.drawn[i - current_visible_notes_L].lane = EditorResources.chart.notes[i][1] + lane_distance
 							note_renderer.drawn[i - current_visible_notes_L].update_transform()
-					
-					moved_time_distance = time_distance
-					moved_lane_distance = lane_distance
-	
+						
+						moved_time_distance = time_distance
+						moved_lane_distance = lane_distance
 	
 	if Input.is_action_just_released(&"mouse_left"):
 		if placing_note:
@@ -427,6 +298,147 @@ func _process(delta: float) -> void:
 	
 	queue_redraw()
 
+# goes through the notes to and plays a hit sound when passed
+func note_hits() -> void:
+	var notes_list = EditorResources.chart.notes
+	if notes_list.size() > 0 and SettingsManager.data.chart_hit_sounds:
+		while (current_note < notes_list.size() and (notes_list[current_note][0] <= (song_position + start_offset))):
+			var note: Array = notes_list[current_note]
+			var song_time: float = song_position + start_offset
+			if song_time + conductor.seconds_per_step >= note[0] and song_time - conductor.seconds_per_step <= note[0]:
+				var lane: int = note[1]
+				if EditorResources.strumlines.size() == 1:
+					if EditorResources.strumlines[0].hit_sounds:
+						SoundManager.tool_hit.play()
+				else:
+					for id in EditorResources.strumlines.size():
+						var strumline: Strumline = EditorResources.strumlines[id]
+						if (strumline.has_lane(lane) and strumline.hit_sounds):
+							SoundManager.tool_hit.play()
+			
+			current_note += 1
+
+# main manager of hovering over symbols
+func hovering_check() -> void:
+	var cursor_time: float = grid_position_to_time(grid_position)
+	if !note_renderer.data.is_empty():
+		var factor: float = conductor.numerator * conductor.denominator / chart_snap
+		var time_range: float = (conductor.seconds_per_step * factor) / 2
+		var i: int = 0
+		var min_i: int = -1
+		var min_dist: float = INF
+		for packet in note_renderer.data:
+			# The notes are aligned from the top so I have to add a half range.
+			var note_time: float = packet[0] + time_range
+			if cursor_time < note_time - time_range or cursor_time > note_time + packet[2] * conductor.seconds_per_beat + time_range:
+				i += 1
+				continue
+			
+			if packet[1] != snapped_position.x - 1:
+				i += 1
+				continue
+			
+			var dist: float = abs(packet[0] - cursor_time)
+			if dist < min_dist:
+				min_i = i + current_visible_notes_L
+				min_dist = dist
+			
+			i += 1
+		
+		hovered_note = min_i
+	else:
+		hovered_note = -1
+	
+	if !event_renderer.data.is_empty() and snapped_position.x == grid.columns - 1:
+		var time_range: float = conductor.seconds_per_step / 2
+		var i: int = 0
+		var min_i: int = -1
+		var min_dist: float = INF
+		for packet in event_renderer.data:
+			# The notes are aligned from the top so I have to add a half range.
+			var event_time: float = packet[0] + time_range
+			if cursor_time < event_time - time_range or cursor_time > event_time + time_range:
+				i += 1
+				continue
+			
+			var dist: float = abs(packet[0] - cursor_time)
+			if dist < min_dist:
+				min_i = i + current_visible_events_L
+				min_dist = dist
+			
+			i += 1
+		
+		hovered_event = min_i
+	else:
+		hovered_event = -1
+
+func just_left_click() -> void:
+	if Input.is_action_pressed(&"control"):
+		bounding_box = true
+		start_box = get_global_mouse_position()
+	elif is_mouse_over_grid() and not is_mouse_over_any_ui():
+		if (((snapped_position.x - 1) >= 0 and (snapped_position.x - 1) < EditorResources.strum_count)):
+			var lane: int = snapped_position.x - 1
+			var time: float = grid_position_to_time(snapped_position, true)
+			time += conductor.get_change_time_at(song_position + start_offset)
+			
+			if time <= music.stream.get_sync_stream(0).get_length():
+				if hovered_note == -1:
+					add_action("Placed Note", place_note.bind(time, lane, 0, current_note_type, true),
+					remove_note.bind(lane, time))
+					
+					SoundManager.tool_note_place.play()
+					placing_note = true
+				else:
+					var i: int = hovered_note
+					if selected_notes.has(i):
+						moving_notes = true
+						start_lane = lane
+						start_time = time
+						min_lane = EditorResources.strum_count
+						max_lane = 0
+						for j in selected_notes:
+							var note: Array = EditorResources.chart.notes[j]
+							min_lane = min(min_lane, note[1])
+							max_lane = max(max_lane, note[1])
+						
+						min_lane = start_lane - min_lane
+						max_lane = EditorResources.strum_count - 1 - (max_lane - start_lane)
+					else:
+						selected_notes = [i]
+						min_lane = 0
+						max_lane = EditorResources.strum_count - 1
+					
+					SoundManager.tool_mouse_click.play()
+
+func right_click() -> void:
+	if hovered_note != -1:
+		var i: int = hovered_note
+		var note: Array = EditorResources.chart.notes[i]
+		var length: float = note[2]
+		var note_type = note[3]
+		
+		add_action("Removed Note", remove_note.bind(i),
+		place_note.bind(note[0], snapped_position.x - 1, length, note_type, true))
+		SoundManager.tool_note_remove.play()
+		
+		if selected_notes.has(i):
+			if selected_notes.size() == 1:
+				selected_notes.clear()
+			else:
+				var j: int = selected_notes.find(i)
+				selected_notes.remove_at(j)
+				for k in range(j, selected_notes.size()):
+					selected_notes[k] -= 1
+		else:
+			if !selected_notes.is_empty() and i <= selected_notes.front():
+				for j in selected_notes.size():
+					selected_notes[j] -= 1
+		
+		load_section(song_position, false)
+		hovered_note = -1
+		auto_save()
+
 # Song scrubbing
 func scrub(axis: int) -> void:
 	if not music.stream_paused:
@@ -447,6 +459,7 @@ func update_conductor():
 	conductor.offset = EditorResources.chart.offset
 
 ## Sets the offset of the play marker.
+@warning_ignore("shadowed_variable")
 func set_start_offset(grid_position: Vector2):
 	var time: float = grid_position_to_time(grid_position)
 	time += conductor.get_change_time_at(song_position + start_offset)
@@ -521,14 +534,6 @@ func _draw() -> void:
 		draw_rect(rect, Color.LIME, false, 1)
 	
 	if EditorResources.chart:
-		# The offset the grid has from the normal canvas layer
-		var grid_offset: Vector2 = grid.position + grid_layer.offset + note_parallax.scroll_offset
-		var mouse_position: Vector2 = get_global_mouse_position() - grid_offset
-		var grid_position: Vector2i = Vector2i(grid.get_grid_position(mouse_position).floor())
-		var snapped_position: Vector2i = Vector2i(
-			grid.get_grid_position(mouse_position, grid.grid_size * Vector2(1, conductor.numerator * conductor.denominator / chart_snap))
-			)
-		
 		# Song Start Offset Marker
 		rect = Rect2(grid_offset - note_parallax.scroll_offset + Vector2(grid.get_real_position(Vector2(0, 0)).x,
 		time_to_y_position(song_position - EditorResources.chart.offset + start_offset) - 2), \
@@ -549,13 +554,16 @@ func _draw() -> void:
 		
 		## Note Highlighting
 		for i in selected_notes:
-			if i - current_visible_notes_L >= 0 and i <= current_visible_notes_R:
-				var length: float = EditorResources.chart.notes[i][2] + (1.0 / conductor.numerator)
-				length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
-				rect = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
-				Vector2(grid.grid_size.x * grid.zoom.x, length))
-				draw_rect(rect, selected_color)
-				draw_rect(rect, Color.LIME, false, 1)
+			highlight_note(i)
+
+func highlight_note(i: int) -> void:
+	if i - current_visible_notes_L >= 0 and i <= current_visible_notes_R:
+		var length: float = EditorResources.chart.notes[i][2] + (1.0 / conductor.numerator)
+		length *= grid.grid_size.y * grid.zoom.y * conductor.numerator
+		var rect: Rect2 = Rect2(note_renderer.drawn[i - current_visible_notes_L].position,
+		Vector2(grid.grid_size.x * grid.zoom.x, length))
+		draw_rect(rect, selected_color)
+		draw_rect(rect, Color.LIME, false, 1)
 
 func on_files_dropped(files: PackedStringArray):
 	var file: String = files[0]
@@ -706,12 +714,6 @@ func load_chart(file: Chart) -> void:
 	current_visible_notes_R = -1
 	current_visible_events_L = -1
 	current_visible_events_R = -1
-	get_tree().call_group(&"notes", &"free")
-	note_nodes = []
-	
-	get_tree().call_group(&"events", &"free")
-	event_nodes = []
-	
 	undo_redo.clear_history()
 	get_tree().call_group(&"history", &"free")
 	var action: String = "Loaded Chart"
@@ -790,6 +792,7 @@ func load_dividers() -> void:
 	if !EditorResources.song or !EditorResources.chart:
 		return
 	
+	# Beat dividers
 	for i in range(conductor.numerator):
 		var rect = ColorRect.new()
 		var size: float = 4 if i == 0 else 2
@@ -807,6 +810,7 @@ func load_dividers() -> void:
 		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
+	# Vertical dividers
 	for i in [0, 1, grid.columns]:
 		var rect = ColorRect.new()
 		var size: float = 2
@@ -821,6 +825,7 @@ func load_dividers() -> void:
 		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
+	# Strumline dividers
 	for strumline in EditorResources.strumlines:
 		var rect = ColorRect.new()
 		var size: float = 2
@@ -835,10 +840,9 @@ func load_dividers() -> void:
 		note_parallax.add_child(rect)
 		rect.add_to_group(&"dividers")
 	
+	# Song end marker
 	var times: Array = []
-	if music.stream:
-		times.append(music.stream.get_sync_stream(0).get_length())
-	
+	# BPM Markers
 	times.append_array(conductor.time_changes.keys())
 	times.erase(0.0)
 	if not conductor.time_changes.is_empty():
@@ -856,6 +860,19 @@ func load_dividers() -> void:
 			
 			self.add_child(rect)
 			rect.add_to_group(&"dividers")
+	
+	# End of song void
+	if music.stream:
+		var rect = ColorRect.new()
+		rect.size = Vector2(grid.get_size().x, grid.get_size().y * window_scale_factor * 2)
+		rect.position = grid.position
+		rect.position.x -= grid.get_size().x / 2
+		rect.position.y = time_to_y_position(music.stream.get_sync_stream(0).get_length())
+		rect.position += grid.position + grid_layer.offset
+		rect.color = Color(0.0, 0.0, 0.0, 0.5)
+		
+		self.add_child(rect)
+		rect.add_to_group(&"dividers")
 
 
 func new_file(path: String, song: Song) -> void:
@@ -1083,19 +1100,9 @@ func time_to_y_position(time: float) -> float:
 	
 	return y_offset
 
-
+## 0 second timer, makes everything work magically.
 func enable_can_chart_on_next_frame() -> void:
 	get_tree().create_timer(0.0).timeout.connect(func(): can_chart = true)
-
-func update_note_position(node: Node2D) -> void:
-	if node is ChartEvent:
-		node.position = Vector2(grid.get_real_position(Vector2(-0.5 + grid.columns, 0)).x,
-		time_to_y_position(node.time) + grid.grid_size.y * grid.zoom.y / 2)
-		node.position += grid_layer.offset
-		node.grid_size = (grid.grid_size * grid.zoom)
-		node.update()
-	else:
-		printerr(node.get_class(), " isn't a valid node.")
 
 ## This assumes that the tempo and meter dictionaries are sorted
 func grid_position_to_time(p: Vector2, factor_in_snap: bool = false) -> float:
@@ -1459,7 +1466,7 @@ func save(play_sound: bool = false) -> void:
 	if play_sound:
 		SoundManager.play_sound_once("uid://caejyneseangk")
 
-
+## Moves any objects in [member selected_notes].
 func move_selection(time_distance: float, lane_distance: float) -> void:
 	moving_notes = false
 	var notes: Array = []
@@ -1539,7 +1546,7 @@ func update_camera_song_position(instant: bool = false) -> void:
 
 ## Updates the duration, position and size of the waveform, Usually called every beat.
 func update_waveforms(time: float = 0) -> void:
-	var time_range: float = conductor.numerator * conductor.seconds_per_beat * 2 / grid.zoom.y
+	var time_range: float = get_visible_time() * 2
 	
 	if waveform_nodes.is_empty() and (instrumental_waveforms or vocal_waveforms):
 		load_waveforms()
@@ -1618,6 +1625,7 @@ func _on_metadata_window_updated_song_name(text: String) -> void:
 
 func _on_metadata_window_updated_song_scene(path: String) -> void:
 	EditorResources.song.scene = path
+	upper_ui.test_button.get_popup().set_item_disabled(0, !ResourceLoader.exists(EditorResources.song.scene))
 	auto_save()
 
 func _on_metadata_window_updated_scroll_speed(speed: float) -> void:
@@ -1772,7 +1780,7 @@ func flip() -> void:
 			lane += _min_lane
 			note[1] = lane
 		
-		load_section(song_position, false)
+		load_section(song_position)
 		SoundManager.tool_note_place.play()
 
 func increase_length() -> void:
@@ -1812,7 +1820,7 @@ func select_area(L: int, R: int, lane_a: int, lane_b: int) -> void:
 		var lane: int = EditorResources.chart.notes[i][1]
 		return (lane >= lane_a and lane <= lane_b))
 	
-	if selected_notes.size() > 0:
+	if !selected_notes.is_empty():
 		SoundManager.tool_mouse_click.play()
 
 
@@ -1889,6 +1897,7 @@ func scrub_minimap() -> void:
 	if not music.stream_paused:
 		toggle_audios(true)
 	
+	@warning_ignore("shadowed_variable")
 	var mouse_position: Vector2 = get_corrected_mouse_position()
 	song_position = remap(mouse_position.y - 360,
 	minimap.global_position.y, minimap.global_position.y + minimap.size.y,
@@ -1911,9 +1920,9 @@ func create_new_strumline() -> void:
 ## Updates the grid_size of [member grid] based off the viewport size
 func _on_viewport_size_changed() -> void:
 	var width: float = clamp(get_window().size.y, MINIMUM_WINDOW_SIZE.y, 1280)
-	
+	window_scale_factor = width / MINIMUM_WINDOW_SIZE.y
 	grid.grid_size = Vector2.ONE * 36 * (MINIMUM_WINDOW_SIZE.y / width)
-	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * (width / MINIMUM_WINDOW_SIZE.y))
+	$"Grid Layer/Parallax2D".repeat_times = ceili(MINIMUM_PARALLAX_REPEAT * window_scale_factor)
 	update_grid()
 	load_dividers()
 	note_renderer.update_render_transforms()

@@ -24,7 +24,6 @@ class_name ChartEditorUpperUI
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	
 	open_song_window.file_selected.connect(chart_editor.load_song_path)
 	open_song_window.close_requested.connect(func():
 		open_song_window.hide()
