@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://b1blhjns06ilt" path="res://noah/conductor.gd" id="2_dontb"]
 [ext_resource type="PackedScene" uid="uid://dmjgk2qf3nl2i" path="res://noah/tools/chart_editor/grid.tscn" id="2_i6pv1"]
 [ext_resource type="Script" uid="uid://bhmt3ud8q0te1" path="res://noah/tools/chart_editor/chart_note_renderer.gd" id="3_5be8r"]
-[ext_resource type="Script" uid="uid://cvv38kf7dqxs0" path="res://noah/tools/event_renderer.gd" id="5_vkl47"]
+[ext_resource type="Script" uid="uid://cvv38kf7dqxs0" path="res://noah/tools/chart_event_renderer.gd" id="5_vkl47"]
 [ext_resource type="PackedScene" uid="uid://s3uvtxiv1wo4" path="res://noah/tools/chart_editor/minimap.tscn" id="10_kpohl"]
 [ext_resource type="Theme" uid="uid://b1gv0wfdmojbx" path="res://noah/tools/themes/tool.res" id="17_75w6f"]
 [ext_resource type="PackedScene" uid="uid://bx3kdd0dt1kkw" path="res://noah/tools/chart_editor/lower_ui.tscn" id="17_sxrev"]
