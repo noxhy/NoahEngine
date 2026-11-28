@@ -381,13 +381,13 @@ func _process(delta: float) -> void:
 			bounding_box = false
 			var rect = Rect2(start_box, get_global_mouse_position() - start_box).abs()
 			# Added leniency since notes are centered from the top
-			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(0.5, 0.5)
-			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset) + Vector2(0.5, 0)
+			var pos_1: Vector2 = grid.get_grid_position(rect.position - grid_offset) - Vector2(0, 0.5)
+			var pos_2: Vector2 = grid.get_grid_position(rect.end - grid_offset)
 			
 			var time_a: float = grid_position_to_time(pos_1) + conductor.offset + time_change_offset
 			var time_b: float = grid_position_to_time(pos_2) + conductor.offset + time_change_offset
-			var lane_a: int = floori(pos_1.x)
-			var lane_b: int = floori(pos_2.x)
+			var lane_a: int = floori(pos_1.x) - 1
+			var lane_b: int = floori(pos_2.x) - 1
 			var L: int = NoahTools.bsearch_note_data_left_range(EditorResources.chart.notes, time_a)
 			var R: int = NoahTools.bsearch_note_data_right_range(EditorResources.chart.notes, time_b)
 			
@@ -927,6 +927,7 @@ func remove_note(lane, time: float = -1):
 		minimap.unmap_from_image(EditorResources.chart.notes[i])
 	
 	EditorResources.chart.notes.remove_at(i)
+	current_visible_notes_L -= 1
 	load_section(song_position)
 
 ## Removes the notes in the given indices
